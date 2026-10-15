@@ -1,0 +1,33 @@
+[
+  {
+    "countryId": "pais-1",
+    "divisions": [
+      {
+        "clubIds": ["clube-1", "clube-2", "clube-3", "clube-4"],
+        "level": 1,
+        "name": "Divisão 1",
+        "promotionSlots": 0,
+        "relegationSlots": 1
+      },
+      {
+        "clubIds": ["clube-5", "clube-6", "clube-7", "clube-8"],
+        "level": 2,
+        "name": "Divisão 2",
+        "promotionSlots": 1,
+        "relegationSlots": 0
+      }
+    ],
+    "format": {
+      "points": {
+        "draw": 1,
+        "loss": 0,
+        "win": 3
+      },
+      "rounds": 2,
+      "tiebreakers": ["wins", "goal-difference"],
+      "type": "league"
+    },
+    "id": "liga",
+    "name": "Liga de Teste"
+  }
+]

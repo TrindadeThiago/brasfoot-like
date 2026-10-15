@@ -1,0 +1,22 @@
+{
+  "name": "brasfoot-like",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.15.1",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "typecheck": "pnpm -r typecheck",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "test": "vitest run",
+    "gen:default-bank": "pnpm --filter @brasfoot-like/tools gen:default-bank",
+    "validate-bank": "pnpm --filter @brasfoot-like/tools validate-bank"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.15",
+    "typescript": "~6.0.3",
+    "vitest": "^5.0.4"
+  }
+}

@@ -16,7 +16,7 @@
 ## 2. Plataforma e stack
 
 - **Web primeiro**, **desktop depois** (Electron).
-- **TypeScript + React + Vite + Vitest.**
+- **TypeScript + Next.js (React, static export) + Vitest + Biome.**
 - **Motor do jogo em TypeScript puro**, sem dependência de React, testável isoladamente (simulação, regras, IA).
 - **Hospedagem:** site estático (GitHub Pages / Cloudflare Pages / itch.io). Sem backend.
 - **i18n desde o dia 1**; apenas pt-BR no lançamento.

@@ -1,0 +1,5 @@
+{
+  "cli.valid": "Banco válido.",
+  "cli.warningPrefix": "(aviso)",
+  "cli.summary": "{errors, plural, =0 {nenhum erro} one {# erro} other {# erros}} e {warnings, plural, =0 {nenhum aviso} one {# aviso} other {# avisos}}."
+}

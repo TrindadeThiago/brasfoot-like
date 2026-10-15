@@ -1,0 +1,19 @@
+{
+  "name": "@brasfoot-like/tools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p .",
+    "gen:default-bank": "tsx src/gen-default-bank.ts",
+    "validate-bank": "tsx src/validate-bank.ts"
+  },
+  "dependencies": {
+    "@brasfoot-like/engine": "workspace:*",
+    "@brasfoot-like/i18n": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "tsx": "^4.23.15"
+  }
+}

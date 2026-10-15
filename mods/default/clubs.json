@@ -1,0 +1,934 @@
+[
+  {
+    "abbreviation": "RFU",
+    "city": "Ribeira Funda",
+    "colors": {
+      "primary": "#5B2C83",
+      "secondary": "#000000"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#5B2C83",
+        "#000000"
+      ],
+      "initials": "RFEC",
+      "shape": "round"
+    },
+    "id": "clube-001",
+    "initialCash": 2850000,
+    "name": "Ribeira Funda Esporte Clube",
+    "reputation": 46,
+    "shortName": "Ribeira Funda",
+    "stadiumCapacity": 16000
+  },
+  {
+    "abbreviation": "SMO",
+    "city": "Serra Morena",
+    "colors": {
+      "primary": "#7A1F3D",
+      "secondary": "#5B2C83"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#7A1F3D",
+        "#5B2C83",
+        "#8B5A2B"
+      ],
+      "initials": "SMAC",
+      "shape": "triangle"
+    },
+    "id": "clube-002",
+    "initialCash": 2310000,
+    "name": "Serra Morena Atlético Clube",
+    "reputation": 52,
+    "shortName": "Serra Morena",
+    "stadiumCapacity": 9500
+  },
+  {
+    "abbreviation": "TAL",
+    "city": "Taquaruçu Alto",
+    "colors": {
+      "primary": "#FFD100",
+      "secondary": "#9EA2A2"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#FFD100",
+        "#9EA2A2"
+      ],
+      "initials": "ECTA",
+      "shape": "classic"
+    },
+    "id": "clube-003",
+    "initialCash": 6280000,
+    "name": "Esporte Clube Taquaruçu Alto",
+    "reputation": 67,
+    "shortName": "Taquaruçu Alto",
+    "stadiumCapacity": 24500
+  },
+  {
+    "abbreviation": "VSE",
+    "city": "Vila Serena",
+    "colors": {
+      "primary": "#006B3F",
+      "secondary": "#000000"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#006B3F",
+        "#000000"
+      ],
+      "initials": "VSCR",
+      "shape": "rectangle"
+    },
+    "id": "clube-004",
+    "initialCash": 3050000,
+    "name": "Vila Serena Clube de Regatas",
+    "reputation": 53,
+    "shortName": "Vila Serena",
+    "stadiumCapacity": 8500
+  },
+  {
+    "abbreviation": "IDO",
+    "city": "Ipê Dourado",
+    "colors": {
+      "primary": "#0033A0",
+      "secondary": "#000000"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#0033A0",
+        "#000000"
+      ],
+      "initials": "UEID",
+      "shape": "rectangle"
+    },
+    "id": "clube-005",
+    "initialCash": 5660000,
+    "name": "União Esportiva Ipê Dourado",
+    "reputation": 65,
+    "shortName": "Ipê Dourado",
+    "stadiumCapacity": 29000
+  },
+  {
+    "abbreviation": "PNO",
+    "city": "Piraquara Nova",
+    "colors": {
+      "primary": "#004C45",
+      "secondary": "#9EA2A2"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#004C45",
+        "#9EA2A2"
+      ],
+      "initials": "UEPN",
+      "shape": "rectangle"
+    },
+    "id": "clube-006",
+    "initialCash": 2960000,
+    "name": "União Esportiva Piraquara Nova",
+    "reputation": 58,
+    "shortName": "Piraquara Nova",
+    "stadiumCapacity": 26500
+  },
+  {
+    "abbreviation": "PPE",
+    "city": "Paraíso das Pedras",
+    "colors": {
+      "primary": "#7A1F3D",
+      "secondary": "#9EA2A2"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#7A1F3D",
+        "#9EA2A2"
+      ],
+      "initials": "UEPP",
+      "shape": "triangle"
+    },
+    "id": "clube-007",
+    "initialCash": 2320000,
+    "name": "União Esportiva Paraíso das Pedras",
+    "reputation": 48,
+    "shortName": "Paraíso das Pedras",
+    "stadiumCapacity": 17500
+  },
+  {
+    "abbreviation": "CSU",
+    "city": "Coqueiral do Sul",
+    "colors": {
+      "primary": "#0033A0",
+      "secondary": "#004C45"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#0033A0",
+        "#004C45"
+      ],
+      "initials": "CACS",
+      "shape": "classic"
+    },
+    "id": "clube-008",
+    "initialCash": 2880000,
+    "name": "Clube Atlético Coqueiral do Sul",
+    "reputation": 49,
+    "shortName": "Coqueiral do Sul",
+    "stadiumCapacity": 7500
+  },
+  {
+    "abbreviation": "CAJ",
+    "city": "Cajarana",
+    "colors": {
+      "primary": "#004C45",
+      "secondary": "#F47920"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#004C45",
+        "#F47920",
+        "#006B3F"
+      ],
+      "initials": "CAC",
+      "shape": "triangle"
+    },
+    "id": "clube-009",
+    "initialCash": 10080000,
+    "name": "Clube Atlético Cajarana",
+    "reputation": 88,
+    "shortName": "Cajarana",
+    "stadiumCapacity": 73000
+  },
+  {
+    "abbreviation": "AMA",
+    "city": "Água Mansa",
+    "colors": {
+      "primary": "#9EA2A2",
+      "secondary": "#5B2C83"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#9EA2A2",
+        "#5B2C83"
+      ],
+      "initials": "CAÁM",
+      "shape": "round"
+    },
+    "id": "clube-010",
+    "initialCash": 1560000,
+    "name": "Clube Atlético Água Mansa",
+    "reputation": 43,
+    "shortName": "Água Mansa",
+    "stadiumCapacity": 7500
+  },
+  {
+    "abbreviation": "VEN",
+    "city": "Ventosul",
+    "colors": {
+      "primary": "#F47920",
+      "secondary": "#C8102E"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#F47920",
+        "#C8102E"
+      ],
+      "initials": "VFC",
+      "shape": "triangle"
+    },
+    "id": "clube-011",
+    "initialCash": 8450000,
+    "name": "Ventosul Futebol Clube",
+    "reputation": 83,
+    "shortName": "Ventosul",
+    "stadiumCapacity": 76500
+  },
+  {
+    "abbreviation": "CDO",
+    "city": "Campo Dourado",
+    "colors": {
+      "primary": "#00A3E0",
+      "secondary": "#5B2C83"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#00A3E0",
+        "#5B2C83"
+      ],
+      "initials": "CDFR",
+      "shape": "classic"
+    },
+    "id": "clube-012",
+    "initialCash": 3290000,
+    "name": "Campo Dourado Futebol e Regatas",
+    "reputation": 57,
+    "shortName": "Campo Dourado",
+    "stadiumCapacity": 15000
+  },
+  {
+    "abbreviation": "ALE",
+    "city": "Alvorada do Leste",
+    "colors": {
+      "primary": "#9EA2A2",
+      "secondary": "#5B2C83"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#9EA2A2",
+        "#5B2C83",
+        "#7A1F3D"
+      ],
+      "initials": "ALAC",
+      "shape": "classic"
+    },
+    "id": "clube-013",
+    "initialCash": 2260000,
+    "name": "Alvorada do Leste Atlético Clube",
+    "reputation": 45,
+    "shortName": "Alvorada do Leste",
+    "stadiumCapacity": 7000
+  },
+  {
+    "abbreviation": "BVE",
+    "city": "Baía dos Ventos",
+    "colors": {
+      "primary": "#FFD100",
+      "secondary": "#9EA2A2"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#FFD100",
+        "#9EA2A2",
+        "#FFFFFF"
+      ],
+      "initials": "ECBV",
+      "shape": "triangle"
+    },
+    "id": "clube-014",
+    "initialCash": 7280000,
+    "name": "Esporte Clube Baía dos Ventos",
+    "reputation": 74,
+    "shortName": "Baía dos Ventos",
+    "stadiumCapacity": 31000
+  },
+  {
+    "abbreviation": "NAU",
+    "city": "Nova Aurélia",
+    "colors": {
+      "primary": "#1D428A",
+      "secondary": "#004C45"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#1D428A",
+        "#004C45"
+      ],
+      "initials": "NAAC",
+      "shape": "round"
+    },
+    "id": "clube-015",
+    "initialCash": 4990000,
+    "name": "Nova Aurélia Atlético Clube",
+    "reputation": 66,
+    "shortName": "Nova Aurélia",
+    "stadiumCapacity": 17500
+  },
+  {
+    "abbreviation": "ABO",
+    "city": "Alto Bonito",
+    "colors": {
+      "primary": "#7A1F3D",
+      "secondary": "#FFFFFF"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#7A1F3D",
+        "#FFFFFF",
+        "#000000"
+      ],
+      "initials": "ECAB",
+      "shape": "classic"
+    },
+    "id": "clube-016",
+    "initialCash": 8510000,
+    "name": "Esporte Clube Alto Bonito",
+    "reputation": 89,
+    "shortName": "Alto Bonito",
+    "stadiumCapacity": 62500
+  },
+  {
+    "abbreviation": "RVE",
+    "city": "Recanto Verde",
+    "colors": {
+      "primary": "#1D428A",
+      "secondary": "#8B5A2B"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#1D428A",
+        "#8B5A2B"
+      ],
+      "initials": "RVFC",
+      "shape": "triangle"
+    },
+    "id": "clube-017",
+    "initialCash": 8560000,
+    "name": "Recanto Verde Futebol Clube",
+    "reputation": 92,
+    "shortName": "Recanto Verde",
+    "stadiumCapacity": 68000
+  },
+  {
+    "abbreviation": "QNO",
+    "city": "Queimada Nova",
+    "colors": {
+      "primary": "#000000",
+      "secondary": "#006B3F"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#000000",
+        "#006B3F"
+      ],
+      "initials": "QNFC",
+      "shape": "round"
+    },
+    "id": "clube-018",
+    "initialCash": 4470000,
+    "name": "Queimada Nova Futebol Clube",
+    "reputation": 57,
+    "shortName": "Queimada Nova",
+    "stadiumCapacity": 37500
+  },
+  {
+    "abbreviation": "TAZ",
+    "city": "Trevo Azul",
+    "colors": {
+      "primary": "#FFFFFF",
+      "secondary": "#9EA2A2"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#FFFFFF",
+        "#9EA2A2",
+        "#FFD100"
+      ],
+      "initials": "SETA",
+      "shape": "classic"
+    },
+    "id": "clube-019",
+    "initialCash": 3200000,
+    "name": "Sociedade Esportiva Trevo Azul",
+    "reputation": 61,
+    "shortName": "Trevo Azul",
+    "stadiumCapacity": 15000
+  },
+  {
+    "abbreviation": "CLI",
+    "city": "Campo Lindo",
+    "colors": {
+      "primary": "#1D428A",
+      "secondary": "#00A3E0"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#1D428A",
+        "#00A3E0",
+        "#C8102E"
+      ],
+      "initials": "CLFC",
+      "shape": "round"
+    },
+    "id": "clube-020",
+    "initialCash": 2310000,
+    "name": "Campo Lindo Futebol Clube",
+    "reputation": 41,
+    "shortName": "Campo Lindo",
+    "stadiumCapacity": 10000
+  },
+  {
+    "abbreviation": "ILH",
+    "city": "Ilha Dourada",
+    "colors": {
+      "primary": "#1D428A",
+      "secondary": "#FFD100"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#1D428A",
+        "#FFD100"
+      ],
+      "initials": "IDCR",
+      "shape": "triangle"
+    },
+    "id": "clube-021",
+    "initialCash": 1820000,
+    "name": "Ilha Dourada Clube de Regatas",
+    "reputation": 43,
+    "shortName": "Ilha Dourada",
+    "stadiumCapacity": 10500
+  },
+  {
+    "abbreviation": "BRI",
+    "city": "Brisamar",
+    "colors": {
+      "primary": "#004C45",
+      "secondary": "#F47920"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#004C45",
+        "#F47920"
+      ],
+      "initials": "BFC",
+      "shape": "rectangle"
+    },
+    "id": "clube-022",
+    "initialCash": 1840000,
+    "name": "Brisamar Futebol Clube",
+    "reputation": 38,
+    "shortName": "Brisamar",
+    "stadiumCapacity": 15000
+  },
+  {
+    "abbreviation": "LBR",
+    "city": "Lagoa Branca",
+    "colors": {
+      "primary": "#8B5A2B",
+      "secondary": "#F47920"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#8B5A2B",
+        "#F47920"
+      ],
+      "initials": "LBFR",
+      "shape": "classic"
+    },
+    "id": "clube-023",
+    "initialCash": 1870000,
+    "name": "Lagoa Branca Futebol e Regatas",
+    "reputation": 40,
+    "shortName": "Lagoa Branca",
+    "stadiumCapacity": 10000
+  },
+  {
+    "abbreviation": "CNO",
+    "city": "Carnaubeira Nova",
+    "colors": {
+      "primary": "#004C45",
+      "secondary": "#7A1F3D"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#004C45",
+        "#7A1F3D",
+        "#006B3F"
+      ],
+      "initials": "CACN",
+      "shape": "triangle"
+    },
+    "id": "clube-024",
+    "initialCash": 1550000,
+    "name": "Clube Atlético Carnaubeira Nova",
+    "reputation": 41,
+    "shortName": "Carnaubeira Nova",
+    "stadiumCapacity": 8500
+  },
+  {
+    "abbreviation": "VAC",
+    "city": "Vila das Acácias",
+    "colors": {
+      "primary": "#8B5A2B",
+      "secondary": "#F47920"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#8B5A2B",
+        "#F47920"
+      ],
+      "initials": "ADVA",
+      "shape": "round"
+    },
+    "id": "clube-025",
+    "initialCash": 1500000,
+    "name": "Associação Desportiva Vila das Acácias",
+    "reputation": 34,
+    "shortName": "Vila das Acácias",
+    "stadiumCapacity": 6000
+  },
+  {
+    "abbreviation": "SBO",
+    "city": "Salto Bonito",
+    "colors": {
+      "primary": "#000000",
+      "secondary": "#C8102E"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#000000",
+        "#C8102E"
+      ],
+      "initials": "SBFC",
+      "shape": "round"
+    },
+    "id": "clube-026",
+    "initialCash": 2230000,
+    "name": "Salto Bonito Futebol Clube",
+    "reputation": 50,
+    "shortName": "Salto Bonito",
+    "stadiumCapacity": 31500
+  },
+  {
+    "abbreviation": "CAB",
+    "city": "Cabrobó Novo",
+    "colors": {
+      "primary": "#5B2C83",
+      "secondary": "#00A3E0"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#5B2C83",
+        "#00A3E0",
+        "#8B5A2B"
+      ],
+      "initials": "CNCR",
+      "shape": "triangle"
+    },
+    "id": "clube-027",
+    "initialCash": 650000,
+    "name": "Cabrobó Novo Clube de Regatas",
+    "reputation": 27,
+    "shortName": "Cabrobó Novo",
+    "stadiumCapacity": 11000
+  },
+  {
+    "abbreviation": "PBR",
+    "city": "Pontal da Brisa",
+    "colors": {
+      "primary": "#0033A0",
+      "secondary": "#C8102E"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#0033A0",
+        "#C8102E"
+      ],
+      "initials": "PBFC",
+      "shape": "round"
+    },
+    "id": "clube-028",
+    "initialCash": 1610000,
+    "name": "Pontal da Brisa Futebol Clube",
+    "reputation": 41,
+    "shortName": "Pontal da Brisa",
+    "stadiumCapacity": 14500
+  },
+  {
+    "abbreviation": "VCA",
+    "city": "Vila Cândida",
+    "colors": {
+      "primary": "#7A1F3D",
+      "secondary": "#00A3E0"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#7A1F3D",
+        "#00A3E0"
+      ],
+      "initials": "VCEC",
+      "shape": "round"
+    },
+    "id": "clube-029",
+    "initialCash": 620000,
+    "name": "Vila Cândida Esporte Clube",
+    "reputation": 25,
+    "shortName": "Vila Cândida",
+    "stadiumCapacity": 9500
+  },
+  {
+    "abbreviation": "PLI",
+    "city": "Pedra Lisa",
+    "colors": {
+      "primary": "#00A3E0",
+      "secondary": "#9EA2A2"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#00A3E0",
+        "#9EA2A2",
+        "#C8102E"
+      ],
+      "initials": "PLEC",
+      "shape": "round"
+    },
+    "id": "clube-030",
+    "initialCash": 1140000,
+    "name": "Pedra Lisa Esporte Clube",
+    "reputation": 35,
+    "shortName": "Pedra Lisa",
+    "stadiumCapacity": 14000
+  },
+  {
+    "abbreviation": "RAZ",
+    "city": "Rochedo Azul",
+    "colors": {
+      "primary": "#000000",
+      "secondary": "#FFFFFF"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#000000",
+        "#FFFFFF"
+      ],
+      "initials": "RAFR",
+      "shape": "round"
+    },
+    "id": "clube-031",
+    "initialCash": 1020000,
+    "name": "Rochedo Azul Futebol e Regatas",
+    "reputation": 30,
+    "shortName": "Rochedo Azul",
+    "stadiumCapacity": 14500
+  },
+  {
+    "abbreviation": "VAL",
+    "city": "Vale Sereno",
+    "colors": {
+      "primary": "#FFD100",
+      "secondary": "#8B5A2B"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#FFD100",
+        "#8B5A2B"
+      ],
+      "initials": "VSCR",
+      "shape": "classic"
+    },
+    "id": "clube-032",
+    "initialCash": 2540000,
+    "name": "Vale Sereno Clube de Regatas",
+    "reputation": 54,
+    "shortName": "Vale Sereno",
+    "stadiumCapacity": 22000
+  },
+  {
+    "abbreviation": "BAL",
+    "city": "Barreiro Alto",
+    "colors": {
+      "primary": "#006B3F",
+      "secondary": "#8B5A2B"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#006B3F",
+        "#8B5A2B"
+      ],
+      "initials": "BAFR",
+      "shape": "triangle"
+    },
+    "id": "clube-033",
+    "initialCash": 640000,
+    "name": "Barreiro Alto Futebol e Regatas",
+    "reputation": 28,
+    "shortName": "Barreiro Alto",
+    "stadiumCapacity": 18000
+  },
+  {
+    "abbreviation": "BES",
+    "city": "Barra Estreita",
+    "colors": {
+      "primary": "#004C45",
+      "secondary": "#8B5A2B"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#004C45",
+        "#8B5A2B"
+      ],
+      "initials": "BECR",
+      "shape": "round"
+    },
+    "id": "clube-034",
+    "initialCash": 1460000,
+    "name": "Barra Estreita Clube de Regatas",
+    "reputation": 41,
+    "shortName": "Barra Estreita",
+    "stadiumCapacity": 6000
+  },
+  {
+    "abbreviation": "GUA",
+    "city": "Guaravera",
+    "colors": {
+      "primary": "#000000",
+      "secondary": "#FFD100"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#000000",
+        "#FFD100",
+        "#F47920"
+      ],
+      "initials": "SEG",
+      "shape": "round"
+    },
+    "id": "clube-035",
+    "initialCash": 740000,
+    "name": "Sociedade Esportiva Guaravera",
+    "reputation": 28,
+    "shortName": "Guaravera",
+    "stadiumCapacity": 16500
+  },
+  {
+    "abbreviation": "LMI",
+    "city": "Lagoa do Mirante",
+    "colors": {
+      "primary": "#F47920",
+      "secondary": "#000000"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#F47920",
+        "#000000"
+      ],
+      "initials": "LMFC",
+      "shape": "round"
+    },
+    "id": "clube-036",
+    "initialCash": 2440000,
+    "name": "Lagoa do Mirante Futebol Clube",
+    "reputation": 52,
+    "shortName": "Lagoa do Mirante",
+    "stadiumCapacity": 27500
+  },
+  {
+    "abbreviation": "TGR",
+    "city": "Taboleiro Grande",
+    "colors": {
+      "primary": "#8B5A2B",
+      "secondary": "#FFD100"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#8B5A2B",
+        "#FFD100"
+      ],
+      "initials": "ECTG",
+      "shape": "rectangle"
+    },
+    "id": "clube-037",
+    "initialCash": 1210000,
+    "name": "Esporte Clube Taboleiro Grande",
+    "reputation": 37,
+    "shortName": "Taboleiro Grande",
+    "stadiumCapacity": 16500
+  },
+  {
+    "abbreviation": "MAZ",
+    "city": "Morro Azulado",
+    "colors": {
+      "primary": "#FFFFFF",
+      "secondary": "#8B5A2B"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#FFFFFF",
+        "#8B5A2B"
+      ],
+      "initials": "CAMA",
+      "shape": "triangle"
+    },
+    "id": "clube-038",
+    "initialCash": 790000,
+    "name": "Clube Atlético Morro Azulado",
+    "reputation": 31,
+    "shortName": "Morro Azulado",
+    "stadiumCapacity": 17500
+  },
+  {
+    "abbreviation": "LES",
+    "city": "Lagoa Esmeralda",
+    "colors": {
+      "primary": "#FFFFFF",
+      "secondary": "#F47920"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#FFFFFF",
+        "#F47920"
+      ],
+      "initials": "LEFC",
+      "shape": "triangle"
+    },
+    "id": "clube-039",
+    "initialCash": 2170000,
+    "name": "Lagoa Esmeralda Futebol Clube",
+    "reputation": 47,
+    "shortName": "Lagoa Esmeralda",
+    "stadiumCapacity": 36500
+  },
+  {
+    "abbreviation": "SCL",
+    "city": "Santa Clareira",
+    "colors": {
+      "primary": "#FFD100",
+      "secondary": "#0033A0"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#FFD100",
+        "#0033A0",
+        "#C8102E"
+      ],
+      "initials": "SCCR",
+      "shape": "triangle"
+    },
+    "id": "clube-040",
+    "initialCash": 3940000,
+    "name": "Santa Clareira Clube de Regatas",
+    "reputation": 55,
+    "shortName": "Santa Clareira",
+    "stadiumCapacity": 32000
+  }
+]

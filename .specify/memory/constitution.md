@@ -1,6 +1,22 @@
 <!--
 Sync Impact Report
-- Versão: (template sem versão) → 1.0.0 (ratificação inicial)
+- Versão: 1.0.0 → 1.1.0 (MINOR: mudança material na seção "Stack e Restrições Técnicas")
+- Princípios modificados: nenhum
+- Seção alterada: "Stack e Restrições Técnicas"
+  - UI web: React + Vite → Next.js (React) com static export obrigatório e sem recursos de
+    servidor
+  - Adicionado: Biome como linter/formatador único
+  - Verificação da fronteira do motor: Biome + teste de arquitetura com Vitest
+- Seções adicionadas/removidas: nenhuma
+- Templates:
+  - ✅ .specify/templates/plan-template.md — sem mudança necessária (gates I–IX inalterados)
+  - ✅ .specify/templates/tasks-template.md — sem mudança necessária
+  - ✅ .specify/templates/spec-template.md — sem mudança necessária
+  - ✅ docs/design.md §2 — stack atualizada
+- TODOs adiados: nenhum
+
+Histórico:
+- 1.0.0 (2026-10-14): ratificação inicial (template sem versão → 1.0.0)
 - Princípios definidos (template → novo):
   - [PRINCIPLE_1] → I. Motor Separado da Interface
   - [PRINCIPLE_2] → II. Determinismo
@@ -139,14 +155,20 @@ jogador.
 ## Stack e Restrições Técnicas
 
 - **Linguagem:** TypeScript com `strict: true`; `any` só com justificativa explícita.
-- **UI web:** React + Vite.
+- **UI web:** Next.js (React) **exclusivamente em modo static export** (`output: "export"`).
+  São PROIBIDOS recursos que exigem servidor: rotas de API/route handlers dinâmicos, SSR por
+  requisição, server actions, middleware e otimização de imagens em runtime. O build gera
+  arquivos estáticos que rodam offline e servem de base para o Electron.
 - **Testes:** Vitest (motor, schemas, migrações e simulações longas).
+- **Lint e formatação:** Biome, como ferramenta única para todo o monorepo.
 - **Schemas:** Zod para banco, mods, configuração e saves.
 - **Persistência:** IndexedDB no navegador; arquivo em disco no desktop (Electron, futuro),
   ambos atrás de um adaptador comum. Exportar/importar save em JSON compactado.
 - **Hospedagem:** site estático (GitHub Pages, Cloudflare Pages, itch.io). Sem backend.
 - **Organização:** o motor é um pacote/diretório próprio cuja fronteira de dependências é
-  verificável (ex.: regra de lint ou checagem de imports que bloqueia React/DOM no motor).
+  verificável: tsconfig do motor sem tipos de DOM/Node, regras do Biome que bloqueiam imports
+  e globais proibidos, e um teste de arquitetura (Vitest) que falha se o código do motor usar
+  APIs não determinísticas.
 - **Idioma:** documentação, specs, planos e tarefas em português. Identificadores de código
   podem ser em inglês, de forma consistente.
 
@@ -173,4 +195,4 @@ jogador.
 - Toda spec, plano e revisão de código DEVE verificar conformidade com os princípios;
   exceções são temporárias, justificadas por escrito e acompanhadas de plano de remoção.
 
-**Version**: 1.0.0 | **Ratified**: 2026-10-14 | **Last Amended**: 2026-10-14
+**Version**: 1.1.0 | **Ratified**: 2026-10-14 | **Last Amended**: 2026-10-14

@@ -1,0 +1,72 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "includes": ["**", "!**/node_modules", "!mods", "!.specify", "!.claude", "!specs", "!docs"]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double"
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended"
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["packages/engine/src/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "paths": {
+                  "react": "O motor não pode depender de React (Constituição, Princípio I).",
+                  "react-dom": "O motor não pode depender de React (Constituição, Princípio I).",
+                  "next": "O motor não pode depender de Next.js (Constituição, Princípio I).",
+                  "fs": "O motor não faz I/O; use o pacote tools (Princípio I).",
+                  "path": "O motor não faz I/O; use o pacote tools (Princípio I)."
+                },
+                "patterns": [
+                  {
+                    "group": ["node:*", "react/*", "react-dom/*", "next/*"],
+                    "message": "O motor é TypeScript puro, sem Node/React/Next (Princípio I)."
+                  }
+                ]
+              }
+            },
+            "noRestrictedGlobals": {
+              "level": "error",
+              "options": {
+                "deniedGlobals": {
+                  "Date": "Proibido no motor: use o calendário do jogo (Princípio II).",
+                  "performance": "Proibido no motor: fonte não determinística (Princípio II).",
+                  "window": "O motor não acessa APIs do navegador (Princípio I).",
+                  "document": "O motor não acessa APIs do navegador (Princípio I).",
+                  "globalThis": "O motor não acessa o ambiente global (Princípio I).",
+                  "localStorage": "O motor não faz persistência (Princípio I).",
+                  "indexedDB": "O motor não faz persistência (Princípio I).",
+                  "fetch": "O motor não acessa a rede (Princípios I e VIII)."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

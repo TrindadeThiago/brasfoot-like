@@ -1,0 +1,163 @@
+[
+  {
+    "abbreviation": "AAA",
+    "city": "Cidade 1",
+    "colors": {
+      "primary": "#112233",
+      "secondary": "#FFFFFF"
+    },
+    "countryId": "pais-1",
+    "crest": {
+      "colors": ["#112233", "#FFFFFF"],
+      "initials": "CT1",
+      "shape": "classic"
+    },
+    "id": "clube-1",
+    "initialCash": 1000000,
+    "mascote": "Tatu",
+    "name": "Clube de Teste 1",
+    "reputation": 50,
+    "shortName": "Teste 1",
+    "stadiumCapacity": 20000
+  },
+  {
+    "abbreviation": "BBB",
+    "city": "Cidade 2",
+    "colors": {
+      "primary": "#112233",
+      "secondary": "#FFFFFF"
+    },
+    "countryId": "pais-1",
+    "crest": {
+      "colors": ["#112233", "#FFFFFF"],
+      "initials": "CT2",
+      "shape": "classic"
+    },
+    "id": "clube-2",
+    "initialCash": 1000000,
+    "name": "Clube de Teste 2",
+    "reputation": 50,
+    "shortName": "Teste 2",
+    "stadiumCapacity": 20000
+  },
+  {
+    "abbreviation": "CCC",
+    "city": "Cidade 3",
+    "colors": {
+      "primary": "#112233",
+      "secondary": "#FFFFFF"
+    },
+    "countryId": "pais-1",
+    "crest": {
+      "colors": ["#112233", "#FFFFFF"],
+      "initials": "CT3",
+      "shape": "classic"
+    },
+    "id": "clube-3",
+    "initialCash": 1000000,
+    "name": "Clube de Teste 3",
+    "reputation": 50,
+    "shortName": "Teste 3",
+    "stadiumCapacity": 20000
+  },
+  {
+    "abbreviation": "DDD",
+    "city": "Cidade 4",
+    "colors": {
+      "primary": "#112233",
+      "secondary": "#FFFFFF"
+    },
+    "countryId": "pais-1",
+    "crest": {
+      "colors": ["#112233", "#FFFFFF"],
+      "initials": "CT4",
+      "shape": "classic"
+    },
+    "id": "clube-4",
+    "initialCash": 1000000,
+    "name": "Clube de Teste 4",
+    "reputation": 50,
+    "shortName": "Teste 4",
+    "stadiumCapacity": 20000
+  },
+  {
+    "abbreviation": "EEE",
+    "city": "Cidade 5",
+    "colors": {
+      "primary": "#112233",
+      "secondary": "#FFFFFF"
+    },
+    "countryId": "pais-1",
+    "crest": {
+      "colors": ["#112233", "#FFFFFF"],
+      "initials": "CT5",
+      "shape": "classic"
+    },
+    "id": "clube-5",
+    "initialCash": 1000000,
+    "name": "Clube de Teste 5",
+    "reputation": 50,
+    "shortName": "Teste 5",
+    "stadiumCapacity": 20000
+  },
+  {
+    "abbreviation": "FFF",
+    "city": "Cidade 6",
+    "colors": {
+      "primary": "#112233",
+      "secondary": "#FFFFFF"
+    },
+    "countryId": "pais-1",
+    "crest": {
+      "colors": ["#112233", "#FFFFFF"],
+      "initials": "CT6",
+      "shape": "classic"
+    },
+    "id": "clube-6",
+    "initialCash": 1000000,
+    "name": "Clube de Teste 6",
+    "reputation": 50,
+    "shortName": "Teste 6",
+    "stadiumCapacity": 20000
+  },
+  {
+    "abbreviation": "GGG",
+    "city": "Cidade 7",
+    "colors": {
+      "primary": "#112233",
+      "secondary": "#FFFFFF"
+    },
+    "countryId": "pais-1",
+    "crest": {
+      "colors": ["#112233", "#FFFFFF"],
+      "initials": "CT7",
+      "shape": "classic"
+    },
+    "id": "clube-7",
+    "initialCash": 1000000,
+    "name": "Clube de Teste 7",
+    "reputation": 50,
+    "shortName": "Teste 7",
+    "stadiumCapacity": 20000
+  },
+  {
+    "abbreviation": "HHH",
+    "city": "Cidade 8",
+    "colors": {
+      "primary": "#112233",
+      "secondary": "#FFFFFF"
+    },
+    "countryId": "pais-1",
+    "crest": {
+      "colors": ["#112233", "#FFFFFF"],
+      "initials": "CT8",
+      "shape": "classic"
+    },
+    "id": "clube-8",
+    "initialCash": 1000000,
+    "name": "Clube de Teste 8",
+    "reputation": 50,
+    "shortName": "Teste 8",
+    "stadiumCapacity": 20000
+  }
+]
