@@ -1,0 +1,14 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createRng > mantém uma sequência estável conhecida (snapshot entre engines) 1`] = `
+[
+  2965739158,
+  1832023836,
+  2921408395,
+  2886176394,
+  3587401066,
+  3043468217,
+  1813704278,
+  2835179724,
+]
+`;

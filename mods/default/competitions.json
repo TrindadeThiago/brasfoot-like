@@ -1,0 +1,81 @@
+[
+  {
+    "countryId": "val",
+    "divisions": [
+      {
+        "clubIds": [
+          "clube-001",
+          "clube-002",
+          "clube-003",
+          "clube-004",
+          "clube-005",
+          "clube-006",
+          "clube-007",
+          "clube-008",
+          "clube-009",
+          "clube-010",
+          "clube-011",
+          "clube-012",
+          "clube-013",
+          "clube-014",
+          "clube-015",
+          "clube-016",
+          "clube-017",
+          "clube-018",
+          "clube-019",
+          "clube-020"
+        ],
+        "level": 1,
+        "name": "Série A",
+        "promotionSlots": 0,
+        "relegationSlots": 4
+      },
+      {
+        "clubIds": [
+          "clube-021",
+          "clube-022",
+          "clube-023",
+          "clube-024",
+          "clube-025",
+          "clube-026",
+          "clube-027",
+          "clube-028",
+          "clube-029",
+          "clube-030",
+          "clube-031",
+          "clube-032",
+          "clube-033",
+          "clube-034",
+          "clube-035",
+          "clube-036",
+          "clube-037",
+          "clube-038",
+          "clube-039",
+          "clube-040"
+        ],
+        "level": 2,
+        "name": "Série B",
+        "promotionSlots": 4,
+        "relegationSlots": 0
+      }
+    ],
+    "format": {
+      "points": {
+        "draw": 1,
+        "loss": 0,
+        "win": 3
+      },
+      "rounds": 2,
+      "tiebreakers": [
+        "wins",
+        "goal-difference",
+        "goals-for",
+        "head-to-head",
+        "draw-lots"
+      ],
+      "type": "league"
+    },
+    "id": "liga-nacional",
+    "name": "Campeonato Valtoriano"
+  }
+]
