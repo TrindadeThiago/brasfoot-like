@@ -1,2 +1,10 @@
 # Spec Kit: cache do catálogo de extensões
 .specify/extensions/.cache/
+
+# Node
+node_modules/
+coverage/
+dist/
+*.tsbuildinfo
+*.log
+.env*
