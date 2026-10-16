@@ -1,0 +1,34 @@
+{
+  "name": "@brasfoot-like/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && tsx ../../tools/src/precache.ts",
+    "preview": "tsx ../../tools/src/serve-static.ts out 4173",
+    "typecheck": "tsc --noEmit -p .",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@brasfoot-like/default-mod": "workspace:*",
+    "@brasfoot-like/engine": "workspace:*",
+    "@brasfoot-like/i18n": "workspace:*",
+    "@brasfoot-like/save": "workspace:*",
+    "idb": "^8.0.4",
+    "next": "16.4.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "fake-indexeddb": "6.2.5",
+    "happy-dom": "20.14.6",
+    "tsx": "^4.23.15"
+  }
+}

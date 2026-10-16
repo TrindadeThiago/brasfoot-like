@@ -1,0 +1,48 @@
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-5);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-width: 420px;
+}
+
+.field small {
+  color: var(--color-muted);
+}
+
+.advanced summary {
+  cursor: pointer;
+  color: var(--color-muted);
+}
+
+.club {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.footer {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  justify-content: flex-end;
+  padding: var(--space-3) 0;
+  background: var(--color-bg);
+}
+
+.error {
+  color: var(--color-danger);
+}
