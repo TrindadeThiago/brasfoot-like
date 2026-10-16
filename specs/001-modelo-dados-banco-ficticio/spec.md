@@ -234,8 +234,10 @@ distribuições de força, idade e posições ficam dentro das faixas definidas 
 - **FR-032**: Considerando todos os jogadores do banco (escala "contida"): força média entre 55 e
   65; no máximo 2% com força ≥ 85; ao menos 50% com força entre 45 e 70; nenhum abaixo de 20.
 - **FR-033**: A força média dos 16 melhores jogadores de cada clube da Série A DEVE superar a da
-  Série B em pelo menos 5 pontos, e a média dos grandes DEVE superar a dos pequenos da Série A em
-  pelo menos 8 pontos.
+  Série B em pelo menos 4 pontos, e a média dos grandes DEVE superar a dos pequenos da Série A em
+  pelo menos 5,5 pontos. *(Emenda de 2026-10-16, feature 003: eram 5 e 8; a hierarquia anterior
+  deixava a temporada previsível demais — ver `specs/003-temporada-pontos-corridos/research.md`
+  R12.)*
 - **FR-034**: Idades geradas entre 16 e 37 anos, com média entre 24 e 28 anos.
 - **FR-035**: Após completar os atributos ocultos (FR-017b) do banco gerado: potencial ≥ força
   para todos; jogadores com até 21 anos têm potencial médio pelo menos 8 pontos acima da força

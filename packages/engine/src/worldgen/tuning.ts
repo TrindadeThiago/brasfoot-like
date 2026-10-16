@@ -25,7 +25,7 @@ export const GENERATOR_TUNING = {
   },
 
   /** Nível técnico do clube ≈ média dos 16 melhores: base + fator × reputação ± ruído. */
-  clubLevel: { base: 39, perReputation: 0.42, noise: 3 },
+  clubLevel: { base: 49.9, perReputation: 0.22, noise: 3 },
 
   /** Composição do elenco: mínimo e máximo por posição e total (FR-030). */
   squad: {
@@ -45,7 +45,7 @@ export const GENERATOR_TUNING = {
   strengthClamp: [20, 99],
 
   /** Craques: chance de um titular receber um bônus de força, por camada. */
-  star: { chance: { big: 0.06, medium: 0.015, small: 0 }, bonus: [7, 12] },
+  star: { chance: { big: 0.1, medium: 0.03, small: 0 }, bonus: [7, 12] },
 
   /** Idade (triangular): titulares/reservas e demais jogadores (mais jovens). */
   age: {

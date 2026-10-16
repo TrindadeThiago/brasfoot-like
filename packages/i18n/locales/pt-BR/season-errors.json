@@ -1,0 +1,10 @@
+{
+  "season.unknown_competition": "A competição {competitionId} não existe no banco.",
+  "season.unknown_division": "A competição {competitionId} não tem divisão de nível {level}.",
+  "season.unsupported_format": "O formato de disputa \"{format}\" ainda não pode ser simulado como temporada.",
+  "season.too_few_clubs": "A divisão tem {count, plural, one {# clube} other {# clubes}}; são necessários ao menos 2.",
+  "season.invalid_rules": "A regra {rule} vale {value}, mas deve estar entre {min} e {max}.",
+  "season.lineup_unavailable": "A escalação do clube {clubId} inclui {playerId}, que está suspenso ou lesionado.",
+  "season.invalid_lineup": "A escalação do clube {clubId} foi recusada pelo motor de partida ({matchErrorCode}).",
+  "season.lineup_not_playing": "O clube {clubId} não joga na rodada {round}."
+}

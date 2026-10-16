@@ -5,6 +5,7 @@ import {
   formatLabel,
   formatMatchError,
   formatMessage,
+  formatSeasonError,
   messageKeys,
 } from "../src/index.js";
 
@@ -109,5 +110,22 @@ describe("formatMatchError", () => {
 
   it("traduz rótulos de postura", () => {
     expect(formatLabel("posture.attacking", "pt-BR")).toBe("Ofensiva");
+  });
+});
+
+describe("formatSeasonError", () => {
+  it("usa as mensagens do contrato", () => {
+    expect(
+      formatSeasonError(
+        {
+          code: "season.lineup_unavailable",
+          params: { clubId: "clube-001", playerId: "jogador-00007" },
+        },
+        "pt-BR",
+      ),
+    ).toBe("A escalação do clube clube-001 inclui jogador-00007, que está suspenso ou lesionado.");
+    expect(formatSeasonError({ code: "season.too_few_clubs", params: { count: 1 } }, "pt-BR")).toBe(
+      "A divisão tem 1 clube; são necessários ao menos 2.",
+    );
   });
 });

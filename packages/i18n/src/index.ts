@@ -4,5 +4,6 @@ export {
   formatLabel,
   formatMatchError,
   formatMessage,
+  formatSeasonError,
   messageKeys,
 } from "./format.js";

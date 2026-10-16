@@ -7,7 +7,8 @@
     "typecheck": "tsc --noEmit -p .",
     "gen:default-bank": "tsx src/gen-default-bank.ts",
     "validate-bank": "tsx src/validate-bank.ts",
-    "sim:matches": "tsx src/simulate-matches.ts"
+    "sim:matches": "tsx src/simulate-matches.ts",
+    "sim:season": "tsx src/simulate-season.ts"
   },
   "dependencies": {
     "@brasfoot-like/engine": "workspace:*",

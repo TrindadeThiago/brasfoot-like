@@ -70,7 +70,7 @@ export const MATCH_TUNING = {
   } satisfies Record<string, number>,
 
   /** Peso de finalização por posição da vaga. */
-  shooterWeight: { GK: 0.01, CB: 0.25, FB: 0.35, DM: 0.5, MF: 1.1, FW: 2.2 },
+  shooterWeight: { GK: 0.01, CB: 0.3, FB: 0.4, DM: 0.55, MF: 1.2, FW: 1.8 },
   /** Peso de assistência por posição da vaga. */
   assistWeight: { GK: 0.05, CB: 0.25, FB: 0.9, DM: 0.7, MF: 1.4, FW: 1 },
   /** Peso de falta por posição da vaga. */

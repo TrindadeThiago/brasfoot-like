@@ -55,3 +55,19 @@ e regenere `mods/default/`.
 - **Calibragem** — constantes em `src/match/tuning.ts`; faixas em `src/match/limits.ts`
   (FR-040 a FR-049), verificadas por `test/match/realism/*`. Para recalibrar, ajuste as
   constantes e rode `pnpm sim:matches` (10.000 partidas, ~4 s) e `pnpm test`.
+
+## Temporada (feature 003)
+
+- **API** — `createSeason(world, { competitionId, divisionLevel, seed })`,
+  `advanceSeason(season, world, { rounds } | { toEnd: true }, lineups?)`, `standings`,
+  `seasonStats`, `topScorers`, `topAssists`, `seasonReport`, `aggregateCredibility`. O estado da
+  temporada é serializável e **não** guarda o mundo: o `CompletedBank` é passado em cada chamada.
+- **Calendário** — método de Berger com a ordem dos clubes sorteada pela seed: cada par uma vez
+  por turno, no máximo 2 jogos seguidos com o mesmo mando, returno espelhado, folga com número
+  ímpar de clubes.
+- **Tabela** — derivada dos registros; desempates na ordem do banco, em grupos, com confronto
+  direto em minitabela e sorteio estável pela seed.
+- **Disciplina** — 3 amarelos ou vermelho = 1 jogo (configurável); amarelos da expulsão não
+  acumulam; lesões afastam 1–2, 3–6 ou 7–15 partidas conforme a gravidade.
+- **Credibilidade** — `pnpm sim:season --seed 42` (uma temporada) e
+  `pnpm sim:season --seasons 100` (critérios FR-030 a FR-037).
