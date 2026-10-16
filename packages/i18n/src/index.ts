@@ -1,9 +1,11 @@
-export type { Locale } from "./format.js";
+export type { Locale } from "./format";
 export {
   formatIssue,
   formatLabel,
   formatMatchError,
   formatMessage,
   formatSeasonError,
+  formatUi,
   messageKeys,
-} from "./format.js";
+  uiKeys,
+} from "./format";

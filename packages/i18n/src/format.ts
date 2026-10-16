@@ -5,6 +5,7 @@ import ptBrErrors from "../locales/pt-BR/errors.json" with { type: "json" };
 import ptBrMatchErrors from "../locales/pt-BR/match-errors.json" with { type: "json" };
 import ptBrMessages from "../locales/pt-BR/messages.json" with { type: "json" };
 import ptBrSeasonErrors from "../locales/pt-BR/season-errors.json" with { type: "json" };
+import ptBrUi from "../locales/pt-BR/ui.json" with { type: "json" };
 
 export type Locale = "pt-BR";
 
@@ -14,6 +15,7 @@ interface LocaleBundle {
   errors: Record<string, string>;
   matchErrors: Record<string, string>;
   seasonErrors: Record<string, string>;
+  ui: Record<string, string>;
   catalog: Record<string, string>;
   messages: Record<string, string>;
 }
@@ -23,6 +25,7 @@ const BUNDLES: Record<Locale, LocaleBundle> = {
     errors: ptBrErrors,
     matchErrors: ptBrMatchErrors,
     seasonErrors: ptBrSeasonErrors,
+    ui: ptBrUi,
     catalog: ptBrCatalog,
     messages: ptBrMessages,
   },
@@ -114,4 +117,22 @@ export function formatSeasonError(error: SeasonError, locale: Locale): string {
     throw new Error(`erro de temporada sem tradução (${locale}): ${error.code}`);
   }
   return render(locale, template, error.params);
+}
+
+/** Texto da interface (`ui.json`), em ICU MessageFormat. */
+export function formatUi(
+  key: string,
+  values: MessageValues = {},
+  locale: Locale = "pt-BR",
+): string {
+  const template = BUNDLES[locale].ui[key];
+  if (template === undefined) {
+    throw new Error(`texto da interface sem tradução (${locale}): ${key}`);
+  }
+  return render(locale, template, values);
+}
+
+/** Chaves de texto da interface disponíveis no idioma. */
+export function uiKeys(locale: Locale = "pt-BR"): string[] {
+  return Object.keys(BUNDLES[locale].ui);
 }
