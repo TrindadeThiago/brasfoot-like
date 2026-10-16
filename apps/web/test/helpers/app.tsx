@@ -2,10 +2,14 @@ import { render } from "@testing-library/react";
 import { type ComponentType, useSyncExternalStore } from "react";
 import SavesPage from "../../src/app/carreiras/page";
 import CalendarPage from "../../src/app/jogo/calendario/page";
+import ScorersPage from "../../src/app/jogo/competicao/artilharia/page";
 import CompetitionPage from "../../src/app/jogo/competicao/page";
+import ResultsPage from "../../src/app/jogo/competicao/resultados/page";
 import SquadPage from "../../src/app/jogo/elenco/page";
 import LineupPage from "../../src/app/jogo/escalacao/page";
+import SeasonEndPage from "../../src/app/jogo/fim-de-temporada/page";
 import HomePage from "../../src/app/jogo/page";
+import RoundPage from "../../src/app/jogo/rodada/page";
 import NewCareerPage from "../../src/app/nova-carreira/page";
 import OpeningPage from "../../src/app/page";
 import { GameProvider } from "../../src/game/GameProvider";
@@ -20,6 +24,10 @@ const ROUTES: Record<string, ComponentType> = {
   "/jogo/elenco": SquadPage,
   "/jogo/escalacao": LineupPage,
   "/jogo/competicao": CompetitionPage,
+  "/jogo/competicao/resultados": ResultsPage,
+  "/jogo/competicao/artilharia": ScorersPage,
+  "/jogo/rodada": RoundPage,
+  "/jogo/fim-de-temporada": SeasonEndPage,
   "/jogo/calendario": CalendarPage,
 };
 

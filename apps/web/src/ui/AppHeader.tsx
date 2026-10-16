@@ -8,6 +8,7 @@ import { useT } from "../i18n";
 import styles from "./AppHeader.module.css";
 import { Button } from "./Button";
 import { Crest } from "./Crest";
+import { confirmLeave } from "./leave-guard";
 import { SaveIndicator } from "./SaveIndicator";
 
 export const GAME_SCREENS = [
@@ -17,6 +18,13 @@ export const GAME_SCREENS = [
   { path: "/jogo/competicao", key: "nav.competition" },
   { path: "/jogo/calendario", key: "nav.calendar" },
 ] as const;
+
+/** A tela da navegação está ativa (Competição inclui as abas de resultados e artilharia). */
+function isActive(pathname: string, path: string): boolean {
+  return path === "/jogo"
+    ? pathname === path
+    : pathname === path || pathname.startsWith(`${path}/`);
+}
 
 export function screenHref(path: string, careerId: string): string {
   return `${path}/?c=${careerId}`;
@@ -50,8 +58,11 @@ export function AppHeader({ save, onHelp }: { save: SaveFile; onHelp: () => void
           <Link
             key={screen.path}
             href={screenHref(screen.path, save.id)}
-            aria-current={pathname === screen.path ? "page" : undefined}
-            className={pathname === screen.path ? styles.active : undefined}
+            aria-current={isActive(pathname, screen.path) ? "page" : undefined}
+            className={isActive(pathname, screen.path) ? styles.active : undefined}
+            onClick={(event) => {
+              if (!confirmLeave()) event.preventDefault();
+            }}
           >
             {t(screen.key)}
           </Link>

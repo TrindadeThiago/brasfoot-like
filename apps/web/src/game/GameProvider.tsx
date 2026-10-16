@@ -2,18 +2,21 @@
 
 import {
   adjustLineup,
-  advanceSeason,
   changeFormation as changeLineupFormation,
   clubUnavailability,
+  completeRound,
   type FormationId,
+  finishRound,
   isSeasonOver,
   type Lineup,
   type LineupIssue,
+  type LiveRound,
   type MatchRecord,
   managerAutoLineup,
   type Place,
   type Posture,
   placePlayer as placeLineupPlayer,
+  startRound,
   validateLineup,
 } from "@brasfoot-like/engine";
 import { createSave, type SaveError, type SaveFile, touch } from "@brasfoot-like/save";
@@ -29,7 +32,7 @@ import {
 } from "react";
 import { announceSaved, listenSaved } from "../storage/channel";
 import { createIndexedDbStore, type SaveStore, type SaveWriteResult } from "../storage/indexeddb";
-import { readPreferences, writePreferences } from "../storage/preferences";
+import { type RoundMode, readPreferences, writePreferences } from "../storage/preferences";
 import { defaultBankInput } from "./default-bank";
 import { newCareerId, newSeed } from "./ids";
 
@@ -45,8 +48,10 @@ export interface GameState {
   conflict: boolean;
   /** Chave de i18n do erro ao abrir. */
   error?: string;
-  /** Problemas que impediram (`blocked`) ou pedem confirmação (`confirm`) para simular. */
-  simulateIssues?: { kind: "blocked" | "confirm"; issues: LineupIssue[] };
+  /** Problemas que impediram (`blocked`) ou pedem confirmação (`confirm`) para jogar a rodada. */
+  simulateIssues?: { kind: "blocked" | "confirm"; issues: LineupIssue[]; mode: RoundMode };
+  /** Rodada ao vivo preparada (só em memória; descartada ao sair). */
+  live?: LiveRound;
 }
 
 export type GameAction =
@@ -56,7 +61,11 @@ export type GameAction =
   | { type: "saving"; status: SavingStatus; message?: string }
   | { type: "conflict"; value: boolean }
   | { type: "update"; save: SaveFile }
-  | { type: "simulateIssues"; value?: { kind: "blocked" | "confirm"; issues: LineupIssue[] } }
+  | {
+      type: "simulateIssues";
+      value?: { kind: "blocked" | "confirm"; issues: LineupIssue[]; mode: RoundMode };
+    }
+  | { type: "live"; value?: LiveRound }
   | { type: "close" };
 
 export const initialGameState: GameState = { status: "idle", saving: "idle", conflict: false };
@@ -89,6 +98,10 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       const { simulateIssues: _issues, ...rest } = state;
       return action.value ? { ...rest, simulateIssues: action.value } : rest;
     }
+    case "live": {
+      const { live: _live, ...rest } = state;
+      return action.value ? { ...rest, live: action.value } : rest;
+    }
     case "close":
       return initialGameState;
   }
@@ -117,6 +130,17 @@ interface GameContextValue {
    * 005): escalação inválida não joga; aviso de goleiro pede `confirmed`.
    */
   simulateNextRound(options?: { confirmed?: boolean }): Promise<void>;
+  /**
+   * Joga a próxima rodada ao vivo (prepara a rodada em memória) ou direto (simula e salva).
+   * Escalação inválida ou sem goleiro param antes, com o diálogo do layout.
+   */
+  playRound(
+    mode: RoundMode,
+    options?: { confirmed?: boolean },
+  ): Promise<"blocked" | "confirm" | "live" | "done" | "over">;
+  /** Fecha uma rodada ao vivo terminada na temporada e salva (FR-006). */
+  commitRound(live: LiveRound): Promise<void>;
+  discardLiveRound(): void;
   setLineup(lineup: Lineup): void;
   changeFormation(formation: FormationId): void;
   setPosture(posture: Posture): void;
@@ -165,23 +189,30 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
   const latestSave = useRef<SaveFile | undefined>(undefined);
   latestSave.current = state.save;
 
+  /** Gravações em fila: cada uma espera a anterior e usa o `savedAt` que ela deixou. */
+  const queue = useRef<Promise<unknown>>(Promise.resolve());
   const persist = useCallback(
-    async (save: SaveFile, options?: { force?: boolean }): Promise<SaveWriteResult> => {
-      dispatch({ type: "saving", status: "saving" });
-      const result = await activeStore.save(save, options?.force ? undefined : baseline.current);
-      if (result.ok) {
-        baseline.current = result.savedAt;
-        announceSaved({ id: save.id, savedAt: result.savedAt });
-        dispatch({ type: "saving", status: "saved" });
-      } else {
-        if (result.reason === "conflict") dispatch({ type: "conflict", value: true });
-        dispatch({
-          type: "saving",
-          status: "failed",
-          message: FAILURE_MESSAGE[result.reason] ?? "saving.failed",
-        });
-      }
-      return result;
+    (save: SaveFile, options?: { force?: boolean }): Promise<SaveWriteResult> => {
+      const run = async (): Promise<SaveWriteResult> => {
+        dispatch({ type: "saving", status: "saving" });
+        const result = await activeStore.save(save, options?.force ? undefined : baseline.current);
+        if (result.ok) {
+          baseline.current = result.savedAt;
+          announceSaved({ id: save.id, savedAt: result.savedAt });
+          dispatch({ type: "saving", status: "saved" });
+        } else {
+          if (result.reason === "conflict") dispatch({ type: "conflict", value: true });
+          dispatch({
+            type: "saving",
+            status: "failed",
+            message: FAILURE_MESSAGE[result.reason] ?? "saving.failed",
+          });
+        }
+        return result;
+      };
+      const next = queue.current.then(run, run);
+      queue.current = next.catch(() => undefined);
+      return next;
     },
     [activeStore],
   );
@@ -266,10 +297,36 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
     [persist, openCareer],
   );
 
-  const simulateNextRound = useCallback(
-    async (options?: { confirmed?: boolean }) => {
+  const commitRound = useCallback(
+    async (live: LiveRound) => {
       const save = latestSave.current;
-      if (!save || isSeasonOver(save.season)) return;
+      if (!save || live.round !== save.season.nextRound) return;
+      const result = completeRound(save.season, save.bank, live);
+      if (!result.ok) return;
+      const next = touch(
+        withAdjustedLineup({ ...save, season: result.season }),
+        new Date().toISOString(),
+      );
+      latestSave.current = next;
+      dispatch({ type: "live" });
+      dispatch({
+        type: "ready",
+        save: next,
+        lastRound: result.season.records.filter((record) => record.round === live.round),
+      });
+      await persist(next);
+    },
+    [persist],
+  );
+
+  const playRound = useCallback(
+    async (
+      mode: RoundMode,
+      options?: { confirmed?: boolean },
+    ): Promise<"blocked" | "confirm" | "live" | "done" | "over"> => {
+      const save = latestSave.current;
+      if (!save || isSeasonOver(save.season)) return "over";
+      writePreferences({ roundMode: mode });
       const { squad, unavailable } = lineupContext(save);
       const validation = validateLineup(save.lineup, squad, unavailable);
       if (!validation.valid) {
@@ -277,40 +334,46 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
           type: "simulateIssues",
           value: {
             kind: "blocked",
+            mode,
             issues: validation.issues.filter((issue) => issue.severity === "error"),
           },
         });
-        return;
+        return "blocked";
       }
       const confirmations = validation.issues.filter((issue) => issue.code === "no_goalkeeper");
       if (confirmations.length > 0 && !options?.confirmed) {
-        dispatch({ type: "simulateIssues", value: { kind: "confirm", issues: confirmations } });
-        return;
+        dispatch({
+          type: "simulateIssues",
+          value: { kind: "confirm", mode, issues: confirmations },
+        });
+        return "confirm";
       }
       dispatch({ type: "simulateIssues" });
       const short = validation.issues.some((issue) => issue.code === "short_squad");
-      const round = save.season.nextRound;
-      const result = advanceSeason(
+      const started = startRound(
         save.season,
         save.bank,
-        { rounds: 1 },
         short ? undefined : { [save.clubId]: save.lineup },
       );
-      if (!result.ok) return;
-      const next = touch(
-        withAdjustedLineup({ ...save, season: result.season }),
-        new Date().toISOString(),
-      );
-      latestSave.current = next;
-      dispatch({
-        type: "ready",
-        save: next,
-        lastRound: result.season.records.filter((record) => record.round === round),
-      });
-      await persist(next);
+      if (!started.ok) return "blocked";
+      if (mode === "live") {
+        dispatch({ type: "live", value: started.round });
+        return "live";
+      }
+      await commitRound(finishRound(started.round));
+      return "done";
     },
-    [persist],
+    [commitRound],
   );
+
+  const simulateNextRound = useCallback(
+    async (options?: { confirmed?: boolean }) => {
+      await playRound("direct", options);
+    },
+    [playRound],
+  );
+
+  const discardLiveRound = useCallback(() => dispatch({ type: "live" }), []);
 
   /** Troca a escalação (e o esquema da temporada) e salva. */
   const commitLineup = useCallback(
@@ -417,6 +480,9 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       persist,
       resolveConflict,
       simulateNextRound,
+      playRound,
+      commitRound,
+      discardLiveRound,
       setLineup,
       changeFormation,
       setPosture,
@@ -433,6 +499,9 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       persist,
       resolveConflict,
       simulateNextRound,
+      playRound,
+      commitRound,
+      discardLiveRound,
       setLineup,
       changeFormation,
       setPosture,

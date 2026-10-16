@@ -1,0 +1,16 @@
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.club {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.empty {
+  color: var(--color-muted);
+}

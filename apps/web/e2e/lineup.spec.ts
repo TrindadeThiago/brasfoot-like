@@ -52,7 +52,7 @@ test("escalar, simular e recarregar mantém a escalação usada na partida (SC-0
     .toContain(inId);
 
   await page.locator("body").click({ position: { x: 5, y: 5 } });
-  await page.keyboard.press("s");
+  await page.keyboard.press("d");
   await expect(
     page.getByText(t("header.progress", { year: 2027, round: 2, total: 38 })),
   ).toBeVisible();

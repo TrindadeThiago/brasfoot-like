@@ -2,6 +2,7 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { t } from "../../src/i18n";
+import { writePreferences } from "../../src/storage/preferences";
 import { renderApp } from "../helpers/app";
 import { storedCareer } from "../helpers/career";
 import { memoryRouter } from "../helpers/router";
@@ -25,14 +26,19 @@ describe("atalhos de teclado (FR-020)", () => {
     await waitFor(() => expect(memoryRouter.pathname()).toBe("/jogo"));
   });
 
-  it("S simula a próxima rodada", async () => {
+  it("S abre a rodada ao vivo e D simula direto", async () => {
     const { store } = await storedCareer(1);
     renderApp("/jogo?c=tela", store);
-    await screen.findByRole("button", { name: t("home.simulate") });
-    await userEvent.setup().keyboard("s");
+    await screen.findByRole("button", { name: t("home.playLive") });
+    const user = userEvent.setup();
+    await user.keyboard("d");
     expect(
       await screen.findByText(t("header.progress", { year: 2027, round: 2, total: 38 })),
     ).toBeDefined();
+    expect(memoryRouter.pathname()).toBe("/jogo");
+    writePreferences({ roundMode: "live" });
+    await user.keyboard("s");
+    await waitFor(() => expect(memoryRouter.pathname()).toBe("/jogo/rodada"));
   });
 
   it("? abre a ajuda com todos os atalhos e Esc fecha", async () => {
@@ -48,9 +54,13 @@ describe("atalhos de teclado (FR-020)", () => {
       "help.lineup",
       "help.auto",
       "help.details",
+      "help.playLive",
+      "help.direct",
+      "help.pause",
+      "help.speed",
+      "help.finish",
       "help.competition",
       "help.calendar",
-      "help.simulate",
       "help.help",
       "help.close",
     ]) {

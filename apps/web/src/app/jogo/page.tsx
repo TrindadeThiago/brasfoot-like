@@ -1,9 +1,12 @@
 "use client";
 
 import { isSeasonOver } from "@brasfoot-like/engine";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { GameLayout } from "../../game/GameLayout";
 import { clubPosition, lastResults, nextFixture } from "../../game/selectors";
 import { useT } from "../../i18n";
+import { screenHref } from "../../ui/AppHeader";
 import { Button } from "../../ui/Button";
 import { Crest } from "../../ui/Crest";
 import { FormChips } from "../../ui/FormChips";
@@ -13,6 +16,7 @@ import styles from "./page.module.css";
 
 export default function HomePage() {
   const t = useT();
+  const router = useRouter();
   return (
     <GameLayout>
       {(save, game) => {
@@ -23,6 +27,14 @@ export default function HomePage() {
         const position = clubPosition(save.season, save.bank, save.clubId);
         const results = lastResults(save.season, save.clubId, 5);
         const lastRound = game.state.lastRound;
+        const play = async (mode: "live" | "direct") => {
+          const last = save.season.nextRound === save.season.calendar.length;
+          const outcome = await game.playRound(mode);
+          if (outcome === "live") router.push(screenHref("/jogo/rodada", save.id));
+          if (outcome === "done" && last) {
+            router.push(screenHref("/jogo/fim-de-temporada", save.id));
+          }
+        };
         return (
           <div className={styles.grid}>
             {save.lineupNotice && save.lineupNotice.length > 0 ? (
@@ -44,13 +56,19 @@ export default function HomePage() {
                   </div>
                 </div>
               ) : null}
-              <Button
-                variant="primary"
-                disabled={over}
-                onClick={() => void game.simulateNextRound()}
-              >
-                {t("home.simulate")}
-              </Button>
+              <div className={styles.actions}>
+                <Button variant="primary" disabled={over} onClick={() => void play("live")}>
+                  {t("home.playLive")}
+                </Button>
+                <Button disabled={over} onClick={() => void play("direct")}>
+                  {t("home.simulate")}
+                </Button>
+              </div>
+              {over ? (
+                <Link href={screenHref("/jogo/fim-de-temporada", save.id)}>
+                  {t("home.seasonEndLink")}
+                </Link>
+              ) : null}
             </section>
             <section aria-label={t("home.position")} className={styles.card}>
               <h2>{t("home.position")}</h2>

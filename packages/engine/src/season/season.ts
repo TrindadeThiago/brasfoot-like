@@ -1,23 +1,17 @@
-import { unavailabilityOf } from "../lineup/unavailability";
-import { simulateMatch } from "../match/engine";
-import type { Lineup, MatchInput, Side } from "../match/types";
-import type { CompletedBank, CompletedPlayer } from "../model/types";
+import type { Lineup } from "../match/types";
+import type { CompletedBank } from "../model/types";
 import { generateCalendar } from "./calendar";
-import { applyMatchToStatus } from "./discipline";
 import { type SeasonError, seasonError } from "./errors";
-import { lineupForMatch, preferredFormation } from "./lineups";
-import { toMatchRecord } from "./record";
+import { squadsByClub } from "./fixture";
+import { preferredFormation } from "./lineups";
+import { completeRound, finishRound, startRound } from "./live-round";
 import {
-  type Absence,
   DEFAULT_DISCIPLINE_RULES,
   type DisciplineRules,
-  type Fixture,
-  type MatchRecord,
   type PlayerStatus,
   type Season,
   type SeasonOptions,
   type SeasonStep,
-  type SeasonWarning,
 } from "./types";
 
 export type CreateSeasonResult = { ok: true; season: Season } | { ok: false; error: SeasonError };
@@ -27,16 +21,6 @@ const RULE_RANGES: Record<keyof DisciplineRules, readonly [number, number]> = {
   yellowsForSuspension: [1, 10],
   matchesPerRed: [1, 10],
 };
-
-function squadsByClub(world: CompletedBank): Map<string, CompletedPlayer[]> {
-  const squads = new Map<string, CompletedPlayer[]>();
-  for (const player of world.players) {
-    const squad = squads.get(player.clubId);
-    if (squad) squad.push(player);
-    else squads.set(player.clubId, [player]);
-  }
-  return squads;
-}
 
 /** Cria a temporada de uma divisão de pontos corridos (FR-001 a FR-007, FR-023). */
 export function createSeason(world: CompletedBank, options: SeasonOptions): CreateSeasonResult {
@@ -120,137 +104,6 @@ export function unavailablePlayers(
   return ids.filter((playerId) => isUnavailable(season.status[playerId])).sort();
 }
 
-interface SideLineup {
-  lineup: Lineup;
-  absences: Absence[];
-  unavailable: string[];
-  warning?: SeasonWarning;
-}
-
-function sideLineup(
-  season: Season,
-  round: number,
-  clubId: string,
-  squad: CompletedPlayer[],
-  status: Record<string, PlayerStatus>,
-  external: Lineup | undefined,
-): { ok: true; value: SideLineup } | { ok: false; error: SeasonError } {
-  const blocked = unavailabilityOf(squad, status);
-
-  if (external) {
-    const chosen = new Set([...Object.values(external.starters), ...external.bench]);
-    const conflict = blocked.find((entry) => chosen.has(entry.playerId));
-    if (conflict) {
-      return {
-        ok: false,
-        error: seasonError("season.lineup_unavailable", { clubId, playerId: conflict.playerId }),
-      };
-    }
-    return {
-      ok: true,
-      value: {
-        lineup: external,
-        absences: blocked.map(({ playerId, reason }) => ({ playerId, reason, fielded: false })),
-        unavailable: blocked.map((entry) => entry.playerId),
-      },
-    };
-  }
-
-  const formation = season.formations[clubId] ?? "4-4-2";
-  const { lineup, fielded } = lineupForMatch(squad, formation, blocked);
-  const fieldedSet = new Set(fielded);
-  const value: SideLineup = {
-    lineup,
-    absences: blocked.map(({ playerId, reason }) => ({
-      playerId,
-      reason,
-      fielded: fieldedSet.has(playerId),
-    })),
-    unavailable: blocked
-      .filter((entry) => !fieldedSet.has(entry.playerId))
-      .map((entry) => entry.playerId),
-  };
-  if (fielded.length > 0)
-    value.warning = { round, clubId, code: "short_squad", playerIds: fielded };
-  return { ok: true, value };
-}
-
-function playFixture(
-  season: Season,
-  fixture: Fixture,
-  squads: Map<string, CompletedPlayer[]>,
-  status: Record<string, PlayerStatus>,
-  lineups: Record<string, Lineup> | undefined,
-):
-  | { ok: true; record: MatchRecord; warnings: SeasonWarning[] }
-  | { ok: false; error: SeasonError } {
-  const sides: Record<Side, string> = { home: fixture.home, away: fixture.away };
-  const prepared: Partial<Record<Side, SideLineup>> = {};
-  for (const side of ["home", "away"] as const) {
-    const clubId = sides[side];
-    const result = sideLineup(
-      season,
-      fixture.round,
-      clubId,
-      squads.get(clubId) ?? [],
-      status,
-      lineups?.[clubId],
-    );
-    if (!result.ok) return result;
-    prepared[side] = result.value;
-  }
-  const home = prepared.home as SideLineup;
-  const away = prepared.away as SideLineup;
-  const input: MatchInput = {
-    home: {
-      clubId: fixture.home,
-      squad: squads.get(fixture.home) ?? [],
-      lineup: home.lineup,
-      unavailable: home.unavailable,
-    },
-    away: {
-      clubId: fixture.away,
-      squad: squads.get(fixture.away) ?? [],
-      lineup: away.lineup,
-      unavailable: away.unavailable,
-    },
-    seed: fixture.seed,
-  };
-  const outcome = simulateMatch(input);
-  if (!outcome.ok) {
-    const failed = outcome.errors[0];
-    const clubId = failed?.side ? sides[failed.side] : fixture.home;
-    if (lineups?.[clubId]) {
-      return {
-        ok: false,
-        error: seasonError("season.invalid_lineup", {
-          clubId,
-          matchErrorCode: failed?.code ?? "unknown",
-        }),
-      };
-    }
-    throw new Error(`escalação automática inválida: ${JSON.stringify(outcome.errors)}`);
-  }
-  const playerSides: Record<string, Side> = {};
-  for (const player of input.home.squad) playerSides[player.id] = "home";
-  for (const player of input.away.squad) playerSides[player.id] = "away";
-  const record = toMatchRecord(
-    fixture.round,
-    fixture.home,
-    fixture.away,
-    outcome.result,
-    playerSides,
-    {
-      home: home.absences,
-      away: away.absences,
-    },
-  );
-  const warnings = [home.warning, away.warning].filter(
-    (warning): warning is SeasonWarning => warning !== undefined,
-  );
-  return { ok: true, record, warnings };
-}
-
 /**
  * Avança a temporada N rodadas ou até o fim (FR-005, FR-006). `lineups` (escalação externa por
  * clube) vale só para a próxima rodada (FR-008). Nunca altera a temporada recebida.
@@ -275,33 +128,14 @@ export function advanceSeason(
     }
   }
 
-  const squads = squadsByClub(world);
-  const next: Season = {
-    ...season,
-    records: [...season.records],
-    status: Object.fromEntries(
-      Object.entries(season.status).map(([id, entry]) => [id, { ...entry }]),
-    ),
-    warnings: [...season.warnings],
-  };
+  let next = season;
   const total = "toEnd" in step ? season.calendar.length : step.rounds;
   for (let played = 0; played < total && !isSeasonOver(next); played++) {
-    const round = next.calendar[next.nextRound - 1];
-    if (!round) break;
-    const roundLineups = played === 0 ? lineups : undefined;
-    const results: { record: MatchRecord; warnings: SeasonWarning[] }[] = [];
-    for (const fixture of round.fixtures) {
-      const outcome = playFixture(next, fixture, squads, next.status, roundLineups);
-      if (!outcome.ok) return outcome;
-      results.push(outcome);
-    }
-    for (const { record, warnings } of results) {
-      next.records.push(record);
-      next.warnings.push(...warnings);
-      applyMatchToStatus(next.status, record, "home", next.rules, next.seed);
-      applyMatchToStatus(next.status, record, "away", next.rules, next.seed);
-    }
-    next.nextRound += 1;
+    const started = startRound(next, world, played === 0 ? lineups : undefined);
+    if (!started.ok) return started;
+    const completed = completeRound(next, world, finishRound(started.round));
+    if (!completed.ok) return completed;
+    next = completed.season;
   }
   return { ok: true, season: next };
 }

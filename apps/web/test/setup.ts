@@ -16,13 +16,24 @@ vi.mock("next/navigation", () => ({
 }));
 
 vi.mock("next/link", () => ({
-  default: ({ href, children, ...rest }: { href: string; children: ReactNode }) =>
+  default: ({
+    href,
+    children,
+    onClick,
+    ...rest
+  }: {
+    href: string;
+    children: ReactNode;
+    onClick?: (event: MouseEvent) => void;
+  }) =>
     createElement(
       "a",
       {
         ...rest,
         href,
         onClick: (event: MouseEvent) => {
+          onClick?.(event);
+          if (event.defaultPrevented) return;
           event.preventDefault();
           memoryRouter.push(href);
         },

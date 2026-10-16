@@ -83,6 +83,18 @@ export type { SeasonError, SeasonErrorCode } from "./season/errors";
 export { SEASON_ERROR_CODES, SEASON_ERROR_PARAMS } from "./season/errors";
 export { SEASON_CREDIBILITY_LIMITS } from "./season/limits";
 export { lineupForMatch, preferredFormation, SEASON_BENCH_LIMIT } from "./season/lineups";
+export type { LiveMatch, LiveRound, RoundDecision } from "./season/live-round";
+export {
+  advanceRound,
+  applyRoundChange,
+  completeRound,
+  finishRound,
+  formationChange,
+  isRoundFinished,
+  matchOf,
+  matchTicks,
+  startRound,
+} from "./season/live-round";
 export type { AdvanceSeasonResult, CreateSeasonResult } from "./season/season";
 export { advanceSeason, createSeason, isSeasonOver, unavailablePlayers } from "./season/season";
 export { standings } from "./season/standings";

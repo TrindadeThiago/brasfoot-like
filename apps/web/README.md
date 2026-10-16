@@ -21,8 +21,11 @@ chromium`. No Linux/WSL ele precisa das bibliotecas do sistema (`sudo pnpm --fil
 ## Estrutura
 
 - `src/app/` — rotas: `/`, `/nova-carreira`, `/carreiras`, `/jogo`, `/jogo/elenco`,
-  `/jogo/escalacao`, `/jogo/competicao`, `/jogo/calendario`. A carreira vai na query (`?c=<id>`),
+  `/jogo/escalacao`, `/jogo/rodada` (rodada ao vivo), `/jogo/competicao` (com as abas
+  `/resultados` e `/artilharia`), `/jogo/calendario`, `/jogo/fim-de-temporada`. A carreira vai na query (`?c=<id>`),
   porque o static export não tem rotas dinâmicas.
+- `src/game/useLiveRound.ts` — relógio da rodada ao vivo (velocidade, pausa, pausa automática,
+  decisões, feed); o motor só recebe passos e decisões, nunca tempo real.
 - `src/game/` — `GameProvider` (criar, abrir, apagar, simular rodada, salvar; escalação: esquema,
   postura, trocar jogadores, escalar automaticamente, aviso de ajuste), seletores, layout e a
   seleção em dois passos da escalação (`lineup-selection.ts`).
@@ -34,9 +37,13 @@ chromium`. No Linux/WSL ele precisa das bibliotecas do sistema (`sudo pnpm --fil
 
 ## Atalhos
 
-`1`–`5` telas do jogo · `S` simular (valida a escalação) · `A` escalar automaticamente (na
+`1`–`5` telas do jogo · `S` jogar a rodada no modo preferido (ao vivo ou direto) · `D` simular
+direto · na rodada: `Espaço` pausa/retoma, `+`/`-` velocidade, `F` terminar agora · `A` escalar automaticamente (na
 Escalação) · `I` detalhes do jogador em foco · `Enter`/`Espaço` escolher origem e destino de uma
 troca · `Esc` cancelar/fechar · `?` ajuda.
+
+Os salvamentos de uma aba entram numa fila (um espera o anterior) e o aviso entre abas ignora
+as mensagens da própria aba.
 
 ## Regras
 
