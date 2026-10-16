@@ -15,6 +15,9 @@
 Cabeçalho do jogo (sempre visível): escudo e nome do clube, técnico, temporada e rodada, navegação
 das 4 telas, indicador de salvamento, botão de ajuda.
 
+> A partir da 005, a navegação tem 5 telas (Início, Elenco, Escalação, Competição, Calendário,
+> atalhos `1`–`5`); ver `specs/005-escalacao-taticas/contracts/ui.md`.
+
 ## Atalhos de teclado
 
 | Tecla | Ação |

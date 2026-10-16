@@ -7,7 +7,7 @@ import { storedCareer } from "../helpers/career";
 import { memoryRouter } from "../helpers/router";
 
 describe("atalhos de teclado (FR-020)", () => {
-  it("1–4 navegam entre as telas mantendo a carreira", async () => {
+  it("1–5 navegam entre as telas mantendo a carreira", async () => {
     const { store } = await storedCareer(1);
     renderApp("/jogo?c=tela", store);
     await screen.findByRole("button", { name: t("home.simulate") });
@@ -16,8 +16,10 @@ describe("atalhos de teclado (FR-020)", () => {
     await waitFor(() => expect(memoryRouter.pathname()).toBe("/jogo/elenco"));
     expect(memoryRouter.searchParams().get("c")).toBe("tela");
     await user.keyboard("3");
-    await waitFor(() => expect(memoryRouter.pathname()).toBe("/jogo/competicao"));
+    await waitFor(() => expect(memoryRouter.pathname()).toBe("/jogo/escalacao"));
     await user.keyboard("4");
+    await waitFor(() => expect(memoryRouter.pathname()).toBe("/jogo/competicao"));
+    await user.keyboard("5");
     await waitFor(() => expect(memoryRouter.pathname()).toBe("/jogo/calendario"));
     await user.keyboard("1");
     await waitFor(() => expect(memoryRouter.pathname()).toBe("/jogo"));
@@ -43,6 +45,9 @@ describe("atalhos de teclado (FR-020)", () => {
     for (const key of [
       "help.home",
       "help.squad",
+      "help.lineup",
+      "help.auto",
+      "help.details",
       "help.competition",
       "help.calendar",
       "help.simulate",

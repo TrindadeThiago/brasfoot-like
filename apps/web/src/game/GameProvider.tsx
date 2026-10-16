@@ -1,6 +1,21 @@
 "use client";
 
-import { advanceSeason, isSeasonOver, type MatchRecord } from "@brasfoot-like/engine";
+import {
+  adjustLineup,
+  advanceSeason,
+  changeFormation as changeLineupFormation,
+  clubUnavailability,
+  type FormationId,
+  isSeasonOver,
+  type Lineup,
+  type LineupIssue,
+  type MatchRecord,
+  managerAutoLineup,
+  type Place,
+  type Posture,
+  placePlayer as placeLineupPlayer,
+  validateLineup,
+} from "@brasfoot-like/engine";
 import { createSave, type SaveError, type SaveFile, touch } from "@brasfoot-like/save";
 import {
   createContext,
@@ -30,6 +45,8 @@ export interface GameState {
   conflict: boolean;
   /** Chave de i18n do erro ao abrir. */
   error?: string;
+  /** Problemas que impediram (`blocked`) ou pedem confirmação (`confirm`) para simular. */
+  simulateIssues?: { kind: "blocked" | "confirm"; issues: LineupIssue[] };
 }
 
 export type GameAction =
@@ -38,6 +55,8 @@ export type GameAction =
   | { type: "error"; message: string }
   | { type: "saving"; status: SavingStatus; message?: string }
   | { type: "conflict"; value: boolean }
+  | { type: "update"; save: SaveFile }
+  | { type: "simulateIssues"; value?: { kind: "blocked" | "confirm"; issues: LineupIssue[] } }
   | { type: "close" };
 
 export const initialGameState: GameState = { status: "idle", saving: "idle", conflict: false };
@@ -64,6 +83,12 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
     }
     case "conflict":
       return { ...state, conflict: action.value };
+    case "update":
+      return { ...state, save: action.save };
+    case "simulateIssues": {
+      const { simulateIssues: _issues, ...rest } = state;
+      return action.value ? { ...rest, simulateIssues: action.value } : rest;
+    }
     case "close":
       return initialGameState;
   }
@@ -87,8 +112,31 @@ interface GameContextValue {
   /** Grava a carreira (usado pelo salvamento automático). */
   persist(save: SaveFile, options?: { force?: boolean }): Promise<SaveWriteResult>;
   resolveConflict(choice: "reload" | "overwrite"): Promise<void>;
-  /** Simula a próxima rodada inteira e salva automaticamente (FR-011, FR-012). */
-  simulateNextRound(): Promise<void>;
+  /**
+   * Simula a próxima rodada com a escalação do jogador e salva (FR-011 da 004; FR-011/FR-012 da
+   * 005): escalação inválida não joga; aviso de goleiro pede `confirmed`.
+   */
+  simulateNextRound(options?: { confirmed?: boolean }): Promise<void>;
+  setLineup(lineup: Lineup): void;
+  changeFormation(formation: FormationId): void;
+  setPosture(posture: Posture): void;
+  placePlayer(from: Place, to: Place): { ok: true } | { ok: false; code: string };
+  autoLineup(): void;
+  dismissLineupNotice(): void;
+}
+
+/** Elenco do clube do jogador e indisponíveis do momento. */
+export function lineupContext(save: SaveFile) {
+  const squad = save.bank.players.filter((player) => player.clubId === save.clubId);
+  return { squad, unavailable: clubUnavailability(save.season, save.bank, save.clubId) };
+}
+
+/** Ajuste automático da escalação; as trocas se somam ao aviso ainda não dispensado. */
+function withAdjustedLineup(save: SaveFile): SaveFile {
+  const { squad, unavailable } = lineupContext(save);
+  const { lineup, changes } = adjustLineup(save.lineup, squad, unavailable);
+  if (changes.length === 0) return save;
+  return { ...save, lineup, lineupNotice: [...(save.lineupNotice ?? []), ...changes] };
 }
 
 const GameContext = createContext<GameContextValue | null>(null);
@@ -171,8 +219,13 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
         if (result.status === "ok") {
           baseline.current = result.save.savedAt;
           writePreferences({ lastCareerId: id });
-          dispatch({ type: "ready", save: result.save });
+          const adjusted = withAdjustedLineup(result.save);
+          dispatch({ type: "ready", save: adjusted });
           dispatch({ type: "conflict", value: false });
+          if (adjusted !== result.save) {
+            latestSave.current = adjusted;
+            await persist(touch(adjusted, new Date().toISOString()));
+          }
         } else {
           dispatch({
             type: "error",
@@ -183,7 +236,7 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
         dispatch({ type: "error", message: "saves.openFailed" });
       }
     },
-    [activeStore],
+    [activeStore, persist],
   );
 
   const deleteCareer = useCallback(
@@ -213,21 +266,135 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
     [persist, openCareer],
   );
 
-  const simulateNextRound = useCallback(async () => {
-    const save = latestSave.current;
-    if (!save || isSeasonOver(save.season)) return;
-    const round = save.season.nextRound;
-    const result = advanceSeason(save.season, save.bank, { rounds: 1 });
-    if (!result.ok) return;
-    const next = touch({ ...save, season: result.season }, new Date().toISOString());
-    latestSave.current = next;
-    dispatch({
-      type: "ready",
-      save: next,
-      lastRound: result.season.records.filter((record) => record.round === round),
-    });
-    await persist(next);
-  }, [persist]);
+  const simulateNextRound = useCallback(
+    async (options?: { confirmed?: boolean }) => {
+      const save = latestSave.current;
+      if (!save || isSeasonOver(save.season)) return;
+      const { squad, unavailable } = lineupContext(save);
+      const validation = validateLineup(save.lineup, squad, unavailable);
+      if (!validation.valid) {
+        dispatch({
+          type: "simulateIssues",
+          value: {
+            kind: "blocked",
+            issues: validation.issues.filter((issue) => issue.severity === "error"),
+          },
+        });
+        return;
+      }
+      const confirmations = validation.issues.filter((issue) => issue.code === "no_goalkeeper");
+      if (confirmations.length > 0 && !options?.confirmed) {
+        dispatch({ type: "simulateIssues", value: { kind: "confirm", issues: confirmations } });
+        return;
+      }
+      dispatch({ type: "simulateIssues" });
+      const short = validation.issues.some((issue) => issue.code === "short_squad");
+      const round = save.season.nextRound;
+      const result = advanceSeason(
+        save.season,
+        save.bank,
+        { rounds: 1 },
+        short ? undefined : { [save.clubId]: save.lineup },
+      );
+      if (!result.ok) return;
+      const next = touch(
+        withAdjustedLineup({ ...save, season: result.season }),
+        new Date().toISOString(),
+      );
+      latestSave.current = next;
+      dispatch({
+        type: "ready",
+        save: next,
+        lastRound: result.season.records.filter((record) => record.round === round),
+      });
+      await persist(next);
+    },
+    [persist],
+  );
+
+  /** Troca a escalação (e o esquema da temporada) e salva. */
+  const commitLineup = useCallback(
+    (update: (save: SaveFile) => SaveFile) => {
+      const save = latestSave.current;
+      if (!save) return;
+      const changed = update(save);
+      if (changed === save) return;
+      const next = touch(
+        {
+          ...changed,
+          season: {
+            ...changed.season,
+            formations: {
+              ...changed.season.formations,
+              [changed.clubId]: changed.lineup.formation,
+            },
+          },
+        },
+        new Date().toISOString(),
+      );
+      latestSave.current = next;
+      dispatch({ type: "update", save: next });
+      void persist(next);
+    },
+    [persist],
+  );
+
+  const setLineup = useCallback(
+    (lineup: Lineup) => commitLineup((save) => ({ ...save, lineup })),
+    [commitLineup],
+  );
+
+  const changeFormation = useCallback(
+    (formation: FormationId) =>
+      commitLineup((save) => ({
+        ...save,
+        lineup: changeLineupFormation(save.lineup, formation, lineupContext(save).squad),
+      })),
+    [commitLineup],
+  );
+
+  const setPosture = useCallback(
+    (posture: Posture) =>
+      commitLineup((save) => ({ ...save, lineup: { ...save.lineup, posture } })),
+    [commitLineup],
+  );
+
+  const placePlayer = useCallback(
+    (from: Place, to: Place): { ok: true } | { ok: false; code: string } => {
+      const save = latestSave.current;
+      if (!save) return { ok: false, code: "empty_source" };
+      const result = placeLineupPlayer(save.lineup, from, to);
+      if (!result.ok) return result;
+      commitLineup((current) => ({ ...current, lineup: result.lineup }));
+      return { ok: true };
+    },
+    [commitLineup],
+  );
+
+  const autoLineup = useCallback(
+    () =>
+      commitLineup((save) => {
+        const { squad, unavailable } = lineupContext(save);
+        const { lineup } = managerAutoLineup(
+          squad,
+          save.lineup.formation,
+          save.lineup.posture,
+          unavailable,
+        );
+        return { ...save, lineup };
+      }),
+    [commitLineup],
+  );
+
+  const dismissLineupNotice = useCallback(
+    () =>
+      commitLineup((save) => {
+        if (!save.lineupNotice) return save;
+        const { lineupNotice: _notice, ...rest } = save;
+        return rest;
+      }),
+    [commitLineup],
+  );
 
   useEffect(
     () =>
@@ -250,6 +417,12 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       persist,
       resolveConflict,
       simulateNextRound,
+      setLineup,
+      changeFormation,
+      setPosture,
+      placePlayer,
+      autoLineup,
+      dismissLineupNotice,
     }),
     [
       state,
@@ -260,6 +433,12 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       persist,
       resolveConflict,
       simulateNextRound,
+      setLineup,
+      changeFormation,
+      setPosture,
+      placePlayer,
+      autoLineup,
+      dismissLineupNotice,
     ],
   );
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

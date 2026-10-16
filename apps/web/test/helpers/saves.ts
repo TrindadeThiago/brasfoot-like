@@ -4,7 +4,7 @@ import countries from "@brasfoot-like/default-mod/countries.json" with { type: "
 import mod from "@brasfoot-like/default-mod/mod.json" with { type: "json" };
 import players from "@brasfoot-like/default-mod/players.json" with { type: "json" };
 import { joinBankFiles } from "@brasfoot-like/engine";
-import { createSave, type SaveFile } from "@brasfoot-like/save";
+import { createSave, initialLineup, type SaveFile } from "@brasfoot-like/save";
 
 export const SERIE_A = (competitions[0]?.divisions[0]?.clubIds ?? []) as string[];
 
@@ -35,5 +35,7 @@ export function careerSave(
     base = result.save;
   }
   const copy = JSON.parse(JSON.stringify(base)) as SaveFile;
-  return { ...copy, id, savedAt, createdAt: savedAt, clubId: SERIE_A[clubIndex] as string };
+  const clubId = SERIE_A[clubIndex] as string;
+  const lineup = clubIndex === 0 ? copy.lineup : initialLineup(copy.bank, copy.season, clubId);
+  return { ...copy, id, savedAt, createdAt: savedAt, clubId, lineup };
 }

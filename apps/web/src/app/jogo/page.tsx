@@ -7,6 +7,7 @@ import { useT } from "../../i18n";
 import { Button } from "../../ui/Button";
 import { Crest } from "../../ui/Crest";
 import { FormChips } from "../../ui/FormChips";
+import { LineupNotice } from "../../ui/LineupNotice";
 import { RoundResults } from "../../ui/RoundResults";
 import styles from "./page.module.css";
 
@@ -24,6 +25,11 @@ export default function HomePage() {
         const lastRound = game.state.lastRound;
         return (
           <div className={styles.grid}>
+            {save.lineupNotice && save.lineupNotice.length > 0 ? (
+              <div className={styles.wide}>
+                <LineupNotice save={save} onDismiss={game.dismissLineupNotice} />
+              </div>
+            ) : null}
             <section aria-label={t("home.nextMatch")} className={styles.card}>
               <h2>{t("home.nextMatch")}</h2>
               {over ? (

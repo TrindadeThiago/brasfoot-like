@@ -13,6 +13,7 @@ import { SaveIndicator } from "./SaveIndicator";
 export const GAME_SCREENS = [
   { path: "/jogo", key: "nav.home" },
   { path: "/jogo/elenco", key: "nav.squad" },
+  { path: "/jogo/escalacao", key: "nav.lineup" },
   { path: "/jogo/competicao", key: "nav.competition" },
   { path: "/jogo/calendario", key: "nav.calendar" },
 ] as const;
