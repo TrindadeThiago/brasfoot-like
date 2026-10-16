@@ -12,7 +12,8 @@
     "format": "biome format --write .",
     "test": "vitest run",
     "gen:default-bank": "pnpm --filter @brasfoot-like/tools gen:default-bank",
-    "validate-bank": "pnpm --filter @brasfoot-like/tools validate-bank"
+    "validate-bank": "pnpm --filter @brasfoot-like/tools validate-bank",
+    "sim:matches": "pnpm --filter @brasfoot-like/tools sim:matches"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",
