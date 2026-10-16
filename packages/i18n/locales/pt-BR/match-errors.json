@@ -1,0 +1,20 @@
+{
+  "input.same_club": "O mandante e o visitante são o mesmo clube ({clubId}).",
+  "input.invalid_option": "A opção {option} vale {value}, mas deve estar entre {min} e {max}.",
+  "lineup.unknown_formation": "{side, select, home {Mandante: } away {Visitante: } other {}}o esquema \"{formation}\" não existe.",
+  "lineup.slots_mismatch": "{side, select, home {Mandante: } away {Visitante: } other {}}a escalação preenche {received} vagas, mas o esquema tem {expected}.",
+  "lineup.duplicate_player": "{side, select, home {Mandante: } away {Visitante: } other {}}o jogador {playerId} aparece mais de uma vez na escalação.",
+  "lineup.player_not_in_squad": "{side, select, home {Mandante: } away {Visitante: } other {}}o jogador {playerId} não faz parte do elenco.",
+  "lineup.player_in_both_teams": "{side, select, home {Mandante: } away {Visitante: } other {}}o jogador {playerId} está escalado nos dois times.",
+  "lineup.bench_too_large": "{side, select, home {Mandante: } away {Visitante: } other {}}o banco tem {count} jogadores, mas o máximo é {max}.",
+  "lineup.player_unavailable": "{side, select, home {Mandante: } away {Visitante: } other {}}o jogador {playerId} está indisponível e não pode ser escalado.",
+  "change.match_finished": "A partida já terminou; não é possível fazer mudanças.",
+  "change.not_started": "A partida ainda não começou.",
+  "change.limit_reached": "O time já fez as {limit} substituições permitidas.",
+  "change.player_not_on_field": "O jogador {playerId} não está em campo.",
+  "change.player_not_on_bench": "O jogador {playerId} não está no banco de reservas.",
+  "change.player_unavailable": "O jogador {playerId} está indisponível e não pode entrar.",
+  "change.unknown_slot": "A posição {slotId} não existe no esquema atual.",
+  "change.invalid_assignment": "A distribuição dos jogadores no esquema {formation} não corresponde aos jogadores em campo.",
+  "auto_lineup.not_enough_players": "Há apenas {available, plural, one {# jogador disponível} other {# jogadores disponíveis}}; são necessários {required}."
+}

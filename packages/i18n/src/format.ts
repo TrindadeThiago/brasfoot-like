@@ -1,7 +1,8 @@
-import type { ValidationIssue } from "@brasfoot-like/engine";
+import type { MatchError, ValidationIssue } from "@brasfoot-like/engine";
 import { IntlMessageFormat } from "intl-messageformat";
 import ptBrCatalog from "../locales/pt-BR/catalog.json" with { type: "json" };
 import ptBrErrors from "../locales/pt-BR/errors.json" with { type: "json" };
+import ptBrMatchErrors from "../locales/pt-BR/match-errors.json" with { type: "json" };
 import ptBrMessages from "../locales/pt-BR/messages.json" with { type: "json" };
 
 export type Locale = "pt-BR";
@@ -10,12 +11,18 @@ type MessageValues = Record<string, string | number>;
 
 interface LocaleBundle {
   errors: Record<string, string>;
+  matchErrors: Record<string, string>;
   catalog: Record<string, string>;
   messages: Record<string, string>;
 }
 
 const BUNDLES: Record<Locale, LocaleBundle> = {
-  "pt-BR": { errors: ptBrErrors, catalog: ptBrCatalog, messages: ptBrMessages },
+  "pt-BR": {
+    errors: ptBrErrors,
+    matchErrors: ptBrMatchErrors,
+    catalog: ptBrCatalog,
+    messages: ptBrMessages,
+  },
 };
 
 /** Parâmetros cujo valor é um id de catálogo e deve ser exibido pelo rótulo traduzido. */
@@ -86,4 +93,13 @@ export function formatIssue(issue: ValidationIssue, locale: Locale): string {
 /** Códigos de problema com mensagem no idioma. */
 export function messageKeys(locale: Locale): string[] {
   return Object.keys(BUNDLES[locale].errors);
+}
+
+/** Texto de um erro do motor de partida (entrada, mudança ou escalação automática). */
+export function formatMatchError(error: MatchError, locale: Locale): string {
+  const template = BUNDLES[locale].matchErrors[error.code];
+  if (template === undefined) {
+    throw new Error(`erro de partida sem tradução (${locale}): ${error.code}`);
+  }
+  return render(locale, template, { side: error.side ?? "none", ...error.params });
 }
