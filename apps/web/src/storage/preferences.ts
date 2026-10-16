@@ -5,7 +5,13 @@ export interface Preferences {
   lastCareerId?: string | undefined;
   squadSort?: { column: string; direction: "ascending" | "descending" };
   squadFilter?: { sector: SquadSector; availability: SquadAvailability };
+  roundMode?: RoundMode;
+  roundSpeed?: RoundSpeed;
+  autoPause?: boolean;
 }
+
+export type RoundMode = "live" | "direct";
+export type RoundSpeed = "slow" | "normal" | "fast";
 
 export type SquadSector = "all" | "GK" | "DEF" | "MID" | "ATT";
 export type SquadAvailability = "all" | "available" | "unavailable";

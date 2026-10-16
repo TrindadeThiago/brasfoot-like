@@ -4,8 +4,10 @@ import type { SaveFile } from "@brasfoot-like/save";
 import { useRouter } from "next/navigation";
 import { type ReactNode, Suspense, useMemo, useState } from "react";
 import { useT } from "../i18n";
+import { type RoundMode, readPreferences } from "../storage/preferences";
 import { AppHeader, GAME_SCREENS, screenHref } from "../ui/AppHeader";
 import { ConflictDialog } from "../ui/ConflictDialog";
+import { confirmLeave } from "../ui/leave-guard";
 import { ShortcutsHelp } from "../ui/ShortcutsHelp";
 import { SimulateDialogs } from "../ui/SimulateDialogs";
 import { useShortcuts } from "../ui/useShortcuts";
@@ -25,7 +27,14 @@ function Layout({ children }: { children: Render }) {
     if (!save) return {};
     const go = (index: number) => () => {
       const screen = GAME_SCREENS[index];
-      if (screen) router.push(screenHref(screen.path, save.id));
+      if (screen && confirmLeave()) router.push(screenHref(screen.path, save.id));
+    };
+    const play = async (mode: RoundMode) => {
+      if (!confirmLeave()) return;
+      const last = save.season.nextRound === save.season.calendar.length;
+      const outcome = await game.playRound(mode);
+      if (outcome === "live") router.push(screenHref("/jogo/rodada", save.id));
+      if (outcome === "done" && last) router.push(screenHref("/jogo/fim-de-temporada", save.id));
     };
     return {
       "1": go(0),
@@ -33,7 +42,8 @@ function Layout({ children }: { children: Render }) {
       "3": go(2),
       "4": go(3),
       "5": go(4),
-      s: () => void game.simulateNextRound(),
+      s: () => void play(readPreferences().roundMode ?? "live"),
+      d: () => void play("direct"),
       "?": () => setHelp((open) => !open),
     };
   }, [save, router, game]);

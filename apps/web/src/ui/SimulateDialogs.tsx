@@ -42,7 +42,14 @@ export function SimulateDialogs({
           {blocked ? (
             <Button onClick={close}>{t("common.close")}</Button>
           ) : (
-            <Button onClick={() => void game.simulateNextRound({ confirmed: true })}>
+            <Button
+              onClick={async () => {
+                const mode = pending.mode;
+                if ((await game.playRound(mode, { confirmed: true })) === "live") {
+                  router.push(screenHref("/jogo/rodada", save.id));
+                }
+              }}
+            >
               {t("simulate.playAnyway")}
             </Button>
           )}
