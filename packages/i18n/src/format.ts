@@ -2,6 +2,7 @@ import type { MatchError, SeasonError, ValidationIssue } from "@brasfoot-like/en
 import { IntlMessageFormat } from "intl-messageformat";
 import ptBrCatalog from "../locales/pt-BR/catalog.json" with { type: "json" };
 import ptBrErrors from "../locales/pt-BR/errors.json" with { type: "json" };
+import ptBrEvents from "../locales/pt-BR/events.json" with { type: "json" };
 import ptBrMatchErrors from "../locales/pt-BR/match-errors.json" with { type: "json" };
 import ptBrMessages from "../locales/pt-BR/messages.json" with { type: "json" };
 import ptBrSeasonErrors from "../locales/pt-BR/season-errors.json" with { type: "json" };
@@ -18,6 +19,7 @@ interface LocaleBundle {
   ui: Record<string, string>;
   catalog: Record<string, string>;
   messages: Record<string, string>;
+  events: Record<string, string>;
 }
 
 const BUNDLES: Record<Locale, LocaleBundle> = {
@@ -28,6 +30,7 @@ const BUNDLES: Record<Locale, LocaleBundle> = {
     ui: ptBrUi,
     catalog: ptBrCatalog,
     messages: ptBrMessages,
+    events: ptBrEvents,
   },
 };
 
@@ -135,4 +138,58 @@ export function formatUi(
 /** Chaves de texto da interface disponíveis no idioma. */
 export function uiKeys(locale: Locale = "pt-BR"): string[] {
   return Object.keys(BUNDLES[locale].ui);
+}
+
+/** Tipos de evento narrados no feed da rodada (research.md R4). */
+export const EVENT_TYPES = [
+  "goal",
+  "penalty_goal",
+  "penalty_awarded",
+  "penalty_missed",
+  "yellow",
+  "red_second_yellow",
+  "red_direct",
+  "injury",
+  "substitution",
+  "substitution_auto",
+  "formation",
+  "posture",
+  "kickoff",
+  "half_time",
+  "second_half",
+  "full_time",
+  "abandoned",
+] as const;
+export type EventType = (typeof EVENT_TYPES)[number];
+
+/** Quantas variações de texto o tipo de evento tem no idioma. */
+export function eventVariants(type: EventType, locale: Locale = "pt-BR"): number {
+  let count = 0;
+  while (BUNDLES[locale].events[`event.${type}.${count + 1}`] !== undefined) count++;
+  return count;
+}
+
+/** Variação (1..count) escolhida de forma determinística para um evento (hash FNV-1a). */
+export function eventVariant(seed: string, seq: number, count: number): number {
+  const text = `${seed}#${seq}`;
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < text.length; index++) {
+    hash ^= text.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193) >>> 0;
+  }
+  return (hash % count) + 1;
+}
+
+/** Texto de um evento do feed, sempre com a mesma variação para o mesmo evento. */
+export function formatEvent(
+  type: EventType,
+  values: MessageValues,
+  seed: string,
+  seq: number,
+  locale: Locale = "pt-BR",
+): string {
+  const count = eventVariants(type, locale);
+  if (count === 0) throw new Error(`evento sem texto (${locale}): ${type}`);
+  const template = BUNDLES[locale].events[`event.${type}.${eventVariant(seed, seq, count)}`];
+  return render(locale, template as string, values);
 }
