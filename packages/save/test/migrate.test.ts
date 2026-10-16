@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { type Migration, migrateSave, SAVE_FORMAT_VERSION } from "../src";
+import { MIGRATIONS, type Migration, migrateSave, SAVE_FORMAT_VERSION } from "../src";
 import { validSave } from "./fixtures";
 
 /** Save "v0" simulado: o técnico ficava em `coach` e não havia `createdAt`. */
 function legacyV0() {
-  const { managerName, createdAt: _createdAt, ...rest } = validSave();
+  const { managerName, createdAt: _createdAt, lineup: _lineup, ...rest } = validSave();
   return { ...rest, formatVersion: 0, coach: managerName };
 }
 
@@ -27,7 +27,7 @@ describe("migrateSave (FR-009, FR-010, SC-004)", () => {
   });
 
   it("migra um save de versão anterior (simulado) e preserva os dados", () => {
-    const result = migrateSave(legacyV0(), [v0toV1]);
+    const result = migrateSave(legacyV0(), [v0toV1, ...MIGRATIONS]);
     expect(result.status).toBe("ok");
     if (result.status !== "ok") return;
     expect(result.migratedFrom).toBe(0);
@@ -35,6 +35,7 @@ describe("migrateSave (FR-009, FR-010, SC-004)", () => {
     expect(result.save.managerName).toBe("Ana Souza");
     expect(result.save.season).toEqual(validSave().season);
     expect(result.save.bank).toEqual(validSave().bank);
+    expect(result.save.lineup).toEqual(validSave().lineup);
   });
 
   it("aplica as migrações em cadeia, na ordem", () => {
@@ -44,7 +45,7 @@ describe("migrateSave (FR-009, FR-010, SC-004)", () => {
         from: 1,
         migrate: (raw) => {
           order.push(1);
-          return { ...(raw as object), formatVersion: 2 };
+          return (MIGRATIONS[0] as Migration).migrate(raw);
         },
       },
       {

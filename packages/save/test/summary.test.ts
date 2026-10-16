@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { summarize, touch } from "../src";
+import { SAVE_FORMAT_VERSION, summarize, touch } from "../src";
 import { validSave } from "./fixtures";
 
 describe("summarize e touch", () => {
@@ -8,7 +8,7 @@ describe("summarize e touch", () => {
     const club = save.bank.clubs.find((entry) => entry.id === save.clubId);
     expect(summarize(save)).toEqual({
       id: save.id,
-      formatVersion: 1,
+      formatVersion: SAVE_FORMAT_VERSION,
       managerName: "Ana Souza",
       clubId: save.clubId,
       clubName: club?.name,

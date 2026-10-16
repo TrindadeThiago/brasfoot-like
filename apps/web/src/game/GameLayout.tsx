@@ -7,6 +7,7 @@ import { useT } from "../i18n";
 import { AppHeader, GAME_SCREENS, screenHref } from "../ui/AppHeader";
 import { ConflictDialog } from "../ui/ConflictDialog";
 import { ShortcutsHelp } from "../ui/ShortcutsHelp";
+import { SimulateDialogs } from "../ui/SimulateDialogs";
 import { useShortcuts } from "../ui/useShortcuts";
 import styles from "./GameLayout.module.css";
 import type { useGame } from "./GameProvider";
@@ -31,6 +32,7 @@ function Layout({ children }: { children: Render }) {
       "2": go(1),
       "3": go(2),
       "4": go(3),
+      "5": go(4),
       s: () => void game.simulateNextRound(),
       "?": () => setHelp((open) => !open),
     };
@@ -50,6 +52,7 @@ function Layout({ children }: { children: Render }) {
       <AppHeader save={save} onHelp={() => setHelp(true)} />
       <main className={styles.content}>{children(save, game)}</main>
       <ConflictDialog />
+      <SimulateDialogs save={save} game={game} />
       <ShortcutsHelp open={help} onClose={() => setHelp(false)} />
     </>
   );

@@ -1,3 +1,4 @@
+import { unavailabilityOf } from "../lineup/unavailability";
 import { simulateMatch } from "../match/engine";
 import type { Lineup, MatchInput, Side } from "../match/types";
 import type { CompletedBank, CompletedPlayer } from "../model/types";
@@ -134,16 +135,7 @@ function sideLineup(
   status: Record<string, PlayerStatus>,
   external: Lineup | undefined,
 ): { ok: true; value: SideLineup } | { ok: false; error: SeasonError } {
-  const blocked = squad
-    .filter((player) => isUnavailable(status[player.id]))
-    .map((player) => {
-      const entry = status[player.id] as PlayerStatus;
-      return {
-        playerId: player.id,
-        reason: entry.injury > 0 ? ("injury" as const) : ("suspension" as const),
-        remaining: Math.max(entry.injury, entry.suspension),
-      };
-    });
+  const blocked = unavailabilityOf(squad, status);
 
   if (external) {
     const chosen = new Set([...Object.values(external.starters), ...external.bench]);

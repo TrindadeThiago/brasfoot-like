@@ -1,5 +1,6 @@
 import { completeHiddenAttributes, createSeason, validateBank } from "@brasfoot-like/engine";
 import { MANAGER_NAME_MAX, SAVE_FORMAT_VERSION, type SaveError, type SaveFile } from "./format";
+import { initialLineup } from "./lineup";
 
 export interface CreateSaveInput {
   id: string;
@@ -65,6 +66,7 @@ export function createSave(input: CreateSaveInput): CreateSaveResult {
       seed: input.seed,
       bank,
       season: season.season,
+      lineup: initialLineup(bank, season.season, input.clubId),
     },
   };
 }

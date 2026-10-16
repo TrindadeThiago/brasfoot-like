@@ -4,6 +4,7 @@ import SavesPage from "../../src/app/carreiras/page";
 import CalendarPage from "../../src/app/jogo/calendario/page";
 import CompetitionPage from "../../src/app/jogo/competicao/page";
 import SquadPage from "../../src/app/jogo/elenco/page";
+import LineupPage from "../../src/app/jogo/escalacao/page";
 import HomePage from "../../src/app/jogo/page";
 import NewCareerPage from "../../src/app/nova-carreira/page";
 import OpeningPage from "../../src/app/page";
@@ -17,6 +18,7 @@ const ROUTES: Record<string, ComponentType> = {
   "/carreiras": SavesPage,
   "/jogo": HomePage,
   "/jogo/elenco": SquadPage,
+  "/jogo/escalacao": LineupPage,
   "/jogo/competicao": CompetitionPage,
   "/jogo/calendario": CalendarPage,
 };

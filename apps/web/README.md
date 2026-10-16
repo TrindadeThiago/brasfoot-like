@@ -21,14 +21,22 @@ chromium`. No Linux/WSL ele precisa das bibliotecas do sistema (`sudo pnpm --fil
 ## Estrutura
 
 - `src/app/` — rotas: `/`, `/nova-carreira`, `/carreiras`, `/jogo`, `/jogo/elenco`,
-  `/jogo/competicao`, `/jogo/calendario`. A carreira vai na query (`?c=<id>`), porque o static
-  export não tem rotas dinâmicas.
-- `src/game/` — `GameProvider` (criar, abrir, apagar, simular rodada, salvar), seletores e layout.
+  `/jogo/escalacao`, `/jogo/competicao`, `/jogo/calendario`. A carreira vai na query (`?c=<id>`),
+  porque o static export não tem rotas dinâmicas.
+- `src/game/` — `GameProvider` (criar, abrir, apagar, simular rodada, salvar; escalação: esquema,
+  postura, trocar jogadores, escalar automaticamente, aviso de ajuste), seletores, layout e a
+  seleção em dois passos da escalação (`lineup-selection.ts`).
 - `src/storage/` — `SaveStore` sobre IndexedDB (saves + resumos, conflito entre abas),
   preferências no `localStorage`, aviso entre abas por `BroadcastChannel`.
 - `src/ui/` — componentes (escudo SVG gerado dos dados, tabela ordenável, diálogos, atalhos).
 - `src/i18n/` — `t`/`useT`/`<T>` sobre `packages/i18n/locales/pt-BR/ui.json`.
 - `public/sw.js` — cache primeiro para todos os arquivos do build.
+
+## Atalhos
+
+`1`–`5` telas do jogo · `S` simular (valida a escalação) · `A` escalar automaticamente (na
+Escalação) · `I` detalhes do jogador em foco · `Enter`/`Espaço` escolher origem e destino de uma
+troca · `Esc` cancelar/fechar · `?` ajuda.
 
 ## Regras
 
@@ -37,5 +45,8 @@ chromium`. No Linux/WSL ele precisa das bibliotecas do sistema (`sudo pnpm --fil
 - **Nenhuma string visível no código**: tudo passa pelo i18n; `test/i18n/no-literals.test.ts`
   falha com texto literal em JSX ou em `title`/`aria-label`/`placeholder`/`alt`, e com chaves que
   não existem em `ui.json`.
-- **Nenhuma regra de jogo na UI**: o app só usa a API pública do motor; o formato do save, as
-  migrações e a validação ficam em `packages/save`.
+- **Nenhuma regra de jogo na UI**: o app só usa a API pública do motor (inclusive
+  `validateLineup`, `adjustLineup`, `changeFormation`, `placePlayer`, `managerAutoLineup`); o
+  formato do save, as migrações e a validação ficam em `packages/save`.
+- **Atributos ocultos** (potencial, temperamento, propensão a lesões) nunca são exibidos;
+  `test/ui/no-hidden.test.tsx` confere.

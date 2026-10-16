@@ -8,9 +8,13 @@ import styles from "./ShortcutsHelp.module.css";
 const SHORTCUTS: readonly [string, string][] = [
   ["1", "help.home"],
   ["2", "help.squad"],
-  ["3", "help.competition"],
-  ["4", "help.calendar"],
+  ["3", "help.lineup"],
+  ["4", "help.competition"],
+  ["5", "help.calendar"],
   ["S", "help.simulate"],
+  ["A", "help.auto"],
+  ["I", "help.details"],
+  ["Enter", "help.select"],
   ["?", "help.help"],
   ["Esc", "help.close"],
 ];

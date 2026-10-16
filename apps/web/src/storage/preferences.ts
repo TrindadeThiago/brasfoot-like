@@ -4,7 +4,11 @@ const KEY = "brasfoot-like:preferences";
 export interface Preferences {
   lastCareerId?: string | undefined;
   squadSort?: { column: string; direction: "ascending" | "descending" };
+  squadFilter?: { sector: SquadSector; availability: SquadAvailability };
 }
+
+export type SquadSector = "all" | "GK" | "DEF" | "MID" | "ATT";
+export type SquadAvailability = "all" | "available" | "unavailable";
 
 export function readPreferences(): Preferences {
   try {
