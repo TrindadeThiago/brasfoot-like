@@ -1,5 +1,5 @@
-import type { SemanticContext } from "../context.js";
-import { makeIssue, type Section, type ValidationIssue } from "../issues.js";
+import type { SemanticContext } from "../context";
+import { makeIssue, type Section, type ValidationIssue } from "../issues";
 
 /** Um id existe na seção se algum item da entrada o declarou, mesmo que inválido (sem cascata). */
 function existsIn(context: SemanticContext, id: string, section: Section): boolean {

@@ -5,7 +5,7 @@ import {
   daysFromCivil,
   formatIsoDate,
   parseIsoDate,
-} from "../../src/calendar/date.js";
+} from "../../src/calendar/date";
 
 describe("parseIsoDate", () => {
   it("aceita datas válidas, inclusive 29/02 em ano bissexto", () => {

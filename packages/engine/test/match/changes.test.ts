@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { applyChange } from "../../src/match/changes.js";
-import { advanceMatch, startMatch } from "../../src/match/engine.js";
-import { MATCH_ERROR_CODES, type MatchError, type MatchErrorCode } from "../../src/match/errors.js";
-import { FORMATIONS } from "../../src/match/formations.js";
-import type { MatchChange, MatchState, Side } from "../../src/match/types.js";
-import { clubIds, makeInput } from "./helpers/teams.js";
+import { applyChange } from "../../src/match/changes";
+import { advanceMatch, startMatch } from "../../src/match/engine";
+import { MATCH_ERROR_CODES, type MatchError, type MatchErrorCode } from "../../src/match/errors";
+import { FORMATIONS } from "../../src/match/formations";
+import type { MatchChange, MatchState, Side } from "../../src/match/types";
+import { clubIds, makeInput } from "./helpers/teams";
 
 const [HOME, AWAY] = clubIds() as [string, string];
 

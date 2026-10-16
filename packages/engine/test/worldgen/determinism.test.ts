@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { toCanonicalJson } from "../../src/serialize/canonical-json.js";
-import { validateBank } from "../../src/validation/validate.js";
-import { generateDefaultBank } from "../../src/worldgen/generate.js";
-import { TEST_SEEDS } from "../helpers/seeds.js";
+import { toCanonicalJson } from "../../src/serialize/canonical-json";
+import { validateBank } from "../../src/validation/validate";
+import { generateDefaultBank } from "../../src/worldgen/generate";
+import { TEST_SEEDS } from "../helpers/seeds";
 
 describe("generateDefaultBank — determinismo (SC-001, SC-007)", () => {
   it.each(TEST_SEEDS)("seed %s: válido, sem avisos e idêntico ao gerar de novo", (seed) => {

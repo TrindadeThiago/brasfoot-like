@@ -1,9 +1,9 @@
-import { CREST_SHAPES } from "../model/catalogs.js";
-import type { Club } from "../model/types.js";
-import { bell } from "../rng/distributions.js";
-import type { Rng } from "../rng/xoshiro.js";
-import type { NameBank } from "./name-banks/schema.js";
-import { GENERATOR_TUNING, type Range, type Tier } from "./tuning.js";
+import { CREST_SHAPES } from "../model/catalogs";
+import type { Club } from "../model/types";
+import { bell } from "../rng/distributions";
+import type { Rng } from "../rng/xoshiro";
+import type { NameBank } from "./name-banks/schema";
+import { GENERATOR_TUNING, type Range, type Tier } from "./tuning";
 
 export type DivisionKey = "serieA" | "serieB";
 

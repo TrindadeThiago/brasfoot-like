@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { checkRealism } from "../../../src/match/metrics.js";
-import { runLeagueSample } from "./harness.js";
+import { checkRealism } from "../../../src/match/metrics";
+import { runLeagueSample } from "./harness";
 
 describe("placares e volume de jogo (FR-040, FR-041, FR-049)", () => {
   it("10.000 partidas de campeonato ficam nas faixas", () => {

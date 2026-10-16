@@ -1,6 +1,6 @@
-import type { Rng } from "../rng/xoshiro.js";
-import { MATCH_TUNING } from "./tuning.js";
-import type { MatchEvent } from "./types.js";
+import type { Rng } from "../rng/xoshiro";
+import { MATCH_TUNING } from "./tuning";
+import type { MatchEvent } from "./types";
 
 /** Acréscimos de um tempo, a partir do que aconteceu nele (research.md R8, FR-012). */
 export function stoppageFor(events: readonly MatchEvent[], half: 1 | 2, rng: Rng): number {

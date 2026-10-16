@@ -9,9 +9,9 @@ import type {
   leagueFormatSchema,
   manifestSchema,
   playerSchema,
-} from "./schemas.js";
+} from "./schemas";
 
-export type { CrestShape, Position, Tiebreaker, Trait } from "./catalogs.js";
+export type { CrestShape, Position, Tiebreaker, Trait } from "./catalogs";
 
 export type Manifest = z.infer<typeof manifestSchema>;
 export type Country = z.infer<typeof countrySchema>;

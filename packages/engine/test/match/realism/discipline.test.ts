@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { checkRealism } from "../../../src/match/metrics.js";
-import { runLeagueSample } from "./harness.js";
+import { checkRealism } from "../../../src/match/metrics";
+import { runLeagueSample } from "./harness";
 
 describe("cartões, lesões e pênaltis (FR-046, FR-047, FR-048)", () => {
   it("8.000 partidas de campeonato ficam nas faixas", () => {

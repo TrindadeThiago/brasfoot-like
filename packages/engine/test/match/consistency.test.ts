@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { simulateMatch } from "../../src/match/engine.js";
-import type { MatchEvent, MatchResult } from "../../src/match/types.js";
-import { replayViolations } from "./helpers/replay.js";
-import { clubIds, makeInput } from "./helpers/teams.js";
+import { simulateMatch } from "../../src/match/engine";
+import type { MatchEvent, MatchResult } from "../../src/match/types";
+import { replayViolations } from "./helpers/replay";
+import { clubIds, makeInput } from "./helpers/teams";
 
 const CLUBS = clubIds();
 const MATCHES = Array.from({ length: 300 }, (_, index) => {

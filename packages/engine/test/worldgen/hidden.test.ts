@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import type { ValidatedBank } from "../../src/model/types.js";
-import { validateBank } from "../../src/validation/validate.js";
-import { generateDefaultBank } from "../../src/worldgen/generate.js";
-import { completeHiddenAttributes } from "../../src/worldgen/hidden.js";
-import { at, makeValidBank } from "../helpers/build-bank.js";
+import type { ValidatedBank } from "../../src/model/types";
+import { validateBank } from "../../src/validation/validate";
+import { generateDefaultBank } from "../../src/worldgen/generate";
+import { completeHiddenAttributes } from "../../src/worldgen/hidden";
+import { at, makeValidBank } from "../helpers/build-bank";
 
 const bank = generateDefaultBank({ seed: 7 });
 

@@ -1,8 +1,8 @@
-import type { Position, Trait } from "../model/catalogs.js";
-import type { CompletedPlayer } from "../model/types.js";
-import type { Rng } from "../rng/xoshiro.js";
-import { MATCH_TUNING } from "./tuning.js";
-import type { ShotKind } from "./types.js";
+import type { Position, Trait } from "../model/catalogs";
+import type { CompletedPlayer } from "../model/types";
+import type { Rng } from "../rng/xoshiro";
+import { MATCH_TUNING } from "./tuning";
+import type { ShotKind } from "./types";
 
 /** Jogador em campo com a posição da vaga que ocupa. */
 export interface FieldPlayer {

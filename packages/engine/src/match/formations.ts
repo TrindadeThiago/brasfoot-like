@@ -1,4 +1,4 @@
-import type { Position } from "../model/catalogs.js";
+import type { Position } from "../model/catalogs";
 
 /** Vaga de um esquema: identificador e posição esperada. */
 export interface Slot {

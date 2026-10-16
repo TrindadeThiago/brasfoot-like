@@ -1,9 +1,9 @@
-import type { CompletedPlayer } from "../model/types.js";
-import { slotValue } from "./auto-lineup.js";
-import { slotPosition } from "./formations.js";
-import { emit, type MatchContext, playerState, type RemovalHook } from "./minute.js";
-import type { ClockKey } from "./rng.js";
-import type { MatchState, PendingChange, Side } from "./types.js";
+import type { CompletedPlayer } from "../model/types";
+import { slotValue } from "./auto-lineup";
+import { slotPosition } from "./formations";
+import { emit, type MatchContext, playerState, type RemovalHook } from "./minute";
+import type { ClockKey } from "./rng";
+import type { MatchState, PendingChange, Side } from "./types";
 
 /** Lesão ou expulsão do goleiro deixam uma mudança pendente para o time (FR-025). */
 export const registerPending: RemovalHook = (state, side, playerId, slotId, reason) => {

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { MATCH_REALISM_LIMITS as L } from "../../../src/match/limits.js";
-import { clubIds, squadOf } from "../helpers/teams.js";
-import { cloneSquad, emptyOutcome, play, rateOf, record, team } from "./harness.js";
+import { MATCH_REALISM_LIMITS as L } from "../../../src/match/limits";
+import { clubIds, squadOf } from "../helpers/teams";
+import { cloneSquad, emptyOutcome, play, rateOf, record, team } from "./harness";
 
 /** Cada clube contra uma cópia de si mesmo: forças idênticas. */
 function equalMatches(neutral: boolean, perClub: number) {

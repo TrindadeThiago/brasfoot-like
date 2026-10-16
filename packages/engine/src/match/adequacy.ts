@@ -1,4 +1,4 @@
-import type { Position } from "../model/catalogs.js";
+import type { Position } from "../model/catalogs";
 
 /** Rendimento de um jogador numa vaga de outra posição (research.md R3). Tabela simétrica. */
 const PAIRS: Record<string, number> = {

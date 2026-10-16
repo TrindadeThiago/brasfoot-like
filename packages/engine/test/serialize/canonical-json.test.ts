@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { toCanonicalJson } from "../../src/serialize/canonical-json.js";
+import { toCanonicalJson } from "../../src/serialize/canonical-json";
 
 describe("toCanonicalJson", () => {
   it("ordena chaves recursivamente e mantém a ordem dos arrays", () => {

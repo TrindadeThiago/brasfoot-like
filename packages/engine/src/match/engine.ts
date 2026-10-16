@@ -1,14 +1,14 @@
-import type { CompletedPlayer } from "../model/types.js";
-import { createRng } from "../rng/xoshiro.js";
-import type { MatchError } from "./errors.js";
-import { emit, type MatchContext, newPlayerState, onFieldCount, playMinute } from "./minute.js";
-import { registerPending, resolvePending } from "./pending.js";
-import { matchResult } from "./result.js";
-import { type ClockKey, minuteRng } from "./rng.js";
-import { stoppageFor } from "./stoppage.js";
-import { MATCH_TUNING } from "./tuning.js";
-import type { MatchInput, MatchResult, MatchState, Side, TeamState } from "./types.js";
-import { normalizeInput, validateMatchInput } from "./validate-input.js";
+import type { CompletedPlayer } from "../model/types";
+import { createRng } from "../rng/xoshiro";
+import type { MatchError } from "./errors";
+import { emit, type MatchContext, newPlayerState, onFieldCount, playMinute } from "./minute";
+import { registerPending, resolvePending } from "./pending";
+import { matchResult } from "./result";
+import { type ClockKey, minuteRng } from "./rng";
+import { stoppageFor } from "./stoppage";
+import { MATCH_TUNING } from "./tuning";
+import type { MatchInput, MatchResult, MatchState, Side, TeamState } from "./types";
+import { normalizeInput, validateMatchInput } from "./validate-input";
 
 export type StartResult = { ok: true; state: MatchState } | { ok: false; errors: MatchError[] };
 export type Advance = { minutes: number } | { toEnd: true };

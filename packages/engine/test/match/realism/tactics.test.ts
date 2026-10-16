@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import type { Posture } from "../../../src/match/formations.js";
-import { MATCH_REALISM_LIMITS as L } from "../../../src/match/limits.js";
-import type { MatchState } from "../../../src/match/types.js";
-import { clubIds, squadOf, withStrengthDelta } from "../helpers/teams.js";
-import { cloneSquad, emptyOutcome, play, rateOf, record, team } from "./harness.js";
+import type { Posture } from "../../../src/match/formations";
+import { MATCH_REALISM_LIMITS as L } from "../../../src/match/limits";
+import type { MatchState } from "../../../src/match/types";
+import { clubIds, squadOf, withStrengthDelta } from "../helpers/teams";
+import { cloneSquad, emptyOutcome, play, rateOf, record, team } from "./harness";
 
 const CLUBS = clubIds().slice(0, 15);
 

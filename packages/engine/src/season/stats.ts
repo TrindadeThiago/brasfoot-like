@@ -1,4 +1,4 @@
-import type { PlayerSeasonStats, Season } from "./types.js";
+import type { PlayerSeasonStats, Season } from "./types";
 
 /** Estatísticas de cada jogador na temporada, derivadas dos registros (FR-021). */
 export function seasonStats(season: Season): PlayerSeasonStats[] {

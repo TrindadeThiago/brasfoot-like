@@ -1,5 +1,5 @@
-import type { FormationId } from "../match/formations.js";
-import type { InjurySeverity, MatchEvent, Side, TeamStats } from "../match/types.js";
+import type { FormationId } from "../match/formations";
+import type { InjurySeverity, MatchEvent, Side, TeamStats } from "../match/types";
 
 export interface DisciplineRules {
   yellowsForSuspension: number;

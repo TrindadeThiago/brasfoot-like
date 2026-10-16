@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { toCanonicalJson } from "../../src/serialize/canonical-json.js";
-import { validateBank } from "../../src/validation/validate.js";
-import { generateDefaultBank } from "../../src/worldgen/generate.js";
+import { toCanonicalJson } from "../../src/serialize/canonical-json";
+import { validateBank } from "../../src/validation/validate";
+import { generateDefaultBank } from "../../src/worldgen/generate";
 
 describe("desempenho (SC-005)", () => {
   it("gera e valida o banco padrão em menos de 2 segundos", () => {

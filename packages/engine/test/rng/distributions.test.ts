@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { intIrwinHall, intTriangular, irwinHall, triangular } from "../../src/rng/distributions.js";
-import { createRng } from "../../src/rng/xoshiro.js";
+import { intIrwinHall, intTriangular, irwinHall, triangular } from "../../src/rng/distributions";
+import { createRng } from "../../src/rng/xoshiro";
 
 const N = 20000;
 

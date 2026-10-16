@@ -1,8 +1,8 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { BANK_FILES, splitBankFiles } from "../../src/serialize/bank-files.js";
-import { generateDefaultBank } from "../../src/worldgen/generate.js";
+import { BANK_FILES, splitBankFiles } from "../../src/serialize/bank-files";
+import { generateDefaultBank } from "../../src/worldgen/generate";
 
 const DEFAULT_SEED = "brasfoot-like-default-1";
 const MOD_DIR = join(import.meta.dirname, "..", "..", "..", "..", "mods", "default");

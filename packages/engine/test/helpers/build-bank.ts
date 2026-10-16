@@ -1,4 +1,4 @@
-import type { Club, ModPackage, Player, Position } from "../../src/model/types.js";
+import type { Club, ModPackage, Player, Position } from "../../src/model/types";
 
 const SQUAD_POSITIONS: Position[] = [
   "GK",

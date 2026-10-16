@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import type { ValidationIssue } from "../../src/validation/issues.js";
-import { validateBank } from "../../src/validation/validate.js";
-import { at, makeValidBank, removeField, setRaw } from "../helpers/build-bank.js";
+import type { ValidationIssue } from "../../src/validation/issues";
+import { validateBank } from "../../src/validation/validate";
+import { at, makeValidBank, removeField, setRaw } from "../helpers/build-bank";
 
 function errorsOf(input: unknown): ValidationIssue[] {
   const result = validateBank(input);

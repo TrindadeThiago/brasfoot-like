@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { validateBank } from "../../src/validation/validate.js";
-import { at, makeValidBank, setRaw } from "../helpers/build-bank.js";
+import { validateBank } from "../../src/validation/validate";
+import { at, makeValidBank, setRaw } from "../helpers/build-bank";
 
 describe("vários defeitos (SC-004)", () => {
   it("N defeitos independentes produzem N erros, em ordem determinística", () => {

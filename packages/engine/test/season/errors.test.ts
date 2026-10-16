@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
-import type { Lineup } from "../../src/match/types.js";
-import type { CompletedBank } from "../../src/model/types.js";
+import type { Lineup } from "../../src/match/types";
+import type { CompletedBank } from "../../src/model/types";
 import {
   SEASON_ERROR_CODES,
   type SeasonError,
   type SeasonErrorCode,
-} from "../../src/season/errors.js";
-import { advanceSeason, createSeason } from "../../src/season/season.js";
-import { newSeason, serieAOptions, testWorld } from "./helpers/world.js";
+} from "../../src/season/errors";
+import { advanceSeason, createSeason } from "../../src/season/season";
+import { newSeason, serieAOptions, testWorld } from "./helpers/world";
 
 function editedWorld(edit: (world: CompletedBank) => void): CompletedBank {
   const copy = JSON.parse(JSON.stringify(testWorld())) as CompletedBank;

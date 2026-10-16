@@ -1,7 +1,7 @@
-import type { Position } from "../model/catalogs.js";
-import type { CompletedPlayer } from "../model/types.js";
-import { adequacy } from "./adequacy.js";
-import { FORMATIONS, type FormationId } from "./formations.js";
+import type { Position } from "../model/catalogs";
+import type { CompletedPlayer } from "../model/types";
+import { adequacy } from "./adequacy";
+import { FORMATIONS, type FormationId } from "./formations";
 
 export interface SectorWeights {
   goalkeeper: number;

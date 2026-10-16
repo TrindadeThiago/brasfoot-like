@@ -1,6 +1,6 @@
-import { POSITIONS, type Position } from "../model/catalogs.js";
-import type { Rng } from "../rng/xoshiro.js";
-import { GENERATOR_TUNING } from "./tuning.js";
+import { POSITIONS, type Position } from "../model/catalogs";
+import type { Rng } from "../rng/xoshiro";
+import { GENERATOR_TUNING } from "./tuning";
 
 /** Quantidade de jogadores por posição, dentro das faixas do FR-030. */
 export function composeSquad(rng: Rng): Record<Position, number> {

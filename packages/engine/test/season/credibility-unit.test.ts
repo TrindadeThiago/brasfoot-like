@@ -4,12 +4,12 @@ import {
   clubStrength,
   seasonReport,
   spearman,
-} from "../../src/season/credibility.js";
-import { SEASON_CREDIBILITY_LIMITS as L } from "../../src/season/limits.js";
-import { standings } from "../../src/season/standings.js";
-import { topScorers } from "../../src/season/stats.js";
-import type { SeasonReport } from "../../src/season/types.js";
-import { playedSeason, testWorld } from "./helpers/world.js";
+} from "../../src/season/credibility";
+import { SEASON_CREDIBILITY_LIMITS as L } from "../../src/season/limits";
+import { standings } from "../../src/season/standings";
+import { topScorers } from "../../src/season/stats";
+import type { SeasonReport } from "../../src/season/types";
+import { playedSeason, testWorld } from "./helpers/world";
 
 describe("spearman", () => {
   it("vale 1 para ordens iguais, −1 para inversas e trata empates", () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { runSimulateSeason } from "../src/simulate-season.js";
+import { runSimulateSeason } from "../src/simulate-season";
 
 describe("sim:season", () => {
   it("mesma seed ⇒ mesma saída", () => {

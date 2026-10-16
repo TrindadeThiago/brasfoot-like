@@ -1,8 +1,8 @@
-import { cloneState } from "./engine.js";
-import { type MatchError, matchError } from "./errors.js";
-import { FORMATIONS } from "./formations.js";
-import { emit, playerState } from "./minute.js";
-import type { MatchChange, MatchState, Side } from "./types.js";
+import { cloneState } from "./engine";
+import { type MatchError, matchError } from "./errors";
+import { FORMATIONS } from "./formations";
+import { emit, playerState } from "./minute";
+import type { MatchChange, MatchState, Side } from "./types";
 
 export type ChangeResult = { ok: true; state: MatchState } | { ok: false; error: MatchError };
 

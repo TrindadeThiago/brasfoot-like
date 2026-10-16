@@ -1,5 +1,5 @@
-import { MATCH_TUNING } from "./tuning.js";
-import type { MatchResult, MatchState, Side, TeamStats } from "./types.js";
+import { MATCH_TUNING } from "./tuning";
+import type { MatchResult, MatchState, Side, TeamStats } from "./types";
 
 function teamStats(state: MatchState, side: Side, possession: number): TeamStats {
   const stats: TeamStats = {

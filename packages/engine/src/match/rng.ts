@@ -1,4 +1,4 @@
-import { createRng, type Rng } from "../rng/xoshiro.js";
+import { createRng, type Rng } from "../rng/xoshiro";
 
 export interface ClockKey {
   half: 1 | 2;

@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
-import type { InjurySeverity, Side } from "../../src/match/types.js";
-import { applyMatchToStatus, injuryDuration } from "../../src/season/discipline.js";
+import type { InjurySeverity, Side } from "../../src/match/types";
+import { applyMatchToStatus, injuryDuration } from "../../src/season/discipline";
 import {
   DEFAULT_DISCIPLINE_RULES,
   type DisciplineRules,
   type MatchRecord,
   type PlayerLine,
   type PlayerStatus,
-} from "../../src/season/types.js";
+} from "../../src/season/types";
 
 function line(overrides: Partial<PlayerLine> = {}): PlayerLine {
   return { side: "home", minutes: 90, goals: 0, assists: 0, yellows: 0, red: false, ...overrides };

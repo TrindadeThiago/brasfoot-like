@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import type { MatchResult } from "../../../src/match/types.js";
-import type { Position, Trait } from "../../../src/model/catalogs.js";
-import type { CompletedPlayer } from "../../../src/model/types.js";
-import { clubIds, squadOf } from "../helpers/teams.js";
-import { cloneSquad, play, team } from "./harness.js";
+import type { MatchResult } from "../../../src/match/types";
+import type { Position, Trait } from "../../../src/model/catalogs";
+import type { CompletedPlayer } from "../../../src/model/types";
+import { clubIds, squadOf } from "../helpers/teams";
+import { cloneSquad, play, team } from "./harness";
 
 interface TraitCase {
   trait: Trait;

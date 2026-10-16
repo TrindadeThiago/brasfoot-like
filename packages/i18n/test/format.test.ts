@@ -7,7 +7,7 @@ import {
   formatMessage,
   formatSeasonError,
   messageKeys,
-} from "../src/index.js";
+} from "../src/index";
 
 describe("formatIssue", () => {
   it("ref.club_not_found de um jogador", () => {

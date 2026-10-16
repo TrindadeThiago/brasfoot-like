@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { ageOn } from "../../src/calendar/date.js";
-import { POSITIONS } from "../../src/model/catalogs.js";
-import type { ModPackage } from "../../src/model/types.js";
-import { generateDefaultBank } from "../../src/worldgen/generate.js";
-import { completeHiddenAttributes } from "../../src/worldgen/hidden.js";
-import { DISTRIBUTION_LIMITS as L, tierOf } from "../../src/worldgen/limits.js";
-import { at } from "../helpers/build-bank.js";
-import { TEST_SEEDS } from "../helpers/seeds.js";
+import { ageOn } from "../../src/calendar/date";
+import { POSITIONS } from "../../src/model/catalogs";
+import type { ModPackage } from "../../src/model/types";
+import { generateDefaultBank } from "../../src/worldgen/generate";
+import { completeHiddenAttributes } from "../../src/worldgen/hidden";
+import { DISTRIBUTION_LIMITS as L, tierOf } from "../../src/worldgen/limits";
+import { at } from "../helpers/build-bank";
+import { TEST_SEEDS } from "../helpers/seeds";
 
 const mean = (values: number[]) => values.reduce((sum, value) => sum + value, 0) / values.length;
 const share = <T>(items: T[], predicate: (item: T) => boolean) =>

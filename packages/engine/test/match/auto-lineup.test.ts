@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { autoLineup } from "../../src/match/auto-lineup.js";
-import { startMatch } from "../../src/match/engine.js";
-import { FORMATION_IDS, FORMATIONS, slotPosition } from "../../src/match/formations.js";
-import { effectiveStrength, slotWeight } from "../../src/match/strength.js";
-import type { Lineup } from "../../src/match/types.js";
-import type { CompletedPlayer } from "../../src/model/types.js";
-import { clubIds, squadOf } from "./helpers/teams.js";
+import { autoLineup } from "../../src/match/auto-lineup";
+import { startMatch } from "../../src/match/engine";
+import { FORMATION_IDS, FORMATIONS, slotPosition } from "../../src/match/formations";
+import { effectiveStrength, slotWeight } from "../../src/match/strength";
+import type { Lineup } from "../../src/match/types";
+import type { CompletedPlayer } from "../../src/model/types";
+import { clubIds, squadOf } from "./helpers/teams";
 
 function value(lineup: Lineup, squad: CompletedPlayer[]): number {
   const byId = new Map(squad.map((player) => [player.id, player]));

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { advanceSeason } from "../../src/season/season.js";
-import type { MatchRecord, Season } from "../../src/season/types.js";
-import { newSeason, playedSeason, testWorld } from "./helpers/world.js";
+import { advanceSeason } from "../../src/season/season";
+import type { MatchRecord, Season } from "../../src/season/types";
+import { newSeason, playedSeason, testWorld } from "./helpers/world";
 
 const SEEDS = [11, 12, 13, 14, 15];
 

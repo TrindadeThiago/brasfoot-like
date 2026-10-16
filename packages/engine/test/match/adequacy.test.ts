@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { adequacy } from "../../src/match/adequacy.js";
-import { POSITIONS } from "../../src/model/catalogs.js";
+import { adequacy } from "../../src/match/adequacy";
+import { POSITIONS } from "../../src/model/catalogs";
 
 describe("adequação posição × vaga (FR-007)", () => {
   const values = POSITIONS.flatMap((player) =>

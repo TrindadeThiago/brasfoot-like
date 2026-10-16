@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { aggregateCredibility, seasonReport } from "../../src/season/credibility.js";
-import { advanceSeason, createSeason } from "../../src/season/season.js";
-import { generateDefaultBank } from "../../src/worldgen/generate.js";
-import { completeHiddenAttributes } from "../../src/worldgen/hidden.js";
+import { aggregateCredibility, seasonReport } from "../../src/season/credibility";
+import { advanceSeason, createSeason } from "../../src/season/season";
+import { generateDefaultBank } from "../../src/worldgen/generate";
+import { completeHiddenAttributes } from "../../src/worldgen/hidden";
 
 describe("campeonato crível em 100 temporadas (FR-030 a FR-037, SC-004)", () => {
   it("todos os critérios ficam nas faixas", () => {

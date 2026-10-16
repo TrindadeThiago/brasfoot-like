@@ -1,5 +1,5 @@
-import type { Posture } from "./formations.js";
-import type { InjurySeverity, ShotKind } from "./types.js";
+import type { Posture } from "./formations";
+import type { InjurySeverity, ShotKind } from "./types";
 
 /**
  * Constantes do modelo de partida (research.md R2, R8, R9). Ajustáveis livremente; quem decide se

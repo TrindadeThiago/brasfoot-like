@@ -1,7 +1,7 @@
-import { ageOn } from "../../calendar/date.js";
-import { POSITIONS } from "../../model/catalogs.js";
-import type { SemanticContext } from "../context.js";
-import { makeIssue, type ValidationIssue } from "../issues.js";
+import { ageOn } from "../../calendar/date";
+import { POSITIONS } from "../../model/catalogs";
+import type { SemanticContext } from "../context";
+import { makeIssue, type ValidationIssue } from "../issues";
 
 const SQUAD_MIN = 16;
 const SQUAD_MAX = 40;

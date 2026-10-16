@@ -1,11 +1,11 @@
-import { simulateMatch } from "../match/engine.js";
-import type { Lineup, MatchInput, Side } from "../match/types.js";
-import type { CompletedBank, CompletedPlayer } from "../model/types.js";
-import { generateCalendar } from "./calendar.js";
-import { applyMatchToStatus } from "./discipline.js";
-import { type SeasonError, seasonError } from "./errors.js";
-import { lineupForMatch, preferredFormation } from "./lineups.js";
-import { toMatchRecord } from "./record.js";
+import { simulateMatch } from "../match/engine";
+import type { Lineup, MatchInput, Side } from "../match/types";
+import type { CompletedBank, CompletedPlayer } from "../model/types";
+import { generateCalendar } from "./calendar";
+import { applyMatchToStatus } from "./discipline";
+import { type SeasonError, seasonError } from "./errors";
+import { lineupForMatch, preferredFormation } from "./lineups";
+import { toMatchRecord } from "./record";
 import {
   type Absence,
   DEFAULT_DISCIPLINE_RULES,
@@ -17,7 +17,7 @@ import {
   type SeasonOptions,
   type SeasonStep,
   type SeasonWarning,
-} from "./types.js";
+} from "./types";
 
 export type CreateSeasonResult = { ok: true; season: Season } | { ok: false; error: SeasonError };
 export type AdvanceSeasonResult = { ok: true; season: Season } | { ok: false; error: SeasonError };

@@ -1,4 +1,4 @@
-import { cyrb128, splitmix32 } from "./hash.js";
+import { cyrb128, splitmix32 } from "./hash";
 
 /** Estado serializável do PRNG: 4 inteiros sem sinal de 32 bits. */
 export interface RngState {

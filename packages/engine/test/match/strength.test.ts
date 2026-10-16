@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { FORMATIONS } from "../../src/match/formations.js";
-import { teamStrength } from "../../src/match/strength.js";
-import type { CompletedPlayer, Position } from "../../src/model/types.js";
+import { FORMATIONS } from "../../src/match/formations";
+import { teamStrength } from "../../src/match/strength";
+import type { CompletedPlayer, Position } from "../../src/model/types";
 
 function player(id: string, position: Position, strength = 70): CompletedPlayer {
   return {

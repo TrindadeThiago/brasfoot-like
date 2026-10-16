@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createRng, restoreRng } from "../../src/rng/xoshiro.js";
+import { createRng, restoreRng } from "../../src/rng/xoshiro";
 
 function take(rng: { next(): number }, n: number): number[] {
   return Array.from({ length: n }, () => rng.next());

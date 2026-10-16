@@ -1,11 +1,11 @@
-import type { Position } from "../model/catalogs.js";
-import type { CompletedPlayer } from "../model/types.js";
-import { type MatchError, matchError } from "./errors.js";
-import { FORMATIONS, type FormationId, type Posture } from "./formations.js";
-import { maximizeAssignment } from "./hungarian.js";
-import { effectiveStrength, slotWeight } from "./strength.js";
-import type { Lineup } from "./types.js";
-import { DEFAULT_BENCH_LIMIT } from "./validate-input.js";
+import type { Position } from "../model/catalogs";
+import type { CompletedPlayer } from "../model/types";
+import { type MatchError, matchError } from "./errors";
+import { FORMATIONS, type FormationId, type Posture } from "./formations";
+import { maximizeAssignment } from "./hungarian";
+import { effectiveStrength, slotWeight } from "./strength";
+import type { Lineup } from "./types";
+import { DEFAULT_BENCH_LIMIT } from "./validate-input";
 
 export interface AutoLineupOptions {
   squad: readonly CompletedPlayer[];

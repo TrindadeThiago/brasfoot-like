@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { BANK_FILES, joinBankFiles, splitBankFiles } from "../../src/serialize/bank-files.js";
-import { validateBank } from "../../src/validation/validate.js";
-import { makeValidBank } from "../helpers/build-bank.js";
+import { BANK_FILES, joinBankFiles, splitBankFiles } from "../../src/serialize/bank-files";
+import { validateBank } from "../../src/validation/validate";
+import { makeValidBank } from "../helpers/build-bank";
 
 describe("bank-files", () => {
   it("gera um arquivo por seção", () => {

@@ -1,5 +1,5 @@
-import type { CompletedPlayer } from "../model/types.js";
-import type { FormationId, Posture } from "./formations.js";
+import type { CompletedPlayer } from "../model/types";
+import type { FormationId, Posture } from "./formations";
 
 export type Side = "home" | "away";
 export const SIDES: readonly Side[] = ["home", "away"];

@@ -1,5 +1,5 @@
-import type { Club, Competition, Country, Manifest, Player } from "../model/types.js";
-import type { Section, ValidationIssue } from "./issues.js";
+import type { Club, Competition, Country, Manifest, Player } from "../model/types";
+import type { Section, ValidationIssue } from "./issues";
 
 /** Item que passou na validação estrutural, com seu índice original na seção. */
 export interface ParsedItem<T> {

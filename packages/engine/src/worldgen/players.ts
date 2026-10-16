@@ -1,12 +1,12 @@
-import { civilFromDays, daysFromCivil, formatIsoDate, parseIsoDate } from "../calendar/date.js";
-import { POSITIONS, type Position, type Trait } from "../model/catalogs.js";
-import type { Player } from "../model/types.js";
-import { bell, intTriangular } from "../rng/distributions.js";
-import type { Rng } from "../rng/xoshiro.js";
-import type { GeneratedClub } from "./clubs.js";
-import type { NameBank } from "./name-banks/schema.js";
-import { composeSquad } from "./squads.js";
-import { GENERATOR_TUNING } from "./tuning.js";
+import { civilFromDays, daysFromCivil, formatIsoDate, parseIsoDate } from "../calendar/date";
+import { POSITIONS, type Position, type Trait } from "../model/catalogs";
+import type { Player } from "../model/types";
+import { bell, intTriangular } from "../rng/distributions";
+import type { Rng } from "../rng/xoshiro";
+import type { GeneratedClub } from "./clubs";
+import type { NameBank } from "./name-banks/schema";
+import { composeSquad } from "./squads";
+import { GENERATOR_TUNING } from "./tuning";
 
 type Role = "starter" | "reserve" | "extra";
 

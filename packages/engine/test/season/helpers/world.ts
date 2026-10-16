@@ -1,8 +1,8 @@
-import type { CompletedBank } from "../../../src/model/types.js";
-import { advanceSeason, createSeason } from "../../../src/season/season.js";
-import type { Season, SeasonOptions } from "../../../src/season/types.js";
-import { generateDefaultBank } from "../../../src/worldgen/generate.js";
-import { completeHiddenAttributes } from "../../../src/worldgen/hidden.js";
+import type { CompletedBank } from "../../../src/model/types";
+import { advanceSeason, createSeason } from "../../../src/season/season";
+import type { Season, SeasonOptions } from "../../../src/season/types";
+import { generateDefaultBank } from "../../../src/worldgen/generate";
+import { completeHiddenAttributes } from "../../../src/worldgen/hidden";
 
 let world: CompletedBank | undefined;
 

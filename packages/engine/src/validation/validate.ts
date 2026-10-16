@@ -1,11 +1,11 @@
-import type { ModPackage, ValidatedBank } from "../model/types.js";
-import type { SemanticRule } from "./context.js";
-import { SECTIONS, type ValidationIssue } from "./issues.js";
-import { checkCompetitions } from "./semantic/competitions.js";
-import { checkReferences } from "./semantic/references.js";
-import { checkSquads } from "./semantic/squads.js";
-import { checkUniqueness } from "./semantic/uniqueness.js";
-import { validateStructure } from "./structural.js";
+import type { ModPackage, ValidatedBank } from "../model/types";
+import type { SemanticRule } from "./context";
+import { SECTIONS, type ValidationIssue } from "./issues";
+import { checkCompetitions } from "./semantic/competitions";
+import { checkReferences } from "./semantic/references";
+import { checkSquads } from "./semantic/squads";
+import { checkUniqueness } from "./semantic/uniqueness";
+import { validateStructure } from "./structural";
 
 export type ValidationResult =
   | { ok: true; bank: ValidatedBank; warnings: ValidationIssue[] }

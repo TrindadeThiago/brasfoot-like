@@ -1,14 +1,14 @@
 import { z } from "zod";
-import { RESERVED_FORMAT_TYPES, SUPPORTED_FORMAT_VERSIONS } from "../model/catalogs.js";
-import { manifestSchema, SECTION_ITEM_SCHEMAS, SECTION_MIN_ITEMS } from "../model/schemas.js";
-import type { IdLocation, ParsedItem, SemanticContext } from "./context.js";
+import { RESERVED_FORMAT_TYPES, SUPPORTED_FORMAT_VERSIONS } from "../model/catalogs";
+import { manifestSchema, SECTION_ITEM_SCHEMAS, SECTION_MIN_ITEMS } from "../model/schemas";
+import type { IdLocation, ParsedItem, SemanticContext } from "./context";
 import {
   type IssueCode,
   type IssueParams,
   makeIssue,
   type Section,
   type ValidationIssue,
-} from "./issues.js";
+} from "./issues";
 
 type ItemSection = keyof typeof SECTION_ITEM_SCHEMAS;
 type Path = (string | number)[];

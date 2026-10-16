@@ -1,18 +1,18 @@
-import { autoLineup } from "../../../src/match/auto-lineup.js";
-import { advanceMatch, startMatch } from "../../../src/match/engine.js";
-import { FORMATION_IDS, type FormationId, type Posture } from "../../../src/match/formations.js";
-import { createMetricsAccumulator, type MatchMetrics } from "../../../src/match/metrics.js";
-import { matchResult } from "../../../src/match/result.js";
+import { autoLineup } from "../../../src/match/auto-lineup";
+import { advanceMatch, startMatch } from "../../../src/match/engine";
+import { FORMATION_IDS, type FormationId, type Posture } from "../../../src/match/formations";
+import { createMetricsAccumulator, type MatchMetrics } from "../../../src/match/metrics";
+import { matchResult } from "../../../src/match/result";
 import type {
   Lineup,
   MatchInput,
   MatchResult,
   MatchState,
   TeamInput,
-} from "../../../src/match/types.js";
-import type { CompletedPlayer } from "../../../src/model/types.js";
-import { createRng } from "../../../src/rng/xoshiro.js";
-import { squadOf, testWorld } from "../helpers/teams.js";
+} from "../../../src/match/types";
+import type { CompletedPlayer } from "../../../src/model/types";
+import { createRng } from "../../../src/rng/xoshiro";
+import { squadOf, testWorld } from "../helpers/teams";
 
 const lineupCache = new Map<string, Lineup>();
 

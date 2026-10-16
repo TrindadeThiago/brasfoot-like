@@ -17,7 +17,7 @@ import {
   standings,
   topScorers,
 } from "@brasfoot-like/engine";
-import { DEFAULT_SEED } from "./default-seed.js";
+import { DEFAULT_SEED } from "./default-seed";
 
 export interface SimulateSeasonOptions {
   seed: string;

@@ -1,6 +1,6 @@
-import type { CompletedPlayer } from "../model/types.js";
-import { MATCH_REALISM_LIMITS } from "./limits.js";
-import type { MatchInput, MatchResult } from "./types.js";
+import type { CompletedPlayer } from "../model/types";
+import { MATCH_REALISM_LIMITS } from "./limits";
+import type { MatchInput, MatchResult } from "./types";
 
 export interface MatchMetrics {
   matches: number;
