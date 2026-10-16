@@ -1,6 +1,12 @@
 import { makeIssue } from "@brasfoot-like/engine";
 import { describe, expect, it } from "vitest";
-import { formatIssue, formatLabel, formatMessage, messageKeys } from "../src/index.js";
+import {
+  formatIssue,
+  formatLabel,
+  formatMatchError,
+  formatMessage,
+  messageKeys,
+} from "../src/index.js";
 
 describe("formatIssue", () => {
   it("ref.club_not_found de um jogador", () => {
@@ -79,5 +85,29 @@ describe("rótulos e mensagens gerais", () => {
 
   it("lista as chaves de mensagens de problemas", () => {
     expect(messageKeys("pt-BR")).toContain("ref.club_not_found");
+  });
+});
+
+describe("formatMatchError", () => {
+  it("usa as mensagens do contrato", () => {
+    expect(formatMatchError({ code: "change.limit_reached", params: { limit: 5 } }, "pt-BR")).toBe(
+      "O time já fez as 5 substituições permitidas.",
+    );
+    expect(
+      formatMatchError(
+        { code: "lineup.slots_mismatch", side: "home", params: { expected: 11, received: 10 } },
+        "pt-BR",
+      ),
+    ).toBe("Mandante: a escalação preenche 10 vagas, mas o esquema tem 11.");
+    expect(
+      formatMatchError(
+        { code: "auto_lineup.not_enough_players", params: { available: 1, required: 11 } },
+        "pt-BR",
+      ),
+    ).toBe("Há apenas 1 jogador disponível; são necessários 11.");
+  });
+
+  it("traduz rótulos de postura", () => {
+    expect(formatLabel("posture.attacking", "pt-BR")).toBe("Ofensiva");
   });
 });

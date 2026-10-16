@@ -22,5 +22,14 @@
   "tiebreaker.fewest-red-cards": "Menos cartões vermelhos",
   "tiebreaker.draw-lots": "Sorteio",
   "severity.error": "erro",
-  "severity.warning": "aviso"
+  "severity.warning": "aviso",
+  "posture.defensive": "Defensiva",
+  "posture.balanced": "Equilibrada",
+  "posture.attacking": "Ofensiva",
+  "formation.4-4-2": "4-4-2",
+  "formation.4-3-3": "4-3-3",
+  "formation.3-5-2": "3-5-2",
+  "formation.4-5-1": "4-5-1",
+  "formation.5-3-2": "5-3-2",
+  "formation.4-2-3-1": "4-2-3-1"
 }

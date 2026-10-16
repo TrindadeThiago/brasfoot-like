@@ -2,10 +2,9 @@
 import { join, relative } from "node:path";
 import { parseArgs } from "node:util";
 import { ageOn, generateDefaultBank, type ValidatedBank } from "@brasfoot-like/engine";
+import { DEFAULT_SEED } from "./default-seed.js";
 import { REPO_ROOT, resolveUserPath, writeBankDir } from "./fs-bank.js";
 import { summarize } from "./summary.js";
-
-export const DEFAULT_SEED = "brasfoot-like-default-1";
 
 const { values } = parseArgs({
   options: {
