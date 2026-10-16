@@ -69,6 +69,41 @@ export type {
 } from "./model/types.js";
 export type { Rng, RngState, WeightedItem } from "./rng/xoshiro.js";
 export { createRng, restoreRng } from "./rng/xoshiro.js";
+export { fixtureSeed, generateCalendar } from "./season/calendar.js";
+export type { CredibilityCheck } from "./season/credibility.js";
+export {
+  aggregateCredibility,
+  clubStrength,
+  seasonReport,
+  spearman,
+} from "./season/credibility.js";
+export { applyMatchToStatus, INJURY_MATCHES, injuryDuration } from "./season/discipline.js";
+export type { SeasonError, SeasonErrorCode } from "./season/errors.js";
+export { SEASON_ERROR_CODES, SEASON_ERROR_PARAMS } from "./season/errors.js";
+export { SEASON_CREDIBILITY_LIMITS } from "./season/limits.js";
+export { preferredFormation } from "./season/lineups.js";
+export type { AdvanceSeasonResult, CreateSeasonResult } from "./season/season.js";
+export { advanceSeason, createSeason, isSeasonOver, unavailablePlayers } from "./season/season.js";
+export { standings } from "./season/standings.js";
+export { seasonStats, topAssists, topScorers } from "./season/stats.js";
+export type {
+  Absence,
+  DisciplineRules,
+  Fixture,
+  FormResult,
+  MatchRecord,
+  PlayerLine,
+  PlayerSeasonStats,
+  PlayerStatus,
+  Round,
+  Season,
+  SeasonOptions,
+  SeasonReport,
+  SeasonStep,
+  SeasonWarning,
+  StandingRow,
+} from "./season/types.js";
+export { DEFAULT_DISCIPLINE_RULES } from "./season/types.js";
 export { BANK_FILES, joinBankFiles, splitBankFiles } from "./serialize/bank-files.js";
 export { toCanonicalJson } from "./serialize/canonical-json.js";
 export type {
