@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { deriveMarketValue, deriveWage } from "../../src/derived/economy.js";
-import type { Club, CompletedPlayer } from "../../src/model/types.js";
-import { at, makeValidBank } from "../helpers/build-bank.js";
+import { deriveMarketValue, deriveWage } from "../../src/derived/economy";
+import type { Club, CompletedPlayer } from "../../src/model/types";
+import { at, makeValidBank } from "../helpers/build-bank";
 
 const REFERENCE = "2027-01-01";
 const base = makeValidBank();

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { simulateMatch } from "../../src/match/engine.js";
-import { clubIds, makeInput } from "./helpers/teams.js";
+import { simulateMatch } from "../../src/match/engine";
+import { clubIds, makeInput } from "./helpers/teams";
 
 describe("desempenho (SC-006)", () => {
   const clubs = clubIds();

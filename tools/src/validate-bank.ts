@@ -8,7 +8,7 @@ import {
   validateBank,
 } from "@brasfoot-like/engine";
 import { formatIssue, formatMessage, type Locale } from "@brasfoot-like/i18n";
-import { readBankDir, resolveUserPath } from "./fs-bank.js";
+import { readBankDir, resolveUserPath } from "./fs-bank";
 
 const LOCALE: Locale = "pt-BR";
 

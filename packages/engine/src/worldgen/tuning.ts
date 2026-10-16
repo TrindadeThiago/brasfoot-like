@@ -1,4 +1,4 @@
-import type { Position, Trait } from "../model/catalogs.js";
+import type { Position, Trait } from "../model/catalogs";
 
 export type Tier = "big" | "medium" | "small";
 export type Range = readonly [number, number];

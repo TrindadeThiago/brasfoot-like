@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { seasonStats, topAssists, topScorers } from "../../src/season/stats.js";
-import { playedSeason } from "./helpers/world.js";
+import { seasonStats, topAssists, topScorers } from "../../src/season/stats";
+import { playedSeason } from "./helpers/world";
 
 describe("estatísticas da temporada (FR-021, FR-022)", () => {
   const season = playedSeason(31);

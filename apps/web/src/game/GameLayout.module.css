@@ -1,0 +1,11 @@
+.content {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: var(--space-5);
+}
+
+.message {
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--color-muted);
+}

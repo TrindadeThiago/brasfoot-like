@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { parseIsoDate } from "../calendar/date.js";
-import { CREST_SHAPES, FORMAT_TYPES, POSITIONS, TIEBREAKERS, TRAITS } from "./catalogs.js";
+import { parseIsoDate } from "../calendar/date";
+import { CREST_SHAPES, FORMAT_TYPES, POSITIONS, TIEBREAKERS, TRAITS } from "./catalogs";
 
 /**
  * Schemas Zod do formato de banco v1 (data-model.md). As regras de faixa, tamanho e formato

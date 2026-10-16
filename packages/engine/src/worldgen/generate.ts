@@ -1,11 +1,11 @@
-import type { Competition, Country, ModPackage, ValidatedBank } from "../model/types.js";
-import { createRng } from "../rng/xoshiro.js";
-import { validateBank } from "../validation/validate.js";
-import { generateClubs } from "./clubs.js";
+import type { Competition, Country, ModPackage, ValidatedBank } from "../model/types";
+import { createRng } from "../rng/xoshiro";
+import { validateBank } from "../validation/validate";
+import { generateClubs } from "./clubs";
 import defaultNameBank from "./name-banks/default.json" with { type: "json" };
-import { nameBankSchema } from "./name-banks/schema.js";
-import { generateSquad } from "./players.js";
-import { GENERATOR_TUNING } from "./tuning.js";
+import { nameBankSchema } from "./name-banks/schema";
+import { generateSquad } from "./players";
+import { GENERATOR_TUNING } from "./tuning";
 
 export interface GenerateOptions {
   seed: string | number;

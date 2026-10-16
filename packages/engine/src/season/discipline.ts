@@ -1,6 +1,6 @@
-import type { InjurySeverity, Side } from "../match/types.js";
-import { createRng } from "../rng/xoshiro.js";
-import type { DisciplineRules, MatchRecord, PlayerStatus } from "./types.js";
+import type { InjurySeverity, Side } from "../match/types";
+import { createRng } from "../rng/xoshiro";
+import type { DisciplineRules, MatchRecord, PlayerStatus } from "./types";
 
 /** Partidas de afastamento por gravidade de lesão (FR-018). */
 export const INJURY_MATCHES: Record<InjurySeverity, readonly [number, number]> = {

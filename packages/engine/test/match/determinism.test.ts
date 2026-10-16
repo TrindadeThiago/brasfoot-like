@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { simulateMatch } from "../../src/match/engine.js";
-import type { MatchResult } from "../../src/match/types.js";
-import { clubIds, makeInput, naturalLineup, squadOf } from "./helpers/teams.js";
+import { simulateMatch } from "../../src/match/engine";
+import type { MatchResult } from "../../src/match/types";
+import { clubIds, makeInput, naturalLineup, squadOf } from "./helpers/teams";
 
 const [HOME, AWAY] = clubIds() as [string, string];
 

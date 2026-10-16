@@ -1,6 +1,6 @@
-import type { ModPackage } from "../../src/model/types.js";
-import type { IssueCode, IssueParams, Section } from "../../src/validation/issues.js";
-import { at, makeValidBank, removeField, setRaw } from "../helpers/build-bank.js";
+import type { ModPackage } from "../../src/model/types";
+import type { IssueCode, IssueParams, Section } from "../../src/validation/issues";
+import { at, makeValidBank, removeField, setRaw } from "../helpers/build-bank";
 
 export interface RuleCase {
   code: IssueCode;

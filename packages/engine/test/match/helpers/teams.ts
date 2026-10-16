@@ -1,10 +1,10 @@
-import { autoLineup } from "../../../src/match/auto-lineup.js";
-import { FORMATIONS, type FormationId, type Posture } from "../../../src/match/formations.js";
-import { effectiveStrength } from "../../../src/match/strength.js";
-import type { Lineup, MatchInput, TeamInput } from "../../../src/match/types.js";
-import type { CompletedBank, CompletedPlayer } from "../../../src/model/types.js";
-import { generateDefaultBank } from "../../../src/worldgen/generate.js";
-import { completeHiddenAttributes } from "../../../src/worldgen/hidden.js";
+import { autoLineup } from "../../../src/match/auto-lineup";
+import { FORMATIONS, type FormationId, type Posture } from "../../../src/match/formations";
+import { effectiveStrength } from "../../../src/match/strength";
+import type { Lineup, MatchInput, TeamInput } from "../../../src/match/types";
+import type { CompletedBank, CompletedPlayer } from "../../../src/model/types";
+import { generateDefaultBank } from "../../../src/worldgen/generate";
+import { completeHiddenAttributes } from "../../../src/worldgen/hidden";
 
 let world: CompletedBank | undefined;
 

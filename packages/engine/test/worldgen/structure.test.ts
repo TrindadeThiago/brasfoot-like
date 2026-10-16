@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { generateDefaultBank } from "../../src/worldgen/generate.js";
-import { at } from "../helpers/build-bank.js";
+import { generateDefaultBank } from "../../src/worldgen/generate";
+import { at } from "../helpers/build-bank";
 
 const bank = generateDefaultBank({ seed: 42 });
 

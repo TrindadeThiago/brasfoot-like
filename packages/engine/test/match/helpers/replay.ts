@@ -1,4 +1,4 @@
-import type { MatchEvent, MatchInput, Side } from "../../../src/match/types.js";
+import type { MatchEvent, MatchInput, Side } from "../../../src/match/types";
 
 /**
  * Reproduz os eventos de uma partida acompanhando quem está em campo, e devolve as violações de

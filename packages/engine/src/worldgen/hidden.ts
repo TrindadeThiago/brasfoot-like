@@ -1,8 +1,8 @@
-import { ageOn } from "../calendar/date.js";
-import type { CompletedBank, CompletedPlayer, Player, ValidatedBank } from "../model/types.js";
-import { intIrwinHall } from "../rng/distributions.js";
-import { createRng, type Rng } from "../rng/xoshiro.js";
-import { GENERATOR_TUNING } from "./tuning.js";
+import { ageOn } from "../calendar/date";
+import type { CompletedBank, CompletedPlayer, Player, ValidatedBank } from "../model/types";
+import { intIrwinHall } from "../rng/distributions";
+import { createRng, type Rng } from "../rng/xoshiro";
+import { GENERATOR_TUNING } from "./tuning";
 
 function potentialMargin(rng: Rng, age: number): number {
   for (const [maxAge, [min, max]] of GENERATOR_TUNING.hidden.potentialMargin) {

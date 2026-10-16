@@ -1,5 +1,5 @@
-import { createRng } from "../rng/xoshiro.js";
-import type { Fixture, Round } from "./types.js";
+import { createRng } from "../rng/xoshiro";
+import type { Fixture, Round } from "./types";
 
 const PHANTOM = "\u0000folga";
 

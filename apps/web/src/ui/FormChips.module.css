@@ -1,0 +1,28 @@
+.chips {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.chip {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  color: #0b1a10;
+}
+
+.W {
+  background: var(--color-win);
+}
+
+.D {
+  background: var(--color-draw);
+}
+
+.L {
+  background: var(--color-loss);
+}

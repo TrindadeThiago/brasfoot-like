@@ -1,5 +1,5 @@
-import type { SemanticContext } from "../context.js";
-import { makeIssue, SECTIONS, type ValidationIssue } from "../issues.js";
+import type { SemanticContext } from "../context";
+import { makeIssue, SECTIONS, type ValidationIssue } from "../issues";
 
 /** Ids únicos no banco inteiro, siglas de clube e códigos de país únicos (FR-020). */
 export function checkUniqueness(context: SemanticContext): ValidationIssue[] {

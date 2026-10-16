@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { generateDefaultBank } from "../../src/worldgen/generate.js";
+import { generateDefaultBank } from "../../src/worldgen/generate";
 import nameBank from "../../src/worldgen/name-banks/default.json" with { type: "json" };
 import blocklist from "../fixtures/blocklist.json" with { type: "json" };
 

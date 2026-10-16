@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import nameBank from "../../src/worldgen/name-banks/default.json" with { type: "json" };
-import { nameBankSchema } from "../../src/worldgen/name-banks/schema.js";
+import { nameBankSchema } from "../../src/worldgen/name-banks/schema";
 
 const uniqueCount = (values: string[]) => new Set(values).size;
 

@@ -1,4 +1,4 @@
-import type { Side } from "./types.js";
+import type { Side } from "./types";
 
 /** Códigos de erro do motor de partida e seus parâmetros (contracts/match-errors.md). */
 export const MATCH_ERROR_PARAMS = {

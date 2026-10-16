@@ -5,8 +5,8 @@ import {
   countrySchema,
   manifestSchema,
   playerSchema,
-} from "../../src/model/schemas.js";
-import { at, makeValidBank } from "../helpers/build-bank.js";
+} from "../../src/model/schemas";
+import { at, makeValidBank } from "../helpers/build-bank";
 
 function customCodes(result: { success: boolean; error?: { issues: unknown[] } }): unknown[] {
   return (result.error?.issues ?? []).map((issue) => {

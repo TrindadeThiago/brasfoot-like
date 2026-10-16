@@ -1,6 +1,6 @@
-import { type MatchError, matchError } from "./errors.js";
-import { FORMATION_IDS, FORMATIONS, type FormationId } from "./formations.js";
-import { type MatchInput, type NormalizedMatchInput, SIDES, type Side } from "./types.js";
+import { type MatchError, matchError } from "./errors";
+import { FORMATION_IDS, FORMATIONS, type FormationId } from "./formations";
+import { type MatchInput, type NormalizedMatchInput, SIDES, type Side } from "./types";
 
 const OPTION_RANGES = {
   substitutionLimit: [0, 11],

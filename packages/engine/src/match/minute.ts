@@ -1,12 +1,12 @@
-import type { Trait } from "../model/catalogs.js";
-import type { CompletedPlayer } from "../model/types.js";
-import type { Rng } from "../rng/xoshiro.js";
-import { adequacy } from "./adequacy.js";
-import { FORMATIONS } from "./formations.js";
-import { type FieldPlayer, pickAssister, pickFouler, pickInjured, pickShooter } from "./picker.js";
-import { type ClockKey, minuteRng } from "./rng.js";
-import { computeStrength, type TeamStrength } from "./strength.js";
-import { MATCH_TUNING } from "./tuning.js";
+import type { Trait } from "../model/catalogs";
+import type { CompletedPlayer } from "../model/types";
+import type { Rng } from "../rng/xoshiro";
+import { adequacy } from "./adequacy";
+import { FORMATIONS } from "./formations";
+import { type FieldPlayer, pickAssister, pickFouler, pickInjured, pickShooter } from "./picker";
+import { type ClockKey, minuteRng } from "./rng";
+import { computeStrength, type TeamStrength } from "./strength";
+import { MATCH_TUNING } from "./tuning";
 import type {
   InjurySeverity,
   MatchEvent,
@@ -15,7 +15,7 @@ import type {
   ShotKind,
   ShotOutcome,
   Side,
-} from "./types.js";
+} from "./types";
 
 /** Dados fixos da partida, montados uma vez por chamada de `advanceMatch`. */
 interface LineupCache {

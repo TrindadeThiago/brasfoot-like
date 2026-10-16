@@ -8,3 +8,9 @@ dist/
 *.tsbuildinfo
 *.log
 .env*
+
+# Next.js e Playwright
+.next/
+apps/web/out/
+test-results/
+playwright-report/

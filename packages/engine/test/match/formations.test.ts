@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { FORMATION_IDS, FORMATIONS, POSTURES } from "../../src/match/formations.js";
+import { FORMATION_IDS, FORMATIONS, POSTURES } from "../../src/match/formations";
 
 const DEFENDERS = new Set(["CB", "FB"]);
 const MIDFIELDERS = new Set(["DM", "MF"]);

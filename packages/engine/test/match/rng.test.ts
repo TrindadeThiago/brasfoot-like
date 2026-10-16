@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { minuteRng } from "../../src/match/rng.js";
+import { minuteRng } from "../../src/match/rng";
 
 const take = (rng: { next(): number }, n = 5) => Array.from({ length: n }, () => rng.next());
 

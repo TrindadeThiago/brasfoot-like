@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { advanceSeason, isSeasonOver } from "../../src/season/season.js";
-import { standings } from "../../src/season/standings.js";
-import type { Season } from "../../src/season/types.js";
-import { newSeason, playedSeason, testWorld } from "./helpers/world.js";
+import { advanceSeason, isSeasonOver } from "../../src/season/season";
+import { standings } from "../../src/season/standings";
+import type { Season } from "../../src/season/types";
+import { newSeason, playedSeason, testWorld } from "./helpers/world";
 
 function advance(season: Season, step: { rounds: number } | { toEnd: true }): Season {
   const result = advanceSeason(season, testWorld(), step);

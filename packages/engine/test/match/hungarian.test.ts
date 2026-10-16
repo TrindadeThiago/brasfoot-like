@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { maximizeAssignment } from "../../src/match/hungarian.js";
-import { createRng } from "../../src/rng/xoshiro.js";
+import { maximizeAssignment } from "../../src/match/hungarian";
+import { createRng } from "../../src/rng/xoshiro";
 
 function total(matrix: number[][], assignment: number[]): number {
   return assignment.reduce((sum, row, column) => sum + (matrix[row]?.[column] ?? 0), 0);

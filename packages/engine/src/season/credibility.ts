@@ -1,8 +1,8 @@
-import type { CompletedBank } from "../model/types.js";
-import { SEASON_CREDIBILITY_LIMITS } from "./limits.js";
-import { standings } from "./standings.js";
-import { topScorers } from "./stats.js";
-import type { Season, SeasonReport } from "./types.js";
+import type { CompletedBank } from "../model/types";
+import { SEASON_CREDIBILITY_LIMITS } from "./limits";
+import { standings } from "./standings";
+import { topScorers } from "./stats";
+import type { Season, SeasonReport } from "./types";
 
 const TOP_N = 16;
 

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { advanceSeason } from "../../src/season/season.js";
-import { newSeason, testWorld } from "./helpers/world.js";
+import { advanceSeason } from "../../src/season/season";
+import { newSeason, testWorld } from "./helpers/world";
 
 describe("desempenho (SC-005)", () => {
   it("uma temporada completa em menos de 2 s", () => {

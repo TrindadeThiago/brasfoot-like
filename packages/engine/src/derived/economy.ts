@@ -1,5 +1,5 @@
-import { ageOn } from "../calendar/date.js";
-import type { Club, CompletedPlayer } from "../model/types.js";
+import { ageOn } from "../calendar/date";
+import type { Club, CompletedPlayer } from "../model/types";
 
 /**
  * Salário e valor de mercado derivados (FR-016, research.md R13). Regra provisória, recalibrada

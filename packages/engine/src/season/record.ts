@@ -1,5 +1,5 @@
-import type { MatchEvent, MatchResult, Side } from "../match/types.js";
-import type { Absence, MatchRecord, PlayerLine } from "./types.js";
+import type { MatchEvent, MatchResult, Side } from "../match/types";
+import type { Absence, MatchRecord, PlayerLine } from "./types";
 
 /** Eventos guardados no registro: gols, pênaltis marcados, cartões, lesões e substituições. */
 function isKeyEvent(event: MatchEvent): boolean {

@@ -14,7 +14,7 @@ import {
   type MatchInput,
   simulateMatch,
 } from "@brasfoot-like/engine";
-import { DEFAULT_SEED } from "./default-seed.js";
+import { DEFAULT_SEED } from "./default-seed";
 
 const { values } = parseArgs({
   options: {

@@ -1,4 +1,4 @@
-import type { Rng } from "./xoshiro.js";
+import type { Rng } from "./xoshiro";
 
 /** Média de `n` uniformes: aproximadamente normal, em [0, 1), centrada em 0,5. */
 export function irwinHall(rng: Rng, n = 4): number {

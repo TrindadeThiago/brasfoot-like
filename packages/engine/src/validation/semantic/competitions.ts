@@ -1,6 +1,6 @@
-import type { Competition } from "../../model/types.js";
-import type { SemanticContext } from "../context.js";
-import { makeIssue, type ValidationIssue } from "../issues.js";
+import type { Competition } from "../../model/types";
+import type { SemanticContext } from "../context";
+import { makeIssue, type ValidationIssue } from "../issues";
 
 const MIN_CLUBS = 4;
 const MAX_CLUBS = 40;

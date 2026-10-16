@@ -1,4 +1,4 @@
-import type { Position } from "../model/catalogs.js";
+import type { Position } from "../model/catalogs";
 
 /** Camada de um clube pela reputação: grande ≥ 75, médio 55–74, pequeno < 55. */
 export const REPUTATION_TIERS = { big: 75, medium: 55 } as const;

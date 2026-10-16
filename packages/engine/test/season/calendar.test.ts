@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { generateCalendar } from "../../src/season/calendar.js";
-import type { Round } from "../../src/season/types.js";
+import { generateCalendar } from "../../src/season/calendar";
+import type { Round } from "../../src/season/types";
 
 const clubs = (n: number) => Array.from({ length: n }, (_, index) => `c${index + 1}`);
 const pairKey = (a: string, b: string) => [a, b].sort().join("|");

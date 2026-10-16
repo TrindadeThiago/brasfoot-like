@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { ISSUE_CODES, severityOf } from "../../src/validation/issues.js";
-import { validateBank } from "../../src/validation/validate.js";
-import { bankFor, RULE_CASES } from "./cases.js";
+import { ISSUE_CODES, severityOf } from "../../src/validation/issues";
+import { validateBank } from "../../src/validation/validate";
+import { bankFor, RULE_CASES } from "./cases";
 
 describe("cada código de problema tem um caso (SC-003)", () => {
   it("nenhum código sem caso, exceto file.*", () => {

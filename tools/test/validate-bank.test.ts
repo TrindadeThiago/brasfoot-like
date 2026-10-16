@@ -2,8 +2,8 @@ import { cpSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import { REPO_ROOT } from "../src/fs-bank.js";
-import { runValidateBank } from "../src/validate-bank.js";
+import { REPO_ROOT } from "../src/fs-bank";
+import { runValidateBank } from "../src/validate-bank";
 
 const FIXTURE = join(REPO_ROOT, "packages/engine/test/fixtures/invalid/multiple-defects");
 const DEFAULT_MOD = join(REPO_ROOT, "mods/default");

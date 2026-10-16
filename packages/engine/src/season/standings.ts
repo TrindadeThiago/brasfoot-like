@@ -1,7 +1,7 @@
-import type { Tiebreaker } from "../model/catalogs.js";
-import type { CompletedBank } from "../model/types.js";
-import { createRng } from "../rng/xoshiro.js";
-import type { FormResult, MatchRecord, Season, StandingRow } from "./types.js";
+import type { Tiebreaker } from "../model/catalogs";
+import type { CompletedBank } from "../model/types";
+import { createRng } from "../rng/xoshiro";
+import type { FormResult, MatchRecord, Season, StandingRow } from "./types";
 
 interface Points {
   win: number;

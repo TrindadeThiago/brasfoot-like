@@ -1,0 +1,49 @@
+.table {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.sortButton {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  gap: var(--space-1);
+  align-items: center;
+}
+
+.sortButton:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.arrow {
+  font-size: 10px;
+  min-width: 10px;
+}
+
+.highlight {
+  background: var(--color-highlight);
+  font-weight: 600;
+}
+
+.selected {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  background: var(--color-surface-2);
+}
+
+.clickable:focus-visible {
+  outline: 3px solid #7cc4ff;
+  outline-offset: -2px;
+}
+
+.table td {
+  vertical-align: middle;
+}

@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { Tiebreaker } from "../../src/model/catalogs.js";
-import type { CompletedBank } from "../../src/model/types.js";
-import { standings } from "../../src/season/standings.js";
-import { DEFAULT_DISCIPLINE_RULES, type MatchRecord, type Season } from "../../src/season/types.js";
+import type { Tiebreaker } from "../../src/model/catalogs";
+import type { CompletedBank } from "../../src/model/types";
+import { standings } from "../../src/season/standings";
+import { DEFAULT_DISCIPLINE_RULES, type MatchRecord, type Season } from "../../src/season/types";
 
 const CLUBS = ["a", "b", "c", "d"];
 

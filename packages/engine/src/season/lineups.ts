@@ -1,8 +1,8 @@
-import { autoLineup } from "../match/auto-lineup.js";
-import { FORMATION_IDS, type FormationId, slotPosition } from "../match/formations.js";
-import { effectiveStrength } from "../match/strength.js";
-import type { Lineup } from "../match/types.js";
-import type { CompletedPlayer } from "../model/types.js";
+import { autoLineup } from "../match/auto-lineup";
+import { FORMATION_IDS, type FormationId, slotPosition } from "../match/formations";
+import { effectiveStrength } from "../match/strength";
+import type { Lineup } from "../match/types";
+import type { CompletedPlayer } from "../model/types";
 
 export const SEASON_BENCH_LIMIT = 12;
 

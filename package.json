@@ -14,7 +14,11 @@
     "gen:default-bank": "pnpm --filter @brasfoot-like/tools gen:default-bank",
     "validate-bank": "pnpm --filter @brasfoot-like/tools validate-bank",
     "sim:matches": "pnpm --filter @brasfoot-like/tools sim:matches",
-    "sim:season": "pnpm --filter @brasfoot-like/tools sim:season"
+    "sim:season": "pnpm --filter @brasfoot-like/tools sim:season",
+    "dev:web": "pnpm --filter @brasfoot-like/web dev",
+    "build:web": "pnpm --filter @brasfoot-like/web build",
+    "preview:web": "pnpm --filter @brasfoot-like/web preview",
+    "test:e2e": "pnpm --filter @brasfoot-like/web test:e2e"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",

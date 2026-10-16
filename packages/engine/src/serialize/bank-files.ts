@@ -1,6 +1,6 @@
-import type { ModPackage } from "../model/types.js";
-import type { Section } from "../validation/issues.js";
-import { toCanonicalJson } from "./canonical-json.js";
+import type { ModPackage } from "../model/types";
+import type { Section } from "../validation/issues";
+import { toCanonicalJson } from "./canonical-json";
 
 /** Arquivo de cada seção no diretório do mod (contracts/mod-format.md). */
 export const BANK_FILES: Record<Section, string> = {
