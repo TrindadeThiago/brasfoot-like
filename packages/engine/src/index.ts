@@ -2,6 +2,7 @@
 
 export { ageOn } from "./calendar/date";
 export { deriveMarketValue, deriveWage } from "./derived/economy";
+export * from "./lineup";
 export { adequacy } from "./match/adequacy";
 export type { AutoLineupOptions, AutoLineupResult } from "./match/auto-lineup";
 export { autoLineup } from "./match/auto-lineup";
@@ -12,7 +13,7 @@ export { advanceMatch, simulateMatch, startMatch } from "./match/engine";
 export type { MatchError, MatchErrorCode } from "./match/errors";
 export { MATCH_ERROR_CODES, MATCH_ERROR_PARAMS } from "./match/errors";
 export type { Formation, FormationId, Posture, Slot } from "./match/formations";
-export { FORMATION_IDS, FORMATIONS, POSTURES } from "./match/formations";
+export { FORMATION_IDS, FORMATIONS, POSTURES, slotPosition } from "./match/formations";
 export { MATCH_REALISM_LIMITS } from "./match/limits";
 export type { MatchMetrics, MetricCheck } from "./match/metrics";
 export { checkRealism, createMetricsAccumulator } from "./match/metrics";
@@ -81,7 +82,7 @@ export { applyMatchToStatus, INJURY_MATCHES, injuryDuration } from "./season/dis
 export type { SeasonError, SeasonErrorCode } from "./season/errors";
 export { SEASON_ERROR_CODES, SEASON_ERROR_PARAMS } from "./season/errors";
 export { SEASON_CREDIBILITY_LIMITS } from "./season/limits";
-export { preferredFormation } from "./season/lineups";
+export { lineupForMatch, preferredFormation, SEASON_BENCH_LIMIT } from "./season/lineups";
 export type { AdvanceSeasonResult, CreateSeasonResult } from "./season/season";
 export { advanceSeason, createSeason, isSeasonOver, unavailablePlayers } from "./season/season";
 export { standings } from "./season/standings";
