@@ -7,7 +7,7 @@
     "name": "Waldemar Siqueira Toledo",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 65,
+    "strength": 67,
     "traits": []
   },
   {
@@ -18,7 +18,7 @@
     "name": "Lucas Urquiza Coutinho",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 56,
+    "strength": 58,
     "traits": []
   },
   {
@@ -29,7 +29,7 @@
     "name": "Kauã Lins Bragança",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 44,
+    "strength": 46,
     "traits": [
       "wall"
     ]
@@ -42,7 +42,7 @@
     "name": "Norberto Cavalcanti Coutinho",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 63,
+    "strength": 65,
     "traits": [
       "heading",
       "free-kick"
@@ -56,7 +56,7 @@
     "name": "André Aguiar Marinho",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 62,
+    "strength": 64,
     "traits": [
       "playmaker"
     ]
@@ -69,7 +69,7 @@
     "name": "Wagner Figueiredo Rodrigues",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 59,
+    "strength": 61,
     "traits": []
   },
   {
@@ -80,7 +80,7 @@
     "name": "Jonathan Urquiza Vieira",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 44,
+    "strength": 46,
     "traits": [
       "free-kick",
       "pace"
@@ -94,7 +94,7 @@
     "name": "Maurício Batista Nunes",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 61,
+    "strength": 63,
     "traits": [
       "heading"
     ]
@@ -107,7 +107,7 @@
     "name": "Elias Araújo Damasceno",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 67,
+    "strength": 69,
     "traits": [
       "wall",
       "pace"
@@ -121,7 +121,7 @@
     "name": "Dário Vieira Godinho",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 50,
+    "strength": 52,
     "traits": []
   },
   {
@@ -132,7 +132,7 @@
     "name": "Thiago Menezes Rabelo",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 49,
+    "strength": 51,
     "traits": [
       "heading"
     ]
@@ -145,7 +145,7 @@
     "name": "Wagner Fernandes Sarmento",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 46,
+    "strength": 48,
     "traits": [
       "wall",
       "heading"
@@ -159,7 +159,7 @@
     "name": "Allan Lago Lustosa",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 64,
+    "strength": 66,
     "traits": [
       "playmaker"
     ]
@@ -172,7 +172,7 @@
     "name": "Edinho Soares Faria",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 59,
+    "strength": 61,
     "traits": []
   },
   {
@@ -183,7 +183,7 @@
     "name": "Murilo Bueno Portela",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 46,
+    "strength": 48,
     "traits": []
   },
   {
@@ -194,7 +194,7 @@
     "name": "Glauco Leal Jardim",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 54,
+    "strength": 56,
     "traits": []
   },
   {
@@ -205,7 +205,7 @@
     "name": "Jean Lins Brito",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 57,
+    "strength": 59,
     "traits": []
   },
   {
@@ -216,7 +216,7 @@
     "name": "Zacarias Menezes Garcia",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 63,
+    "strength": 64,
     "traits": [
       "pace"
     ]
@@ -229,7 +229,7 @@
     "name": "Élton Ferraz Penteado",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 57,
+    "strength": 59,
     "traits": []
   },
   {
@@ -240,7 +240,7 @@
     "name": "Edinho Seixas Drummond",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 55,
+    "strength": 57,
     "traits": []
   },
   {
@@ -251,7 +251,7 @@
     "name": "Vanderlei Monteiro Torres",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 45,
+    "strength": 47,
     "traits": [
       "free-kick"
     ]
@@ -264,7 +264,7 @@
     "name": "Luan Ramos Mourão",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 66,
+    "strength": 68,
     "traits": [
       "finisher",
       "pace"
@@ -278,7 +278,7 @@
     "name": "Marcos Dornelles Andrade",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 60,
+    "strength": 62,
     "traits": [
       "heading"
     ]
@@ -291,7 +291,7 @@
     "name": "Jardel Salgado Zago",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 53,
+    "strength": 54,
     "traits": [
       "finisher"
     ]
@@ -304,7 +304,7 @@
     "name": "Felício Pacheco Bandeira",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 46,
+    "strength": 47,
     "traits": [
       "finisher"
     ]
@@ -317,7 +317,7 @@
     "name": "Lucas Toledo Bezerra",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 56,
+    "strength": 58,
     "traits": []
   },
   {
@@ -328,7 +328,7 @@
     "name": "Wendel Silva Pereira",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 67,
+    "strength": 68,
     "traits": [
       "wall"
     ]
@@ -354,7 +354,7 @@
     "name": "Waldemar Farias Diniz",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 51,
+    "strength": 52,
     "traits": []
   },
   {
@@ -365,7 +365,7 @@
     "name": "Tadeu Pinto Neves",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 59,
+    "strength": 60,
     "traits": []
   },
   {
@@ -376,7 +376,7 @@
     "name": "Jean Jordão Infante",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 62,
+    "strength": 63,
     "traits": []
   },
   {
@@ -387,7 +387,7 @@
     "name": "Michel Monteiro Nogueira",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 59,
+    "strength": 60,
     "traits": []
   },
   {
@@ -398,7 +398,7 @@
     "name": "Heraldo Quintana Tenório",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 53,
+    "strength": 54,
     "traits": []
   },
   {
@@ -409,7 +409,7 @@
     "name": "Guilherme Amaral Braga",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 50,
+    "strength": 51,
     "traits": []
   },
   {
@@ -420,7 +420,7 @@
     "name": "Heverton Mourão Infante",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 60,
+    "strength": 61,
     "traits": [
       "pace"
     ]
@@ -458,7 +458,7 @@
     "name": "Ronaldo Calado Faria",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 49,
+    "strength": 50,
     "traits": []
   },
   {
@@ -469,7 +469,7 @@
     "name": "Edinho Muniz Coimbra",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 51,
+    "strength": 52,
     "traits": [
       "heading",
       "wall"
@@ -496,7 +496,7 @@
     "name": "Renato Cerqueira Rodrigues",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 61,
+    "strength": 62,
     "traits": []
   },
   {
@@ -544,7 +544,7 @@
     "name": "Vítor Pacheco Bittencourt",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 65,
+    "strength": 66,
     "traits": [
       "playmaker"
     ]
@@ -557,7 +557,7 @@
     "name": "Ivan Antunes Cardoso",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 62,
+    "strength": 63,
     "traits": [
       "finisher"
     ]
@@ -570,7 +570,7 @@
     "name": "Abel Melo Bezerra",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 60,
+    "strength": 61,
     "traits": [
       "pace"
     ]
@@ -596,7 +596,7 @@
     "name": "Max Couto Holanda",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 51,
+    "strength": 52,
     "traits": [
       "playmaker"
     ]
@@ -609,7 +609,7 @@
     "name": "Murilo Pinto Lima",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 64,
+    "strength": 65,
     "traits": []
   },
   {
@@ -620,7 +620,7 @@
     "name": "Tiago Pereira Costa",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 61,
+    "strength": 62,
     "traits": [
       "pace",
       "heading"
@@ -647,7 +647,7 @@
     "name": "Amaral Guimarães Prates",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 49,
+    "strength": 50,
     "traits": [
       "finisher"
     ]
@@ -660,7 +660,7 @@
     "name": "Marcelo Melo Lopes",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 60,
+    "strength": 61,
     "traits": [
       "pace",
       "finisher"
@@ -674,7 +674,7 @@
     "name": "Valter Mesquita Paiva",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 71,
+    "strength": 69,
     "traits": []
   },
   {
@@ -685,7 +685,7 @@
     "name": "Dênis Salgado Cabral",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 61,
+    "strength": 58,
     "traits": []
   },
   {
@@ -696,7 +696,7 @@
     "name": "Wilson Drummond Sanches",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 54,
+    "strength": 52,
     "traits": [
       "wall"
     ]
@@ -709,7 +709,7 @@
     "name": "Cauã Couto Seixas",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 72,
+    "strength": 69,
     "traits": [
       "free-kick"
     ]
@@ -722,7 +722,7 @@
     "name": "Raul Nogueira Accioly",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 73,
+    "strength": 71,
     "traits": []
   },
   {
@@ -733,7 +733,7 @@
     "name": "Wellington Brás Soares",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 56,
+    "strength": 54,
     "traits": [
       "pace",
       "playmaker"
@@ -747,7 +747,7 @@
     "name": "Jéferson Urquiza Neves",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 61,
+    "strength": 58,
     "traits": []
   },
   {
@@ -758,7 +758,7 @@
     "name": "Francisco Leite Lima",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 64,
+    "strength": 61,
     "traits": [
       "playmaker",
       "heading"
@@ -772,7 +772,7 @@
     "name": "Wilson Valadares Arantes",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 76,
+    "strength": 74,
     "traits": [
       "wall"
     ]
@@ -785,7 +785,7 @@
     "name": "Igor Mourão Prates",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 78,
+    "strength": 75,
     "traits": []
   },
   {
@@ -796,7 +796,7 @@
     "name": "Kauã Andrade Ferreira",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 68,
+    "strength": 65,
     "traits": []
   },
   {
@@ -807,7 +807,7 @@
     "name": "Baltazar Siqueira Batista",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 60,
+    "strength": 57,
     "traits": []
   },
   {
@@ -818,7 +818,7 @@
     "name": "Geraldo Souza Cruz",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 65,
+    "strength": 63,
     "traits": []
   },
   {
@@ -829,7 +829,7 @@
     "name": "Maurício Pereira Jardim",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 67,
+    "strength": 64,
     "traits": [
       "free-kick"
     ]
@@ -842,7 +842,7 @@
     "name": "Marco Farias Macedo",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 58,
+    "strength": 55,
     "traits": []
   },
   {
@@ -853,7 +853,7 @@
     "name": "Zacarias Salgado Maia",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 69,
+    "strength": 67,
     "traits": []
   },
   {
@@ -864,7 +864,7 @@
     "name": "Joaquim Queiroz Ramos",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 65,
+    "strength": 63,
     "traits": [
       "playmaker"
     ]
@@ -877,7 +877,7 @@
     "name": "Pietro Dantas Miranda",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 76,
+    "strength": 73,
     "traits": []
   },
   {
@@ -888,7 +888,7 @@
     "name": "Otávio Brandão Cunha",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 63,
+    "strength": 60,
     "traits": []
   },
   {
@@ -899,7 +899,7 @@
     "name": "Túlio Coutinho Cabral",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 73,
+    "strength": 71,
     "traits": [
       "heading"
     ]
@@ -912,7 +912,7 @@
     "name": "Cristóvão Rocha Ferraz",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 68,
+    "strength": 65,
     "traits": [
       "pace"
     ]
@@ -925,7 +925,7 @@
     "name": "Allan Leal Bragança",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 65,
+    "strength": 63,
     "traits": [
       "heading"
     ]
@@ -938,7 +938,7 @@
     "name": "Murilo Abreu Barros",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 55,
+    "strength": 52,
     "traits": []
   },
   {
@@ -1036,7 +1036,7 @@
     "name": "Vinícius Amaral Antunes",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 52,
+    "strength": 53,
     "traits": [
       "playmaker",
       "free-kick"
@@ -1061,7 +1061,7 @@
     "name": "Alessandro Lacerda Canedo",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 61,
+    "strength": 62,
     "traits": []
   },
   {
@@ -1184,7 +1184,7 @@
     "name": "Gustavo Lemos Coimbra",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 50,
+    "strength": 51,
     "traits": [
       "finisher",
       "free-kick"
@@ -1198,7 +1198,7 @@
     "name": "Heitor Amaro Quintana",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 71,
+    "strength": 72,
     "traits": []
   },
   {
@@ -1209,7 +1209,7 @@
     "name": "Juan Soares Alencar",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 67,
+    "strength": 68,
     "traits": [
       "pace"
     ]
@@ -1222,7 +1222,7 @@
     "name": "Raul Faria Assis",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 58,
+    "strength": 59,
     "traits": []
   },
   {
@@ -1233,7 +1233,7 @@
     "name": "Leonardo Vieira Ribeiro",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 46,
+    "strength": 47,
     "traits": []
   },
   {
@@ -1244,7 +1244,7 @@
     "name": "Thiago Holanda Lemos",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 52,
+    "strength": 53,
     "traits": [
       "finisher"
     ]
@@ -1257,7 +1257,7 @@
     "name": "Jardel Nunes Prado",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 69,
+    "strength": 67,
     "traits": [
       "wall"
     ]
@@ -1270,7 +1270,7 @@
     "name": "Josué Vidal Holanda",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 64,
+    "strength": 62,
     "traits": []
   },
   {
@@ -1281,7 +1281,7 @@
     "name": "Everton Sales Brito",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 62,
+    "strength": 60,
     "traits": []
   },
   {
@@ -1292,7 +1292,7 @@
     "name": "Cássio Bastos Lobo",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 71,
+    "strength": 69,
     "traits": [
       "pace"
     ]
@@ -1305,7 +1305,7 @@
     "name": "Leonardo Jordão Simões",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 66,
+    "strength": 64,
     "traits": [
       "heading"
     ]
@@ -1318,7 +1318,7 @@
     "name": "Josué Aguiar Mesquita",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 66,
+    "strength": 64,
     "traits": [
       "pace"
     ]
@@ -1331,7 +1331,7 @@
     "name": "Igor Neves Carneiro",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 50,
+    "strength": 48,
     "traits": [
       "free-kick"
     ]
@@ -1344,7 +1344,7 @@
     "name": "Michel Henriques Bittencourt",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 48,
+    "strength": 46,
     "traits": []
   },
   {
@@ -1355,7 +1355,7 @@
     "name": "Renan Correia Seixas",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 73,
+    "strength": 71,
     "traits": []
   },
   {
@@ -1366,7 +1366,7 @@
     "name": "Jorge Zanetti Maia",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 69,
+    "strength": 67,
     "traits": [
       "wall"
     ]
@@ -1379,7 +1379,7 @@
     "name": "Marco Fonseca Caldeira",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 62,
+    "strength": 60,
     "traits": [
       "wall"
     ]
@@ -1392,7 +1392,7 @@
     "name": "Michel Sanches Coutinho",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 60,
+    "strength": 58,
     "traits": []
   },
   {
@@ -1403,7 +1403,7 @@
     "name": "Fred Barreto Mesquita",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 69,
+    "strength": 67,
     "traits": []
   },
   {
@@ -1414,7 +1414,7 @@
     "name": "Paulo Coelho Valente",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 65,
+    "strength": 62,
     "traits": []
   },
   {
@@ -1425,7 +1425,7 @@
     "name": "Anderson Sarmento Antunes",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 61,
+    "strength": 59,
     "traits": []
   },
   {
@@ -1436,7 +1436,7 @@
     "name": "Benedito Arantes Lemos",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 61,
+    "strength": 59,
     "traits": [
       "playmaker"
     ]
@@ -1449,7 +1449,7 @@
     "name": "Miguel Viana Damasceno",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 49,
+    "strength": 47,
     "traits": []
   },
   {
@@ -1460,7 +1460,7 @@
     "name": "Túlio Mourão Garcia",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 62,
+    "strength": 60,
     "traits": [
       "playmaker"
     ]
@@ -1473,7 +1473,7 @@
     "name": "Francisco Moura Chagas",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 69,
+    "strength": 67,
     "traits": [
       "playmaker"
     ]
@@ -1486,7 +1486,7 @@
     "name": "Danilo Leal Moura",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 68,
+    "strength": 66,
     "traits": [
       "finisher"
     ]
@@ -1499,7 +1499,7 @@
     "name": "Danilo Andrade Oliveira",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 61,
+    "strength": 59,
     "traits": []
   },
   {
@@ -1510,7 +1510,7 @@
     "name": "Alisson Amaro Macedo",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 46,
+    "strength": 44,
     "traits": []
   },
   {
@@ -1521,7 +1521,7 @@
     "name": "Kauã Brandão Ferraz",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 70,
+    "strength": 68,
     "traits": [
       "pace"
     ]
@@ -1534,7 +1534,7 @@
     "name": "Wesley Teixeira Lustosa",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 70,
+    "strength": 68,
     "traits": []
   },
   {
@@ -1545,7 +1545,7 @@
     "name": "Jean Neves Delgado",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 59,
+    "strength": 57,
     "traits": [
       "pace"
     ]
@@ -1558,7 +1558,7 @@
     "name": "Victor Tenório Leal",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 56,
+    "strength": 54,
     "traits": [
       "finisher"
     ]
@@ -1571,7 +1571,7 @@
     "name": "Régis Damasceno Pimenta",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 57,
+    "strength": 55,
     "traits": []
   },
   {
@@ -1595,7 +1595,7 @@
     "name": "Adilson Simões Valadares",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 55,
+    "strength": 54,
     "traits": [
       "wall"
     ]
@@ -1619,7 +1619,7 @@
     "name": "Pablo Batista Maia",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 69,
+    "strength": 68,
     "traits": [
       "free-kick"
     ]
@@ -1683,7 +1683,7 @@
     "name": "Luiz Lacerda Accioly",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 65,
+    "strength": 64,
     "traits": [
       "wall"
     ]
@@ -1696,7 +1696,7 @@
     "name": "Pedro Diniz Meireles",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 68,
+    "strength": 67,
     "traits": [
       "pace"
     ]
@@ -1709,7 +1709,7 @@
     "name": "Robson Rodrigues Lago",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 61,
+    "strength": 60,
     "traits": [
       "wall"
     ]
@@ -1748,7 +1748,7 @@
     "name": "Jean Rezende Miranda",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 72,
+    "strength": 71,
     "traits": [
       "playmaker"
     ]
@@ -1761,7 +1761,7 @@
     "name": "Glauco Caldeira Pacheco",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 61,
+    "strength": 60,
     "traits": []
   },
   {
@@ -1772,7 +1772,7 @@
     "name": "Armando Coimbra Infante",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 54,
+    "strength": 53,
     "traits": [
       "wall"
     ]
@@ -1785,7 +1785,7 @@
     "name": "Adriano Paiva Maia",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 55,
+    "strength": 54,
     "traits": []
   },
   {
@@ -1796,7 +1796,7 @@
     "name": "Juliano Penteado Viana",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 54,
+    "strength": 53,
     "traits": []
   },
   {
@@ -1834,7 +1834,7 @@
     "name": "Cauã Silva Rodrigues",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 64,
+    "strength": 63,
     "traits": [
       "free-kick",
       "playmaker"
@@ -1848,7 +1848,7 @@
     "name": "Eustáquio Rangel Holanda",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 66,
+    "strength": 65,
     "traits": [
       "finisher"
     ]
@@ -1861,7 +1861,7 @@
     "name": "Ubiratan Sanches Rebouças",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 69,
+    "strength": 68,
     "traits": []
   },
   {
@@ -1885,7 +1885,7 @@
     "name": "Wallace Barbosa Souza",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 60,
+    "strength": 59,
     "traits": []
   },
   {
@@ -1909,7 +1909,7 @@
     "name": "Enzo Galvão Quaresma",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 58,
+    "strength": 59,
     "traits": [
       "wall"
     ]
@@ -1922,7 +1922,7 @@
     "name": "Max Cardoso Barros",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 54,
+    "strength": 55,
     "traits": [
       "wall"
     ]
@@ -1935,7 +1935,7 @@
     "name": "Vicente Urquiza Leal",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 52,
+    "strength": 53,
     "traits": [
       "wall"
     ]
@@ -1948,7 +1948,7 @@
     "name": "Eduardo Salgado Albuquerque",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 63,
+    "strength": 64,
     "traits": [
       "pace"
     ]
@@ -1961,7 +1961,7 @@
     "name": "Aldair Guerra Lemos",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 61,
+    "strength": 62,
     "traits": [
       "pace"
     ]
@@ -1974,7 +1974,7 @@
     "name": "Alex Araújo Lins",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 57,
+    "strength": 58,
     "traits": [
       "pace",
       "playmaker"
@@ -1988,7 +1988,7 @@
     "name": "Kaique Paranhos Camargo",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 59,
+    "strength": 60,
     "traits": [
       "playmaker"
     ]
@@ -2001,7 +2001,7 @@
     "name": "Mateus Reis Frota",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 61,
+    "strength": 62,
     "traits": []
   },
   {
@@ -2012,7 +2012,7 @@
     "name": "Washington Bueno Maia",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 62,
+    "strength": 64,
     "traits": [
       "heading"
     ]
@@ -2025,7 +2025,7 @@
     "name": "Robson Frota Belchior",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 58,
+    "strength": 59,
     "traits": []
   },
   {
@@ -2036,7 +2036,7 @@
     "name": "Neto Guerra Rebouças",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 54,
+    "strength": 56,
     "traits": []
   },
   {
@@ -2047,7 +2047,7 @@
     "name": "Emanuel Bezerra Frota",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 51,
+    "strength": 52,
     "traits": [
       "heading"
     ]
@@ -2060,7 +2060,7 @@
     "name": "Tadeu Nóbrega Lustosa",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 64,
+    "strength": 65,
     "traits": [
       "heading"
     ]
@@ -2073,7 +2073,7 @@
     "name": "Enzo Frota Viana",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 56,
+    "strength": 57,
     "traits": []
   },
   {
@@ -2084,7 +2084,7 @@
     "name": "Ítalo Costa Martins",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 50,
+    "strength": 51,
     "traits": [
       "wall",
       "free-kick"
@@ -2098,7 +2098,7 @@
     "name": "Valter Lourenço Seixas",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 47,
+    "strength": 49,
     "traits": [
       "heading"
     ]
@@ -2111,7 +2111,7 @@
     "name": "José Cavalcanti Monteiro",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 52,
+    "strength": 54,
     "traits": [
       "heading",
       "playmaker"
@@ -2125,7 +2125,7 @@
     "name": "Dorival Sampaio Zago",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 58,
+    "strength": 60,
     "traits": []
   },
   {
@@ -2136,7 +2136,7 @@
     "name": "Aldair Canedo Couto",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 64,
+    "strength": 65,
     "traits": [
       "finisher"
     ]
@@ -2149,7 +2149,7 @@
     "name": "Yago Coutinho Novaes",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 64,
+    "strength": 66,
     "traits": []
   },
   {
@@ -2160,7 +2160,7 @@
     "name": "Gilmar Magalhães Vidal",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 55,
+    "strength": 57,
     "traits": []
   },
   {
@@ -2171,7 +2171,7 @@
     "name": "César Borges Almeida",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 56,
+    "strength": 57,
     "traits": [
       "finisher",
       "pace"
@@ -2185,7 +2185,7 @@
     "name": "Antônio Tourinho Sales",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 53,
+    "strength": 54,
     "traits": [
       "finisher"
     ]
@@ -2198,7 +2198,7 @@
     "name": "Hamilton Farias Medeiros",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 62,
+    "strength": 63,
     "traits": [
       "pace"
     ]
@@ -2211,7 +2211,7 @@
     "name": "Jefferson Junqueira Carneiro",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 55,
+    "strength": 56,
     "traits": [
       "pace",
       "heading"
@@ -2225,7 +2225,7 @@
     "name": "Baltazar Lemos Dantas",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 50,
+    "strength": 52,
     "traits": [
       "heading"
     ]
@@ -2238,7 +2238,7 @@
     "name": "Alan Urquiza Tourinho",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 66,
+    "strength": 67,
     "traits": []
   },
   {
@@ -2249,7 +2249,7 @@
     "name": "Luan Pestana Quaresma",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 56,
+    "strength": 58,
     "traits": []
   },
   {
@@ -2260,7 +2260,7 @@
     "name": "Nélson Xavier Mendes",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 45,
+    "strength": 46,
     "traits": [
       "wall"
     ]
@@ -2273,7 +2273,7 @@
     "name": "Heverton Rabelo Rocha",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 63,
+    "strength": 65,
     "traits": []
   },
   {
@@ -2284,7 +2284,7 @@
     "name": "Ricardo Tourinho Teles",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 67,
+    "strength": 68,
     "traits": [
       "pace"
     ]
@@ -2297,7 +2297,7 @@
     "name": "Rodrigo Guimarães Drummond",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 61,
+    "strength": 62,
     "traits": [
       "heading"
     ]
@@ -2310,7 +2310,7 @@
     "name": "Jailson Cunha Moraes",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 47,
+    "strength": 48,
     "traits": [
       "heading"
     ]
@@ -2323,7 +2323,7 @@
     "name": "Lucas Bastos Bandeira",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 51,
+    "strength": 52,
     "traits": []
   },
   {
@@ -2334,7 +2334,7 @@
     "name": "Daniel Azevedo Sales",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 63,
+    "strength": 64,
     "traits": [
       "wall"
     ]
@@ -2347,7 +2347,7 @@
     "name": "Valdir Galvão Ramos",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 62,
+    "strength": 64,
     "traits": [
       "heading"
     ]
@@ -2360,7 +2360,7 @@
     "name": "Diego Almeida Nunes",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 61,
+    "strength": 62,
     "traits": [
       "heading"
     ]
@@ -2373,7 +2373,7 @@
     "name": "Júlio Rezende Xavier",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 49,
+    "strength": 50,
     "traits": [
       "wall"
     ]
@@ -2386,7 +2386,7 @@
     "name": "Jonathan Avelar Batista",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 45,
+    "strength": 46,
     "traits": [
       "heading"
     ]
@@ -2399,7 +2399,7 @@
     "name": "Domingos Bueno Esteves",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 63,
+    "strength": 64,
     "traits": []
   },
   {
@@ -2410,7 +2410,7 @@
     "name": "Reinaldo Brandão Vieira",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 57,
+    "strength": 58,
     "traits": [
       "wall",
       "heading"
@@ -2424,7 +2424,7 @@
     "name": "Emanuel Barbosa Urquiza",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 50,
+    "strength": 52,
     "traits": []
   },
   {
@@ -2435,7 +2435,7 @@
     "name": "Ruan Rangel Delgado",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 51,
+    "strength": 52,
     "traits": [
       "playmaker"
     ]
@@ -2448,7 +2448,7 @@
     "name": "Moisés Varela Zanetti",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 64,
+    "strength": 65,
     "traits": [
       "playmaker"
     ]
@@ -2461,7 +2461,7 @@
     "name": "Baltazar Prates Cruz",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 62,
+    "strength": 63,
     "traits": [
       "free-kick"
     ]
@@ -2474,7 +2474,7 @@
     "name": "Guilherme Rocha Franco",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 64,
+    "strength": 65,
     "traits": []
   },
   {
@@ -2485,7 +2485,7 @@
     "name": "Wilson Franco Duarte",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 60,
+    "strength": 61,
     "traits": [
       "pace"
     ]
@@ -2498,7 +2498,7 @@
     "name": "Luciano Duarte Avelar",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 64,
+    "strength": 66,
     "traits": []
   },
   {
@@ -2509,7 +2509,7 @@
     "name": "Diogo Camargo Mourão",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 66,
+    "strength": 67,
     "traits": []
   },
   {
@@ -2520,7 +2520,7 @@
     "name": "Ismael Mendes Franco",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 58,
+    "strength": 59,
     "traits": []
   },
   {
@@ -2531,7 +2531,7 @@
     "name": "Antônio Araújo Mesquita",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 53,
+    "strength": 54,
     "traits": [
       "finisher"
     ]
@@ -2544,7 +2544,7 @@
     "name": "Vítor Tenório Calheiros",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 79,
+    "strength": 73,
     "traits": []
   },
   {
@@ -2555,7 +2555,7 @@
     "name": "Vanderlei Matos Paranhos",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 75,
+    "strength": 68,
     "traits": [
       "wall"
     ]
@@ -2568,7 +2568,7 @@
     "name": "Vítor Belchior Guimarães",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 64,
+    "strength": 57,
     "traits": []
   },
   {
@@ -2579,7 +2579,7 @@
     "name": "Cauã Bittencourt Leal",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 74,
+    "strength": 67,
     "traits": [
       "pace",
       "playmaker"
@@ -2593,7 +2593,7 @@
     "name": "Jardel Barreto Souza",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 73,
+    "strength": 66,
     "traits": []
   },
   {
@@ -2604,7 +2604,7 @@
     "name": "Jonas Ramos Amorim",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 70,
+    "strength": 64,
     "traits": []
   },
   {
@@ -2615,7 +2615,7 @@
     "name": "Alan Brito Vieira",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 67,
+    "strength": 61,
     "traits": [
       "pace"
     ]
@@ -2628,7 +2628,7 @@
     "name": "Renato Ferraz Figueiredo",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 75,
+    "strength": 68,
     "traits": [
       "free-kick"
     ]
@@ -2641,7 +2641,7 @@
     "name": "Orlando Abreu Damasceno",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 73,
+    "strength": 66,
     "traits": []
   },
   {
@@ -2652,7 +2652,7 @@
     "name": "Adilson Pacheco Bittencourt",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 88,
+    "strength": 81,
     "traits": []
   },
   {
@@ -2663,7 +2663,7 @@
     "name": "Daniel Quaresma Freitas",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 75,
+    "strength": 68,
     "traits": []
   },
   {
@@ -2674,7 +2674,7 @@
     "name": "Alberto Barreto Capistrano",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 72,
+    "strength": 65,
     "traits": []
   },
   {
@@ -2685,7 +2685,7 @@
     "name": "Agnaldo Toledo Abreu",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 81,
+    "strength": 74,
     "traits": []
   },
   {
@@ -2696,7 +2696,7 @@
     "name": "Caio Rego Teles",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 78,
+    "strength": 72,
     "traits": [
       "heading"
     ]
@@ -2709,7 +2709,7 @@
     "name": "Felipe Monteiro Leal",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 70,
+    "strength": 64,
     "traits": []
   },
   {
@@ -2720,7 +2720,7 @@
     "name": "Jonas Capistrano Faria",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 85,
+    "strength": 78,
     "traits": [
       "free-kick"
     ]
@@ -2733,7 +2733,7 @@
     "name": "Luís Gomes Godinho",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 84,
+    "strength": 77,
     "traits": [
       "free-kick"
     ]
@@ -2746,7 +2746,7 @@
     "name": "Raul Vieira Reis",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 81,
+    "strength": 75,
     "traits": []
   },
   {
@@ -2757,7 +2757,7 @@
     "name": "Mateus Lago Rocha",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 73,
+    "strength": 66,
     "traits": [
       "free-kick",
       "pace"
@@ -2771,7 +2771,7 @@
     "name": "Hélio Almeida Belchior",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 71,
+    "strength": 64,
     "traits": [
       "playmaker"
     ]
@@ -2784,7 +2784,7 @@
     "name": "Dorival Pimenta Leite",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 78,
+    "strength": 72,
     "traits": [
       "heading"
     ]
@@ -2797,7 +2797,7 @@
     "name": "Túlio Fonseca Brito",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 76,
+    "strength": 70,
     "traits": [
       "pace"
     ]
@@ -2810,7 +2810,7 @@
     "name": "Gilberto Ornelas Paiva",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 79,
+    "strength": 73,
     "traits": []
   },
   {
@@ -2821,7 +2821,7 @@
     "name": "Marcos Espíndola Duarte",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 67,
+    "strength": 61,
     "traits": []
   },
   {
@@ -2832,7 +2832,7 @@
     "name": "Hamilton Mendes Coimbra",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 59,
+    "strength": 62,
     "traits": [
       "wall"
     ]
@@ -2845,7 +2845,7 @@
     "name": "Flávio Galvão Meireles",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 52,
+    "strength": 54,
     "traits": []
   },
   {
@@ -2856,7 +2856,7 @@
     "name": "Diego Fagundes Lins",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 57,
+    "strength": 59,
     "traits": [
       "wall"
     ]
@@ -2869,7 +2869,7 @@
     "name": "Marcos Moreira Miranda",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 62,
+    "strength": 64,
     "traits": []
   },
   {
@@ -2880,7 +2880,7 @@
     "name": "Miguel Moura Cabral",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 58,
+    "strength": 60,
     "traits": []
   },
   {
@@ -2891,7 +2891,7 @@
     "name": "Reinaldo Reis Penteado",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 59,
+    "strength": 61,
     "traits": [
       "heading"
     ]
@@ -2904,7 +2904,7 @@
     "name": "Lucas Nascimento Prado",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 40,
+    "strength": 43,
     "traits": [
       "heading"
     ]
@@ -2917,7 +2917,7 @@
     "name": "Célio Peixoto Siqueira",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 51,
+    "strength": 53,
     "traits": []
   },
   {
@@ -2928,7 +2928,7 @@
     "name": "Agnaldo Fernandes Zago",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 61,
+    "strength": 63,
     "traits": [
       "heading"
     ]
@@ -2941,7 +2941,7 @@
     "name": "Fred Arruda Mourão",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 52,
+    "strength": 55,
     "traits": []
   },
   {
@@ -2952,7 +2952,7 @@
     "name": "Wallace Almeida Albuquerque",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 53,
+    "strength": 55,
     "traits": []
   },
   {
@@ -2963,7 +2963,7 @@
     "name": "Washington Galvão Leite",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 47,
+    "strength": 50,
     "traits": []
   },
   {
@@ -2974,7 +2974,7 @@
     "name": "Mateus Zanetti Simões",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 51,
+    "strength": 54,
     "traits": [
       "heading",
       "wall"
@@ -2988,7 +2988,7 @@
     "name": "Thiago Amorim Brito",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 63,
+    "strength": 65,
     "traits": [
       "free-kick"
     ]
@@ -3001,7 +3001,7 @@
     "name": "Abel Dantas Viana",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 58,
+    "strength": 61,
     "traits": [
       "heading",
       "playmaker"
@@ -3015,7 +3015,7 @@
     "name": "Ruan Miranda Godinho",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 40,
+    "strength": 42,
     "traits": []
   },
   {
@@ -3026,7 +3026,7 @@
     "name": "Gilson Toledo Moura",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 42,
+    "strength": 44,
     "traits": []
   },
   {
@@ -3037,7 +3037,7 @@
     "name": "Roberto Moraes Brandão",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 61,
+    "strength": 64,
     "traits": [
       "pace"
     ]
@@ -3050,7 +3050,7 @@
     "name": "Pietro Araújo Vidal",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 55,
+    "strength": 58,
     "traits": [
       "finisher",
       "playmaker"
@@ -3064,7 +3064,7 @@
     "name": "Abel Alencar Frazão",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 65,
+    "strength": 67,
     "traits": [
       "playmaker"
     ]
@@ -3077,7 +3077,7 @@
     "name": "Felipe Couto Almeida",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 57,
+    "strength": 60,
     "traits": []
   },
   {
@@ -3088,7 +3088,7 @@
     "name": "Pablo Zago Cerqueira",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 42,
+    "strength": 44,
     "traits": []
   },
   {
@@ -3099,7 +3099,7 @@
     "name": "Jéferson Pestana Tourinho",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 57,
+    "strength": 59,
     "traits": []
   },
   {
@@ -3110,7 +3110,7 @@
     "name": "Élton Falcão Lobo",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 60,
+    "strength": 62,
     "traits": [
       "pace"
     ]
@@ -3123,7 +3123,7 @@
     "name": "Alex Aguiar Rangel",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 50,
+    "strength": 53,
     "traits": [
       "finisher"
     ]
@@ -3136,7 +3136,7 @@
     "name": "Valmir Godinho Moreira",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 46,
+    "strength": 48,
     "traits": [
       "heading",
       "pace"
@@ -3150,7 +3150,7 @@
     "name": "Odair Drummond Espíndola",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 81,
+    "strength": 75,
     "traits": []
   },
   {
@@ -3161,7 +3161,7 @@
     "name": "Cláudio Cerqueira Lima",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 79,
+    "strength": 73,
     "traits": [
       "wall"
     ]
@@ -3174,7 +3174,7 @@
     "name": "Anselmo Bezerra Bittencourt",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 64,
+    "strength": 58,
     "traits": [
       "wall"
     ]
@@ -3187,7 +3187,7 @@
     "name": "Max Lacerda Paiva",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 73,
+    "strength": 68,
     "traits": []
   },
   {
@@ -3198,7 +3198,7 @@
     "name": "Joel Dantas Paiva",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 72,
+    "strength": 66,
     "traits": []
   },
   {
@@ -3209,7 +3209,7 @@
     "name": "Alberto Matos Rodrigues",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 72,
+    "strength": 66,
     "traits": []
   },
   {
@@ -3220,7 +3220,7 @@
     "name": "Gilmar Castro Faria",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 66,
+    "strength": 60,
     "traits": [
       "free-kick"
     ]
@@ -3233,7 +3233,7 @@
     "name": "Ismael Espíndola Souza",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 75,
+    "strength": 70,
     "traits": [
       "heading",
       "wall"
@@ -3247,7 +3247,7 @@
     "name": "Fernando Holanda Jordão",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 75,
+    "strength": 79,
     "traits": [
       "wall"
     ]
@@ -3260,7 +3260,7 @@
     "name": "Douglas Tenório Mourão",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 75,
+    "strength": 69,
     "traits": []
   },
   {
@@ -3271,7 +3271,7 @@
     "name": "Michel Pinto Pestana",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 64,
+    "strength": 58,
     "traits": [
       "heading"
     ]
@@ -3284,7 +3284,7 @@
     "name": "Breno Lemos Ferraz",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 74,
+    "strength": 69,
     "traits": []
   },
   {
@@ -3295,7 +3295,7 @@
     "name": "Juan Medeiros Batista",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 77,
+    "strength": 72,
     "traits": []
   },
   {
@@ -3306,7 +3306,7 @@
     "name": "José Rebouças Bulhões",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 67,
+    "strength": 61,
     "traits": []
   },
   {
@@ -3317,7 +3317,7 @@
     "name": "Natanael Novaes Arruda",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 78,
+    "strength": 72,
     "traits": []
   },
   {
@@ -3328,7 +3328,7 @@
     "name": "Irineu Xavier Esteves",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 78,
+    "strength": 73,
     "traits": [
       "pace"
     ]
@@ -3341,7 +3341,7 @@
     "name": "Jair Dantas Frazão",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 79,
+    "strength": 73,
     "traits": [
       "finisher"
     ]
@@ -3354,7 +3354,7 @@
     "name": "Alexandre Alencar Mesquita",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 77,
+    "strength": 72,
     "traits": []
   },
   {
@@ -3365,7 +3365,7 @@
     "name": "Moisés Souza Lago",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 68,
+    "strength": 62,
     "traits": [
       "finisher"
     ]
@@ -3378,7 +3378,7 @@
     "name": "Fagner Rabelo Assis",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 73,
+    "strength": 67,
     "traits": [
       "pace"
     ]
@@ -3391,7 +3391,7 @@
     "name": "Emerson Albuquerque Vasconcelos",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 72,
+    "strength": 67,
     "traits": [
       "finisher"
     ]
@@ -3404,7 +3404,7 @@
     "name": "Sebastião Figueiredo Jardim",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 73,
+    "strength": 67,
     "traits": []
   },
   {
@@ -3415,7 +3415,7 @@
     "name": "Nélson Franco Nascimento",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 67,
+    "strength": 61,
     "traits": [
       "free-kick"
     ]
@@ -3428,7 +3428,7 @@
     "name": "Valdir Figueiredo Vidal",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 70,
+    "strength": 64,
     "traits": [
       "pace"
     ]
@@ -3441,7 +3441,7 @@
     "name": "Davi Arruda Moraes",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 66,
+    "strength": 65,
     "traits": []
   },
   {
@@ -3474,7 +3474,7 @@
     "name": "Rafael Vilela Oliveira",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 62,
+    "strength": 61,
     "traits": [
       "heading",
       "pace"
@@ -3488,7 +3488,7 @@
     "name": "Jailson Guedes Pimenta",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 72,
+    "strength": 71,
     "traits": [
       "pace"
     ]
@@ -3501,7 +3501,7 @@
     "name": "Dênis Pestana Medeiros",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 58,
+    "strength": 57,
     "traits": [
       "free-kick",
       "heading"
@@ -3515,7 +3515,7 @@
     "name": "Leandro Rocha Guedes",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 52,
+    "strength": 51,
     "traits": [
       "pace"
     ]
@@ -3552,7 +3552,7 @@
     "name": "Dênis Martins Vasconcelos",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 68,
+    "strength": 67,
     "traits": []
   },
   {
@@ -3563,7 +3563,7 @@
     "name": "Antônio Lopes Teixeira",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 57,
+    "strength": 56,
     "traits": [
       "heading"
     ]
@@ -3587,7 +3587,7 @@
     "name": "Denílson Aguiar Drummond",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 62,
+    "strength": 61,
     "traits": []
   },
   {
@@ -3598,7 +3598,7 @@
     "name": "Raul Moura Campos",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 55,
+    "strength": 54,
     "traits": []
   },
   {
@@ -3622,7 +3622,7 @@
     "name": "Tomás Moreira Azevedo",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 67,
+    "strength": 66,
     "traits": []
   },
   {
@@ -3694,7 +3694,7 @@
     "name": "Diego Coelho Moreira",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 61,
+    "strength": 60,
     "traits": []
   },
   {
@@ -3705,7 +3705,7 @@
     "name": "Guilherme Azevedo Aragão",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 58,
+    "strength": 57,
     "traits": []
   },
   {
@@ -3716,7 +3716,7 @@
     "name": "Renan Souza Vidal",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 62,
+    "strength": 64,
     "traits": [
       "wall"
     ]
@@ -3729,7 +3729,7 @@
     "name": "Yuri Seixas Vasconcelos",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 61,
+    "strength": 63,
     "traits": [
       "wall"
     ]
@@ -3742,7 +3742,7 @@
     "name": "Edinho Moura Rezende",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 48,
+    "strength": 50,
     "traits": [
       "wall"
     ]
@@ -3755,7 +3755,7 @@
     "name": "Sandro Jordão Pimenta",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 61,
+    "strength": 63,
     "traits": [
       "pace"
     ]
@@ -3768,7 +3768,7 @@
     "name": "Gerson Godinho Magalhães",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 56,
+    "strength": 57,
     "traits": []
   },
   {
@@ -3779,7 +3779,7 @@
     "name": "Tomás Viana Barreto",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 55,
+    "strength": 57,
     "traits": [
       "heading"
     ]
@@ -3792,7 +3792,7 @@
     "name": "Cristiano Vidal Melo",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 48,
+    "strength": 49,
     "traits": []
   },
   {
@@ -3803,7 +3803,7 @@
     "name": "Juan Sampaio Pires",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 48,
+    "strength": 49,
     "traits": [
       "playmaker"
     ]
@@ -3816,7 +3816,7 @@
     "name": "Emanuel Cunha Rodrigues",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 58,
+    "strength": 60,
     "traits": [
       "wall"
     ]
@@ -3829,7 +3829,7 @@
     "name": "Murilo Brás Siqueira",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 54,
+    "strength": 56,
     "traits": []
   },
   {
@@ -3840,7 +3840,7 @@
     "name": "Alisson Azevedo Caldeira",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 59,
+    "strength": 61,
     "traits": []
   },
   {
@@ -3851,7 +3851,7 @@
     "name": "Severino Ferraz Moura",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 54,
+    "strength": 56,
     "traits": [
       "pace"
     ]
@@ -3864,7 +3864,7 @@
     "name": "Manoel Tourinho Capistrano",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 50,
+    "strength": 52,
     "traits": []
   },
   {
@@ -3875,7 +3875,7 @@
     "name": "Rafael Barros Silva",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 62,
+    "strength": 64,
     "traits": [
       "free-kick"
     ]
@@ -3888,7 +3888,7 @@
     "name": "Romário Fagundes Henriques",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 48,
+    "strength": 50,
     "traits": [
       "heading"
     ]
@@ -3901,7 +3901,7 @@
     "name": "Severino Carvalho Guerra",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 47,
+    "strength": 49,
     "traits": []
   },
   {
@@ -3912,7 +3912,7 @@
     "name": "César Prado Rangel",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 53,
+    "strength": 54,
     "traits": []
   },
   {
@@ -3923,7 +3923,7 @@
     "name": "Hamilton Bezerra Nascimento",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 55,
+    "strength": 57,
     "traits": [
       "free-kick"
     ]
@@ -3936,7 +3936,7 @@
     "name": "César Queiroz Teixeira",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 61,
+    "strength": 62,
     "traits": []
   },
   {
@@ -3947,7 +3947,7 @@
     "name": "Moisés Antunes Ferreira",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 64,
+    "strength": 66,
     "traits": [
       "free-kick",
       "playmaker"
@@ -3961,7 +3961,7 @@
     "name": "Rodrigo Veiga Tenório",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 53,
+    "strength": 55,
     "traits": []
   },
   {
@@ -3972,7 +3972,7 @@
     "name": "Agnaldo Tavares Bulhões",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 59,
+    "strength": 61,
     "traits": [
       "pace",
       "playmaker"
@@ -3986,7 +3986,7 @@
     "name": "Washington Cabral Brás",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 53,
+    "strength": 55,
     "traits": [
       "finisher",
       "pace"
@@ -4000,7 +4000,7 @@
     "name": "Maurício Ramos Queiroz",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 61,
+    "strength": 63,
     "traits": []
   },
   {
@@ -4011,7 +4011,7 @@
     "name": "Giovani Pacheco Bezerra",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 57,
+    "strength": 59,
     "traits": []
   },
   {
@@ -4022,7 +4022,7 @@
     "name": "Tomás Franco Vieira",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 54,
+    "strength": 56,
     "traits": [
       "heading"
     ]
@@ -4035,7 +4035,7 @@
     "name": "Tadeu Toledo Figueiredo",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 50,
+    "strength": 52,
     "traits": [
       "free-kick"
     ]
@@ -4048,7 +4048,7 @@
     "name": "Vanderlei Ferreira Camargo",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 53,
+    "strength": 55,
     "traits": [
       "free-kick",
       "finisher"
@@ -4062,7 +4062,7 @@
     "name": "Abel Vieira Assis",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 73,
+    "strength": 69,
     "traits": [
       "wall"
     ]
@@ -4075,7 +4075,7 @@
     "name": "Josias Martins Quintana",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 65,
+    "strength": 62,
     "traits": []
   },
   {
@@ -4086,7 +4086,7 @@
     "name": "Sérgio Seixas Jardim",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 61,
+    "strength": 57,
     "traits": []
   },
   {
@@ -4097,7 +4097,7 @@
     "name": "Valmir Meireles Muniz",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 73,
+    "strength": 69,
     "traits": []
   },
   {
@@ -4108,7 +4108,7 @@
     "name": "Baltazar Frota Mascarenhas",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 75,
+    "strength": 71,
     "traits": [
       "playmaker"
     ]
@@ -4121,7 +4121,7 @@
     "name": "Wesley Rodrigues Penteado",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 66,
+    "strength": 62,
     "traits": []
   },
   {
@@ -4132,7 +4132,7 @@
     "name": "Osvaldo Coimbra Godinho",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 62,
+    "strength": 58,
     "traits": []
   },
   {
@@ -4143,7 +4143,7 @@
     "name": "Mário Sarmento Siqueira",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 61,
+    "strength": 57,
     "traits": [
       "pace"
     ]
@@ -4156,7 +4156,7 @@
     "name": "Emerson Fonseca Jordão",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 72,
+    "strength": 68,
     "traits": [
       "heading"
     ]
@@ -4169,7 +4169,7 @@
     "name": "Brenno Dantas Lago",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 71,
+    "strength": 67,
     "traits": [
       "wall"
     ]
@@ -4182,7 +4182,7 @@
     "name": "Willian Lourenço Xavier",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 75,
+    "strength": 71,
     "traits": []
   },
   {
@@ -4193,7 +4193,7 @@
     "name": "Augusto Mota Jordão",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 58,
+    "strength": 54,
     "traits": [
       "pace"
     ]
@@ -4206,7 +4206,7 @@
     "name": "Luís Ferreira Coimbra",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 65,
+    "strength": 61,
     "traits": []
   },
   {
@@ -4217,7 +4217,7 @@
     "name": "Jéferson Camargo Melo",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 69,
+    "strength": 65,
     "traits": [
       "playmaker"
     ]
@@ -4230,7 +4230,7 @@
     "name": "Maicon Tenório Seixas",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 64,
+    "strength": 60,
     "traits": []
   },
   {
@@ -4241,7 +4241,7 @@
     "name": "Washington Pereira Mourão",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 74,
+    "strength": 71,
     "traits": []
   },
   {
@@ -4252,7 +4252,7 @@
     "name": "Max Portela Nunes",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 75,
+    "strength": 71,
     "traits": []
   },
   {
@@ -4263,7 +4263,7 @@
     "name": "Wagner Varela Brás",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 75,
+    "strength": 71,
     "traits": []
   },
   {
@@ -4274,7 +4274,7 @@
     "name": "Wallace Castro Soares",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 67,
+    "strength": 63,
     "traits": []
   },
   {
@@ -4285,7 +4285,7 @@
     "name": "Anderson Prates Capistrano",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 61,
+    "strength": 57,
     "traits": [
       "free-kick"
     ]
@@ -4298,7 +4298,7 @@
     "name": "Sebastião Portela Frazão",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 62,
+    "strength": 58,
     "traits": []
   },
   {
@@ -4309,7 +4309,7 @@
     "name": "Iago Urquiza Garcia",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 75,
+    "strength": 71,
     "traits": [
       "pace"
     ]
@@ -4322,7 +4322,7 @@
     "name": "Wilson Barros Lobo",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 66,
+    "strength": 62,
     "traits": [
       "heading"
     ]
@@ -4335,7 +4335,7 @@
     "name": "Túlio Farias Viana",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 57,
+    "strength": 53,
     "traits": []
   },
   {
@@ -4346,7 +4346,7 @@
     "name": "Ronaldo Lemos Pimenta",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 67,
+    "strength": 63,
     "traits": []
   },
   {
@@ -4357,7 +4357,7 @@
     "name": "Victor Rebouças Falcão",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 75,
+    "strength": 72,
     "traits": [
       "wall"
     ]
@@ -4370,7 +4370,7 @@
     "name": "Valter Chagas Prado",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 59,
+    "strength": 57,
     "traits": []
   },
   {
@@ -4381,7 +4381,7 @@
     "name": "Ronaldo Avelar Alves",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 58,
+    "strength": 55,
     "traits": [
       "wall"
     ]
@@ -4394,7 +4394,7 @@
     "name": "Allan Capistrano Paranhos",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 70,
+    "strength": 68,
     "traits": [
       "free-kick"
     ]
@@ -4407,7 +4407,7 @@
     "name": "Raul Quintana Fagundes",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 67,
+    "strength": 65,
     "traits": [
       "pace"
     ]
@@ -4420,7 +4420,7 @@
     "name": "Otávio Cavalcanti Moraes",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 63,
+    "strength": 60,
     "traits": [
       "playmaker"
     ]
@@ -4433,7 +4433,7 @@
     "name": "Fábio Faria Godinho",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 58,
+    "strength": 56,
     "traits": [
       "pace"
     ]
@@ -4446,7 +4446,7 @@
     "name": "Everton Carneiro Rebouças",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 76,
+    "strength": 73,
     "traits": [
       "wall"
     ]
@@ -4459,7 +4459,7 @@
     "name": "Romário Moraes Rego",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 71,
+    "strength": 68,
     "traits": [
       "heading"
     ]
@@ -4472,7 +4472,7 @@
     "name": "Baltazar Rego Freitas",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 66,
+    "strength": 64,
     "traits": []
   },
   {
@@ -4483,7 +4483,7 @@
     "name": "Gilberto Belchior Ferreira",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 54,
+    "strength": 52,
     "traits": []
   },
   {
@@ -4494,7 +4494,7 @@
     "name": "Vinícius Lourenço Vidal",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 61,
+    "strength": 59,
     "traits": []
   },
   {
@@ -4505,7 +4505,7 @@
     "name": "Osvaldo Mesquita Sobral",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 69,
+    "strength": 67,
     "traits": [
       "playmaker"
     ]
@@ -4518,7 +4518,7 @@
     "name": "Edson Tavares Accioly",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 62,
+    "strength": 60,
     "traits": [
       "heading"
     ]
@@ -4531,7 +4531,7 @@
     "name": "Heraldo Pinheiro Almeida",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 56,
+    "strength": 53,
     "traits": [
       "free-kick"
     ]
@@ -4544,7 +4544,7 @@
     "name": "Edmílson Barreto Fernandes",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 68,
+    "strength": 66,
     "traits": []
   },
   {
@@ -4555,7 +4555,7 @@
     "name": "Erick Castro Soares",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 69,
+    "strength": 66,
     "traits": []
   },
   {
@@ -4566,7 +4566,7 @@
     "name": "Abel Peixoto Meireles",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 73,
+    "strength": 71,
     "traits": [
       "playmaker"
     ]
@@ -4579,7 +4579,7 @@
     "name": "Emanuel Novaes Batista",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 68,
+    "strength": 66,
     "traits": [
       "playmaker",
       "pace"
@@ -4593,7 +4593,7 @@
     "name": "Jonathan Torres Galvão",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 70,
+    "strength": 68,
     "traits": [
       "pace"
     ]
@@ -4606,7 +4606,7 @@
     "name": "Anselmo Nascimento Valadares",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 69,
+    "strength": 67,
     "traits": [
       "free-kick"
     ]
@@ -4619,7 +4619,7 @@
     "name": "Odair Moreira Viana",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 63,
+    "strength": 61,
     "traits": []
   },
   {
@@ -4630,7 +4630,7 @@
     "name": "Sebastião Peixoto Lins",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 58,
+    "strength": 56,
     "traits": [
       "finisher",
       "pace"
@@ -4644,7 +4644,7 @@
     "name": "Domingos Toledo Fonseca",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 78,
+    "strength": 71,
     "traits": [
       "wall"
     ]
@@ -4657,7 +4657,7 @@
     "name": "Neto Rangel Martins",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 65,
+    "strength": 58,
     "traits": [
       "wall"
     ]
@@ -4670,7 +4670,7 @@
     "name": "Diego Almeida Pimenta",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 72,
+    "strength": 65,
     "traits": [
       "wall"
     ]
@@ -4683,7 +4683,7 @@
     "name": "Abel Nunes Soares",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 88,
+    "strength": 81,
     "traits": [
       "pace"
     ]
@@ -4696,7 +4696,7 @@
     "name": "Fernando Lobo Pinheiro",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 81,
+    "strength": 74,
     "traits": [
       "free-kick"
     ]
@@ -4709,7 +4709,7 @@
     "name": "Rodrigo Caldeira Rabelo",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 79,
+    "strength": 72,
     "traits": []
   },
   {
@@ -4720,7 +4720,7 @@
     "name": "Francisco Henriques Ferreira",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 67,
+    "strength": 60,
     "traits": [
       "pace"
     ]
@@ -4733,7 +4733,7 @@
     "name": "Alex Torres Valadares",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 67,
+    "strength": 60,
     "traits": []
   },
   {
@@ -4744,7 +4744,7 @@
     "name": "Valdir Ribeiro Guimarães",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 74,
+    "strength": 67,
     "traits": []
   },
   {
@@ -4755,7 +4755,7 @@
     "name": "Nathan Cardoso Melo",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 81,
+    "strength": 75,
     "traits": [
       "heading"
     ]
@@ -4768,7 +4768,7 @@
     "name": "Maicon Teixeira Monteiro",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 76,
+    "strength": 69,
     "traits": []
   },
   {
@@ -4779,7 +4779,7 @@
     "name": "Orlando Lourenço Rangel",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 75,
+    "strength": 68,
     "traits": [
       "heading"
     ]
@@ -4792,7 +4792,7 @@
     "name": "Amaral Matos Cavalcanti",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 68,
+    "strength": 61,
     "traits": []
   },
   {
@@ -4803,7 +4803,7 @@
     "name": "Jardel Miranda Portela",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 77,
+    "strength": 71,
     "traits": []
   },
   {
@@ -4814,7 +4814,7 @@
     "name": "Kaique Albuquerque Assis",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 77,
+    "strength": 70,
     "traits": [
       "free-kick",
       "heading"
@@ -4828,7 +4828,7 @@
     "name": "Zacarias Bulhões Avelar",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 63,
+    "strength": 56,
     "traits": [
       "playmaker"
     ]
@@ -4841,7 +4841,7 @@
     "name": "Túlio Nóbrega Espíndola",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 68,
+    "strength": 61,
     "traits": []
   },
   {
@@ -4852,7 +4852,7 @@
     "name": "Raimundo Mendes Neves",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 68,
+    "strength": 61,
     "traits": []
   },
   {
@@ -4863,7 +4863,7 @@
     "name": "Max Ornelas Simões",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 84,
+    "strength": 77,
     "traits": [
       "playmaker"
     ]
@@ -4876,7 +4876,7 @@
     "name": "Amaral Andrade Franco",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 76,
+    "strength": 69,
     "traits": []
   },
   {
@@ -4887,7 +4887,7 @@
     "name": "Ricardo Lacerda Salgado",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 81,
+    "strength": 74,
     "traits": [
       "playmaker"
     ]
@@ -4900,7 +4900,7 @@
     "name": "José Nunes Lourenço",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 79,
+    "strength": 72,
     "traits": []
   },
   {
@@ -4911,7 +4911,7 @@
     "name": "Fábio Chagas Lourenço",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 70,
+    "strength": 64,
     "traits": []
   },
   {
@@ -4922,7 +4922,7 @@
     "name": "Adilson Ferreira Moreira",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 81,
+    "strength": 74,
     "traits": [
       "pace"
     ]
@@ -4935,7 +4935,7 @@
     "name": "Anderson Toledo Pacheco",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 83,
+    "strength": 76,
     "traits": [
       "finisher",
       "heading"
@@ -4949,7 +4949,7 @@
     "name": "Rafael Jardim Alves",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 73,
+    "strength": 67,
     "traits": [
       "finisher",
       "free-kick"
@@ -4963,7 +4963,7 @@
     "name": "Vítor Bulhões Cabral",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 64,
+    "strength": 57,
     "traits": []
   },
   {
@@ -4974,7 +4974,7 @@
     "name": "Jonathan Costa Junqueira",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 69,
+    "strength": 62,
     "traits": [
       "finisher",
       "pace"
@@ -4988,7 +4988,7 @@
     "name": "Raul Albuquerque Jordão",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 79,
+    "strength": 71,
     "traits": []
   },
   {
@@ -4999,7 +4999,7 @@
     "name": "Dário Moraes Martins",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 75,
+    "strength": 67,
     "traits": []
   },
   {
@@ -5010,7 +5010,7 @@
     "name": "Gustavo Meireles Souza",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 61,
+    "strength": 54,
     "traits": []
   },
   {
@@ -5021,7 +5021,7 @@
     "name": "Willian Bezerra Ferreira",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 82,
+    "strength": 75,
     "traits": []
   },
   {
@@ -5032,7 +5032,7 @@
     "name": "Jonathan Amaral Damasceno",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 89,
+    "strength": 82,
     "traits": []
   },
   {
@@ -5043,7 +5043,7 @@
     "name": "Yuri Torres Rezende",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 78,
+    "strength": 70,
     "traits": []
   },
   {
@@ -5054,7 +5054,7 @@
     "name": "Jair Bandeira Almeida",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 68,
+    "strength": 60,
     "traits": []
   },
   {
@@ -5065,7 +5065,7 @@
     "name": "Alex Caldeira Frazão",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 85,
+    "strength": 78,
     "traits": []
   },
   {
@@ -5076,7 +5076,7 @@
     "name": "Fernando Macedo Melo",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 81,
+    "strength": 74,
     "traits": [
       "wall"
     ]
@@ -5089,7 +5089,7 @@
     "name": "Sebastião Rego Bandeira",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 73,
+    "strength": 65,
     "traits": [
       "heading"
     ]
@@ -5102,7 +5102,7 @@
     "name": "Mário Reis Castro",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 72,
+    "strength": 65,
     "traits": []
   },
   {
@@ -5113,7 +5113,7 @@
     "name": "Heverton Bueno Sampaio",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 80,
+    "strength": 73,
     "traits": []
   },
   {
@@ -5124,7 +5124,7 @@
     "name": "Ronaldo Menezes Ornelas",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 77,
+    "strength": 69,
     "traits": []
   },
   {
@@ -5135,7 +5135,7 @@
     "name": "Jonas Novaes Ornelas",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 63,
+    "strength": 55,
     "traits": [
       "playmaker",
       "wall"
@@ -5149,7 +5149,7 @@
     "name": "Arthur Espíndola Fernandes",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 69,
+    "strength": 62,
     "traits": [
       "playmaker",
       "free-kick"
@@ -5163,7 +5163,7 @@
     "name": "Maurício Urquiza Pimenta",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 79,
+    "strength": 72,
     "traits": []
   },
   {
@@ -5174,7 +5174,7 @@
     "name": "Valter Teles Guedes",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 76,
+    "strength": 68,
     "traits": [
       "playmaker"
     ]
@@ -5187,7 +5187,7 @@
     "name": "Heitor Barros Coimbra",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 78,
+    "strength": 71,
     "traits": [
       "pace"
     ]
@@ -5200,7 +5200,7 @@
     "name": "Severino Borges Sarmento",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 77,
+    "strength": 70,
     "traits": [
       "pace"
     ]
@@ -5213,7 +5213,7 @@
     "name": "Renato Bandeira Urquiza",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 77,
+    "strength": 70,
     "traits": [
       "finisher"
     ]
@@ -5226,7 +5226,7 @@
     "name": "Ailton Resende Esteves",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 86,
+    "strength": 78,
     "traits": []
   },
   {
@@ -5237,7 +5237,7 @@
     "name": "Waldemar Neves Rego",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 77,
+    "strength": 69,
     "traits": []
   },
   {
@@ -5248,7 +5248,7 @@
     "name": "Danilo Accioly Sanches",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 68,
+    "strength": 61,
     "traits": [
       "finisher"
     ]
@@ -5283,7 +5283,7 @@
     "name": "Leonardo Rodrigues Nascimento",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 58,
+    "strength": 57,
     "traits": [
       "wall"
     ]
@@ -5318,7 +5318,7 @@
     "name": "Glauco Pacheco Bandeira",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 63,
+    "strength": 62,
     "traits": []
   },
   {
@@ -5340,7 +5340,7 @@
     "name": "Jailson Ferraz Ramos",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 59,
+    "strength": 58,
     "traits": []
   },
   {
@@ -5351,7 +5351,7 @@
     "name": "Wilson Mesquita Barros",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 63,
+    "strength": 62,
     "traits": [
       "heading"
     ]
@@ -5375,7 +5375,7 @@
     "name": "Everton Mendes Brito",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 63,
+    "strength": 62,
     "traits": []
   },
   {
@@ -5397,7 +5397,7 @@
     "name": "Antônio Frazão Alves",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 68,
+    "strength": 67,
     "traits": [
       "free-kick"
     ]
@@ -5434,7 +5434,7 @@
     "name": "Túlio Araújo Paranhos",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 68,
+    "strength": 67,
     "traits": []
   },
   {
@@ -5504,7 +5504,7 @@
     "name": "Marco Souza Medeiros",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 65,
+    "strength": 64,
     "traits": []
   },
   {
@@ -5529,7 +5529,7 @@
     "name": "Anselmo Toledo Junqueira",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 68,
+    "strength": 66,
     "traits": []
   },
   {
@@ -5540,7 +5540,7 @@
     "name": "Jorge Xavier Caldeira",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 60,
+    "strength": 59,
     "traits": [
       "wall"
     ]
@@ -5553,7 +5553,7 @@
     "name": "Giovani Chagas Correia",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 55,
+    "strength": 54,
     "traits": []
   },
   {
@@ -5564,7 +5564,7 @@
     "name": "Baltazar Gonçalves Braga",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 61,
+    "strength": 60,
     "traits": [
       "pace"
     ]
@@ -5577,7 +5577,7 @@
     "name": "Rogério Falcão Valadares",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 71,
+    "strength": 70,
     "traits": [
       "heading"
     ]
@@ -5590,7 +5590,7 @@
     "name": "Luiz Aires Lacerda",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 59,
+    "strength": 58,
     "traits": [
       "heading"
     ]
@@ -5603,7 +5603,7 @@
     "name": "Samuel Leal Lemos",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 48,
+    "strength": 47,
     "traits": []
   },
   {
@@ -5614,7 +5614,7 @@
     "name": "Silvio Camargo Nunes",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 50,
+    "strength": 49,
     "traits": [
       "pace"
     ]
@@ -5627,7 +5627,7 @@
     "name": "Reinaldo Rangel Moraes",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 69,
+    "strength": 68,
     "traits": []
   },
   {
@@ -5638,7 +5638,7 @@
     "name": "Tadeu Leal Viana",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 71,
+    "strength": 70,
     "traits": []
   },
   {
@@ -5649,7 +5649,7 @@
     "name": "Jonas Goulart Fernandes",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 56,
+    "strength": 55,
     "traits": [
       "heading"
     ]
@@ -5662,7 +5662,7 @@
     "name": "Lisandro Castro Simões",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 52,
+    "strength": 51,
     "traits": []
   },
   {
@@ -5673,7 +5673,7 @@
     "name": "Juliano Bezerra Freitas",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 72,
+    "strength": 70,
     "traits": [
       "free-kick"
     ]
@@ -5686,7 +5686,7 @@
     "name": "Jorge Sobral Franco",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 66,
+    "strength": 64,
     "traits": []
   },
   {
@@ -5697,7 +5697,7 @@
     "name": "Emanuel Simões Urquiza",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 48,
+    "strength": 46,
     "traits": [
       "playmaker"
     ]
@@ -5710,7 +5710,7 @@
     "name": "Edinho Cruz Moreira",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 58,
+    "strength": 56,
     "traits": []
   },
   {
@@ -5721,7 +5721,7 @@
     "name": "Aldair Moura Pinheiro",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 65,
+    "strength": 64,
     "traits": [
       "playmaker"
     ]
@@ -5734,7 +5734,7 @@
     "name": "Leonardo Espíndola Peixoto",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 68,
+    "strength": 66,
     "traits": [
       "free-kick",
       "playmaker"
@@ -5748,7 +5748,7 @@
     "name": "Fábio Dantas Junqueira",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 72,
+    "strength": 71,
     "traits": [
       "free-kick"
     ]
@@ -5761,7 +5761,7 @@
     "name": "Juliano Zanetti Carneiro",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 55,
+    "strength": 53,
     "traits": [
       "pace"
     ]
@@ -5774,7 +5774,7 @@
     "name": "Régis Meireles Correia",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 62,
+    "strength": 61,
     "traits": [
       "free-kick"
     ]
@@ -5787,7 +5787,7 @@
     "name": "Davi Coimbra Calado",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 66,
+    "strength": 64,
     "traits": [
       "pace"
     ]
@@ -5800,7 +5800,7 @@
     "name": "Ítalo Campos Miranda",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 71,
+    "strength": 70,
     "traits": []
   },
   {
@@ -5811,7 +5811,7 @@
     "name": "Wallace Quintana Urquiza",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 58,
+    "strength": 57,
     "traits": [
       "finisher"
     ]
@@ -5824,7 +5824,7 @@
     "name": "Erick Seixas Chagas",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 59,
+    "strength": 58,
     "traits": [
       "pace"
     ]
@@ -5837,7 +5837,7 @@
     "name": "Célio Lima Toledo",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 57,
+    "strength": 59,
     "traits": [
       "wall"
     ]
@@ -5850,7 +5850,7 @@
     "name": "Ivan Jordão Amaro",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 57,
+    "strength": 60,
     "traits": []
   },
   {
@@ -5861,7 +5861,7 @@
     "name": "Felício Tenório Borges",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 47,
+    "strength": 50,
     "traits": []
   },
   {
@@ -5872,7 +5872,7 @@
     "name": "Alisson Valente Gomes",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 63,
+    "strength": 65,
     "traits": [
       "free-kick"
     ]
@@ -5885,7 +5885,7 @@
     "name": "Davi Prates Toledo",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 59,
+    "strength": 61,
     "traits": [
       "pace",
       "free-kick"
@@ -5899,7 +5899,7 @@
     "name": "Erick Chagas Nogueira",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 52,
+    "strength": 55,
     "traits": [
       "pace"
     ]
@@ -5912,7 +5912,7 @@
     "name": "Domingos Infante Leite",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 43,
+    "strength": 46,
     "traits": [
       "playmaker"
     ]
@@ -5925,7 +5925,7 @@
     "name": "Emerson Valadares Bandeira",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 61,
+    "strength": 64,
     "traits": []
   },
   {
@@ -5936,7 +5936,7 @@
     "name": "Alex Simões Caldeira",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 61,
+    "strength": 64,
     "traits": [
       "wall"
     ]
@@ -5949,7 +5949,7 @@
     "name": "Emanuel Couto Neves",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 49,
+    "strength": 52,
     "traits": [
       "wall",
       "heading"
@@ -5963,7 +5963,7 @@
     "name": "Heraldo Matos Leal",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 47,
+    "strength": 50,
     "traits": []
   },
   {
@@ -5974,7 +5974,7 @@
     "name": "Norberto Franco Penteado",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 54,
+    "strength": 57,
     "traits": [
       "playmaker",
       "free-kick"
@@ -5988,7 +5988,7 @@
     "name": "Otávio Bulhões Rocha",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 54,
+    "strength": 57,
     "traits": []
   },
   {
@@ -5999,7 +5999,7 @@
     "name": "Tomás Pinto Prado",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 48,
+    "strength": 50,
     "traits": [
       "playmaker"
     ]
@@ -6012,7 +6012,7 @@
     "name": "Gilberto Miranda Bezerra",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 47,
+    "strength": 50,
     "traits": [
       "wall"
     ]
@@ -6025,7 +6025,7 @@
     "name": "Sérgio Valadares Simões",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 44,
+    "strength": 47,
     "traits": [
       "playmaker"
     ]
@@ -6038,7 +6038,7 @@
     "name": "Augusto Rebouças Calado",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 55,
+    "strength": 58,
     "traits": [
       "playmaker"
     ]
@@ -6051,7 +6051,7 @@
     "name": "Átila Mourão Vilela",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 62,
+    "strength": 65,
     "traits": [
       "pace"
     ]
@@ -6064,7 +6064,7 @@
     "name": "Nilton Mendes Brandão",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 60,
+    "strength": 62,
     "traits": [
       "pace",
       "playmaker"
@@ -6078,7 +6078,7 @@
     "name": "Adilson Cunha Urquiza",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 55,
+    "strength": 58,
     "traits": [
       "playmaker",
       "pace"
@@ -6092,7 +6092,7 @@
     "name": "Tadeu Arantes Resende",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 46,
+    "strength": 49,
     "traits": [
       "playmaker"
     ]
@@ -6105,7 +6105,7 @@
     "name": "Alexandre Rocha Moura",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 45,
+    "strength": 48,
     "traits": []
   },
   {
@@ -6116,7 +6116,7 @@
     "name": "Adilson Pereira Lustosa",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 55,
+    "strength": 58,
     "traits": []
   },
   {
@@ -6127,7 +6127,7 @@
     "name": "Sérgio Mendonça Tavares",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 62,
+    "strength": 64,
     "traits": [
       "finisher",
       "heading"
@@ -6141,7 +6141,7 @@
     "name": "Juan Cruz Araújo",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 53,
+    "strength": 55,
     "traits": [
       "pace"
     ]
@@ -6154,7 +6154,7 @@
     "name": "Alisson Wanderley Teixeira",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 46,
+    "strength": 49,
     "traits": [
       "finisher"
     ]
@@ -6167,7 +6167,7 @@
     "name": "Adriano Rocha Mesquita",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 46,
+    "strength": 49,
     "traits": [
       "finisher"
     ]
@@ -6180,7 +6180,7 @@
     "name": "Alex Jardim Neves",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 56,
+    "strength": 59,
     "traits": [
       "wall"
     ]
@@ -6193,7 +6193,7 @@
     "name": "Arthur Souza Seixas",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 55,
+    "strength": 57,
     "traits": [
       "wall"
     ]
@@ -6206,7 +6206,7 @@
     "name": "Tomás Andrade Paranhos",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 48,
+    "strength": 50,
     "traits": []
   },
   {
@@ -6217,7 +6217,7 @@
     "name": "Fagner Medeiros Campos",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 59,
+    "strength": 62,
     "traits": [
       "pace",
       "playmaker"
@@ -6231,7 +6231,7 @@
     "name": "Renato Freitas Teixeira",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 65,
+    "strength": 67,
     "traits": [
       "pace"
     ]
@@ -6244,7 +6244,7 @@
     "name": "Murilo Aragão Lago",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 53,
+    "strength": 55,
     "traits": [
       "pace"
     ]
@@ -6257,7 +6257,7 @@
     "name": "Luciano Veiga Araújo",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 47,
+    "strength": 50,
     "traits": [
       "pace",
       "heading"
@@ -6271,7 +6271,7 @@
     "name": "Guilherme Amaro Cabral",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 63,
+    "strength": 65,
     "traits": [
       "wall"
     ]
@@ -6284,7 +6284,7 @@
     "name": "Davi Pimenta Freitas",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 63,
+    "strength": 65,
     "traits": []
   },
   {
@@ -6295,7 +6295,7 @@
     "name": "Washington Marinho Vieira",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 59,
+    "strength": 62,
     "traits": [
       "heading",
       "wall"
@@ -6309,7 +6309,7 @@
     "name": "Waldemar Monteiro Bueno",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 45,
+    "strength": 47,
     "traits": [
       "heading"
     ]
@@ -6322,7 +6322,7 @@
     "name": "Alex Furtado Rocha",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 49,
+    "strength": 52,
     "traits": []
   },
   {
@@ -6333,7 +6333,7 @@
     "name": "Josias Araújo Sales",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 57,
+    "strength": 59,
     "traits": []
   },
   {
@@ -6344,7 +6344,7 @@
     "name": "Caio Vasconcelos Castro",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 53,
+    "strength": 55,
     "traits": []
   },
   {
@@ -6355,7 +6355,7 @@
     "name": "Rogério Ornelas Mattos",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 46,
+    "strength": 48,
     "traits": [
       "heading",
       "playmaker"
@@ -6369,7 +6369,7 @@
     "name": "Lindomar Moura Lago",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 50,
+    "strength": 52,
     "traits": []
   },
   {
@@ -6380,7 +6380,7 @@
     "name": "Evandro Prates Valadares",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 60,
+    "strength": 62,
     "traits": []
   },
   {
@@ -6391,7 +6391,7 @@
     "name": "Márcio Castro Lima",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 60,
+    "strength": 62,
     "traits": []
   },
   {
@@ -6402,7 +6402,7 @@
     "name": "Fred Ferreira Sales",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 63,
+    "strength": 65,
     "traits": []
   },
   {
@@ -6413,7 +6413,7 @@
     "name": "Dênis Gonçalves Maia",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 62,
+    "strength": 64,
     "traits": []
   },
   {
@@ -6424,7 +6424,7 @@
     "name": "Eduardo Amaro Fagundes",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 61,
+    "strength": 64,
     "traits": [
       "finisher"
     ]
@@ -6437,7 +6437,7 @@
     "name": "Ruan Faria Valadares",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 60,
+    "strength": 62,
     "traits": []
   },
   {
@@ -6448,7 +6448,7 @@
     "name": "Isaac Pires Bulhões",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 50,
+    "strength": 52,
     "traits": []
   },
   {
@@ -6459,7 +6459,7 @@
     "name": "Alexandre Feitosa Aires",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 50,
+    "strength": 52,
     "traits": [
       "free-kick",
       "finisher"
@@ -6473,7 +6473,7 @@
     "name": "Luciano Azevedo Resende",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 62,
+    "strength": 65,
     "traits": [
       "wall"
     ]
@@ -6486,7 +6486,7 @@
     "name": "Severino Magalhães Duarte",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 58,
+    "strength": 62,
     "traits": []
   },
   {
@@ -6497,7 +6497,7 @@
     "name": "Rodrigo Lemos Aires",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 44,
+    "strength": 48,
     "traits": []
   },
   {
@@ -6508,7 +6508,7 @@
     "name": "Alberto Prates Cabral",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 54,
+    "strength": 57,
     "traits": []
   },
   {
@@ -6519,7 +6519,7 @@
     "name": "Pablo Ribeiro Coelho",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 60,
+    "strength": 63,
     "traits": [
       "pace",
       "heading"
@@ -6533,7 +6533,7 @@
     "name": "Max Araújo Garcia",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 58,
+    "strength": 61,
     "traits": [
       "playmaker",
       "free-kick"
@@ -6547,7 +6547,7 @@
     "name": "André Lopes Andrade",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 44,
+    "strength": 48,
     "traits": []
   },
   {
@@ -6558,7 +6558,7 @@
     "name": "Cássio Barreto Cabral",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 61,
+    "strength": 64,
     "traits": []
   },
   {
@@ -6569,7 +6569,7 @@
     "name": "Juninho Valença Garcia",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 61,
+    "strength": 64,
     "traits": []
   },
   {
@@ -6580,7 +6580,7 @@
     "name": "Manoel Caldeira Soares",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 59,
+    "strength": 63,
     "traits": [
       "heading",
       "wall"
@@ -6594,7 +6594,7 @@
     "name": "Denílson Sanches Couto",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 42,
+    "strength": 45,
     "traits": [
       "heading"
     ]
@@ -6607,7 +6607,7 @@
     "name": "Wagner Freitas Fernandes",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 48,
+    "strength": 51,
     "traits": [
       "heading"
     ]
@@ -6620,7 +6620,7 @@
     "name": "Adriano Henriques Mendes",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 60,
+    "strength": 64,
     "traits": [
       "playmaker"
     ]
@@ -6633,7 +6633,7 @@
     "name": "Anselmo Varela Novaes",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 61,
+    "strength": 64,
     "traits": []
   },
   {
@@ -6644,7 +6644,7 @@
     "name": "Ruan Rebouças Souza",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 52,
+    "strength": 55,
     "traits": [
       "wall"
     ]
@@ -6657,7 +6657,7 @@
     "name": "Odair Cardoso Guerra",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 42,
+    "strength": 46,
     "traits": [
       "wall"
     ]
@@ -6670,7 +6670,7 @@
     "name": "Jean Nascimento Pires",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 52,
+    "strength": 55,
     "traits": []
   },
   {
@@ -6681,7 +6681,7 @@
     "name": "Cauã Drummond Fonseca",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 59,
+    "strength": 62,
     "traits": []
   },
   {
@@ -6692,7 +6692,7 @@
     "name": "Reinaldo Teles Maia",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 58,
+    "strength": 61,
     "traits": []
   },
   {
@@ -6703,7 +6703,7 @@
     "name": "Ivan Araújo Cruz",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 59,
+    "strength": 62,
     "traits": []
   },
   {
@@ -6714,7 +6714,7 @@
     "name": "Jorge Franco Sales",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 50,
+    "strength": 54,
     "traits": []
   },
   {
@@ -6725,7 +6725,7 @@
     "name": "Cauã Godinho Fonseca",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 46,
+    "strength": 49,
     "traits": []
   },
   {
@@ -6736,7 +6736,7 @@
     "name": "Rogério Nunes Abreu",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 64,
+    "strength": 67,
     "traits": [
       "finisher"
     ]
@@ -6749,7 +6749,7 @@
     "name": "Valmir Bueno Braga",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 62,
+    "strength": 65,
     "traits": [
       "finisher",
       "heading"
@@ -6763,7 +6763,7 @@
     "name": "Mateus Frota Aires",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 51,
+    "strength": 54,
     "traits": []
   },
   {
@@ -6774,7 +6774,7 @@
     "name": "Ivan Costa Valente",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 45,
+    "strength": 49,
     "traits": []
   },
   {
@@ -6785,7 +6785,7 @@
     "name": "Glauco Espíndola Furtado",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 46,
+    "strength": 49,
     "traits": []
   },
   {
@@ -6796,7 +6796,7 @@
     "name": "Isaac Godinho Paranhos",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 58,
+    "strength": 61,
     "traits": []
   },
   {
@@ -6807,7 +6807,7 @@
     "name": "Diogo Canedo Dantas",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 55,
+    "strength": 58,
     "traits": []
   },
   {
@@ -6818,7 +6818,7 @@
     "name": "Antônio Lemos Gonçalves",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 52,
+    "strength": 55,
     "traits": [
       "wall"
     ]
@@ -6831,7 +6831,7 @@
     "name": "Carlos Aguiar Paranhos",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 64,
+    "strength": 67,
     "traits": [
       "heading"
     ]
@@ -6844,7 +6844,7 @@
     "name": "Giovani Nunes Barbosa",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 56,
+    "strength": 59,
     "traits": [
       "free-kick"
     ]
@@ -6857,7 +6857,7 @@
     "name": "Felipe Pereira Siqueira",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 45,
+    "strength": 48,
     "traits": []
   },
   {
@@ -6868,7 +6868,7 @@
     "name": "Domingos Monteiro Prates",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 48,
+    "strength": 51,
     "traits": [
       "free-kick"
     ]
@@ -6881,7 +6881,7 @@
     "name": "Heraldo Farias Vasconcelos",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 49,
+    "strength": 52,
     "traits": []
   },
   {
@@ -6892,7 +6892,7 @@
     "name": "Juliano Rezende Zanetti",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 58,
+    "strength": 61,
     "traits": []
   },
   {
@@ -6903,7 +6903,7 @@
     "name": "Wallace Lacerda Cruz",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 53,
+    "strength": 56,
     "traits": []
   },
   {
@@ -6914,7 +6914,7 @@
     "name": "Guilherme Espíndola Sobral",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 52,
+    "strength": 54,
     "traits": []
   },
   {
@@ -6925,7 +6925,7 @@
     "name": "Abel Esteves Alencar",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 43,
+    "strength": 46,
     "traits": []
   },
   {
@@ -6936,7 +6936,7 @@
     "name": "Wesley Freitas Holanda",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 52,
+    "strength": 54,
     "traits": []
   },
   {
@@ -6947,7 +6947,7 @@
     "name": "Edmílson Farias Lobo",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 55,
+    "strength": 58,
     "traits": []
   },
   {
@@ -6958,7 +6958,7 @@
     "name": "Fagner Caldeira Guerra",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 44,
+    "strength": 47,
     "traits": [
       "heading"
     ]
@@ -6971,7 +6971,7 @@
     "name": "Dênis Abreu Prado",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 46,
+    "strength": 49,
     "traits": []
   },
   {
@@ -6982,7 +6982,7 @@
     "name": "Patrick Diniz Tavares",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 57,
+    "strength": 60,
     "traits": []
   },
   {
@@ -6993,7 +6993,7 @@
     "name": "Jorge Tenório Peixoto",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 61,
+    "strength": 64,
     "traits": []
   },
   {
@@ -7004,7 +7004,7 @@
     "name": "Ivan Vidal Marinho",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 56,
+    "strength": 59,
     "traits": []
   },
   {
@@ -7015,7 +7015,7 @@
     "name": "Agnaldo Toledo Muniz",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 55,
+    "strength": 58,
     "traits": []
   },
   {
@@ -7026,7 +7026,7 @@
     "name": "Kauã Guedes Jardim",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 61,
+    "strength": 64,
     "traits": []
   },
   {
@@ -7037,7 +7037,7 @@
     "name": "Lindomar Lourenço Brito",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 55,
+    "strength": 58,
     "traits": [
       "finisher"
     ]
@@ -7050,7 +7050,7 @@
     "name": "Maurício Paiva Amorim",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 50,
+    "strength": 53,
     "traits": []
   },
   {
@@ -7061,7 +7061,7 @@
     "name": "Leandro Penteado Soares",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 42,
+    "strength": 45,
     "traits": [
       "pace"
     ]
@@ -7074,7 +7074,7 @@
     "name": "Anselmo Bittencourt Coimbra",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 64,
+    "strength": 67,
     "traits": []
   },
   {
@@ -7085,7 +7085,7 @@
     "name": "Hamilton Fonseca Ornelas",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 56,
+    "strength": 58,
     "traits": [
       "wall"
     ]
@@ -7098,7 +7098,7 @@
     "name": "Anderson Sanches Espíndola",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 48,
+    "strength": 51,
     "traits": [
       "wall"
     ]
@@ -7111,7 +7111,7 @@
     "name": "Erick Silva Correia",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 61,
+    "strength": 64,
     "traits": [
       "playmaker",
       "pace"
@@ -7125,7 +7125,7 @@
     "name": "Túlio Alencar Ornelas",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 58,
+    "strength": 61,
     "traits": []
   },
   {
@@ -7136,7 +7136,7 @@
     "name": "Natanael Caldeira Lopes",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 55,
+    "strength": 57,
     "traits": [
       "pace"
     ]
@@ -7149,7 +7149,7 @@
     "name": "Heitor Amorim Lago",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 48,
+    "strength": 50,
     "traits": [
       "heading",
       "pace"
@@ -7163,7 +7163,7 @@
     "name": "Renato Leal Vidal",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 45,
+    "strength": 48,
     "traits": [
       "pace"
     ]
@@ -7176,7 +7176,7 @@
     "name": "Lindomar Seixas Nogueira",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 58,
+    "strength": 61,
     "traits": [
       "wall",
       "heading"
@@ -7190,7 +7190,7 @@
     "name": "Kauã Aires Peixoto",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 61,
+    "strength": 63,
     "traits": [
       "heading"
     ]
@@ -7203,7 +7203,7 @@
     "name": "Emerson Brandão Zago",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 50,
+    "strength": 53,
     "traits": []
   },
   {
@@ -7214,7 +7214,7 @@
     "name": "Ubiratan Quintana Ramos",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 51,
+    "strength": 54,
     "traits": []
   },
   {
@@ -7225,7 +7225,7 @@
     "name": "Paulo Albuquerque Braga",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 52,
+    "strength": 55,
     "traits": []
   },
   {
@@ -7236,7 +7236,7 @@
     "name": "Joel Lemos Bezerra",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 67,
+    "strength": 69,
     "traits": [
       "heading",
       "free-kick"
@@ -7250,7 +7250,7 @@
     "name": "Patrick Coutinho Lago",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 51,
+    "strength": 53,
     "traits": [
       "wall"
     ]
@@ -7263,7 +7263,7 @@
     "name": "Saulo Andrade Sarmento",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 44,
+    "strength": 47,
     "traits": [
       "free-kick"
     ]
@@ -7276,7 +7276,7 @@
     "name": "Jorge Rezende Aires",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 49,
+    "strength": 52,
     "traits": [
       "free-kick"
     ]
@@ -7289,7 +7289,7 @@
     "name": "Fagner Barros Martins",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 52,
+    "strength": 55,
     "traits": [
       "playmaker"
     ]
@@ -7302,7 +7302,7 @@
     "name": "Átila Mota Queiroz",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 63,
+    "strength": 66,
     "traits": []
   },
   {
@@ -7313,7 +7313,7 @@
     "name": "Davi Zanetti Lopes",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 57,
+    "strength": 60,
     "traits": []
   },
   {
@@ -7324,7 +7324,7 @@
     "name": "Bernardo Bueno Delgado",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 57,
+    "strength": 59,
     "traits": []
   },
   {
@@ -7335,7 +7335,7 @@
     "name": "Juan Sanches Urquiza",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 52,
+    "strength": 54,
     "traits": []
   },
   {
@@ -7346,7 +7346,7 @@
     "name": "Lauro Lacerda Carvalho",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 61,
+    "strength": 64,
     "traits": []
   },
   {
@@ -7357,7 +7357,7 @@
     "name": "Luiz Pires Rego",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 65,
+    "strength": 68,
     "traits": []
   },
   {
@@ -7368,7 +7368,7 @@
     "name": "Adriano Brás Valente",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 52,
+    "strength": 55,
     "traits": []
   },
   {
@@ -7379,7 +7379,7 @@
     "name": "Alisson Brandão Nunes",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 42,
+    "strength": 45,
     "traits": [
       "finisher"
     ]
@@ -7392,7 +7392,7 @@
     "name": "Alexandre Lins Rezende",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 45,
+    "strength": 48,
     "traits": [
       "pace"
     ]
@@ -7405,7 +7405,7 @@
     "name": "Adriano Braga Peixoto",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 59,
+    "strength": 63,
     "traits": [
       "wall"
     ]
@@ -7418,7 +7418,7 @@
     "name": "Baltazar Muniz Batista",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 50,
+    "strength": 54,
     "traits": [
       "wall"
     ]
@@ -7431,7 +7431,7 @@
     "name": "Júlio Cabral Frazão",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 42,
+    "strength": 46,
     "traits": [
       "wall"
     ]
@@ -7444,7 +7444,7 @@
     "name": "Túlio Nascimento Rodrigues",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 55,
+    "strength": 59,
     "traits": []
   },
   {
@@ -7455,7 +7455,7 @@
     "name": "Enzo Prado Vieira",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 52,
+    "strength": 56,
     "traits": [
       "free-kick"
     ]
@@ -7468,7 +7468,7 @@
     "name": "Sérgio Espíndola Sampaio",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 50,
+    "strength": 54,
     "traits": [
       "playmaker"
     ]
@@ -7481,7 +7481,7 @@
     "name": "Nilton Fernandes Avelar",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 43,
+    "strength": 48,
     "traits": [
       "free-kick",
       "playmaker"
@@ -7495,7 +7495,7 @@
     "name": "Cleber Espíndola Aragão",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 53,
+    "strength": 57,
     "traits": []
   },
   {
@@ -7506,7 +7506,7 @@
     "name": "Norberto Torres Calheiros",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 57,
+    "strength": 61,
     "traits": []
   },
   {
@@ -7517,7 +7517,7 @@
     "name": "Flávio Furtado Rebouças",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 57,
+    "strength": 61,
     "traits": [
       "heading"
     ]
@@ -7530,7 +7530,7 @@
     "name": "Fábio Peixoto Tourinho",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 53,
+    "strength": 57,
     "traits": [
       "heading"
     ]
@@ -7543,7 +7543,7 @@
     "name": "Gilmar Torres Aires",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 41,
+    "strength": 45,
     "traits": [
       "heading"
     ]
@@ -7556,7 +7556,7 @@
     "name": "Rodolfo Falcão Mesquita",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 43,
+    "strength": 47,
     "traits": []
   },
   {
@@ -7567,7 +7567,7 @@
     "name": "Vanderlei Magalhães Valadares",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 55,
+    "strength": 59,
     "traits": []
   },
   {
@@ -7578,7 +7578,7 @@
     "name": "Márcio Mendes Carneiro",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 51,
+    "strength": 55,
     "traits": []
   },
   {
@@ -7589,7 +7589,7 @@
     "name": "Gerson Freitas Rodrigues",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 42,
+    "strength": 46,
     "traits": [
       "wall"
     ]
@@ -7602,7 +7602,7 @@
     "name": "Glauco Fernandes Neves",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 45,
+    "strength": 49,
     "traits": []
   },
   {
@@ -7613,7 +7613,7 @@
     "name": "Lindomar Martins Arruda",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 37,
+    "strength": 41,
     "traits": [
       "wall",
       "playmaker"
@@ -7627,7 +7627,7 @@
     "name": "Denílson Coelho Melo",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 61,
+    "strength": 66,
     "traits": []
   },
   {
@@ -7638,7 +7638,7 @@
     "name": "Heverton Mendes Freitas",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 57,
+    "strength": 61,
     "traits": []
   },
   {
@@ -7649,7 +7649,7 @@
     "name": "Saulo Azevedo Wanderley",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 57,
+    "strength": 61,
     "traits": [
       "playmaker"
     ]
@@ -7662,7 +7662,7 @@
     "name": "Murilo Prates Infante",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 48,
+    "strength": 52,
     "traits": [
       "free-kick"
     ]
@@ -7675,7 +7675,7 @@
     "name": "Kelvin Guerra Bueno",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 41,
+    "strength": 45,
     "traits": []
   },
   {
@@ -7686,7 +7686,7 @@
     "name": "Marcelo Cavalcanti Menezes",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 53,
+    "strength": 58,
     "traits": [
       "heading"
     ]
@@ -7699,7 +7699,7 @@
     "name": "Lourenço Capistrano Coimbra",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 54,
+    "strength": 59,
     "traits": []
   },
   {
@@ -7710,7 +7710,7 @@
     "name": "Lisandro Borges Pinto",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 54,
+    "strength": 59,
     "traits": []
   },
   {
@@ -7721,7 +7721,7 @@
     "name": "Gerson Almeida Moraes",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 47,
+    "strength": 51,
     "traits": []
   },
   {
@@ -7732,7 +7732,7 @@
     "name": "Rodrigo Cunha Mendes",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 65,
+    "strength": 66,
     "traits": []
   },
   {
@@ -7743,7 +7743,7 @@
     "name": "Jonathan Barbosa Goulart",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 56,
+    "strength": 57,
     "traits": [
       "wall"
     ]
@@ -7756,7 +7756,7 @@
     "name": "Lisandro Pinheiro Bezerra",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 54,
+    "strength": 55,
     "traits": []
   },
   {
@@ -7780,7 +7780,7 @@
     "name": "Sebastião Albuquerque Matos",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 64,
+    "strength": 65,
     "traits": [
       "pace"
     ]
@@ -7793,7 +7793,7 @@
     "name": "Irineu Drummond Macedo",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 59,
+    "strength": 60,
     "traits": [
       "pace"
     ]
@@ -7806,7 +7806,7 @@
     "name": "Dênis Amaro Fonseca",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 49,
+    "strength": 50,
     "traits": []
   },
   {
@@ -7817,7 +7817,7 @@
     "name": "Fábio Rangel Muniz",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 63,
+    "strength": 64,
     "traits": [
       "heading"
     ]
@@ -7830,7 +7830,7 @@
     "name": "Edinho Correia Espíndola",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 57,
+    "strength": 58,
     "traits": []
   },
   {
@@ -7841,7 +7841,7 @@
     "name": "Yuri Pires Gonçalves",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 56,
+    "strength": 57,
     "traits": []
   },
   {
@@ -7852,7 +7852,7 @@
     "name": "Leonardo Alencar Lima",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 56,
+    "strength": 57,
     "traits": []
   },
   {
@@ -7863,7 +7863,7 @@
     "name": "Ronaldo Valença Drummond",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 61,
+    "strength": 62,
     "traits": [
       "heading"
     ]
@@ -7876,7 +7876,7 @@
     "name": "Gustavo Tenório Bandeira",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 54,
+    "strength": 55,
     "traits": [
       "playmaker",
       "free-kick"
@@ -7890,7 +7890,7 @@
     "name": "Michel Cabral Brás",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 51,
+    "strength": 52,
     "traits": []
   },
   {
@@ -7901,7 +7901,7 @@
     "name": "Benedito Diniz Miranda",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 62,
+    "strength": 63,
     "traits": [
       "playmaker"
     ]
@@ -7914,7 +7914,7 @@
     "name": "Wilson Diniz Seixas",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 61,
+    "strength": 62,
     "traits": [
       "free-kick",
       "playmaker"
@@ -7928,7 +7928,7 @@
     "name": "Kauã Alencar Junqueira",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 67,
+    "strength": 68,
     "traits": []
   },
   {
@@ -7939,7 +7939,7 @@
     "name": "Caio Rocha Batista",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 56,
+    "strength": 57,
     "traits": []
   },
   {
@@ -7950,7 +7950,7 @@
     "name": "Átila Nogueira Fagundes",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 60,
+    "strength": 61,
     "traits": [
       "finisher"
     ]
@@ -7963,7 +7963,7 @@
     "name": "Paulo Braga Portela",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 64,
+    "strength": 65,
     "traits": [
       "finisher"
     ]
@@ -7976,7 +7976,7 @@
     "name": "Célio Meireles Marinho",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 61,
+    "strength": 62,
     "traits": [
       "heading"
     ]
@@ -7989,7 +7989,7 @@
     "name": "Valdir Valente Penteado",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 54,
+    "strength": 55,
     "traits": [
       "pace"
     ]
@@ -8002,7 +8002,7 @@
     "name": "Roberto Resende Carneiro",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 47,
+    "strength": 48,
     "traits": []
   },
   {
@@ -8013,7 +8013,7 @@
     "name": "Reinaldo Henriques Franco",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 50,
+    "strength": 55,
     "traits": [
       "wall"
     ]
@@ -8026,7 +8026,7 @@
     "name": "Leonardo Feitosa Mascarenhas",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 50,
+    "strength": 55,
     "traits": [
       "wall"
     ]
@@ -8039,7 +8039,7 @@
     "name": "Maurício Pinto Ramos",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 49,
+    "strength": 54,
     "traits": []
   },
   {
@@ -8050,7 +8050,7 @@
     "name": "Domingos Braga Batista",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 59,
+    "strength": 64,
     "traits": []
   },
   {
@@ -8061,7 +8061,7 @@
     "name": "Kaique Brandão Wanderley",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 52,
+    "strength": 58,
     "traits": [
       "free-kick"
     ]
@@ -8074,7 +8074,7 @@
     "name": "Mário Tavares Cerqueira",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 49,
+    "strength": 55,
     "traits": [
       "pace"
     ]
@@ -8087,7 +8087,7 @@
     "name": "Maicon Pinto Rodrigues",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 47,
+    "strength": 53,
     "traits": []
   },
   {
@@ -8098,7 +8098,7 @@
     "name": "Alberto Rebouças Simões",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 47,
+    "strength": 52,
     "traits": [
       "pace"
     ]
@@ -8111,7 +8111,7 @@
     "name": "Mateus Galvão Rebouças",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 61,
+    "strength": 66,
     "traits": [
       "heading",
       "wall"
@@ -8125,7 +8125,7 @@
     "name": "Wilson Leal Barbosa",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 54,
+    "strength": 60,
     "traits": []
   },
   {
@@ -8136,7 +8136,7 @@
     "name": "Marcos Diniz Dornelles",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 52,
+    "strength": 58,
     "traits": []
   },
   {
@@ -8147,7 +8147,7 @@
     "name": "Paulo Amorim Damasceno",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 37,
+    "strength": 43,
     "traits": []
   },
   {
@@ -8158,7 +8158,7 @@
     "name": "Gabriel Guedes Cunha",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 45,
+    "strength": 50,
     "traits": []
   },
   {
@@ -8169,7 +8169,7 @@
     "name": "Gabriel Alencar Abreu",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 57,
+    "strength": 62,
     "traits": [
       "playmaker"
     ]
@@ -8182,7 +8182,7 @@
     "name": "Brenno Guerra Maia",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 54,
+    "strength": 59,
     "traits": [
       "wall"
     ]
@@ -8195,7 +8195,7 @@
     "name": "Allan Rego Almeida",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 48,
+    "strength": 53,
     "traits": [
       "free-kick"
     ]
@@ -8208,7 +8208,7 @@
     "name": "César Lustosa Bulhões",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 57,
+    "strength": 63,
     "traits": [
       "playmaker"
     ]
@@ -8221,7 +8221,7 @@
     "name": "Samuel Urquiza Correia",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 59,
+    "strength": 64,
     "traits": []
   },
   {
@@ -8232,7 +8232,7 @@
     "name": "Rafael Reis Arruda",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 54,
+    "strength": 60,
     "traits": []
   },
   {
@@ -8243,7 +8243,7 @@
     "name": "Renan Galvão Rabelo",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 53,
+    "strength": 59,
     "traits": []
   },
   {
@@ -8254,7 +8254,7 @@
     "name": "Ricardo Pestana Almeida",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 41,
+    "strength": 47,
     "traits": []
   },
   {
@@ -8265,7 +8265,7 @@
     "name": "Rafael Assis Diniz",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 45,
+    "strength": 51,
     "traits": [
       "playmaker",
       "pace"
@@ -8279,7 +8279,7 @@
     "name": "Heverton Paiva Urquiza",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 52,
+    "strength": 58,
     "traits": [
       "finisher"
     ]
@@ -8292,7 +8292,7 @@
     "name": "Benedito Belchior Vasconcelos",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 54,
+    "strength": 59,
     "traits": [
       "pace"
     ]
@@ -8305,7 +8305,7 @@
     "name": "Élton Gonçalves Urquiza",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 54,
+    "strength": 59,
     "traits": []
   },
   {
@@ -8316,7 +8316,7 @@
     "name": "Diego Simões Garcia",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 43,
+    "strength": 48,
     "traits": []
   },
   {
@@ -8327,7 +8327,7 @@
     "name": "Luís Menezes Caldeira",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 34,
+    "strength": 40,
     "traits": [
       "free-kick"
     ]
@@ -8340,7 +8340,7 @@
     "name": "César Souza Cruz",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 59,
+    "strength": 62,
     "traits": [
       "wall"
     ]
@@ -8353,7 +8353,7 @@
     "name": "Régis Camargo Teles",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 48,
+    "strength": 51,
     "traits": []
   },
   {
@@ -8364,7 +8364,7 @@
     "name": "Wagner Farias Mota",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 44,
+    "strength": 47,
     "traits": []
   },
   {
@@ -8375,7 +8375,7 @@
     "name": "Michel Queiroz Pereira",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 57,
+    "strength": 60,
     "traits": [
       "pace"
     ]
@@ -8388,7 +8388,7 @@
     "name": "Igor Goulart Martins",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 60,
+    "strength": 62,
     "traits": [
       "pace"
     ]
@@ -8401,7 +8401,7 @@
     "name": "Vicente Gomes Mattos",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 54,
+    "strength": 57,
     "traits": []
   },
   {
@@ -8412,7 +8412,7 @@
     "name": "Gabriel Vasconcelos Jardim",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 44,
+    "strength": 46,
     "traits": [
       "pace"
     ]
@@ -8425,7 +8425,7 @@
     "name": "Willian Lago Campos",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 63,
+    "strength": 65,
     "traits": [
       "wall"
     ]
@@ -8438,7 +8438,7 @@
     "name": "Gilberto Bezerra Azevedo",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 66,
+    "strength": 69,
     "traits": []
   },
   {
@@ -8449,7 +8449,7 @@
     "name": "Tiago Canedo Arruda",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 54,
+    "strength": 57,
     "traits": []
   },
   {
@@ -8460,7 +8460,7 @@
     "name": "Maurício Reis Meireles",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 47,
+    "strength": 50,
     "traits": [
       "wall"
     ]
@@ -8473,7 +8473,7 @@
     "name": "Kauã Alencar Freitas",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 64,
+    "strength": 67,
     "traits": [
       "wall",
       "playmaker"
@@ -8487,7 +8487,7 @@
     "name": "Douglas Frota Coutinho",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 52,
+    "strength": 54,
     "traits": []
   },
   {
@@ -8498,7 +8498,7 @@
     "name": "Arthur Braga Camargo",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 48,
+    "strength": 50,
     "traits": [
       "playmaker"
     ]
@@ -8511,7 +8511,7 @@
     "name": "Kléber Silva Frazão",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 46,
+    "strength": 48,
     "traits": [
       "wall"
     ]
@@ -8524,7 +8524,7 @@
     "name": "Igor Leite Ramos",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 61,
+    "strength": 64,
     "traits": [
       "free-kick"
     ]
@@ -8537,7 +8537,7 @@
     "name": "Diego Muniz Coelho",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 60,
+    "strength": 63,
     "traits": []
   },
   {
@@ -8548,7 +8548,7 @@
     "name": "Anderson Carvalho Moraes",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 60,
+    "strength": 63,
     "traits": [
       "playmaker"
     ]
@@ -8561,7 +8561,7 @@
     "name": "Orlando Accioly Caldeira",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 55,
+    "strength": 57,
     "traits": []
   },
   {
@@ -8572,7 +8572,7 @@
     "name": "Cristóvão Pereira Nunes",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 54,
+    "strength": 57,
     "traits": []
   },
   {
@@ -8583,7 +8583,7 @@
     "name": "Luan Bueno Jordão",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 45,
+    "strength": 48,
     "traits": [
       "playmaker"
     ]
@@ -8596,7 +8596,7 @@
     "name": "Emanuel Faria Antunes",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 61,
+    "strength": 64,
     "traits": [
       "pace"
     ]
@@ -8609,7 +8609,7 @@
     "name": "Ramon Rocha Correia",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 63,
+    "strength": 66,
     "traits": [
       "pace"
     ]
@@ -8622,7 +8622,7 @@
     "name": "Vítor Cavalcanti Menezes",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 55,
+    "strength": 58,
     "traits": [
       "finisher"
     ]
@@ -8635,7 +8635,7 @@
     "name": "Renato Lopes Pinheiro",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 41,
+    "strength": 44,
     "traits": []
   },
   {
@@ -8646,7 +8646,7 @@
     "name": "Patrick Tavares Souza",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 49,
+    "strength": 55,
     "traits": [
       "wall"
     ]
@@ -8659,7 +8659,7 @@
     "name": "Erick Varela Freitas",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 50,
+    "strength": 56,
     "traits": [
       "wall"
     ]
@@ -8672,7 +8672,7 @@
     "name": "Renan Cunha Bueno",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 41,
+    "strength": 46,
     "traits": [
       "wall"
     ]
@@ -8685,7 +8685,7 @@
     "name": "Wendel Zago Carvalho",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 52,
+    "strength": 58,
     "traits": []
   },
   {
@@ -8696,7 +8696,7 @@
     "name": "Douglas Soares Freitas",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 61,
+    "strength": 67,
     "traits": []
   },
   {
@@ -8707,7 +8707,7 @@
     "name": "Hélio Correia Veiga",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 49,
+    "strength": 55,
     "traits": [
       "free-kick"
     ]
@@ -8720,7 +8720,7 @@
     "name": "Geraldo Holanda Valente",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 37,
+    "strength": 43,
     "traits": []
   },
   {
@@ -8731,7 +8731,7 @@
     "name": "Pedro Penteado Mendes",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 41,
+    "strength": 47,
     "traits": []
   },
   {
@@ -8742,7 +8742,7 @@
     "name": "Vicente Damasceno Rangel",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 52,
+    "strength": 58,
     "traits": [
       "wall",
       "heading"
@@ -8756,7 +8756,7 @@
     "name": "Dênis Junqueira Andrade",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 51,
+    "strength": 57,
     "traits": []
   },
   {
@@ -8767,7 +8767,7 @@
     "name": "Nicolas Calheiros Lemos",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 47,
+    "strength": 53,
     "traits": [
       "heading"
     ]
@@ -8780,7 +8780,7 @@
     "name": "Wellington Aguiar Vilela",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 41,
+    "strength": 47,
     "traits": []
   },
   {
@@ -8791,7 +8791,7 @@
     "name": "Mário Mesquita Lins",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 63,
+    "strength": 68,
     "traits": [
       "wall"
     ]
@@ -8804,7 +8804,7 @@
     "name": "Eustáquio Sarmento Machado",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 48,
+    "strength": 54,
     "traits": []
   },
   {
@@ -8815,7 +8815,7 @@
     "name": "Jean Almeida Calheiros",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 41,
+    "strength": 47,
     "traits": []
   },
   {
@@ -8826,7 +8826,7 @@
     "name": "Heverton Mendonça Guimarães",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 58,
+    "strength": 63,
     "traits": [
       "finisher"
     ]
@@ -8839,7 +8839,7 @@
     "name": "Edmílson Varela Teixeira",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 50,
+    "strength": 55,
     "traits": []
   },
   {
@@ -8850,7 +8850,7 @@
     "name": "Guilherme Campos Franco",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 58,
+    "strength": 64,
     "traits": []
   },
   {
@@ -8861,7 +8861,7 @@
     "name": "Ismael Penteado Sanches",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 53,
+    "strength": 59,
     "traits": [
       "finisher"
     ]
@@ -8874,7 +8874,7 @@
     "name": "Bruno Martins Rebouças",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 55,
+    "strength": 61,
     "traits": []
   },
   {
@@ -8885,7 +8885,7 @@
     "name": "Fagner Mendes Ribeiro",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 56,
+    "strength": 62,
     "traits": [
       "finisher"
     ]
@@ -8898,7 +8898,7 @@
     "name": "Moisés Galvão Barros",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 47,
+    "strength": 53,
     "traits": []
   },
   {
@@ -8909,7 +8909,7 @@
     "name": "Augusto Franco Holanda",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 42,
+    "strength": 48,
     "traits": []
   },
   {
@@ -8920,7 +8920,7 @@
     "name": "Pedro Damasceno Nascimento",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 60,
+    "strength": 64,
     "traits": [
       "wall"
     ]
@@ -8933,7 +8933,7 @@
     "name": "Agnaldo Frota Teles",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 51,
+    "strength": 55,
     "traits": [
       "wall"
     ]
@@ -8946,7 +8946,7 @@
     "name": "Wendel Fernandes Zanetti",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 46,
+    "strength": 50,
     "traits": [
       "wall"
     ]
@@ -8959,7 +8959,7 @@
     "name": "Patrick Monteiro Lima",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 60,
+    "strength": 64,
     "traits": [
       "pace"
     ]
@@ -8972,7 +8972,7 @@
     "name": "Lourenço Rabelo Barreto",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 56,
+    "strength": 60,
     "traits": [
       "free-kick",
       "pace"
@@ -8986,7 +8986,7 @@
     "name": "Ítalo Farias Coutinho",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 49,
+    "strength": 53,
     "traits": [
       "free-kick"
     ]
@@ -8999,7 +8999,7 @@
     "name": "Juliano Rezende Guedes",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 45,
+    "strength": 49,
     "traits": []
   },
   {
@@ -9010,7 +9010,7 @@
     "name": "Otávio Bastos Fernandes",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 43,
+    "strength": 47,
     "traits": [
       "pace"
     ]
@@ -9023,7 +9023,7 @@
     "name": "Emanuel Barreto Brás",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 61,
+    "strength": 64,
     "traits": []
   },
   {
@@ -9034,7 +9034,7 @@
     "name": "Tadeu Meireles Xavier",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 57,
+    "strength": 61,
     "traits": [
       "wall"
     ]
@@ -9047,7 +9047,7 @@
     "name": "Roberto Pacheco Avelar",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 51,
+    "strength": 54,
     "traits": []
   },
   {
@@ -9058,7 +9058,7 @@
     "name": "Marcelo Campos Mendonça",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 46,
+    "strength": 50,
     "traits": [
       "heading"
     ]
@@ -9071,7 +9071,7 @@
     "name": "Agnaldo Vidal Cerqueira",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 59,
+    "strength": 62,
     "traits": [
       "playmaker"
     ]
@@ -9084,7 +9084,7 @@
     "name": "Moisés Cruz Mesquita",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 50,
+    "strength": 54,
     "traits": []
   },
   {
@@ -9095,7 +9095,7 @@
     "name": "Cristiano Duarte Garcia",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 43,
+    "strength": 47,
     "traits": []
   },
   {
@@ -9106,7 +9106,7 @@
     "name": "Manoel Arantes Andrade",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 47,
+    "strength": 50,
     "traits": []
   },
   {
@@ -9117,7 +9117,7 @@
     "name": "Maicon Barreto Gonçalves",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 58,
+    "strength": 62,
     "traits": [
       "finisher"
     ]
@@ -9130,7 +9130,7 @@
     "name": "Rafael Soares Goulart",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 56,
+    "strength": 59,
     "traits": []
   },
   {
@@ -9141,7 +9141,7 @@
     "name": "Mateus Esteves Miranda",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 53,
+    "strength": 57,
     "traits": []
   },
   {
@@ -9152,7 +9152,7 @@
     "name": "Norberto Faria Lemos",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 54,
+    "strength": 58,
     "traits": [
       "free-kick",
       "pace"
@@ -9166,7 +9166,7 @@
     "name": "Nilton Valadares Freitas",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 48,
+    "strength": 52,
     "traits": [
       "pace"
     ]
@@ -9179,7 +9179,7 @@
     "name": "Fábio Feitosa Leal",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 59,
+    "strength": 63,
     "traits": [
       "pace"
     ]
@@ -9192,7 +9192,7 @@
     "name": "Norberto Tavares Faria",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 56,
+    "strength": 60,
     "traits": []
   },
   {
@@ -9203,7 +9203,7 @@
     "name": "Hélio Moreira Monteiro",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 58,
+    "strength": 62,
     "traits": [
       "finisher"
     ]
@@ -9216,7 +9216,7 @@
     "name": "Tiago Nogueira Mascarenhas",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 40,
+    "strength": 44,
     "traits": [
       "pace"
     ]
@@ -9229,7 +9229,7 @@
     "name": "Kaique Alves Duarte",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 56,
+    "strength": 61,
     "traits": [
       "wall"
     ]
@@ -9242,7 +9242,7 @@
     "name": "Charles Duarte Correia",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 50,
+    "strength": 55,
     "traits": []
   },
   {
@@ -9253,7 +9253,7 @@
     "name": "Thiago Pires Cavalcanti",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 46,
+    "strength": 51,
     "traits": [
       "wall"
     ]
@@ -9266,7 +9266,7 @@
     "name": "Willian Calheiros Ferreira",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 56,
+    "strength": 61,
     "traits": []
   },
   {
@@ -9277,7 +9277,7 @@
     "name": "Valter Castro Rabelo",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 62,
+    "strength": 67,
     "traits": [
       "heading"
     ]
@@ -9290,7 +9290,7 @@
     "name": "Wellington Muniz Bastos",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 50,
+    "strength": 55,
     "traits": [
       "playmaker"
     ]
@@ -9303,7 +9303,7 @@
     "name": "Pietro Salgado Simões",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 41,
+    "strength": 46,
     "traits": [
       "pace"
     ]
@@ -9316,7 +9316,7 @@
     "name": "Jardel Prado Galvão",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 46,
+    "strength": 51,
     "traits": []
   },
   {
@@ -9327,7 +9327,7 @@
     "name": "Lisandro Wanderley Lourenço",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 56,
+    "strength": 61,
     "traits": [
       "heading",
       "wall"
@@ -9341,7 +9341,7 @@
     "name": "Moisés Borges Brandão",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 59,
+    "strength": 64,
     "traits": [
       "wall"
     ]
@@ -9354,7 +9354,7 @@
     "name": "Washington Coutinho Calheiros",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 55,
+    "strength": 60,
     "traits": [
       "heading"
     ]
@@ -9367,7 +9367,7 @@
     "name": "Sebastião Dornelles Rodrigues",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 35,
+    "strength": 40,
     "traits": []
   },
   {
@@ -9378,7 +9378,7 @@
     "name": "Dorival Sales Silva",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 44,
+    "strength": 49,
     "traits": [
       "heading"
     ]
@@ -9391,7 +9391,7 @@
     "name": "Jardel Cavalcanti Sampaio",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 54,
+    "strength": 59,
     "traits": [
       "free-kick"
     ]
@@ -9404,7 +9404,7 @@
     "name": "Jonas Nogueira Mattos",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 48,
+    "strength": 53,
     "traits": [
       "playmaker"
     ]
@@ -9417,7 +9417,7 @@
     "name": "Kléber Holanda Zago",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 43,
+    "strength": 48,
     "traits": []
   },
   {
@@ -9428,7 +9428,7 @@
     "name": "Maicon Siqueira Brandão",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 44,
+    "strength": 49,
     "traits": [
       "wall"
     ]
@@ -9441,7 +9441,7 @@
     "name": "Hélio Nóbrega Valadares",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 50,
+    "strength": 55,
     "traits": [
       "pace"
     ]
@@ -9454,7 +9454,7 @@
     "name": "Ailton Rangel Novaes",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 56,
+    "strength": 61,
     "traits": []
   },
   {
@@ -9465,7 +9465,7 @@
     "name": "Murilo Carneiro Moraes",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 49,
+    "strength": 54,
     "traits": [
       "playmaker",
       "finisher"
@@ -9479,7 +9479,7 @@
     "name": "Alessandro Duarte Meireles",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 46,
+    "strength": 51,
     "traits": [
       "free-kick",
       "pace"
@@ -9493,7 +9493,7 @@
     "name": "Wesley Espíndola Bittencourt",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 44,
+    "strength": 49,
     "traits": []
   },
   {
@@ -9504,7 +9504,7 @@
     "name": "Danilo Seixas Maia",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 43,
+    "strength": 48,
     "traits": [
       "pace"
     ]
@@ -9517,7 +9517,7 @@
     "name": "Átila Ornelas Lemos",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 54,
+    "strength": 59,
     "traits": []
   },
   {
@@ -9528,7 +9528,7 @@
     "name": "Tiago Nunes Rocha",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 51,
+    "strength": 56,
     "traits": []
   },
   {
@@ -9539,7 +9539,7 @@
     "name": "Ramon Zago Guedes",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 48,
+    "strength": 52,
     "traits": [
       "finisher"
     ]
@@ -9552,7 +9552,7 @@
     "name": "Eustáquio Prado Sampaio",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 50,
+    "strength": 55,
     "traits": [
       "pace",
       "finisher"
@@ -9566,7 +9566,7 @@
     "name": "Wagner Novaes Albuquerque",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 43,
+    "strength": 48,
     "traits": [
       "finisher",
       "heading"
@@ -9630,7 +9630,7 @@
     "name": "Josias Lago Amorim",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 71,
+    "strength": 72,
     "traits": [
       "heading",
       "pace"
@@ -9792,7 +9792,7 @@
     "name": "Edson Mascarenhas Pereira",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 68,
+    "strength": 69,
     "traits": [
       "finisher",
       "free-kick"
@@ -9924,7 +9924,7 @@
     "name": "Josué Fernandes Prado",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 59,
+    "strength": 64,
     "traits": []
   },
   {
@@ -9935,7 +9935,7 @@
     "name": "Fernando Aguiar Resende",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 47,
+    "strength": 52,
     "traits": []
   },
   {
@@ -9946,7 +9946,7 @@
     "name": "Sérgio Mota Barros",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 41,
+    "strength": 47,
     "traits": []
   },
   {
@@ -9957,7 +9957,7 @@
     "name": "Nélson Nascimento Farias",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 51,
+    "strength": 56,
     "traits": []
   },
   {
@@ -9968,7 +9968,7 @@
     "name": "Lourenço Almeida Nóbrega",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 54,
+    "strength": 60,
     "traits": []
   },
   {
@@ -9979,7 +9979,7 @@
     "name": "Denílson Antunes Mascarenhas",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 47,
+    "strength": 52,
     "traits": []
   },
   {
@@ -9990,7 +9990,7 @@
     "name": "Dorival Accioly Sampaio",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 49,
+    "strength": 55,
     "traits": []
   },
   {
@@ -10001,7 +10001,7 @@
     "name": "Davi Pinto Dantas",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 53,
+    "strength": 58,
     "traits": [
       "heading"
     ]
@@ -10014,7 +10014,7 @@
     "name": "Isaac Sales Drummond",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 46,
+    "strength": 52,
     "traits": [
       "heading"
     ]
@@ -10027,7 +10027,7 @@
     "name": "Patrick Amaral Falcão",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 49,
+    "strength": 54,
     "traits": []
   },
   {
@@ -10038,7 +10038,7 @@
     "name": "Willian Drummond Castro",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 41,
+    "strength": 46,
     "traits": [
       "wall"
     ]
@@ -10051,7 +10051,7 @@
     "name": "Severino Prado Wanderley",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 53,
+    "strength": 58,
     "traits": []
   },
   {
@@ -10062,7 +10062,7 @@
     "name": "Guilherme Aguiar Alves",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 42,
+    "strength": 48,
     "traits": []
   },
   {
@@ -10073,7 +10073,7 @@
     "name": "Lindomar Alencar Vilela",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 44,
+    "strength": 49,
     "traits": [
       "heading",
       "wall"
@@ -10087,7 +10087,7 @@
     "name": "Baltazar Alencar Bandeira",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 46,
+    "strength": 51,
     "traits": []
   },
   {
@@ -10098,7 +10098,7 @@
     "name": "Nathan Godinho Jordão",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 43,
+    "strength": 48,
     "traits": [
       "heading"
     ]
@@ -10111,7 +10111,7 @@
     "name": "Henrique Rangel Pereira",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 54,
+    "strength": 59,
     "traits": [
       "playmaker"
     ]
@@ -10124,7 +10124,7 @@
     "name": "Vanderlei Moraes Silva",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 55,
+    "strength": 61,
     "traits": [
       "playmaker",
       "pace"
@@ -10138,7 +10138,7 @@
     "name": "Josué Caldeira Sarmento",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 56,
+    "strength": 61,
     "traits": []
   },
   {
@@ -10149,7 +10149,7 @@
     "name": "Edinho Reis Brás",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 50,
+    "strength": 55,
     "traits": [
       "free-kick"
     ]
@@ -10162,7 +10162,7 @@
     "name": "Josias Quintana Alves",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 58,
+    "strength": 63,
     "traits": []
   },
   {
@@ -10173,7 +10173,7 @@
     "name": "Gilson Duarte Bulhões",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 58,
+    "strength": 63,
     "traits": []
   },
   {
@@ -10184,7 +10184,7 @@
     "name": "Roberto Penteado Coelho",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 41,
+    "strength": 46,
     "traits": [
       "pace"
     ]
@@ -10197,7 +10197,7 @@
     "name": "Lisandro Bastos Borges",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 45,
+    "strength": 51,
     "traits": []
   },
   {
@@ -10208,7 +10208,7 @@
     "name": "Túlio Rego Carvalho",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 40,
+    "strength": 45,
     "traits": [
       "finisher"
     ]
@@ -10221,7 +10221,7 @@
     "name": "Nilton Fonseca Accioly",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 56,
+    "strength": 58,
     "traits": [
       "wall"
     ]
@@ -10234,7 +10234,7 @@
     "name": "Rubens Matos Damasceno",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 55,
+    "strength": 57,
     "traits": []
   },
   {
@@ -10245,7 +10245,7 @@
     "name": "Jéferson Farias Rabelo",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 49,
+    "strength": 52,
     "traits": [
       "wall"
     ]
@@ -10258,7 +10258,7 @@
     "name": "Joel Goulart Muniz",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 61,
+    "strength": 63,
     "traits": []
   },
   {
@@ -10269,7 +10269,7 @@
     "name": "Ruan Ribeiro Viana",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 57,
+    "strength": 60,
     "traits": []
   },
   {
@@ -10280,7 +10280,7 @@
     "name": "Luiz Torres Barros",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 49,
+    "strength": 52,
     "traits": []
   },
   {
@@ -10291,7 +10291,7 @@
     "name": "José Bezerra Quaresma",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 52,
+    "strength": 55,
     "traits": []
   },
   {
@@ -10302,7 +10302,7 @@
     "name": "Willian Moraes Leal",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 60,
+    "strength": 62,
     "traits": []
   },
   {
@@ -10313,7 +10313,7 @@
     "name": "Bruno Drummond Campos",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 58,
+    "strength": 60,
     "traits": []
   },
   {
@@ -10324,7 +10324,7 @@
     "name": "Luan Portela Falcão",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 49,
+    "strength": 52,
     "traits": [
       "pace"
     ]
@@ -10337,7 +10337,7 @@
     "name": "Glauco Gonçalves Vasconcelos",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 44,
+    "strength": 47,
     "traits": []
   },
   {
@@ -10348,7 +10348,7 @@
     "name": "Juan Braga Aragão",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 38,
+    "strength": 41,
     "traits": [
       "heading"
     ]
@@ -10361,7 +10361,7 @@
     "name": "Célio Antunes Drummond",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 62,
+    "strength": 65,
     "traits": [
       "playmaker"
     ]
@@ -10374,7 +10374,7 @@
     "name": "César Mattos Nóbrega",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 50,
+    "strength": 53,
     "traits": [
       "heading",
       "playmaker"
@@ -10388,7 +10388,7 @@
     "name": "Fernando Brás Chagas",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 48,
+    "strength": 50,
     "traits": []
   },
   {
@@ -10399,7 +10399,7 @@
     "name": "Pablo Damasceno Oliveira",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 43,
+    "strength": 46,
     "traits": [
       "playmaker"
     ]
@@ -10412,7 +10412,7 @@
     "name": "Pietro Batista Campos",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 50,
+    "strength": 53,
     "traits": [
       "playmaker"
     ]
@@ -10425,7 +10425,7 @@
     "name": "Heitor Lima Guimarães",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 57,
+    "strength": 60,
     "traits": [
       "playmaker"
     ]
@@ -10438,7 +10438,7 @@
     "name": "Francisco Infante Damasceno",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 56,
+    "strength": 59,
     "traits": [
       "pace"
     ]
@@ -10451,7 +10451,7 @@
     "name": "Sérgio Moraes Assis",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 57,
+    "strength": 60,
     "traits": []
   },
   {
@@ -10462,7 +10462,7 @@
     "name": "Carlos Infante Alencar",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 60,
+    "strength": 63,
     "traits": [
       "heading",
       "finisher"
@@ -10476,7 +10476,7 @@
     "name": "Régis Coimbra Moura",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 59,
+    "strength": 62,
     "traits": []
   },
   {
@@ -10487,7 +10487,7 @@
     "name": "César Brandão Cunha",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 53,
+    "strength": 56,
     "traits": [
       "heading"
     ]
@@ -10500,7 +10500,7 @@
     "name": "Vicente Nascimento Amaro",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 45,
+    "strength": 48,
     "traits": []
   },
   {
@@ -10511,7 +10511,7 @@
     "name": "Orlando Mesquita Vidal",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 55,
+    "strength": 58,
     "traits": []
   },
   {
@@ -10522,7 +10522,7 @@
     "name": "Fred Vidal Avelar",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 57,
+    "strength": 63,
     "traits": [
       "wall"
     ]
@@ -10535,7 +10535,7 @@
     "name": "Tadeu Barreto Pinto",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 46,
+    "strength": 51,
     "traits": []
   },
   {
@@ -10546,7 +10546,7 @@
     "name": "Cristiano Guedes Cunha",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 45,
+    "strength": 50,
     "traits": [
       "wall"
     ]
@@ -10559,7 +10559,7 @@
     "name": "Wesley Sampaio Melo",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 52,
+    "strength": 58,
     "traits": []
   },
   {
@@ -10570,7 +10570,7 @@
     "name": "Wesley Rodrigues Damasceno",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 56,
+    "strength": 61,
     "traits": [
       "pace"
     ]
@@ -10583,7 +10583,7 @@
     "name": "Augusto Pinheiro Nunes",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 52,
+    "strength": 57,
     "traits": [
       "pace",
       "heading"
@@ -10597,7 +10597,7 @@
     "name": "Wagner Bulhões Ferraz",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 46,
+    "strength": 51,
     "traits": []
   },
   {
@@ -10608,7 +10608,7 @@
     "name": "Geraldo Salgado Monteiro",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 52,
+    "strength": 57,
     "traits": []
   },
   {
@@ -10619,7 +10619,7 @@
     "name": "Yuri Antunes Frazão",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 52,
+    "strength": 58,
     "traits": []
   },
   {
@@ -10630,7 +10630,7 @@
     "name": "Isaac Moraes Accioly",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 47,
+    "strength": 52,
     "traits": []
   },
   {
@@ -10641,7 +10641,7 @@
     "name": "Alisson Cabral Farias",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 35,
+    "strength": 40,
     "traits": [
       "heading",
       "wall"
@@ -10655,7 +10655,7 @@
     "name": "Henrique Freitas Fagundes",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 34,
+    "strength": 39,
     "traits": [
       "heading",
       "wall"
@@ -10669,7 +10669,7 @@
     "name": "Romário Rangel Barreto",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 55,
+    "strength": 60,
     "traits": [
       "free-kick"
     ]
@@ -10682,7 +10682,7 @@
     "name": "Jorge Carneiro Rodrigues",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 51,
+    "strength": 57,
     "traits": []
   },
   {
@@ -10693,7 +10693,7 @@
     "name": "Fabiano Pestana Toledo",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 42,
+    "strength": 48,
     "traits": []
   },
   {
@@ -10704,7 +10704,7 @@
     "name": "Jorge Xavier Valente",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 40,
+    "strength": 45,
     "traits": [
       "playmaker"
     ]
@@ -10717,7 +10717,7 @@
     "name": "Erick Xavier Frazão",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 57,
+    "strength": 63,
     "traits": []
   },
   {
@@ -10728,7 +10728,7 @@
     "name": "Pablo Bandeira Bastos",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 56,
+    "strength": 61,
     "traits": [
       "playmaker"
     ]
@@ -10741,7 +10741,7 @@
     "name": "Josué Mendonça Junqueira",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 57,
+    "strength": 63,
     "traits": [
       "finisher"
     ]
@@ -10754,7 +10754,7 @@
     "name": "Daniel Assis Maia",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 52,
+    "strength": 57,
     "traits": [
       "pace"
     ]
@@ -10767,7 +10767,7 @@
     "name": "Joaquim Frazão Belchior",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 54,
+    "strength": 60,
     "traits": [
       "finisher"
     ]
@@ -10780,7 +10780,7 @@
     "name": "Charles Valadares Veiga",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 51,
+    "strength": 56,
     "traits": [
       "pace"
     ]
@@ -10793,7 +10793,7 @@
     "name": "Alan Moreira Teixeira",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 51,
+    "strength": 56,
     "traits": [
       "finisher"
     ]
@@ -10806,7 +10806,7 @@
     "name": "Jardel Prates Moura",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 42,
+    "strength": 47,
     "traits": [
       "finisher"
     ]
@@ -10819,7 +10819,7 @@
     "name": "Josias Jordão Bulhões",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 45,
+    "strength": 51,
     "traits": []
   },
   {
@@ -10830,7 +10830,7 @@
     "name": "Fred Guerra Amaro",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 70,
+    "strength": 71,
     "traits": []
   },
   {
@@ -10852,7 +10852,7 @@
     "name": "Cleber Martins Pinto",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 53,
+    "strength": 54,
     "traits": []
   },
   {
@@ -10876,7 +10876,7 @@
     "name": "Lauro Azevedo Lustosa",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 66,
+    "strength": 67,
     "traits": []
   },
   {
@@ -10911,7 +10911,7 @@
     "name": "Dênis Franco Correia",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 56,
+    "strength": 57,
     "traits": []
   },
   {
@@ -10922,7 +10922,7 @@
     "name": "Hamilton Henriques Azevedo",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 66,
+    "strength": 67,
     "traits": [
       "wall"
     ]
@@ -10960,7 +10960,7 @@
     "name": "Valter Gomes Soares",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 54,
+    "strength": 55,
     "traits": [
       "heading"
     ]
@@ -10973,7 +10973,7 @@
     "name": "Cauã Gonçalves Lago",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 58,
+    "strength": 59,
     "traits": [
       "playmaker"
     ]
@@ -10986,7 +10986,7 @@
     "name": "Danilo Carneiro Rego",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 55,
+    "strength": 56,
     "traits": [
       "playmaker"
     ]
@@ -10999,7 +10999,7 @@
     "name": "Gabriel Fonseca Lacerda",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 58,
+    "strength": 59,
     "traits": []
   },
   {
@@ -11054,7 +11054,7 @@
     "name": "Fred Calado Sanches",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 61,
+    "strength": 62,
     "traits": [
       "playmaker"
     ]
@@ -11067,7 +11067,7 @@
     "name": "Cláudio Vidal Valente",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 59,
+    "strength": 60,
     "traits": [
       "finisher"
     ]
@@ -11093,7 +11093,7 @@
     "name": "Augusto Duarte Xavier",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 62,
+    "strength": 63,
     "traits": []
   },
   {
@@ -11117,7 +11117,7 @@
     "name": "Ricardo Amaro Feitosa",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 58,
+    "strength": 61,
     "traits": []
   },
   {
@@ -11128,7 +11128,7 @@
     "name": "Bento Lins Sales",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 56,
+    "strength": 59,
     "traits": [
       "wall"
     ]
@@ -11141,7 +11141,7 @@
     "name": "Gabriel Ramos Silva",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 50,
+    "strength": 53,
     "traits": [
       "wall"
     ]
@@ -11154,7 +11154,7 @@
     "name": "Juliano Henriques Penteado",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 57,
+    "strength": 60,
     "traits": [
       "playmaker"
     ]
@@ -11167,7 +11167,7 @@
     "name": "Davi Teixeira Dornelles",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 59,
+    "strength": 63,
     "traits": []
   },
   {
@@ -11178,7 +11178,7 @@
     "name": "Gabriel Nascimento Duarte",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 58,
+    "strength": 61,
     "traits": [
       "heading"
     ]
@@ -11191,7 +11191,7 @@
     "name": "Élton Bastos Teixeira",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 43,
+    "strength": 46,
     "traits": [
       "heading",
       "pace"
@@ -11205,7 +11205,7 @@
     "name": "Allan Lima Nogueira",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 52,
+    "strength": 56,
     "traits": []
   },
   {
@@ -11216,7 +11216,7 @@
     "name": "Heverton Jardim Valença",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 54,
+    "strength": 58,
     "traits": []
   },
   {
@@ -11227,7 +11227,7 @@
     "name": "Felício Guimarães Jordão",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 57,
+    "strength": 61,
     "traits": [
       "wall"
     ]
@@ -11240,7 +11240,7 @@
     "name": "Yago Borges Chagas",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 54,
+    "strength": 58,
     "traits": [
       "pace"
     ]
@@ -11253,7 +11253,7 @@
     "name": "José Lima Nascimento",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 49,
+    "strength": 53,
     "traits": [
       "wall"
     ]
@@ -11266,7 +11266,7 @@
     "name": "Victor Delgado Lourenço",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 56,
+    "strength": 59,
     "traits": []
   },
   {
@@ -11277,7 +11277,7 @@
     "name": "Jonathan Rocha Assis",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 58,
+    "strength": 61,
     "traits": [
       "wall"
     ]
@@ -11290,7 +11290,7 @@
     "name": "Rafael Varela Penteado",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 43,
+    "strength": 47,
     "traits": [
       "playmaker"
     ]
@@ -11303,7 +11303,7 @@
     "name": "Willian Meireles Nogueira",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 43,
+    "strength": 46,
     "traits": [
       "wall"
     ]
@@ -11316,7 +11316,7 @@
     "name": "Anderson Dornelles Penteado",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 57,
+    "strength": 61,
     "traits": [
       "playmaker"
     ]
@@ -11329,7 +11329,7 @@
     "name": "Fagner Oliveira Bulhões",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 53,
+    "strength": 57,
     "traits": []
   },
   {
@@ -11340,7 +11340,7 @@
     "name": "Douglas Sanches Pestana",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 55,
+    "strength": 58,
     "traits": [
       "playmaker"
     ]
@@ -11353,7 +11353,7 @@
     "name": "Natanael Monteiro Mascarenhas",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 52,
+    "strength": 55,
     "traits": [
       "playmaker"
     ]
@@ -11366,7 +11366,7 @@
     "name": "Nélson Prates Mascarenhas",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 61,
+    "strength": 64,
     "traits": []
   },
   {
@@ -11377,7 +11377,7 @@
     "name": "Cristiano Jardim Brandão",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 58,
+    "strength": 61,
     "traits": []
   },
   {
@@ -11388,7 +11388,7 @@
     "name": "Hugo Guerra Quintana",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 55,
+    "strength": 58,
     "traits": []
   },
   {
@@ -11399,7 +11399,7 @@
     "name": "Ismael Prado Valente",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 44,
+    "strength": 47,
     "traits": [
       "finisher"
     ]
@@ -11412,7 +11412,7 @@
     "name": "Renato Cabral Rodrigues",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 57,
+    "strength": 61,
     "traits": []
   },
   {
@@ -11423,7 +11423,7 @@
     "name": "Josias Aragão Brás",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 51,
+    "strength": 55,
     "traits": [
       "wall"
     ]
@@ -11436,7 +11436,7 @@
     "name": "Saulo Sampaio Monteiro",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 40,
+    "strength": 44,
     "traits": []
   },
   {
@@ -11447,7 +11447,7 @@
     "name": "Hamilton Sales Pinto",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 58,
+    "strength": 62,
     "traits": []
   },
   {
@@ -11458,7 +11458,7 @@
     "name": "Moisés Aragão Rangel",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 54,
+    "strength": 58,
     "traits": []
   },
   {
@@ -11469,7 +11469,7 @@
     "name": "Alan Siqueira Veiga",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 50,
+    "strength": 55,
     "traits": [
       "pace"
     ]
@@ -11482,7 +11482,7 @@
     "name": "Alberto Paranhos Tourinho",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 37,
+    "strength": 42,
     "traits": [
       "heading"
     ]
@@ -11495,7 +11495,7 @@
     "name": "Cristiano Fernandes Esteves",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 60,
+    "strength": 64,
     "traits": [
       "heading",
       "wall"
@@ -11509,7 +11509,7 @@
     "name": "Joaquim Siqueira Penteado",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 54,
+    "strength": 59,
     "traits": [
       "pace"
     ]
@@ -11522,7 +11522,7 @@
     "name": "Augusto Muniz Mourão",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 52,
+    "strength": 57,
     "traits": []
   },
   {
@@ -11533,7 +11533,7 @@
     "name": "Marcos Bezerra Jardim",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 50,
+    "strength": 54,
     "traits": []
   },
   {
@@ -11544,7 +11544,7 @@
     "name": "Francisco Fernandes Barbosa",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 58,
+    "strength": 63,
     "traits": [
       "playmaker"
     ]
@@ -11557,7 +11557,7 @@
     "name": "Ivan Calheiros Jordão",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 48,
+    "strength": 53,
     "traits": []
   },
   {
@@ -11568,7 +11568,7 @@
     "name": "Adriano Vilela Capistrano",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 39,
+    "strength": 44,
     "traits": [
       "free-kick"
     ]
@@ -11581,7 +11581,7 @@
     "name": "Dorival Amorim Delgado",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 53,
+    "strength": 58,
     "traits": []
   },
   {
@@ -11592,7 +11592,7 @@
     "name": "Cleiton Teixeira Calheiros",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 52,
+    "strength": 57,
     "traits": [
       "pace"
     ]
@@ -11605,7 +11605,7 @@
     "name": "Sebastião Ribeiro Junqueira",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 54,
+    "strength": 58,
     "traits": []
   },
   {
@@ -11616,7 +11616,7 @@
     "name": "Anderson Aguiar Simões",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 49,
+    "strength": 53,
     "traits": [
       "free-kick"
     ]
@@ -11629,7 +11629,7 @@
     "name": "Emanuel Chagas Ferreira",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 55,
+    "strength": 59,
     "traits": []
   },
   {
@@ -11640,7 +11640,7 @@
     "name": "Cleber Rego Arantes",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 55,
+    "strength": 60,
     "traits": [
       "pace"
     ]
@@ -11653,7 +11653,7 @@
     "name": "Ricardo Gomes Aguiar",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 52,
+    "strength": 57,
     "traits": [
       "finisher",
       "heading"
@@ -11667,7 +11667,7 @@
     "name": "Paulo Sales Bragança",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 39,
+    "strength": 44,
     "traits": [
       "finisher"
     ]
@@ -11680,7 +11680,7 @@
     "name": "Iago Bastos Teles",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 43,
+    "strength": 48,
     "traits": []
   },
   {
@@ -11691,7 +11691,7 @@
     "name": "Fernando Bastos Seixas",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 58,
+    "strength": 59,
     "traits": []
   },
   {
@@ -11702,7 +11702,7 @@
     "name": "Jair Barbosa Brito",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 57,
+    "strength": 59,
     "traits": []
   },
   {
@@ -11713,7 +11713,7 @@
     "name": "Irineu Correia Bandeira",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 55,
+    "strength": 57,
     "traits": []
   },
   {
@@ -11724,7 +11724,7 @@
     "name": "Wesley Dornelles Brás",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 64,
+    "strength": 66,
     "traits": [
       "playmaker"
     ]
@@ -11737,7 +11737,7 @@
     "name": "Douglas Frazão Meireles",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 62,
+    "strength": 63,
     "traits": []
   },
   {
@@ -11748,7 +11748,7 @@
     "name": "Fernando Rocha Macedo",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 60,
+    "strength": 61,
     "traits": [
       "heading"
     ]
@@ -11761,7 +11761,7 @@
     "name": "Vicente Feitosa Bastos",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 55,
+    "strength": 57,
     "traits": [
       "playmaker"
     ]
@@ -11774,7 +11774,7 @@
     "name": "Giovani Costa Fagundes",
     "nationalityId": "val",
     "position": "FB",
-    "strength": 53,
+    "strength": 54,
     "traits": []
   },
   {
@@ -11785,7 +11785,7 @@
     "name": "Sebastião Damasceno Mattos",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 56,
+    "strength": 57,
     "traits": [
       "wall"
     ]
@@ -11798,7 +11798,7 @@
     "name": "Benedito Guerra Frota",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 59,
+    "strength": 61,
     "traits": []
   },
   {
@@ -11809,7 +11809,7 @@
     "name": "Nicolas Lago Pacheco",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 57,
+    "strength": 58,
     "traits": []
   },
   {
@@ -11820,7 +11820,7 @@
     "name": "Jean Martins Couto",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 50,
+    "strength": 52,
     "traits": [
       "heading"
     ]
@@ -11833,7 +11833,7 @@
     "name": "Victor Junqueira Pereira",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 49,
+    "strength": 50,
     "traits": [
       "heading",
       "wall"
@@ -11847,7 +11847,7 @@
     "name": "Cleber Mattos Jordão",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 63,
+    "strength": 65,
     "traits": []
   },
   {
@@ -11858,7 +11858,7 @@
     "name": "Murilo Braga Quaresma",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 58,
+    "strength": 59,
     "traits": [
       "playmaker",
       "heading"
@@ -11872,7 +11872,7 @@
     "name": "Caio Rebouças Abreu",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 55,
+    "strength": 57,
     "traits": [
       "playmaker"
     ]
@@ -11885,7 +11885,7 @@
     "name": "Willian Lustosa Alves",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 45,
+    "strength": 47,
     "traits": []
   },
   {
@@ -11896,7 +11896,7 @@
     "name": "Felipe Coimbra Infante",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 64,
+    "strength": 65,
     "traits": [
       "free-kick"
     ]
@@ -11909,7 +11909,7 @@
     "name": "Armando Xavier Mota",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 61,
+    "strength": 62,
     "traits": [
       "free-kick"
     ]
@@ -11922,7 +11922,7 @@
     "name": "Wendel Rangel Amorim",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 64,
+    "strength": 66,
     "traits": [
       "free-kick"
     ]
@@ -11935,7 +11935,7 @@
     "name": "Ricardo Viana Prates",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 60,
+    "strength": 62,
     "traits": [
       "playmaker"
     ]
@@ -11948,7 +11948,7 @@
     "name": "Caio Abreu Junqueira",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 52,
+    "strength": 53,
     "traits": [
       "playmaker"
     ]
@@ -11961,7 +11961,7 @@
     "name": "Kauã Farias Nascimento",
     "nationalityId": "val",
     "position": "MF",
-    "strength": 47,
+    "strength": 49,
     "traits": []
   },
   {
@@ -11972,7 +11972,7 @@
     "name": "Márcio Cruz Vidal",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 65,
+    "strength": 66,
     "traits": [
       "pace"
     ]
@@ -11985,7 +11985,7 @@
     "name": "Jéferson Pinto Magalhães",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 58,
+    "strength": 59,
     "traits": []
   },
   {
@@ -11996,7 +11996,7 @@
     "name": "Kelvin Torres Campos",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 57,
+    "strength": 59,
     "traits": [
       "finisher"
     ]
@@ -12009,7 +12009,7 @@
     "name": "Fagner Monteiro Braga",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 54,
+    "strength": 56,
     "traits": []
   },
   {
@@ -12020,7 +12020,7 @@
     "name": "Gabriel Campos Delgado",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 57,
+    "strength": 59,
     "traits": [
       "pace"
     ]
@@ -12044,7 +12044,7 @@
     "name": "Benedito Neves Couto",
     "nationalityId": "val",
     "position": "GK",
-    "strength": 61,
+    "strength": 60,
     "traits": [
       "wall"
     ]
@@ -12116,7 +12116,7 @@
     "name": "Lindomar Andrade Matos",
     "nationalityId": "val",
     "position": "CB",
-    "strength": 72,
+    "strength": 71,
     "traits": [
       "pace"
     ]
@@ -12178,7 +12178,7 @@
     "name": "Vicente Resende Mesquita",
     "nationalityId": "val",
     "position": "DM",
-    "strength": 58,
+    "strength": 57,
     "traits": [
       "playmaker",
       "free-kick"
@@ -12289,7 +12289,7 @@
     "name": "Wallace Zago Simões",
     "nationalityId": "val",
     "position": "FW",
-    "strength": 59,
+    "strength": 58,
     "traits": [
       "free-kick"
     ]

@@ -200,3 +200,10 @@ Cada item segue o formato Decisão / Razão / Alternativas consideradas.
 - **Alternativas**: plugin GritQL do Biome para `Math.random` (possível, mas o escopo por
   diretório de plugins é menos maduro; pode ser somado depois para feedback no editor);
   dependency-cruiser (mais uma ferramenta para o que Biome, tsconfig e teste já resolvem).
+
+## Nota (feature 003)
+
+A calibragem de R12 foi revista na feature 003: o nível técnico ficou mais achatado
+(49,9 + 0,22 × reputação) e o FR-033 foi emendado (Série A ≥ 4 acima da B; grandes ≥ 5,5 acima dos
+pequenos), para que a temporada não fosse previsível demais. Detalhes em
+`specs/003-temporada-pontos-corridos/research.md` R12.

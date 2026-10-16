@@ -44,7 +44,7 @@ export function pickShooter(
   const kindTrait = KIND_TRAIT[kind];
   return pick(rng, players, ({ player, slotPosition }) => {
     let weight = MATCH_TUNING.shooterWeight[slotPosition] * player.strength;
-    if (has(player, "finisher")) weight *= 1.5;
+    if (has(player, "finisher")) weight *= 1.3;
     if (kindTrait && has(player, kindTrait))
       weight *= kind === "penalty" || kind === "free_kick" ? 6 : 2;
     return weight;

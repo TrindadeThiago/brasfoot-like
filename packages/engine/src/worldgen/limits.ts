@@ -40,8 +40,10 @@ export const DISTRIBUTION_LIMITS = {
 
   /** FR-033: hierarquia, pela média dos 16 melhores de cada clube. */
   topN: 16,
-  minGapSerieAOverB: 5,
-  minGapBigOverSmallInA: 8,
+  // Relaxados de 5 e 8 na feature 003: a hierarquia anterior deixava a temporada previsível
+  // demais (campeão com até 99 pontos). Ver specs/003-temporada-pontos-corridos/research.md R12.
+  minGapSerieAOverB: 4,
+  minGapBigOverSmallInA: 5.5,
 
   /** FR-034: idades. */
   ageRange: [16, 37],
