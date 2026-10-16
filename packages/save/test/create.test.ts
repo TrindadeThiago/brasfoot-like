@@ -5,7 +5,7 @@ import mod from "@brasfoot-like/default-mod/mod.json" with { type: "json" };
 import players from "@brasfoot-like/default-mod/players.json" with { type: "json" };
 import { joinBankFiles } from "@brasfoot-like/engine";
 import { describe, expect, it } from "vitest";
-import { createSave } from "../src";
+import { createSave, SAVE_FORMAT_VERSION } from "../src";
 
 const defaultBank = () =>
   joinBankFiles({
@@ -37,7 +37,7 @@ describe("createSave (FR-001, FR-003)", () => {
     if (!result.ok) throw new Error(JSON.stringify(result.error));
     const save = result.save;
     expect(save).toMatchObject({
-      formatVersion: 1,
+      formatVersion: SAVE_FORMAT_VERSION,
       id: "carreira-1",
       createdAt: "2026-10-16T12:00:00.000Z",
       savedAt: "2026-10-16T12:00:00.000Z",

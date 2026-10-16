@@ -1,6 +1,15 @@
-import { validateBank } from "@brasfoot-like/engine";
+import {
+  type CompletedBank,
+  clubUnavailability,
+  FORMATION_IDS,
+  POSTURES,
+  type Season,
+  validateBank,
+  validateLineup,
+} from "@brasfoot-like/engine";
 import { z } from "zod";
 import { MANAGER_NAME_MAX, SAVE_FORMAT_VERSION, type SaveFile } from "./format";
+import { initialLineup } from "./lineup";
 
 /** Transforma um save da versão `from` na versão `from + 1`. */
 export interface Migration {
@@ -8,8 +17,30 @@ export interface Migration {
   migrate(raw: unknown): unknown;
 }
 
-/** Migrações reais do formato; vazio enquanto só existe a versão 1. */
-export const MIGRATIONS: readonly Migration[] = [];
+/** v1 → v2: a carreira ganha a escalação do jogador (automática no esquema do clube). */
+const addLineup: Migration = {
+  from: 1,
+  migrate(raw) {
+    const save = raw as { bank: CompletedBank; season: Season; clubId: string };
+    return {
+      ...(raw as object),
+      formatVersion: 2,
+      lineup: initialLineup(save.bank, save.season, save.clubId),
+    };
+  },
+};
+
+/** Migrações reais do formato, em ordem. */
+export const MIGRATIONS: readonly Migration[] = [addLineup];
+
+/** Problemas que tornam a escalação gravada ilegível (os demais o jogo corrige ou avisa). */
+const BROKEN_LINEUP = new Set([
+  "unknown_formation",
+  "unknown_slot",
+  "duplicate_player",
+  "not_in_squad",
+  "bench_too_large",
+]);
 
 export type LoadResult =
   | { status: "ok"; save: SaveFile; migratedFrom?: number }
@@ -33,6 +64,13 @@ const envelopeSchema = z.object({
     records: z.array(z.unknown()),
     status: z.record(z.string(), z.unknown()),
   }),
+  lineup: z.object({
+    formation: z.enum(FORMATION_IDS),
+    posture: z.enum(POSTURES),
+    starters: z.record(z.string(), z.string()),
+    bench: z.array(z.string()),
+  }),
+  lineupNotice: z.array(z.object({ kind: z.string() }).loose()).optional(),
 });
 
 function versionOf(raw: unknown): number | undefined {
@@ -76,6 +114,15 @@ export function migrateSave(
   if (!validateBank(save.bank).ok) return { status: "corrupt", reason: "banco inválido" };
   if (!save.season.clubIds.includes(save.clubId) || String(save.season.seed) !== save.seed) {
     return { status: "corrupt", reason: "temporada incoerente com a carreira" };
+  }
+  const squad = save.bank.players.filter((player) => player.clubId === save.clubId);
+  const lineup = validateLineup(
+    save.lineup,
+    squad,
+    clubUnavailability(save.season, save.bank, save.clubId),
+  );
+  if (lineup.issues.some((issue) => BROKEN_LINEUP.has(issue.code))) {
+    return { status: "corrupt", reason: "escalação inválida" };
   }
   return original === target
     ? { status: "ok", save }
