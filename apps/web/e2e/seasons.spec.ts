@@ -30,6 +30,9 @@ test("Série B: temporada direto, resumo, próxima temporada e rodada ao vivo (S
   await page.getByRole("button", { name: t("seasonEnd.next") }).click();
   await expect(page.getByText(/temporada 2028 · rodada 1 de 38/)).toBeVisible();
   expect(Date.now() - started).toBeLessThan(2_000);
+  await expect(
+    page.getByRole("region", { name: t("renewal.notice.title", { year: 2028 }) }),
+  ).toBeVisible();
 
   await page.getByRole("button", { name: t("home.playLive") }).click();
   await expect(page).toHaveURL(/rodada/);

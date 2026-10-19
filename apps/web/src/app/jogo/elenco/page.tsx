@@ -20,6 +20,7 @@ import {
 } from "../../../storage/preferences";
 import { Button } from "../../../ui/Button";
 import { type Column, DataTable } from "../../../ui/DataTable";
+import { evolutionText, lastEvolution } from "../../../ui/evolution-text";
 import { conditionText } from "../../../ui/PlayerCondition";
 import { PlayerDetails } from "../../../ui/PlayerDetails";
 import styles from "./page.module.css";
@@ -109,6 +110,13 @@ function SquadScreen({ save }: { save: SaveFile }) {
     },
     { key: "status", header: t("col.status"), render: status, sortValue: status },
     { key: "lineup", header: t("col.inLineup"), render: placeOf, sortValue: placeOf },
+    {
+      key: "evolution",
+      header: t("col.evolution"),
+      render: (player) => evolutionText(lastEvolution(save, player.id)),
+      sortValue: (player) => lastEvolution(save, player.id),
+      align: "right",
+    },
     {
       key: "actions",
       header: t("col.actions"),

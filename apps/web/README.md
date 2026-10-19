@@ -29,6 +29,9 @@ chromium`. No Linux/WSL ele precisa das bibliotecas do sistema (`sudo pnpm --fil
   dinâmicas.
 - `src/game/useLiveRound.ts` — relógio da rodada ao vivo (velocidade, pausa, pausa automática,
   decisões, feed); o motor só recebe passos e decisões, nunca tempo real.
+- Elenco: coluna "Evolução" com a variação de força da última evolução (meio e fim da temporada);
+  Início da nova temporada: cartão "Mudanças no elenco" (aposentados, jovens, dispensas,
+  promoções, maiores altas e quedas).
 - `src/game/` — `GameProvider` (criar, abrir, apagar, jogar a rodada da liga com as finanças,
   virada de temporada, ações financeiras — preço, crédito, obras —, salvar; escalação: esquema, postura, trocar jogadores, escalar automaticamente, aviso
   de ajuste), seletores (inclusive o resumo de fim de temporada), `useDivision` (divisão escolhida
