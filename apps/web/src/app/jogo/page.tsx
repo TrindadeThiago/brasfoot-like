@@ -1,6 +1,7 @@
 "use client";
 
-import { isSeasonOver } from "@brasfoot-like/engine";
+import { isLeagueSeasonOver, leagueRound, leagueTotalRounds } from "@brasfoot-like/engine";
+import { divisionNameOf, userDivisionLevel, userSeason } from "@brasfoot-like/save";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { GameLayout } from "../../game/GameLayout";
@@ -21,14 +22,14 @@ export default function HomePage() {
     <GameLayout>
       {(save, game) => {
         const clubs = new Map(save.bank.clubs.map((club) => [club.id, club]));
-        const over = isSeasonOver(save.season);
-        const next = nextFixture(save.season, save.clubId);
+        const over = isLeagueSeasonOver(save.league);
+        const next = nextFixture(userSeason(save), save.clubId);
         const opponent = next ? clubs.get(next.opponentId) : undefined;
-        const position = clubPosition(save.season, save.bank, save.clubId);
-        const results = lastResults(save.season, save.clubId, 5);
+        const position = clubPosition(userSeason(save), save.bank, save.clubId);
+        const results = lastResults(userSeason(save), save.clubId, 5);
         const lastRound = game.state.lastRound;
         const play = async (mode: "live" | "direct") => {
-          const last = save.season.nextRound === save.season.calendar.length;
+          const last = leagueRound(save.league) === leagueTotalRounds(save.league);
           const outcome = await game.playRound(mode);
           if (outcome === "live") router.push(screenHref("/jogo/rodada", save.id));
           if (outcome === "done" && last) {
@@ -45,13 +46,23 @@ export default function HomePage() {
             <section aria-label={t("home.nextMatch")} className={styles.card}>
               <h2>{t("home.nextMatch")}</h2>
               {over ? (
-                <p>{t("home.seasonOver", { position })}</p>
+                <p>
+                  {t("home.seasonOver", {
+                    position,
+                    division: divisionNameOf(save, userDivisionLevel(save)),
+                  })}
+                </p>
               ) : next && opponent ? (
                 <div className={styles.next}>
                   <Crest crest={opponent.crest} label={opponent.name} size={56} />
                   <div>
                     <strong>{opponent.name}</strong>
                     <span>{next.isHome ? t("home.homeGame") : t("home.awayGame")}</span>
+                    <span>
+                      {t("home.division", {
+                        division: divisionNameOf(save, userDivisionLevel(save)),
+                      })}
+                    </span>
                     <span>{t("home.roundLabel", { round: next.round })}</span>
                   </div>
                 </div>
@@ -65,9 +76,14 @@ export default function HomePage() {
                 </Button>
               </div>
               {over ? (
-                <Link href={screenHref("/jogo/fim-de-temporada", save.id)}>
-                  {t("home.seasonEndLink")}
-                </Link>
+                <div className={styles.actions}>
+                  <Link href={screenHref("/jogo/fim-de-temporada", save.id)}>
+                    {t("home.seasonEndLink")}
+                  </Link>
+                  <Button variant="primary" onClick={() => void game.advanceToNextSeason()}>
+                    {t("home.nextSeason")}
+                  </Button>
+                </div>
               ) : null}
             </section>
             <section aria-label={t("home.position")} className={styles.card}>

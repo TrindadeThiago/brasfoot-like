@@ -1,7 +1,7 @@
 "use client";
 
 import { ageOn, clubUnavailability, seasonStats } from "@brasfoot-like/engine";
-import type { SaveFile } from "@brasfoot-like/save";
+import { currentDate, type SaveFile, userSeason } from "@brasfoot-like/save";
 import { label, useT } from "../i18n";
 import { Button } from "./Button";
 import { Dialog } from "./Dialog";
@@ -33,17 +33,14 @@ export function PlayerDetails({
   const player = playerId ? save.bank.players.find((entry) => entry.id === playerId) : undefined;
   if (!player) return null;
   const country = save.bank.countries.find((entry) => entry.id === player.nationalityId);
-  const condition = clubUnavailability(save.season, save.bank, save.clubId).find(
+  const condition = clubUnavailability(userSeason(save), save.bank, save.clubId).find(
     (entry) => entry.playerId === player.id,
   );
-  const stats = seasonStats(save.season).find((entry) => entry.playerId === player.id);
+  const stats = seasonStats(userSeason(save)).find((entry) => entry.playerId === player.id);
   const visible: [string, string][] = [
     ["player.position", label(`position.${player.position}`)],
     ["player.strength", String(player.strength)],
-    [
-      "player.age",
-      t("player.ageValue", { age: ageOn(player.birthDate, save.bank.manifest.referenceDate) }),
-    ],
+    ["player.age", t("player.ageValue", { age: ageOn(player.birthDate, currentDate(save)) })],
     ["player.nationality", country?.name ?? ""],
     [
       "player.traits",

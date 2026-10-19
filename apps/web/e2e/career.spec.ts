@@ -5,17 +5,17 @@ test("criar carreira, recarregar e continuar na mesma rodada (SC-002)", async ({
   const club = await createCareer(page, "Ana Souza", 2);
   await simulate(page, 3);
   await expect(
-    page.getByText(t("header.progress", { year: 2027, round: 4, total: 38 })),
+    page.getByText(t("header.progress", { year: 2027, round: 4, total: 38, division: "Série A" })),
   ).toBeVisible();
   await page.reload();
   await expect(
-    page.getByText(t("header.progress", { year: 2027, round: 4, total: 38 })),
+    page.getByText(t("header.progress", { year: 2027, round: 4, total: 38, division: "Série A" })),
   ).toBeVisible();
   await page.goto("/");
   await page.getByRole("link", { name: new RegExp(t("opening.continue")) }).click();
   await expect(page.getByRole("heading", { name: club })).toBeVisible();
   await expect(
-    page.getByText(t("header.progress", { year: 2027, round: 4, total: 38 })),
+    page.getByText(t("header.progress", { year: 2027, round: 4, total: 38, division: "Série A" })),
   ).toBeVisible();
 });
 

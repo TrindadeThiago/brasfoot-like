@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { MIGRATIONS, type Migration, migrateSave, SAVE_FORMAT_VERSION } from "../src";
-import { validSave } from "./fixtures";
+import { saveV1, validSave } from "./fixtures";
 
 /** Save "v0" simulado: o técnico ficava em `coach` e não havia `createdAt`. */
 function legacyV0() {
-  const { managerName, createdAt: _createdAt, lineup: _lineup, ...rest } = validSave();
+  const { managerName, createdAt: _createdAt, ...rest } = saveV1();
   return { ...rest, formatVersion: 0, coach: managerName };
 }
 
@@ -33,7 +33,8 @@ describe("migrateSave (FR-009, FR-010, SC-004)", () => {
     expect(result.migratedFrom).toBe(0);
     expect(result.save.formatVersion).toBe(SAVE_FORMAT_VERSION);
     expect(result.save.managerName).toBe("Ana Souza");
-    expect(result.save.season).toEqual(validSave().season);
+    expect(result.save.league.divisions[0]).toEqual(validSave().league.divisions[0]);
+    expect(result.save.league).toEqual(validSave().league);
     expect(result.save.bank).toEqual(validSave().bank);
     expect(result.save.lineup).toEqual(validSave().lineup);
   });
@@ -41,6 +42,13 @@ describe("migrateSave (FR-009, FR-010, SC-004)", () => {
   it("aplica as migrações em cadeia, na ordem", () => {
     const order: number[] = [];
     const chain: Migration[] = [
+      {
+        from: 2,
+        migrate: (raw) => {
+          order.push(2);
+          return (MIGRATIONS[1] as Migration).migrate(raw);
+        },
+      },
       {
         from: 1,
         migrate: (raw) => {
@@ -56,8 +64,8 @@ describe("migrateSave (FR-009, FR-010, SC-004)", () => {
         },
       },
     ];
-    const result = migrateSave(legacyV0(), chain, 2);
-    expect(order).toEqual([0, 1]);
+    const result = migrateSave(legacyV0(), chain, 3);
+    expect(order).toEqual([0, 1, 2]);
     expect(result.status).toBe("ok");
   });
 
@@ -75,7 +83,7 @@ describe("migrateSave (FR-009, FR-010, SC-004)", () => {
     ["lixo", "não é um save"],
     ["sem campos", { formatVersion: 1 }],
     ["banco inválido", { ...validSave(), bank: { manifest: {} } }],
-    ["temporada de outro formato", { ...validSave(), season: { nextRound: "x" } }],
+    ["liga de outro formato", { ...validSave(), league: { divisions: "x" } }],
     ["clube fora da temporada", { ...validSave(), clubId: "clube-999" }],
     ["sem migração para a versão", { ...validSave(), formatVersion: 0 }],
   ])("%s ⇒ corrupt", (_, raw) => {

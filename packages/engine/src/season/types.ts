@@ -16,6 +16,10 @@ export interface SeasonOptions {
   divisionLevel: number;
   seed: string | number;
   rules?: Partial<DisciplineRules>;
+  /** Composição da divisão nesta temporada; padrão: a do banco (research.md 007 R4). */
+  clubIds?: readonly string[];
+  /** Situação inicial dos jogadores, como lesões herdadas da temporada anterior (R7). */
+  status?: Record<string, PlayerStatus>;
 }
 
 export interface Fixture {

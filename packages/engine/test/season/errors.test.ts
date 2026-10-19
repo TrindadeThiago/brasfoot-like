@@ -1,4 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { createLeagueSeason } from "../../src/career/league";
+import { advanceLeague } from "../../src/career/league-round";
+import { seasonTurnover } from "../../src/career/turnover";
+import type { LeagueSeason } from "../../src/career/types";
 import type { Lineup } from "../../src/match/types";
 import type { CompletedBank } from "../../src/model/types";
 import {
@@ -47,6 +51,23 @@ interface ErrorCase {
 }
 
 const competitionId = serieAOptions(1).competitionId;
+
+function league(): LeagueSeason {
+  const result = createLeagueSeason(testWorld(), { competitionId, careerSeed: "erros" });
+  if (!result.ok) throw new Error(JSON.stringify(result.error));
+  return result.league;
+}
+
+let finished: LeagueSeason | undefined;
+/** Liga de teste jogada até o fim (calculada uma vez). */
+function finishedLeague(): LeagueSeason {
+  if (!finished) {
+    const result = advanceLeague(league(), testWorld(), { toEnd: true });
+    if (!result.ok) throw new Error(JSON.stringify(result.error));
+    finished = result.league;
+  }
+  return finished;
+}
 
 const CASES: ErrorCase[] = [
   {
@@ -139,6 +160,52 @@ const CASES: ErrorCase[] = [
       return result.ok ? undefined : result.error;
     },
     params: { clubId: "clube-999", round: 1 },
+  },
+  {
+    code: "season.invalid_composition",
+    run: () => {
+      const result = createSeason(testWorld(), {
+        ...serieAOptions(1),
+        clubIds: ["clube-001", "clube-001"],
+      });
+      return result.ok ? undefined : result.error;
+    },
+    params: { level: 1, reason: "clube repetido" },
+  },
+  {
+    code: "turnover.season_not_over",
+    run: () => {
+      const result = seasonTurnover(league(), testWorld(), [], { careerSeed: "erros" });
+      return result.ok ? undefined : result.error;
+    },
+    params: { round: 1 },
+  },
+  {
+    code: "turnover.invalid_steps",
+    run: () => {
+      const result = seasonTurnover(finishedLeague(), testWorld(), [], {
+        careerSeed: "erros",
+        extraSteps: [{ step: { id: "financas", run: (context) => context }, after: "mercado" }],
+      });
+      return result.ok ? undefined : result.error;
+    },
+    params: { stepId: "financas", reason: "âncora inexistente: mercado" },
+  },
+  {
+    code: "turnover.invalid_result",
+    run: () => {
+      const result = seasonTurnover(finishedLeague(), testWorld(), [], {
+        careerSeed: "erros",
+        extraSteps: [
+          {
+            step: { id: "sem-calendario", run: ({ league: _league, ...context }) => context },
+            after: "generate-calendars",
+          },
+        ],
+      });
+      return result.ok ? undefined : result.error;
+    },
+    params: { reason: "a etapa generate-calendars não criou a temporada" },
   },
 ];
 

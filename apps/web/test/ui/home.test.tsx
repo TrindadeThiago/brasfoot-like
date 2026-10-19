@@ -1,3 +1,4 @@
+import { userSeason } from "@brasfoot-like/save";
 import { screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { t } from "../../src/i18n";
@@ -9,7 +10,7 @@ describe("Início do clube (FR-016)", () => {
     const { store, save } = await storedCareer(6);
     renderApp("/jogo?c=tela", store);
     const next = await screen.findByRole("region", { name: t("home.nextMatch") });
-    const fixture = save.season.calendar[5]?.fixtures.find(
+    const fixture = userSeason(save).calendar[5]?.fixtures.find(
       (entry) => entry.home === save.clubId || entry.away === save.clubId,
     );
     const opponentId = fixture?.home === save.clubId ? fixture?.away : fixture?.home;

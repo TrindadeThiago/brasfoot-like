@@ -4,9 +4,12 @@ import { createCareer, t } from "./helpers";
 interface StoredSave {
   clubId: string;
   lineup: { posture: string; starters: Record<string, string>; bench: string[] };
-  season: {
-    nextRound: number;
-    records: { round: number; home: string; away: string; players: Record<string, unknown> }[];
+  league: {
+    divisions: {
+      clubIds: string[];
+      nextRound: number;
+      records: { round: number; home: string; away: string; players: Record<string, unknown> }[];
+    }[];
   };
   bank: { players: { id: string; displayName: string; clubId: string }[] };
 }
@@ -54,10 +57,11 @@ test("escalar, simular e recarregar mantém a escalação usada na partida (SC-0
   await page.locator("body").click({ position: { x: 5, y: 5 } });
   await page.keyboard.press("d");
   await expect(
-    page.getByText(t("header.progress", { year: 2027, round: 2, total: 38 })),
+    page.getByText(t("header.progress", { year: 2027, round: 2, total: 38, division: "Série A" })),
   ).toBeVisible();
   const after = await storedSave(page);
-  const record = after.season.records.find(
+  const season = after.league.divisions.find((entry) => entry.clubIds.includes(after.clubId));
+  const record = season?.records.find(
     (entry) => entry.round === 1 && (entry.home === after.clubId || entry.away === after.clubId),
   );
   expect(record?.players[inId]).toBeDefined();

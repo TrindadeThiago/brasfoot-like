@@ -30,6 +30,6 @@ test("rodada ao vivo: relógio corre, pausa com substituição, termina e mostra
   );
   await page.getByRole("link", { name: t("round.toHome") }).click();
   await expect(
-    page.getByText(t("header.progress", { year: 2027, round: 2, total: 38 })),
+    page.getByText(t("header.progress", { year: 2027, round: 2, total: 38, division: "Série A" })),
   ).toBeVisible();
 });

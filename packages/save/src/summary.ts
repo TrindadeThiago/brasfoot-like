@@ -1,4 +1,10 @@
-import type { Crest } from "@brasfoot-like/engine";
+import {
+  type Crest,
+  isLeagueSeasonOver,
+  leagueRound,
+  leagueTotalRounds,
+} from "@brasfoot-like/engine";
+import { userDivisionLevel } from "./career";
 import type { SaveFile } from "./format";
 
 /** O necessário para a lista de carreiras, sem abrir o save inteiro (FR-007). */
@@ -9,6 +15,10 @@ export interface SaveSummary {
   clubId: string;
   clubName: string;
   clubCrest: Crest;
+  /** Nível da divisão do clube do jogador (007). */
+  divisionLevel: number;
+  /** Nome da divisão do clube do jogador, vindo do mod. */
+  divisionName: string;
   seasonYear: number;
   round: number;
   totalRounds: number;
@@ -16,13 +26,21 @@ export interface SaveSummary {
   savedAt: string;
 }
 
+/** Nome (do mod) da divisão de um nível na competição da carreira. */
+export function divisionNameOf(save: SaveFile, level: number): string {
+  const division = save.bank.competitions
+    .find((entry) => entry.id === save.league.competitionId)
+    ?.divisions.find((entry) => entry.level === level);
+  return division?.name ?? String(level);
+}
+
 export function seasonYearOf(save: SaveFile): number {
-  return Number(save.bank.manifest.referenceDate.slice(0, 4));
+  return save.league.year;
 }
 
 export function summarize(save: SaveFile): SaveSummary {
   const club = save.bank.clubs.find((entry) => entry.id === save.clubId);
-  const totalRounds = save.season.calendar.length;
+  const totalRounds = leagueTotalRounds(save.league);
   return {
     id: save.id,
     formatVersion: save.formatVersion,
@@ -30,10 +48,12 @@ export function summarize(save: SaveFile): SaveSummary {
     clubId: save.clubId,
     clubName: club?.name ?? save.clubId,
     clubCrest: club?.crest ?? { shape: "classic", colors: ["#888888", "#FFFFFF"], initials: "?" },
+    divisionLevel: userDivisionLevel(save),
+    divisionName: divisionNameOf(save, userDivisionLevel(save)),
     seasonYear: seasonYearOf(save),
-    round: Math.min(save.season.nextRound, totalRounds),
+    round: Math.min(leagueRound(save.league), totalRounds),
     totalRounds,
-    seasonOver: save.season.nextRound > totalRounds,
+    seasonOver: isLeagueSeasonOver(save.league),
     savedAt: save.savedAt,
   };
 }

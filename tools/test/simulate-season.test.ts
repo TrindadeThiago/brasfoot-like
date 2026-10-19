@@ -24,4 +24,15 @@ describe("sim:season", () => {
     const criteria = lines.filter((line) => /^[✓✗] /.test(line));
     expect(criteria).toHaveLength(9);
   }, 60000);
+
+  it("carreira: campeões, quem sobe e desce e 20/20 a cada temporada", () => {
+    const { exitCode, lines } = runSimulateSeason({ seed: "42", career: 2 });
+    expect(exitCode).toBe(0);
+    expect(lines.filter((line) => line.startsWith("Temporada "))).toHaveLength(2);
+    expect(lines.filter((line) => /^\s+sobem: /.test(line))).toHaveLength(2);
+    expect(lines.filter((line) => /^\s+descem: /.test(line))).toHaveLength(2);
+    expect(
+      lines.filter((line) => line.includes("✓ clubes por divisão") && line.endsWith("20/20")),
+    ).toHaveLength(2);
+  }, 60000);
 });

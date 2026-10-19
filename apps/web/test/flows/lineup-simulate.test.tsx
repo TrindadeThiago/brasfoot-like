@@ -1,4 +1,4 @@
-import type { SaveFile } from "@brasfoot-like/save";
+import { type SaveFile, userSeason } from "@brasfoot-like/save";
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
@@ -41,9 +41,9 @@ describe("escalação do jogador nas partidas (US1, US3)", () => {
     const home = renderApp("/jogo?c=tela", store);
     await user.click(await screen.findByRole("button", { name: t("home.simulate") }));
     await screen.findByRole("region", { name: t("home.lastRound", { round: 1 }) });
-    await waitFor(async () => expect((await loadStored(store)).season.nextRound).toBe(2));
+    await waitFor(async () => expect(userSeason(await loadStored(store)).nextRound).toBe(2));
     const stored = await loadStored(store);
-    const record = stored.season.records.find(
+    const record = userSeason(stored).records.find(
       (entry) =>
         entry.round === 1 && (entry.home === stored.clubId || entry.away === stored.clubId),
     );
@@ -70,7 +70,7 @@ describe("escalação do jogador nas partidas (US1, US3)", () => {
       expect(within(pitch()).getByText(nameOf(save, playerId))).toBeDefined();
     }
     await waitFor(async () => expect((await loadStored(store)).lineup.formation).toBe(other));
-    expect((await loadStored(store)).season.formations[save.clubId]).toBe(other);
+    expect(userSeason(await loadStored(store)).formations[save.clubId]).toBe(other);
   });
 
   it("escalação inválida não deixa simular e leva à escalação (SC-001)", async () => {
@@ -86,7 +86,7 @@ describe("escalação do jogador nas partidas (US1, US3)", () => {
     expect(
       within(dialog).getByText(t("lineupIssue.empty_slot", { position: label("position.GK") })),
     ).toBeDefined();
-    expect((await loadStored(store)).season.nextRound).toBe(1);
+    expect(userSeason(await loadStored(store)).nextRound).toBe(1);
     await user.click(within(dialog).getByRole("button", { name: t("simulate.goToLineup") }));
     await waitFor(() => expect(memoryRouter.pathname()).toBe("/jogo/escalacao"));
     expect(save).toBeDefined();
@@ -96,7 +96,7 @@ describe("escalação do jogador nas partidas (US1, US3)", () => {
     const { store, save } = await storedCareer(1);
     const suspendedId = outsideOf(save)[0] as string;
     const raw = await loadStored(store);
-    raw.season.status[suspendedId] = { yellows: 0, suspension: 1, injury: 0 };
+    userSeason(raw).status[suspendedId] = { yellows: 0, suspension: 1, injury: 0 };
     await store.save(raw, raw.savedAt);
     renderApp("/jogo/escalacao?c=tela", store);
     const user = userEvent.setup();
@@ -111,7 +111,7 @@ describe("escalação do jogador nas partidas (US1, US3)", () => {
     await user.keyboard("s");
     const dialog = await screen.findByRole("dialog", { name: t("simulate.invalidTitle") });
     expect(within(dialog).getByText(new RegExp(nameOf(save, suspendedId)))).toBeDefined();
-    expect((await loadStored(store)).season.nextRound).toBe(1);
+    expect(userSeason(await loadStored(store)).nextRound).toBe(1);
   });
 
   it("jogador de linha no gol pede confirmação; 'Jogar mesmo assim' simula", async () => {
@@ -128,14 +128,14 @@ describe("escalação do jogador nas partidas (US1, US3)", () => {
     await user.click(await screen.findByRole("button", { name: t("home.simulate") }));
     const dialog = await screen.findByRole("dialog", { name: t("simulate.noGoalkeeperTitle") });
     await user.click(within(dialog).getByRole("button", { name: t("simulate.playAnyway") }));
-    await waitFor(async () => expect((await loadStored(store)).season.nextRound).toBe(2));
+    await waitFor(async () => expect(userSeason(await loadStored(store)).nextRound).toBe(2));
   });
 
   it("depois de uma lesão a escalação é ajustada com aviso, que pode ser dispensado e sobrevive ao reload", async () => {
     const { store, save } = await storedCareer(1);
     const starter = Object.values(save.lineup.starters)[3] as string;
     const raw = await loadStored(store);
-    raw.season.status[starter] = { yellows: 0, suspension: 0, injury: 2 };
+    userSeason(raw).status[starter] = { yellows: 0, suspension: 0, injury: 2 };
     await store.save(raw, raw.savedAt);
     const first = renderApp("/jogo?c=tela", store);
     const notice = await screen.findByRole("region", { name: t("lineupChange.title") });

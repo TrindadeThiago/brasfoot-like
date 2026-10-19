@@ -1,44 +1,57 @@
 "use client";
 
-import { isSeasonOver, standings } from "@brasfoot-like/engine";
-import { type SaveFile, seasonYearOf } from "@brasfoot-like/save";
+import { isLeagueSeasonOver } from "@brasfoot-like/engine";
+import type { SaveFile } from "@brasfoot-like/save";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { GameLayout } from "../../../game/GameLayout";
+import type { useGame } from "../../../game/GameProvider";
+import { seasonEndSummary } from "../../../game/selectors";
 import { useT } from "../../../i18n";
-import { Crest } from "../../../ui/Crest";
-import { StandingsTable } from "../../../ui/StandingsTable";
+import { screenHref } from "../../../ui/AppHeader";
+import { Button } from "../../../ui/Button";
+import { SeasonSummary } from "../../../ui/SeasonSummary";
+import { useShortcuts } from "../../../ui/useShortcuts";
 import styles from "./page.module.css";
 
-function SeasonEnd({ save }: { save: SaveFile }) {
+type Game = ReturnType<typeof useGame>;
+
+function SeasonEnd({ save, game }: { save: SaveFile; game: Game }) {
   const t = useT();
-  const year = seasonYearOf(save);
-  const table = standings(save.season, save.bank);
-  const championRow = table[0];
-  const champion = save.bank.clubs.find((club) => club.id === championRow?.clubId);
-  const mine = table.find((row) => row.clubId === save.clubId);
-  const club = save.bank.clubs.find((entry) => entry.id === save.clubId);
-  if (!isSeasonOver(save.season) || !championRow || !champion) return null;
+  const router = useRouter();
+  const [state, setState] = useState<"idle" | "busy" | "failed">("idle");
+  const over = isLeagueSeasonOver(save.league);
+  const next = async () => {
+    if (!over || state === "busy") return;
+    setState("busy");
+    const outcome = await game.advanceToNextSeason();
+    if (outcome === "done") router.push(screenHref("/jogo", save.id));
+    else setState("failed");
+  };
+  useShortcuts({ n: () => void next() });
+  if (!over) {
+    return (
+      <p className={styles.note}>
+        <Link href={screenHref("/jogo", save.id)}>{t("round.toHome")}</Link>
+      </p>
+    );
+  }
+  const summary = seasonEndSummary(save);
   return (
     <div className={styles.layout}>
-      <h1>{t("seasonEnd.title", { year })}</h1>
-      <section aria-label={t("seasonEnd.champion")} className={styles.champion}>
-        <Crest crest={champion.crest} label={champion.name} size={96} />
-        <div>
-          <p className={styles.label}>{t("seasonEnd.champion")}</p>
-          <p className={styles.name}>{champion.name}</p>
-          <p>{t("seasonEnd.championPoints", { points: championRow.points })}</p>
-        </div>
-      </section>
-      <p className={styles.mine}>
-        {championRow.clubId === save.clubId
-          ? t("seasonEnd.yourTitle", { club: club?.name ?? "" })
-          : t("seasonEnd.yourPosition", { club: club?.name ?? "", position: mine?.position ?? 0 })}
-      </p>
-      <StandingsTable save={save} caption={t("seasonEnd.table")} />
-      <p className={styles.note}>{t("seasonEnd.next")}</p>
+      <h1>{t("seasonEnd.title", { year: summary.year })}</h1>
+      <SeasonSummary save={save} summary={summary} />
+      <div className={styles.actions}>
+        <Button variant="primary" onClick={() => void next()} disabled={state === "busy"}>
+          {state === "busy" ? t("seasonEnd.preparing") : t("seasonEnd.next")}
+        </Button>
+        {state === "failed" ? <p role="alert">{t("seasonEnd.failed")}</p> : null}
+      </div>
     </div>
   );
 }
 
 export default function SeasonEndPage() {
-  return <GameLayout>{(save) => <SeasonEnd save={save} />}</GameLayout>;
+  return <GameLayout>{(save, game) => <SeasonEnd save={save} game={game} />}</GameLayout>;
 }

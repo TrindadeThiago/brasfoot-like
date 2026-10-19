@@ -1,4 +1,9 @@
-import { completeHiddenAttributes, createSeason, validateBank } from "@brasfoot-like/engine";
+import {
+  clubDivision,
+  completeHiddenAttributes,
+  createLeagueSeason,
+  validateBank,
+} from "@brasfoot-like/engine";
 import { MANAGER_NAME_MAX, SAVE_FORMAT_VERSION, type SaveError, type SaveFile } from "./format";
 import { initialLineup } from "./lineup";
 
@@ -17,7 +22,7 @@ export type CreateSaveResult = { ok: true; save: SaveFile } | { ok: false; error
 
 /**
  * Cria a carreira (FR-001, FR-003): valida o nome e o banco, completa os atributos ocultos com a
- * seed da carreira e cria a temporada da Série A com a mesma seed.
+ * seed da carreira e cria a temporada da liga (todas as divisões) com a mesma seed (007 R10).
  */
 export function createSave(input: CreateSaveInput): CreateSaveResult {
   const managerName = input.managerName.trim();
@@ -39,19 +44,18 @@ export function createSave(input: CreateSaveInput): CreateSaveResult {
   }
   const bank = completeHiddenAttributes(validation.bank, input.seed);
   const competition = bank.competitions[0];
-  const league = competition?.divisions.find((division) => division.level === 1);
-  if (!competition || !league?.clubIds.includes(input.clubId)) {
+  if (!competition?.divisions.some((division) => division.clubIds.includes(input.clubId))) {
     return {
       ok: false,
       error: { code: "save.club_not_in_league", params: { clubId: input.clubId } },
     };
   }
-  const season = createSeason(bank, {
+  const league = createLeagueSeason(bank, {
     competitionId: competition.id,
-    divisionLevel: league.level,
-    seed: input.seed,
+    careerSeed: input.seed,
   });
-  if (!season.ok) {
+  const season = league.ok ? clubDivision(league.league, input.clubId) : undefined;
+  if (!league.ok || !season) {
     return { ok: false, error: { code: "save.invalid_bank", params: { issues: 1 } } };
   }
   return {
@@ -65,8 +69,9 @@ export function createSave(input: CreateSaveInput): CreateSaveResult {
       clubId: input.clubId,
       seed: input.seed,
       bank,
-      season: season.season,
-      lineup: initialLineup(bank, season.season, input.clubId),
+      league: league.league,
+      history: [],
+      lineup: initialLineup(bank, season, input.clubId),
     },
   };
 }

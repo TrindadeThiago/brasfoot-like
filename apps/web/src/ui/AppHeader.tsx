@@ -1,7 +1,12 @@
 "use client";
 
-import { isSeasonOver } from "@brasfoot-like/engine";
-import { type SaveFile, seasonYearOf } from "@brasfoot-like/save";
+import { isLeagueSeasonOver, leagueRound, leagueTotalRounds } from "@brasfoot-like/engine";
+import {
+  divisionNameOf,
+  type SaveFile,
+  seasonYearOf,
+  userDivisionLevel,
+} from "@brasfoot-like/save";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useT } from "../i18n";
@@ -17,6 +22,7 @@ export const GAME_SCREENS = [
   { path: "/jogo/escalacao", key: "nav.lineup" },
   { path: "/jogo/competicao", key: "nav.competition" },
   { path: "/jogo/calendario", key: "nav.calendar" },
+  { path: "/jogo/historico", key: "nav.history" },
 ] as const;
 
 /** A tela da navegação está ativa (Competição inclui as abas de resultados e artilharia). */
@@ -36,7 +42,8 @@ export function AppHeader({ save, onHelp }: { save: SaveFile; onHelp: () => void
   const pathname = (usePathname() ?? "/jogo").replace(/\/+$/, "") || "/jogo";
   const club = save.bank.clubs.find((entry) => entry.id === save.clubId);
   const year = seasonYearOf(save);
-  const total = save.season.calendar.length;
+  const total = leagueTotalRounds(save.league);
+  const division = divisionNameOf(save, userDivisionLevel(save));
   return (
     <header className={styles.header}>
       <div className={styles.club}>
@@ -46,9 +53,14 @@ export function AppHeader({ save, onHelp }: { save: SaveFile; onHelp: () => void
           <p className={styles.meta}>
             <span>{t("header.manager", { name: save.managerName })}</span>
             <span>
-              {isSeasonOver(save.season)
-                ? t("header.seasonOver", { year })
-                : t("header.progress", { year, round: save.season.nextRound, total })}
+              {isLeagueSeasonOver(save.league)
+                ? t("header.seasonOver", { year, division })
+                : t("header.progress", {
+                    year,
+                    round: leagueRound(save.league),
+                    total,
+                    division,
+                  })}
             </span>
           </p>
         </div>

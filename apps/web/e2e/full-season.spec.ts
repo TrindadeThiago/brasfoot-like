@@ -8,13 +8,21 @@ test("temporada inteira simulada direto até o campeão (SC-001)", async ({ page
     await page.keyboard.press("d");
     if (round < 38) {
       await expect(
-        page.getByText(t("header.progress", { year: 2027, round: round + 1, total: 38 })),
+        page.getByText(
+          t("header.progress", { year: 2027, round: round + 1, total: 38, division: "Série A" }),
+        ),
       ).toBeVisible();
     }
   }
   await expect(page).toHaveURL(/fim-de-temporada/);
-  await expect(page.getByRole("region", { name: t("seasonEnd.champion") })).toBeVisible();
+  for (const division of ["Série A", "Série B"]) {
+    await expect(
+      page.getByRole("region", { name: t("seasonEnd.champion", { division }) }),
+    ).toBeVisible();
+  }
   await expect(
-    page.getByRole("table", { name: t("seasonEnd.table") }).locator("tbody tr"),
-  ).toHaveCount(20);
+    page
+      .getByRole("region", { name: t("seasonEnd.relegatedTo", { division: "Série B" }) })
+      .getByRole("listitem"),
+  ).toHaveCount(4);
 });

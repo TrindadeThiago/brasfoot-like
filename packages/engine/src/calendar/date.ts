@@ -90,3 +90,12 @@ export function ageOn(birthDate: string, referenceDate: string): number {
   }
   return age;
 }
+
+/**
+ * Data de referência no ano da temporada (research.md 007 R6): mesmo dia e mês, com 29/02
+ * virando 28/02 em ano não bissexto.
+ */
+export function seasonDate(referenceDate: string, year: number): string {
+  const { month, day } = parseOrThrow(referenceDate);
+  return formatIsoDate({ year, month, day: Math.min(day, daysInMonth(year, month)) });
+}

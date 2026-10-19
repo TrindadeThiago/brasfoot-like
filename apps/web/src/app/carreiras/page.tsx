@@ -53,8 +53,15 @@ export default function SavesPage() {
                   </strong>
                   <span>
                     {summary.seasonOver
-                      ? t("saves.seasonOver", { year: summary.seasonYear })
-                      : t("saves.progress", { year: summary.seasonYear, round: summary.round })}
+                      ? t("saves.seasonOver", {
+                          year: summary.seasonYear,
+                          division: summary.divisionName,
+                        })
+                      : t("saves.progress", {
+                          year: summary.seasonYear,
+                          round: summary.round,
+                          division: summary.divisionName,
+                        })}
                   </span>
                   <small>{t("saves.savedAt", { date: formatDateTime(summary.savedAt) })}</small>
                   {summary.status === "future_version" ? <em>{t("saves.future")}</em> : null}

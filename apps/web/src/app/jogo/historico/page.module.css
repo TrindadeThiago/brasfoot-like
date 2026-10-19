@@ -1,0 +1,47 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.layout h1 {
+  margin: 0;
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.club {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.empty {
+  color: var(--color-muted);
+}
+
+.position {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.zone {
+  padding: 0 var(--space-1);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-bg);
+}
+
+.promotion {
+  background: var(--color-accent);
+}
+
+.relegation {
+  background: var(--color-danger);
+}

@@ -3,7 +3,7 @@
 import {
   FORMATION_IDS,
   type FormationId,
-  isSeasonOver,
+  isLeagueSeasonOver,
   type Place,
   POSTURES,
   type Posture,
@@ -126,7 +126,9 @@ function LineupScreen({ save, game }: { save: SaveFile; game: ReturnType<typeof 
           {message}
         </span>
       </div>
-      {isSeasonOver(save.season) ? <p className={styles.note}>{t("lineup.seasonOver")}</p> : null}
+      {isLeagueSeasonOver(save.league) ? (
+        <p className={styles.note}>{t("lineup.seasonOver")}</p>
+      ) : null}
       <LineupIssues issues={validation.issues} save={save} />
       <div className={styles.board}>
         <Pitch

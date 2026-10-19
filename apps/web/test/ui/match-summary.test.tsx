@@ -1,3 +1,4 @@
+import { userSeason } from "@brasfoot-like/save";
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { t } from "../../src/i18n";
@@ -7,7 +8,7 @@ import { storedCareer } from "../helpers/career";
 describe("resumo da partida (US4)", () => {
   it("lista gols, cartões, lesões e substituições e as estatísticas do registro", async () => {
     const { save } = await storedCareer(4);
-    const record = save.season.records.find(
+    const record = userSeason(save).records.find(
       (entry) =>
         entry.score.home + entry.score.away >= 2 &&
         entry.events.some((e) => e.type === "yellow_card"),

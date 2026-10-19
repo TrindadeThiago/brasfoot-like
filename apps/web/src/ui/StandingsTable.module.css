@@ -1,0 +1,28 @@
+.position {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.zone {
+  padding: 0 var(--space-1);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.promotion {
+  color: var(--color-bg);
+  background: var(--color-accent);
+}
+
+.relegation {
+  color: var(--color-bg);
+  background: var(--color-danger);
+}
+
+.legend {
+  margin-top: var(--space-2);
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
