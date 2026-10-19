@@ -1,25 +1,35 @@
 "use client";
 
 import {
-  adjustLineup,
   changeFormation as changeLineupFormation,
   clubUnavailability,
-  completeRound,
+  completeLeagueRound,
   type FormationId,
   finishRound,
+  isLeagueSeasonOver,
   isSeasonOver,
   type Lineup,
   type LineupIssue,
   type LiveRound,
+  leagueRound,
   type MatchRecord,
   managerAutoLineup,
   type Place,
   type Posture,
   placePlayer as placeLineupPlayer,
-  startRound,
+  startLeagueRound,
   validateLineup,
 } from "@brasfoot-like/engine";
-import { createSave, type SaveError, type SaveFile, touch } from "@brasfoot-like/save";
+import {
+  advanceCareerSeason,
+  createSave,
+  type SaveError,
+  type SaveFile,
+  touch,
+  userSeason,
+  withAdjustedLineup,
+  withManagerFormation,
+} from "@brasfoot-like/save";
 import {
   createContext,
   type ReactNode,
@@ -141,6 +151,8 @@ interface GameContextValue {
   /** Fecha uma rodada ao vivo terminada na temporada e salva (FR-006). */
   commitRound(live: LiveRound): Promise<void>;
   discardLiveRound(): void;
+  /** Virada de temporada (atômica: um único salvamento) depois da última rodada (FR-011, FR-014). */
+  advanceToNextSeason(): Promise<"done" | "error">;
   setLineup(lineup: Lineup): void;
   changeFormation(formation: FormationId): void;
   setPosture(posture: Posture): void;
@@ -152,15 +164,7 @@ interface GameContextValue {
 /** Elenco do clube do jogador e indisponíveis do momento. */
 export function lineupContext(save: SaveFile) {
   const squad = save.bank.players.filter((player) => player.clubId === save.clubId);
-  return { squad, unavailable: clubUnavailability(save.season, save.bank, save.clubId) };
-}
-
-/** Ajuste automático da escalação; as trocas se somam ao aviso ainda não dispensado. */
-function withAdjustedLineup(save: SaveFile): SaveFile {
-  const { squad, unavailable } = lineupContext(save);
-  const { lineup, changes } = adjustLineup(save.lineup, squad, unavailable);
-  if (changes.length === 0) return save;
-  return { ...save, lineup, lineupNotice: [...(save.lineupNotice ?? []), ...changes] };
+  return { squad, unavailable: clubUnavailability(userSeason(save), save.bank, save.clubId) };
 }
 
 const GameContext = createContext<GameContextValue | null>(null);
@@ -300,11 +304,11 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
   const commitRound = useCallback(
     async (live: LiveRound) => {
       const save = latestSave.current;
-      if (!save || live.round !== save.season.nextRound) return;
-      const result = completeRound(save.season, save.bank, live);
+      if (!save || live.round !== leagueRound(save.league)) return;
+      const result = completeLeagueRound(save.league, save.bank, live);
       if (!result.ok) return;
       const next = touch(
-        withAdjustedLineup({ ...save, season: result.season }),
+        withAdjustedLineup({ ...save, league: result.league }),
         new Date().toISOString(),
       );
       latestSave.current = next;
@@ -312,7 +316,7 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       dispatch({
         type: "ready",
         save: next,
-        lastRound: result.season.records.filter((record) => record.round === live.round),
+        lastRound: userSeason(next).records.filter((record) => record.round === live.round),
       });
       await persist(next);
     },
@@ -325,7 +329,7 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       options?: { confirmed?: boolean },
     ): Promise<"blocked" | "confirm" | "live" | "done" | "over"> => {
       const save = latestSave.current;
-      if (!save || isSeasonOver(save.season)) return "over";
+      if (!save || isLeagueSeasonOver(save.league)) return "over";
       writePreferences({ roundMode: mode });
       const { squad, unavailable } = lineupContext(save);
       const validation = validateLineup(save.lineup, squad, unavailable);
@@ -350,10 +354,11 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       }
       dispatch({ type: "simulateIssues" });
       const short = validation.issues.some((issue) => issue.code === "short_squad");
-      const started = startRound(
-        save.season,
+      const playing = !isSeasonOver(userSeason(save));
+      const started = startLeagueRound(
+        save.league,
         save.bank,
-        short ? undefined : { [save.clubId]: save.lineup },
+        short || !playing ? undefined : { [save.clubId]: save.lineup },
       );
       if (!started.ok) return "blocked";
       if (mode === "live") {
@@ -375,6 +380,17 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
 
   const discardLiveRound = useCallback(() => dispatch({ type: "live" }), []);
 
+  const advanceToNextSeason = useCallback(async (): Promise<"done" | "error"> => {
+    const save = latestSave.current;
+    if (!save) return "error";
+    const result = advanceCareerSeason(save, new Date().toISOString());
+    if (!result.ok) return "error";
+    latestSave.current = result.save;
+    dispatch({ type: "ready", save: result.save });
+    await persist(result.save);
+    return "done";
+  }, [persist]);
+
   /** Troca a escalação (e o esquema da temporada) e salva. */
   const commitLineup = useCallback(
     (update: (save: SaveFile) => SaveFile) => {
@@ -382,19 +398,7 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       if (!save) return;
       const changed = update(save);
       if (changed === save) return;
-      const next = touch(
-        {
-          ...changed,
-          season: {
-            ...changed.season,
-            formations: {
-              ...changed.season.formations,
-              [changed.clubId]: changed.lineup.formation,
-            },
-          },
-        },
-        new Date().toISOString(),
-      );
+      const next = touch(withManagerFormation(changed), new Date().toISOString());
       latestSave.current = next;
       dispatch({ type: "update", save: next });
       void persist(next);
@@ -483,6 +487,7 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       playRound,
       commitRound,
       discardLiveRound,
+      advanceToNextSeason,
       setLineup,
       changeFormation,
       setPosture,
@@ -502,6 +507,7 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       playRound,
       commitRound,
       discardLiveRound,
+      advanceToNextSeason,
       setLineup,
       changeFormation,
       setPosture,

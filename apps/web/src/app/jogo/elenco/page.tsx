@@ -7,7 +7,7 @@ import {
   type Position,
   slotPosition,
 } from "@brasfoot-like/engine";
-import type { SaveFile } from "@brasfoot-like/save";
+import { currentDate, type SaveFile } from "@brasfoot-like/save";
 import { useCallback, useMemo, useState } from "react";
 import { GameLayout } from "../../../game/GameLayout";
 import { lineupContext } from "../../../game/GameProvider";
@@ -47,7 +47,7 @@ function SquadScreen({ save }: { save: SaveFile }) {
     [unavailable],
   );
   const club = save.bank.clubs.find((entry) => entry.id === save.clubId);
-  const reference = save.bank.manifest.referenceDate;
+  const reference = currentDate(save);
 
   const updateFilter = (next: typeof filter) => {
     setFilter(next);

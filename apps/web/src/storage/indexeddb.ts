@@ -40,6 +40,8 @@ function corruptEntry(id: string): SummaryEntry {
     clubId: "",
     clubName: "",
     clubCrest: { shape: "classic", colors: ["#555555", "#999999"], initials: "?" },
+    divisionLevel: 0,
+    divisionName: "",
     seasonYear: 0,
     round: 0,
     totalRounds: 0,

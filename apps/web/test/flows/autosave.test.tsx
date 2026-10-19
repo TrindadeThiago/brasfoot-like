@@ -1,5 +1,5 @@
-import { advanceSeason } from "@brasfoot-like/engine";
-import { migrateSave, type SaveFile } from "@brasfoot-like/save";
+import { advanceLeague } from "@brasfoot-like/engine";
+import { migrateSave, type SaveFile, userSeason } from "@brasfoot-like/save";
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
@@ -13,9 +13,9 @@ let counter = 0;
 function atRound(round: number, id = "auto"): SaveFile {
   const save = careerSave(id);
   if (round === 1) return save;
-  const advanced = advanceSeason(save.season, save.bank, { rounds: round - 1 });
+  const advanced = advanceLeague(save.league, save.bank, { rounds: round - 1 });
   if (!advanced.ok) throw new Error("falhou");
-  return { ...save, season: advanced.season };
+  return { ...save, league: advanced.league };
 }
 
 describe("salvamento automático (US3)", () => {
@@ -36,7 +36,9 @@ describe("salvamento automático (US3)", () => {
     first.unmount();
     renderApp("/jogo?c=auto", store);
     expect(
-      await screen.findByText(t("header.progress", { year: 2027, round: 4, total: 38 })),
+      await screen.findByText(
+        t("header.progress", { year: 2027, round: 4, total: 38, division: "Série A" }),
+      ),
     ).toBeDefined();
   });
 
@@ -53,7 +55,9 @@ describe("salvamento automático (US3)", () => {
     expect(await screen.findByText(t("saving.quota"))).toBeDefined();
     await user.click(screen.getByRole("button", { name: t("home.simulate") }));
     expect(
-      await screen.findByText(t("header.progress", { year: 2027, round: 3, total: 38 })),
+      await screen.findByText(
+        t("header.progress", { year: 2027, round: 3, total: 38, division: "Série A" }),
+      ),
     ).toBeDefined();
   });
 
@@ -81,6 +85,6 @@ describe("salvamento automático (US3)", () => {
     await user.click(screen.getByRole("button", { name: t("conflict.overwrite") }));
     await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
     const stored = await tabB.load("auto");
-    expect(stored.status === "ok" && stored.save.season.nextRound).toBe(2);
+    expect(stored.status === "ok" && userSeason(stored.save).nextRound).toBe(2);
   });
 });

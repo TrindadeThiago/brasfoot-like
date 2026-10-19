@@ -1,10 +1,11 @@
 import { ageOn } from "@brasfoot-like/engine";
+import { userSeason } from "@brasfoot-like/save";
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { label, t } from "../../src/i18n";
 import { renderApp } from "../helpers/app";
-import { storedCareer } from "../helpers/career";
+import { storedCareer, withUserSeason } from "../helpers/career";
 
 describe("Elenco (FR-017)", () => {
   it("lista os jogadores do clube com as colunas visíveis e sem atributos ocultos", async () => {
@@ -59,11 +60,11 @@ describe("Elenco (FR-017)", () => {
     const { store, save } = await storedCareer(1, (career) => {
       const squad = career.bank.players.filter((player) => player.clubId === career.clubId);
       const status = {
-        ...career.season.status,
+        ...userSeason(career).status,
         [squad[0]?.id ?? ""]: { yellows: 0, suspension: 1, injury: 0 },
         [squad[1]?.id ?? ""]: { yellows: 0, suspension: 0, injury: 3 },
       };
-      return { ...career, season: { ...career.season, status } };
+      return withUserSeason(career, (season) => ({ ...season, status }));
     });
     renderApp("/jogo/elenco?c=tela", store);
     expect(await screen.findByText(t("squad.suspended", { matches: 1 }))).toBeDefined();
@@ -77,10 +78,10 @@ describe("Elenco (FR-017)", () => {
         (player) => player.clubId === career.clubId && player.position === "FW",
       );
       const status = {
-        ...career.season.status,
+        ...userSeason(career).status,
         [forwards[0]?.id ?? ""]: { yellows: 0, suspension: 0, injury: 2 },
       };
-      return { ...career, season: { ...career.season, status } };
+      return withUserSeason(career, (season) => ({ ...season, status }));
     });
     const view = renderApp("/jogo/elenco?c=tela", store);
     const user = userEvent.setup();

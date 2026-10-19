@@ -19,7 +19,9 @@ async function createCareer(managerName: string, clubRow: number) {
   const user = userEvent.setup();
   await user.click(screen.getByRole("link", { name: t("opening.newCareer") }));
   await user.type(screen.getByLabelText(t("newCareer.managerName")), managerName);
-  const table = screen.getByRole("table", { name: t("newCareer.clubsCaption") });
+  const table = screen.getByRole("table", {
+    name: t("newCareer.clubsCaption", { division: "Série A" }),
+  });
   const row = within(within(table).getAllByRole("rowgroup")[1] as HTMLElement).getAllByRole("row")[
     clubRow
   ] as HTMLElement;
@@ -56,7 +58,9 @@ describe("saves (US2)", () => {
     expect(items).toHaveLength(2);
     expect(within(items[0] as HTMLElement).getByText(/Bia Lima/)).toBeDefined();
     expect(
-      within(items[0] as HTMLElement).getByText(t("saves.progress", { year: 2027, round: 1 })),
+      within(items[0] as HTMLElement).getByText(
+        t("saves.progress", { year: 2027, round: 1, division: "Série A" }),
+      ),
     ).toBeDefined();
     expect(within(items[0] as HTMLElement).getByRole("img")).toBeDefined();
     expect(within(items[1] as HTMLElement).getByText(/Ana Souza/)).toBeDefined();

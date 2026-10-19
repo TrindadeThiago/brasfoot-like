@@ -33,7 +33,9 @@ describe("atalhos de teclado (FR-020)", () => {
     const user = userEvent.setup();
     await user.keyboard("d");
     expect(
-      await screen.findByText(t("header.progress", { year: 2027, round: 2, total: 38 })),
+      await screen.findByText(
+        t("header.progress", { year: 2027, round: 2, total: 38, division: "Série A" }),
+      ),
     ).toBeDefined();
     expect(memoryRouter.pathname()).toBe("/jogo");
     writePreferences({ roundMode: "live" });

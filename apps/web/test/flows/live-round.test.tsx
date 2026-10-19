@@ -1,4 +1,5 @@
-import { advanceSeason } from "@brasfoot-like/engine";
+import { advanceLeague } from "@brasfoot-like/engine";
+import { userSeason } from "@brasfoot-like/save";
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -29,14 +30,14 @@ async function startLive() {
 const results = () => screen.queryByRole("region", { name: t("home.lastRound", { round: 1 }) });
 
 function direct(save: Awaited<ReturnType<typeof storedCareer>>["save"]) {
-  const result = advanceSeason(
-    save.season,
+  const result = advanceLeague(
+    save.league,
     save.bank,
     { rounds: 1 },
     { [save.clubId]: save.lineup },
   );
   if (!result.ok) throw new Error("falhou");
-  return result.season.records;
+  return userSeason({ ...save, league: result.league }).records;
 }
 
 describe("rodada ao vivo (US1, US3)", () => {
@@ -70,9 +71,9 @@ describe("rodada ao vivo (US1, US3)", () => {
 
     await elapse(21_000);
     expect(results()).not.toBeNull();
-    await waitFor(async () => expect((await loadSaved(store)).season.nextRound).toBe(2));
+    await waitFor(async () => expect(userSeason(await loadSaved(store)).nextRound).toBe(2));
     const saved = await loadSaved(store);
-    expect(saved.season.records).toEqual(records);
+    expect(userSeason(saved).records).toEqual(records);
     expect(screen.getByRole("article", { name: /^Resumo:/ })).toBeDefined();
   });
 
@@ -90,8 +91,8 @@ describe("rodada ao vivo (US1, US3)", () => {
     await elapse(12_000);
     await user.click(screen.getByRole("button", { name: t("round.finishNow") }));
     expect(results()).not.toBeNull();
-    await waitFor(async () => expect((await loadSaved(store)).season.nextRound).toBe(2));
-    expect((await loadSaved(store)).season.records).toEqual(direct(save));
+    await waitFor(async () => expect(userSeason(await loadSaved(store)).nextRound).toBe(2));
+    expect(userSeason(await loadSaved(store)).records).toEqual(direct(save));
   });
 
   it("D simula direto e o modo preferido é lembrado", async () => {
@@ -100,12 +101,12 @@ describe("rodada ao vivo (US1, US3)", () => {
     await screen.findByRole("button", { name: t("home.playLive") });
     const user = userEvent.setup({ delay: null });
     await user.keyboard("d");
-    await waitFor(async () => expect((await loadSaved(store)).season.nextRound).toBe(2));
+    await waitFor(async () => expect(userSeason(await loadSaved(store)).nextRound).toBe(2));
     view.unmount();
     renderApp("/jogo?c=tela", store);
     await screen.findByRole("button", { name: t("home.playLive") });
     await user.keyboard("s");
-    await waitFor(async () => expect((await loadSaved(store)).season.nextRound).toBe(3));
+    await waitFor(async () => expect(userSeason(await loadSaved(store)).nextRound).toBe(3));
     expect(memoryRouter.pathname()).toBe("/jogo");
   });
 

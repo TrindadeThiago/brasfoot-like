@@ -1,3 +1,4 @@
+import { userSeason } from "@brasfoot-like/save";
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -54,6 +55,6 @@ describe("rodada só pelo teclado (SC-007)", () => {
     expect(screen.queryByRole("region", { name: t("round.panel") })).toBeNull();
     await user.keyboard("f");
     expect(screen.getByRole("region", { name: t("home.lastRound", { round: 1 }) })).toBeDefined();
-    await waitFor(async () => expect((await loadSaved(store)).season.nextRound).toBe(2));
+    await waitFor(async () => expect(userSeason(await loadSaved(store)).nextRound).toBe(2));
   });
 });

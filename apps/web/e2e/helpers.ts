@@ -13,12 +13,23 @@ export function t(key: string, values: Record<string, string | number> = {}): st
   return template.replace(/\{(\w+)\}/g, (_, name: string) => String(values[name] ?? `{${name}}`));
 }
 
-/** Cria uma carreira pela interface e devolve o nome do clube escolhido (linha `row` da tabela). */
-export async function createCareer(page: Page, manager: string, row: number): Promise<string> {
+/**
+ * Cria uma carreira pela interface e devolve o nome do clube escolhido (linha `row` da tabela da
+ * divisão `division`).
+ */
+export async function createCareer(
+  page: Page,
+  manager: string,
+  row: number,
+  division = "Série A",
+): Promise<string> {
   await page.goto("/");
   await page.getByRole("link", { name: t("opening.newCareer") }).click();
   await page.getByLabel(t("newCareer.managerName")).fill(manager);
-  const table = page.getByRole("table", { name: t("newCareer.clubsCaption") });
+  if (division !== "Série A") {
+    await page.getByLabel(t("newCareer.division.filter")).selectOption({ label: division });
+  }
+  const table = page.getByRole("table", { name: t("newCareer.clubsCaption", { division }) });
   const clubRow = table.locator("tbody tr").nth(row);
   const club = (await clubRow.getByRole("img").getAttribute("aria-label")) ?? "";
   await clubRow.click();

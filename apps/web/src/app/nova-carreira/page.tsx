@@ -6,25 +6,38 @@ import { useRouter } from "next/navigation";
 import { type FormEvent, useMemo, useState } from "react";
 import { defaultBankInput } from "../../game/default-bank";
 import { useGame } from "../../game/GameProvider";
-import { type LeagueClub, leagueClubs } from "../../game/selectors";
+import { competitionClubs, type LeagueClub } from "../../game/selectors";
 import { formatNumber, useT } from "../../i18n";
 import { Button } from "../../ui/Button";
 import { Crest } from "../../ui/Crest";
 import { type Column, DataTable } from "../../ui/DataTable";
 import styles from "./page.module.css";
 
-function useLeagueClubs(): LeagueClub[] {
+function useCompetitionClubs(): LeagueClub[] {
   return useMemo(() => {
     const result = validateBank(defaultBankInput());
-    return result.ok ? leagueClubs(result.bank) : [];
+    return result.ok ? competitionClubs(result.bank) : [];
   }, []);
+}
+
+/** Divisões da competição (nível e nome do mod), na ordem de nível. */
+function divisionsOf(clubs: readonly LeagueClub[]): { level: number; name: string }[] {
+  const levels = new Map(clubs.map((club) => [club.divisionLevel, club.divisionName]));
+  return [...levels].sort(([a], [b]) => a - b).map(([level, name]) => ({ level, name }));
 }
 
 export default function NewCareerPage() {
   const t = useT();
   const router = useRouter();
   const { createCareer } = useGame();
-  const clubs = useLeagueClubs();
+  const allClubs = useCompetitionClubs();
+  const divisions = useMemo(() => divisionsOf(allClubs), [allClubs]);
+  // 0 = todas as divisões; padrão: a principal (US4).
+  const [division, setDivision] = useState(divisions[0]?.level ?? 0);
+  const clubs = useMemo(
+    () => allClubs.filter((club) => division === 0 || club.divisionLevel === division),
+    [allClubs, division],
+  );
   const [managerName, setManagerName] = useState("");
   const [seed, setSeed] = useState("");
   const [clubId, setClubId] = useState<string | undefined>();
@@ -70,9 +83,16 @@ export default function NewCareerPage() {
       sortValue: (club) => club.stadiumCapacity,
       align: "right",
     },
+    {
+      key: "division",
+      header: t("newCareer.clubDivision"),
+      render: (club) => club.divisionName,
+      sortValue: (club) => club.divisionLevel,
+    },
   ];
 
-  const selected = clubs.find((club) => club.id === clubId);
+  const selected = allClubs.find((club) => club.id === clubId);
+  const divisionName = divisions.find((entry) => entry.level === division)?.name;
 
   async function submit(event: FormEvent) {
     event.preventDefault();
@@ -117,11 +137,27 @@ export default function NewCareerPage() {
           </label>
         </details>
         <h2>{t("newCareer.chooseClub")}</h2>
+        <label className={styles.field}>
+          <span>{t("newCareer.division.filter")}</span>
+          <select value={division} onChange={(event) => setDivision(Number(event.target.value))}>
+            {divisions.map((entry) => (
+              <option key={entry.level} value={entry.level}>
+                {entry.name}
+              </option>
+            ))}
+            <option value={0}>{t("newCareer.division.all")}</option>
+          </select>
+        </label>
         <DataTable
+          key={division}
           rows={clubs}
           columns={columns}
           rowKey={(club) => club.id}
-          caption={t("newCareer.clubsCaption")}
+          caption={
+            divisionName
+              ? t("newCareer.clubsCaption", { division: divisionName })
+              : t("newCareer.clubsCaptionAll")
+          }
           initialSort={{ column: "reputation", direction: "descending" }}
           onRowClick={(club) => setClubId(club.id)}
           selected={(club) => club.id === clubId}

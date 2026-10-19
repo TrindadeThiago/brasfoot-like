@@ -1,7 +1,9 @@
 import { standings } from "@brasfoot-like/engine";
+import { userSeason } from "@brasfoot-like/save";
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
+import { seasonEndSummary } from "../../src/game/selectors";
 import { t } from "../../src/i18n";
 import { renderApp } from "../helpers/app";
 import { storedCareer } from "../helpers/career";
@@ -16,22 +18,28 @@ describe("temporada inteira no navegador (SC-001)", () => {
     for (let round = 1; round <= 38; round++) {
       await user.click(await screen.findByRole("button", { name: t("home.simulate") }));
       if (round < 38) {
-        await screen.findByText(t("header.progress", { year: 2027, round: round + 1, total: 38 }));
+        await screen.findByText(
+          t("header.progress", { year: 2027, round: round + 1, total: 38, division: "Série A" }),
+        );
       }
     }
     await waitFor(() => expect(memoryRouter.pathname()).toBe("/jogo/fim-de-temporada"));
     const saved = await loadSaved(store);
-    const table = standings(saved.season, saved.bank);
+    const table = standings(userSeason(saved), saved.bank);
     const champion = saved.bank.clubs.find((club) => club.id === table[0]?.clubId);
-    const region = await screen.findByRole("region", { name: t("seasonEnd.champion") });
+    const region = await screen.findByRole("region", {
+      name: t("seasonEnd.champion", { division: "Série A" }),
+    });
     expect(within(region).getByText(champion?.name ?? "")).toBeDefined();
-    const mine = table.find((row) => row.clubId === saved.clubId);
+    const summary = seasonEndSummary(saved);
     const club = saved.bank.clubs.find((entry) => entry.id === saved.clubId);
     expect(
       screen.getByText(
-        table[0]?.clubId === saved.clubId
-          ? t("seasonEnd.yourTitle", { club: club?.name ?? "" })
-          : t("seasonEnd.yourPosition", { club: club?.name ?? "", position: mine?.position ?? 0 }),
+        t(`seasonEnd.mine.${summary.mine.situation}`, {
+          club: club?.name ?? "",
+          position: summary.mine.position,
+          division: summary.mine.situation === "relegated" ? "Série B" : "Série A",
+        }),
       ),
     ).toBeDefined();
 

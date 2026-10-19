@@ -1,6 +1,7 @@
 "use client";
 
 import type { Round } from "@brasfoot-like/engine";
+import { userSeason } from "@brasfoot-like/save";
 import { useState } from "react";
 import { GameLayout } from "../../../game/GameLayout";
 import { resultInRound } from "../../../game/selectors";
@@ -49,7 +50,7 @@ export default function CalendarPage() {
             key: "score",
             header: t("col.score"),
             render: (round) => {
-              const result = resultInRound(save.season, save.clubId, round.number);
+              const result = resultInRound(userSeason(save), save.clubId, round.number);
               return (
                 <span className={styles.score}>
                   {result ? `${result.goalsFor} × ${result.goalsAgainst}` : t("calendar.notPlayed")}
@@ -71,15 +72,15 @@ export default function CalendarPage() {
             ),
           },
         ];
-        const selected = open ? save.season.calendar[open - 1] : undefined;
+        const selected = open ? userSeason(save).calendar[open - 1] : undefined;
         return (
           <div className={styles.layout}>
             <DataTable
-              rows={save.season.calendar}
+              rows={userSeason(save).calendar}
               columns={columns}
               rowKey={(round) => String(round.number)}
               caption={t("calendar.caption", { club: clubs.get(save.clubId)?.name ?? "" })}
-              highlight={(round) => round.number === save.season.nextRound}
+              highlight={(round) => round.number === userSeason(save).nextRound}
             />
             {selected ? (
               <section
@@ -89,7 +90,7 @@ export default function CalendarPage() {
                 <h2>{t("calendar.roundMatches", { round: selected.number })}</h2>
                 <ul>
                   {selected.fixtures.map((fixture) => {
-                    const record = save.season.records.find(
+                    const record = userSeason(save).records.find(
                       (entry) => entry.round === selected.number && entry.home === fixture.home,
                     );
                     return (

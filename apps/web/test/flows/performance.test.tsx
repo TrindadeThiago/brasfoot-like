@@ -1,9 +1,14 @@
-// SC-005: lista de carreiras < 1 s, abrir carreira < 2 s, salvar sem travar a interface > 200 ms.
-import { touch } from "@brasfoot-like/save";
-import { screen } from "@testing-library/react";
+// SC-005 (004): lista de carreiras < 1 s, abrir carreira < 2 s, salvar sem travar a interface
+// > 200 ms. 007: rodada das duas divisões em modo direto < 1 s (SC-006), virada < 2 s (SC-005).
+import { advanceLeague } from "@brasfoot-like/engine";
+import { touch, userSeason } from "@brasfoot-like/save";
+import { screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { beforeAll, describe, expect, it } from "vitest";
 import { t } from "../../src/i18n";
 import { freshStore, renderApp } from "../helpers/app";
+import { loadSaved } from "../helpers/live";
+import { memoryRouter } from "../helpers/router";
 import { careerSave } from "../helpers/saves";
 
 beforeAll(() => {
@@ -58,4 +63,32 @@ describe("desempenho (SC-005)", () => {
     );
     expect(blocked).toBeLessThan(200);
   });
+
+  it("simula a rodada das duas divisões em modo direto em menos de 1 s (SC-006)", async () => {
+    const store = freshStore();
+    await store.save(careerSave("tela"));
+    renderApp("/jogo?c=tela", store);
+    const button = await screen.findByRole("button", { name: t("home.simulate") });
+    const user = userEvent.setup();
+    const start = performance.now();
+    await user.click(button);
+    await screen.findByRole("region", { name: t("home.lastRound", { round: 1 }) });
+    expect(performance.now() - start).toBeLessThan(1000);
+    expect(userSeason(await loadSaved(store)).nextRound).toBe(2);
+  });
+
+  it("faz a virada de temporada em menos de 2 s (SC-005)", async () => {
+    const base = careerSave("tela");
+    const played = advanceLeague(base.league, base.bank, { toEnd: true });
+    if (!played.ok) throw new Error("falhou");
+    const store = freshStore();
+    await store.save({ ...base, league: played.league });
+    renderApp("/jogo/fim-de-temporada?c=tela", store);
+    const button = await screen.findByRole("button", { name: t("seasonEnd.next") });
+    const user = userEvent.setup();
+    const start = performance.now();
+    await user.click(button);
+    await waitFor(() => expect(memoryRouter.pathname()).toBe("/jogo"));
+    expect(performance.now() - start).toBeLessThan(2000);
+  }, 60_000);
 });

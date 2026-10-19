@@ -1,5 +1,5 @@
-import { advanceSeason } from "@brasfoot-like/engine";
-import { migrateSave, type SaveFile } from "@brasfoot-like/save";
+import { advanceLeague, type Season } from "@brasfoot-like/engine";
+import { migrateSave, type SaveFile, userDivisionLevel } from "@brasfoot-like/save";
 import { createIndexedDbStore, type SaveStore } from "../../src/storage/indexeddb";
 import { careerSave } from "./saves";
 
@@ -12,12 +12,26 @@ export async function storedCareer(
 ): Promise<{ store: SaveStore; save: SaveFile }> {
   let save = careerSave("tela");
   if (round > 1) {
-    const advanced = advanceSeason(save.season, save.bank, { rounds: round - 1 });
+    const advanced = advanceLeague(save.league, save.bank, { rounds: round - 1 });
     if (!advanced.ok) throw new Error("falhou");
-    save = { ...save, season: advanced.season };
+    save = { ...save, league: advanced.league };
   }
   if (edit) save = edit(save);
   const store = createIndexedDbStore(`tela-${counter++}`, migrateSave);
   await store.save(save);
   return { store, save };
+}
+
+/** Save com a temporada da divisão do jogador trocada. */
+export function withUserSeason(save: SaveFile, update: (season: Season) => Season): SaveFile {
+  const level = userDivisionLevel(save);
+  return {
+    ...save,
+    league: {
+      ...save.league,
+      divisions: save.league.divisions.map((season) =>
+        season.divisionLevel === level ? update(season) : season,
+      ),
+    },
+  };
 }

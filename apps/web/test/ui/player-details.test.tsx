@@ -1,4 +1,5 @@
 import { ageOn, seasonStats } from "@brasfoot-like/engine";
+import { userSeason } from "@brasfoot-like/save";
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
@@ -12,7 +13,7 @@ describe("Detalhes do jogador (US5)", () => {
     const { store, save } = await storedCareer(4);
     renderApp("/jogo/elenco?c=tela", store);
     const user = userEvent.setup();
-    const stats = seasonStats(save.season).find(
+    const stats = seasonStats(userSeason(save)).find(
       (entry) => entry.clubId === save.clubId && entry.matches > 0,
     );
     if (!stats) throw new Error("sem jogador com jogos");

@@ -1,0 +1,40 @@
+import { expect, test } from "@playwright/test";
+import { createCareer, t } from "./helpers";
+
+test("Série B: temporada direto, resumo, próxima temporada e rodada ao vivo (SC-004, SC-005)", async ({
+  page,
+}) => {
+  test.setTimeout(240_000);
+  await createCareer(page, "Bia Lima", 0, "Série B");
+  await expect(
+    page.getByText(t("header.progress", { year: 2027, round: 1, total: 38, division: "Série B" })),
+  ).toBeVisible();
+  for (let round = 1; round <= 38; round++) {
+    await page.keyboard.press("d");
+    if (round < 38) {
+      await expect(
+        page.getByText(
+          t("header.progress", { year: 2027, round: round + 1, total: 38, division: "Série B" }),
+        ),
+      ).toBeVisible();
+    }
+  }
+  await expect(page).toHaveURL(/fim-de-temporada/);
+  await expect(
+    page
+      .getByRole("region", { name: t("seasonEnd.promotedTo", { division: "Série A" }) })
+      .getByRole("listitem"),
+  ).toHaveCount(4);
+
+  const started = Date.now();
+  await page.getByRole("button", { name: t("seasonEnd.next") }).click();
+  await expect(page.getByText(/temporada 2028 · rodada 1 de 38/)).toBeVisible();
+  expect(Date.now() - started).toBeLessThan(2_000);
+
+  await page.getByRole("button", { name: t("home.playLive") }).click();
+  await expect(page).toHaveURL(/rodada/);
+  await page.getByRole("button", { name: t("round.finishNow") }).click();
+  await expect(page.getByText(t("round.results", { round: 1 }))).toBeVisible();
+  await page.getByRole("link", { name: t("round.toHome") }).click();
+  await expect(page.getByText(/temporada 2028 · rodada 2 de 38/)).toBeVisible();
+});

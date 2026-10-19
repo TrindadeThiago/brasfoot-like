@@ -21,7 +21,7 @@ test("depois da primeira visita o jogo abre e continua sem rede (SC-007)", async
   await expect(page.getByRole("heading", { name: club })).toBeVisible();
   await simulate(page, 1);
   await expect(
-    page.getByText(t("header.progress", { year: 2027, round: 2, total: 38 })),
+    page.getByText(t("header.progress", { year: 2027, round: 2, total: 38, division: "Série A" })),
   ).toBeVisible();
   for (const screen of ["nav.squad", "nav.competition", "nav.calendar"]) {
     await page.getByRole("link", { name: t(screen) }).click();

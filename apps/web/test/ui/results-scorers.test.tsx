@@ -1,4 +1,5 @@
 import { topScorers } from "@brasfoot-like/engine";
+import { userSeason } from "@brasfoot-like/save";
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
@@ -32,7 +33,7 @@ describe("resultados e artilharia (US5)", () => {
     const region = await screen.findByRole("region", { name: t("results.caption", { round: 5 }) });
     const items = within(region).getAllByRole("listitem");
     expect(items).toHaveLength(10);
-    const record = save.season.records.find((entry) => entry.round === 5);
+    const record = userSeason(save).records.find((entry) => entry.round === 5);
     expect(items[0]?.textContent).toContain(`${record?.score.home} × ${record?.score.away}`);
     const user = userEvent.setup();
     await user.click(within(items[0] as HTMLElement).getByRole("button"));
@@ -50,7 +51,7 @@ describe("resultados e artilharia (US5)", () => {
     const rows = within(within(table).getAllByRole("rowgroup")[1] as HTMLElement).getAllByRole(
       "row",
     );
-    const expected = topScorers(save.season, 20).filter((row) => row.goals > 0);
+    const expected = topScorers(userSeason(save), 20).filter((row) => row.goals > 0);
     expect(rows).toHaveLength(expected.length);
     const first = expected[0];
     const name = save.bank.players.find((player) => player.id === first?.playerId)?.displayName;

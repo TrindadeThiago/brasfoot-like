@@ -1,27 +1,29 @@
 "use client";
 
-import type { MatchRecord } from "@brasfoot-like/engine";
+import type { MatchRecord, Season } from "@brasfoot-like/engine";
 import type { SaveFile } from "@brasfoot-like/save";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 import { GameLayout } from "../../../../game/GameLayout";
+import { useDivision } from "../../../../game/useDivision";
 import { useT } from "../../../../i18n";
 import { Button } from "../../../../ui/Button";
 import { CompetitionTabs } from "../../../../ui/CompetitionTabs";
 import { Crest } from "../../../../ui/Crest";
 import { Dialog } from "../../../../ui/Dialog";
+import { DivisionTabs } from "../../../../ui/DivisionTabs";
 import { MatchSummary } from "../../../../ui/MatchSummary";
 import styles from "./page.module.css";
 
-function Results({ save, initial }: { save: SaveFile; initial: number }) {
+function Results({ save, season, initial }: { save: SaveFile; season: Season; initial: number }) {
   const t = useT();
-  const total = save.season.calendar.length;
+  const total = season.calendar.length;
   const [round, setRound] = useState(Math.min(total, Math.max(1, initial)));
   const [open, setOpen] = useState<MatchRecord | undefined>();
   const close = useCallback(() => setOpen(undefined), []);
   const clubs = new Map(save.bank.clubs.map((club) => [club.id, club]));
-  const fixtures = save.season.calendar[round - 1]?.fixtures ?? [];
-  const records = save.season.records.filter((record) => record.round === round);
+  const fixtures = season.calendar[round - 1]?.fixtures ?? [];
+  const records = season.records.filter((record) => record.round === round);
   return (
     <div className={styles.layout}>
       <div className={styles.picker}>
@@ -31,7 +33,7 @@ function Results({ save, initial }: { save: SaveFile; initial: number }) {
         <label>
           <span>{t("results.round")}</span>
           <select value={round} onChange={(event) => setRound(Number(event.target.value))}>
-            {save.season.calendar.map((entry) => (
+            {season.calendar.map((entry) => (
               <option key={entry.number} value={entry.number}>
                 {entry.number}
               </option>
@@ -103,13 +105,17 @@ function Results({ save, initial }: { save: SaveFile; initial: number }) {
 
 function ResultsScreen({ save }: { save: SaveFile }) {
   const params = useSearchParams();
-  const played = Math.max(1, save.season.nextRound - 1);
+  const { level, season } = useDivision(save);
+  const played = Math.max(1, season.nextRound - 1);
   const requested = Number(params?.get("r"));
   return (
     <>
-      <CompetitionTabs careerId={save.id} />
+      <CompetitionTabs careerId={save.id} level={level} />
+      <DivisionTabs save={save} level={level} />
       <Results
+        key={level}
         save={save}
+        season={season}
         initial={Number.isInteger(requested) && requested > 0 ? requested : played}
       />
     </>

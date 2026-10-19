@@ -5,12 +5,17 @@ import {
   type FormResult,
   type MatchRecord,
   type ModPackage,
+  nextComposition,
   type Season,
   standings,
 } from "@brasfoot-like/engine";
+import { type SaveFile, userSeason } from "@brasfoot-like/save";
 
 export interface LeagueClub {
   id: string;
+  /** Divisão do clube no banco (nível e nome do mod). */
+  divisionLevel: number;
+  divisionName: string;
   name: string;
   abbreviation: string;
   city: string;
@@ -20,14 +25,20 @@ export interface LeagueClub {
   crest: Crest;
 }
 
-/** Clubes da Série A (divisão de nível 1 da primeira competição) com as informações da escolha. */
-export function leagueClubs(bank: ModPackage): LeagueClub[] {
-  const league = bank.competitions[0]?.divisions.find((division) => division.level === 1);
-  const ids = new Set(league?.clubIds ?? []);
+/** Clubes de todas as divisões da primeira competição com as informações da escolha (007). */
+export function competitionClubs(bank: ModPackage): LeagueClub[] {
+  const divisions = new Map<string, { level: number; name: string }>();
+  for (const division of bank.competitions[0]?.divisions ?? []) {
+    for (const clubId of division.clubIds) {
+      divisions.set(clubId, { level: division.level, name: division.name });
+    }
+  }
   return bank.clubs
-    .filter((club) => ids.has(club.id))
+    .filter((club) => divisions.has(club.id))
     .map((club) => ({
       id: club.id,
+      divisionLevel: divisions.get(club.id)?.level ?? 0,
+      divisionName: divisions.get(club.id)?.name ?? "",
       name: club.name,
       abbreviation: club.abbreviation,
       city: club.city,
@@ -36,10 +47,6 @@ export function leagueClubs(bank: ModPackage): LeagueClub[] {
       stadiumCapacity: club.stadiumCapacity,
       crest: club.crest,
     }));
-}
-
-export function seasonYear(bank: ModPackage): number {
-  return Number(bank.manifest.referenceDate.slice(0, 4));
 }
 
 export interface NextFixture {
@@ -102,4 +109,68 @@ export function resultInRound(
 
 export function clubPosition(season: Season, bank: CompletedBank, clubId: string): number {
   return standings(season, bank).find((row) => row.clubId === clubId)?.position ?? 0;
+}
+
+export type ManagerSituation = "champion" | "promoted" | "relegated" | "stayed";
+
+export interface SeasonEndSummary {
+  year: number;
+  /** Campeão de cada divisão, por nível. */
+  champions: { level: number; clubId: string; points: number }[];
+  /** Clubes que trocam de divisão, agrupados por destino. */
+  moves: { from: number; to: number; clubs: { clubId: string; position: number }[] }[];
+  mine: { situation: ManagerSituation; position: number; level: number; nextLevel: number };
+}
+
+/**
+ * Resumo do fim de temporada (US3): lê as classificações finais e a composição da próxima
+ * temporada do motor, sem regra própria.
+ */
+export function seasonEndSummary(save: SaveFile): SeasonEndSummary {
+  const tables = new Map(
+    save.league.divisions.map((season) => [season.divisionLevel, standings(season, save.bank)]),
+  );
+  const change = nextComposition(save.league, save.bank);
+  const positionOf = (level: number, clubId: string) =>
+    tables.get(level)?.find((row) => row.clubId === clubId)?.position ?? 0;
+  const champions = save.league.divisions.map((season) => {
+    const first = tables.get(season.divisionLevel)?.[0];
+    return { level: season.divisionLevel, clubId: first?.clubId ?? "", points: first?.points ?? 0 };
+  });
+  const moves: SeasonEndSummary["moves"] = [];
+  for (const season of save.league.divisions) {
+    const level = season.divisionLevel;
+    const groups = [
+      { to: level - 1, clubs: change.promoted[level] ?? [] },
+      { to: level + 1, clubs: change.relegated[level] ?? [] },
+    ];
+    for (const group of groups) {
+      if (group.clubs.length === 0) continue;
+      moves.push({
+        from: level,
+        to: group.to,
+        clubs: group.clubs.map((clubId) => ({ clubId, position: positionOf(level, clubId) })),
+      });
+    }
+  }
+  const level = userSeason(save).divisionLevel;
+  const nextLevel =
+    Number(
+      Object.entries(change.composition).find(([, clubs]) => clubs.includes(save.clubId))?.[0],
+    ) || level;
+  const position = positionOf(level, save.clubId);
+  const situation: ManagerSituation =
+    nextLevel < level
+      ? "promoted"
+      : nextLevel > level
+        ? "relegated"
+        : position === 1
+          ? "champion"
+          : "stayed";
+  return {
+    year: save.league.year,
+    champions,
+    moves,
+    mine: { situation, position, level, nextLevel },
+  };
 }

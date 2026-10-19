@@ -1,5 +1,5 @@
 import { clubUnavailability, managerAutoLineup, preferredFormation } from "@brasfoot-like/engine";
-import type { SaveFile } from "@brasfoot-like/save";
+import { type SaveFile, userSeason } from "@brasfoot-like/save";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
@@ -46,7 +46,7 @@ describe("Escalar automaticamente (US2)", () => {
         squadOf(save),
         "5-3-2",
         "defensive",
-        clubUnavailability(save.season, save.bank, save.clubId),
+        clubUnavailability(userSeason(save), save.bank, save.clubId),
       ).lineup;
       await waitFor(async () => expect((await stored(store)).lineup).toEqual(expected));
     },

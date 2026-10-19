@@ -1,5 +1,6 @@
 "use client";
 
+import { leagueRound, leagueTotalRounds } from "@brasfoot-like/engine";
 import type { SaveFile } from "@brasfoot-like/save";
 import { useRouter } from "next/navigation";
 import { type ReactNode, Suspense, useMemo, useState } from "react";
@@ -31,7 +32,7 @@ function Layout({ children }: { children: Render }) {
     };
     const play = async (mode: RoundMode) => {
       if (!confirmLeave()) return;
-      const last = save.season.nextRound === save.season.calendar.length;
+      const last = leagueRound(save.league) === leagueTotalRounds(save.league);
       const outcome = await game.playRound(mode);
       if (outcome === "live") router.push(screenHref("/jogo/rodada", save.id));
       if (outcome === "done" && last) router.push(screenHref("/jogo/fim-de-temporada", save.id));
@@ -42,6 +43,7 @@ function Layout({ children }: { children: Render }) {
       "3": go(2),
       "4": go(3),
       "5": go(4),
+      h: go(5),
       s: () => void play(readPreferences().roundMode ?? "live"),
       d: () => void play("direct"),
       "?": () => setHelp((open) => !open),

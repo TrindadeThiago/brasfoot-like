@@ -1,3 +1,4 @@
+import { userSeason } from "@brasfoot-like/save";
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
@@ -9,7 +10,9 @@ describe("Competição (FR-018)", () => {
   it("mostra a tabela completa com o clube do jogador destacado", async () => {
     const { store, save } = await storedCareer(4);
     renderApp("/jogo/competicao?c=tela", store);
-    const table = await screen.findByRole("table", { name: t("competition.caption") });
+    const table = await screen.findByRole("table", {
+      name: t("competition.caption", { division: "Série A" }),
+    });
     const rows = within(within(table).getAllByRole("rowgroup")[1] as HTMLElement).getAllByRole(
       "row",
     );
@@ -50,7 +53,7 @@ describe("Calendário (FR-019)", () => {
       "row",
     );
     expect(rows).toHaveLength(38);
-    const firstRecord = save.season.records.find(
+    const firstRecord = userSeason(save).records.find(
       (record) =>
         record.round === 1 && (record.home === save.clubId || record.away === save.clubId),
     );

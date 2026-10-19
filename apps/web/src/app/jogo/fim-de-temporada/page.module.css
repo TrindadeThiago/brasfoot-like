@@ -8,35 +8,10 @@
   margin: 0;
 }
 
-.champion {
+.actions {
   display: flex;
   align-items: center;
-  gap: var(--space-5);
-  padding: var(--space-5);
-  border-radius: var(--radius);
-  background: linear-gradient(90deg, rgba(255, 204, 77, 0.18), transparent);
-  border: 1px solid var(--color-warning);
-}
-
-.champion p {
-  margin: 0;
-}
-
-.label {
-  color: var(--color-warning);
-  font-weight: 700;
-  text-transform: uppercase;
-  font-size: var(--text-sm);
-}
-
-.name {
-  font-size: 28px;
-  font-weight: 700;
-}
-
-.mine {
-  margin: 0;
-  font-size: var(--text-lg);
+  gap: var(--space-4);
 }
 
 .note {
