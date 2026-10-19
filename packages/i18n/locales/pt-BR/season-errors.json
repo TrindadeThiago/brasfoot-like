@@ -6,5 +6,9 @@
   "season.invalid_rules": "A regra {rule} vale {value}, mas deve estar entre {min} e {max}.",
   "season.lineup_unavailable": "A escalação do clube {clubId} inclui {playerId}, que está suspenso ou lesionado.",
   "season.invalid_lineup": "A escalação do clube {clubId} foi recusada pelo motor de partida ({matchErrorCode}).",
-  "season.lineup_not_playing": "O clube {clubId} não joga na rodada {round}."
+  "season.lineup_not_playing": "O clube {clubId} não joga na rodada {round}.",
+  "season.invalid_composition": "A composição da divisão de nível {level} é inválida: {reason}.",
+  "turnover.season_not_over": "A temporada ainda não terminou: falta disputar a rodada {round}.",
+  "turnover.invalid_steps": "A etapa {stepId} da virada de temporada é inválida: {reason}.",
+  "turnover.invalid_result": "A virada de temporada produziu uma temporada inválida: {reason}."
 }
