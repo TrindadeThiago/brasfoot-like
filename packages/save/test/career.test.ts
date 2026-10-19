@@ -10,6 +10,7 @@ import {
   advanceCareerSeason,
   createSave,
   currentDate,
+  dismissSquadNotice,
   migrateSave,
   type SaveFile,
   seasonYearOf,
@@ -167,4 +168,75 @@ describe("virada da carreira (US2, contracts/save-format-v3.md)", () => {
     expect(sponsorship[0]?.season).toBe(2);
     expect(migrateSave(JSON.parse(JSON.stringify(result.save))).status).toBe("ok");
   }, 60000);
+});
+
+describe("renovação na virada da carreira (009 US4)", () => {
+  it("um titular que se aposenta sai da escalação, com aviso, e o save segue válido", () => {
+    const base = validSave(SERIE_A[0]);
+    const keeper = base.lineup.starters.gk as string;
+    const aged = {
+      ...base,
+      bank: {
+        ...base.bank,
+        players: base.bank.players.map((player) =>
+          player.id === keeper ? { ...player, birthDate: "1980-01-01" } : player,
+        ),
+      },
+    };
+    const played = advanceCareer(
+      aged.league,
+      aged.finances,
+      aged.bank,
+      { toEnd: true },
+      aged.clubId,
+      undefined,
+      {
+        state: aged.renewal,
+        careerSeed: aged.seed,
+      },
+    );
+    if (!played.ok) throw new Error("falhou");
+    const save = {
+      ...aged,
+      league: played.league,
+      finances: played.finances,
+      bank: played.world,
+      renewal: played.renewal ?? aged.renewal,
+    };
+    const result = advanceCareerSeason(save, "2026-10-20T00:00:00.000Z");
+    if (!result.ok) throw new Error(JSON.stringify(result.error));
+    const next = result.save;
+    expect(next.bank.players.some((player) => player.id === keeper)).toBe(false);
+    expect(Object.values(next.lineup.starters)).not.toContain(keeper);
+    expect(next.lineupNotice?.length ?? 0).toBeGreaterThan(0);
+    expect(next.renewal.squadNotice?.retired.map((ref) => ref.playerId)).toContain(keeper);
+    expect(next.renewal.squadNotice?.season).toBe(2);
+    expect(migrateSave(JSON.parse(JSON.stringify(next))).status).toBe("ok");
+  }, 60000);
+});
+
+describe("aviso de mudanças do elenco (009 US6)", () => {
+  it("dismissSquadNotice remove o aviso e mantém o resto", () => {
+    const save = validSave();
+    const withNotice = {
+      ...save,
+      renewal: {
+        ...save.renewal,
+        squadNotice: {
+          season: 2,
+          clubId: save.clubId,
+          retired: [],
+          arrived: [],
+          released: [],
+          promoted: [],
+          risers: [],
+          fallers: [],
+        },
+      },
+    };
+    const dismissed = dismissSquadNotice(withNotice);
+    expect(dismissed.renewal.squadNotice).toBeUndefined();
+    expect(dismissed.renewal.nextPlayerSeq).toBe(save.renewal.nextPlayerSeq);
+    expect(dismissSquadNotice(save)).toBe(save);
+  });
 });

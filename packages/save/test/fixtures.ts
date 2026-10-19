@@ -4,6 +4,7 @@ import countries from "@brasfoot-like/default-mod/countries.json" with { type: "
 import mod from "@brasfoot-like/default-mod/mod.json" with { type: "json" };
 import players from "@brasfoot-like/default-mod/players.json" with { type: "json" };
 import {
+  advanceCareer,
   advanceLeague,
   advanceSeason,
   joinBankFiles,
@@ -47,7 +48,10 @@ export function validSave(clubId: string = SERIE_A[0] as string): SaveFile {
 }
 
 /** Save no formato da 005/006 (versão 2): uma única `season` da Série A, sem liga nem histórico. */
-export type SaveV2 = Omit<SaveFile, "formatVersion" | "league" | "history" | "finances"> & {
+export type SaveV2 = Omit<
+  SaveFile,
+  "formatVersion" | "league" | "history" | "finances" | "renewal"
+> & {
   formatVersion: 2;
   season: Season;
 };
@@ -63,6 +67,7 @@ export function saveV2(step: SeasonStep = { rounds: 0 }): SaveV2 {
       league,
       history: _history,
       finances: _finances,
+      renewal: _renewal,
       formatVersion: _version,
       ...rest
     } = validSave();
@@ -99,7 +104,9 @@ export function saveV1(mutate?: (save: SaveV2) => void) {
 }
 
 /** Save no formato da 007 (versão 3): liga e histórico, sem finanças. */
-export type SaveV3 = Omit<SaveFile, "formatVersion" | "finances"> & { formatVersion: 3 };
+export type SaveV3 = Omit<SaveFile, "formatVersion" | "finances" | "renewal"> & {
+  formatVersion: 3;
+};
 
 const v3Cache = new Map<string, SaveV3>();
 
@@ -108,7 +115,12 @@ export function saveV3(step: SeasonStep = { rounds: 0 }): SaveV3 {
   const key = JSON.stringify(step);
   let save = v3Cache.get(key);
   if (!save) {
-    const { finances: _finances, formatVersion: _version, ...rest } = validSave();
+    const {
+      finances: _finances,
+      renewal: _renewal,
+      formatVersion: _version,
+      ...rest
+    } = validSave();
     let league = rest.league;
     if (!("rounds" in step) || step.rounds > 0) {
       const advanced = advanceLeague(league, rest.bank, step);
@@ -129,4 +141,35 @@ export function saveV3MidSeason(): SaveV3 {
 /** v3 com a temporada encerrada. */
 export function saveV3SeasonOver(): SaveV3 {
   return saveV3({ toEnd: true });
+}
+
+/** Save no formato da 008 (versão 4): finanças, sem renovação. */
+export type SaveV4 = Omit<SaveFile, "formatVersion" | "renewal"> & { formatVersion: 4 };
+
+const v4Cache = new Map<string, SaveV4>();
+
+/** Save v4 com a carreira (liga + finanças) avançada `step`. */
+export function saveV4(step: SeasonStep = { rounds: 0 }): SaveV4 {
+  const key = JSON.stringify(step);
+  let save = v4Cache.get(key);
+  if (!save) {
+    const { renewal: _renewal, formatVersion: _version, ...rest } = validSave();
+    let { league, finances } = rest;
+    if (!("rounds" in step) || step.rounds > 0) {
+      const advanced = advanceCareer(league, finances, rest.bank, step, rest.clubId);
+      if (!advanced.ok) throw new Error(JSON.stringify(advanced.error));
+      ({ league, finances } = advanced);
+    }
+    save = { ...rest, formatVersion: 4, league, finances };
+    v4Cache.set(key, save);
+  }
+  return JSON.parse(JSON.stringify(save)) as SaveV4;
+}
+
+export function saveV4MidSeason(): SaveV4 {
+  return saveV4({ rounds: 10 });
+}
+
+export function saveV4SeasonOver(): SaveV4 {
+  return saveV4({ toEnd: true });
 }

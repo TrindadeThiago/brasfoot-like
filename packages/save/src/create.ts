@@ -3,6 +3,7 @@ import {
   completeHiddenAttributes,
   createFinances,
   createLeagueSeason,
+  initialRenewal,
   validateBank,
 } from "@brasfoot-like/engine";
 import { MANAGER_NAME_MAX, SAVE_FORMAT_VERSION, type SaveError, type SaveFile } from "./format";
@@ -73,6 +74,7 @@ export function createSave(input: CreateSaveInput): CreateSaveResult {
       league: league.league,
       history: [],
       finances: createFinances(bank, league.league),
+      renewal: initialRenewal(bank),
       lineup: initialLineup(bank, season, input.clubId),
     },
   };
