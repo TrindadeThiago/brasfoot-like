@@ -21,6 +21,8 @@ export interface LiveMatch {
   /** Clube de cada lado. */
   sides: Record<Side, string>;
   prepared: PreparedFixture["sides"];
+  /** Divisão da partida; numa rodada da liga, a UI filtra por ele (research.md 007 R2). */
+  divisionLevel: number;
 }
 
 /** Decisão do jogador aplicada num passo da rodada. */
@@ -92,6 +94,7 @@ export function startRound(
       state: started.state,
       sides: { home: fixture.home, away: fixture.away },
       prepared: prepared.value.sides,
+      divisionLevel: season.divisionLevel,
     });
   }
   return { ok: true, round: { round: round.number, tick: 0, matches, decisions: [] } };

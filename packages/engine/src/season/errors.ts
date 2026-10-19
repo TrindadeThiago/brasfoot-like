@@ -8,6 +8,10 @@ export const SEASON_ERROR_PARAMS = {
   "season.lineup_unavailable": ["clubId", "playerId"],
   "season.invalid_lineup": ["clubId", "matchErrorCode"],
   "season.lineup_not_playing": ["clubId", "round"],
+  "season.invalid_composition": ["level", "reason"],
+  "turnover.season_not_over": ["round"],
+  "turnover.invalid_steps": ["stepId", "reason"],
+  "turnover.invalid_result": ["reason"],
 } as const satisfies Record<string, readonly string[]>;
 
 export type SeasonErrorCode = keyof typeof SEASON_ERROR_PARAMS;

@@ -1,6 +1,40 @@
 // API pública do motor (contracts/engine-api.md). Nada fora deste arquivo é API pública.
 
-export { ageOn } from "./calendar/date";
+export { ageOn, seasonDate } from "./calendar/date";
+export type { CompositionChange } from "./career/composition";
+export { nextComposition } from "./career/composition";
+export {
+  clubDivision,
+  createLeagueSeason,
+  divisionSeason,
+  divisionZones,
+  isLeagueSeasonOver,
+  leagueRound,
+  leagueSeasonSeed,
+  leagueTotalRounds,
+} from "./career/league";
+export { advanceLeague, completeLeagueRound, startLeagueRound } from "./career/league-round";
+export {
+  DEFAULT_TURNOVER_STEPS,
+  resolveTurnoverSteps,
+  seasonTurnover,
+  TURNOVER_STEP_IDS,
+} from "./career/turnover";
+export type {
+  DivisionZones,
+  HistoryDivision,
+  HistoryRow,
+  LeagueResult,
+  LeagueSeason,
+  LeagueSeasonOptions,
+  NextSeasonDraft,
+  SeasonHistoryEntry,
+  TurnoverContext,
+  TurnoverOptions,
+  TurnoverRegistration,
+  TurnoverResult,
+  TurnoverStep,
+} from "./career/types";
 export { deriveMarketValue, deriveWage } from "./derived/economy";
 export * from "./lineup";
 export { adequacy } from "./match/adequacy";

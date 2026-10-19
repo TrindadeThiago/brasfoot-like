@@ -1,5 +1,5 @@
 import type { Lineup } from "../match/types";
-import type { CompletedBank } from "../model/types";
+import type { CompletedBank, Division } from "../model/types";
 import { generateCalendar } from "./calendar";
 import { type SeasonError, seasonError } from "./errors";
 import { squadsByClub } from "./fixture";
@@ -47,10 +47,20 @@ export function createSeason(world: CompletedBank, options: SeasonOptions): Crea
       error: seasonError("season.unsupported_format", { format: competition.format.type }),
     };
   }
-  if (division.clubIds.length < 2) {
+  const clubIds = options.clubIds ? [...options.clubIds] : [...division.clubIds];
+  if (options.clubIds) {
+    const reason = compositionProblem(world, competition.divisions, clubIds);
+    if (reason) {
+      return {
+        ok: false,
+        error: seasonError("season.invalid_composition", { level: division.level, reason }),
+      };
+    }
+  }
+  if (clubIds.length < 2) {
     return {
       ok: false,
-      error: seasonError("season.too_few_clubs", { count: division.clubIds.length }),
+      error: seasonError("season.too_few_clubs", { count: clubIds.length }),
     };
   }
   const rules: DisciplineRules = { ...DEFAULT_DISCIPLINE_RULES, ...options.rules };
@@ -63,7 +73,7 @@ export function createSeason(world: CompletedBank, options: SeasonOptions): Crea
 
   const squads = squadsByClub(world);
   const formations: Season["formations"] = {};
-  for (const clubId of division.clubIds) {
+  for (const clubId of clubIds) {
     formations[clubId] = preferredFormation(squads.get(clubId) ?? []);
   }
   return {
@@ -73,15 +83,34 @@ export function createSeason(world: CompletedBank, options: SeasonOptions): Crea
       divisionLevel: division.level,
       seed: options.seed,
       rules,
-      clubIds: [...division.clubIds],
+      clubIds,
       formations,
-      calendar: generateCalendar(division.clubIds, competition.format.rounds, options.seed),
+      calendar: generateCalendar(clubIds, competition.format.rounds, options.seed),
       nextRound: 1,
       records: [],
-      status: {},
+      status: Object.fromEntries(
+        Object.entries(options.status ?? {}).map(([id, entry]) => [id, { ...entry }]),
+      ),
       warnings: [],
     },
   };
+}
+
+/** Motivo pelo qual uma composição informada é inválida, ou nada se for válida. */
+function compositionProblem(
+  world: CompletedBank,
+  divisions: readonly Division[],
+  clubIds: readonly string[],
+): string | undefined {
+  if (clubIds.length < 2) return "menos de 2 clubes";
+  if (new Set(clubIds).size !== clubIds.length) return "clube repetido";
+  const known = new Set(world.clubs.map((club) => club.id));
+  const unknown = clubIds.find((clubId) => !known.has(clubId));
+  if (unknown) return `clube inexistente: ${unknown}`;
+  const competing = new Set(divisions.flatMap((division) => division.clubIds));
+  const outsider = clubIds.find((clubId) => !competing.has(clubId));
+  if (outsider) return `clube fora da competição: ${outsider}`;
+  return undefined;
 }
 
 export function isSeasonOver(season: Season): boolean {
