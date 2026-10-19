@@ -2,7 +2,9 @@ import {
   advanceSeason,
   type CompletedBank,
   clubUnavailability,
+  createFinances,
   createSeason,
+  economyRules,
   FORMATION_IDS,
   isSeasonOver,
   type LeagueSeason,
@@ -73,8 +75,21 @@ const addLeague: Migration = {
   },
 };
 
+/** v3 → v4: finanças iniciais (008 R12), sem bilheteria nem folha retroativas. */
+const addFinances: Migration = {
+  from: 3,
+  migrate(raw) {
+    const save = raw as { bank: CompletedBank; league: LeagueSeason };
+    return {
+      ...(raw as object),
+      formatVersion: 4,
+      finances: createFinances(save.bank, save.league),
+    };
+  },
+};
+
 /** Migrações reais do formato, em ordem. */
-export const MIGRATIONS: readonly Migration[] = [addLineup, addLeague];
+export const MIGRATIONS: readonly Migration[] = [addLineup, addLeague, addFinances];
 
 /** Problemas que tornam a escalação gravada ilegível (os demais o jogo corrige ou avisa). */
 const BROKEN_LINEUP = new Set([
@@ -119,6 +134,24 @@ const envelopeSchema = z.object({
       .min(1),
   }),
   history: z.array(z.object({ number: z.int(), year: z.int() }).loose()),
+  finances: z.object({
+    clubs: z.record(
+      z.string(),
+      z
+        .object({
+          cash: z.int(),
+          debt: z.int().min(0),
+          ticketPrice: z.int(),
+          capacity: z.int().min(1),
+          seasonStartCash: z.int(),
+        })
+        .loose(),
+    ),
+    ledger: z.array(z.object({ clubId: z.string(), amount: z.int() }).loose()),
+    gates: z.array(z.unknown()),
+    seasons: z.array(z.unknown()),
+    crises: z.array(z.unknown()),
+  }),
   lineup: z.object({
     formation: z.enum(FORMATION_IDS),
     posture: z.enum(POSTURES),
@@ -143,6 +176,27 @@ function leagueProblem(save: SaveFile): string | undefined {
     league.divisions.filter((season) => !isSeasonOver(season)).map((season) => season.nextRound),
   );
   if (rounds.size > 1) return "divisões em rodadas diferentes";
+  return undefined;
+}
+
+/** Motivo pelo qual as finanças não combinam com a liga ou entre si, ou nada se combinam. */
+function financeProblem(save: SaveFile): string | undefined {
+  const { finances } = save;
+  const { min, max } = economyRules(save.bank, save.league.competitionId).priceRange;
+  const sums = new Map<string, number>();
+  for (const entry of finances.ledger)
+    sums.set(entry.clubId, (sums.get(entry.clubId) ?? 0) + entry.amount);
+  for (const season of save.league.divisions) {
+    for (const clubId of season.clubIds) {
+      const club = finances.clubs[clubId];
+      if (!club) return `clube sem finanças: ${clubId}`;
+      if (club.cash !== club.seasonStartCash + (sums.get(clubId) ?? 0)) {
+        return `caixa incoerente com os lançamentos: ${clubId}`;
+      }
+      if (club.ticketPrice < min || club.ticketPrice > max)
+        return `ingresso fora da faixa: ${clubId}`;
+    }
+  }
   return undefined;
 }
 
@@ -185,7 +239,7 @@ export function migrateSave(
   if (!envelope.success) return { status: "corrupt", reason: "estrutura inválida" };
   const save = current as SaveFile;
   if (!validateBank(save.bank).ok) return { status: "corrupt", reason: "banco inválido" };
-  const incoherence = leagueProblem(save);
+  const incoherence = leagueProblem(save) ?? financeProblem(save);
   if (incoherence) return { status: "corrupt", reason: incoherence };
   const season = save.league.divisions.find((entry) => entry.clubIds.includes(save.clubId));
   if (!season) return { status: "corrupt", reason: "clube fora das divisões" };

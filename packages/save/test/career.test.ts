@@ -1,4 +1,10 @@
-import { advanceLeague, leagueRound, nextComposition, seasonDate } from "@brasfoot-like/engine";
+import {
+  advanceCareer,
+  advanceLeague,
+  leagueRound,
+  nextComposition,
+  seasonDate,
+} from "@brasfoot-like/engine";
 import { describe, expect, it } from "vitest";
 import {
   advanceCareerSeason,
@@ -135,5 +141,30 @@ describe("virada da carreira (US2, contracts/save-format-v3.md)", () => {
     if (!first.ok) throw new Error("falhou");
     const opened = migrateSave(JSON.parse(JSON.stringify(first.save)));
     expect(opened.status).toBe("ok");
+  }, 60000);
+
+  it("leva as finanças: premiação recebida, resumo e patrocínio da nova divisão", () => {
+    const base = validSave(SERIE_A[0]);
+    const played = advanceCareer(
+      base.league,
+      base.finances,
+      base.bank,
+      { toEnd: true },
+      base.clubId,
+    );
+    if (!played.ok) throw new Error("falhou");
+    const save = { ...base, league: played.league, finances: played.finances };
+    const result = advanceCareerSeason(save, "2026-10-20T00:00:00.000Z");
+    if (!result.ok) throw new Error(JSON.stringify(result.error));
+    const { finances } = result.save;
+    const summary = finances.seasons.find((item) => item.clubId === save.clubId);
+    expect(summary?.totals.prize).toBeGreaterThan(0);
+    expect(summary?.season).toBe(1);
+    const sponsorship = finances.ledger.filter(
+      (entry) => entry.clubId === save.clubId && entry.category === "sponsorship",
+    );
+    expect(sponsorship).toHaveLength(1);
+    expect(sponsorship[0]?.season).toBe(2);
+    expect(migrateSave(JSON.parse(JSON.stringify(result.save))).status).toBe("ok");
   }, 60000);
 });

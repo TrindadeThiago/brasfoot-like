@@ -61,10 +61,20 @@ export function advanceCareerSeason(
   save: SaveFile,
   now: string,
 ): { ok: true; save: SaveFile } | { ok: false; error: SeasonError } {
-  const turned = seasonTurnover(save.league, save.bank, save.history, { careerSeed: save.seed });
+  const turned = seasonTurnover(save.league, save.bank, save.history, {
+    careerSeed: save.seed,
+    finances: save.finances,
+    managerClubId: save.clubId,
+  });
   if (!turned.ok) return turned;
   const next = withAdjustedLineup(
-    withManagerFormation({ ...save, league: turned.league, history: turned.history, savedAt: now }),
+    withManagerFormation({
+      ...save,
+      league: turned.league,
+      history: turned.history,
+      finances: turned.finances ?? save.finances,
+      savedAt: now,
+    }),
   );
   return { ok: true, save: next };
 }
