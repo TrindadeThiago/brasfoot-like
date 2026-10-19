@@ -36,6 +36,44 @@ export type {
   TurnoverStep,
 } from "./career/types";
 export { deriveMarketValue, deriveWage } from "./derived/economy";
+export type { FinanceResult } from "./finance/actions";
+export {
+  creditLine,
+  interestFor,
+  repayLoan,
+  setTicketPrice,
+  startStadiumWorks,
+  takeLoan,
+} from "./finance/actions";
+export {
+  annualWageBill,
+  createFinances,
+  defaultTicketPrice,
+  sponsorshipFor,
+} from "./finance/create";
+export type { FinanceError, FinanceErrorCode } from "./finance/errors";
+export { FINANCE_ERROR_CODES, FINANCE_ERROR_PARAMS, financeError } from "./finance/errors";
+export type { GateEstimate } from "./finance/gate";
+export { gateFor, nextHomeGateEstimate, powQuarters } from "./finance/gate";
+export type { CareerRoundResult } from "./finance/round";
+export { advanceCareer, applyRoundFinances, completeCareerRound } from "./finance/round";
+export { DEFAULT_ECONOMY, divisionEconomy, economyRules } from "./finance/rules";
+export { seasonFinanceSummary } from "./finance/summary";
+export { prizeFor } from "./finance/turnover";
+export type {
+  ClubFinance,
+  CrisisRecord,
+  DivisionEconomy,
+  EconomyRules,
+  FinanceSeasonSummary,
+  FinanceState,
+  GateRecord,
+  LedgerCategory,
+  LedgerEntry,
+  StadiumOption,
+  StadiumWorks,
+} from "./finance/types";
+export { LEDGER_CATEGORIES } from "./finance/types";
 export * from "./lineup";
 export { adequacy } from "./match/adequacy";
 export type { AutoLineupOptions, AutoLineupResult } from "./match/auto-lineup";
