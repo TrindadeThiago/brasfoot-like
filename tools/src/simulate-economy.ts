@@ -12,6 +12,7 @@ import {
   createLeagueSeason,
   type FinanceState,
   generateDefaultBank,
+  initialRenewal,
   type SeasonHistoryEntry,
   seasonTurnover,
   spearman,
@@ -51,7 +52,7 @@ const millions = (value: number) => `${(value / 1_000_000).toFixed(1)} mi`;
 /** Executa a simulação e devolve a saída (testável, sem encerrar o processo). */
 export function runSimulateEconomy(options: SimulateEconomyOptions): SimulateEconomyOutput {
   const seasons = options.seasons ?? 30;
-  const world =
+  let world: CompletedBank =
     options.world ??
     completeHiddenAttributes(generateDefaultBank({ seed: DEFAULT_SEED }), options.seed);
   const competition = world.competitions[0];
@@ -63,6 +64,7 @@ export function runSimulateEconomy(options: SimulateEconomyOptions): SimulateEco
   if (!created.ok) throw new Error(JSON.stringify(created.error));
   let league = created.league;
   let finances: FinanceState = createFinances(world, league);
+  let renewal = initialRenewal(world);
   let history: SeasonHistoryEntry[] = [];
   const clubIds = Object.keys(finances.clubs).sort();
   const wages = median(
@@ -79,17 +81,23 @@ export function runSimulateEconomy(options: SimulateEconomyOptions): SimulateEco
   let healthySum = 0;
   let lastMedian = 0;
   for (let index = 0; index < seasons; index++) {
-    const played = advanceCareer(league, finances, world, { toEnd: true }, "");
+    const played = advanceCareer(league, finances, world, { toEnd: true }, "", undefined, {
+      state: renewal,
+      careerSeed: options.seed,
+    });
     if (!played.ok) throw new Error(JSON.stringify(played.error));
-    const turned = seasonTurnover(played.league, world, history, {
+    const turned = seasonTurnover(played.league, played.world, history, {
       careerSeed: options.seed,
       finances: played.finances,
       managerClubId: "",
+      renewal: played.renewal ?? renewal,
     });
     if (!turned.ok || !turned.finances) throw new Error(JSON.stringify(turned));
     league = turned.league;
     history = turned.history;
     finances = turned.finances;
+    world = turned.world;
+    renewal = turned.renewal ?? renewal;
     const cash = clubIds.map((clubId) => finances.clubs[clubId]?.cash ?? 0);
     for (const [position, clubId] of clubIds.entries()) {
       totals.set(clubId, (totals.get(clubId) ?? 0) + (cash[position] ?? 0));

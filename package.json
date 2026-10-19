@@ -19,7 +19,8 @@
     "build:web": "pnpm --filter @brasfoot-like/web build",
     "preview:web": "pnpm --filter @brasfoot-like/web preview",
     "test:e2e": "pnpm --filter @brasfoot-like/web test:e2e",
-    "sim:economy": "pnpm --filter @brasfoot-like/tools sim:economy"
+    "sim:economy": "pnpm --filter @brasfoot-like/tools sim:economy",
+    "sim:world": "pnpm --filter @brasfoot-like/tools sim:world"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",
