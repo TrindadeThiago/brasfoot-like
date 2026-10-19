@@ -5,6 +5,7 @@ import { currentDate, type SaveFile, userSeason } from "@brasfoot-like/save";
 import { label, useT } from "../i18n";
 import { Button } from "./Button";
 import { Dialog } from "./Dialog";
+import { evolutionText, lastEvolution } from "./evolution-text";
 import { conditionText } from "./PlayerCondition";
 import styles from "./PlayerDetails.module.css";
 
@@ -40,6 +41,7 @@ export function PlayerDetails({
   const visible: [string, string][] = [
     ["player.position", label(`position.${player.position}`)],
     ["player.strength", String(player.strength)],
+    ["player.evolution", evolutionText(lastEvolution(save, player.id))],
     ["player.age", t("player.ageValue", { age: ageOn(player.birthDate, currentDate(save)) })],
     ["player.nationality", country?.name ?? ""],
     [

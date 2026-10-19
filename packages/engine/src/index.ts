@@ -55,7 +55,7 @@ export type { FinanceError, FinanceErrorCode } from "./finance/errors";
 export { FINANCE_ERROR_CODES, FINANCE_ERROR_PARAMS, financeError } from "./finance/errors";
 export type { GateEstimate } from "./finance/gate";
 export { gateFor, nextHomeGateEstimate, powQuarters } from "./finance/gate";
-export type { CareerRoundResult } from "./finance/round";
+export type { CareerRenewal, CareerRoundResult } from "./finance/round";
 export { advanceCareer, applyRoundFinances, completeCareerRound } from "./finance/round";
 export { DEFAULT_ECONOMY, divisionEconomy, economyRules } from "./finance/rules";
 export { seasonFinanceSummary } from "./finance/summary";
@@ -140,6 +140,37 @@ export type {
   Trait,
   ValidatedBank,
 } from "./model/types";
+export {
+  evolutionDelta,
+  evolvePlayers,
+  midSeasonRound,
+  minutesInRounds,
+} from "./renewal/evolution";
+export { initialRenewal, measureWorld, playerSeq } from "./renewal/measure";
+export type { CountryNames } from "./renewal/names";
+export { DEFAULT_NAME_BANK, nameBankFor } from "./renewal/names";
+export { regulate } from "./renewal/regulator";
+export { retirementChance, retirePlayers } from "./renewal/retirement";
+export {
+  EVOLUTION_RULES,
+  PROSPECT_POTENTIAL,
+  REGULATOR_RULES,
+  RETIREMENT_RULES,
+  SQUAD_RULES,
+  STAR_THRESHOLD,
+  YOUTH_RULES,
+} from "./renewal/rules";
+export { balanceSquads, squadProblems } from "./renewal/squads";
+export type {
+  EvolutionRecord,
+  PlayerDelta,
+  PlayerRef,
+  RegulatorState,
+  RenewalState,
+  SquadChangeNotice,
+  WorldMeasure,
+} from "./renewal/types";
+export { generateYouth, youthCount } from "./renewal/youth";
 export type { Rng, RngState, WeightedItem } from "./rng/xoshiro";
 export { createRng, restoreRng } from "./rng/xoshiro";
 export { fixtureSeed, generateCalendar } from "./season/calendar";

@@ -1,0 +1,87 @@
+import { ageOn } from "../calendar/date";
+import type { LeagueSeason } from "../career/types";
+import { POSITIONS, type Position } from "../model/catalogs";
+import type { CompletedBank, CompletedPlayer } from "../model/types";
+import { createRng } from "../rng/xoshiro";
+import { playerRef } from "./retirement";
+import { SQUAD_RULES } from "./rules";
+import type { PlayerRef, RenewalState } from "./types";
+import { createYouth, neediestPosition } from "./youth";
+
+/** Utilidade para dispensa (R7): força, margem dos jovens e penalidade dos veteranos. */
+function utility(player: CompletedPlayer, date: string): number {
+  const { youthAge, youthWeight, ageFrom, agePenalty } = SQUAD_RULES.utility;
+  const age = ageOn(player.birthDate, date);
+  const margin =
+    age <= youthAge ? youthWeight * Math.max(0, player.hidden.potential - player.strength) : 0;
+  return player.strength + margin - agePenalty * Math.max(0, age - ageFrom);
+}
+
+/** Problemas de elenco de cada clube da competição (vazio = todos dentro das regras). */
+export function squadProblems(world: CompletedBank, league: LeagueSeason): string[] {
+  const problems: string[] = [];
+  for (const clubId of league.divisions.flatMap((season) => season.clubIds).sort()) {
+    const squad = world.players.filter((player) => player.clubId === clubId);
+    if (squad.length < SQUAD_RULES.min || squad.length > SQUAD_RULES.max) {
+      problems.push(`${clubId}: ${squad.length} jogadores`);
+    }
+    for (const position of POSITIONS) {
+      const count = squad.filter((player) => player.position === position).length;
+      if (count < SQUAD_RULES.positionMin[position])
+        problems.push(`${clubId}: ${count} ${position}`);
+    }
+  }
+  return problems;
+}
+
+/**
+ * Reposição e dispensa até as regras de elenco (FR-011 a FR-013), clube por clube em ordem de id:
+ * jovens extras nas posições abaixo do mínimo e até o tamanho mínimo; dispensa dos de menor
+ * utilidade acima do máximo, sem deixar posição abaixo do mínimo.
+ */
+export function balanceSquads(
+  world: CompletedBank,
+  league: LeagueSeason,
+  renewal: RenewalState,
+  careerSeed: string,
+  season: number,
+  date: string,
+): { world: CompletedBank; renewal: RenewalState; promoted: PlayerRef[]; released: PlayerRef[] } {
+  let players = [...world.players];
+  const promoted: PlayerRef[] = [];
+  const released: PlayerRef[] = [];
+  let seq = renewal.nextPlayerSeq;
+  for (const clubId of league.divisions.flatMap((entry) => entry.clubIds).sort()) {
+    const club = world.clubs.find((entry) => entry.id === clubId);
+    if (!club) continue;
+    const rng = createRng(`${careerSeed}:squad:${season}:${clubId}`);
+    const squad = () => players.filter((player) => player.clubId === clubId);
+    const count = (position: Position) =>
+      squad().filter((player) => player.position === position).length;
+    const add = (position: Position) => {
+      const youth = createYouth(world, club, position, seq, renewal.regulator, date, rng);
+      seq += 1;
+      players.push(youth);
+      promoted.push(playerRef(youth, date));
+    };
+    for (const position of POSITIONS) {
+      while (count(position) < SQUAD_RULES.positionMin[position]) add(position);
+    }
+    while (squad().length < SQUAD_RULES.min) add(neediestPosition(squad(), rng));
+    while (squad().length > SQUAD_RULES.max) {
+      const candidates = squad()
+        .filter((player) => count(player.position) > SQUAD_RULES.positionMin[player.position])
+        .sort((a, b) => utility(a, date) - utility(b, date) || (a.id < b.id ? -1 : 1));
+      const out = candidates[0];
+      if (!out) break;
+      released.push(playerRef(out, date));
+      players = players.filter((player) => player.id !== out.id);
+    }
+  }
+  return {
+    world: { ...world, players },
+    renewal: { ...renewal, nextPlayerSeq: seq },
+    promoted,
+    released,
+  };
+}

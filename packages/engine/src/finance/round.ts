@@ -3,6 +3,8 @@ import { completeLeagueRound, startLeagueRound } from "../career/league-round";
 import type { LeagueSeason } from "../career/types";
 import type { Lineup } from "../match/types";
 import type { CompletedBank } from "../model/types";
+import { evolvePlayers, midSeasonRound } from "../renewal/evolution";
+import type { RenewalState } from "../renewal/types";
 import type { SeasonError } from "../season/errors";
 import { finishRound, type LiveRound } from "../season/live-round";
 import { isSeasonOver } from "../season/season";
@@ -15,8 +17,21 @@ import { draft, post } from "./ledger";
 import { economyRules } from "./rules";
 import type { FinanceState } from "./types";
 
+/** Estado de renovação da carreira passado à rodada (009): evolução do meio da temporada. */
+export interface CareerRenewal {
+  state: RenewalState;
+  careerSeed: string;
+}
+
 export type CareerRoundResult =
-  | { ok: true; league: LeagueSeason; finances: FinanceState }
+  | {
+      ok: true;
+      league: LeagueSeason;
+      finances: FinanceState;
+      /** Mundo vivo depois da rodada (muda na evolução do meio da temporada). */
+      world: CompletedBank;
+      renewal?: RenewalState;
+    }
   | { ok: false; error: SeasonError };
 
 /** Parcela da folha na rodada `k` de `total`: as parcelas somam exatamente a folha anual (R4). */
@@ -121,13 +136,41 @@ export function completeCareerRound(
   world: CompletedBank,
   round: LiveRound,
   managerClubId: string,
+  renewal?: CareerRenewal,
 ): CareerRoundResult {
   const completed = completeLeagueRound(league, world, round);
   if (!completed.ok) return completed;
+  const nextFinances = applyRoundFinances(
+    finances,
+    completed.league,
+    world,
+    round.round,
+    managerClubId,
+  );
+  if (renewal && round.round === midSeasonRound(completed.league)) {
+    // Evolução do meio da temporada (009 R3), no mesmo caminho do ao vivo e do direto.
+    const evolved = evolvePlayers(
+      world,
+      completed.league,
+      renewal.careerSeed,
+      "mid",
+      1,
+      round.round,
+    );
+    return {
+      ok: true,
+      league: completed.league,
+      finances: nextFinances,
+      world: evolved.world,
+      renewal: { ...renewal.state, lastEvolution: evolved.record },
+    };
+  }
   return {
     ok: true,
     league: completed.league,
-    finances: applyRoundFinances(finances, completed.league, world, round.round, managerClubId),
+    finances: nextFinances,
+    world,
+    ...(renewal ? { renewal: renewal.state } : {}),
   };
 }
 
@@ -139,25 +182,37 @@ export function advanceCareer(
   step: SeasonStep,
   managerClubId: string,
   lineups?: Record<string, Lineup>,
+  renewal?: CareerRenewal,
 ): CareerRoundResult {
-  let next = { league, finances };
+  let next: {
+    league: LeagueSeason;
+    finances: FinanceState;
+    world: CompletedBank;
+    renewal?: RenewalState;
+  } = { league, finances, world, ...(renewal ? { renewal: renewal.state } : {}) };
   const total =
     "toEnd" in step
       ? Math.max(...league.divisions.map((season) => season.calendar.length))
       : step.rounds;
   for (let played = 0; played < total; played++) {
     if (next.league.divisions.every(isSeasonOver)) break;
-    const started = startLeagueRound(next.league, world, played === 0 ? lineups : undefined);
+    const started = startLeagueRound(next.league, next.world, played === 0 ? lineups : undefined);
     if (!started.ok) return started;
     const completed = completeCareerRound(
       next.league,
       next.finances,
-      world,
+      next.world,
       finishRound(started.round),
       managerClubId,
+      renewal && next.renewal ? { state: next.renewal, careerSeed: renewal.careerSeed } : undefined,
     );
     if (!completed.ok) return completed;
-    next = { league: completed.league, finances: completed.finances };
+    next = {
+      league: completed.league,
+      finances: completed.finances,
+      world: completed.world,
+      ...(completed.renewal ? { renewal: completed.renewal } : {}),
+    };
   }
   return { ok: true, ...next };
 }

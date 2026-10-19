@@ -60,6 +60,8 @@ export const countrySchema = z.object({
   id,
   name: text(1, 60),
   code: pattern(COUNTRY_CODE_PATTERN, "country-code"),
+  /** Banco de nomes do país para jogadores gerados (009, research.md R10). */
+  names: z.object({ firstNames: z.array(text(1, 30)), surnames: z.array(text(1, 30)) }).optional(),
 });
 
 export const leagueFormatSchema = z.object({

@@ -35,6 +35,7 @@ export const ISSUE_PARAMS = {
   "division.slots_mismatch": ["level", "relegated", "nextLevel", "promoted"],
   "division.slots_exceed_clubs": ["level", "slots", "clubs"],
   "economy.price_range": ["min", "max"],
+  "country.names_too_few": ["kind", "count", "min"],
   "economy.unknown_division": ["level"],
   "squad.size": ["clubId", "count", "min", "max"],
   "squad.min_goalkeepers": ["clubId", "count", "min"],

@@ -47,7 +47,11 @@ export function withManagerFormation(save: SaveFile): SaveFile {
 /** Ajuste automático da escalação; as trocas se somam ao aviso ainda não dispensado. */
 export function withAdjustedLineup(save: SaveFile): SaveFile {
   const squad = save.bank.players.filter((player) => player.clubId === save.clubId);
-  const unavailable = clubUnavailability(userSeason(save), save.bank, save.clubId);
+  const inSquad = new Set(squad.map((player) => player.id));
+  const left = [...Object.values(save.lineup.starters), ...save.lineup.bench]
+    .filter((playerId) => !inSquad.has(playerId))
+    .map((playerId) => ({ playerId, reason: "left" as const, remaining: 0 }));
+  const unavailable = [...clubUnavailability(userSeason(save), save.bank, save.clubId), ...left];
   const { lineup, changes } = adjustLineup(save.lineup, squad, unavailable);
   if (changes.length === 0) return save;
   return { ...save, lineup, lineupNotice: [...(save.lineupNotice ?? []), ...changes] };
@@ -65,6 +69,7 @@ export function advanceCareerSeason(
     careerSeed: save.seed,
     finances: save.finances,
     managerClubId: save.clubId,
+    renewal: save.renewal,
   });
   if (!turned.ok) return turned;
   const next = withAdjustedLineup(
@@ -73,8 +78,17 @@ export function advanceCareerSeason(
       league: turned.league,
       history: turned.history,
       finances: turned.finances ?? save.finances,
+      bank: turned.world,
+      renewal: turned.renewal ?? save.renewal,
       savedAt: now,
     }),
   );
   return { ok: true, save: next };
+}
+
+/** Some com o aviso de mudanças do elenco da virada (009 US6). */
+export function dismissSquadNotice(save: SaveFile): SaveFile {
+  if (!save.renewal.squadNotice) return save;
+  const { squadNotice: _notice, ...renewal } = save.renewal;
+  return { ...save, renewal };
 }

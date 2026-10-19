@@ -13,6 +13,7 @@ import { Crest } from "../../ui/Crest";
 import { FormChips } from "../../ui/FormChips";
 import { LineupNotice } from "../../ui/LineupNotice";
 import { RoundResults } from "../../ui/RoundResults";
+import { SquadChangeNotice } from "../../ui/SquadChangeNotice";
 import styles from "./page.module.css";
 
 export default function HomePage() {
@@ -44,6 +45,11 @@ export default function HomePage() {
                   rounds: save.finances.clubs[save.clubId]?.negativeRounds ?? 0,
                 })}
               </p>
+            ) : null}
+            {save.renewal.squadNotice ? (
+              <div className={styles.wide}>
+                <SquadChangeNotice save={save} onDismiss={game.dismissSquadNotice} />
+              </div>
             ) : null}
             {save.lineupNotice && save.lineupNotice.length > 0 ? (
               <div className={styles.wide}>

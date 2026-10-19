@@ -24,6 +24,7 @@ import {
 import {
   advanceCareerSeason,
   createSave,
+  dismissSquadNotice as dismissSavedSquadNotice,
   type FinanceSaveResult,
   repayManagerLoan,
   type SaveError,
@@ -165,6 +166,8 @@ interface GameContextValue {
   placePlayer(from: Place, to: Place): { ok: true } | { ok: false; code: string };
   autoLineup(): void;
   dismissLineupNotice(): void;
+  /** Some com o aviso de mudanças do elenco da virada (009). */
+  dismissSquadNotice(): void;
   /** Ações financeiras do clube do jogador (008): validam no motor, salvam e devolvem o erro. */
   setTicketPrice(price: number): FinanceActionResult;
   takeLoan(amount: number): FinanceActionResult;
@@ -318,10 +321,19 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
     async (live: LiveRound) => {
       const save = latestSave.current;
       if (!save || live.round !== leagueRound(save.league)) return;
-      const result = completeCareerRound(save.league, save.finances, save.bank, live, save.clubId);
+      const result = completeCareerRound(save.league, save.finances, save.bank, live, save.clubId, {
+        state: save.renewal,
+        careerSeed: save.seed,
+      });
       if (!result.ok) return;
       const next = touch(
-        withAdjustedLineup({ ...save, league: result.league, finances: result.finances }),
+        withAdjustedLineup({
+          ...save,
+          league: result.league,
+          finances: result.finances,
+          bank: result.world,
+          renewal: result.renewal ?? save.renewal,
+        }),
         new Date().toISOString(),
       );
       latestSave.current = next;
@@ -499,6 +511,11 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
     [commitFinance],
   );
 
+  const dismissSquadNotice = useCallback(
+    () => commitLineup((save) => dismissSavedSquadNotice(save)),
+    [commitLineup],
+  );
+
   const dismissLineupNotice = useCallback(
     () =>
       commitLineup((save) => {
@@ -540,6 +557,7 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       placePlayer,
       autoLineup,
       dismissLineupNotice,
+      dismissSquadNotice,
       setTicketPrice,
       takeLoan,
       repayLoan,
@@ -564,6 +582,7 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       placePlayer,
       autoLineup,
       dismissLineupNotice,
+      dismissSquadNotice,
       setTicketPrice,
       takeLoan,
       repayLoan,

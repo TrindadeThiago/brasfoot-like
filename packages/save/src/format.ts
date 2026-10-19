@@ -4,11 +4,12 @@ import type {
   LeagueSeason,
   Lineup,
   LineupChange,
+  RenewalState,
   SeasonHistoryEntry,
 } from "@brasfoot-like/engine";
 
 /** Versão atual do formato do save (Princípio VI). */
-export const SAVE_FORMAT_VERSION = 4;
+export const SAVE_FORMAT_VERSION = 5;
 
 export const MANAGER_NAME_MAX = 40;
 
@@ -28,6 +29,8 @@ export interface SaveFile {
   history: SeasonHistoryEntry[];
   /** Finanças de todos os clubes da competição (v4). */
   finances: FinanceState;
+  /** Estado da renovação do mundo (v5). `bank` é o mundo vivo da carreira desde a 009. */
+  renewal: RenewalState;
   /** Escalação do clube do jogador (v2). */
   lineup: Lineup;
   /** Trocas do último ajuste automático, até o jogador dispensar o aviso (v2). */

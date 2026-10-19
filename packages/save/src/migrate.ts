@@ -6,10 +6,12 @@ import {
   createSeason,
   economyRules,
   FORMATION_IDS,
+  initialRenewal,
   isSeasonOver,
   type LeagueSeason,
   leagueSeasonSeed,
   POSTURES,
+  playerSeq,
   type Season,
   validateBank,
   validateLineup,
@@ -88,8 +90,17 @@ const addFinances: Migration = {
   },
 };
 
+/** v4 → v5: estado de renovação do mundo (009 R12); os jogadores atuais seguem como estão. */
+const addRenewal: Migration = {
+  from: 4,
+  migrate(raw) {
+    const save = raw as { bank: CompletedBank };
+    return { ...(raw as object), formatVersion: 5, renewal: initialRenewal(save.bank) };
+  },
+};
+
 /** Migrações reais do formato, em ordem. */
-export const MIGRATIONS: readonly Migration[] = [addLineup, addLeague, addFinances];
+export const MIGRATIONS: readonly Migration[] = [addLineup, addLeague, addFinances, addRenewal];
 
 /** Problemas que tornam a escalação gravada ilegível (os demais o jogo corrige ou avisa). */
 const BROKEN_LINEUP = new Set([
@@ -152,6 +163,12 @@ const envelopeSchema = z.object({
     seasons: z.array(z.unknown()),
     crises: z.array(z.unknown()),
   }),
+  renewal: z
+    .object({
+      nextPlayerSeq: z.int().min(1),
+      regulator: z.object({ strengthOffset: z.number(), potentialBonus: z.number() }).loose(),
+    })
+    .loose(),
   lineup: z.object({
     formation: z.enum(FORMATION_IDS),
     posture: z.enum(POSTURES),
@@ -200,6 +217,14 @@ function financeProblem(save: SaveFile): string | undefined {
   return undefined;
 }
 
+/** Sequência de ids da renovação coerente com os jogadores do mundo. */
+function renewalProblem(save: SaveFile): string | undefined {
+  const highest = save.bank.players.reduce((max, player) => Math.max(max, playerSeq(player.id)), 0);
+  return save.renewal.nextPlayerSeq > highest
+    ? undefined
+    : "sequência de ids de jogador repetiria ids";
+}
+
 function versionOf(raw: unknown): number | undefined {
   if (raw === null || typeof raw !== "object") return undefined;
   const value = (raw as { formatVersion?: unknown }).formatVersion;
@@ -239,7 +264,7 @@ export function migrateSave(
   if (!envelope.success) return { status: "corrupt", reason: "estrutura inválida" };
   const save = current as SaveFile;
   if (!validateBank(save.bank).ok) return { status: "corrupt", reason: "banco inválido" };
-  const incoherence = leagueProblem(save) ?? financeProblem(save);
+  const incoherence = leagueProblem(save) ?? financeProblem(save) ?? renewalProblem(save);
   if (incoherence) return { status: "corrupt", reason: incoherence };
   const season = save.league.divisions.find((entry) => entry.clubIds.includes(save.clubId));
   if (!season) return { status: "corrupt", reason: "clube fora das divisões" };

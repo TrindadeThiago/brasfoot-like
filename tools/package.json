@@ -9,7 +9,8 @@
     "validate-bank": "tsx src/validate-bank.ts",
     "sim:matches": "tsx src/simulate-matches.ts",
     "sim:season": "tsx src/simulate-season.ts",
-    "sim:economy": "tsx src/simulate-economy.ts"
+    "sim:economy": "tsx src/simulate-economy.ts",
+    "sim:world": "tsx src/simulate-world.ts"
   },
   "dependencies": {
     "@brasfoot-like/engine": "workspace:*",

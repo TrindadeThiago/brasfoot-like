@@ -3,7 +3,13 @@ import type { SaveFile } from "@brasfoot-like/save";
 import { label, t } from "../i18n";
 
 export function playerName(save: SaveFile, playerId: string): string {
-  return save.bank.players.find((player) => player.id === playerId)?.displayName ?? playerId;
+  const notice = save.renewal.squadNotice;
+  const gone = notice ? [...notice.retired, ...notice.released] : [];
+  return (
+    save.bank.players.find((player) => player.id === playerId)?.displayName ??
+    gone.find((ref) => ref.playerId === playerId)?.displayName ??
+    playerId
+  );
 }
 
 function positionOfSlot(save: SaveFile, slotId: string | undefined): string {

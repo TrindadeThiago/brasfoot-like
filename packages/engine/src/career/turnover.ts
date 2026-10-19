@@ -16,6 +16,7 @@
  * `generate-calendars`.
  */
 
+import { seasonDate } from "../calendar/date";
 import {
   aiFinanceReview,
   closeFinanceSeason,
@@ -23,6 +24,13 @@ import {
   paySponsorship,
 } from "../finance/turnover";
 import type { CompletedBank } from "../model/types";
+import {
+  balanceSquadsStep,
+  evolvePlayersStep,
+  generateYouthStep,
+  regulateWorldStep,
+  retirePlayersStep,
+} from "../renewal/turnover";
 import { createRng } from "../rng/xoshiro";
 import { type SeasonError, seasonError } from "../season/errors";
 import { standings } from "../season/standings";
@@ -44,6 +52,11 @@ export const TURNOVER_STEP_IDS = [
   "record-history",
   "pay-prizes",
   "close-finance-season",
+  "evolve-players",
+  "retire-players",
+  "regulate-world",
+  "generate-youth",
+  "balance-squads",
   "promotion-relegation",
   "advance-year",
   "reset-season-stats",
@@ -89,12 +102,20 @@ const advanceYear: TurnoverStep = {
   id: "advance-year",
   run: (context) => {
     const number = context.finished.number + 1;
+    const year = context.finished.year + 1;
+    const manifest = context.world.manifest;
     return {
       ...context,
+      // O mundo vivo avança no tempo (009): a data de referência acompanha a temporada, para que
+      // as idades dos jogadores gerados sigam válidas pelo schema do banco.
+      world: {
+        ...context.world,
+        manifest: { ...manifest, referenceDate: seasonDate(manifest.referenceDate, year) },
+      },
       next: {
         ...context.next,
         number,
-        year: context.finished.year + 1,
+        year,
         seed: leagueSeasonSeed(context.careerSeed, number),
       },
     };
@@ -139,6 +160,11 @@ export const DEFAULT_TURNOVER_STEPS: readonly TurnoverStep[] = [
   recordHistory,
   payPrizes,
   closeFinanceSeason,
+  evolvePlayersStep,
+  retirePlayersStep,
+  regulateWorldStep,
+  generateYouthStep,
+  balanceSquadsStep,
   promotionRelegation,
   advanceYear,
   resetSeasonStats,
@@ -252,6 +278,7 @@ export function seasonTurnover(
     rng: (stepId) => createRng(`${options.careerSeed}:turnover:${nextNumber}:${stepId}`),
     ...(options.finances ? { finances: options.finances } : {}),
     ...(options.managerClubId ? { managerClubId: options.managerClubId } : {}),
+    ...(options.renewal ? { renewal: options.renewal } : {}),
   };
   try {
     for (const step of resolved.steps) context = step.run(context);
@@ -278,5 +305,7 @@ export function seasonTurnover(
     league: context.league,
     history: context.history,
     ...(context.finances ? { finances: context.finances } : {}),
+    world: context.world,
+    ...(context.renewal ? { renewal: context.renewal } : {}),
   };
 }

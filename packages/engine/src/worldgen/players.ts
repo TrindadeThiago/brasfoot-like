@@ -18,7 +18,7 @@ function roleFor(position: Position, slot: number): Role {
 }
 
 /** Data de nascimento sorteada de modo que a idade na data de referência seja `age`. */
-function birthDateFor(rng: Rng, age: number, referenceDate: string): string {
+export function birthDateFor(rng: Rng, age: number, referenceDate: string): string {
   const reference = parseIsoDate(referenceDate);
   if (!reference) throw new Error(`data de referência inválida: ${referenceDate}`);
   const latest = daysFromCivil({ ...reference, year: reference.year - age });
@@ -33,7 +33,7 @@ function ageOffset(age: number): number {
   return 0;
 }
 
-function pickTraits(rng: Rng, position: Position): Trait[] {
+export function pickTraits(rng: Rng, position: Position): Trait[] {
   const { chanceAtLeastOne, chanceSecond, weights } = GENERATOR_TUNING.traits;
   if (rng.float() >= chanceAtLeastOne) return [];
   const options = Object.entries(weights[position]).map(([value, weight]) => ({
@@ -55,7 +55,10 @@ function strengthFor(rng: Rng, club: GeneratedClub, role: Role, age: number): nu
   return Math.min(strengthClamp[1], Math.max(strengthClamp[0], Math.round(strength)));
 }
 
-function personName(rng: Rng, names: NameBank): { name: string; displayName: string } {
+export function personName(
+  rng: Rng,
+  names: Pick<NameBank, "firstNames" | "surnames">,
+): { name: string; displayName: string } {
   const first = rng.pick(names.firstNames);
   const middle = rng.pick(names.surnames);
   const last = rng.pick(names.surnames.filter((surname) => surname !== middle));

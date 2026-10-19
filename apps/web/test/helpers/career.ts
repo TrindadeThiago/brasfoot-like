@@ -18,9 +18,17 @@ export async function storedCareer(
       save.bank,
       { rounds: round - 1 },
       save.clubId,
+      undefined,
+      { state: save.renewal, careerSeed: save.seed },
     );
     if (!advanced.ok) throw new Error("falhou");
-    save = { ...save, league: advanced.league, finances: advanced.finances };
+    save = {
+      ...save,
+      league: advanced.league,
+      finances: advanced.finances,
+      bank: advanced.world,
+      renewal: advanced.renewal ?? save.renewal,
+    };
   }
   if (edit) save = edit(save);
   const store = createIndexedDbStore(`tela-${counter++}`, migrateSave);
