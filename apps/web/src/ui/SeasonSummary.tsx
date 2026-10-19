@@ -4,7 +4,7 @@ import { divisionNameOf, type SaveFile } from "@brasfoot-like/save";
 import Link from "next/link";
 import type { SeasonEndSummary } from "../game/selectors";
 import { divisionHref } from "../game/useDivision";
-import { useT } from "../i18n";
+import { formatMoney, useT } from "../i18n";
 import { screenHref } from "./AppHeader";
 import { Crest } from "./Crest";
 import styles from "./SeasonSummary.module.css";
@@ -27,6 +27,7 @@ export function SeasonSummary({ save, summary }: { save: SaveFile; summary: Seas
           ),
         })}
       </p>
+      <p>{t("seasonEnd.prize", { club: club?.name ?? "", amount: formatMoney(mine.prize) })}</p>
       <div className={styles.champions}>
         {summary.champions.map((champion) => {
           const winner = clubs.get(champion.clubId);
