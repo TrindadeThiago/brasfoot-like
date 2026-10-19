@@ -32,5 +32,6 @@
   "file.missing": "O arquivo {file} não foi encontrado.",
   "file.invalid_json": "O arquivo {file} não é um JSON válido (linha {line}, coluna {column}).",
   "economy.price_range": "O preço mínimo do ingresso ({min}) é maior que o máximo ({max}).",
-  "economy.unknown_division": "As regras econômicas citam a divisão de nível {level}, que não existe na competição."
+  "economy.unknown_division": "As regras econômicas citam a divisão de nível {level}, que não existe na competição.",
+  "country.names_too_few": "O banco de nomes do país tem {count, plural, one {# {kind, select, firstNames {nome} other {sobrenome}}} other {# {kind, select, firstNames {nomes} other {sobrenomes}}}}; são necessários ao menos {min}."
 }
