@@ -15,7 +15,7 @@ const WORKS_OCCUPANCY = 0.9;
 const PRICE_STEP_PCT = 10;
 const RESERVE_MONTHS = 6;
 /** Caixa acima de tantos meses de folha: o clube investe no estádio mesmo sem lotar. */
-const RICH_MONTHS = 24;
+const RICH_MONTHS = 18;
 
 /** Ocupação média dos últimos jogos em casa da temporada, ou nada sem jogos suficientes. */
 function recentOccupancy(finances: FinanceState, clubId: string): number | undefined {
@@ -102,7 +102,7 @@ function reviewCredit(
 
 /**
  * Decisões dos clubes do computador (US7, FR-021), em ordem de id: a cada 4 rodadas revisam o
- * preço e as obras (com estádio cheio, ou com caixa acima de 24 meses de folha); toda rodada, o
+ * preço e as obras (com estádio cheio, ou com caixa acima de 18 meses de folha); toda rodada, o
  * crédito. O clube do jogador nunca é alterado.
  */
 export function aiRoundReview(

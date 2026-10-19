@@ -1,9 +1,13 @@
 /** Jogador impedido de jogar agora: motivo e partidas restantes. */
 export interface Unavailability {
   playerId: string;
-  reason: "injury" | "suspension";
+  /** `left`: aposentado ou dispensado na virada (009); some da escalação com aviso. */
+  reason: "injury" | "suspension" | "left";
   remaining: number;
 }
+
+/** Ausência por lesão ou suspensão (situação da temporada). */
+export type SeasonUnavailability = Unavailability & { reason: "injury" | "suspension" };
 
 export type LineupIssueCode =
   | "empty_slot"

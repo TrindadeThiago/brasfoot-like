@@ -1,5 +1,6 @@
 import type { FinanceState } from "../finance/types";
 import type { CompletedBank } from "../model/types";
+import type { RenewalState } from "../renewal/types";
 import type { Rng } from "../rng/xoshiro";
 import type { SeasonError } from "../season/errors";
 import type { DisciplineRules, PlayerStatus, Season, StandingRow } from "../season/types";
@@ -82,7 +83,8 @@ export interface NextSeasonDraft {
 }
 
 export interface TurnoverContext {
-  readonly world: CompletedBank;
+  /** Mundo vivo: as etapas de renovação (009) o substituem; as seguintes usam o novo. */
+  world: CompletedBank;
   readonly careerSeed: string;
   /** Temporada encerrada (somente leitura). */
   readonly finished: LeagueSeason;
@@ -96,6 +98,8 @@ export interface TurnoverContext {
   finances?: FinanceState;
   /** Clube do jogador: as decisões da IA não o alteram. */
   managerClubId?: string;
+  /** Estado de renovação do mundo (009). */
+  renewal?: RenewalState;
   /** Gerador próprio de cada etapa (não depende das outras etapas). */
   rng(stepId: string): Rng;
 }
@@ -117,8 +121,17 @@ export interface TurnoverOptions {
   /** Finanças da temporada encerrada (008). */
   finances?: FinanceState;
   managerClubId?: string;
+  renewal?: RenewalState;
 }
 
 export type TurnoverResult =
-  | { ok: true; league: LeagueSeason; history: SeasonHistoryEntry[]; finances?: FinanceState }
+  | {
+      ok: true;
+      league: LeagueSeason;
+      history: SeasonHistoryEntry[];
+      finances?: FinanceState;
+      /** Mundo vivo depois da virada. */
+      world: CompletedBank;
+      renewal?: RenewalState;
+    }
   | { ok: false; error: SeasonError };

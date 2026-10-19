@@ -30,6 +30,7 @@ export function generateDefaultBank(options: GenerateOptions): ValidatedBank {
     id: names.countryCode.toLowerCase(),
     name: names.countryName,
     code: names.countryCode,
+    names: { firstNames: [...names.firstNames], surnames: [...names.surnames] },
   };
 
   const clubs = generateClubs(rng.fork("clubs"), names, country.id);

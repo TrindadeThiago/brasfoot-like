@@ -77,9 +77,9 @@
           },
           "referencePrice": 12,
           "sponsorship": {
-            "base": 1500000,
+            "base": 900000,
             "perReputation": 0,
-            "wageSharePct": 18
+            "wageSharePct": 30
           }
         },
         {
@@ -93,9 +93,9 @@
           },
           "referencePrice": 8,
           "sponsorship": {
-            "base": 600000,
+            "base": 400000,
             "perReputation": 0,
-            "wageSharePct": 55
+            "wageSharePct": 60
           }
         }
       ],

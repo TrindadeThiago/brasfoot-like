@@ -5,6 +5,9 @@ import type { LeagueSeason, SeasonHistoryEntry } from "../../src/career/types";
 import { annualWageBill, createFinances } from "../../src/finance/create";
 import { advanceCareer } from "../../src/finance/round";
 import type { FinanceState } from "../../src/finance/types";
+import type { CompletedBank } from "../../src/model/types";
+import { initialRenewal } from "../../src/renewal/measure";
+import type { RenewalState } from "../../src/renewal/types";
 import { spearman } from "../../src/season/credibility";
 import { competitionId } from "../career/helpers";
 import { testWorld } from "./helpers";
@@ -33,24 +36,32 @@ interface SeasonEnd {
 }
 
 function simulate(careerSeed: string): SeasonEnd[] {
-  const world = testWorld();
+  let world: CompletedBank = testWorld();
   const created = createLeagueSeason(world, { competitionId: competitionId(), careerSeed });
   if (!created.ok) throw new Error("falhou");
   let league: LeagueSeason = created.league;
   let finances: FinanceState = createFinances(world, league);
+  // Desde a 009 toda carreira tem renovação do mundo (evolução, aposentadoria, jovens): a economia
+  // é verificada nesse cenário real, não com elencos congelados.
+  let renewal: RenewalState = initialRenewal(world);
   let history: SeasonHistoryEntry[] = [];
   const ends: SeasonEnd[] = [];
   for (let season = 0; season < SEASONS; season++) {
-    const played = advanceCareer(league, finances, world, { toEnd: true }, NO_MANAGER);
+    const played = advanceCareer(league, finances, world, { toEnd: true }, NO_MANAGER, undefined, {
+      state: renewal,
+      careerSeed,
+    });
     if (!played.ok) throw new Error(JSON.stringify(played.error));
-    const turned = seasonTurnover(played.league, world, history, {
+    const turned = seasonTurnover(played.league, played.world, history, {
       careerSeed,
       finances: played.finances,
       managerClubId: NO_MANAGER,
+      renewal: played.renewal ?? renewal,
     });
     if (!turned.ok || !turned.finances) throw new Error(JSON.stringify(turned));
-    ({ league, history } = turned);
+    ({ league, history, world } = turned);
     finances = turned.finances;
+    renewal = turned.renewal ?? renewal;
     const clubs = Object.values(finances.clubs);
     ends.push({
       cash: new Map(clubs.map((club) => [club.clubId, club.cash])),

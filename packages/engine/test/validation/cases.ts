@@ -424,6 +424,22 @@ export const RULE_CASES: RuleCase[] = [
       params: { level: 7 },
     },
   },
+  {
+    code: "country.names_too_few",
+    description: "banco de nomes com poucos sobrenomes",
+    mutate: (bank) => {
+      at(bank.countries, 0).names = {
+        firstNames: Array.from({ length: 20 }, (_, index) => `Nome${index}`),
+        surnames: ["Silva", "Souza"],
+      };
+    },
+    expect: {
+      section: "countries",
+      path: [0, "names", "surnames"],
+      entityId: at(makeValidBank().countries, 0).id,
+      params: { kind: "surnames", count: 2, min: 20 },
+    },
+  },
 ];
 
 export function bankFor(ruleCase: RuleCase): ModPackage {

@@ -2,6 +2,7 @@ import type { ModPackage, ValidatedBank } from "../model/types";
 import type { SemanticRule } from "./context";
 import { SECTIONS, type ValidationIssue } from "./issues";
 import { checkCompetitions } from "./semantic/competitions";
+import { checkCountries } from "./semantic/countries";
 import { checkReferences } from "./semantic/references";
 import { checkSquads } from "./semantic/squads";
 import { checkUniqueness } from "./semantic/uniqueness";
@@ -16,6 +17,7 @@ const SEMANTIC_RULES: SemanticRule[] = [
   checkUniqueness,
   checkReferences,
   checkCompetitions,
+  checkCountries,
   checkSquads,
 ];
 
