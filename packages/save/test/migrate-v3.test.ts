@@ -22,7 +22,7 @@ describe("migração v2 → v3 (R9, FR-024, SC-007)", () => {
     if (result.status !== "ok") return;
     expect(result.migratedFrom).toBe(2);
     const { save } = result;
-    expect(save.formatVersion).toBe(3);
+    expect(save.formatVersion).toBe(4);
     expect("season" in save).toBe(false);
     expect(save.history).toEqual([]);
     expect(save.league).toMatchObject({
@@ -43,7 +43,13 @@ describe("migração v2 → v3 (R9, FR-024, SC-007)", () => {
     if (!expected.ok) throw new Error("não avançou");
     expect(save.league.divisions[1]).toEqual(expected.season);
     expect(leagueRound(save.league)).toBe(11);
-    const { league: _league, history: _history, formatVersion: _v, ...rest } = save;
+    const {
+      league: _league,
+      history: _history,
+      finances: _finances,
+      formatVersion: _v,
+      ...rest
+    } = save;
     const { season: _season, formatVersion: _v2, ...restV2 } = v2;
     expect(rest).toEqual(restV2);
   }, 30000);
@@ -58,10 +64,10 @@ describe("migração v2 → v3 (R9, FR-024, SC-007)", () => {
     expect(migrated(saveV2MidSeason())).toEqual(migrated(saveV2MidSeason()));
   }, 30000);
 
-  it("v1 → v3 em cadeia", () => {
+  it("v1 → v4 em cadeia", () => {
     const save = migrated(saveV1());
     expect(save.migratedFrom).toBe(1);
-    expect(save.formatVersion).toBe(3);
+    expect(save.formatVersion).toBe(4);
     expect(save.lineup.starters.gk).toBeDefined();
     expect(save.league.divisions).toHaveLength(2);
   });

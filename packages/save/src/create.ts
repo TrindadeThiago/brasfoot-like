@@ -1,6 +1,7 @@
 import {
   clubDivision,
   completeHiddenAttributes,
+  createFinances,
   createLeagueSeason,
   validateBank,
 } from "@brasfoot-like/engine";
@@ -71,6 +72,7 @@ export function createSave(input: CreateSaveInput): CreateSaveResult {
       bank,
       league: league.league,
       history: [],
+      finances: createFinances(bank, league.league),
       lineup: initialLineup(bank, season, input.clubId),
     },
   };

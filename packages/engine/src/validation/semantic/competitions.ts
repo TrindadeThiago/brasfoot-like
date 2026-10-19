@@ -105,6 +105,39 @@ function checkSlots(index: number, competition: Competition): ValidationIssue[] 
   return issues;
 }
 
+/** Regras econômicas coerentes com a competição (008). */
+function checkEconomy(index: number, competition: Competition): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const economy = competition.economy;
+  if (!economy) return issues;
+  if (economy.priceRange && economy.priceRange.min > economy.priceRange.max) {
+    issues.push(
+      makeIssue(
+        "economy.price_range",
+        "competitions",
+        [index, "economy", "priceRange"],
+        { min: economy.priceRange.min, max: economy.priceRange.max },
+        competition.id,
+      ),
+    );
+  }
+  const levels = new Set(competition.divisions.map((division) => division.level));
+  (economy.divisions ?? []).forEach((division, position) => {
+    if (!levels.has(division.level)) {
+      issues.push(
+        makeIssue(
+          "economy.unknown_division",
+          "competitions",
+          [index, "economy", "divisions", position, "level"],
+          { level: division.level },
+          competition.id,
+        ),
+      );
+    }
+  });
+  return issues;
+}
+
 /** Formato de disputa e divisões de cada competição (FR-006 a FR-008, FR-021, FR-022). */
 export function checkCompetitions(context: SemanticContext): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
@@ -112,6 +145,7 @@ export function checkCompetitions(context: SemanticContext): ValidationIssue[] {
 
   for (const { index, value: competition } of context.competitions) {
     issues.push(...checkFormat(index, competition));
+    issues.push(...checkEconomy(index, competition));
 
     competition.divisions.forEach((division, position) => {
       const path = [index, "divisions", position];

@@ -23,13 +23,14 @@ chromium`. No Linux/WSL ele precisa das bibliotecas do sistema (`sudo pnpm --fil
 - `src/app/` — rotas: `/`, `/nova-carreira`, `/carreiras`, `/jogo`, `/jogo/elenco`,
   `/jogo/escalacao`, `/jogo/rodada` (rodada ao vivo), `/jogo/competicao` (com as abas
   `/resultados` e `/artilharia`; a divisão vai em `&d=<nível>`), `/jogo/calendario`,
-  `/jogo/fim-de-temporada` (resumo e "Próxima temporada") e `/jogo/historico` (`&t=<número>`
-  abre uma temporada). A carreira vai na query (`?c=<id>`), porque o static export não tem rotas
+  `/jogo/fim-de-temporada` (resumo e "Próxima temporada"), `/jogo/financas` (saldo, categorias,
+  ingresso com estimativa de público, crédito, obras, jogos em casa e histórico) e
+  `/jogo/historico` (`&t=<número>` abre uma temporada). A carreira vai na query (`?c=<id>`), porque o static export não tem rotas
   dinâmicas.
 - `src/game/useLiveRound.ts` — relógio da rodada ao vivo (velocidade, pausa, pausa automática,
   decisões, feed); o motor só recebe passos e decisões, nunca tempo real.
-- `src/game/` — `GameProvider` (criar, abrir, apagar, jogar a rodada da liga, virada de
-  temporada, salvar; escalação: esquema, postura, trocar jogadores, escalar automaticamente, aviso
+- `src/game/` — `GameProvider` (criar, abrir, apagar, jogar a rodada da liga com as finanças,
+  virada de temporada, ações financeiras — preço, crédito, obras —, salvar; escalação: esquema, postura, trocar jogadores, escalar automaticamente, aviso
   de ajuste), seletores (inclusive o resumo de fim de temporada), `useDivision` (divisão escolhida
   na URL), layout e a seleção em dois passos da escalação (`lineup-selection.ts`).
 - `src/storage/` — `SaveStore` sobre IndexedDB (saves + resumos, conflito entre abas),
@@ -40,7 +41,7 @@ chromium`. No Linux/WSL ele precisa das bibliotecas do sistema (`sudo pnpm --fil
 
 ## Atalhos
 
-`1`–`5` telas do jogo · `H` histórico · `[`/`]` divisão anterior/seguinte (na Competição) ·
+`1`–`6` telas do jogo (`6` = Finanças) · `H` histórico · `[`/`]` divisão anterior/seguinte (na Competição) ·
 `N` próxima temporada (no resumo da temporada) · `S` jogar a rodada no modo preferido (ao vivo ou direto) · `D` simular
 direto · na rodada: `Espaço` pausa/retoma, `+`/`-` velocidade, `F` terminar agora · `A` escalar automaticamente (na
 Escalação) · `I` detalhes do jogador em foco · `Enter`/`Espaço` escolher origem e destino de uma

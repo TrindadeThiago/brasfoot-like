@@ -1,0 +1,10 @@
+{
+  "finance.price_out_of_range": "O ingresso de {price} está fora da faixa permitida, de {min} a {max}.",
+  "finance.invalid_amount": "O valor {amount, number} é inválido: use um número inteiro maior que zero.",
+  "finance.credit_limit": "O empréstimo de {amount, number} passa do crédito disponível de {available, number}.",
+  "finance.insufficient_cash": "Faltam recursos: a operação custa {amount, number} e o caixa é de {cash, number}.",
+  "finance.no_debt": "O clube não tem dívida para amortizar.",
+  "finance.works_in_progress": "Já há uma obra em andamento; faltam {remainingRounds, plural, one {# rodada} other {# rodadas}}.",
+  "finance.max_capacity": "A ampliação levaria o estádio de {capacity, number} lugares além do máximo de {max, number}.",
+  "finance.unknown_option": "A opção de obra {index} não existe."
+}

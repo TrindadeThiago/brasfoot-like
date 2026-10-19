@@ -1,3 +1,4 @@
+import type { FinanceState } from "../finance/types";
 import type { CompletedBank } from "../model/types";
 import type { Rng } from "../rng/xoshiro";
 import type { SeasonError } from "../season/errors";
@@ -91,6 +92,10 @@ export interface TurnoverContext {
   next: NextSeasonDraft;
   /** Nova temporada, criada pela etapa `generate-calendars`. */
   league?: LeagueSeason;
+  /** Finanças da carreira (008); ausentes em usos só da liga. */
+  finances?: FinanceState;
+  /** Clube do jogador: as decisões da IA não o alteram. */
+  managerClubId?: string;
   /** Gerador próprio de cada etapa (não depende das outras etapas). */
   rng(stepId: string): Rng;
 }
@@ -109,8 +114,11 @@ export interface TurnoverOptions {
   careerSeed: string;
   /** Etapas de sistemas futuros; padrão nenhuma. */
   extraSteps?: readonly TurnoverRegistration[];
+  /** Finanças da temporada encerrada (008). */
+  finances?: FinanceState;
+  managerClubId?: string;
 }
 
 export type TurnoverResult =
-  | { ok: true; league: LeagueSeason; history: SeasonHistoryEntry[] }
+  | { ok: true; league: LeagueSeason; history: SeasonHistoryEntry[]; finances?: FinanceState }
   | { ok: false; error: SeasonError };

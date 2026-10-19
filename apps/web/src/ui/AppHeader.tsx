@@ -22,6 +22,7 @@ export const GAME_SCREENS = [
   { path: "/jogo/escalacao", key: "nav.lineup" },
   { path: "/jogo/competicao", key: "nav.competition" },
   { path: "/jogo/calendario", key: "nav.calendar" },
+  { path: "/jogo/financas", key: "nav.finance" },
   { path: "/jogo/historico", key: "nav.history" },
 ] as const;
 

@@ -8,6 +8,13 @@ export {
 } from "./career";
 export type { CreateSaveInput, CreateSaveResult } from "./create";
 export { createSave } from "./create";
+export type { FinanceSaveResult } from "./finance";
+export {
+  repayManagerLoan,
+  setManagerTicketPrice,
+  startManagerStadiumWorks,
+  takeManagerLoan,
+} from "./finance";
 export type { SaveError, SaveErrorCode, SaveFile } from "./format";
 export { MANAGER_NAME_MAX, SAVE_FORMAT_VERSION } from "./format";
 export { initialLineup } from "./lineup";

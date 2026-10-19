@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { GameLayout } from "../../game/GameLayout";
 import { clubPosition, lastResults, nextFixture } from "../../game/selectors";
-import { useT } from "../../i18n";
+import { formatMoney, useT } from "../../i18n";
 import { screenHref } from "../../ui/AppHeader";
 import { Button } from "../../ui/Button";
 import { Crest } from "../../ui/Crest";
@@ -38,6 +38,13 @@ export default function HomePage() {
         };
         return (
           <div className={styles.grid}>
+            {save.finances.clubs[save.clubId]?.inCrisis ? (
+              <p role="alert" className={`${styles.wide} ${styles.crisis}`}>
+                {t("home.crisis", {
+                  rounds: save.finances.clubs[save.clubId]?.negativeRounds ?? 0,
+                })}
+              </p>
+            ) : null}
             {save.lineupNotice && save.lineupNotice.length > 0 ? (
               <div className={styles.wide}>
                 <LineupNotice save={save} onDismiss={game.dismissLineupNotice} />
@@ -89,6 +96,11 @@ export default function HomePage() {
             <section aria-label={t("home.position")} className={styles.card}>
               <h2>{t("home.position")}</h2>
               <p className={styles.position}>{t("home.positionValue", { position })}</p>
+              <p>
+                {t("home.cash", {
+                  amount: formatMoney(save.finances.clubs[save.clubId]?.cash ?? 0),
+                })}
+              </p>
             </section>
             <section aria-label={t("home.lastResults")} className={styles.card}>
               <h2>{t("home.lastResults")}</h2>

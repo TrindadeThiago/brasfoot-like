@@ -11,7 +11,7 @@ describe("migração v1 → v2 (FR-024, SC-007)", () => {
     if (result.status !== "ok") return;
     expect(result.migratedFrom).toBe(1);
     const { save } = result;
-    expect(save.formatVersion).toBe(3);
+    expect(save.formatVersion).toBe(4);
     const season = userSeason(save);
     const squad = save.bank.players.filter((player) => player.clubId === save.clubId);
     const expected = managerAutoLineup(
@@ -22,7 +22,13 @@ describe("migração v1 → v2 (FR-024, SC-007)", () => {
     ).lineup;
     expect(save.lineup).toEqual(expected);
     expect(season).toEqual(v1.season);
-    const { lineup: _lineup, league: _league, history: _history, ...rest } = save;
+    const {
+      lineup: _lineup,
+      league: _league,
+      history: _history,
+      finances: _finances,
+      ...rest
+    } = save;
     const { season: _season, ...restV1 } = v1;
     expect({ ...rest, formatVersion: 1 }).toEqual(restV1);
   });

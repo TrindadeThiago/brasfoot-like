@@ -33,3 +33,8 @@ export function formatDateTime(iso: string): string {
 export function formatNumber(value: number): string {
   return number.format(value);
 }
+
+/** Valor na moeda fictícia do jogo (inteiro), com o formato numérico do idioma. */
+export function formatMoney(value: number): string {
+  return t("money", { negative: value < 0 ? "yes" : "no", amount: number.format(Math.abs(value)) });
+}

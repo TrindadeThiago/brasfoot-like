@@ -3,7 +3,8 @@
 import {
   changeFormation as changeLineupFormation,
   clubUnavailability,
-  completeLeagueRound,
+  completeCareerRound,
+  type FinanceError,
   type FormationId,
   finishRound,
   isLeagueSeasonOver,
@@ -23,8 +24,13 @@ import {
 import {
   advanceCareerSeason,
   createSave,
+  type FinanceSaveResult,
+  repayManagerLoan,
   type SaveError,
   type SaveFile,
+  setManagerTicketPrice,
+  startManagerStadiumWorks,
+  takeManagerLoan,
   touch,
   userSeason,
   withAdjustedLineup,
@@ -159,7 +165,14 @@ interface GameContextValue {
   placePlayer(from: Place, to: Place): { ok: true } | { ok: false; code: string };
   autoLineup(): void;
   dismissLineupNotice(): void;
+  /** Ações financeiras do clube do jogador (008): validam no motor, salvam e devolvem o erro. */
+  setTicketPrice(price: number): FinanceActionResult;
+  takeLoan(amount: number): FinanceActionResult;
+  repayLoan(amount: number): FinanceActionResult;
+  startStadiumWorks(optionIndex: number): FinanceActionResult;
 }
+
+export type FinanceActionResult = { ok: true } | { ok: false; error: FinanceError };
 
 /** Elenco do clube do jogador e indisponíveis do momento. */
 export function lineupContext(save: SaveFile) {
@@ -305,10 +318,10 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
     async (live: LiveRound) => {
       const save = latestSave.current;
       if (!save || live.round !== leagueRound(save.league)) return;
-      const result = completeLeagueRound(save.league, save.bank, live);
+      const result = completeCareerRound(save.league, save.finances, save.bank, live, save.clubId);
       if (!result.ok) return;
       const next = touch(
-        withAdjustedLineup({ ...save, league: result.league }),
+        withAdjustedLineup({ ...save, league: result.league, finances: result.finances }),
         new Date().toISOString(),
       );
       latestSave.current = next;
@@ -453,6 +466,39 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
     [commitLineup],
   );
 
+  /** Aplica uma ação financeira ao save atual e salva (só entre rodadas). */
+  const commitFinance = useCallback(
+    (action: (save: SaveFile) => FinanceSaveResult): FinanceActionResult => {
+      const save = latestSave.current;
+      if (!save) return { ok: true };
+      const result = action(save);
+      if (!result.ok) return result;
+      const next = touch(result.save, new Date().toISOString());
+      latestSave.current = next;
+      dispatch({ type: "update", save: next });
+      void persist(next);
+      return { ok: true };
+    },
+    [persist],
+  );
+
+  const setTicketPrice = useCallback(
+    (price: number) => commitFinance((save) => setManagerTicketPrice(save, price)),
+    [commitFinance],
+  );
+  const takeLoan = useCallback(
+    (amount: number) => commitFinance((save) => takeManagerLoan(save, amount)),
+    [commitFinance],
+  );
+  const repayLoan = useCallback(
+    (amount: number) => commitFinance((save) => repayManagerLoan(save, amount)),
+    [commitFinance],
+  );
+  const startStadiumWorks = useCallback(
+    (optionIndex: number) => commitFinance((save) => startManagerStadiumWorks(save, optionIndex)),
+    [commitFinance],
+  );
+
   const dismissLineupNotice = useCallback(
     () =>
       commitLineup((save) => {
@@ -494,6 +540,10 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       placePlayer,
       autoLineup,
       dismissLineupNotice,
+      setTicketPrice,
+      takeLoan,
+      repayLoan,
+      startStadiumWorks,
     }),
     [
       state,
@@ -514,6 +564,10 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       placePlayer,
       autoLineup,
       dismissLineupNotice,
+      setTicketPrice,
+      takeLoan,
+      repayLoan,
+      startStadiumWorks,
     ],
   );
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

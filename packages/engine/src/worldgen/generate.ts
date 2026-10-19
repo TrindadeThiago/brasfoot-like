@@ -1,3 +1,4 @@
+import { DEFAULT_ECONOMY } from "../finance/rules";
 import type { Competition, Country, ModPackage, ValidatedBank } from "../model/types";
 import { createRng } from "../rng/xoshiro";
 import { validateBank } from "../validation/validate";
@@ -60,6 +61,8 @@ export function generateDefaultBank(options: GenerateOptions): ValidatedBank {
         relegationSlots: 0,
       },
     ],
+    // Regras econômicas explícitas no mod (008, R11): o banco padrão é "o primeiro mod".
+    economy: JSON.parse(JSON.stringify(DEFAULT_ECONOMY)) as typeof DEFAULT_ECONOMY,
   };
 
   let playerCount = 0;

@@ -59,6 +59,75 @@
         "relegationSlots": 0
       }
     ],
+    "economy": {
+      "credit": {
+        "interestBp": 30,
+        "perReputation": 30000
+      },
+      "crisisRounds": 10,
+      "divisions": [
+        {
+          "creditBase": 2000000,
+          "fanFactorPct": 100,
+          "level": 1,
+          "prizes": {
+            "first": 2000000,
+            "last": 300000,
+            "title": 1000000
+          },
+          "referencePrice": 12,
+          "sponsorship": {
+            "base": 1500000,
+            "perReputation": 0,
+            "wageSharePct": 18
+          }
+        },
+        {
+          "creditBase": 1000000,
+          "fanFactorPct": 70,
+          "level": 2,
+          "prizes": {
+            "first": 900000,
+            "last": 150000,
+            "title": 400000
+          },
+          "referencePrice": 8,
+          "sponsorship": {
+            "base": 600000,
+            "perReputation": 0,
+            "wageSharePct": 55
+          }
+        }
+      ],
+      "fansBase": 16000,
+      "fansPerReputation": 50,
+      "priceElasticityPct": 150,
+      "priceRange": {
+        "max": 200,
+        "min": 5
+      },
+      "stadium": {
+        "maxCapacity": 100000,
+        "options": [
+          {
+            "cost": 1500000,
+            "rounds": 6,
+            "seats": 2000
+          },
+          {
+            "cost": 4000000,
+            "rounds": 12,
+            "seats": 5000
+          },
+          {
+            "cost": 9000000,
+            "rounds": 20,
+            "seats": 10000
+          }
+        ]
+      },
+      "wageFactorPct": 100
+    },
     "format": {
       "points": {
         "draw": 1,

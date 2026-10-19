@@ -66,3 +66,11 @@
 .actions button {
   flex: 1;
 }
+
+.crisis {
+  margin: 0;
+  padding: var(--space-3);
+  border-radius: var(--radius);
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+}

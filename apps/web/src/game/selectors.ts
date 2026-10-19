@@ -2,10 +2,12 @@ import {
   type CompletedBank,
   type Crest,
   clubStrength,
+  economyRules,
   type FormResult,
   type MatchRecord,
   type ModPackage,
   nextComposition,
+  prizeFor,
   type Season,
   standings,
 } from "@brasfoot-like/engine";
@@ -119,7 +121,14 @@ export interface SeasonEndSummary {
   champions: { level: number; clubId: string; points: number }[];
   /** Clubes que trocam de divisão, agrupados por destino. */
   moves: { from: number; to: number; clubs: { clubId: string; position: number }[] }[];
-  mine: { situation: ManagerSituation; position: number; level: number; nextLevel: number };
+  mine: {
+    situation: ManagerSituation;
+    position: number;
+    level: number;
+    nextLevel: number;
+    /** Premiação que o clube recebe na virada (008). */
+    prize: number;
+  };
 }
 
 /**
@@ -167,10 +176,17 @@ export function seasonEndSummary(save: SaveFile): SeasonEndSummary {
         : position === 1
           ? "champion"
           : "stayed";
+  const prize = prizeFor(
+    economyRules(save.bank, save.league.competitionId),
+    level,
+    position,
+    tables.get(level)?.length ?? 0,
+    position === 1,
+  );
   return {
     year: save.league.year,
     champions,
     moves,
-    mine: { situation, position, level, nextLevel },
+    mine: { situation, position, level, nextLevel, prize },
   };
 }

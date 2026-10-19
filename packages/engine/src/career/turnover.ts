@@ -8,10 +8,20 @@
  * - várias etapas na mesma âncora e direção rodam em ordem de `id` (nunca na ordem de registro);
  * - o contexto traz a temporada encerrada (`finished`, só leitura), as classificações finais, o
  *   histórico, o rascunho da próxima temporada (`next`) e, depois de `generate-calendars`, a nova
- *   liga (`league`); toda aleatoriedade vem de `rng(id)`, um gerador próprio de cada etapa.
+ *   liga (`league`), além das finanças (`finances`) quando a carreira as tem; toda aleatoriedade
+ *   vem de `rng(id)`, um gerador próprio de cada etapa.
  * Sistemas que mudam elencos rodam antes de `generate-calendars`; os que leem o resultado da
- * temporada rodam depois de `record-history`.
+ * temporada rodam depois de `record-history`. As finanças (008) são etapas padrão: premiação e
+ * fechamento da temporada logo depois de `record-history`; patrocínio e revisão da IA depois de
+ * `generate-calendars`.
  */
+
+import {
+  aiFinanceReview,
+  closeFinanceSeason,
+  payPrizes,
+  paySponsorship,
+} from "../finance/turnover";
 import type { CompletedBank } from "../model/types";
 import { createRng } from "../rng/xoshiro";
 import { type SeasonError, seasonError } from "../season/errors";
@@ -32,10 +42,14 @@ import type {
 
 export const TURNOVER_STEP_IDS = [
   "record-history",
+  "pay-prizes",
+  "close-finance-season",
   "promotion-relegation",
   "advance-year",
   "reset-season-stats",
   "generate-calendars",
+  "pay-sponsorship",
+  "ai-finance-review",
 ] as const;
 
 /** Falha de uma etapa, convertida em erro da virada por `seasonTurnover`. */
@@ -123,10 +137,14 @@ const generateCalendars: TurnoverStep = {
 /** Etapas padrão, na ordem fixa documentada (FR-017). */
 export const DEFAULT_TURNOVER_STEPS: readonly TurnoverStep[] = [
   recordHistory,
+  payPrizes,
+  closeFinanceSeason,
   promotionRelegation,
   advanceYear,
   resetSeasonStats,
   generateCalendars,
+  paySponsorship,
+  aiFinanceReview,
 ];
 
 function stepsError(stepId: string, reason: string) {
@@ -232,6 +250,8 @@ export function seasonTurnover(
       carryOver: {},
     },
     rng: (stepId) => createRng(`${options.careerSeed}:turnover:${nextNumber}:${stepId}`),
+    ...(options.finances ? { finances: options.finances } : {}),
+    ...(options.managerClubId ? { managerClubId: options.managerClubId } : {}),
   };
   try {
     for (const step of resolved.steps) context = step.run(context);
@@ -253,5 +273,10 @@ export function seasonTurnover(
       error: seasonError("turnover.invalid_result", { reason: problem ?? "sem temporada" }),
     };
   }
-  return { ok: true, league: context.league, history: context.history };
+  return {
+    ok: true,
+    league: context.league,
+    history: context.history,
+    ...(context.finances ? { finances: context.finances } : {}),
+  };
 }

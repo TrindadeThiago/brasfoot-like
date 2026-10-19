@@ -4,6 +4,7 @@ export {
   eventVariant,
   eventVariants,
   formatEvent,
+  formatFinanceError,
   formatIssue,
   formatLabel,
   formatMatchError,

@@ -398,6 +398,32 @@ export const RULE_CASES: RuleCase[] = [
       params: { age: 12, min: 15, max: 45 },
     },
   },
+  {
+    code: "economy.price_range",
+    description: "preço mínimo acima do máximo",
+    mutate: (bank) => {
+      at(bank.competitions, 0).economy = { priceRange: { min: 50, max: 10 } };
+    },
+    expect: {
+      section: "competitions",
+      path: [0, "economy", "priceRange"],
+      entityId: "liga",
+      params: { min: 50, max: 10 },
+    },
+  },
+  {
+    code: "economy.unknown_division",
+    description: "regras de uma divisão que não existe",
+    mutate: (bank) => {
+      at(bank.competitions, 0).economy = { divisions: [{ level: 7 }] };
+    },
+    expect: {
+      section: "competitions",
+      path: [0, "economy", "divisions", 0, "level"],
+      entityId: "liga",
+      params: { level: 7 },
+    },
+  },
 ];
 
 export function bankFor(ruleCase: RuleCase): ModPackage {

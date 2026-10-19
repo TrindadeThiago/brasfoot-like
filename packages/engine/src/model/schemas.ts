@@ -81,12 +81,57 @@ export const divisionSchema = z.object({
   relegationSlots: intInRange(0, 40),
 });
 
+const money = intInRange(0, 10_000_000_000);
+
+/** Regras econômicas de uma divisão (008); campos ausentes usam os padrões do motor. */
+export const divisionEconomySchema = z.object({
+  level: intInRange(1, 99),
+  referencePrice: intInRange(1, 100_000).optional(),
+  fanFactorPct: intInRange(1, 1000).optional(),
+  sponsorship: z
+    .object({ base: money, perReputation: money, wageSharePct: intInRange(0, 200).optional() })
+    .optional(),
+  prizes: z.object({ first: money, last: money, title: money }).optional(),
+  creditBase: money.optional(),
+});
+
+/** Regras econômicas da competição (008, research.md R11); tudo opcional. */
+export const economySchema = z.object({
+  fansBase: intInRange(0, 1_000_000).optional(),
+  fansPerReputation: intInRange(0, 100_000).optional(),
+  priceElasticityPct: intInRange(0, 1000)
+    .refine((value) => value % 25 === 0, {
+      params: { code: "schema.invalid_format", format: "multiple-of-25" },
+    })
+    .optional(),
+  priceRange: z.object({ min: intInRange(1, 100_000), max: intInRange(1, 100_000) }).optional(),
+  credit: z.object({ perReputation: money, interestBp: intInRange(0, 10_000) }).optional(),
+  stadium: z
+    .object({
+      maxCapacity: intInRange(1000, 300_000),
+      options: list(
+        z.object({
+          seats: intInRange(1, 100_000),
+          cost: intInRange(1, 10_000_000_000),
+          rounds: intInRange(1, 200),
+        }),
+        0,
+        10,
+      ),
+    })
+    .optional(),
+  crisisRounds: intInRange(1, 200).optional(),
+  wageFactorPct: intInRange(1, 1000).optional(),
+  divisions: list(divisionEconomySchema, 0, 99).optional(),
+});
+
 export const competitionSchema = z.object({
   id,
   countryId: id,
   name: text(1, 80),
   format: leagueFormatSchema,
   divisions: list(divisionSchema, 1, 99),
+  economy: economySchema.optional(),
 });
 
 export const crestSchema = z.object({
