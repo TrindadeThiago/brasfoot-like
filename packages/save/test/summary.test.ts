@@ -13,6 +13,8 @@ describe("summarize e touch", () => {
       clubId: save.clubId,
       clubName: club?.name,
       clubCrest: club?.crest,
+      divisionLevel: 1,
+      divisionName: "Série A",
       seasonYear: 2027,
       round: 1,
       totalRounds: 38,
@@ -23,7 +25,7 @@ describe("summarize e touch", () => {
 
   it("limita a rodada à última e marca temporada encerrada", () => {
     const save = validSave();
-    save.season.nextRound = 39;
+    for (const season of save.league.divisions) season.nextRound = 39;
     expect(summarize(save)).toMatchObject({ round: 38, seasonOver: true });
   });
 

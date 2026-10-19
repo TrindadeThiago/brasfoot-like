@@ -1,15 +1,7 @@
 import { clubUnavailability, managerAutoLineup } from "@brasfoot-like/engine";
 import { describe, expect, it } from "vitest";
-import { migrateSave, type SaveFile } from "../src";
-import { validSave } from "./fixtures";
-
-/** Save no formato da 004 (versão 1): sem escalação. */
-function saveV1(mutate?: (save: SaveFile) => void) {
-  const save = validSave();
-  mutate?.(save);
-  const { lineup: _lineup, lineupNotice: _notice, ...rest } = save;
-  return { ...rest, formatVersion: 1 };
-}
+import { migrateSave, type SaveFile, userSeason } from "../src";
+import { type SaveV2, saveV1, saveV2 } from "./fixtures";
 
 describe("migração v1 → v2 (FR-024, SC-007)", () => {
   it("acrescenta a escalação automática no esquema do clube e preserva o resto", () => {
@@ -19,21 +11,24 @@ describe("migração v1 → v2 (FR-024, SC-007)", () => {
     if (result.status !== "ok") return;
     expect(result.migratedFrom).toBe(1);
     const { save } = result;
-    expect(save.formatVersion).toBe(2);
+    expect(save.formatVersion).toBe(3);
+    const season = userSeason(save);
     const squad = save.bank.players.filter((player) => player.clubId === save.clubId);
     const expected = managerAutoLineup(
       squad,
-      save.season.formations[save.clubId] ?? "4-4-2",
+      season.formations[save.clubId] ?? "4-4-2",
       "balanced",
-      clubUnavailability(save.season, save.bank, save.clubId),
+      clubUnavailability(season, save.bank, save.clubId),
     ).lineup;
     expect(save.lineup).toEqual(expected);
-    const { lineup: _lineup, ...rest } = save;
-    expect({ ...rest, formatVersion: 1 }).toEqual(v1);
+    expect(season).toEqual(v1.season);
+    const { lineup: _lineup, league: _league, history: _history, ...rest } = save;
+    const { season: _season, ...restV1 } = v1;
+    expect({ ...rest, formatVersion: 1 }).toEqual(restV1);
   });
 
   it("considera os indisponíveis do momento da migração", () => {
-    const base = validSave();
+    const base = saveV2();
     const keeper = base.lineup.starters.gk as string;
     const result = migrateSave(
       saveV1((save) => {
@@ -63,21 +58,14 @@ describe("migração v1 → v2 (FR-024, SC-007)", () => {
       },
     ],
   ])("v2 com %s ⇒ corrupt", (_, mutate) => {
-    const save = validSave();
-    mutate(save);
+    const save = saveV2();
+    mutate(save as unknown as SaveFile);
     expect(migrateSave(save).status).toBe("corrupt");
   });
 
   it("v2 com vaga vazia (escalação em edição) abre", () => {
-    const save = validSave();
+    const save: SaveV2 = saveV2();
     delete save.lineup.starters.gk;
     expect(migrateSave(save).status).toBe("ok");
-  });
-
-  it("v3 não abre", () => {
-    expect(migrateSave({ ...validSave(), formatVersion: 3 })).toEqual({
-      status: "future_version",
-      version: 3,
-    });
   });
 });

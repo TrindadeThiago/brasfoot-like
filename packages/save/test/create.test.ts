@@ -5,7 +5,7 @@ import mod from "@brasfoot-like/default-mod/mod.json" with { type: "json" };
 import players from "@brasfoot-like/default-mod/players.json" with { type: "json" };
 import { joinBankFiles } from "@brasfoot-like/engine";
 import { describe, expect, it } from "vitest";
-import { createSave, SAVE_FORMAT_VERSION } from "../src";
+import { createSave, SAVE_FORMAT_VERSION, userSeason } from "../src";
 
 const defaultBank = () =>
   joinBankFiles({
@@ -48,9 +48,10 @@ describe("createSave (FR-001, FR-003)", () => {
     expect(save.bank.players.every((player) => player.hidden.potential >= player.strength)).toBe(
       true,
     );
-    expect(save.season.seed).toBe("seed-1");
-    expect(save.season.nextRound).toBe(1);
-    expect(save.season.clubIds).toContain(clubId);
+    expect(save.league.seed).toBe("seed-1");
+    expect(save.league.divisions.every((season) => season.nextRound === 1)).toBe(true);
+    expect(userSeason(save).clubIds).toContain(clubId);
+    expect(save.history).toEqual([]);
   });
 
   it("apara o nome do técnico", () => {
@@ -64,8 +65,8 @@ describe("createSave (FR-001, FR-003)", () => {
     if (!result.ok) expect(result.error.code).toBe("save.invalid_name");
   });
 
-  it("rejeita clube fora da Série A", () => {
-    const outside = (competitions[0]?.divisions[1]?.clubIds[0] ?? "") as string;
+  it("rejeita clube fora da competição", () => {
+    const outside = "clube-999";
     const result = createSave(input({ clubId: outside }));
     expect(result).toEqual({
       ok: false,
@@ -84,6 +85,6 @@ describe("createSave (FR-001, FR-003)", () => {
     const b = createSave(input({ id: "outra", now: "2026-10-17T00:00:00.000Z" }));
     if (!a.ok || !b.ok) throw new Error("falhou");
     expect(b.save.bank).toEqual(a.save.bank);
-    expect(b.save.season).toEqual(a.save.season);
+    expect(b.save.league).toEqual(a.save.league);
   });
 });

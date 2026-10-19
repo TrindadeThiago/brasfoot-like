@@ -1,7 +1,12 @@
 import {
+  advanceSeason,
   type CompletedBank,
   clubUnavailability,
+  createSeason,
   FORMATION_IDS,
+  isSeasonOver,
+  type LeagueSeason,
+  leagueSeasonSeed,
   POSTURES,
   type Season,
   validateBank,
@@ -30,8 +35,46 @@ const addLineup: Migration = {
   },
 };
 
+/**
+ * v2 → v3: a temporada da Série A vira a temporada da liga (007 R9). As outras divisões são
+ * criadas com a mesma seed e avançadas até a mesma rodada; o histórico começa vazio.
+ */
+const addLeague: Migration = {
+  from: 2,
+  migrate(raw) {
+    const { season, ...rest } = raw as { bank: CompletedBank; season: Season; seed: string };
+    const competition = rest.bank.competitions.find((entry) => entry.id === season.competitionId);
+    if (!competition) throw new Error(`competição ${season.competitionId} não existe no banco`);
+    const divisions: Season[] = [season];
+    for (const division of competition.divisions) {
+      if (division.level === season.divisionLevel) continue;
+      const created = createSeason(rest.bank, {
+        competitionId: competition.id,
+        divisionLevel: division.level,
+        seed: season.seed,
+        rules: season.rules,
+      });
+      if (!created.ok) throw new Error(created.error.code);
+      const played = season.nextRound - 1;
+      const advanced =
+        played > 0 ? advanceSeason(created.season, rest.bank, { rounds: played }) : created;
+      if (!advanced.ok) throw new Error(advanced.error.code);
+      divisions.push(advanced.season);
+    }
+    divisions.sort((a, b) => a.divisionLevel - b.divisionLevel);
+    const league: LeagueSeason = {
+      competitionId: competition.id,
+      number: 1,
+      year: Number(rest.bank.manifest.referenceDate.slice(0, 4)),
+      seed: String(season.seed),
+      divisions,
+    };
+    return { ...rest, formatVersion: 3, league, history: [] };
+  },
+};
+
 /** Migrações reais do formato, em ordem. */
-export const MIGRATIONS: readonly Migration[] = [addLineup];
+export const MIGRATIONS: readonly Migration[] = [addLineup, addLeague];
 
 /** Problemas que tornam a escalação gravada ilegível (os demais o jogo corrige ou avisa). */
 const BROKEN_LINEUP = new Set([
@@ -56,14 +99,26 @@ const envelopeSchema = z.object({
   clubId: z.string().min(1),
   seed: z.string().min(1),
   bank: z.unknown(),
-  season: z.object({
-    seed: z.union([z.string(), z.number()]),
-    clubIds: z.array(z.string()),
-    calendar: z.array(z.unknown()),
-    nextRound: z.int().min(1),
-    records: z.array(z.unknown()),
-    status: z.record(z.string(), z.unknown()),
+  league: z.object({
+    competitionId: z.string().min(1),
+    number: z.int().min(1),
+    year: z.int(),
+    seed: z.string().min(1),
+    divisions: z
+      .array(
+        z.object({
+          divisionLevel: z.int().min(1),
+          seed: z.union([z.string(), z.number()]),
+          clubIds: z.array(z.string()),
+          calendar: z.array(z.unknown()),
+          nextRound: z.int().min(1),
+          records: z.array(z.unknown()),
+          status: z.record(z.string(), z.unknown()),
+        }),
+      )
+      .min(1),
   }),
+  history: z.array(z.object({ number: z.int(), year: z.int() }).loose()),
   lineup: z.object({
     formation: z.enum(FORMATION_IDS),
     posture: z.enum(POSTURES),
@@ -72,6 +127,24 @@ const envelopeSchema = z.object({
   }),
   lineupNotice: z.array(z.object({ kind: z.string() }).loose()).optional(),
 });
+
+/** Motivo pelo qual a liga não combina com a carreira, ou nada se combina. */
+function leagueProblem(save: SaveFile): string | undefined {
+  const { league } = save;
+  if (league.seed !== leagueSeasonSeed(save.seed, league.number)) {
+    return "seed da temporada incoerente com a carreira";
+  }
+  if (league.divisions.some((season) => String(season.seed) !== league.seed)) {
+    return "divisão com seed de outra temporada";
+  }
+  const homes = league.divisions.filter((season) => season.clubIds.includes(save.clubId));
+  if (homes.length !== 1) return "clube do jogador fora de uma única divisão";
+  const rounds = new Set(
+    league.divisions.filter((season) => !isSeasonOver(season)).map((season) => season.nextRound),
+  );
+  if (rounds.size > 1) return "divisões em rodadas diferentes";
+  return undefined;
+}
 
 function versionOf(raw: unknown): number | undefined {
   if (raw === null || typeof raw !== "object") return undefined;
@@ -112,14 +185,15 @@ export function migrateSave(
   if (!envelope.success) return { status: "corrupt", reason: "estrutura inválida" };
   const save = current as SaveFile;
   if (!validateBank(save.bank).ok) return { status: "corrupt", reason: "banco inválido" };
-  if (!save.season.clubIds.includes(save.clubId) || String(save.season.seed) !== save.seed) {
-    return { status: "corrupt", reason: "temporada incoerente com a carreira" };
-  }
+  const incoherence = leagueProblem(save);
+  if (incoherence) return { status: "corrupt", reason: incoherence };
+  const season = save.league.divisions.find((entry) => entry.clubIds.includes(save.clubId));
+  if (!season) return { status: "corrupt", reason: "clube fora das divisões" };
   const squad = save.bank.players.filter((player) => player.clubId === save.clubId);
   const lineup = validateLineup(
     save.lineup,
     squad,
-    clubUnavailability(save.season, save.bank, save.clubId),
+    clubUnavailability(season, save.bank, save.clubId),
   );
   if (lineup.issues.some((issue) => BROKEN_LINEUP.has(issue.code))) {
     return { status: "corrupt", reason: "escalação inválida" };
