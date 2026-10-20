@@ -43,6 +43,13 @@ describe("migrateSave (FR-009, FR-010, SC-004)", () => {
     const order: number[] = [];
     const chain: Migration[] = [
       {
+        from: 6,
+        migrate: (raw) => {
+          order.push(6);
+          return (MIGRATIONS[5] as Migration).migrate(raw);
+        },
+      },
+      {
         from: 5,
         migrate: (raw) => {
           order.push(5);
@@ -85,8 +92,8 @@ describe("migrateSave (FR-009, FR-010, SC-004)", () => {
         },
       },
     ];
-    const result = migrateSave(legacyV0(), chain, 6);
-    expect(order).toEqual([0, 1, 2, 3, 4, 5]);
+    const result = migrateSave(legacyV0(), chain, 7);
+    expect(order).toEqual([0, 1, 2, 3, 4, 5, 6]);
     expect(result.status).toBe("ok");
   });
 

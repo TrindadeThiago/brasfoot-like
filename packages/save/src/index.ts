@@ -26,6 +26,7 @@ export {
   answerManagerPlayerDemand,
   applyMarketUpdate,
   cancelManagerNegotiation,
+  dismissWindowReport,
   marketAfterRoundOf,
   marketContextOf,
   proposeManagerContract,

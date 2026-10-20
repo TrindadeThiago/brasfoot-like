@@ -22,7 +22,7 @@ describe("migração v2 → v3 (R9, FR-024, SC-007)", () => {
     if (result.status !== "ok") return;
     expect(result.migratedFrom).toBe(2);
     const { save } = result;
-    expect(save.formatVersion).toBe(6);
+    expect(save.formatVersion).toBe(7);
     expect("season" in save).toBe(false);
     expect(save.history).toEqual([]);
     expect(save.league).toMatchObject({
@@ -68,7 +68,7 @@ describe("migração v2 → v3 (R9, FR-024, SC-007)", () => {
   it("v1 → v5 em cadeia", () => {
     const save = migrated(saveV1());
     expect(save.migratedFrom).toBe(1);
-    expect(save.formatVersion).toBe(6);
+    expect(save.formatVersion).toBe(7);
     expect(save.lineup.starters.gk).toBeDefined();
     expect(save.league.divisions).toHaveLength(2);
   });

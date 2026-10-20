@@ -129,6 +129,15 @@ const addMarket: Migration = {
   },
 };
 
+/** v6 → v7: resumos das janelas da IA de mercado (011 R13), começando vazios. */
+const addReports: Migration = {
+  from: 6,
+  migrate(raw) {
+    const save = raw as { market: object };
+    return { ...(raw as object), formatVersion: 7, market: { ...save.market, reports: [] } };
+  },
+};
+
 /** Migrações reais do formato, em ordem. */
 export const MIGRATIONS: readonly Migration[] = [
   addLineup,
@@ -136,6 +145,7 @@ export const MIGRATIONS: readonly Migration[] = [
   addFinances,
   addRenewal,
   addMarket,
+  addReports,
 ];
 
 /** Problemas que tornam a escalação gravada ilegível (os demais o jogo corrige ou avisa). */
@@ -212,6 +222,7 @@ const envelopeSchema = z.object({
       incoming: z.array(z.object({ id: z.string(), playerId: z.string() }).loose()),
       log: z.array(z.unknown()),
       nextSeq: z.int().min(1),
+      reports: z.array(z.object({ id: z.string() }).loose()),
     })
     .loose(),
   lineup: z.object({
