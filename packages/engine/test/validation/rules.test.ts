@@ -4,9 +4,11 @@ import { validateBank } from "../../src/validation/validate";
 import { bankFor, RULE_CASES } from "./cases";
 
 describe("cada código de problema tem um caso (SC-003)", () => {
-  it("nenhum código sem caso, exceto file.*", () => {
+  it("nenhum código sem caso, exceto file.*, package.*, image.* e csv.*", () => {
     const covered = new Set(RULE_CASES.map((ruleCase) => ruleCase.code));
-    const missing = ISSUE_CODES.filter((code) => !code.startsWith("file.") && !covered.has(code));
+    // Códigos de pacote, imagem e CSV (015) são produzidos e testados no `modkit`.
+    const elsewhere = (code: string) => /^(file|package|image|csv)\./.test(code);
+    const missing = ISSUE_CODES.filter((code) => !elsewhere(code) && !covered.has(code));
     expect(missing).toEqual([]);
   });
 });

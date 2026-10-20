@@ -41,3 +41,10 @@
 .continue {
   font-weight: 600;
 }
+
+.import {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: var(--space-3) 0;
+}

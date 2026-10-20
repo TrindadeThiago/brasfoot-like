@@ -1,0 +1,21 @@
+{
+  "name": "@brasfoot-like/modkit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p . && tsc --noEmit -p test"
+  },
+  "dependencies": {
+    "@brasfoot-like/engine": "workspace:*",
+    "fflate": "^0.8.2"
+  },
+  "devDependencies": {
+    "@brasfoot-like/default-mod": "workspace:*",
+    "@brasfoot-like/save": "workspace:*",
+    "@types/node": "^22.20.5"
+  }
+}

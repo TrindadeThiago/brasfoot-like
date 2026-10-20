@@ -212,6 +212,14 @@ const addNews: Migration = {
   },
 };
 
+/** v10 → v11: imagens de escudo dentro do save (015 R6), vazias para carreiras antigas. */
+const addAssets: Migration = {
+  from: 10,
+  migrate(raw) {
+    return { ...(raw as object), formatVersion: 11, assets: {} };
+  },
+};
+
 /** Migrações reais do formato, em ordem. */
 export const MIGRATIONS: readonly Migration[] = [
   addLineup,
@@ -223,6 +231,7 @@ export const MIGRATIONS: readonly Migration[] = [
   addBoard,
   addFans,
   addNews,
+  addAssets,
 ];
 
 /** Problemas que tornam a escalação gravada ilegível (os demais o jogo corrige ou avisa). */
@@ -364,6 +373,7 @@ const envelopeSchema = z.object({
       seasons: z.array(z.object({ season: z.int(), year: z.int() }).loose()),
     })
     .loose(),
+  assets: z.record(z.string(), z.string()),
   lineupNotice: z.array(z.object({ kind: z.string() }).loose()).optional(),
 });
 

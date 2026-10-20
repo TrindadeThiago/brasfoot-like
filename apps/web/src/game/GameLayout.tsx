@@ -7,6 +7,7 @@ import { type ReactNode, Suspense, useEffect, useMemo, useState } from "react";
 import { useT } from "../i18n";
 import { type RoundMode, readPreferences } from "../storage/preferences";
 import { AppHeader, GAME_SCREENS, screenHref } from "../ui/AppHeader";
+import { AssetsProvider } from "../ui/AssetsProvider";
 import { ConflictDialog } from "../ui/ConflictDialog";
 import { confirmLeave } from "../ui/leave-guard";
 import { ShortcutsHelp } from "../ui/ShortcutsHelp";
@@ -80,13 +81,13 @@ function Layout({ children }: { children: Render }) {
   if (!save) return <main className={styles.message}>{t("common.loading")}</main>;
   if (blocked) return <main className={styles.message}>{t("common.loading")}</main>;
   return (
-    <>
+    <AssetsProvider assets={save.assets}>
       <AppHeader save={save} onHelp={() => setHelp(true)} />
       <main className={styles.content}>{children(save, game)}</main>
       <ConflictDialog />
       <SimulateDialogs save={save} game={game} />
       <ShortcutsHelp open={help} onClose={() => setHelp(false)} />
-    </>
+    </AssetsProvider>
   );
 }
 

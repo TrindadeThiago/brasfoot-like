@@ -20,6 +20,8 @@ export interface SaveStore {
   load(id: string): Promise<LoadResult>;
   save(file: SaveFile, expectedSavedAt?: string): Promise<SaveWriteResult>;
   remove(id: string): Promise<void>;
+  /** Já existe uma carreira com esta identificação (importar save, 015). */
+  exists(id: string): Promise<boolean>;
 }
 
 /** Transformação aplicada ao ler um save (migrações + validação), injetada para testes. */
@@ -30,7 +32,26 @@ export type SaveReader = (
   | { status: "future_version"; version: number }
   | { status: "corrupt"; reason: string };
 
-const DB_VERSION = 1;
+/** v2 (015): store `mods` ao lado de `saves` e `summaries`. */
+const DB_VERSION = 2;
+
+const databases = new Map<string, Promise<IDBPDatabase>>();
+
+/** Banco IndexedDB do app (um por nome), com todos os stores criados na atualização. */
+export function openAppDb(name: string): Promise<IDBPDatabase> {
+  let database = databases.get(name);
+  if (!database) {
+    database = openDB(name, DB_VERSION, {
+      upgrade(upgrade) {
+        for (const store of ["saves", "summaries", "mods"]) {
+          if (!upgrade.objectStoreNames.contains(store)) upgrade.createObjectStore(store);
+        }
+      },
+    });
+    databases.set(name, database);
+  }
+  return database;
+}
 
 function corruptEntry(id: string): SummaryEntry {
   return {
@@ -64,16 +85,7 @@ function errorReason(error: unknown): "quota" | "unavailable" | "unknown" {
  * `summaries` o resumo, gravados na mesma transação.
  */
 export function createIndexedDbStore(name = "brasfoot-like", read?: SaveReader): SaveStore {
-  let database: Promise<IDBPDatabase> | undefined;
-  const db = () => {
-    database ??= openDB(name, DB_VERSION, {
-      upgrade(upgrade) {
-        if (!upgrade.objectStoreNames.contains("saves")) upgrade.createObjectStore("saves");
-        if (!upgrade.objectStoreNames.contains("summaries")) upgrade.createObjectStore("summaries");
-      },
-    });
-    return database;
-  };
+  const db = () => openAppDb(name);
   const reader: SaveReader = read ?? ((raw) => migrateSave(raw));
 
   return {
@@ -151,6 +163,11 @@ export function createIndexedDbStore(name = "brasfoot-like", read?: SaveReader):
       } catch (error) {
         return { ok: false, reason: errorReason(error) };
       }
+    },
+
+    async exists(id) {
+      const handle = await db();
+      return (await handle.getKey("saves", id)) !== undefined;
     },
 
     async remove(id) {

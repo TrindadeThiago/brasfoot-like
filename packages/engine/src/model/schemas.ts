@@ -14,6 +14,8 @@ const SEMVER_PATTERN = /^\d+\.\d+\.\d+$/;
 const ABBREVIATION_PATTERN = /^[A-Z]{3}$/;
 const COUNTRY_CODE_PATTERN = /^[A-Z]{3}$/;
 const INITIALS_PATTERN = /^[\p{L}\p{N}]+$/u;
+/** Imagem de escudo dentro do pacote (015): `images/…` em PNG, JPEG ou WebP. */
+const CREST_IMAGE_PATTERN = /^images\/[A-Za-z0-9._\-/]+\.(png|jpe?g|webp)$/i;
 
 function intInRange(min: number, max: number) {
   return z.int().refine((value) => value >= min && value <= max, {
@@ -364,6 +366,8 @@ export const crestSchema = z.object({
   shape: z.enum(CREST_SHAPES),
   colors: list(color, 2, 3),
   initials: text(1, 4).pipe(pattern(INITIALS_PATTERN, "initials")),
+  /** Imagem que substitui o escudo gerado (opcional). */
+  image: text(8, 120).pipe(pattern(CREST_IMAGE_PATTERN, "crest-image")).optional(),
 });
 
 export const clubSchema = z.object({

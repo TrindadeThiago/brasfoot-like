@@ -1,0 +1,170 @@
+[
+  {
+    "clubIds": [
+      "clube-001",
+      "clube-002"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-001",
+      "clube-021"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-002",
+      "clube-010"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-003",
+      "clube-005"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-003",
+      "clube-008"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-004",
+      "clube-011"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-004",
+      "clube-018"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-005",
+      "clube-014"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-006",
+      "clube-015"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-006",
+      "clube-024"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-007",
+      "clube-015"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-007",
+      "clube-024"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-008",
+      "clube-020"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-009",
+      "clube-012"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-009",
+      "clube-022"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-010",
+      "clube-013"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-011",
+      "clube-017"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-012",
+      "clube-019"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-013",
+      "clube-021"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-014",
+      "clube-020"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-016",
+      "clube-019"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-016",
+      "clube-022"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-017",
+      "clube-023"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-018",
+      "clube-023"
+    ],
+    "intensity": 1
+  }
+]

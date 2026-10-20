@@ -10,11 +10,14 @@
     "sim:matches": "tsx src/simulate-matches.ts",
     "sim:season": "tsx src/simulate-season.ts",
     "sim:economy": "tsx src/simulate-economy.ts",
-    "sim:world": "tsx src/simulate-world.ts"
+    "sim:world": "tsx src/simulate-world.ts",
+    "gen:example-mod": "tsx src/gen-example-mod.ts"
   },
   "dependencies": {
     "@brasfoot-like/engine": "workspace:*",
-    "@brasfoot-like/i18n": "workspace:*"
+    "@brasfoot-like/i18n": "workspace:*",
+    "@brasfoot-like/modkit": "workspace:*",
+    "fflate": "^0.8.2"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",

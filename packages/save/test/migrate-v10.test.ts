@@ -8,10 +8,10 @@ describe("migração v9 → v10 (014 R10, FR-018, SC-008)", () => {
     const result = migrateSave(v9);
     if (result.status !== "ok") throw new Error(JSON.stringify(result));
     expect(result.migratedFrom).toBe(9);
-    expect(result.save.formatVersion).toBe(10);
+    expect(result.save.formatVersion).toBe(11);
     expect(result.save.news.feed).toEqual([]);
     expect(result.save.news.records).toEqual({ league: {}, clubs: {} });
-    const { formatVersion: _v, news: _news, ...rest } = result.save;
+    const { formatVersion: _v, news: _news, assets: _assets, ...rest } = result.save;
     const { formatVersion: _v9, ...restV9 } = v9;
     expect(rest).toEqual(restV9);
   });

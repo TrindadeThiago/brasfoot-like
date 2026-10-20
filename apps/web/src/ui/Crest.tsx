@@ -1,4 +1,7 @@
+"use client";
+
 import type { Crest as CrestData } from "@brasfoot-like/engine";
+import { useAssets } from "./AssetsProvider";
 
 /** Cor de texto legível sobre o fundo (luminância relativa simples). */
 export function textColorFor(background: string): string {
@@ -24,8 +27,17 @@ interface CrestProps {
   size?: number;
 }
 
-/** Escudo desenhado a partir dos dados do clube: forma, cores e iniciais (research.md R8). */
+/**
+ * Escudo do clube: a imagem do mod quando existe (015), senão o desenho a partir dos dados —
+ * forma, cores e iniciais (research.md R8).
+ */
 export function Crest({ crest, label, size = 32 }: CrestProps) {
+  const assets = useAssets();
+  const image = crest.image ? assets[crest.image] : undefined;
+  if (image) {
+    // biome-ignore lint/performance/noImgElement: imagem embutida (data URI) num export estático
+    return <img src={image} alt={label} width={size} height={size} />;
+  }
   const [primary = "#888888", secondary = "#FFFFFF", tertiary] = crest.colors;
   const path = PATHS[crest.shape];
   const clipId = `crest-${crest.shape}-${primary.slice(1)}-${secondary.slice(1)}-${crest.initials}`;

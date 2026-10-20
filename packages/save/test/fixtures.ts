@@ -193,8 +193,15 @@ export function withoutMarket<T extends { bank: { players: { contract?: unknown 
     board: _board,
     fans: _fans,
     news: _news,
+    assets: _assets,
     ...rest
-  } = save as T & { market?: unknown; board?: unknown; fans?: unknown; news?: unknown };
+  } = save as T & {
+    market?: unknown;
+    board?: unknown;
+    fans?: unknown;
+    news?: unknown;
+    assets?: unknown;
+  };
   return {
     ...rest,
     bank: {
@@ -233,7 +240,7 @@ export function saveV5SeasonOver(): SaveV5 {
 }
 
 /** Save no formato da 010 (versão 6): mercado sem resumos de janela. */
-export type SaveV6 = Omit<SaveFile, "formatVersion" | "board" | "fans" | "news"> & {
+export type SaveV6 = Omit<SaveFile, "formatVersion" | "board" | "fans" | "news" | "assets"> & {
   formatVersion: 6;
 };
 
@@ -244,6 +251,7 @@ export function saveV6(): SaveV6 {
     board: _board,
     fans: _fans,
     news: _news,
+    assets: _assets,
     ...rest
   } = validSave();
   const { reports: _reports, ...legacy } = market;
@@ -251,13 +259,20 @@ export function saveV6(): SaveV6 {
 }
 
 /** Save no formato da 011 (versão 7): mercado com resumos, sem diretoria. */
-export type SaveV7 = Omit<SaveFile, "formatVersion" | "board" | "fans" | "news"> & {
+export type SaveV7 = Omit<SaveFile, "formatVersion" | "board" | "fans" | "news" | "assets"> & {
   formatVersion: 7;
 };
 
 /** Save v7 com a carreira avançada `step` (sem diretoria). */
 export function saveV7(step: SeasonStep = { rounds: 0 }): SaveV7 {
-  const { formatVersion: _version, board: _board, fans: _fans, news: _news, ...rest } = validSave();
+  const {
+    formatVersion: _version,
+    board: _board,
+    fans: _fans,
+    news: _news,
+    assets: _assets,
+    ...rest
+  } = validSave();
   let { league, finances, bank, market } = rest;
   if (!("rounds" in step) || step.rounds > 0) {
     const advanced = advanceCareer(
@@ -279,18 +294,34 @@ export function saveV7(step: SeasonStep = { rounds: 0 }): SaveV7 {
 }
 
 /** Save no formato da 012 (versão 8): diretoria, sem torcidas nem rivalidades no banco. */
-export type SaveV8 = Omit<SaveFile, "formatVersion" | "fans" | "news"> & { formatVersion: 8 };
+export type SaveV8 = Omit<SaveFile, "formatVersion" | "fans" | "news" | "assets"> & {
+  formatVersion: 8;
+};
 
 export function saveV8(): SaveV8 {
-  const { formatVersion: _version, fans: _fans, news: _news, ...rest } = validSave();
+  const {
+    formatVersion: _version,
+    fans: _fans,
+    news: _news,
+    assets: _assets,
+    ...rest
+  } = validSave();
   const { rivalries: _rivalries, ...bank } = rest.bank;
   return JSON.parse(JSON.stringify({ ...rest, bank, formatVersion: 8 })) as SaveV8;
 }
 
 /** Save no formato da 013 (versão 9): torcidas, sem notícias. */
-export type SaveV9 = Omit<SaveFile, "formatVersion" | "news"> & { formatVersion: 9 };
+export type SaveV9 = Omit<SaveFile, "formatVersion" | "news" | "assets"> & { formatVersion: 9 };
 
 export function saveV9(): SaveV9 {
-  const { formatVersion: _version, news: _news, ...rest } = validSave();
+  const { formatVersion: _version, news: _news, assets: _assets, ...rest } = validSave();
   return JSON.parse(JSON.stringify({ ...rest, formatVersion: 9 })) as SaveV9;
+}
+
+/** Save no formato da 014 (versão 10): notícias, sem imagens de escudo. */
+export type SaveV10 = Omit<SaveFile, "formatVersion" | "assets"> & { formatVersion: 10 };
+
+export function saveV10(): SaveV10 {
+  const { formatVersion: _version, assets: _assets, ...rest } = validSave();
+  return JSON.parse(JSON.stringify({ ...rest, formatVersion: 10 })) as SaveV10;
 }

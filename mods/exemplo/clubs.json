@@ -1,0 +1,562 @@
+[
+  {
+    "abbreviation": "OST",
+    "city": "Ostmark",
+    "colors": {
+      "primary": "#1D428A",
+      "secondary": "#0033A0"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#1D428A",
+        "#0033A0"
+      ],
+      "initials": "AO",
+      "shape": "rectangle"
+    },
+    "id": "clube-001",
+    "initialCash": 3240000,
+    "name": "Associação Ostmark",
+    "reputation": 50,
+    "shortName": "Ostmark",
+    "stadiumCapacity": 14500
+  },
+  {
+    "abbreviation": "BRI",
+    "city": "Brimdal",
+    "colors": {
+      "primary": "#7A1F3D",
+      "secondary": "#00A3E0"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#7A1F3D",
+        "#00A3E0"
+      ],
+      "initials": "RB",
+      "shape": "round"
+    },
+    "id": "clube-002",
+    "initialCash": 7960000,
+    "name": "Real Brimdal",
+    "reputation": 80,
+    "shortName": "Brimdal",
+    "stadiumCapacity": 54000
+  },
+  {
+    "abbreviation": "LYN",
+    "city": "Lynhavn",
+    "colors": {
+      "primary": "#F47920",
+      "secondary": "#1D428A"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#F47920",
+        "#1D428A"
+      ],
+      "initials": "RL",
+      "shape": "classic"
+    },
+    "id": "clube-003",
+    "initialCash": 5410000,
+    "name": "Real Lynhavn",
+    "reputation": 66,
+    "shortName": "Lynhavn",
+    "stadiumCapacity": 22500
+  },
+  {
+    "abbreviation": "ULF",
+    "city": "Ulfjord",
+    "colors": {
+      "primary": "#000000",
+      "secondary": "#006B3F"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#000000",
+        "#006B3F",
+        "#00A3E0"
+      ],
+      "initials": "ECU",
+      "shape": "round"
+    },
+    "id": "clube-004",
+    "initialCash": 3420000,
+    "name": "Esporte Clube Ulfjord",
+    "reputation": 65,
+    "shortName": "Ulfjord",
+    "stadiumCapacity": 22000
+  },
+  {
+    "abbreviation": "NES",
+    "city": "Nesberg",
+    "colors": {
+      "primary": "#9EA2A2",
+      "secondary": "#00A3E0"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#9EA2A2",
+        "#00A3E0"
+      ],
+      "initials": "AN",
+      "shape": "triangle"
+    },
+    "id": "clube-005",
+    "initialCash": 6130000,
+    "name": "Associação Nesberg",
+    "reputation": 69,
+    "shortName": "Nesberg",
+    "stadiumCapacity": 20000
+  },
+  {
+    "abbreviation": "LYV",
+    "city": "Lynvik",
+    "colors": {
+      "primary": "#000000",
+      "secondary": "#1D428A"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#000000",
+        "#1D428A",
+        "#7A1F3D"
+      ],
+      "initials": "UL",
+      "shape": "classic"
+    },
+    "id": "clube-006",
+    "initialCash": 3780000,
+    "name": "União Lynvik",
+    "reputation": 56,
+    "shortName": "Lynvik",
+    "stadiumCapacity": 27000
+  },
+  {
+    "abbreviation": "BRM",
+    "city": "Brimvik",
+    "colors": {
+      "primary": "#8B5A2B",
+      "secondary": "#006B3F"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#8B5A2B",
+        "#006B3F"
+      ],
+      "initials": "BA",
+      "shape": "rectangle"
+    },
+    "id": "clube-007",
+    "initialCash": 2080000,
+    "name": "Brimvik Atlético",
+    "reputation": 41,
+    "shortName": "Brimvik",
+    "stadiumCapacity": 6500
+  },
+  {
+    "abbreviation": "MAR",
+    "city": "Marvik",
+    "colors": {
+      "primary": "#006B3F",
+      "secondary": "#000000"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#006B3F",
+        "#000000",
+        "#C8102E"
+      ],
+      "initials": "UM",
+      "shape": "classic"
+    },
+    "id": "clube-008",
+    "initialCash": 2620000,
+    "name": "União Marvik",
+    "reputation": 48,
+    "shortName": "Marvik",
+    "stadiumCapacity": 17000
+  },
+  {
+    "abbreviation": "VEL",
+    "city": "Velmark",
+    "colors": {
+      "primary": "#FFFFFF",
+      "secondary": "#004C45"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#FFFFFF",
+        "#004C45"
+      ],
+      "initials": "VEC",
+      "shape": "rectangle"
+    },
+    "id": "clube-009",
+    "initialCash": 3810000,
+    "name": "Velmark Esporte Clube",
+    "reputation": 54,
+    "shortName": "Velmark",
+    "stadiumCapacity": 10500
+  },
+  {
+    "abbreviation": "ULM",
+    "city": "Ulmark",
+    "colors": {
+      "primary": "#F47920",
+      "secondary": "#0033A0"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#F47920",
+        "#0033A0"
+      ],
+      "initials": "RU",
+      "shape": "rectangle"
+    },
+    "id": "clube-010",
+    "initialCash": 5420000,
+    "name": "Real Ulmark",
+    "reputation": 82,
+    "shortName": "Ulmark",
+    "stadiumCapacity": 65500
+  },
+  {
+    "abbreviation": "ROS",
+    "city": "Rosstad",
+    "colors": {
+      "primary": "#FFD100",
+      "secondary": "#006B3F"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#FFD100",
+        "#006B3F"
+      ],
+      "initials": "UR",
+      "shape": "rectangle"
+    },
+    "id": "clube-011",
+    "initialCash": 2440000,
+    "name": "União Rosstad",
+    "reputation": 53,
+    "shortName": "Rosstad",
+    "stadiumCapacity": 6000
+  },
+  {
+    "abbreviation": "NEH",
+    "city": "Nesholm",
+    "colors": {
+      "primary": "#000000",
+      "secondary": "#00A3E0"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#000000",
+        "#00A3E0"
+      ],
+      "initials": "AN",
+      "shape": "triangle"
+    },
+    "id": "clube-012",
+    "initialCash": 6080000,
+    "name": "Atlético Nesholm",
+    "reputation": 69,
+    "shortName": "Nesholm",
+    "stadiumCapacity": 40000
+  },
+  {
+    "abbreviation": "GEL",
+    "city": "Gelfjord",
+    "colors": {
+      "primary": "#F47920",
+      "secondary": "#0033A0"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#F47920",
+        "#0033A0"
+      ],
+      "initials": "GFC",
+      "shape": "round"
+    },
+    "id": "clube-013",
+    "initialCash": 830000,
+    "name": "Gelfjord Futebol Clube",
+    "reputation": 26,
+    "shortName": "Gelfjord",
+    "stadiumCapacity": 9500
+  },
+  {
+    "abbreviation": "ULH",
+    "city": "Ulholm",
+    "colors": {
+      "primary": "#8B5A2B",
+      "secondary": "#FFFFFF"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#8B5A2B",
+        "#FFFFFF"
+      ],
+      "initials": "ECU",
+      "shape": "round"
+    },
+    "id": "clube-014",
+    "initialCash": 1350000,
+    "name": "Esporte Clube Ulholm",
+    "reputation": 37,
+    "shortName": "Ulholm",
+    "stadiumCapacity": 11500
+  },
+  {
+    "abbreviation": "TIN",
+    "city": "Tindstad",
+    "colors": {
+      "primary": "#7A1F3D",
+      "secondary": "#0033A0"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#7A1F3D",
+        "#0033A0",
+        "#FFFFFF"
+      ],
+      "initials": "TA",
+      "shape": "classic"
+    },
+    "id": "clube-015",
+    "initialCash": 2600000,
+    "name": "Tindstad Atlético",
+    "reputation": 47,
+    "shortName": "Tindstad",
+    "stadiumCapacity": 27000
+  },
+  {
+    "abbreviation": "DAL",
+    "city": "Daldal",
+    "colors": {
+      "primary": "#9EA2A2",
+      "secondary": "#7A1F3D"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#9EA2A2",
+        "#7A1F3D",
+        "#00A3E0"
+      ],
+      "initials": "ECD",
+      "shape": "round"
+    },
+    "id": "clube-016",
+    "initialCash": 2700000,
+    "name": "Esporte Clube Daldal",
+    "reputation": 50,
+    "shortName": "Daldal",
+    "stadiumCapacity": 28500
+  },
+  {
+    "abbreviation": "GEB",
+    "city": "Gelberg",
+    "colors": {
+      "primary": "#00A3E0",
+      "secondary": "#006B3F"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#00A3E0",
+        "#006B3F",
+        "#C8102E"
+      ],
+      "initials": "GFC",
+      "shape": "triangle"
+    },
+    "id": "clube-017",
+    "initialCash": 1500000,
+    "name": "Gelberg Futebol Clube",
+    "reputation": 43,
+    "shortName": "Gelberg",
+    "stadiumCapacity": 7000
+  },
+  {
+    "abbreviation": "NEF",
+    "city": "Nesfjord",
+    "colors": {
+      "primary": "#FFD100",
+      "secondary": "#00A3E0"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#FFD100",
+        "#00A3E0"
+      ],
+      "initials": "SN",
+      "shape": "classic"
+    },
+    "id": "clube-018",
+    "initialCash": 810000,
+    "name": "Sociedade Nesfjord",
+    "reputation": 27,
+    "shortName": "Nesfjord",
+    "stadiumCapacity": 7500
+  },
+  {
+    "abbreviation": "LYB",
+    "city": "Lynberg",
+    "colors": {
+      "primary": "#1D428A",
+      "secondary": "#006B3F"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#1D428A",
+        "#006B3F"
+      ],
+      "initials": "LA",
+      "shape": "rectangle"
+    },
+    "id": "clube-019",
+    "initialCash": 1180000,
+    "name": "Lynberg Atlético",
+    "reputation": 31,
+    "shortName": "Lynberg",
+    "stadiumCapacity": 6000
+  },
+  {
+    "abbreviation": "YRH",
+    "city": "Yrholm",
+    "colors": {
+      "primary": "#9EA2A2",
+      "secondary": "#FFFFFF"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#9EA2A2",
+        "#FFFFFF",
+        "#5B2C83"
+      ],
+      "initials": "YA",
+      "shape": "rectangle"
+    },
+    "id": "clube-020",
+    "initialCash": 1950000,
+    "name": "Yrholm Atlético",
+    "reputation": 38,
+    "shortName": "Yrholm",
+    "stadiumCapacity": 6500
+  },
+  {
+    "abbreviation": "NOR",
+    "city": "Norhavn",
+    "colors": {
+      "primary": "#006B3F",
+      "secondary": "#5B2C83"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#006B3F",
+        "#5B2C83",
+        "#FFFFFF"
+      ],
+      "initials": "NA",
+      "shape": "classic"
+    },
+    "id": "clube-021",
+    "initialCash": 1890000,
+    "name": "Norhavn Atlético",
+    "reputation": 39,
+    "shortName": "Norhavn",
+    "stadiumCapacity": 9500
+  },
+  {
+    "abbreviation": "ASK",
+    "city": "Askdal",
+    "colors": {
+      "primary": "#FFD100",
+      "secondary": "#F47920"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#FFD100",
+        "#F47920"
+      ],
+      "initials": "RA",
+      "shape": "rectangle"
+    },
+    "id": "clube-022",
+    "initialCash": 2550000,
+    "name": "Real Askdal",
+    "reputation": 54,
+    "shortName": "Askdal",
+    "stadiumCapacity": 38000
+  },
+  {
+    "abbreviation": "SOL",
+    "city": "Sollund",
+    "colors": {
+      "primary": "#5B2C83",
+      "secondary": "#004C45"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#5B2C83",
+        "#004C45"
+      ],
+      "initials": "SA",
+      "shape": "classic"
+    },
+    "id": "clube-023",
+    "initialCash": 900000,
+    "name": "Sollund Atlético",
+    "reputation": 33,
+    "shortName": "Sollund",
+    "stadiumCapacity": 14000
+  },
+  {
+    "abbreviation": "LYE",
+    "city": "Lynnes",
+    "colors": {
+      "primary": "#004C45",
+      "secondary": "#9EA2A2"
+    },
+    "countryId": "nrv",
+    "crest": {
+      "colors": [
+        "#004C45",
+        "#9EA2A2"
+      ],
+      "initials": "RL",
+      "shape": "triangle"
+    },
+    "id": "clube-024",
+    "initialCash": 1140000,
+    "name": "Real Lynnes",
+    "reputation": 37,
+    "shortName": "Lynnes",
+    "stadiumCapacity": 15000
+  }
+]

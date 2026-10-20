@@ -421,6 +421,7 @@ export type {
   StandingRow,
 } from "./season/types";
 export { DEFAULT_DISCIPLINE_RULES } from "./season/types";
+export type { DataSection } from "./serialize/bank-files";
 export { BANK_FILES, joinBankFiles, splitBankFiles } from "./serialize/bank-files";
 export { toCanonicalJson } from "./serialize/canonical-json";
 export type {

@@ -68,6 +68,7 @@ import {
 } from "react";
 import { announceSaved, listenSaved } from "../storage/channel";
 import { createIndexedDbStore, type SaveStore, type SaveWriteResult } from "../storage/indexeddb";
+import { createModStore, type ModStore } from "../storage/mods";
 import { type RoundMode, readPreferences, writePreferences } from "../storage/preferences";
 import { defaultBankInput } from "./default-bank";
 import { newCareerId, newSeed } from "./ids";
@@ -149,6 +150,10 @@ export interface CreateCareerInput {
   seed?: string;
   /** Opção "sem demissão" (012). */
   noFiring?: boolean;
+  /** Banco de um mod já unido (`joinBankFiles`); sem ele, o banco padrão (015). */
+  bank?: unknown;
+  /** Imagens do mod (caminho → data URI). */
+  assets?: Record<string, string>;
 }
 
 export type CreateCareerResult = { ok: true; id: string } | { ok: false; error: SaveError };
@@ -157,6 +162,8 @@ interface GameContextValue {
   state: GameState;
   dispatch: (action: GameAction) => void;
   store: SaveStore;
+  /** Mods carregados no navegador (015). */
+  mods: ModStore;
   createCareer(input: CreateCareerInput): Promise<CreateCareerResult>;
   openCareer(id: string): Promise<void>;
   deleteCareer(id: string): Promise<void>;
@@ -231,6 +238,12 @@ export function lineupContext(save: SaveFile) {
 const GameContext = createContext<GameContextValue | null>(null);
 
 let defaultStore: SaveStore | undefined;
+let defaultMods: ModStore | undefined;
+function modsFor(mods?: ModStore): ModStore {
+  if (mods) return mods;
+  defaultMods ??= createModStore();
+  return defaultMods;
+}
 function storeFor(store?: SaveStore): SaveStore {
   if (store) return store;
   defaultStore ??= createIndexedDbStore();
@@ -244,10 +257,20 @@ const FAILURE_MESSAGE: Record<string, string> = {
   unknown: "saving.failed",
 };
 
-export function GameProvider({ children, store }: { children: ReactNode; store?: SaveStore }) {
+export function GameProvider({
+  children,
+  store,
+  mods,
+}: {
+  children: ReactNode;
+  store?: SaveStore;
+  mods?: ModStore;
+}) {
   const [state, dispatch] = useReducer(gameReducer, initialGameState);
   const storeRef = useRef(storeFor(store));
   const activeStore = storeRef.current;
+  const modsRef = useRef(modsFor(mods));
+  const activeMods = modsRef.current;
   /** `savedAt` da última gravação conhecida por esta aba (research.md R6). */
   const baseline = useRef<string | undefined>(undefined);
   const openId = useRef<string | undefined>(undefined);
@@ -292,7 +315,8 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
         clubId: input.clubId,
         seed,
         ...(input.noFiring ? { noFiring: true } : {}),
-        defaultBank: defaultBankInput(),
+        defaultBank: input.bank ?? defaultBankInput(),
+        ...(input.assets ? { assets: input.assets } : {}),
       });
       if (!result.ok) return result;
       baseline.current = undefined;
@@ -702,6 +726,7 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       state,
       dispatch,
       store: activeStore,
+      mods: activeMods,
       createCareer,
       openCareer,
       deleteCareer,
@@ -737,6 +762,7 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
     [
       state,
       activeStore,
+      activeMods,
       createCareer,
       openCareer,
       deleteCareer,

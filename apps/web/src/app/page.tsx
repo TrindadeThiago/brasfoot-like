@@ -58,6 +58,9 @@ export default function OpeningPage() {
         <Link className={styles.secondary} href="/carreiras/">
           {t("opening.savedCareers")}
         </Link>
+        <Link className={styles.secondary} href="/mods/">
+          {t("nav.mods")}
+        </Link>
       </nav>
     </main>
   );

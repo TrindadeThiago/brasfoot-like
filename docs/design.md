@@ -97,6 +97,7 @@ Fora do MVP: vestiário/moral, coletivas de imprensa interativas.
 - O banco é **copiado para o save** ao criar a carreira; trocar o mod não corrompe carreiras em andamento.
 - Nomes de competições ficam no mod, não nas traduções.
 - Editor embutido: pós-MVP.
+- Referência completa do formato (arquivos, campos, imagens, CSV, limites e códigos de erro): [`docs/mod-format.md`](mod-format.md); mod de exemplo em `mods/exemplo/`.
 
 ## 12. Persistência
 

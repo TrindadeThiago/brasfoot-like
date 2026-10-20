@@ -1,4 +1,5 @@
 import {
+  type CompletedBank,
   clubDivision,
   completeHiddenAttributes,
   createBoard,
@@ -23,8 +24,24 @@ export interface CreateSaveInput {
   seed: string;
   /** Opção "sem demissão" (012 FR-035); padrão desativada. */
   noFiring?: boolean;
-  /** Banco padrão já unido (`joinBankFiles`), ainda não validado. */
+  /** Banco (padrão ou de um mod) já unido (`joinBankFiles`), ainda não validado. */
   defaultBank: unknown;
+  /** Imagens do mod (caminho → data URI); só as usadas pelos escudos vão para o save (015). */
+  assets?: Record<string, string>;
+}
+
+/** Imagens referenciadas pelos escudos dos clubes do banco. */
+function usedAssets(
+  bank: Pick<CompletedBank, "clubs">,
+  assets: Record<string, string>,
+): Record<string, string> {
+  const used: Record<string, string> = {};
+  for (const club of bank.clubs) {
+    const path = club.crest.image;
+    const data = path ? assets[path] : undefined;
+    if (path && data) used[path] = data;
+  }
+  return used;
 }
 
 export type CreateSaveResult = { ok: true; save: SaveFile } | { ok: false; error: SaveError };
@@ -91,6 +108,7 @@ export function createSave(input: CreateSaveInput): CreateSaveResult {
       market: emptyMarket(),
       fans: createFans(bank, league.league),
       news: createNews(),
+      assets: usedAssets(bank, input.assets ?? {}),
       board: createBoard(bank, league.league, finances, input.seed, {
         clubId: input.clubId,
         noFiring: input.noFiring ?? false,

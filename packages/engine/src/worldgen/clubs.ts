@@ -69,11 +69,16 @@ function roundTo(value: number, step: number): number {
   return Math.round(value / step) * step;
 }
 
-function tiersFor(rng: Rng, division: DivisionKey): Tier[] {
+function tiersFor(rng: Rng, division: DivisionKey, perDivision: number): Tier[] {
   const counts = GENERATOR_TUNING.tierCounts[division];
-  const big = between(rng, counts.big);
-  const medium = between(rng, counts.medium);
-  const small = GENERATOR_TUNING.clubsPerDivision - big - medium;
+  // Divisões de outro tamanho (mods gerados, 015) mantêm a proporção das camadas.
+  const scale = (value: number) =>
+    perDivision === GENERATOR_TUNING.clubsPerDivision
+      ? value
+      : Math.round((value * perDivision) / GENERATOR_TUNING.clubsPerDivision);
+  const big = scale(between(rng, counts.big));
+  const medium = scale(between(rng, counts.medium));
+  const small = perDivision - big - medium;
   const tiers: Tier[] = [
     ...Array<Tier>(big).fill("big"),
     ...Array<Tier>(medium).fill("medium"),
@@ -129,8 +134,8 @@ export function generateClubs(
   rng: Rng,
   names: NameBank,
   countryId: string,
+  perDivision: number = GENERATOR_TUNING.clubsPerDivision,
 ): Record<DivisionKey, GeneratedClub[]> {
-  const perDivision = GENERATOR_TUNING.clubsPerDivision;
   const cities = rng
     .fork("cities")
     .shuffle(names.cities)
@@ -141,7 +146,7 @@ export function generateClubs(
   const usedAbbreviations = new Set<string>();
   const result: Record<DivisionKey, GeneratedClub[]> = { serieA: [], serieB: [] };
   (["serieA", "serieB"] as const).forEach((division, divisionIndex) => {
-    const tiers = tiersFor(rng.fork(`tiers:${division}`), division);
+    const tiers = tiersFor(rng.fork(`tiers:${division}`), division, perDivision);
     tiers.forEach((tier, index) => {
       const number = divisionIndex * perDivision + index + 1;
       const city = cities[number - 1] as string;

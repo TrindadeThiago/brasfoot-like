@@ -11,6 +11,16 @@ import { GENERATOR_TUNING } from "./tuning";
 
 export interface GenerateOptions {
   seed: string | number;
+  /** Banco de nomes (015): padrão, o do banco fictício padrão. */
+  names?: unknown;
+  /** Clubes por divisão (padrão 20). */
+  divisionSize?: number;
+  /** Vagas de acesso e rebaixamento (padrão 4). */
+  slots?: number;
+  /** Identificação do mod gerado (padrão: o banco padrão). */
+  manifest?: { id: string; name: string; author: string; version: string };
+  /** Nomes das divisões (padrão Série A e Série B). */
+  divisionNames?: [string, string];
 }
 
 /**
@@ -24,8 +34,11 @@ export function generateDefaultBank(options: GenerateOptions): ValidatedBank {
     throw new Error("generateDefaultBank exige uma seed (string ou número)");
   }
   const rng = createRng(seed);
-  const names = nameBankSchema.parse(defaultNameBank);
-  const { referenceDate, promotionRelegationSlots: slots } = GENERATOR_TUNING;
+  const names = nameBankSchema.parse(options.names ?? defaultNameBank);
+  const { referenceDate } = GENERATOR_TUNING;
+  const slots = options.slots ?? GENERATOR_TUNING.promotionRelegationSlots;
+  const divisionSize = options.divisionSize ?? GENERATOR_TUNING.clubsPerDivision;
+  const [firstDivision, secondDivision] = options.divisionNames ?? ["Série A", "Série B"];
 
   const country: Country = {
     id: names.countryCode.toLowerCase(),
@@ -34,7 +47,7 @@ export function generateDefaultBank(options: GenerateOptions): ValidatedBank {
     names: { firstNames: [...names.firstNames], surnames: [...names.surnames] },
   };
 
-  const clubs = generateClubs(rng.fork("clubs"), names, country.id);
+  const clubs = generateClubs(rng.fork("clubs"), names, country.id, divisionSize);
   const allClubs = [...clubs.serieA, ...clubs.serieB];
 
   const competition: Competition = {
@@ -50,14 +63,14 @@ export function generateDefaultBank(options: GenerateOptions): ValidatedBank {
     divisions: [
       {
         level: 1,
-        name: "Série A",
+        name: firstDivision,
         clubIds: clubs.serieA.map((generated) => generated.club.id),
         promotionSlots: 0,
         relegationSlots: slots,
       },
       {
         level: 2,
-        name: "Série B",
+        name: secondDivision,
         clubIds: clubs.serieB.map((generated) => generated.club.id),
         promotionSlots: slots,
         relegationSlots: 0,
@@ -86,10 +99,12 @@ export function generateDefaultBank(options: GenerateOptions): ValidatedBank {
   const bank: ModPackage = {
     manifest: {
       formatVersion: 1,
-      id: "default",
-      name: "Mundo padrão",
-      author: "brasfoot-like",
-      version: "1.0.0",
+      ...(options.manifest ?? {
+        id: "default",
+        name: "Mundo padrão",
+        author: "brasfoot-like",
+        version: "1.0.0",
+      }),
       referenceDate,
     },
     countries: [country],
