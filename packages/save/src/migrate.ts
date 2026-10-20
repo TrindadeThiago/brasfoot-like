@@ -2,11 +2,13 @@ import {
   advanceSeason,
   type CompletedBank,
   clubUnavailability,
+  createBoard,
   createFinances,
   createSeason,
   economyRules,
   emptyMarket,
   ensureContracts,
+  type FinanceState,
   FORMATION_IDS,
   initialRenewal,
   isSeasonOver,
@@ -138,6 +140,33 @@ const addReports: Migration = {
   },
 };
 
+/**
+ * v7 → v8: diretoria (012 R12). O técnico segue empregado no clube atual, com reputação inicial,
+ * "sem demissão" desativada e carência até o fim da temporada em andamento, cujas metas são
+ * geradas pela regra de meio de temporada (nenhuma se a liga já terminou).
+ */
+const addBoard: Migration = {
+  from: 7,
+  migrate(raw) {
+    const save = raw as {
+      bank: CompletedBank;
+      league: LeagueSeason;
+      finances: FinanceState;
+      seed: string;
+      clubId: string;
+    };
+    return {
+      ...(raw as object),
+      formatVersion: 8,
+      board: createBoard(save.bank, save.league, save.finances, `${save.seed}:board:migrate`, {
+        clubId: save.clubId,
+        noFiring: false,
+        graceToSeasonEnd: true,
+      }),
+    };
+  },
+};
+
 /** Migrações reais do formato, em ordem. */
 export const MIGRATIONS: readonly Migration[] = [
   addLineup,
@@ -146,6 +175,7 @@ export const MIGRATIONS: readonly Migration[] = [
   addRenewal,
   addMarket,
   addReports,
+  addBoard,
 ];
 
 /** Problemas que tornam a escalação gravada ilegível (os demais o jogo corrige ou avisa). */
@@ -231,6 +261,41 @@ const envelopeSchema = z.object({
     starters: z.record(z.string(), z.string()),
     bench: z.array(z.string()),
   }),
+  board: z
+    .object({
+      manager: z
+        .object({
+          reputation: z.int().min(1).max(100),
+          noFiring: z.boolean(),
+          clubId: z.string().min(1).nullable(),
+        })
+        .loose(),
+      clubs: z.record(
+        z.string(),
+        z
+          .object({
+            clubId: z.string(),
+            coachId: z.string().nullable(),
+            confidence: z.int().min(0).max(100),
+          })
+          .loose(),
+      ),
+      coaches: z.array(
+        z
+          .object({
+            id: z.string(),
+            name: z.string(),
+            reputation: z.int().min(1).max(100),
+            clubId: z.string().nullable(),
+          })
+          .loose(),
+      ),
+      vacancies: z.array(z.object({ id: z.string(), clubId: z.string() }).loose()),
+      offers: z.array(z.object({ id: z.string(), clubId: z.string(), status: z.string() }).loose()),
+      history: z.object({ stints: z.array(z.unknown()), seasons: z.array(z.unknown()) }).loose(),
+      nextSeq: z.int().min(1),
+    })
+    .loose(),
   lineupNotice: z.array(z.object({ kind: z.string() }).loose()).optional(),
 });
 
@@ -293,6 +358,36 @@ function marketProblem(save: SaveFile): string | undefined {
   return undefined;
 }
 
+/** Invariantes da diretoria (012 data-model.md), ou nada se o estado é coerente. */
+function boardProblem(save: SaveFile): string | undefined {
+  const { board } = save;
+  const employer = board.manager.clubId;
+  if (employer !== null) {
+    if (employer !== save.clubId) return "clube do técnico difere do clube em foco";
+    if (board.clubs[employer]?.coachId !== null) return "clube do técnico com técnico da IA";
+  }
+  const competing = save.league.divisions.flatMap((season) => season.clubIds);
+  const coaches = new Map(board.coaches.map((coach) => [coach.id, coach]));
+  const vacant = new Set(board.vacancies.map((vacancy) => vacancy.clubId));
+  if (vacant.size !== board.vacancies.length) return "mais de uma vaga por clube";
+  const coached = new Set<string>();
+  for (const clubId of competing) {
+    const club = board.clubs[clubId];
+    if (!club) return `clube sem diretoria: ${clubId}`;
+    if (clubId === employer) continue;
+    if (club.coachId === null) {
+      if (!vacant.has(clubId)) return `clube sem técnico nem vaga: ${clubId}`;
+      continue;
+    }
+    if (coached.has(club.coachId)) return `técnico em dois clubes: ${club.coachId}`;
+    coached.add(club.coachId);
+    if (coaches.get(club.coachId)?.clubId !== clubId) return `técnico incoerente: ${clubId}`;
+  }
+  const pending = board.offers.filter((offer) => offer.status === "pending");
+  if (pending.some((offer) => offer.clubId === employer)) return "proposta do próprio clube";
+  return undefined;
+}
+
 function versionOf(raw: unknown): number | undefined {
   if (raw === null || typeof raw !== "object") return undefined;
   const value = (raw as { formatVersion?: unknown }).formatVersion;
@@ -333,10 +428,20 @@ export function migrateSave(
   const save = current as SaveFile;
   if (!validateBank(save.bank).ok) return { status: "corrupt", reason: "banco inválido" };
   const incoherence =
-    leagueProblem(save) ?? financeProblem(save) ?? renewalProblem(save) ?? marketProblem(save);
+    leagueProblem(save) ??
+    financeProblem(save) ??
+    renewalProblem(save) ??
+    marketProblem(save) ??
+    boardProblem(save);
   if (incoherence) return { status: "corrupt", reason: incoherence };
   const season = save.league.divisions.find((entry) => entry.clubIds.includes(save.clubId));
   if (!season) return { status: "corrupt", reason: "clube fora das divisões" };
+  // Desempregado (012): a escalação guardada é a do último clube e não é usada.
+  if (save.board.manager.clubId === null) {
+    return original === target
+      ? { status: "ok", save }
+      : { status: "ok", save, migratedFrom: original };
+  }
   const squad = save.bank.players.filter((player) => player.clubId === save.clubId);
   const lineup = validateLineup(
     save.lineup,

@@ -179,11 +179,18 @@ export function saveV4SeasonOver(): SaveV4 {
   return saveV4({ toEnd: true });
 }
 
-/** Remove o que a v6 acrescentou (mercado e contratos), para comparar com saves antigos. */
+/**
+ * Remove o que a v6 e as seguintes acrescentaram (mercado, contratos e diretoria), para comparar
+ * com saves antigos.
+ */
 export function withoutMarket<T extends { bank: { players: { contract?: unknown }[] } }>(
   save: T,
 ): Omit<T, "market"> {
-  const { market: _market, ...rest } = save as T & { market?: unknown };
+  const {
+    market: _market,
+    board: _board,
+    ...rest
+  } = save as T & { market?: unknown; board?: unknown };
   return {
     ...rest,
     bank: {
@@ -222,10 +229,36 @@ export function saveV5SeasonOver(): SaveV5 {
 }
 
 /** Save no formato da 010 (versão 6): mercado sem resumos de janela. */
-export type SaveV6 = Omit<SaveFile, "formatVersion"> & { formatVersion: 6 };
+export type SaveV6 = Omit<SaveFile, "formatVersion" | "board"> & { formatVersion: 6 };
 
 export function saveV6(): SaveV6 {
-  const { formatVersion: _version, market, ...rest } = validSave();
+  const { formatVersion: _version, market, board: _board, ...rest } = validSave();
   const { reports: _reports, ...legacy } = market;
   return { ...rest, market: legacy as SaveFile["market"], formatVersion: 6 };
+}
+
+/** Save no formato da 011 (versão 7): mercado com resumos, sem diretoria. */
+export type SaveV7 = Omit<SaveFile, "formatVersion" | "board"> & { formatVersion: 7 };
+
+/** Save v7 com a carreira avançada `step` (sem diretoria). */
+export function saveV7(step: SeasonStep = { rounds: 0 }): SaveV7 {
+  const { formatVersion: _version, board: _board, ...rest } = validSave();
+  let { league, finances, bank, market } = rest;
+  if (!("rounds" in step) || step.rounds > 0) {
+    const advanced = advanceCareer(
+      league,
+      finances,
+      bank,
+      step,
+      rest.clubId,
+      undefined,
+      undefined,
+      { state: market, careerSeed: rest.seed },
+    );
+    if (!advanced.ok || !advanced.market) throw new Error(JSON.stringify(advanced));
+    ({ league, finances, world: bank, market } = advanced);
+  }
+  return JSON.parse(
+    JSON.stringify({ ...rest, formatVersion: 7, league, finances, bank, market }),
+  ) as SaveV7;
 }

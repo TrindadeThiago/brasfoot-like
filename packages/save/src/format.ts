@@ -1,4 +1,5 @@
 import type {
+  BoardState,
   CompletedBank,
   FinanceState,
   LeagueSeason,
@@ -10,7 +11,7 @@ import type {
 } from "@brasfoot-like/engine";
 
 /** Versão atual do formato do save (Princípio VI). */
-export const SAVE_FORMAT_VERSION = 7;
+export const SAVE_FORMAT_VERSION = 8;
 
 export const MANAGER_NAME_MAX = 40;
 
@@ -21,6 +22,10 @@ export interface SaveFile {
   createdAt: string;
   savedAt: string;
   managerName: string;
+  /**
+   * Clube em foco: o do técnico, ou o último que ele treinou quando está desempregado (v8,
+   * research.md R3). O emprego de verdade está em `board.manager.clubId`.
+   */
   clubId: string;
   seed: string;
   bank: CompletedBank;
@@ -34,6 +39,8 @@ export interface SaveFile {
   renewal: RenewalState;
   /** Livres, negociações, propostas (v6) e resumos de janela (v7) do mercado. Contratos ficam em `bank.players[].contract`. */
   market: MarketState;
+  /** Diretorias, técnicos da IA e carreira do técnico (v8). */
+  board: BoardState;
   /** Escalação do clube do jogador (v2). */
   lineup: Lineup;
   /** Trocas do último ajuste automático, até o jogador dispensar o aviso (v2). */
