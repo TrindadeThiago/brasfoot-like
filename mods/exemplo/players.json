@@ -1,0 +1,7499 @@
+[
+  {
+    "birthDate": "1998-08-13",
+    "clubId": "clube-001",
+    "displayName": "Marek Granhaug",
+    "id": "jogador-00001",
+    "name": "Marek Helhus Granhaug",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 65,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-06-23",
+    "clubId": "clube-001",
+    "displayName": "Valan Kvarhaug",
+    "id": "jogador-00002",
+    "name": "Valan Kardal Kvarhaug",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 56,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2000-06-27",
+    "clubId": "clube-001",
+    "displayName": "Edan Dalhus",
+    "id": "jogador-00003",
+    "name": "Edan Neslund Dalhus",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 51,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-06-01",
+    "clubId": "clube-001",
+    "displayName": "Brein Osttorp",
+    "id": "jogador-00004",
+    "name": "Brein Nesdal Osttorp",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 64,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1998-05-17",
+    "clubId": "clube-001",
+    "displayName": "Bjorin Bernes",
+    "id": "jogador-00005",
+    "name": "Bjorin Engness Bernes",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 64,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2002-05-15",
+    "clubId": "clube-001",
+    "displayName": "Fenano Ravsen",
+    "id": "jogador-00006",
+    "name": "Fenano Velhaug Ravsen",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 64,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2003-07-08",
+    "clubId": "clube-001",
+    "displayName": "Edlo Nyrlund",
+    "id": "jogador-00007",
+    "name": "Edlo Dalvik Nyrlund",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 53,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "1997-01-20",
+    "clubId": "clube-001",
+    "displayName": "Frolo Heldal",
+    "id": "jogador-00008",
+    "name": "Frolo Ostlund Heldal",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 52,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2000-09-20",
+    "clubId": "clube-001",
+    "displayName": "Pereto Engmark",
+    "id": "jogador-00009",
+    "name": "Pereto Holtorp Engmark",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 62,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2002-04-12",
+    "clubId": "clube-001",
+    "displayName": "Kasur Brintorp",
+    "id": "jogador-00010",
+    "name": "Kasur Dalberg Brintorp",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 65,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2001-02-23",
+    "clubId": "clube-001",
+    "displayName": "Valdor Lunbakk",
+    "id": "jogador-00011",
+    "name": "Valdor Engvik Lunbakk",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 62,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-10-08",
+    "clubId": "clube-001",
+    "displayName": "Goren Ravsen",
+    "id": "jogador-00012",
+    "name": "Goren Lunlund Ravsen",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 51,
+    "traits": []
+  },
+  {
+    "birthDate": "2006-11-14",
+    "clubId": "clube-001",
+    "displayName": "Vikar Lunbakk",
+    "id": "jogador-00013",
+    "name": "Vikar Kvarhaug Lunbakk",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 61,
+    "traits": []
+  },
+  {
+    "birthDate": "1996-08-04",
+    "clubId": "clube-001",
+    "displayName": "Halar Grantorp",
+    "id": "jogador-00014",
+    "name": "Halar Dalberg Grantorp",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 56,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2008-11-29",
+    "clubId": "clube-001",
+    "displayName": "Jarur Nyrfeld",
+    "id": "jogador-00015",
+    "name": "Jarur Strogard Nyrfeld",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 47,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2006-11-24",
+    "clubId": "clube-001",
+    "displayName": "Torven Ravsen",
+    "id": "jogador-00016",
+    "name": "Torven Falhus Ravsen",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 51,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2002-09-23",
+    "clubId": "clube-001",
+    "displayName": "Valan Sandnes",
+    "id": "jogador-00017",
+    "name": "Valan Sandhus Sandnes",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 53,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1998-05-02",
+    "clubId": "clube-001",
+    "displayName": "Bredor Sandstrand",
+    "id": "jogador-00018",
+    "name": "Bredor Ostness Sandstrand",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 64,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2000-09-07",
+    "clubId": "clube-001",
+    "displayName": "Halmund Berby",
+    "id": "jogador-00019",
+    "name": "Halmund Granstrand Berby",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 67,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-04-06",
+    "clubId": "clube-001",
+    "displayName": "Kaslo Nyrlund",
+    "id": "jogador-00020",
+    "name": "Kaslo Lindness Nyrlund",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 64,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-03-01",
+    "clubId": "clube-001",
+    "displayName": "Ivoan Kvarhaug",
+    "id": "jogador-00021",
+    "name": "Ivoan Nestorp Kvarhaug",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 60,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1999-12-25",
+    "clubId": "clube-001",
+    "displayName": "Osrik Asknes",
+    "id": "jogador-00022",
+    "name": "Osrik Ostfeld Asknes",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 54,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-07-08",
+    "clubId": "clube-001",
+    "displayName": "Ardald Holrud",
+    "id": "jogador-00023",
+    "name": "Ardald Faldal Holrud",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 65,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "1994-06-11",
+    "clubId": "clube-001",
+    "displayName": "Harmund Strodahl",
+    "id": "jogador-00024",
+    "name": "Harmund Karrud Strodahl",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 64,
+    "traits": []
+  },
+  {
+    "birthDate": "1998-02-07",
+    "clubId": "clube-001",
+    "displayName": "Kasian Lunholm",
+    "id": "jogador-00025",
+    "name": "Kasian Velberg Lunholm",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 56,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-09-05",
+    "clubId": "clube-001",
+    "displayName": "Casvel Kvardahl",
+    "id": "jogador-00026",
+    "name": "Casvel Ostfeld Kvardahl",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 55,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1998-09-01",
+    "clubId": "clube-001",
+    "displayName": "Halin Nyrvik",
+    "id": "jogador-00027",
+    "name": "Halin Berlund Nyrvik",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 55,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "1998-05-09",
+    "clubId": "clube-002",
+    "displayName": "Fenano Talstad",
+    "id": "jogador-00028",
+    "name": "Fenano Brinsen Talstad",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 68,
+    "traits": []
+  },
+  {
+    "birthDate": "1997-10-25",
+    "clubId": "clube-002",
+    "displayName": "Kasar Ostdal",
+    "id": "jogador-00029",
+    "name": "Kasar Kvarby Ostdal",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 68,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-11-10",
+    "clubId": "clube-002",
+    "displayName": "Eleto Nesrud",
+    "id": "jogador-00030",
+    "name": "Eleto Kardahl Nesrud",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 58,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1994-08-12",
+    "clubId": "clube-002",
+    "displayName": "Vikos Ostsen",
+    "id": "jogador-00031",
+    "name": "Vikos Holtorp Ostsen",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 71,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2002-12-03",
+    "clubId": "clube-002",
+    "displayName": "Alrik Rosmark",
+    "id": "jogador-00032",
+    "name": "Alrik Mornes Rosmark",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 71,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1997-07-22",
+    "clubId": "clube-002",
+    "displayName": "Perric Faldal",
+    "id": "jogador-00033",
+    "name": "Perric Morhus Faldal",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 67,
+    "traits": []
+  },
+  {
+    "birthDate": "1998-07-27",
+    "clubId": "clube-002",
+    "displayName": "Ardmund Ostberg",
+    "id": "jogador-00034",
+    "name": "Ardmund Lunsen Ostberg",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 64,
+    "traits": [
+      "pace",
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "1999-09-08",
+    "clubId": "clube-002",
+    "displayName": "Vikar Holstad",
+    "id": "jogador-00035",
+    "name": "Vikar Mornes Holstad",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 69,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "1998-10-24",
+    "clubId": "clube-002",
+    "displayName": "Daren Fallund",
+    "id": "jogador-00036",
+    "name": "Daren Falhus Fallund",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 78,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-10-13",
+    "clubId": "clube-002",
+    "displayName": "Halin Brinhus",
+    "id": "jogador-00037",
+    "name": "Halin Askness Brinhus",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 64,
+    "traits": []
+  },
+  {
+    "birthDate": "2007-11-20",
+    "clubId": "clube-002",
+    "displayName": "Osor Nyrfeld",
+    "id": "jogador-00038",
+    "name": "Osor Ostberg Nyrfeld",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 49,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-04-22",
+    "clubId": "clube-002",
+    "displayName": "Kasald Kvardahl",
+    "id": "jogador-00039",
+    "name": "Kasald Nyrhaug Kvardahl",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 71,
+    "traits": []
+  },
+  {
+    "birthDate": "1991-08-17",
+    "clubId": "clube-002",
+    "displayName": "Casven Asknes",
+    "id": "jogador-00040",
+    "name": "Casven Holstrand Asknes",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 63,
+    "traits": []
+  },
+  {
+    "birthDate": "2003-11-26",
+    "clubId": "clube-002",
+    "displayName": "Elano Ostness",
+    "id": "jogador-00041",
+    "name": "Elano Askrud Ostness",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 59,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2006-01-19",
+    "clubId": "clube-002",
+    "displayName": "Toros Karrud",
+    "id": "jogador-00042",
+    "name": "Toros Morbakk Karrud",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 60,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2005-12-26",
+    "clubId": "clube-002",
+    "displayName": "Alen Malberg",
+    "id": "jogador-00043",
+    "name": "Alen Malhaug Malberg",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 59,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-02-12",
+    "clubId": "clube-002",
+    "displayName": "Lorur Helgard",
+    "id": "jogador-00044",
+    "name": "Lorur Velstad Helgard",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 69,
+    "traits": [
+      "pace",
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1996-03-26",
+    "clubId": "clube-002",
+    "displayName": "Casven Fallund",
+    "id": "jogador-00045",
+    "name": "Casven Lunberg Fallund",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 67,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2005-10-03",
+    "clubId": "clube-002",
+    "displayName": "Loran Roshaug",
+    "id": "jogador-00046",
+    "name": "Loran Morhus Roshaug",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 64,
+    "traits": [
+      "pace",
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1995-06-12",
+    "clubId": "clube-002",
+    "displayName": "Kelven Granfeld",
+    "id": "jogador-00047",
+    "name": "Kelven Mordal Granfeld",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 68,
+    "traits": []
+  },
+  {
+    "birthDate": "2007-08-16",
+    "clubId": "clube-002",
+    "displayName": "Svenor Askberg",
+    "id": "jogador-00048",
+    "name": "Svenor Nyrbakk Askberg",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 56,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-05-27",
+    "clubId": "clube-002",
+    "displayName": "Osric Karhaug",
+    "id": "jogador-00049",
+    "name": "Osric Rosdal Karhaug",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 71,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-02-26",
+    "clubId": "clube-002",
+    "displayName": "Kasur Sandhus",
+    "id": "jogador-00050",
+    "name": "Kasur Talbakk Sandhus",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 72,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-06-20",
+    "clubId": "clube-002",
+    "displayName": "Edur Kvarvik",
+    "id": "jogador-00051",
+    "name": "Edur Faldal Kvarvik",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 71,
+    "traits": []
+  },
+  {
+    "birthDate": "2002-09-22",
+    "clubId": "clube-002",
+    "displayName": "Peros Sandlund",
+    "id": "jogador-00052",
+    "name": "Peros Oststad Sandlund",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 61,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "1998-05-01",
+    "clubId": "clube-003",
+    "displayName": "Elrik Lindstrand",
+    "id": "jogador-00053",
+    "name": "Elrik Strostad Lindstrand",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 67,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2003-06-08",
+    "clubId": "clube-003",
+    "displayName": "Ivois Lindfeld",
+    "id": "jogador-00054",
+    "name": "Ivois Nyrby Lindfeld",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 65,
+    "traits": []
+  },
+  {
+    "birthDate": "2003-12-19",
+    "clubId": "clube-003",
+    "displayName": "Casmund Nyrhaug",
+    "id": "jogador-00055",
+    "name": "Casmund Lunberg Nyrhaug",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 54,
+    "traits": []
+  },
+  {
+    "birthDate": "1998-09-29",
+    "clubId": "clube-003",
+    "displayName": "Ardven Nesgard",
+    "id": "jogador-00056",
+    "name": "Ardven Brinsen Nesgard",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 65,
+    "traits": []
+  },
+  {
+    "birthDate": "1994-12-25",
+    "clubId": "clube-003",
+    "displayName": "Ulin Askness",
+    "id": "jogador-00057",
+    "name": "Ulin Kvarhaug Askness",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 63,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2005-10-03",
+    "clubId": "clube-003",
+    "displayName": "Ardor Rosmark",
+    "id": "jogador-00058",
+    "name": "Ardor Faldal Rosmark",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 60,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2002-08-31",
+    "clubId": "clube-003",
+    "displayName": "Ardek Lunby",
+    "id": "jogador-00059",
+    "name": "Ardek Sandstrand Lunby",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 56,
+    "traits": [
+      "pace",
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "1996-07-20",
+    "clubId": "clube-003",
+    "displayName": "Darlo Ravsen",
+    "id": "jogador-00060",
+    "name": "Darlo Roshaug Ravsen",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 69,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1996-11-24",
+    "clubId": "clube-003",
+    "displayName": "Ardin Englund",
+    "id": "jogador-00061",
+    "name": "Ardin Stroness Englund",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 71,
+    "traits": []
+  },
+  {
+    "birthDate": "1992-11-10",
+    "clubId": "clube-003",
+    "displayName": "Ulven Rosnes",
+    "id": "jogador-00062",
+    "name": "Ulven Sandhus Rosnes",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 54,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2006-12-30",
+    "clubId": "clube-003",
+    "displayName": "Vikur Granhaug",
+    "id": "jogador-00063",
+    "name": "Vikur Kardal Granhaug",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 55,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2010-01-01",
+    "clubId": "clube-003",
+    "displayName": "Ulin Askrud",
+    "id": "jogador-00064",
+    "name": "Ulin Sandrud Askrud",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 50,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-09-22",
+    "clubId": "clube-003",
+    "displayName": "Froeto Lunberg",
+    "id": "jogador-00065",
+    "name": "Froeto Engfeld Lunberg",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 70,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1999-02-07",
+    "clubId": "clube-003",
+    "displayName": "Toris Rosby",
+    "id": "jogador-00066",
+    "name": "Toris Malnes Rosby",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 62,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2006-03-13",
+    "clubId": "clube-003",
+    "displayName": "Ardek Holstrand",
+    "id": "jogador-00067",
+    "name": "Ardek Morhus Holstrand",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 51,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-03-13",
+    "clubId": "clube-003",
+    "displayName": "Halmund Lunbakk",
+    "id": "jogador-00068",
+    "name": "Halmund Berhus Lunbakk",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 73,
+    "traits": []
+  },
+  {
+    "birthDate": "2002-02-01",
+    "clubId": "clube-003",
+    "displayName": "Alrik Ravnes",
+    "id": "jogador-00069",
+    "name": "Alrik Rosdahl Ravnes",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 66,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1998-08-13",
+    "clubId": "clube-003",
+    "displayName": "Ulmund Ravmark",
+    "id": "jogador-00070",
+    "name": "Ulmund Morsen Ravmark",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 68,
+    "traits": []
+  },
+  {
+    "birthDate": "1993-08-06",
+    "clubId": "clube-003",
+    "displayName": "Arddor Berholm",
+    "id": "jogador-00071",
+    "name": "Arddor Talnes Berholm",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 56,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1990-10-07",
+    "clubId": "clube-003",
+    "displayName": "Ello Kvarrud",
+    "id": "jogador-00072",
+    "name": "Ello Ostnes Kvarrud",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 63,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2000-12-27",
+    "clubId": "clube-003",
+    "displayName": "Arden Kvarhus",
+    "id": "jogador-00073",
+    "name": "Arden Sandgard Kvarhus",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 68,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-12-29",
+    "clubId": "clube-003",
+    "displayName": "Gorar Ostfeld",
+    "id": "jogador-00074",
+    "name": "Gorar Granstrand Ostfeld",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 64,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2006-10-17",
+    "clubId": "clube-003",
+    "displayName": "Hareto Bernes",
+    "id": "jogador-00075",
+    "name": "Hareto Granholm Bernes",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 59,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2006-12-20",
+    "clubId": "clube-003",
+    "displayName": "Rolen Nesberg",
+    "id": "jogador-00076",
+    "name": "Rolen Nesdahl Nesberg",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 52,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-07-09",
+    "clubId": "clube-004",
+    "displayName": "Vikar Malmark",
+    "id": "jogador-00077",
+    "name": "Vikar Karby Malmark",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 65,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-08-15",
+    "clubId": "clube-004",
+    "displayName": "Bjorald Engdahl",
+    "id": "jogador-00078",
+    "name": "Bjorald Nessen Engdahl",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 62,
+    "traits": []
+  },
+  {
+    "birthDate": "2006-09-28",
+    "clubId": "clube-004",
+    "displayName": "Torric Engby",
+    "id": "jogador-00079",
+    "name": "Torric Ravmark Engby",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 52,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1994-03-24",
+    "clubId": "clube-004",
+    "displayName": "Vikur Lindstrand",
+    "id": "jogador-00080",
+    "name": "Vikur Sandnes Lindstrand",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 69,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1998-12-07",
+    "clubId": "clube-004",
+    "displayName": "Elin Engsen",
+    "id": "jogador-00081",
+    "name": "Elin Brinrud Engsen",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 72,
+    "traits": []
+  },
+  {
+    "birthDate": "2002-05-05",
+    "clubId": "clube-004",
+    "displayName": "Ardald Sandvik",
+    "id": "jogador-00082",
+    "name": "Ardald Nyrbakk Sandvik",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 66,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2003-06-05",
+    "clubId": "clube-004",
+    "displayName": "Ivoian Nessen",
+    "id": "jogador-00083",
+    "name": "Ivoian Sandholm Nessen",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 63,
+    "traits": []
+  },
+  {
+    "birthDate": "1996-06-25",
+    "clubId": "clube-004",
+    "displayName": "Loros Karhaug",
+    "id": "jogador-00084",
+    "name": "Loros Askvik Karhaug",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 70,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1998-11-19",
+    "clubId": "clube-004",
+    "displayName": "Halan Lungard",
+    "id": "jogador-00085",
+    "name": "Halan Brinhaug Lungard",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 71,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2004-06-06",
+    "clubId": "clube-004",
+    "displayName": "Alen Kvarnes",
+    "id": "jogador-00086",
+    "name": "Alen Nesdahl Kvarnes",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 61,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-11-18",
+    "clubId": "clube-004",
+    "displayName": "Marric Sandnes",
+    "id": "jogador-00087",
+    "name": "Marric Grantorp Sandnes",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 60,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2006-04-30",
+    "clubId": "clube-004",
+    "displayName": "Perek Faldahl",
+    "id": "jogador-00088",
+    "name": "Perek Daldal Faldahl",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 55,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-06-04",
+    "clubId": "clube-004",
+    "displayName": "Elvel Hellund",
+    "id": "jogador-00089",
+    "name": "Elvel Berness Hellund",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 69,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-01-13",
+    "clubId": "clube-004",
+    "displayName": "Kelven Nyrfeld",
+    "id": "jogador-00090",
+    "name": "Kelven Sandvik Nyrfeld",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 68,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2001-11-19",
+    "clubId": "clube-004",
+    "displayName": "Svenlo Kardahl",
+    "id": "jogador-00091",
+    "name": "Svenlo Nyrvik Kardahl",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 54,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2005-01-20",
+    "clubId": "clube-004",
+    "displayName": "Svenrik Granholm",
+    "id": "jogador-00092",
+    "name": "Svenrik Rosdahl Granholm",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 59,
+    "traits": [
+      "wall",
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2008-04-19",
+    "clubId": "clube-004",
+    "displayName": "Osric Nesgard",
+    "id": "jogador-00093",
+    "name": "Osric Brinlund Nesgard",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 50,
+    "traits": [
+      "wall",
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1998-12-26",
+    "clubId": "clube-004",
+    "displayName": "Ingian Brinhaug",
+    "id": "jogador-00094",
+    "name": "Ingian Karby Brinhaug",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 72,
+    "traits": [
+      "free-kick",
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1998-04-01",
+    "clubId": "clube-004",
+    "displayName": "Edlo Taldahl",
+    "id": "jogador-00095",
+    "name": "Edlo Engmark Taldahl",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 75,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "1993-01-15",
+    "clubId": "clube-004",
+    "displayName": "Ardvel Holberg",
+    "id": "jogador-00096",
+    "name": "Ardvel Lunlund Holberg",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 72,
+    "traits": []
+  },
+  {
+    "birthDate": "1997-09-05",
+    "clubId": "clube-004",
+    "displayName": "Ardeto Morhus",
+    "id": "jogador-00097",
+    "name": "Ardeto Morsen Morhus",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 63,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2002-10-01",
+    "clubId": "clube-004",
+    "displayName": "Lorur Sandholm",
+    "id": "jogador-00098",
+    "name": "Lorur Dalby Sandholm",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 56,
+    "traits": []
+  },
+  {
+    "birthDate": "1996-05-04",
+    "clubId": "clube-004",
+    "displayName": "Ardvel Velberg",
+    "id": "jogador-00099",
+    "name": "Ardvel Rossen Velberg",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 63,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1996-01-08",
+    "clubId": "clube-004",
+    "displayName": "Alrik Faltorp",
+    "id": "jogador-00100",
+    "name": "Alrik Dalgard Faltorp",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 83,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-04-18",
+    "clubId": "clube-004",
+    "displayName": "Gorur Brinlund",
+    "id": "jogador-00101",
+    "name": "Gorur Bersen Brinlund",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 65,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2000-12-13",
+    "clubId": "clube-004",
+    "displayName": "Mareto Osttorp",
+    "id": "jogador-00102",
+    "name": "Mareto Sandgard Osttorp",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 61,
+    "traits": []
+  },
+  {
+    "birthDate": "2006-06-04",
+    "clubId": "clube-004",
+    "displayName": "Viklo Faldal",
+    "id": "jogador-00103",
+    "name": "Viklo Rosstrand Faldal",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 53,
+    "traits": []
+  },
+  {
+    "birthDate": "1998-05-25",
+    "clubId": "clube-005",
+    "displayName": "Osvel Strostrand",
+    "id": "jogador-00104",
+    "name": "Osvel Ostnes Strostrand",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 69,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1999-02-20",
+    "clubId": "clube-005",
+    "displayName": "Halmund Berholm",
+    "id": "jogador-00105",
+    "name": "Halmund Nyrlund Berholm",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 63,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2007-11-06",
+    "clubId": "clube-005",
+    "displayName": "Vallo Faldal",
+    "id": "jogador-00106",
+    "name": "Vallo Kardal Faldal",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 56,
+    "traits": []
+  },
+  {
+    "birthDate": "2006-08-10",
+    "clubId": "clube-005",
+    "displayName": "Casven Malberg",
+    "id": "jogador-00107",
+    "name": "Casven Sandhus Malberg",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 63,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2001-06-28",
+    "clubId": "clube-005",
+    "displayName": "Edlo Lindvik",
+    "id": "jogador-00108",
+    "name": "Edlo Falmark Lindvik",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 71,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-09-18",
+    "clubId": "clube-005",
+    "displayName": "Edano Berfeld",
+    "id": "jogador-00109",
+    "name": "Edano Dalgard Berfeld",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 67,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-04-04",
+    "clubId": "clube-005",
+    "displayName": "Lorald Morsen",
+    "id": "jogador-00110",
+    "name": "Lorald Lunhus Morsen",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 61,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-04-13",
+    "clubId": "clube-005",
+    "displayName": "Torvel Englund",
+    "id": "jogador-00111",
+    "name": "Torvel Mormark Englund",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 58,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "1994-08-15",
+    "clubId": "clube-005",
+    "displayName": "Casmund Nyrlund",
+    "id": "jogador-00112",
+    "name": "Casmund Malnes Nyrlund",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 67,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "1995-06-15",
+    "clubId": "clube-005",
+    "displayName": "Breian Holbakk",
+    "id": "jogador-00113",
+    "name": "Breian Dalgard Holbakk",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 66,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2000-11-04",
+    "clubId": "clube-005",
+    "displayName": "Elor Nyrrud",
+    "id": "jogador-00114",
+    "name": "Elor Lindgard Nyrrud",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 62,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-02-26",
+    "clubId": "clube-005",
+    "displayName": "Eldor Brintorp",
+    "id": "jogador-00115",
+    "name": "Eldor Morhus Brintorp",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 58,
+    "traits": []
+  },
+  {
+    "birthDate": "2006-03-22",
+    "clubId": "clube-005",
+    "displayName": "Kasald Helsen",
+    "id": "jogador-00116",
+    "name": "Kasald Lunstrand Helsen",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 55,
+    "traits": []
+  },
+  {
+    "birthDate": "2003-07-11",
+    "clubId": "clube-005",
+    "displayName": "Ardmund Malstad",
+    "id": "jogador-00117",
+    "name": "Ardmund Nyrby Malstad",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 73,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2000-11-24",
+    "clubId": "clube-005",
+    "displayName": "Froek Velmark",
+    "id": "jogador-00118",
+    "name": "Froek Morhus Velmark",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 68,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2007-10-16",
+    "clubId": "clube-005",
+    "displayName": "Osric Askbakk",
+    "id": "jogador-00119",
+    "name": "Osric Talberg Askbakk",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 57,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2006-02-07",
+    "clubId": "clube-005",
+    "displayName": "Daren Granstrand",
+    "id": "jogador-00120",
+    "name": "Daren Velmark Granstrand",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 59,
+    "traits": []
+  },
+  {
+    "birthDate": "2002-12-23",
+    "clubId": "clube-005",
+    "displayName": "Bjoren Lunlund",
+    "id": "jogador-00121",
+    "name": "Bjoren Falmark Lunlund",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 70,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2007-09-04",
+    "clubId": "clube-005",
+    "displayName": "Casvel Ravnes",
+    "id": "jogador-00122",
+    "name": "Casvel Dalvik Ravnes",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 61,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1997-08-06",
+    "clubId": "clube-005",
+    "displayName": "Bjorek Kvarnes",
+    "id": "jogador-00123",
+    "name": "Bjorek Helhus Kvarnes",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 68,
+    "traits": [
+      "playmaker",
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "1991-05-23",
+    "clubId": "clube-005",
+    "displayName": "Marano Berlund",
+    "id": "jogador-00124",
+    "name": "Marano Dalgard Berlund",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 59,
+    "traits": [
+      "free-kick",
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2005-03-23",
+    "clubId": "clube-005",
+    "displayName": "Vikven Kvarrud",
+    "id": "jogador-00125",
+    "name": "Vikven Talnes Kvarrud",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 57,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2005-09-20",
+    "clubId": "clube-005",
+    "displayName": "Kelen Holness",
+    "id": "jogador-00126",
+    "name": "Kelen Ostfeld Holness",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 54,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "1997-12-17",
+    "clubId": "clube-005",
+    "displayName": "Bjorin Holsen",
+    "id": "jogador-00127",
+    "name": "Bjorin Granrud Holsen",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 74,
+    "traits": []
+  },
+  {
+    "birthDate": "1992-03-20",
+    "clubId": "clube-005",
+    "displayName": "Ardor Brinbakk",
+    "id": "jogador-00128",
+    "name": "Ardor Talfeld Brinbakk",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 69,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-11-14",
+    "clubId": "clube-005",
+    "displayName": "Halos Stroness",
+    "id": "jogador-00129",
+    "name": "Halos Dalberg Stroness",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 67,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-07-26",
+    "clubId": "clube-005",
+    "displayName": "Vallo Falfeld",
+    "id": "jogador-00130",
+    "name": "Vallo Dalgard Falfeld",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 59,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-11-29",
+    "clubId": "clube-006",
+    "displayName": "Arddor Kvarberg",
+    "id": "jogador-00131",
+    "name": "Arddor Ostvik Kvarberg",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 68,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2001-04-09",
+    "clubId": "clube-006",
+    "displayName": "Brevel Nyrtorp",
+    "id": "jogador-00132",
+    "name": "Brevel Sandvik Nyrtorp",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 58,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2006-10-21",
+    "clubId": "clube-006",
+    "displayName": "Perald Nyrbakk",
+    "id": "jogador-00133",
+    "name": "Perald Karhaug Nyrbakk",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 55,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1995-03-22",
+    "clubId": "clube-006",
+    "displayName": "Vikar Holrud",
+    "id": "jogador-00134",
+    "name": "Vikar Holstrand Holrud",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 64,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2000-04-21",
+    "clubId": "clube-006",
+    "displayName": "Brevel Strones",
+    "id": "jogador-00135",
+    "name": "Brevel Rosmark Strones",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 63,
+    "traits": [
+      "pace",
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2001-12-01",
+    "clubId": "clube-006",
+    "displayName": "Gunar Morsen",
+    "id": "jogador-00136",
+    "name": "Gunar Berholm Morsen",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 65,
+    "traits": []
+  },
+  {
+    "birthDate": "2003-12-27",
+    "clubId": "clube-006",
+    "displayName": "Goris Malhaug",
+    "id": "jogador-00137",
+    "name": "Goris Nyrrud Malhaug",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 58,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2004-03-18",
+    "clubId": "clube-006",
+    "displayName": "Vallo Sandvik",
+    "id": "jogador-00138",
+    "name": "Vallo Berby Sandvik",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 58,
+    "traits": []
+  },
+  {
+    "birthDate": "1993-01-24",
+    "clubId": "clube-006",
+    "displayName": "Edan Ravvik",
+    "id": "jogador-00139",
+    "name": "Edan Brintorp Ravvik",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 64,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2004-06-24",
+    "clubId": "clube-006",
+    "displayName": "Daros Lunbakk",
+    "id": "jogador-00140",
+    "name": "Daros Oststad Lunbakk",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 72,
+    "traits": []
+  },
+  {
+    "birthDate": "2006-01-03",
+    "clubId": "clube-006",
+    "displayName": "Halis Lindmark",
+    "id": "jogador-00141",
+    "name": "Halis Dalgard Lindmark",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 63,
+    "traits": []
+  },
+  {
+    "birthDate": "2006-12-27",
+    "clubId": "clube-006",
+    "displayName": "Ardven Dalvik",
+    "id": "jogador-00142",
+    "name": "Ardven Rosdal Dalvik",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 51,
+    "traits": [
+      "heading",
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2006-08-19",
+    "clubId": "clube-006",
+    "displayName": "Viklo Helhus",
+    "id": "jogador-00143",
+    "name": "Viklo Berstad Helhus",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 53,
+    "traits": []
+  },
+  {
+    "birthDate": "1995-05-24",
+    "clubId": "clube-006",
+    "displayName": "Ingdor Lunsen",
+    "id": "jogador-00144",
+    "name": "Ingdor Sandstrand Lunsen",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 66,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2004-03-18",
+    "clubId": "clube-006",
+    "displayName": "Osos Grandal",
+    "id": "jogador-00145",
+    "name": "Osos Berlund Grandal",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 64,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2003-05-08",
+    "clubId": "clube-006",
+    "displayName": "Gunar Helhus",
+    "id": "jogador-00146",
+    "name": "Gunar Askberg Helhus",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 61,
+    "traits": [
+      "playmaker",
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2006-05-01",
+    "clubId": "clube-006",
+    "displayName": "Bjormund Talhus",
+    "id": "jogador-00147",
+    "name": "Bjormund Lunberg Talhus",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 50,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-02-06",
+    "clubId": "clube-006",
+    "displayName": "Bredor Kardahl",
+    "id": "jogador-00148",
+    "name": "Bredor Morby Kardahl",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 66,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1997-03-28",
+    "clubId": "clube-006",
+    "displayName": "Norrik Rosmark",
+    "id": "jogador-00149",
+    "name": "Norrik Engdahl Rosmark",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 66,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2007-07-24",
+    "clubId": "clube-006",
+    "displayName": "Peros Malnes",
+    "id": "jogador-00150",
+    "name": "Peros Kardahl Malnes",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 58,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-01-03",
+    "clubId": "clube-006",
+    "displayName": "Bjoror Brinby",
+    "id": "jogador-00151",
+    "name": "Bjoror Granhaug Brinby",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 59,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2006-09-16",
+    "clubId": "clube-006",
+    "displayName": "Jarur Brinby",
+    "id": "jogador-00152",
+    "name": "Jarur Falhus Brinby",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 54,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1995-10-05",
+    "clubId": "clube-006",
+    "displayName": "Kasvel Veldahl",
+    "id": "jogador-00153",
+    "name": "Kasvel Malberg Veldahl",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 62,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "1999-06-09",
+    "clubId": "clube-006",
+    "displayName": "Vikis Talfeld",
+    "id": "jogador-00154",
+    "name": "Vikis Weslund Talfeld",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 67,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "1996-10-20",
+    "clubId": "clube-006",
+    "displayName": "Viklo Nyrberg",
+    "id": "jogador-00155",
+    "name": "Viklo Rosvik Nyrberg",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 60,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2005-02-09",
+    "clubId": "clube-006",
+    "displayName": "Svenar Engmark",
+    "id": "jogador-00156",
+    "name": "Svenar Velmark Engmark",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 52,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-05-24",
+    "clubId": "clube-006",
+    "displayName": "Ardvel Kvarvik",
+    "id": "jogador-00157",
+    "name": "Ardvel Nyrby Kvarvik",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 56,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2006-01-30",
+    "clubId": "clube-007",
+    "displayName": "Perald Falrud",
+    "id": "jogador-00158",
+    "name": "Perald Veldahl Falrud",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 57,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1994-04-23",
+    "clubId": "clube-007",
+    "displayName": "Froor Lunstrand",
+    "id": "jogador-00159",
+    "name": "Froor Falhus Lunstrand",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 54,
+    "traits": []
+  },
+  {
+    "birthDate": "2002-07-12",
+    "clubId": "clube-007",
+    "displayName": "Jarur Sandtorp",
+    "id": "jogador-00160",
+    "name": "Jarur Dalhus Sandtorp",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 50,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1999-09-12",
+    "clubId": "clube-007",
+    "displayName": "Caslo Lindbakk",
+    "id": "jogador-00161",
+    "name": "Caslo Sandlund Lindbakk",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 65,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2002-01-28",
+    "clubId": "clube-007",
+    "displayName": "Casmund Sandholm",
+    "id": "jogador-00162",
+    "name": "Casmund Ostlund Sandholm",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 62,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1995-05-16",
+    "clubId": "clube-007",
+    "displayName": "Goren Ostnes",
+    "id": "jogador-00163",
+    "name": "Goren Sanddal Ostnes",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 56,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1998-07-07",
+    "clubId": "clube-007",
+    "displayName": "Edan Ravberg",
+    "id": "jogador-00164",
+    "name": "Edan Falhaug Ravberg",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 56,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1999-05-26",
+    "clubId": "clube-007",
+    "displayName": "Lorlo Bersen",
+    "id": "jogador-00165",
+    "name": "Lorlo Brinhaug Bersen",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 57,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1992-09-04",
+    "clubId": "clube-007",
+    "displayName": "Osdor Malby",
+    "id": "jogador-00166",
+    "name": "Osdor Lindvik Malby",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 62,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1999-10-29",
+    "clubId": "clube-007",
+    "displayName": "Valeto Berberg",
+    "id": "jogador-00167",
+    "name": "Valeto Nyrberg Berberg",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 61,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "1996-04-17",
+    "clubId": "clube-007",
+    "displayName": "Lorlo Lunholm",
+    "id": "jogador-00168",
+    "name": "Lorlo Strogard Lunholm",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 55,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "1999-07-03",
+    "clubId": "clube-007",
+    "displayName": "Casin Talbakk",
+    "id": "jogador-00169",
+    "name": "Casin Engfeld Talbakk",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 55,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2000-07-15",
+    "clubId": "clube-007",
+    "displayName": "Rolric Faltorp",
+    "id": "jogador-00170",
+    "name": "Rolric Nyrby Faltorp",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 64,
+    "traits": [
+      "heading",
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1999-08-13",
+    "clubId": "clube-007",
+    "displayName": "Kelven Falhaug",
+    "id": "jogador-00171",
+    "name": "Kelven Helhus Falhaug",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 55,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2002-05-01",
+    "clubId": "clube-007",
+    "displayName": "Svenor Morness",
+    "id": "jogador-00172",
+    "name": "Svenor Lindfeld Morness",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 55,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2004-10-01",
+    "clubId": "clube-007",
+    "displayName": "Torian Bertorp",
+    "id": "jogador-00173",
+    "name": "Torian Berlund Bertorp",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 47,
+    "traits": []
+  },
+  {
+    "birthDate": "1996-07-17",
+    "clubId": "clube-007",
+    "displayName": "Alvel Nesberg",
+    "id": "jogador-00174",
+    "name": "Alvel Kardal Nesberg",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 66,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2004-07-18",
+    "clubId": "clube-007",
+    "displayName": "Osdor Nyrfeld",
+    "id": "jogador-00175",
+    "name": "Osdor Rosmark Nyrfeld",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 59,
+    "traits": []
+  },
+  {
+    "birthDate": "1997-04-26",
+    "clubId": "clube-007",
+    "displayName": "Breian Talberg",
+    "id": "jogador-00176",
+    "name": "Breian Ostvik Talberg",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 60,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "1992-01-25",
+    "clubId": "clube-007",
+    "displayName": "Halan Mormark",
+    "id": "jogador-00177",
+    "name": "Halan Strostad Mormark",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 55,
+    "traits": [
+      "playmaker",
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2001-07-09",
+    "clubId": "clube-007",
+    "displayName": "Harur Talberg",
+    "id": "jogador-00178",
+    "name": "Harur Holstrand Talberg",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 50,
+    "traits": []
+  },
+  {
+    "birthDate": "2002-09-12",
+    "clubId": "clube-007",
+    "displayName": "Marvel Rosstad",
+    "id": "jogador-00179",
+    "name": "Marvel Granholm Rosstad",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 66,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-05-11",
+    "clubId": "clube-007",
+    "displayName": "Jarar Talstad",
+    "id": "jogador-00180",
+    "name": "Jarar Lindgard Talstad",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 60,
+    "traits": [
+      "free-kick",
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "1993-02-28",
+    "clubId": "clube-007",
+    "displayName": "Hardor Bringard",
+    "id": "jogador-00181",
+    "name": "Hardor Bersen Bringard",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 53,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2007-09-22",
+    "clubId": "clube-007",
+    "displayName": "Torvel Rossen",
+    "id": "jogador-00182",
+    "name": "Torvel Osthaug Rossen",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 48,
+    "traits": []
+  },
+  {
+    "birthDate": "2006-01-23",
+    "clubId": "clube-007",
+    "displayName": "Harald Lungard",
+    "id": "jogador-00183",
+    "name": "Harald Holfeld Lungard",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 50,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2000-11-08",
+    "clubId": "clube-008",
+    "displayName": "Jaror Velhaug",
+    "id": "jogador-00184",
+    "name": "Jaror Bertorp Velhaug",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 58,
+    "traits": []
+  },
+  {
+    "birthDate": "1997-10-28",
+    "clubId": "clube-008",
+    "displayName": "Osdor Granfeld",
+    "id": "jogador-00185",
+    "name": "Osdor Grantorp Granfeld",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 57,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-07-09",
+    "clubId": "clube-008",
+    "displayName": "Jarur Falhaug",
+    "id": "jogador-00186",
+    "name": "Jarur Talrud Falhaug",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 55,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1995-11-19",
+    "clubId": "clube-008",
+    "displayName": "Kasvel Lunsen",
+    "id": "jogador-00187",
+    "name": "Kasvel Berstad Lunsen",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 69,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2006-01-02",
+    "clubId": "clube-008",
+    "displayName": "Vallo Rosdal",
+    "id": "jogador-00188",
+    "name": "Vallo Bertorp Rosdal",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 57,
+    "traits": []
+  },
+  {
+    "birthDate": "1996-09-24",
+    "clubId": "clube-008",
+    "displayName": "Perric Talberg",
+    "id": "jogador-00189",
+    "name": "Perric Sandvik Talberg",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 62,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2002-04-28",
+    "clubId": "clube-008",
+    "displayName": "Marven Heldal",
+    "id": "jogador-00190",
+    "name": "Marven Nyrlund Heldal",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 55,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1995-01-20",
+    "clubId": "clube-008",
+    "displayName": "Elen Kargard",
+    "id": "jogador-00191",
+    "name": "Elen Talhus Kargard",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 62,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1999-07-05",
+    "clubId": "clube-008",
+    "displayName": "Marano Engfeld",
+    "id": "jogador-00192",
+    "name": "Marano Falmark Engfeld",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 65,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-02-19",
+    "clubId": "clube-008",
+    "displayName": "Brevel Lunhus",
+    "id": "jogador-00193",
+    "name": "Brevel Helsen Lunhus",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 63,
+    "traits": []
+  },
+  {
+    "birthDate": "2005-09-11",
+    "clubId": "clube-008",
+    "displayName": "Elor Talnes",
+    "id": "jogador-00194",
+    "name": "Elor Roshaug Talnes",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 47,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2006-11-06",
+    "clubId": "clube-008",
+    "displayName": "Kelen Helsen",
+    "id": "jogador-00195",
+    "name": "Kelen Berhus Helsen",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 53,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "1997-01-31",
+    "clubId": "clube-008",
+    "displayName": "Daros Sanddal",
+    "id": "jogador-00196",
+    "name": "Daros Malstad Sanddal",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 64,
+    "traits": []
+  },
+  {
+    "birthDate": "1997-02-03",
+    "clubId": "clube-008",
+    "displayName": "Osos Velness",
+    "id": "jogador-00197",
+    "name": "Osos Malholm Velness",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 62,
+    "traits": []
+  },
+  {
+    "birthDate": "2009-03-05",
+    "clubId": "clube-008",
+    "displayName": "Valdor Lunness",
+    "id": "jogador-00198",
+    "name": "Valdor Taltorp Lunness",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 48,
+    "traits": []
+  },
+  {
+    "birthDate": "1997-08-21",
+    "clubId": "clube-008",
+    "displayName": "Osor Velstrand",
+    "id": "jogador-00199",
+    "name": "Osor Sandholm Velstrand",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 59,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2001-04-07",
+    "clubId": "clube-008",
+    "displayName": "Bjorvel Brinnes",
+    "id": "jogador-00200",
+    "name": "Bjorvel Holnes Brinnes",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 67,
+    "traits": []
+  },
+  {
+    "birthDate": "1996-04-18",
+    "clubId": "clube-008",
+    "displayName": "Kelos Lindby",
+    "id": "jogador-00201",
+    "name": "Kelos Mornes Lindby",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 64,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2002-10-15",
+    "clubId": "clube-008",
+    "displayName": "Elin Lunby",
+    "id": "jogador-00202",
+    "name": "Elin Mornes Lunby",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 63,
+    "traits": []
+  },
+  {
+    "birthDate": "1996-12-25",
+    "clubId": "clube-008",
+    "displayName": "Gunor Brinhus",
+    "id": "jogador-00203",
+    "name": "Gunor Talnes Brinhus",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 56,
+    "traits": []
+  },
+  {
+    "birthDate": "2007-03-15",
+    "clubId": "clube-008",
+    "displayName": "Kelen Falhus",
+    "id": "jogador-00204",
+    "name": "Kelen Sandholm Falhus",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 49,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-08-23",
+    "clubId": "clube-008",
+    "displayName": "Halar Granstrand",
+    "id": "jogador-00205",
+    "name": "Halar Berness Granstrand",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 57,
+    "traits": [
+      "playmaker",
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "1998-03-30",
+    "clubId": "clube-008",
+    "displayName": "Gundor Grantorp",
+    "id": "jogador-00206",
+    "name": "Gundor Ravmark Grantorp",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 73,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-05-09",
+    "clubId": "clube-008",
+    "displayName": "Ulin Kvarrud",
+    "id": "jogador-00207",
+    "name": "Ulin Lindnes Kvarrud",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 62,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2003-02-02",
+    "clubId": "clube-008",
+    "displayName": "Ular Ravsen",
+    "id": "jogador-00208",
+    "name": "Ular Helsen Ravsen",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 57,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2002-07-07",
+    "clubId": "clube-008",
+    "displayName": "Kaslo Granhaug",
+    "id": "jogador-00209",
+    "name": "Kaslo Ravvik Granhaug",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 53,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2006-10-14",
+    "clubId": "clube-008",
+    "displayName": "Vikano Holfeld",
+    "id": "jogador-00210",
+    "name": "Vikano Nyrvik Holfeld",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 58,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "1998-04-02",
+    "clubId": "clube-009",
+    "displayName": "Edlo Sandnes",
+    "id": "jogador-00211",
+    "name": "Edlo Lindvik Sandnes",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 61,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2003-07-16",
+    "clubId": "clube-009",
+    "displayName": "Perric Strostad",
+    "id": "jogador-00212",
+    "name": "Perric Mornes Strostad",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 60,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2006-11-17",
+    "clubId": "clube-009",
+    "displayName": "Peros Rosnes",
+    "id": "jogador-00213",
+    "name": "Peros Nyrhaug Rosnes",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 50,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1997-02-21",
+    "clubId": "clube-009",
+    "displayName": "Vikven Sandholm",
+    "id": "jogador-00214",
+    "name": "Vikven Berlund Sandholm",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 72,
+    "traits": []
+  },
+  {
+    "birthDate": "2002-12-13",
+    "clubId": "clube-009",
+    "displayName": "Kasur Malberg",
+    "id": "jogador-00215",
+    "name": "Kasur Nestorp Malberg",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 60,
+    "traits": []
+  },
+  {
+    "birthDate": "2005-08-08",
+    "clubId": "clube-009",
+    "displayName": "Edur Lindness",
+    "id": "jogador-00216",
+    "name": "Edur Brinhaug Lindness",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 56,
+    "traits": []
+  },
+  {
+    "birthDate": "2006-08-19",
+    "clubId": "clube-009",
+    "displayName": "Harar Nyrlund",
+    "id": "jogador-00217",
+    "name": "Harar Nesberg Nyrlund",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 53,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2002-11-12",
+    "clubId": "clube-009",
+    "displayName": "Kasian Ostdal",
+    "id": "jogador-00218",
+    "name": "Kasian Sandvik Ostdal",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 57,
+    "traits": []
+  },
+  {
+    "birthDate": "1998-08-20",
+    "clubId": "clube-009",
+    "displayName": "Viklo Askbakk",
+    "id": "jogador-00219",
+    "name": "Viklo Brintorp Askbakk",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 65,
+    "traits": [
+      "heading",
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2000-03-31",
+    "clubId": "clube-009",
+    "displayName": "Caslo Lunlund",
+    "id": "jogador-00220",
+    "name": "Caslo Ostfeld Lunlund",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 62,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-12-29",
+    "clubId": "clube-009",
+    "displayName": "Kasric Sandnes",
+    "id": "jogador-00221",
+    "name": "Kasric Engness Sandnes",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 57,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2005-10-19",
+    "clubId": "clube-009",
+    "displayName": "Bjorek Engmark",
+    "id": "jogador-00222",
+    "name": "Bjorek Nyrberg Engmark",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 52,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-02-06",
+    "clubId": "clube-009",
+    "displayName": "Marek Berhus",
+    "id": "jogador-00223",
+    "name": "Marek Velstrand Berhus",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 68,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-11-09",
+    "clubId": "clube-009",
+    "displayName": "Alrik Berstad",
+    "id": "jogador-00224",
+    "name": "Alrik Strones Berstad",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 62,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2003-09-01",
+    "clubId": "clube-009",
+    "displayName": "Gorur Nestorp",
+    "id": "jogador-00225",
+    "name": "Gorur Talbakk Nestorp",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 58,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-04-12",
+    "clubId": "clube-009",
+    "displayName": "Valven Malby",
+    "id": "jogador-00226",
+    "name": "Valven Holrud Malby",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 65,
+    "traits": []
+  },
+  {
+    "birthDate": "1992-07-07",
+    "clubId": "clube-009",
+    "displayName": "Ingian Kvarrud",
+    "id": "jogador-00227",
+    "name": "Ingian Nesdal Kvarrud",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 63,
+    "traits": []
+  },
+  {
+    "birthDate": "2006-09-18",
+    "clubId": "clube-009",
+    "displayName": "Ardek Lunhus",
+    "id": "jogador-00228",
+    "name": "Ardek Karby Lunhus",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 62,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1992-10-18",
+    "clubId": "clube-009",
+    "displayName": "Valven Heldal",
+    "id": "jogador-00229",
+    "name": "Valven Osthaug Heldal",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 59,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "1997-10-20",
+    "clubId": "clube-009",
+    "displayName": "Alor Velstrand",
+    "id": "jogador-00230",
+    "name": "Alor Engvik Velstrand",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 61,
+    "traits": []
+  },
+  {
+    "birthDate": "1992-04-29",
+    "clubId": "clube-009",
+    "displayName": "Norek Karstad",
+    "id": "jogador-00231",
+    "name": "Norek Veltorp Karstad",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 64,
+    "traits": []
+  },
+  {
+    "birthDate": "1998-12-07",
+    "clubId": "clube-009",
+    "displayName": "Alin Malby",
+    "id": "jogador-00232",
+    "name": "Alin Bringard Malby",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 60,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2004-12-14",
+    "clubId": "clube-009",
+    "displayName": "Gorric Rosdal",
+    "id": "jogador-00233",
+    "name": "Gorric Berhus Rosdal",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 56,
+    "traits": [
+      "finisher",
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2001-06-04",
+    "clubId": "clube-010",
+    "displayName": "Gorric Rosvik",
+    "id": "jogador-00234",
+    "name": "Gorric Mormark Rosvik",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 86,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2001-11-09",
+    "clubId": "clube-010",
+    "displayName": "Perek Oststad",
+    "id": "jogador-00235",
+    "name": "Perek Nyrness Oststad",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 68,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2008-06-13",
+    "clubId": "clube-010",
+    "displayName": "Bjoror Kvarhaug",
+    "id": "jogador-00236",
+    "name": "Bjoror Engmark Kvarhaug",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 52,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1998-07-15",
+    "clubId": "clube-010",
+    "displayName": "Osos Velness",
+    "id": "jogador-00237",
+    "name": "Osos Mordal Velness",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 77,
+    "traits": [
+      "pace",
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "1998-10-05",
+    "clubId": "clube-010",
+    "displayName": "Halan Ravnes",
+    "id": "jogador-00238",
+    "name": "Halan Lindfeld Ravnes",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 73,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1999-04-30",
+    "clubId": "clube-010",
+    "displayName": "Loran Wesdal",
+    "id": "jogador-00239",
+    "name": "Loran Kvarrud Wesdal",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 74,
+    "traits": []
+  },
+  {
+    "birthDate": "2006-07-06",
+    "clubId": "clube-010",
+    "displayName": "Ulmund Sandvik",
+    "id": "jogador-00240",
+    "name": "Ulmund Hellund Sandvik",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 59,
+    "traits": []
+  },
+  {
+    "birthDate": "1993-05-30",
+    "clubId": "clube-010",
+    "displayName": "Lorald Engness",
+    "id": "jogador-00241",
+    "name": "Lorald Berlund Engness",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 71,
+    "traits": [
+      "heading",
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1994-03-29",
+    "clubId": "clube-010",
+    "displayName": "Jarar Rosmark",
+    "id": "jogador-00242",
+    "name": "Jarar Nyrness Rosmark",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 71,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2003-11-01",
+    "clubId": "clube-010",
+    "displayName": "Ulin Velbakk",
+    "id": "jogador-00243",
+    "name": "Ulin Askberg Velbakk",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 69,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2001-02-25",
+    "clubId": "clube-010",
+    "displayName": "Torven Engness",
+    "id": "jogador-00244",
+    "name": "Torven Osttorp Engness",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 60,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-09-19",
+    "clubId": "clube-010",
+    "displayName": "Vikur Brinnes",
+    "id": "jogador-00245",
+    "name": "Vikur Rosby Brinnes",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 71,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1998-09-05",
+    "clubId": "clube-010",
+    "displayName": "Ular Falrud",
+    "id": "jogador-00246",
+    "name": "Ular Ravvik Falrud",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 68,
+    "traits": []
+  },
+  {
+    "birthDate": "2005-04-29",
+    "clubId": "clube-010",
+    "displayName": "Casin Dalberg",
+    "id": "jogador-00247",
+    "name": "Casin Brintorp Dalberg",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 64,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2004-07-30",
+    "clubId": "clube-010",
+    "displayName": "Kasin Faltorp",
+    "id": "jogador-00248",
+    "name": "Kasin Daldal Faltorp",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 59,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-06-14",
+    "clubId": "clube-010",
+    "displayName": "Bjoreto Sandnes",
+    "id": "jogador-00249",
+    "name": "Bjoreto Lindfeld Sandnes",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 76,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "1996-07-07",
+    "clubId": "clube-010",
+    "displayName": "Normund Roshaug",
+    "id": "jogador-00250",
+    "name": "Normund Strodahl Roshaug",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 68,
+    "traits": [
+      "free-kick",
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2003-05-08",
+    "clubId": "clube-010",
+    "displayName": "Edin Brinlund",
+    "id": "jogador-00251",
+    "name": "Edin Taltorp Brinlund",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 71,
+    "traits": []
+  },
+  {
+    "birthDate": "1994-06-11",
+    "clubId": "clube-010",
+    "displayName": "Elan Rosdal",
+    "id": "jogador-00252",
+    "name": "Elan Ravberg Rosdal",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 66,
+    "traits": []
+  },
+  {
+    "birthDate": "2002-06-17",
+    "clubId": "clube-010",
+    "displayName": "Edur Malness",
+    "id": "jogador-00253",
+    "name": "Edur Malholm Malness",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 61,
+    "traits": [
+      "free-kick",
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1995-03-05",
+    "clubId": "clube-010",
+    "displayName": "Ulrik Lindstrand",
+    "id": "jogador-00254",
+    "name": "Ulrik Brinnes Lindstrand",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 77,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1991-09-20",
+    "clubId": "clube-010",
+    "displayName": "Alvel Malnes",
+    "id": "jogador-00255",
+    "name": "Alvel Nyrrud Malnes",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 68,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1995-10-20",
+    "clubId": "clube-010",
+    "displayName": "Osrik Rosdal",
+    "id": "jogador-00256",
+    "name": "Osrik Engby Rosdal",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 70,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-11-25",
+    "clubId": "clube-010",
+    "displayName": "Norur Sandlund",
+    "id": "jogador-00257",
+    "name": "Norur Nyrberg Sandlund",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 60,
+    "traits": []
+  },
+  {
+    "birthDate": "2003-11-18",
+    "clubId": "clube-011",
+    "displayName": "Kaslo Lunhus",
+    "id": "jogador-00258",
+    "name": "Kaslo Granbakk Lunhus",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 67,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-08-27",
+    "clubId": "clube-011",
+    "displayName": "Valano Morbakk",
+    "id": "jogador-00259",
+    "name": "Valano Talnes Morbakk",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 66,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2009-08-18",
+    "clubId": "clube-011",
+    "displayName": "Vikvel Nesrud",
+    "id": "jogador-00260",
+    "name": "Vikvel Morbakk Nesrud",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 49,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-06-28",
+    "clubId": "clube-011",
+    "displayName": "Marrik Velsen",
+    "id": "jogador-00261",
+    "name": "Marrik Morby Velsen",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 67,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1999-05-26",
+    "clubId": "clube-011",
+    "displayName": "Jarur Bringard",
+    "id": "jogador-00262",
+    "name": "Jarur Kvardal Bringard",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 64,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2003-04-08",
+    "clubId": "clube-011",
+    "displayName": "Uleto Rosnes",
+    "id": "jogador-00263",
+    "name": "Uleto Askness Rosnes",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 57,
+    "traits": []
+  },
+  {
+    "birthDate": "2003-04-19",
+    "clubId": "clube-011",
+    "displayName": "Valeto Nestorp",
+    "id": "jogador-00264",
+    "name": "Valeto Holnes Nestorp",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 56,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "1994-04-20",
+    "clubId": "clube-011",
+    "displayName": "Toros Lindfeld",
+    "id": "jogador-00265",
+    "name": "Toros Berlund Lindfeld",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 67,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2001-06-05",
+    "clubId": "clube-011",
+    "displayName": "Edek Velstrand",
+    "id": "jogador-00266",
+    "name": "Edek Velstad Velstrand",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 60,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "1994-12-16",
+    "clubId": "clube-011",
+    "displayName": "Kasin Asknes",
+    "id": "jogador-00267",
+    "name": "Kasin Talberg Asknes",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 60,
+    "traits": []
+  },
+  {
+    "birthDate": "2002-06-30",
+    "clubId": "clube-011",
+    "displayName": "Edur Malness",
+    "id": "jogador-00268",
+    "name": "Edur Ostnes Malness",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 60,
+    "traits": []
+  },
+  {
+    "birthDate": "2003-01-17",
+    "clubId": "clube-011",
+    "displayName": "Ulric Ostvik",
+    "id": "jogador-00269",
+    "name": "Ulric Granstrand Ostvik",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 51,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1997-07-09",
+    "clubId": "clube-011",
+    "displayName": "Hardor Lindfeld",
+    "id": "jogador-00270",
+    "name": "Hardor Ostberg Lindfeld",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 61,
+    "traits": []
+  },
+  {
+    "birthDate": "2003-07-19",
+    "clubId": "clube-011",
+    "displayName": "Harar Lindnes",
+    "id": "jogador-00271",
+    "name": "Harar Kvarhaug Lindnes",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 58,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2008-12-21",
+    "clubId": "clube-011",
+    "displayName": "Bjordor Kvardahl",
+    "id": "jogador-00272",
+    "name": "Bjordor Nyrby Kvardahl",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 50,
+    "traits": []
+  },
+  {
+    "birthDate": "1992-01-25",
+    "clubId": "clube-011",
+    "displayName": "Norur Dalberg",
+    "id": "jogador-00273",
+    "name": "Norur Nesgard Dalberg",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 64,
+    "traits": []
+  },
+  {
+    "birthDate": "1994-09-14",
+    "clubId": "clube-011",
+    "displayName": "Frolo Brinhaug",
+    "id": "jogador-00274",
+    "name": "Frolo Brinhus Brinhaug",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 64,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2000-05-26",
+    "clubId": "clube-011",
+    "displayName": "Bjorvel Kvarby",
+    "id": "jogador-00275",
+    "name": "Bjorvel Ostfeld Kvarby",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 61,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-01-02",
+    "clubId": "clube-011",
+    "displayName": "Vikvel Dalby",
+    "id": "jogador-00276",
+    "name": "Vikvel Malmark Dalby",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 62,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-12-29",
+    "clubId": "clube-011",
+    "displayName": "Valeto Nesberg",
+    "id": "jogador-00277",
+    "name": "Valeto Dalberg Nesberg",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 55,
+    "traits": [
+      "free-kick",
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2006-04-10",
+    "clubId": "clube-011",
+    "displayName": "Lorald Dalby",
+    "id": "jogador-00278",
+    "name": "Lorald Nesdahl Dalby",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 65,
+    "traits": [
+      "finisher",
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2000-11-16",
+    "clubId": "clube-011",
+    "displayName": "Ardar Englund",
+    "id": "jogador-00279",
+    "name": "Ardar Berlund Englund",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 66,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "1994-02-21",
+    "clubId": "clube-011",
+    "displayName": "Edek Holbakk",
+    "id": "jogador-00280",
+    "name": "Edek Grantorp Holbakk",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 62,
+    "traits": []
+  },
+  {
+    "birthDate": "2009-03-28",
+    "clubId": "clube-011",
+    "displayName": "Halis Wesholm",
+    "id": "jogador-00281",
+    "name": "Halis Talfeld Wesholm",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 46,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1998-04-12",
+    "clubId": "clube-011",
+    "displayName": "Kelven Talbakk",
+    "id": "jogador-00282",
+    "name": "Kelven Lunby Talbakk",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 57,
+    "traits": []
+  },
+  {
+    "birthDate": "1996-05-07",
+    "clubId": "clube-012",
+    "displayName": "Valano Dalberg",
+    "id": "jogador-00283",
+    "name": "Valano Rosdal Dalberg",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 73,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1997-11-14",
+    "clubId": "clube-012",
+    "displayName": "Norrik Velstad",
+    "id": "jogador-00284",
+    "name": "Norrik Lindbakk Velstad",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 63,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-09-27",
+    "clubId": "clube-012",
+    "displayName": "Kasald Grandal",
+    "id": "jogador-00285",
+    "name": "Kasald Bertorp Grandal",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 53,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1994-01-05",
+    "clubId": "clube-012",
+    "displayName": "Bjordor Talnes",
+    "id": "jogador-00286",
+    "name": "Bjordor Engmark Talnes",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 67,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1998-09-02",
+    "clubId": "clube-012",
+    "displayName": "Lorald Lindgard",
+    "id": "jogador-00287",
+    "name": "Lorald Kvarnes Lindgard",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 63,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1992-07-31",
+    "clubId": "clube-012",
+    "displayName": "Goren Kvardahl",
+    "id": "jogador-00288",
+    "name": "Goren Sandholm Kvardahl",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 58,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2004-12-13",
+    "clubId": "clube-012",
+    "displayName": "Bjormund Karby",
+    "id": "jogador-00289",
+    "name": "Bjormund Nyrhaug Karby",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 57,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1997-05-21",
+    "clubId": "clube-012",
+    "displayName": "Gunar Rosmark",
+    "id": "jogador-00290",
+    "name": "Gunar Askness Rosmark",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 64,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "1998-10-02",
+    "clubId": "clube-012",
+    "displayName": "Osdor Sandrud",
+    "id": "jogador-00291",
+    "name": "Osdor Talhus Sandrud",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 69,
+    "traits": [
+      "heading",
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2006-04-29",
+    "clubId": "clube-012",
+    "displayName": "Ivoor Sandgard",
+    "id": "jogador-00292",
+    "name": "Ivoor Wesholm Sandgard",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 61,
+    "traits": []
+  },
+  {
+    "birthDate": "1998-06-01",
+    "clubId": "clube-012",
+    "displayName": "Halar Nyrlund",
+    "id": "jogador-00293",
+    "name": "Halar Sandgard Nyrlund",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 55,
+    "traits": []
+  },
+  {
+    "birthDate": "1998-08-26",
+    "clubId": "clube-012",
+    "displayName": "Casor Kvardahl",
+    "id": "jogador-00294",
+    "name": "Casor Talrud Kvardahl",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 71,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "1993-11-17",
+    "clubId": "clube-012",
+    "displayName": "Marano Holfeld",
+    "id": "jogador-00295",
+    "name": "Marano Rosnes Holfeld",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 63,
+    "traits": []
+  },
+  {
+    "birthDate": "2002-04-03",
+    "clubId": "clube-012",
+    "displayName": "Gorur Weslund",
+    "id": "jogador-00296",
+    "name": "Gorur Nyrlund Weslund",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 59,
+    "traits": []
+  },
+  {
+    "birthDate": "1994-02-13",
+    "clubId": "clube-012",
+    "displayName": "Harur Lunbakk",
+    "id": "jogador-00297",
+    "name": "Harur Berlund Lunbakk",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 62,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2003-01-08",
+    "clubId": "clube-012",
+    "displayName": "Edin Karby",
+    "id": "jogador-00298",
+    "name": "Edin Bersen Karby",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 67,
+    "traits": []
+  },
+  {
+    "birthDate": "1998-11-02",
+    "clubId": "clube-012",
+    "displayName": "Norek Lindfeld",
+    "id": "jogador-00299",
+    "name": "Norek Kardahl Lindfeld",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 67,
+    "traits": [
+      "playmaker",
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1999-02-19",
+    "clubId": "clube-012",
+    "displayName": "Gorur Taldahl",
+    "id": "jogador-00300",
+    "name": "Gorur Mornes Taldahl",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 61,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2005-12-22",
+    "clubId": "clube-012",
+    "displayName": "Halar Granholm",
+    "id": "jogador-00301",
+    "name": "Halar Dalby Granholm",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 52,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2002-08-22",
+    "clubId": "clube-012",
+    "displayName": "Froin Granbakk",
+    "id": "jogador-00302",
+    "name": "Froin Dalby Granbakk",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 66,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2004-12-31",
+    "clubId": "clube-012",
+    "displayName": "Svenor Karhaug",
+    "id": "jogador-00303",
+    "name": "Svenor Askstrand Karhaug",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 67,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2004-02-21",
+    "clubId": "clube-012",
+    "displayName": "Bjordor Berhus",
+    "id": "jogador-00304",
+    "name": "Bjordor Granstrand Berhus",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 64,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2009-09-17",
+    "clubId": "clube-012",
+    "displayName": "Eldor Lindholm",
+    "id": "jogador-00305",
+    "name": "Eldor Sandgard Lindholm",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 50,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2002-09-21",
+    "clubId": "clube-012",
+    "displayName": "Ulin Berberg",
+    "id": "jogador-00306",
+    "name": "Ulin Dalgard Berberg",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 58,
+    "traits": []
+  },
+  {
+    "birthDate": "1996-04-30",
+    "clubId": "clube-013",
+    "displayName": "Ulmund Helby",
+    "id": "jogador-00307",
+    "name": "Ulmund Berholm Helby",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 63,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2004-07-14",
+    "clubId": "clube-013",
+    "displayName": "Lorlo Ostnes",
+    "id": "jogador-00308",
+    "name": "Lorlo Morbakk Ostnes",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 51,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-06-20",
+    "clubId": "clube-013",
+    "displayName": "Vallo Lunhus",
+    "id": "jogador-00309",
+    "name": "Vallo Ravvik Lunhus",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 52,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2000-07-10",
+    "clubId": "clube-013",
+    "displayName": "Gunek Lunholm",
+    "id": "jogador-00310",
+    "name": "Gunek Strostrand Lunholm",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 64,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "1994-12-06",
+    "clubId": "clube-013",
+    "displayName": "Tordor Roshaug",
+    "id": "jogador-00311",
+    "name": "Tordor Lindgard Roshaug",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 63,
+    "traits": [
+      "free-kick",
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1993-05-09",
+    "clubId": "clube-013",
+    "displayName": "Kasar Nyrfeld",
+    "id": "jogador-00312",
+    "name": "Kasar Wesgard Nyrfeld",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 49,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2008-10-08",
+    "clubId": "clube-013",
+    "displayName": "Frodor Brinlund",
+    "id": "jogador-00313",
+    "name": "Frodor Lunhus Brinlund",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 43,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-11-02",
+    "clubId": "clube-013",
+    "displayName": "Dareto Brinby",
+    "id": "jogador-00314",
+    "name": "Dareto Kvardahl Brinby",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 55,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1994-09-18",
+    "clubId": "clube-013",
+    "displayName": "Svenald Weshus",
+    "id": "jogador-00315",
+    "name": "Svenald Mordal Weshus",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 60,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-10-10",
+    "clubId": "clube-013",
+    "displayName": "Ardvel Helhus",
+    "id": "jogador-00316",
+    "name": "Ardvel Rosstad Helhus",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 56,
+    "traits": []
+  },
+  {
+    "birthDate": "1998-08-24",
+    "clubId": "clube-013",
+    "displayName": "Ulric Berby",
+    "id": "jogador-00317",
+    "name": "Ulric Brinrud Berby",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 53,
+    "traits": [
+      "pace",
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2001-04-30",
+    "clubId": "clube-013",
+    "displayName": "Perald Lunbakk",
+    "id": "jogador-00318",
+    "name": "Perald Kvarby Lunbakk",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 53,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2006-12-17",
+    "clubId": "clube-013",
+    "displayName": "Ulric Ravberg",
+    "id": "jogador-00319",
+    "name": "Ulric Morbakk Ravberg",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 41,
+    "traits": []
+  },
+  {
+    "birthDate": "1997-02-15",
+    "clubId": "clube-013",
+    "displayName": "Arddor Dalhus",
+    "id": "jogador-00320",
+    "name": "Arddor Malness Dalhus",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 62,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "1995-11-30",
+    "clubId": "clube-013",
+    "displayName": "Alis Velsen",
+    "id": "jogador-00321",
+    "name": "Alis Velstrand Velsen",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 56,
+    "traits": [
+      "playmaker",
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2000-01-13",
+    "clubId": "clube-013",
+    "displayName": "Marvel Dalberg",
+    "id": "jogador-00322",
+    "name": "Marvel Faltorp Dalberg",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 51,
+    "traits": []
+  },
+  {
+    "birthDate": "2006-04-21",
+    "clubId": "clube-013",
+    "displayName": "Rolor Rosby",
+    "id": "jogador-00323",
+    "name": "Rolor Nyrby Rosby",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 43,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-02-20",
+    "clubId": "clube-013",
+    "displayName": "Kasian Lunby",
+    "id": "jogador-00324",
+    "name": "Kasian Malnes Lunby",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 52,
+    "traits": []
+  },
+  {
+    "birthDate": "1996-03-31",
+    "clubId": "clube-013",
+    "displayName": "Vikar Berfeld",
+    "id": "jogador-00325",
+    "name": "Vikar Berstad Berfeld",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 57,
+    "traits": []
+  },
+  {
+    "birthDate": "1995-04-15",
+    "clubId": "clube-013",
+    "displayName": "Kasor Morby",
+    "id": "jogador-00326",
+    "name": "Kasor Faltorp Morby",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 56,
+    "traits": []
+  },
+  {
+    "birthDate": "1996-08-30",
+    "clubId": "clube-013",
+    "displayName": "Bjoreto Morness",
+    "id": "jogador-00327",
+    "name": "Bjoreto Askhaug Morness",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 63,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2004-08-18",
+    "clubId": "clube-013",
+    "displayName": "Toros Ostdal",
+    "id": "jogador-00328",
+    "name": "Toros Asktorp Ostdal",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 52,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2004-06-04",
+    "clubId": "clube-013",
+    "displayName": "Marrik Falmark",
+    "id": "jogador-00329",
+    "name": "Marrik Nyrtorp Falmark",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 48,
+    "traits": []
+  },
+  {
+    "birthDate": "1994-07-08",
+    "clubId": "clube-013",
+    "displayName": "Perek Nyrlund",
+    "id": "jogador-00330",
+    "name": "Perek Karby Nyrlund",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 62,
+    "traits": []
+  },
+  {
+    "birthDate": "2003-10-01",
+    "clubId": "clube-013",
+    "displayName": "Ardan Falness",
+    "id": "jogador-00331",
+    "name": "Ardan Helstrand Falness",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 66,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2006-08-17",
+    "clubId": "clube-013",
+    "displayName": "Valur Holtorp",
+    "id": "jogador-00332",
+    "name": "Valur Malness Holtorp",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 53,
+    "traits": []
+  },
+  {
+    "birthDate": "2005-10-19",
+    "clubId": "clube-013",
+    "displayName": "Edric Velnes",
+    "id": "jogador-00333",
+    "name": "Edric Heldal Velnes",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 44,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-02-18",
+    "clubId": "clube-013",
+    "displayName": "Casor Dalberg",
+    "id": "jogador-00334",
+    "name": "Casor Engsen Dalberg",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 48,
+    "traits": []
+  },
+  {
+    "birthDate": "1995-04-12",
+    "clubId": "clube-014",
+    "displayName": "Norrik Lindfeld",
+    "id": "jogador-00335",
+    "name": "Norrik Talberg Lindfeld",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 63,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2008-05-18",
+    "clubId": "clube-014",
+    "displayName": "Loror Lunness",
+    "id": "jogador-00336",
+    "name": "Loror Granstrand Lunness",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 51,
+    "traits": []
+  },
+  {
+    "birthDate": "2003-09-29",
+    "clubId": "clube-014",
+    "displayName": "Vikis Nyrtorp",
+    "id": "jogador-00337",
+    "name": "Vikis Lindby Nyrtorp",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 57,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1998-10-07",
+    "clubId": "clube-014",
+    "displayName": "Ardald Stromark",
+    "id": "jogador-00338",
+    "name": "Ardald Askvik Stromark",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 67,
+    "traits": []
+  },
+  {
+    "birthDate": "2005-12-09",
+    "clubId": "clube-014",
+    "displayName": "Ulrik Ostvik",
+    "id": "jogador-00339",
+    "name": "Ulrik Engmark Ostvik",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 61,
+    "traits": [
+      "pace",
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1995-07-05",
+    "clubId": "clube-014",
+    "displayName": "Brein Lungard",
+    "id": "jogador-00340",
+    "name": "Brein Brinby Lungard",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 54,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2001-01-13",
+    "clubId": "clube-014",
+    "displayName": "Goren Veltorp",
+    "id": "jogador-00341",
+    "name": "Goren Bertorp Veltorp",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 55,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2001-12-08",
+    "clubId": "clube-014",
+    "displayName": "Marek Nyrness",
+    "id": "jogador-00342",
+    "name": "Marek Rosnes Nyrness",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 64,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1996-06-22",
+    "clubId": "clube-014",
+    "displayName": "Perin Holstrand",
+    "id": "jogador-00343",
+    "name": "Perin Velbakk Holstrand",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 59,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1998-02-01",
+    "clubId": "clube-014",
+    "displayName": "Fenano Faltorp",
+    "id": "jogador-00344",
+    "name": "Fenano Nessen Faltorp",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 54,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2003-04-03",
+    "clubId": "clube-014",
+    "displayName": "Casvel Strones",
+    "id": "jogador-00345",
+    "name": "Casvel Ravberg Strones",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 47,
+    "traits": []
+  },
+  {
+    "birthDate": "2006-03-04",
+    "clubId": "clube-014",
+    "displayName": "Vikvel Holstad",
+    "id": "jogador-00346",
+    "name": "Vikvel Talhus Holstad",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 47,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2001-04-16",
+    "clubId": "clube-014",
+    "displayName": "Casor Helhus",
+    "id": "jogador-00347",
+    "name": "Casor Engby Helhus",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 61,
+    "traits": []
+  },
+  {
+    "birthDate": "1996-02-08",
+    "clubId": "clube-014",
+    "displayName": "Kasald Lindness",
+    "id": "jogador-00348",
+    "name": "Kasald Lunhus Lindness",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 54,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2003-01-03",
+    "clubId": "clube-014",
+    "displayName": "Jarar Velstrand",
+    "id": "jogador-00349",
+    "name": "Jarar Grandal Velstrand",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 50,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-09-05",
+    "clubId": "clube-014",
+    "displayName": "Kasian Askness",
+    "id": "jogador-00350",
+    "name": "Kasian Askbakk Askness",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 56,
+    "traits": []
+  },
+  {
+    "birthDate": "2003-07-15",
+    "clubId": "clube-014",
+    "displayName": "Casmund Sandrud",
+    "id": "jogador-00351",
+    "name": "Casmund Dalhus Sandrud",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 61,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "1998-10-16",
+    "clubId": "clube-014",
+    "displayName": "Vikos Mormark",
+    "id": "jogador-00352",
+    "name": "Vikos Morby Mormark",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 65,
+    "traits": [
+      "playmaker",
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1997-02-10",
+    "clubId": "clube-014",
+    "displayName": "Hardor Askstrand",
+    "id": "jogador-00353",
+    "name": "Hardor Faldal Askstrand",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 65,
+    "traits": [
+      "pace",
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1994-05-07",
+    "clubId": "clube-014",
+    "displayName": "Vikur Holtorp",
+    "id": "jogador-00354",
+    "name": "Vikur Dalhus Holtorp",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 55,
+    "traits": []
+  },
+  {
+    "birthDate": "2007-12-01",
+    "clubId": "clube-014",
+    "displayName": "Valvel Berholm",
+    "id": "jogador-00355",
+    "name": "Valvel Sandvik Berholm",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 42,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2002-10-09",
+    "clubId": "clube-014",
+    "displayName": "Bjordor Lindfeld",
+    "id": "jogador-00356",
+    "name": "Bjordor Ravmark Lindfeld",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 58,
+    "traits": []
+  },
+  {
+    "birthDate": "2002-11-22",
+    "clubId": "clube-014",
+    "displayName": "Vikmund Askstrand",
+    "id": "jogador-00357",
+    "name": "Vikmund Ostvik Askstrand",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 62,
+    "traits": []
+  },
+  {
+    "birthDate": "1998-02-01",
+    "clubId": "clube-014",
+    "displayName": "Valor Berhus",
+    "id": "jogador-00358",
+    "name": "Valor Malhaug Berhus",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 64,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2000-01-18",
+    "clubId": "clube-014",
+    "displayName": "Noren Velmark",
+    "id": "jogador-00359",
+    "name": "Noren Lunlund Velmark",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 56,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2001-11-08",
+    "clubId": "clube-014",
+    "displayName": "Normund Dalhus",
+    "id": "jogador-00360",
+    "name": "Normund Kvarhus Dalhus",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 56,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2005-08-13",
+    "clubId": "clube-014",
+    "displayName": "Noren Engmark",
+    "id": "jogador-00361",
+    "name": "Noren Brinby Engmark",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 46,
+    "traits": []
+  },
+  {
+    "birthDate": "1994-06-02",
+    "clubId": "clube-015",
+    "displayName": "Edur Helgard",
+    "id": "jogador-00362",
+    "name": "Edur Engness Helgard",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 60,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2004-11-08",
+    "clubId": "clube-015",
+    "displayName": "Froor Lunsen",
+    "id": "jogador-00363",
+    "name": "Froor Granholm Lunsen",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 60,
+    "traits": []
+  },
+  {
+    "birthDate": "2003-11-16",
+    "clubId": "clube-015",
+    "displayName": "Gorur Rosvik",
+    "id": "jogador-00364",
+    "name": "Gorur Helhus Rosvik",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 56,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2002-02-27",
+    "clubId": "clube-015",
+    "displayName": "Osvel Talberg",
+    "id": "jogador-00365",
+    "name": "Osvel Grantorp Talberg",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 60,
+    "traits": []
+  },
+  {
+    "birthDate": "2003-07-28",
+    "clubId": "clube-015",
+    "displayName": "Marven Holstrand",
+    "id": "jogador-00366",
+    "name": "Marven Nesdal Holstrand",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 59,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1995-05-18",
+    "clubId": "clube-015",
+    "displayName": "Vikar Dalgard",
+    "id": "jogador-00367",
+    "name": "Vikar Sandlund Dalgard",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 66,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-07-30",
+    "clubId": "clube-015",
+    "displayName": "Rolald Sandhus",
+    "id": "jogador-00368",
+    "name": "Rolald Granstrand Sandhus",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 56,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-05-29",
+    "clubId": "clube-015",
+    "displayName": "Casven Daldal",
+    "id": "jogador-00369",
+    "name": "Casven Lindbakk Daldal",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 66,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2003-03-07",
+    "clubId": "clube-015",
+    "displayName": "Feneto Malby",
+    "id": "jogador-00370",
+    "name": "Feneto Morby Malby",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 62,
+    "traits": []
+  },
+  {
+    "birthDate": "1991-06-05",
+    "clubId": "clube-015",
+    "displayName": "Kelvel Rosdal",
+    "id": "jogador-00371",
+    "name": "Kelvel Askbakk Rosdal",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 52,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2006-08-17",
+    "clubId": "clube-015",
+    "displayName": "Lorur Brinstrand",
+    "id": "jogador-00372",
+    "name": "Lorur Askstrand Brinstrand",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 54,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-06-02",
+    "clubId": "clube-015",
+    "displayName": "Bjoror Bertorp",
+    "id": "jogador-00373",
+    "name": "Bjoror Kvarnes Bertorp",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 57,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1997-05-01",
+    "clubId": "clube-015",
+    "displayName": "Svenald Rosmark",
+    "id": "jogador-00374",
+    "name": "Svenald Granrud Rosmark",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 66,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2004-11-30",
+    "clubId": "clube-015",
+    "displayName": "Tordor Rossen",
+    "id": "jogador-00375",
+    "name": "Tordor Lunhus Rossen",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 61,
+    "traits": []
+  },
+  {
+    "birthDate": "2007-05-17",
+    "clubId": "clube-015",
+    "displayName": "Maren Sandvik",
+    "id": "jogador-00376",
+    "name": "Maren Kargard Sandvik",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 51,
+    "traits": []
+  },
+  {
+    "birthDate": "1996-04-20",
+    "clubId": "clube-015",
+    "displayName": "Harur Askhaug",
+    "id": "jogador-00377",
+    "name": "Harur Karby Askhaug",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 64,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1997-07-19",
+    "clubId": "clube-015",
+    "displayName": "Darrik Brinstrand",
+    "id": "jogador-00378",
+    "name": "Darrik Sandlund Brinstrand",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 68,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2000-03-16",
+    "clubId": "clube-015",
+    "displayName": "Ivoian Talrud",
+    "id": "jogador-00379",
+    "name": "Ivoian Wesgard Talrud",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 69,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "1997-08-22",
+    "clubId": "clube-015",
+    "displayName": "Harmund Kardahl",
+    "id": "jogador-00380",
+    "name": "Harmund Falhus Kardahl",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 59,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-02-12",
+    "clubId": "clube-015",
+    "displayName": "Ardven Kvarness",
+    "id": "jogador-00381",
+    "name": "Ardven Weslund Kvarness",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 61,
+    "traits": []
+  },
+  {
+    "birthDate": "1992-03-05",
+    "clubId": "clube-015",
+    "displayName": "Valeto Malmark",
+    "id": "jogador-00382",
+    "name": "Valeto Karby Malmark",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 62,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2000-01-22",
+    "clubId": "clube-015",
+    "displayName": "Rolen Velmark",
+    "id": "jogador-00383",
+    "name": "Rolen Ravnes Velmark",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 55,
+    "traits": [
+      "heading",
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2005-03-28",
+    "clubId": "clube-015",
+    "displayName": "Harar Granmark",
+    "id": "jogador-00384",
+    "name": "Harar Brinhus Granmark",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 52,
+    "traits": [
+      "finisher",
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "1996-03-18",
+    "clubId": "clube-016",
+    "displayName": "Ulor Ostnes",
+    "id": "jogador-00385",
+    "name": "Ulor Rosmark Ostnes",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 65,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1996-06-05",
+    "clubId": "clube-016",
+    "displayName": "Edric Holness",
+    "id": "jogador-00386",
+    "name": "Edric Nesgard Holness",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 60,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2008-07-23",
+    "clubId": "clube-016",
+    "displayName": "Harmund Berlund",
+    "id": "jogador-00387",
+    "name": "Harmund Rosnes Berlund",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 51,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1999-12-22",
+    "clubId": "clube-016",
+    "displayName": "Kasric Nesdal",
+    "id": "jogador-00388",
+    "name": "Kasric Malberg Nesdal",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 65,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "1994-02-24",
+    "clubId": "clube-016",
+    "displayName": "Kelald Velhaug",
+    "id": "jogador-00389",
+    "name": "Kelald Ostrud Velhaug",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 58,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1998-09-03",
+    "clubId": "clube-016",
+    "displayName": "Kelos Bernes",
+    "id": "jogador-00390",
+    "name": "Kelos Osttorp Bernes",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 58,
+    "traits": []
+  },
+  {
+    "birthDate": "2006-09-02",
+    "clubId": "clube-016",
+    "displayName": "Viklo Brinrud",
+    "id": "jogador-00391",
+    "name": "Viklo Velhaug Brinrud",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 50,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2008-10-13",
+    "clubId": "clube-016",
+    "displayName": "Bjorin Nyrrud",
+    "id": "jogador-00392",
+    "name": "Bjorin Falfeld Nyrrud",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 47,
+    "traits": []
+  },
+  {
+    "birthDate": "2005-03-17",
+    "clubId": "clube-016",
+    "displayName": "Edrik Nyrhaug",
+    "id": "jogador-00393",
+    "name": "Edrik Holberg Nyrhaug",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 62,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1996-04-21",
+    "clubId": "clube-016",
+    "displayName": "Norur Brinby",
+    "id": "jogador-00394",
+    "name": "Norur Ravmark Brinby",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 67,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2001-03-07",
+    "clubId": "clube-016",
+    "displayName": "Ulvel Kvarness",
+    "id": "jogador-00395",
+    "name": "Ulvel Holnes Kvarness",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 58,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2000-10-04",
+    "clubId": "clube-016",
+    "displayName": "Rolor Dalbakk",
+    "id": "jogador-00396",
+    "name": "Rolor Falhaug Dalbakk",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 53,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-11-27",
+    "clubId": "clube-016",
+    "displayName": "Harmund Sandhus",
+    "id": "jogador-00397",
+    "name": "Harmund Brinnes Sandhus",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 57,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-12-10",
+    "clubId": "clube-016",
+    "displayName": "Bremund Nesgard",
+    "id": "jogador-00398",
+    "name": "Bremund Kvarhaug Nesgard",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 60,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-05-22",
+    "clubId": "clube-016",
+    "displayName": "Edrik Mornes",
+    "id": "jogador-00399",
+    "name": "Edrik Strostrand Mornes",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 62,
+    "traits": [
+      "wall",
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2005-10-20",
+    "clubId": "clube-016",
+    "displayName": "Kasur Kvarberg",
+    "id": "jogador-00400",
+    "name": "Kasur Berlund Kvarberg",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 53,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-08-11",
+    "clubId": "clube-016",
+    "displayName": "Hardor Dalhus",
+    "id": "jogador-00401",
+    "name": "Hardor Ravnes Dalhus",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 64,
+    "traits": []
+  },
+  {
+    "birthDate": "1998-08-19",
+    "clubId": "clube-016",
+    "displayName": "Osor Brinby",
+    "id": "jogador-00402",
+    "name": "Osor Brinstrand Brinby",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 66,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-05-06",
+    "clubId": "clube-016",
+    "displayName": "Kelven Talrud",
+    "id": "jogador-00403",
+    "name": "Kelven Stroness Talrud",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 60,
+    "traits": []
+  },
+  {
+    "birthDate": "2003-07-30",
+    "clubId": "clube-016",
+    "displayName": "Casvel Kargard",
+    "id": "jogador-00404",
+    "name": "Casvel Heldal Kargard",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 60,
+    "traits": [
+      "pace",
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2003-11-25",
+    "clubId": "clube-016",
+    "displayName": "Edur Sandtorp",
+    "id": "jogador-00405",
+    "name": "Edur Kardal Sandtorp",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 53,
+    "traits": []
+  },
+  {
+    "birthDate": "2005-06-22",
+    "clubId": "clube-016",
+    "displayName": "Gorric Helsen",
+    "id": "jogador-00406",
+    "name": "Gorric Oststad Helsen",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 57,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1996-01-04",
+    "clubId": "clube-016",
+    "displayName": "Valven Taltorp",
+    "id": "jogador-00407",
+    "name": "Valven Faltorp Taltorp",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 56,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "1993-02-18",
+    "clubId": "clube-016",
+    "displayName": "Kasald Kvarby",
+    "id": "jogador-00408",
+    "name": "Kasald Nyrfeld Kvarby",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 59,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "1997-12-04",
+    "clubId": "clube-016",
+    "displayName": "Lorur Velmark",
+    "id": "jogador-00409",
+    "name": "Lorur Lunbakk Velmark",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 60,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2005-01-02",
+    "clubId": "clube-016",
+    "displayName": "Brein Mordal",
+    "id": "jogador-00410",
+    "name": "Brein Talfeld Mordal",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 48,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2004-02-02",
+    "clubId": "clube-016",
+    "displayName": "Kasald Mornes",
+    "id": "jogador-00411",
+    "name": "Kasald Engby Mornes",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 50,
+    "traits": []
+  },
+  {
+    "birthDate": "1998-04-01",
+    "clubId": "clube-017",
+    "displayName": "Bjorvel Kardal",
+    "id": "jogador-00412",
+    "name": "Bjorvel Faldal Kardal",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 67,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2003-07-19",
+    "clubId": "clube-017",
+    "displayName": "Kelald Brinlund",
+    "id": "jogador-00413",
+    "name": "Kelald Holbakk Brinlund",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 63,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2003-07-30",
+    "clubId": "clube-017",
+    "displayName": "Kelen Askberg",
+    "id": "jogador-00414",
+    "name": "Kelen Talbakk Askberg",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 54,
+    "traits": []
+  },
+  {
+    "birthDate": "1997-09-28",
+    "clubId": "clube-017",
+    "displayName": "Halin Weslund",
+    "id": "jogador-00415",
+    "name": "Halin Strorud Weslund",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 65,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1997-08-29",
+    "clubId": "clube-017",
+    "displayName": "Edmund Engsen",
+    "id": "jogador-00416",
+    "name": "Edmund Holsen Engsen",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 58,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2001-03-04",
+    "clubId": "clube-017",
+    "displayName": "Ulor Holfeld",
+    "id": "jogador-00417",
+    "name": "Ulor Holsen Holfeld",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 62,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-01-22",
+    "clubId": "clube-017",
+    "displayName": "Goris Strostrand",
+    "id": "jogador-00418",
+    "name": "Goris Helsen Strostrand",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 52,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2004-10-09",
+    "clubId": "clube-017",
+    "displayName": "Casvel Nyrvik",
+    "id": "jogador-00419",
+    "name": "Casvel Strones Nyrvik",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 60,
+    "traits": []
+  },
+  {
+    "birthDate": "1996-11-03",
+    "clubId": "clube-017",
+    "displayName": "Loror Veldahl",
+    "id": "jogador-00420",
+    "name": "Loror Sanddal Veldahl",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 67,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-07-20",
+    "clubId": "clube-017",
+    "displayName": "Osos Velstrand",
+    "id": "jogador-00421",
+    "name": "Osos Engfeld Velstrand",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 66,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-04-02",
+    "clubId": "clube-017",
+    "displayName": "Perian Holholm",
+    "id": "jogador-00422",
+    "name": "Perian Wesdal Holholm",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 57,
+    "traits": []
+  },
+  {
+    "birthDate": "2006-01-25",
+    "clubId": "clube-017",
+    "displayName": "Elan Talrud",
+    "id": "jogador-00423",
+    "name": "Elan Nesdal Talrud",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 49,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2002-03-11",
+    "clubId": "clube-017",
+    "displayName": "Vikven Rosstad",
+    "id": "jogador-00424",
+    "name": "Vikven Morby Rosstad",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 59,
+    "traits": []
+  },
+  {
+    "birthDate": "2002-04-14",
+    "clubId": "clube-017",
+    "displayName": "Ivoian Holberg",
+    "id": "jogador-00425",
+    "name": "Ivoian Osttorp Holberg",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 60,
+    "traits": [
+      "free-kick",
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2006-09-25",
+    "clubId": "clube-017",
+    "displayName": "Alis Kvarhaug",
+    "id": "jogador-00426",
+    "name": "Alis Rosstrand Kvarhaug",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 50,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2000-02-23",
+    "clubId": "clube-017",
+    "displayName": "Ingian Kardahl",
+    "id": "jogador-00427",
+    "name": "Ingian Berlund Kardahl",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 70,
+    "traits": []
+  },
+  {
+    "birthDate": "1998-10-31",
+    "clubId": "clube-017",
+    "displayName": "Pereto Stromark",
+    "id": "jogador-00428",
+    "name": "Pereto Brinby Stromark",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 66,
+    "traits": []
+  },
+  {
+    "birthDate": "1990-03-03",
+    "clubId": "clube-017",
+    "displayName": "Edin Morbakk",
+    "id": "jogador-00429",
+    "name": "Edin Mormark Morbakk",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 59,
+    "traits": [
+      "free-kick",
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "1995-12-06",
+    "clubId": "clube-017",
+    "displayName": "Loris Engness",
+    "id": "jogador-00430",
+    "name": "Loris Neslund Engness",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 59,
+    "traits": []
+  },
+  {
+    "birthDate": "1995-09-23",
+    "clubId": "clube-017",
+    "displayName": "Ardor Karbakk",
+    "id": "jogador-00431",
+    "name": "Ardor Morsen Karbakk",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 67,
+    "traits": []
+  },
+  {
+    "birthDate": "1995-11-25",
+    "clubId": "clube-017",
+    "displayName": "Svenek Malstad",
+    "id": "jogador-00432",
+    "name": "Svenek Hellund Malstad",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 63,
+    "traits": []
+  },
+  {
+    "birthDate": "1995-04-13",
+    "clubId": "clube-017",
+    "displayName": "Bjoror Malby",
+    "id": "jogador-00433",
+    "name": "Bjoror Holtorp Malby",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 61,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2002-09-16",
+    "clubId": "clube-017",
+    "displayName": "Edan Kvarvik",
+    "id": "jogador-00434",
+    "name": "Edan Askness Kvarvik",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 51,
+    "traits": [
+      "finisher",
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "1998-04-17",
+    "clubId": "clube-018",
+    "displayName": "Ular Nesberg",
+    "id": "jogador-00435",
+    "name": "Ular Lindgard Nesberg",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 59,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1996-04-19",
+    "clubId": "clube-018",
+    "displayName": "Froald Helby",
+    "id": "jogador-00436",
+    "name": "Froald Velhaug Helby",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 60,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2000-01-15",
+    "clubId": "clube-018",
+    "displayName": "Ardeto Veldahl",
+    "id": "jogador-00437",
+    "name": "Ardeto Asktorp Veldahl",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 54,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2001-09-04",
+    "clubId": "clube-018",
+    "displayName": "Kasald Oststad",
+    "id": "jogador-00438",
+    "name": "Kasald Kargard Oststad",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 58,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-02-17",
+    "clubId": "clube-018",
+    "displayName": "Halis Askness",
+    "id": "jogador-00439",
+    "name": "Halis Ostsen Askness",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 65,
+    "traits": []
+  },
+  {
+    "birthDate": "1998-09-29",
+    "clubId": "clube-018",
+    "displayName": "Loror Engfeld",
+    "id": "jogador-00440",
+    "name": "Loror Karbakk Engfeld",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 53,
+    "traits": []
+  },
+  {
+    "birthDate": "2005-12-05",
+    "clubId": "clube-018",
+    "displayName": "Maren Dalgard",
+    "id": "jogador-00441",
+    "name": "Maren Lunbakk Dalgard",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 46,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2004-08-20",
+    "clubId": "clube-018",
+    "displayName": "Froek Granbakk",
+    "id": "jogador-00442",
+    "name": "Froek Kvarness Granbakk",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 48,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1999-12-31",
+    "clubId": "clube-018",
+    "displayName": "Svenrik Holfeld",
+    "id": "jogador-00443",
+    "name": "Svenrik Falmark Holfeld",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 54,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-08-28",
+    "clubId": "clube-018",
+    "displayName": "Lorur Holsen",
+    "id": "jogador-00444",
+    "name": "Lorur Berholm Holsen",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 57,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-01-01",
+    "clubId": "clube-018",
+    "displayName": "Gunek Dalvik",
+    "id": "jogador-00445",
+    "name": "Gunek Kardal Dalvik",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 52,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2003-07-25",
+    "clubId": "clube-018",
+    "displayName": "Torric Kvarvik",
+    "id": "jogador-00446",
+    "name": "Torric Lindmark Kvarvik",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 55,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2004-11-23",
+    "clubId": "clube-018",
+    "displayName": "Goren Lindstrand",
+    "id": "jogador-00447",
+    "name": "Goren Berhus Lindstrand",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 50,
+    "traits": []
+  },
+  {
+    "birthDate": "1997-08-01",
+    "clubId": "clube-018",
+    "displayName": "Svenrik Morholm",
+    "id": "jogador-00448",
+    "name": "Svenrik Engby Morholm",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 57,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1995-10-06",
+    "clubId": "clube-018",
+    "displayName": "Bjormund Holstad",
+    "id": "jogador-00449",
+    "name": "Bjormund Ravvik Holstad",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 57,
+    "traits": []
+  },
+  {
+    "birthDate": "2008-08-11",
+    "clubId": "clube-018",
+    "displayName": "Vikano Holstad",
+    "id": "jogador-00450",
+    "name": "Vikano Faltorp Holstad",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 42,
+    "traits": []
+  },
+  {
+    "birthDate": "2003-12-23",
+    "clubId": "clube-018",
+    "displayName": "Gunor Engmark",
+    "id": "jogador-00451",
+    "name": "Gunor Rosdahl Engmark",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 63,
+    "traits": []
+  },
+  {
+    "birthDate": "2002-11-20",
+    "clubId": "clube-018",
+    "displayName": "Perric Roshaug",
+    "id": "jogador-00452",
+    "name": "Perric Kvarberg Roshaug",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 63,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2002-07-10",
+    "clubId": "clube-018",
+    "displayName": "Haris Granholm",
+    "id": "jogador-00453",
+    "name": "Haris Lindvik Granholm",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 58,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1998-12-24",
+    "clubId": "clube-018",
+    "displayName": "Halmund Kvarhaug",
+    "id": "jogador-00454",
+    "name": "Halmund Holsen Kvarhaug",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 58,
+    "traits": []
+  },
+  {
+    "birthDate": "2005-05-19",
+    "clubId": "clube-018",
+    "displayName": "Valen Engby",
+    "id": "jogador-00455",
+    "name": "Valen Velmark Engby",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 50,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-09-20",
+    "clubId": "clube-018",
+    "displayName": "Osos Nesdahl",
+    "id": "jogador-00456",
+    "name": "Osos Morsen Nesdahl",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 56,
+    "traits": []
+  },
+  {
+    "birthDate": "1997-07-31",
+    "clubId": "clube-018",
+    "displayName": "Norek Nyrhaug",
+    "id": "jogador-00457",
+    "name": "Norek Osttorp Nyrhaug",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 60,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-09-19",
+    "clubId": "clube-018",
+    "displayName": "Halin Kvardal",
+    "id": "jogador-00458",
+    "name": "Halin Ravsen Kvardal",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 54,
+    "traits": []
+  },
+  {
+    "birthDate": "2005-06-02",
+    "clubId": "clube-018",
+    "displayName": "Casven Velberg",
+    "id": "jogador-00459",
+    "name": "Casven Karbakk Velberg",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 48,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-10-22",
+    "clubId": "clube-018",
+    "displayName": "Perian Strorud",
+    "id": "jogador-00460",
+    "name": "Perian Ostvik Strorud",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 55,
+    "traits": []
+  },
+  {
+    "birthDate": "1994-07-21",
+    "clubId": "clube-019",
+    "displayName": "Loris Ostfeld",
+    "id": "jogador-00461",
+    "name": "Loris Stroness Ostfeld",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 54,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1999-10-29",
+    "clubId": "clube-019",
+    "displayName": "Torric Taldahl",
+    "id": "jogador-00462",
+    "name": "Torric Falhus Taldahl",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 52,
+    "traits": []
+  },
+  {
+    "birthDate": "2002-08-18",
+    "clubId": "clube-019",
+    "displayName": "Froek Ostlund",
+    "id": "jogador-00463",
+    "name": "Froek Talberg Ostlund",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 47,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2001-06-06",
+    "clubId": "clube-019",
+    "displayName": "Jaror Helbakk",
+    "id": "jogador-00464",
+    "name": "Jaror Holrud Helbakk",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 57,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2001-08-21",
+    "clubId": "clube-019",
+    "displayName": "Pereto Mormark",
+    "id": "jogador-00465",
+    "name": "Pereto Engness Mormark",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 56,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1998-08-22",
+    "clubId": "clube-019",
+    "displayName": "Elen Faldahl",
+    "id": "jogador-00466",
+    "name": "Elen Velhaug Faldahl",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 56,
+    "traits": []
+  },
+  {
+    "birthDate": "2005-10-21",
+    "clubId": "clube-019",
+    "displayName": "Marrik Lunby",
+    "id": "jogador-00467",
+    "name": "Marrik Talhus Lunby",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 44,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-02-15",
+    "clubId": "clube-019",
+    "displayName": "Ulven Brinsen",
+    "id": "jogador-00468",
+    "name": "Ulven Faldahl Brinsen",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 59,
+    "traits": []
+  },
+  {
+    "birthDate": "1996-07-06",
+    "clubId": "clube-019",
+    "displayName": "Daran Brinlund",
+    "id": "jogador-00469",
+    "name": "Daran Morness Brinlund",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 61,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1995-08-02",
+    "clubId": "clube-019",
+    "displayName": "Harald Holholm",
+    "id": "jogador-00470",
+    "name": "Harald Strorud Holholm",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 53,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-05-13",
+    "clubId": "clube-019",
+    "displayName": "Marek Granbakk",
+    "id": "jogador-00471",
+    "name": "Marek Velsen Granbakk",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 52,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2002-11-06",
+    "clubId": "clube-019",
+    "displayName": "Kasvel Karstad",
+    "id": "jogador-00472",
+    "name": "Kasvel Falrud Karstad",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 58,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "1997-05-16",
+    "clubId": "clube-019",
+    "displayName": "Kelos Kargard",
+    "id": "jogador-00473",
+    "name": "Kelos Lindvik Kargard",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 55,
+    "traits": [
+      "heading",
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2003-07-26",
+    "clubId": "clube-019",
+    "displayName": "Gorur Brintorp",
+    "id": "jogador-00474",
+    "name": "Gorur Nyrhaug Brintorp",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 47,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-11-17",
+    "clubId": "clube-019",
+    "displayName": "Torric Brinby",
+    "id": "jogador-00475",
+    "name": "Torric Lindvik Brinby",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 65,
+    "traits": [
+      "playmaker",
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2000-12-08",
+    "clubId": "clube-019",
+    "displayName": "Kelos Lindness",
+    "id": "jogador-00476",
+    "name": "Kelos Kargard Lindness",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 60,
+    "traits": []
+  },
+  {
+    "birthDate": "1996-09-12",
+    "clubId": "clube-019",
+    "displayName": "Tordor Brinsen",
+    "id": "jogador-00477",
+    "name": "Tordor Falmark Brinsen",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 59,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2004-10-16",
+    "clubId": "clube-019",
+    "displayName": "Halor Kvarmark",
+    "id": "jogador-00478",
+    "name": "Halor Granmark Kvarmark",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 54,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-06-21",
+    "clubId": "clube-019",
+    "displayName": "Bjorvel Wesholm",
+    "id": "jogador-00479",
+    "name": "Bjorvel Ostfeld Wesholm",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 48,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "1998-05-29",
+    "clubId": "clube-019",
+    "displayName": "Osos Brinhaug",
+    "id": "jogador-00480",
+    "name": "Osos Bernes Brinhaug",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 60,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "1992-05-24",
+    "clubId": "clube-019",
+    "displayName": "Casin Brinby",
+    "id": "jogador-00481",
+    "name": "Casin Lindbakk Brinby",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 57,
+    "traits": []
+  },
+  {
+    "birthDate": "1993-06-16",
+    "clubId": "clube-019",
+    "displayName": "Perrik Velsen",
+    "id": "jogador-00482",
+    "name": "Perrik Granstrand Velsen",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 49,
+    "traits": []
+  },
+  {
+    "birthDate": "2008-05-03",
+    "clubId": "clube-019",
+    "displayName": "Daros Faltorp",
+    "id": "jogador-00483",
+    "name": "Daros Holness Faltorp",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 43,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1996-03-04",
+    "clubId": "clube-020",
+    "displayName": "Darrik Holrud",
+    "id": "jogador-00484",
+    "name": "Darrik Holfeld Holrud",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 56,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1994-05-28",
+    "clubId": "clube-020",
+    "displayName": "Casmund Berholm",
+    "id": "jogador-00485",
+    "name": "Casmund Holness Berholm",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 62,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-03-03",
+    "clubId": "clube-020",
+    "displayName": "Gunek Velsen",
+    "id": "jogador-00486",
+    "name": "Gunek Lindfeld Velsen",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 49,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1995-04-04",
+    "clubId": "clube-020",
+    "displayName": "Daran Morbakk",
+    "id": "jogador-00487",
+    "name": "Daran Weslund Morbakk",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 61,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2006-03-31",
+    "clubId": "clube-020",
+    "displayName": "Breian Ravsen",
+    "id": "jogador-00488",
+    "name": "Breian Osttorp Ravsen",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 55,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2003-01-26",
+    "clubId": "clube-020",
+    "displayName": "Svenek Talstad",
+    "id": "jogador-00489",
+    "name": "Svenek Granbakk Talstad",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 55,
+    "traits": [
+      "heading",
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2007-04-07",
+    "clubId": "clube-020",
+    "displayName": "Rolan Brinby",
+    "id": "jogador-00490",
+    "name": "Rolan Holtorp Brinby",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 42,
+    "traits": []
+  },
+  {
+    "birthDate": "2006-10-07",
+    "clubId": "clube-020",
+    "displayName": "Lorar Engfeld",
+    "id": "jogador-00491",
+    "name": "Lorar Lindbakk Engfeld",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 45,
+    "traits": []
+  },
+  {
+    "birthDate": "2005-01-22",
+    "clubId": "clube-020",
+    "displayName": "Bjorin Nyrberg",
+    "id": "jogador-00492",
+    "name": "Bjorin Asktorp Nyrberg",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 58,
+    "traits": [
+      "heading",
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1998-04-27",
+    "clubId": "clube-020",
+    "displayName": "Haris Brinlund",
+    "id": "jogador-00493",
+    "name": "Haris Taltorp Brinlund",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 58,
+    "traits": []
+  },
+  {
+    "birthDate": "1995-08-11",
+    "clubId": "clube-020",
+    "displayName": "Eleto Sandhus",
+    "id": "jogador-00494",
+    "name": "Eleto Velsen Sandhus",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 53,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2004-01-11",
+    "clubId": "clube-020",
+    "displayName": "Elin Lindnes",
+    "id": "jogador-00495",
+    "name": "Elin Heldal Lindnes",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 49,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2006-07-04",
+    "clubId": "clube-020",
+    "displayName": "Ardvel Karbakk",
+    "id": "jogador-00496",
+    "name": "Ardvel Sandnes Karbakk",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 46,
+    "traits": [
+      "pace",
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2002-12-15",
+    "clubId": "clube-020",
+    "displayName": "Arddor Veldahl",
+    "id": "jogador-00497",
+    "name": "Arddor Mornes Veldahl",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 63,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "1995-01-19",
+    "clubId": "clube-020",
+    "displayName": "Casmund Helby",
+    "id": "jogador-00498",
+    "name": "Casmund Lunness Helby",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 57,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2002-06-08",
+    "clubId": "clube-020",
+    "displayName": "Elrik Sandtorp",
+    "id": "jogador-00499",
+    "name": "Elrik Dalgard Sandtorp",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 52,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-03-01",
+    "clubId": "clube-020",
+    "displayName": "Brein Helsen",
+    "id": "jogador-00500",
+    "name": "Brein Helstrand Helsen",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 62,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "1998-01-11",
+    "clubId": "clube-020",
+    "displayName": "Ardeto Lindmark",
+    "id": "jogador-00501",
+    "name": "Ardeto Nyrtorp Lindmark",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 66,
+    "traits": [
+      "free-kick",
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2000-04-17",
+    "clubId": "clube-020",
+    "displayName": "Valan Dalvik",
+    "id": "jogador-00502",
+    "name": "Valan Holstad Dalvik",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 63,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-06-07",
+    "clubId": "clube-020",
+    "displayName": "Arddor Askstrand",
+    "id": "jogador-00503",
+    "name": "Arddor Lindby Askstrand",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 54,
+    "traits": []
+  },
+  {
+    "birthDate": "2002-11-03",
+    "clubId": "clube-020",
+    "displayName": "Perric Ostvik",
+    "id": "jogador-00504",
+    "name": "Perric Nyrhaug Ostvik",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 54,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2008-12-16",
+    "clubId": "clube-020",
+    "displayName": "Daran Lunstrand",
+    "id": "jogador-00505",
+    "name": "Daran Wesdal Lunstrand",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 48,
+    "traits": []
+  },
+  {
+    "birthDate": "2006-04-02",
+    "clubId": "clube-020",
+    "displayName": "Uleto Helbakk",
+    "id": "jogador-00506",
+    "name": "Uleto Morhus Helbakk",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 53,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-08-19",
+    "clubId": "clube-020",
+    "displayName": "Casin Lunby",
+    "id": "jogador-00507",
+    "name": "Casin Ostfeld Lunby",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 63,
+    "traits": []
+  },
+  {
+    "birthDate": "1995-06-10",
+    "clubId": "clube-020",
+    "displayName": "Perin Helbakk",
+    "id": "jogador-00508",
+    "name": "Perin Brinby Helbakk",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 53,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2003-10-03",
+    "clubId": "clube-020",
+    "displayName": "Vikven Nesgard",
+    "id": "jogador-00509",
+    "name": "Vikven Lunlund Nesgard",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 48,
+    "traits": [
+      "pace",
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2004-02-03",
+    "clubId": "clube-020",
+    "displayName": "Marven Sandhus",
+    "id": "jogador-00510",
+    "name": "Marven Engfeld Sandhus",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 53,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-08-12",
+    "clubId": "clube-021",
+    "displayName": "Elrik Askness",
+    "id": "jogador-00511",
+    "name": "Elrik Bernes Askness",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 66,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "1997-05-16",
+    "clubId": "clube-021",
+    "displayName": "Jaror Lindvik",
+    "id": "jogador-00512",
+    "name": "Jaror Grantorp Lindvik",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 61,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2003-11-15",
+    "clubId": "clube-021",
+    "displayName": "Alin Velbakk",
+    "id": "jogador-00513",
+    "name": "Alin Sandlund Velbakk",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 54,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2006-09-30",
+    "clubId": "clube-021",
+    "displayName": "Valos Stroness",
+    "id": "jogador-00514",
+    "name": "Valos Helhus Stroness",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 57,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1999-10-30",
+    "clubId": "clube-021",
+    "displayName": "Brelo Talnes",
+    "id": "jogador-00515",
+    "name": "Brelo Strodahl Talnes",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 66,
+    "traits": []
+  },
+  {
+    "birthDate": "1995-09-02",
+    "clubId": "clube-021",
+    "displayName": "Svenek Wesgard",
+    "id": "jogador-00516",
+    "name": "Svenek Falfeld Wesgard",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 54,
+    "traits": []
+  },
+  {
+    "birthDate": "2007-03-22",
+    "clubId": "clube-021",
+    "displayName": "Gunor Askness",
+    "id": "jogador-00517",
+    "name": "Gunor Lunsen Askness",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 43,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2005-07-28",
+    "clubId": "clube-021",
+    "displayName": "Fenano Kardahl",
+    "id": "jogador-00518",
+    "name": "Fenano Dalhus Kardahl",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 58,
+    "traits": [
+      "pace",
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2006-04-11",
+    "clubId": "clube-021",
+    "displayName": "Kasric Kargard",
+    "id": "jogador-00519",
+    "name": "Kasric Morness Kargard",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 56,
+    "traits": []
+  },
+  {
+    "birthDate": "1994-09-23",
+    "clubId": "clube-021",
+    "displayName": "Daren Grandal",
+    "id": "jogador-00520",
+    "name": "Daren Askrud Grandal",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 56,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-01-01",
+    "clubId": "clube-021",
+    "displayName": "Halin Engdahl",
+    "id": "jogador-00521",
+    "name": "Halin Karhaug Engdahl",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 50,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1997-08-14",
+    "clubId": "clube-021",
+    "displayName": "Svenrik Karby",
+    "id": "jogador-00522",
+    "name": "Svenrik Nyrfeld Karby",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 65,
+    "traits": []
+  },
+  {
+    "birthDate": "1996-10-19",
+    "clubId": "clube-021",
+    "displayName": "Edrik Sandvik",
+    "id": "jogador-00523",
+    "name": "Edrik Granmark Sandvik",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 59,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2005-12-21",
+    "clubId": "clube-021",
+    "displayName": "Haris Holbakk",
+    "id": "jogador-00524",
+    "name": "Haris Karhaug Holbakk",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 48,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2004-01-27",
+    "clubId": "clube-021",
+    "displayName": "Rolen Kvardal",
+    "id": "jogador-00525",
+    "name": "Rolen Dalberg Kvardal",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 50,
+    "traits": []
+  },
+  {
+    "birthDate": "1998-07-18",
+    "clubId": "clube-021",
+    "displayName": "Ingian Holberg",
+    "id": "jogador-00526",
+    "name": "Ingian Berness Holberg",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 63,
+    "traits": []
+  },
+  {
+    "birthDate": "1992-09-26",
+    "clubId": "clube-021",
+    "displayName": "Bjoros Engfeld",
+    "id": "jogador-00527",
+    "name": "Bjoros Askvik Engfeld",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 58,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1992-01-16",
+    "clubId": "clube-021",
+    "displayName": "Edrik Sandrud",
+    "id": "jogador-00528",
+    "name": "Edrik Ostnes Sandrud",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 63,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2002-01-25",
+    "clubId": "clube-021",
+    "displayName": "Breian Berness",
+    "id": "jogador-00529",
+    "name": "Breian Velhaug Berness",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 58,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-07-07",
+    "clubId": "clube-021",
+    "displayName": "Uleto Lunlund",
+    "id": "jogador-00530",
+    "name": "Uleto Talstad Lunlund",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 69,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1993-07-06",
+    "clubId": "clube-021",
+    "displayName": "Valeto Mornes",
+    "id": "jogador-00531",
+    "name": "Valeto Velness Mornes",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 57,
+    "traits": []
+  },
+  {
+    "birthDate": "1994-07-08",
+    "clubId": "clube-021",
+    "displayName": "Marvel Nyrfeld",
+    "id": "jogador-00532",
+    "name": "Marvel Strostad Nyrfeld",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 54,
+    "traits": []
+  },
+  {
+    "birthDate": "2007-10-24",
+    "clubId": "clube-021",
+    "displayName": "Alrik Fallund",
+    "id": "jogador-00533",
+    "name": "Alrik Holstrand Fallund",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 50,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2004-06-27",
+    "clubId": "clube-021",
+    "displayName": "Alar Lindnes",
+    "id": "jogador-00534",
+    "name": "Alar Grantorp Lindnes",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 48,
+    "traits": []
+  },
+  {
+    "birthDate": "1996-02-08",
+    "clubId": "clube-022",
+    "displayName": "Bjoreto Ostvik",
+    "id": "jogador-00535",
+    "name": "Bjoreto Velsen Ostvik",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 60,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2000-08-20",
+    "clubId": "clube-022",
+    "displayName": "Harald Veltorp",
+    "id": "jogador-00536",
+    "name": "Harald Nessen Veltorp",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 59,
+    "traits": []
+  },
+  {
+    "birthDate": "2003-04-12",
+    "clubId": "clube-022",
+    "displayName": "Halor Velhaug",
+    "id": "jogador-00537",
+    "name": "Halor Ostvik Velhaug",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 60,
+    "traits": []
+  },
+  {
+    "birthDate": "2005-10-24",
+    "clubId": "clube-022",
+    "displayName": "Perin Rosdahl",
+    "id": "jogador-00538",
+    "name": "Perin Karstad Rosdahl",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 60,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1998-08-20",
+    "clubId": "clube-022",
+    "displayName": "Kasin Englund",
+    "id": "jogador-00539",
+    "name": "Kasin Veltorp Englund",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 64,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1998-04-02",
+    "clubId": "clube-022",
+    "displayName": "Tordor Lindgard",
+    "id": "jogador-00540",
+    "name": "Tordor Malmark Lindgard",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 66,
+    "traits": [
+      "pace",
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2003-10-10",
+    "clubId": "clube-022",
+    "displayName": "Edur Berby",
+    "id": "jogador-00541",
+    "name": "Edur Ostfeld Berby",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 48,
+    "traits": [
+      "pace",
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1999-11-20",
+    "clubId": "clube-022",
+    "displayName": "Ulur Kvarberg",
+    "id": "jogador-00542",
+    "name": "Ulur Granmark Kvarberg",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 68,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2007-05-09",
+    "clubId": "clube-022",
+    "displayName": "Kasar Falfeld",
+    "id": "jogador-00543",
+    "name": "Kasar Stromark Falfeld",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 63,
+    "traits": []
+  },
+  {
+    "birthDate": "1998-01-23",
+    "clubId": "clube-022",
+    "displayName": "Edlo Granfeld",
+    "id": "jogador-00544",
+    "name": "Edlo Granhaug Granfeld",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 58,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2005-12-21",
+    "clubId": "clube-022",
+    "displayName": "Alis Falhaug",
+    "id": "jogador-00545",
+    "name": "Alis Talfeld Falhaug",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 50,
+    "traits": []
+  },
+  {
+    "birthDate": "2007-06-18",
+    "clubId": "clube-022",
+    "displayName": "Rolian Falmark",
+    "id": "jogador-00546",
+    "name": "Rolian Holbakk Falmark",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 47,
+    "traits": []
+  },
+  {
+    "birthDate": "2003-01-22",
+    "clubId": "clube-022",
+    "displayName": "Tormund Sandlund",
+    "id": "jogador-00547",
+    "name": "Tormund Talnes Sandlund",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 63,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-02-20",
+    "clubId": "clube-022",
+    "displayName": "Norek Mormark",
+    "id": "jogador-00548",
+    "name": "Norek Nyrtorp Mormark",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 64,
+    "traits": []
+  },
+  {
+    "birthDate": "2002-09-17",
+    "clubId": "clube-022",
+    "displayName": "Lormund Talberg",
+    "id": "jogador-00549",
+    "name": "Lormund Nyrvik Talberg",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 55,
+    "traits": []
+  },
+  {
+    "birthDate": "2005-05-04",
+    "clubId": "clube-022",
+    "displayName": "Valos Sandlund",
+    "id": "jogador-00550",
+    "name": "Valos Berlund Sandlund",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 51,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2007-05-23",
+    "clubId": "clube-022",
+    "displayName": "Rolric Talstad",
+    "id": "jogador-00551",
+    "name": "Rolric Berberg Talstad",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 48,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-04-05",
+    "clubId": "clube-022",
+    "displayName": "Gorric Morholm",
+    "id": "jogador-00552",
+    "name": "Gorric Faldal Morholm",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 63,
+    "traits": []
+  },
+  {
+    "birthDate": "1996-02-10",
+    "clubId": "clube-022",
+    "displayName": "Fenano Lindberg",
+    "id": "jogador-00553",
+    "name": "Fenano Rosstad Lindberg",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 67,
+    "traits": []
+  },
+  {
+    "birthDate": "1995-02-13",
+    "clubId": "clube-022",
+    "displayName": "Alald Velmark",
+    "id": "jogador-00554",
+    "name": "Alald Weshus Velmark",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 60,
+    "traits": []
+  },
+  {
+    "birthDate": "1998-09-25",
+    "clubId": "clube-022",
+    "displayName": "Kaslo Helsen",
+    "id": "jogador-00555",
+    "name": "Kaslo Malberg Helsen",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 59,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2006-08-23",
+    "clubId": "clube-022",
+    "displayName": "Lorlo Lunness",
+    "id": "jogador-00556",
+    "name": "Lorlo Granholm Lunness",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 50,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-03-04",
+    "clubId": "clube-022",
+    "displayName": "Darlo Ravnes",
+    "id": "jogador-00557",
+    "name": "Darlo Helgard Ravnes",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 59,
+    "traits": [
+      "pace",
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1997-01-08",
+    "clubId": "clube-022",
+    "displayName": "Casmund Sandstrand",
+    "id": "jogador-00558",
+    "name": "Casmund Lindfeld Sandstrand",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 63,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2001-02-05",
+    "clubId": "clube-022",
+    "displayName": "Eldor Sandvik",
+    "id": "jogador-00559",
+    "name": "Eldor Bersen Sandvik",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 65,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2000-01-02",
+    "clubId": "clube-022",
+    "displayName": "Breis Lunbakk",
+    "id": "jogador-00560",
+    "name": "Breis Falhaug Lunbakk",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 60,
+    "traits": []
+  },
+  {
+    "birthDate": "2006-02-23",
+    "clubId": "clube-022",
+    "displayName": "Elmund Lindgard",
+    "id": "jogador-00561",
+    "name": "Elmund Kardahl Lindgard",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 52,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2000-08-09",
+    "clubId": "clube-022",
+    "displayName": "Osric Wesholm",
+    "id": "jogador-00562",
+    "name": "Osric Rosstad Wesholm",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 54,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "1998-05-21",
+    "clubId": "clube-023",
+    "displayName": "Halos Falness",
+    "id": "jogador-00563",
+    "name": "Halos Holsen Falness",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 59,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2003-02-15",
+    "clubId": "clube-023",
+    "displayName": "Bjoren Engdahl",
+    "id": "jogador-00564",
+    "name": "Bjoren Strostad Engdahl",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 55,
+    "traits": []
+  },
+  {
+    "birthDate": "2008-03-28",
+    "clubId": "clube-023",
+    "displayName": "Frolo Nyrfeld",
+    "id": "jogador-00565",
+    "name": "Frolo Helgard Nyrfeld",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 50,
+    "traits": []
+  },
+  {
+    "birthDate": "2007-01-22",
+    "clubId": "clube-023",
+    "displayName": "Halin Rossen",
+    "id": "jogador-00566",
+    "name": "Halin Karby Rossen",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 50,
+    "traits": [
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "1995-02-01",
+    "clubId": "clube-023",
+    "displayName": "Perric Lindstrand",
+    "id": "jogador-00567",
+    "name": "Perric Osthaug Lindstrand",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 58,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2000-11-11",
+    "clubId": "clube-023",
+    "displayName": "Vikar Brinlund",
+    "id": "jogador-00568",
+    "name": "Vikar Talhus Brinlund",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 56,
+    "traits": []
+  },
+  {
+    "birthDate": "2006-11-28",
+    "clubId": "clube-023",
+    "displayName": "Pereto Kargard",
+    "id": "jogador-00569",
+    "name": "Pereto Nessen Kargard",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 49,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2003-06-23",
+    "clubId": "clube-023",
+    "displayName": "Hareto Holness",
+    "id": "jogador-00570",
+    "name": "Hareto Falfeld Holness",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 52,
+    "traits": []
+  },
+  {
+    "birthDate": "1997-01-27",
+    "clubId": "clube-023",
+    "displayName": "Vikar Bringard",
+    "id": "jogador-00571",
+    "name": "Vikar Sandtorp Bringard",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 58,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-12-01",
+    "clubId": "clube-023",
+    "displayName": "Osrik Brinhus",
+    "id": "jogador-00572",
+    "name": "Osrik Falfeld Brinhus",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 59,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-12-22",
+    "clubId": "clube-023",
+    "displayName": "Svenlo Lindby",
+    "id": "jogador-00573",
+    "name": "Svenlo Dalgard Lindby",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 55,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2005-12-26",
+    "clubId": "clube-023",
+    "displayName": "Darrik Velsen",
+    "id": "jogador-00574",
+    "name": "Darrik Hellund Velsen",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 52,
+    "traits": []
+  },
+  {
+    "birthDate": "2003-09-05",
+    "clubId": "clube-023",
+    "displayName": "Edek Falhus",
+    "id": "jogador-00575",
+    "name": "Edek Velhaug Falhus",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 68,
+    "traits": [
+      "heading",
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1998-04-21",
+    "clubId": "clube-023",
+    "displayName": "Edan Strogard",
+    "id": "jogador-00576",
+    "name": "Edan Malholm Strogard",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 57,
+    "traits": [
+      "wall",
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2008-06-12",
+    "clubId": "clube-023",
+    "displayName": "Elmund Strostrand",
+    "id": "jogador-00577",
+    "name": "Elmund Engsen Strostrand",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 42,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2006-11-27",
+    "clubId": "clube-023",
+    "displayName": "Caslo Holtorp",
+    "id": "jogador-00578",
+    "name": "Caslo Rosby Holtorp",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 43,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2007-05-24",
+    "clubId": "clube-023",
+    "displayName": "Rolric Sandvik",
+    "id": "jogador-00579",
+    "name": "Rolric Velmark Sandvik",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 50,
+    "traits": [
+      "heading",
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2001-10-02",
+    "clubId": "clube-023",
+    "displayName": "Kelos Dalby",
+    "id": "jogador-00580",
+    "name": "Kelos Lindmark Dalby",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 64,
+    "traits": []
+  },
+  {
+    "birthDate": "2003-07-25",
+    "clubId": "clube-023",
+    "displayName": "Halmund Askrud",
+    "id": "jogador-00581",
+    "name": "Halmund Falrud Askrud",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 59,
+    "traits": []
+  },
+  {
+    "birthDate": "1995-08-01",
+    "clubId": "clube-023",
+    "displayName": "Torvel Engby",
+    "id": "jogador-00582",
+    "name": "Torvel Lunbakk Engby",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 62,
+    "traits": [
+      "playmaker",
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2000-02-21",
+    "clubId": "clube-023",
+    "displayName": "Fromund Ostrud",
+    "id": "jogador-00583",
+    "name": "Fromund Lindness Ostrud",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 57,
+    "traits": []
+  },
+  {
+    "birthDate": "2000-03-06",
+    "clubId": "clube-023",
+    "displayName": "Goris Lunstrand",
+    "id": "jogador-00584",
+    "name": "Goris Ostvik Lunstrand",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 61,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2005-02-24",
+    "clubId": "clube-023",
+    "displayName": "Frorik Ostfeld",
+    "id": "jogador-00585",
+    "name": "Frorik Talfeld Ostfeld",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 57,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-01-22",
+    "clubId": "clube-023",
+    "displayName": "Feneto Malstad",
+    "id": "jogador-00586",
+    "name": "Feneto Malnes Malstad",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 58,
+    "traits": []
+  },
+  {
+    "birthDate": "2005-10-14",
+    "clubId": "clube-023",
+    "displayName": "Torric Kvarmark",
+    "id": "jogador-00587",
+    "name": "Torric Sandlund Kvarmark",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 46,
+    "traits": [
+      "finisher"
+    ]
+  },
+  {
+    "birthDate": "2008-01-23",
+    "clubId": "clube-024",
+    "displayName": "Halan Engness",
+    "id": "jogador-00588",
+    "name": "Halan Rosnes Engness",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 54,
+    "traits": []
+  },
+  {
+    "birthDate": "1993-02-22",
+    "clubId": "clube-024",
+    "displayName": "Ivoeto Velnes",
+    "id": "jogador-00589",
+    "name": "Ivoeto Dalhus Velnes",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 53,
+    "traits": []
+  },
+  {
+    "birthDate": "2003-04-27",
+    "clubId": "clube-024",
+    "displayName": "Ulvel Brinlund",
+    "id": "jogador-00590",
+    "name": "Ulvel Nyrrud Brinlund",
+    "nationalityId": "nrv",
+    "position": "GK",
+    "strength": 49,
+    "traits": []
+  },
+  {
+    "birthDate": "1991-09-05",
+    "clubId": "clube-024",
+    "displayName": "Valdor Lindberg",
+    "id": "jogador-00591",
+    "name": "Valdor Holness Lindberg",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 62,
+    "traits": []
+  },
+  {
+    "birthDate": "2008-06-05",
+    "clubId": "clube-024",
+    "displayName": "Uleto Berholm",
+    "id": "jogador-00592",
+    "name": "Uleto Granmark Berholm",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 54,
+    "traits": []
+  },
+  {
+    "birthDate": "1998-12-17",
+    "clubId": "clube-024",
+    "displayName": "Marven Taltorp",
+    "id": "jogador-00593",
+    "name": "Marven Helhus Taltorp",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 56,
+    "traits": [
+      "pace",
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2000-04-22",
+    "clubId": "clube-024",
+    "displayName": "Toris Bringard",
+    "id": "jogador-00594",
+    "name": "Toris Karstad Bringard",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 48,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "2008-05-31",
+    "clubId": "clube-024",
+    "displayName": "Kasor Engfeld",
+    "id": "jogador-00595",
+    "name": "Kasor Veltorp Engfeld",
+    "nationalityId": "nrv",
+    "position": "FB",
+    "strength": 46,
+    "traits": [
+      "pace"
+    ]
+  },
+  {
+    "birthDate": "2000-02-18",
+    "clubId": "clube-024",
+    "displayName": "Ulor Wesgard",
+    "id": "jogador-00596",
+    "name": "Ulor Velmark Wesgard",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 66,
+    "traits": []
+  },
+  {
+    "birthDate": "1997-05-08",
+    "clubId": "clube-024",
+    "displayName": "Lorald Talfeld",
+    "id": "jogador-00597",
+    "name": "Lorald Wesdal Talfeld",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 62,
+    "traits": [
+      "wall"
+    ]
+  },
+  {
+    "birthDate": "2005-12-13",
+    "clubId": "clube-024",
+    "displayName": "Svenald Kardal",
+    "id": "jogador-00598",
+    "name": "Svenald Holrud Kardal",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 51,
+    "traits": []
+  },
+  {
+    "birthDate": "2006-04-06",
+    "clubId": "clube-024",
+    "displayName": "Daros Rosmark",
+    "id": "jogador-00599",
+    "name": "Daros Kvarvik Rosmark",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 50,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2007-02-21",
+    "clubId": "clube-024",
+    "displayName": "Edur Faldal",
+    "id": "jogador-00600",
+    "name": "Edur Holbakk Faldal",
+    "nationalityId": "nrv",
+    "position": "CB",
+    "strength": 47,
+    "traits": [
+      "heading"
+    ]
+  },
+  {
+    "birthDate": "2002-09-21",
+    "clubId": "clube-024",
+    "displayName": "Bredor Osttorp",
+    "id": "jogador-00601",
+    "name": "Bredor Helsen Osttorp",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 68,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1997-02-04",
+    "clubId": "clube-024",
+    "displayName": "Svenlo Engdahl",
+    "id": "jogador-00602",
+    "name": "Svenlo Berberg Engdahl",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 59,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-03-03",
+    "clubId": "clube-024",
+    "displayName": "Ardmund Nyrfeld",
+    "id": "jogador-00603",
+    "name": "Ardmund Karrud Nyrfeld",
+    "nationalityId": "nrv",
+    "position": "DM",
+    "strength": 49,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-07-22",
+    "clubId": "clube-024",
+    "displayName": "Lorur Bertorp",
+    "id": "jogador-00604",
+    "name": "Lorur Veltorp Bertorp",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 64,
+    "traits": [
+      "playmaker",
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "1998-04-17",
+    "clubId": "clube-024",
+    "displayName": "Valano Stromark",
+    "id": "jogador-00605",
+    "name": "Valano Nyrhaug Stromark",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 63,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1992-08-27",
+    "clubId": "clube-024",
+    "displayName": "Perian Holfeld",
+    "id": "jogador-00606",
+    "name": "Perian Granholm Holfeld",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 57,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1995-04-01",
+    "clubId": "clube-024",
+    "displayName": "Perek Dalbakk",
+    "id": "jogador-00607",
+    "name": "Perek Strostrand Dalbakk",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 54,
+    "traits": [
+      "pace",
+      "free-kick"
+    ]
+  },
+  {
+    "birthDate": "2005-06-23",
+    "clubId": "clube-024",
+    "displayName": "Ingian Lindnes",
+    "id": "jogador-00608",
+    "name": "Ingian Talrud Lindnes",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 46,
+    "traits": []
+  },
+  {
+    "birthDate": "2007-04-13",
+    "clubId": "clube-024",
+    "displayName": "Kelen Kvarness",
+    "id": "jogador-00609",
+    "name": "Kelen Talbakk Kvarness",
+    "nationalityId": "nrv",
+    "position": "MF",
+    "strength": 45,
+    "traits": [
+      "playmaker"
+    ]
+  },
+  {
+    "birthDate": "1995-12-04",
+    "clubId": "clube-024",
+    "displayName": "Valvel Asknes",
+    "id": "jogador-00610",
+    "name": "Valvel Helsen Asknes",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 57,
+    "traits": []
+  },
+  {
+    "birthDate": "2001-07-06",
+    "clubId": "clube-024",
+    "displayName": "Ulmund Kvarhus",
+    "id": "jogador-00611",
+    "name": "Ulmund Kvarrud Kvarhus",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 61,
+    "traits": []
+  },
+  {
+    "birthDate": "1999-01-15",
+    "clubId": "clube-024",
+    "displayName": "Alald Sandhus",
+    "id": "jogador-00612",
+    "name": "Alald Dalbakk Sandhus",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 57,
+    "traits": []
+  },
+  {
+    "birthDate": "2008-10-28",
+    "clubId": "clube-024",
+    "displayName": "Svenek Sandstrand",
+    "id": "jogador-00613",
+    "name": "Svenek Kvarberg Sandstrand",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 42,
+    "traits": []
+  },
+  {
+    "birthDate": "2004-05-10",
+    "clubId": "clube-024",
+    "displayName": "Ulrik Helby",
+    "id": "jogador-00614",
+    "name": "Ulrik Lindbakk Helby",
+    "nationalityId": "nrv",
+    "position": "FW",
+    "strength": 48,
+    "traits": [
+      "finisher"
+    ]
+  }
+]

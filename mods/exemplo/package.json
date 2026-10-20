@@ -1,0 +1,14 @@
+{
+  "name": "@brasfoot-like/example-mod",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mod de exemplo com outro país fictício (Norvália), gerado por pnpm gen:example-mod.",
+  "exports": {
+    "./mod.json": "./mod.json",
+    "./countries.json": "./countries.json",
+    "./competitions.json": "./competitions.json",
+    "./clubs.json": "./clubs.json",
+    "./players.json": "./players.json",
+    "./rivalries.json": "./rivalries.json"
+  }
+}

@@ -56,4 +56,17 @@ describe("validate-bank", () => {
       /^countries\.json — O arquivo countries\.json não é um JSON válido \(linha 2, coluna \d+\)\.$/,
     );
   });
+
+  it("aceita um pacote .zip (015): o exemplo é válido e um pacote quebrado lista os erros", () => {
+    expect(runValidateBank(join(REPO_ROOT, "apps/web/public/mods/exemplo.zip")).lines).toEqual([
+      "Banco válido.",
+    ]);
+    const dir = mkdtempSync(join(tmpdir(), "brasfoot-zip-"));
+    tempDirs.push(dir);
+    const broken = join(dir, "quebrado.zip");
+    writeFileSync(broken, new Uint8Array([1, 2, 3]));
+    const { exitCode, lines } = runValidateBank(broken);
+    expect(exitCode).toBe(1);
+    expect(lines.at(-1)).toBe("1 erro e nenhum aviso.");
+  });
 });
