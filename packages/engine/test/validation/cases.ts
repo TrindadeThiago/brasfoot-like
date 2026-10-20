@@ -469,6 +469,20 @@ export const RULE_CASES: RuleCase[] = [
       params: { clubA: "clube-2", clubB: "clube-1", otherIndex: 0 },
     },
   },
+  {
+    code: "schema.invalid_format",
+    description: "imagem de escudo fora de images/ (015)",
+    mutate: (bank) => {
+      const club = at(bank.clubs, 0);
+      (club.crest as { image?: string }).image = "escudo.gif";
+    },
+    expect: {
+      section: "clubs",
+      path: [0, "crest", "image"],
+      entityId: "clube-1",
+      params: { field: "crest.image", format: "crest-image", value: "escudo.gif" },
+    },
+  },
 ];
 
 export function bankFor(ruleCase: RuleCase): ModPackage {

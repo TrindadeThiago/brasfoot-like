@@ -2,8 +2,11 @@ import type { ModPackage } from "../model/types";
 import type { Section } from "../validation/issues";
 import { toCanonicalJson } from "./canonical-json";
 
-/** Arquivo de cada seção no diretório do mod (contracts/mod-format.md). */
-export const BANK_FILES: Record<Section, string> = {
+/** Seções de dados (as demais, `package` e `images`, só localizam erros do pacote, 015). */
+export type DataSection = Exclude<Section, "package" | "images">;
+
+/** Arquivo de cada seção no diretório do mod (docs/mod-format.md). */
+export const BANK_FILES: Record<DataSection, string> = {
   manifest: "mod.json",
   countries: "countries.json",
   competitions: "competitions.json",
@@ -17,7 +20,7 @@ export function splitBankFiles(bank: ModPackage): Record<string, string> {
   const files: Record<string, string> = {};
   for (const [section, file] of Object.entries(BANK_FILES)) {
     // Seções opcionais (rivalidades, 013) só viram arquivo quando existem.
-    const content = bank[section as Section];
+    const content = bank[section as DataSection];
     if (content !== undefined) files[file] = toCanonicalJson(content);
   }
   return files;

@@ -11,6 +11,8 @@ export const SECTIONS = [
   "clubs",
   "players",
   "rivalries",
+  "package",
+  "images",
 ] as const;
 export type Section = (typeof SECTIONS)[number];
 
@@ -51,6 +53,20 @@ export const ISSUE_PARAMS = {
   "player.age_out_of_range": ["age", "min", "max"],
   "rivalry.same_club": ["clubId"],
   "rivalry.duplicate_pair": ["clubA", "clubB", "otherIndex"],
+  "package.not_zip": [],
+  "package.too_large": ["size", "max"],
+  "package.images_too_large": ["size", "max"],
+  "file.too_large": ["file", "size", "max"],
+  "image.missing": ["clubId", "file"],
+  "image.unused": ["file"],
+  "image.too_large": ["file", "size", "max"],
+  "image.too_big_dimensions": ["file", "width", "height", "max"],
+  "image.bad_format": ["file"],
+  "csv.missing_column": ["file", "column"],
+  "csv.unknown_column": ["file", "column"],
+  "csv.row_length": ["file", "line", "found", "expected"],
+  "csv.invalid_number": ["file", "line", "column", "value"],
+  "csv.unclosed_quote": ["file", "line"],
   "file.missing": ["file"],
   "file.invalid_json": ["file", "line", "column"],
 } as const satisfies Record<string, readonly string[]>;
@@ -59,7 +75,11 @@ export type IssueCode = keyof typeof ISSUE_PARAMS;
 
 export const ISSUE_CODES = Object.keys(ISSUE_PARAMS) as IssueCode[];
 
-const WARNING_CODES: ReadonlySet<IssueCode> = new Set<IssueCode>(["schema.unknown_field"]);
+const WARNING_CODES: ReadonlySet<IssueCode> = new Set<IssueCode>([
+  "schema.unknown_field",
+  "image.unused",
+  "csv.unknown_column",
+]);
 
 export function severityOf(code: IssueCode): Severity {
   return WARNING_CODES.has(code) ? "warning" : "error";
