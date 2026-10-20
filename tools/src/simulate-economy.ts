@@ -10,6 +10,8 @@ import {
   completeHiddenAttributes,
   createFinances,
   createLeagueSeason,
+  emptyMarket,
+  ensureContracts,
   type FinanceState,
   generateDefaultBank,
   initialRenewal,
@@ -52,16 +54,19 @@ const millions = (value: number) => `${(value / 1_000_000).toFixed(1)} mi`;
 /** Executa a simulação e devolve a saída (testável, sem encerrar o processo). */
 export function runSimulateEconomy(options: SimulateEconomyOptions): SimulateEconomyOutput {
   const seasons = options.seasons ?? 30;
-  let world: CompletedBank =
+  const bank: CompletedBank =
     options.world ??
     completeHiddenAttributes(generateDefaultBank({ seed: DEFAULT_SEED }), options.seed);
-  const competition = world.competitions[0];
+  const competition = bank.competitions[0];
   if (!competition) throw new Error("banco sem competição");
-  const created = createLeagueSeason(world, {
+  const created = createLeagueSeason(bank, {
     competitionId: competition.id,
     careerSeed: options.seed,
   });
   if (!created.ok) throw new Error(JSON.stringify(created.error));
+  // Contratos e livres (010): a folha vem dos salários contratuais.
+  let world: CompletedBank = ensureContracts(bank, created.league.year, options.seed);
+  let market = emptyMarket();
   let league = created.league;
   let finances: FinanceState = createFinances(world, league);
   let renewal = initialRenewal(world);
@@ -76,7 +81,7 @@ export function runSimulateEconomy(options: SimulateEconomyOptions): SimulateEco
     `Mediana da folha anual: ${millions(wages)}`,
     "",
   ];
-  lines.push("Temp.   mínimo   mediana    máximo   crise");
+  lines.push("Temp.   mínimo   mediana    máximo   crise   folha mediana   livres");
   let ok = true;
   let healthySum = 0;
   let lastMedian = 0;
@@ -91,8 +96,10 @@ export function runSimulateEconomy(options: SimulateEconomyOptions): SimulateEco
       finances: played.finances,
       managerClubId: "",
       renewal: played.renewal ?? renewal,
+      market,
     });
     if (!turned.ok || !turned.finances) throw new Error(JSON.stringify(turned));
+    market = turned.market ?? market;
     league = turned.league;
     history = turned.history;
     finances = turned.finances;
@@ -112,7 +119,7 @@ export function runSimulateEconomy(options: SimulateEconomyOptions): SimulateEco
       healthy >= ECONOMY_LIMITS.minHealthyShareEachSeason;
     ok &&= seasonOk;
     lines.push(
-      `${seasonOk ? "✓" : "✗"} ${String(index + 1).padStart(3)} ${millions(Math.min(...cash)).padStart(9)} ${millions(lastMedian).padStart(9)} ${millions(Math.max(...cash)).padStart(9)} ${String(crisis).padStart(6)}`,
+      `${seasonOk ? "✓" : "✗"} ${String(index + 1).padStart(3)} ${millions(Math.min(...cash)).padStart(9)} ${millions(lastMedian).padStart(9)} ${millions(Math.max(...cash)).padStart(9)} ${String(crisis).padStart(6)} ${millions(median(clubIds.map((clubId) => annualWageBill(world, clubId, world.manifest.referenceDate)))).padStart(15)} ${String(market.freeAgents.length).padStart(8)}`,
     );
   }
   const reputation = clubIds.map(

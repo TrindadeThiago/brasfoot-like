@@ -1,5 +1,7 @@
 import { seasonDate } from "../calendar/date";
 import type { TurnoverContext, TurnoverStep } from "../career/types";
+import { ensureContracts } from "../market/contracts";
+import { addFreeAgents, toFreeAgent } from "../market/free-agents";
 import { evolvePlayers, midSeasonRound } from "./evolution";
 import { measureWorld } from "./measure";
 import { regulate } from "./regulator";
@@ -108,13 +110,20 @@ export const generateYouthStep: TurnoverStep = {
     );
     const clubs = new Map(world.players.map((player) => [player.id, player.clubId]));
     return withNotice(
-      { ...context, world, renewal },
+      { ...context, world: contracted(context, world), renewal },
       "arrived",
       arrived,
       (ref) => clubs.get(ref.playerId) ?? "",
     );
   },
 };
+
+/** Com mercado, jovens e repostos nascem com contrato para a temporada que começa (R3). */
+function contracted(context: TurnoverContext, world: TurnoverContext["world"]) {
+  return context.market
+    ? ensureContracts(world, context.finished.year + 1, context.careerSeed)
+    : world;
+}
 
 /** Quantas maiores altas e quedas o aviso mostra. */
 const NOTICE_MOVERS = 5;
@@ -125,7 +134,7 @@ export const balanceSquadsStep: TurnoverStep = {
     if (!context.renewal) return context;
     const date = nextSeasonDate(context);
     const before = new Map(context.world.players.map((player) => [player.id, player.clubId]));
-    const { world, renewal, promoted, released } = balanceSquads(
+    const { world, renewal, promoted, released, releasedPlayers } = balanceSquads(
       context.world,
       context.finished,
       context.renewal,
@@ -135,7 +144,21 @@ export const balanceSquadsStep: TurnoverStep = {
     );
     const after = new Map(world.players.map((player) => [player.id, player.clubId]));
     let next = withNotice(
-      { ...context, world, renewal },
+      {
+        ...context,
+        world: contracted(context, world),
+        renewal,
+        ...(context.market
+          ? {
+              market: addFreeAgents(
+                context.market,
+                releasedPlayers.map((player) =>
+                  toFreeAgent(player, before.get(player.id) ?? "", context.finished.year),
+                ),
+              ),
+            }
+          : {}),
+      },
       "promoted",
       promoted,
       (ref) => after.get(ref.playerId) ?? "",

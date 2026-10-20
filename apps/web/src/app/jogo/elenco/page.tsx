@@ -118,6 +118,23 @@ function SquadScreen({ save }: { save: SaveFile }) {
       align: "right",
     },
     {
+      key: "contract",
+      header: t("col.contractUntil"),
+      render: (player) => {
+        const contract = player.contract;
+        if (!contract) return "—";
+        const marks = [
+          contract.untilYear <= save.league.year ? t("squad.lastYear") : undefined,
+          contract.loan ? t("squad.onLoan") : undefined,
+        ].filter(Boolean);
+        return marks.length > 0
+          ? `${contract.untilYear} · ${marks.join(" · ")}`
+          : contract.untilYear;
+      },
+      sortValue: (player) => player.contract?.untilYear ?? 0,
+      align: "right",
+    },
+    {
       key: "actions",
       header: t("col.actions"),
       render: (player) => (

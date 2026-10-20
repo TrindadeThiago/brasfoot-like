@@ -46,10 +46,18 @@ export function balanceSquads(
   careerSeed: string,
   season: number,
   date: string,
-): { world: CompletedBank; renewal: RenewalState; promoted: PlayerRef[]; released: PlayerRef[] } {
+): {
+  world: CompletedBank;
+  renewal: RenewalState;
+  promoted: PlayerRef[];
+  released: PlayerRef[];
+  /** Registros completos dos dispensados (viram livres quando há mercado, 010). */
+  releasedPlayers: CompletedPlayer[];
+} {
   let players = [...world.players];
   const promoted: PlayerRef[] = [];
   const released: PlayerRef[] = [];
+  const releasedPlayers: CompletedPlayer[] = [];
   let seq = renewal.nextPlayerSeq;
   for (const clubId of league.divisions.flatMap((entry) => entry.clubIds).sort()) {
     const club = world.clubs.find((entry) => entry.id === clubId);
@@ -75,6 +83,7 @@ export function balanceSquads(
       const out = candidates[0];
       if (!out) break;
       released.push(playerRef(out, date));
+      releasedPlayers.push(out);
       players = players.filter((player) => player.id !== out.id);
     }
   }
@@ -83,5 +92,6 @@ export function balanceSquads(
     renewal: { ...renewal, nextPlayerSeq: seq },
     promoted,
     released,
+    releasedPlayers,
   };
 }

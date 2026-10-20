@@ -46,7 +46,10 @@ export function annualWageBill(
   const rules = economyRules(world, competitionOf(world, clubId));
   const monthly = world.players
     .filter((player) => player.clubId === clubId)
-    .reduce((sum, player) => sum + deriveWage(player, club, referenceDate), 0);
+    .reduce(
+      (sum, player) => sum + (player.contract?.wage ?? deriveWage(player, club, referenceDate)),
+      0,
+    );
   return Math.round((12 * monthly * rules.wageFactorPct) / 100);
 }
 

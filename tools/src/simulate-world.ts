@@ -11,10 +11,13 @@ import {
   createFinances,
   createLeagueSeason,
   type EvolutionRecord,
+  emptyMarket,
+  ensureContracts,
   type FinanceState,
   generateDefaultBank,
   initialRenewal,
   type LeagueSeason,
+  type MarketState,
   measureWorld,
   type RenewalState,
   type SeasonHistoryEntry,
@@ -34,6 +37,8 @@ export const WORLD_LIMITS = {
   minStars: 1,
   meanAge: [24, 27.5],
   minYouthMinutesGain: 1,
+  /** Livres ao fim de cada virada (010, research.md R11). */
+  maxFreeAgents: 150,
 } as const;
 
 export interface SimulateWorldOptions {
@@ -70,22 +75,22 @@ export interface WorldSeason {
   measure: ReturnType<typeof measureWorld>;
   problems: string[];
   gaps: number[];
+  freeAgents: number;
 }
 
 /** Executa a carreira e devolve as medidas de cada temporada (testável). */
 export function simulateWorld(options: SimulateWorldOptions): WorldSeason[] {
   const seasons = options.seasons ?? 30;
-  let world: CompletedBank = completeHiddenAttributes(
-    generateDefaultBank({ seed: DEFAULT_SEED }),
-    options.seed,
-  );
-  const competition = world.competitions[0];
+  const bank = completeHiddenAttributes(generateDefaultBank({ seed: DEFAULT_SEED }), options.seed);
+  const competition = bank.competitions[0];
   if (!competition) throw new Error("banco sem competição");
-  const created = createLeagueSeason(world, {
+  const created = createLeagueSeason(bank, {
     competitionId: competition.id,
     careerSeed: options.seed,
   });
   if (!created.ok) throw new Error(JSON.stringify(created.error));
+  let world: CompletedBank = ensureContracts(bank, created.league.year, options.seed);
+  let market: MarketState = emptyMarket();
   let league: LeagueSeason = created.league;
   let finances: FinanceState = createFinances(world, league);
   let renewal: RenewalState = initialRenewal(world);
@@ -108,8 +113,12 @@ export function simulateWorld(options: SimulateWorldOptions): WorldSeason[] {
       finances: played.finances,
       managerClubId: "",
       renewal: played.renewal ?? renewal,
+      market,
     });
-    if (!turned.ok || !turned.finances || !turned.renewal) throw new Error(JSON.stringify(turned));
+    if (!turned.ok || !turned.finances || !turned.renewal || !turned.market) {
+      throw new Error(JSON.stringify(turned));
+    }
+    market = turned.market;
     if (turned.renewal.lastEvolution) {
       const gap = youthMinutesGap(played.world, turned.renewal.lastEvolution, date);
       if (gap !== undefined) gaps.push(gap);
@@ -121,6 +130,7 @@ export function simulateWorld(options: SimulateWorldOptions): WorldSeason[] {
       measure: measureWorld(world, league, seasonDate(world.manifest.referenceDate, league.year)),
       problems: squadProblems(world, league),
       gaps,
+      freeAgents: market.freeAgents.length,
     });
   }
   return result;
@@ -136,7 +146,7 @@ export function runSimulateWorld(options: SimulateWorldOptions): {
 } {
   const seasons = simulateWorld(options);
   const lines = [`Mundo em ${seasons.length} temporadas — seed "${options.seed}"`, ""];
-  lines.push("Temp.  média  p10  p50  p90  máx  craques  idade  elencos");
+  lines.push("Temp.  média  p10  p50  p90  máx  craques  idade  elencos  livres");
   let ok = true;
   for (const [index, season] of seasons.entries()) {
     const m = season.measure;
@@ -148,10 +158,11 @@ export function runSimulateWorld(options: SimulateWorldOptions): {
       within(m.max, WORLD_LIMITS.max) &&
       m.stars >= WORLD_LIMITS.minStars &&
       within(m.meanAge, WORLD_LIMITS.meanAge) &&
-      season.problems.length === 0;
+      season.problems.length === 0 &&
+      season.freeAgents <= WORLD_LIMITS.maxFreeAgents;
     ok &&= seasonOk;
     lines.push(
-      `${seasonOk ? "✓" : "✗"} ${String(index + 1).padStart(3)}  ${m.mean.toFixed(1).padStart(5)} ${String(m.p10).padStart(4)} ${String(m.p50).padStart(4)} ${String(m.p90).padStart(4)} ${String(m.max).padStart(4)} ${String(m.stars).padStart(8)}  ${m.meanAge.toFixed(1).padStart(5)} ${String(season.problems.length).padStart(8)}`,
+      `${seasonOk ? "✓" : "✗"} ${String(index + 1).padStart(3)}  ${m.mean.toFixed(1).padStart(5)} ${String(m.p10).padStart(4)} ${String(m.p50).padStart(4)} ${String(m.p90).padStart(4)} ${String(m.max).padStart(4)} ${String(m.stars).padStart(8)}  ${m.meanAge.toFixed(1).padStart(5)} ${String(season.problems.length).padStart(8)} ${String(season.freeAgents).padStart(7)}`,
     );
   }
   const gaps = seasons.flatMap((season) => season.gaps);

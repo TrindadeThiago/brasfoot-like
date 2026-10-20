@@ -7,29 +7,42 @@ import {
   type FinanceError,
   type FormationId,
   finishRound,
+  type IncomingAnswer,
   isLeagueSeasonOver,
   isSeasonOver,
   type Lineup,
   type LineupIssue,
   type LiveRound,
   leagueRound,
+  type MarketError,
   type MatchRecord,
   managerAutoLineup,
+  type NegotiationStep,
   type Place,
   type Posture,
   placePlayer as placeLineupPlayer,
+  type StartInput,
   startLeagueRound,
   validateLineup,
 } from "@brasfoot-like/engine";
 import {
   advanceCareerSeason,
+  answerManagerClubCounter,
+  answerManagerIncomingOffer,
+  answerManagerPlayerDemand,
+  cancelManagerNegotiation,
   createSave,
   dismissSquadNotice as dismissSavedSquadNotice,
   type FinanceSaveResult,
+  type IncomingSaveResult,
+  type MarketSaveResult,
+  marketAfterRoundOf,
+  proposeManagerContract,
   repayManagerLoan,
   type SaveError,
   type SaveFile,
   setManagerTicketPrice,
+  startManagerNegotiation,
   startManagerStadiumWorks,
   takeManagerLoan,
   touch,
@@ -173,7 +186,25 @@ interface GameContextValue {
   takeLoan(amount: number): FinanceActionResult;
   repayLoan(amount: number): FinanceActionResult;
   startStadiumWorks(optionIndex: number): FinanceActionResult;
+  /** Mercado (010): cada ação valida no motor, salva e devolve o passo ou o erro. */
+  startNegotiation(input: StartInput): MarketActionResult;
+  answerClubCounter(negotiationId: string, accept: boolean): MarketActionResult;
+  proposeContract(
+    negotiationId: string,
+    offer: { wage: number; years: number },
+  ): MarketActionResult;
+  answerPlayerDemand(negotiationId: string, accept: boolean): MarketActionResult;
+  cancelNegotiation(negotiationId: string): void;
+  answerIncomingOffer(offerId: string, answer: IncomingAnswer): IncomingActionResult;
 }
+
+export type IncomingActionResult =
+  | { ok: true; response?: "accepted" | "refused" }
+  | { ok: false; error: MarketError };
+
+export type MarketActionResult =
+  | { ok: true; step: NegotiationStep }
+  | { ok: false; error: MarketError };
 
 export type FinanceActionResult = { ok: true } | { ok: false; error: FinanceError };
 
@@ -327,13 +358,15 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       });
       if (!result.ok) return;
       const next = touch(
-        withAdjustedLineup({
-          ...save,
-          league: result.league,
-          finances: result.finances,
-          bank: result.world,
-          renewal: result.renewal ?? save.renewal,
-        }),
+        withAdjustedLineup(
+          marketAfterRoundOf({
+            ...save,
+            league: result.league,
+            finances: result.finances,
+            bank: result.world,
+            renewal: result.renewal ?? save.renewal,
+          }),
+        ),
         new Date().toISOString(),
       );
       latestSave.current = next;
@@ -511,6 +544,68 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
     [commitFinance],
   );
 
+  /** Aplica uma ação do mercado ao save atual e salva (só entre rodadas). */
+  const commitMarket = useCallback(
+    (action: (save: SaveFile) => MarketSaveResult): MarketActionResult => {
+      const save = latestSave.current;
+      if (!save) return { ok: false, error: { code: "market.not_found", params: {} } };
+      const result = action(save);
+      if (!result.ok) return result;
+      const next = touch(result.save, new Date().toISOString());
+      latestSave.current = next;
+      dispatch({ type: "update", save: next });
+      void persist(next);
+      return { ok: true, step: result.step };
+    },
+    [persist],
+  );
+
+  const startNegotiation = useCallback(
+    (input: StartInput) => commitMarket((save) => startManagerNegotiation(save, input)),
+    [commitMarket],
+  );
+  const answerClubCounter = useCallback(
+    (id: string, accept: boolean) =>
+      commitMarket((save) => answerManagerClubCounter(save, id, accept)),
+    [commitMarket],
+  );
+  const proposeContract = useCallback(
+    (id: string, offer: { wage: number; years: number }) =>
+      commitMarket((save) => proposeManagerContract(save, id, offer)),
+    [commitMarket],
+  );
+  const answerPlayerDemand = useCallback(
+    (id: string, accept: boolean) =>
+      commitMarket((save) => answerManagerPlayerDemand(save, id, accept)),
+    [commitMarket],
+  );
+  const cancelNegotiation = useCallback(
+    (id: string) => {
+      const save = latestSave.current;
+      if (!save) return;
+      const next = touch(cancelManagerNegotiation(save, id), new Date().toISOString());
+      latestSave.current = next;
+      dispatch({ type: "update", save: next });
+      void persist(next);
+    },
+    [persist],
+  );
+
+  const answerIncomingOffer = useCallback(
+    (offerId: string, answer: IncomingAnswer): IncomingActionResult => {
+      const save = latestSave.current;
+      if (!save) return { ok: false, error: { code: "market.not_found", params: {} } };
+      const result: IncomingSaveResult = answerManagerIncomingOffer(save, offerId, answer);
+      if (!result.ok) return result;
+      const next = touch(result.save, new Date().toISOString());
+      latestSave.current = next;
+      dispatch({ type: "update", save: next });
+      void persist(next);
+      return { ok: true, ...(result.response ? { response: result.response } : {}) };
+    },
+    [persist],
+  );
+
   const dismissSquadNotice = useCallback(
     () => commitLineup((save) => dismissSavedSquadNotice(save)),
     [commitLineup],
@@ -562,6 +657,12 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       takeLoan,
       repayLoan,
       startStadiumWorks,
+      startNegotiation,
+      answerClubCounter,
+      proposeContract,
+      answerPlayerDemand,
+      cancelNegotiation,
+      answerIncomingOffer,
     }),
     [
       state,
@@ -587,6 +688,12 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       takeLoan,
       repayLoan,
       startStadiumWorks,
+      startNegotiation,
+      answerClubCounter,
+      proposeContract,
+      answerPlayerDemand,
+      cancelNegotiation,
+      answerIncomingOffer,
     ],
   );
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

@@ -41,11 +41,14 @@ describe("pontos de extensão da virada (US6, FR-017 a FR-019)", () => {
       "premios",
       "pay-prizes",
       "close-finance-season",
+      "return-loans",
       "evolve-players",
       "retire-players",
+      "expire-contracts",
       "regulate-world",
       "generate-youth",
       "balance-squads",
+      "age-out-free-agents",
       "promotion-relegation",
       "advance-year",
       "reset-season-stats",
@@ -53,6 +56,7 @@ describe("pontos de extensão da virada (US6, FR-017 a FR-019)", () => {
       "generate-calendars",
       "pay-sponsorship",
       "ai-finance-review",
+      "reset-market",
     ]);
   });
 

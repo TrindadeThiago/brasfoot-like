@@ -70,6 +70,7 @@ export function advanceCareerSeason(
     finances: save.finances,
     managerClubId: save.clubId,
     renewal: save.renewal,
+    market: save.market,
   });
   if (!turned.ok) return turned;
   const next = withAdjustedLineup(
@@ -80,6 +81,7 @@ export function advanceCareerSeason(
       finances: turned.finances ?? save.finances,
       bank: turned.world,
       renewal: turned.renewal ?? save.renewal,
+      market: turned.market ?? save.market,
       savedAt: now,
     }),
   );

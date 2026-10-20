@@ -127,6 +127,63 @@ export const economySchema = z.object({
   divisions: list(divisionEconomySchema, 0, 99).optional(),
 });
 
+const pct = intInRange(0, 1000);
+
+/** Regras do mercado de transferências (010, research.md R5–R11); tudo opcional. */
+export const marketSchema = z.object({
+  windows: list(
+    z.object({ fromRound: intInRange(0, 200), toRound: intInRange(0, 200) }),
+    0,
+    8,
+  ).optional(),
+  contractYears: z
+    .object({
+      min: intInRange(1, 10),
+      max: intInRange(1, 10),
+      veteranAge: intInRange(25, 50),
+      veteranMax: intInRange(1, 10),
+    })
+    .optional(),
+  lastYearValuePct: pct.optional(),
+  twoYearsValuePct: pct.optional(),
+  club: z
+    .object({
+      counterThresholdPct: pct,
+      keyPlayerPct: pct,
+      noiseMinPct: pct,
+      noiseMaxPct: pct,
+      maxBidMinPct: pct,
+      maxBidMaxPct: pct,
+      loanFeePct: pct,
+    })
+    .optional(),
+  player: z
+    .object({
+      demandThresholdPct: pct,
+      interestMargin: intInRange(0, 100),
+      divisionBonus: list(z.int(), 1, 99),
+    })
+    .optional(),
+  incoming: z
+    .object({
+      chancePct: intInRange(0, 100),
+      maxOpen: intInRange(0, 20),
+      expireRounds: intInRange(1, 50),
+      minPct: pct,
+      maxPct: pct,
+      cashBufferMonths: intInRange(0, 60),
+    })
+    .optional(),
+  freeAgents: z.object({ maxSeasons: intInRange(0, 10), retireAge: intInRange(30, 50) }).optional(),
+  ai: z
+    .object({
+      renewMaxAge: intInRange(20, 50),
+      renewTopN: intInRange(1, 60),
+      wageReviewPct: intInRange(0, 200),
+    })
+    .optional(),
+});
+
 export const competitionSchema = z.object({
   id,
   countryId: id,
@@ -134,6 +191,7 @@ export const competitionSchema = z.object({
   format: leagueFormatSchema,
   divisions: list(divisionSchema, 1, 99),
   economy: economySchema.optional(),
+  market: marketSchema.optional(),
 });
 
 export const crestSchema = z.object({
@@ -162,6 +220,13 @@ export const hiddenAttributesSchema = z.object({
   injuryProneness: scale.optional(),
 });
 
+/** Contrato do jogador (010, data-model.md): salário mensal, último ano e empréstimo. */
+export const contractSchema = z.object({
+  wage: money,
+  untilYear: intInRange(0, 10_000),
+  loan: z.object({ fromClubId: id, untilYear: intInRange(0, 10_000) }).optional(),
+});
+
 export const playerSchema = z.object({
   id,
   name: text(1, 80),
@@ -173,6 +238,7 @@ export const playerSchema = z.object({
   strength: scale,
   traits: list(z.enum(TRAITS), 0, 2),
   hidden: hiddenAttributesSchema.optional(),
+  contract: contractSchema.optional(),
 });
 
 /** Schema de cada item, por seção. A validação aplica um item por vez (research.md R8). */

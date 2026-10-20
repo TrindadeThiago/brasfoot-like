@@ -35,17 +35,21 @@ describe("virada financeira (US3, FR-011, FR-012, FR-025)", () => {
       "record-history",
       "pay-prizes",
       "close-finance-season",
+      "return-loans",
       "evolve-players",
       "retire-players",
+      "expire-contracts",
       "regulate-world",
       "generate-youth",
       "balance-squads",
+      "age-out-free-agents",
       "promotion-relegation",
       "advance-year",
       "reset-season-stats",
       "generate-calendars",
       "pay-sponsorship",
       "ai-finance-review",
+      "reset-market",
     ]);
   });
 

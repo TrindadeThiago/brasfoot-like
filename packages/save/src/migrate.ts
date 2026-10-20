@@ -5,6 +5,8 @@ import {
   createFinances,
   createSeason,
   economyRules,
+  emptyMarket,
+  ensureContracts,
   FORMATION_IDS,
   initialRenewal,
   isSeasonOver,
@@ -99,8 +101,42 @@ const addRenewal: Migration = {
   },
 };
 
+/**
+ * v5 → v6: contratos para todos os jogadores (010 R13) — salário derivado atual e duração por
+ * idade, sorteada pela seed da carreira — e mercado vazio; os resumos antigos ganham as categorias
+ * de transferência zeradas.
+ */
+const addMarket: Migration = {
+  from: 5,
+  migrate(raw) {
+    const save = raw as {
+      bank: CompletedBank;
+      league: LeagueSeason;
+      seed: string;
+      finances: { seasons: { totals?: Record<string, number> }[] };
+    };
+    const seasons = save.finances.seasons.map((summary) => ({
+      ...summary,
+      totals: { transfer_purchase: 0, transfer_sale: 0, ...summary.totals },
+    }));
+    return {
+      ...(raw as object),
+      formatVersion: 6,
+      bank: ensureContracts(save.bank, save.league.year, save.seed),
+      finances: { ...save.finances, seasons },
+      market: emptyMarket(),
+    };
+  },
+};
+
 /** Migrações reais do formato, em ordem. */
-export const MIGRATIONS: readonly Migration[] = [addLineup, addLeague, addFinances, addRenewal];
+export const MIGRATIONS: readonly Migration[] = [
+  addLineup,
+  addLeague,
+  addFinances,
+  addRenewal,
+  addMarket,
+];
 
 /** Problemas que tornam a escalação gravada ilegível (os demais o jogo corrige ou avisa). */
 const BROKEN_LINEUP = new Set([
@@ -169,6 +205,15 @@ const envelopeSchema = z.object({
       regulator: z.object({ strengthOffset: z.number(), potentialBonus: z.number() }).loose(),
     })
     .loose(),
+  market: z
+    .object({
+      freeAgents: z.array(z.object({ player: z.object({ id: z.string() }).loose() }).loose()),
+      negotiations: z.array(z.object({ id: z.string(), playerId: z.string() }).loose()),
+      incoming: z.array(z.object({ id: z.string(), playerId: z.string() }).loose()),
+      log: z.array(z.unknown()),
+      nextSeq: z.int().min(1),
+    })
+    .loose(),
   lineup: z.object({
     formation: z.enum(FORMATION_IDS),
     posture: z.enum(POSTURES),
@@ -225,6 +270,18 @@ function renewalProblem(save: SaveFile): string | undefined {
     : "sequência de ids de jogador repetiria ids";
 }
 
+/** Livres fora do banco, uma negociação por atleta e contratos em todos os jogadores. */
+function marketProblem(save: SaveFile): string | undefined {
+  const inBank = new Set(save.bank.players.map((player) => player.id));
+  if (save.market.freeAgents.some((agent) => inBank.has(agent.player.id))) {
+    return "jogador livre também está no banco";
+  }
+  const open = save.market.negotiations.map((entry) => entry.playerId);
+  if (new Set(open).size !== open.length) return "mais de uma negociação por atleta";
+  if (save.bank.players.some((player) => !player.contract)) return "jogador sem contrato";
+  return undefined;
+}
+
 function versionOf(raw: unknown): number | undefined {
   if (raw === null || typeof raw !== "object") return undefined;
   const value = (raw as { formatVersion?: unknown }).formatVersion;
@@ -264,7 +321,8 @@ export function migrateSave(
   if (!envelope.success) return { status: "corrupt", reason: "estrutura inválida" };
   const save = current as SaveFile;
   if (!validateBank(save.bank).ok) return { status: "corrupt", reason: "banco inválido" };
-  const incoherence = leagueProblem(save) ?? financeProblem(save) ?? renewalProblem(save);
+  const incoherence =
+    leagueProblem(save) ?? financeProblem(save) ?? renewalProblem(save) ?? marketProblem(save);
   if (incoherence) return { status: "corrupt", reason: incoherence };
   const season = save.league.divisions.find((entry) => entry.clubIds.includes(save.clubId));
   if (!season) return { status: "corrupt", reason: "clube fora das divisões" };

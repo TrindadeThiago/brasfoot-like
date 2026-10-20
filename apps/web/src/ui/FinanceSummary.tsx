@@ -5,8 +5,20 @@ import type { SaveFile } from "@brasfoot-like/save";
 import { formatMoney, useT } from "../i18n";
 import styles from "./FinancePanel.module.css";
 
-const REVENUES: readonly LedgerCategory[] = ["gate", "sponsorship", "prize", "loan_in"];
-const EXPENSES: readonly LedgerCategory[] = ["wages", "interest", "loan_out", "stadium"];
+const REVENUES: readonly LedgerCategory[] = [
+  "gate",
+  "sponsorship",
+  "prize",
+  "loan_in",
+  "transfer_sale",
+];
+const EXPENSES: readonly LedgerCategory[] = [
+  "wages",
+  "interest",
+  "loan_out",
+  "stadium",
+  "transfer_purchase",
+];
 
 /** Receitas e despesas da temporada por categoria, com saldo inicial e atual (US4, FR-024). */
 export function FinanceSummary({ save }: { save: SaveFile }) {

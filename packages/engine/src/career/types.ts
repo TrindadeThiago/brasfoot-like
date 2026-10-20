@@ -1,4 +1,5 @@
 import type { FinanceState } from "../finance/types";
+import type { MarketState } from "../market/types";
 import type { CompletedBank } from "../model/types";
 import type { RenewalState } from "../renewal/types";
 import type { Rng } from "../rng/xoshiro";
@@ -100,6 +101,8 @@ export interface TurnoverContext {
   managerClubId?: string;
   /** Estado de renovação do mundo (009). */
   renewal?: RenewalState;
+  /** Mercado de transferências (010): livres, negociações e propostas. */
+  market?: MarketState;
   /** Gerador próprio de cada etapa (não depende das outras etapas). */
   rng(stepId: string): Rng;
 }
@@ -122,6 +125,7 @@ export interface TurnoverOptions {
   finances?: FinanceState;
   managerClubId?: string;
   renewal?: RenewalState;
+  market?: MarketState;
 }
 
 export type TurnoverResult =
@@ -133,5 +137,6 @@ export type TurnoverResult =
       /** Mundo vivo depois da virada. */
       world: CompletedBank;
       renewal?: RenewalState;
+      market?: MarketState;
     }
   | { ok: false; error: SeasonError };

@@ -50,7 +50,7 @@ export function validSave(clubId: string = SERIE_A[0] as string): SaveFile {
 /** Save no formato da 005/006 (versão 2): uma única `season` da Série A, sem liga nem histórico. */
 export type SaveV2 = Omit<
   SaveFile,
-  "formatVersion" | "league" | "history" | "finances" | "renewal"
+  "formatVersion" | "league" | "history" | "finances" | "renewal" | "market"
 > & {
   formatVersion: 2;
   season: Season;
@@ -70,7 +70,7 @@ export function saveV2(step: SeasonStep = { rounds: 0 }): SaveV2 {
       renewal: _renewal,
       formatVersion: _version,
       ...rest
-    } = validSave();
+    } = withoutMarket(validSave());
     const serieA = league.divisions[0];
     if (!serieA) throw new Error("sem Série A");
     let season = serieA;
@@ -104,7 +104,7 @@ export function saveV1(mutate?: (save: SaveV2) => void) {
 }
 
 /** Save no formato da 007 (versão 3): liga e histórico, sem finanças. */
-export type SaveV3 = Omit<SaveFile, "formatVersion" | "finances" | "renewal"> & {
+export type SaveV3 = Omit<SaveFile, "formatVersion" | "finances" | "renewal" | "market"> & {
   formatVersion: 3;
 };
 
@@ -120,7 +120,7 @@ export function saveV3(step: SeasonStep = { rounds: 0 }): SaveV3 {
       renewal: _renewal,
       formatVersion: _version,
       ...rest
-    } = validSave();
+    } = withoutMarket(validSave());
     let league = rest.league;
     if (!("rounds" in step) || step.rounds > 0) {
       const advanced = advanceLeague(league, rest.bank, step);
@@ -144,7 +144,12 @@ export function saveV3SeasonOver(): SaveV3 {
 }
 
 /** Save no formato da 008 (versão 4): finanças, sem renovação. */
-export type SaveV4 = Omit<SaveFile, "formatVersion" | "renewal"> & { formatVersion: 4 };
+export type SaveV4 = Omit<SaveFile, "formatVersion" | "renewal" | "market"> & {
+  formatVersion: 4;
+};
+
+/** Save no formato da 009 (versão 5): renovação, sem contratos nem mercado. */
+export type SaveV5 = Omit<SaveFile, "formatVersion" | "market"> & { formatVersion: 5 };
 
 const v4Cache = new Map<string, SaveV4>();
 
@@ -153,7 +158,7 @@ export function saveV4(step: SeasonStep = { rounds: 0 }): SaveV4 {
   const key = JSON.stringify(step);
   let save = v4Cache.get(key);
   if (!save) {
-    const { renewal: _renewal, formatVersion: _version, ...rest } = validSave();
+    const { renewal: _renewal, formatVersion: _version, ...rest } = withoutMarket(validSave());
     let { league, finances } = rest;
     if (!("rounds" in step) || step.rounds > 0) {
       const advanced = advanceCareer(league, finances, rest.bank, step, rest.clubId);
@@ -172,4 +177,46 @@ export function saveV4MidSeason(): SaveV4 {
 
 export function saveV4SeasonOver(): SaveV4 {
   return saveV4({ toEnd: true });
+}
+
+/** Remove o que a v6 acrescentou (mercado e contratos), para comparar com saves antigos. */
+export function withoutMarket<T extends { bank: { players: { contract?: unknown }[] } }>(
+  save: T,
+): Omit<T, "market"> {
+  const { market: _market, ...rest } = save as T & { market?: unknown };
+  return {
+    ...rest,
+    bank: {
+      ...rest.bank,
+      players: rest.bank.players.map(({ contract: _contract, ...player }) => player),
+    },
+  } as unknown as Omit<T, "market">;
+}
+
+const v5Cache = new Map<string, SaveV5>();
+
+/** Save v5 com a carreira (liga + finanças + renovação) avançada `step`. */
+export function saveV5(step: SeasonStep = { rounds: 0 }): SaveV5 {
+  const key = JSON.stringify(step);
+  let save = v5Cache.get(key);
+  if (!save) {
+    const { formatVersion: _version, ...rest } = withoutMarket(validSave());
+    let { league, finances } = rest;
+    if (!("rounds" in step) || step.rounds > 0) {
+      const advanced = advanceCareer(league, finances, rest.bank, step, rest.clubId);
+      if (!advanced.ok) throw new Error(JSON.stringify(advanced.error));
+      ({ league, finances } = advanced);
+    }
+    save = { ...rest, formatVersion: 5, league, finances };
+    v5Cache.set(key, save);
+  }
+  return JSON.parse(JSON.stringify(save)) as SaveV5;
+}
+
+export function saveV5MidSeason(): SaveV5 {
+  return saveV5({ rounds: 10 });
+}
+
+export function saveV5SeasonOver(): SaveV5 {
+  return saveV5({ toEnd: true });
 }

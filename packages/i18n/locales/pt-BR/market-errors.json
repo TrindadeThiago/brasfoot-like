@@ -1,0 +1,12 @@
+{
+  "market.window_closed": "A janela de transferências está fechada. {round, plural, =0 {A próxima abre na próxima temporada.} other {Ela abre na rodada #.}}",
+  "market.insufficient_cash": "O caixa não cobre o valor necessário ({needed, number}).",
+  "market.squad_full": "O elenco já tem o máximo de jogadores.",
+  "market.squad_minimum": "O elenco ficaria abaixo do mínimo de jogadores ou de uma posição.",
+  "market.player_on_loan": "O jogador está emprestado e não pode ser negociado agora.",
+  "market.already_negotiating": "Já existe uma negociação aberta por esse jogador.",
+  "market.invalid_duration": "A duração do contrato deve ficar entre {min} e {max} {max, plural, one {temporada} other {temporadas}}.",
+  "market.invalid_amount": "O valor informado não é válido.",
+  "market.not_found": "Jogador ou negociação não encontrado.",
+  "market.invalid_stage": "Essa ação não está disponível nesta etapa da negociação."
+}

@@ -7,6 +7,7 @@ export {
   formatFinanceError,
   formatIssue,
   formatLabel,
+  formatMarketError,
   formatMatchError,
   formatMessage,
   formatSeasonError,

@@ -24,6 +24,7 @@ export const GAME_SCREENS = [
   { path: "/jogo/calendario", key: "nav.calendar" },
   { path: "/jogo/financas", key: "nav.finance" },
   { path: "/jogo/historico", key: "nav.history" },
+  { path: "/jogo/mercado", key: "nav.market" },
 ] as const;
 
 /** A tela da navegação está ativa (Competição inclui as abas de resultados e artilharia). */
@@ -78,6 +79,9 @@ export function AppHeader({ save, onHelp }: { save: SaveFile; onHelp: () => void
             }}
           >
             {t(screen.key)}
+            {screen.path === "/jogo/mercado" && save.market.incoming.length > 0
+              ? ` (${save.market.incoming.length})`
+              : ""}
           </Link>
         ))}
       </nav>

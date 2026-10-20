@@ -57,6 +57,21 @@ export function checkReferences(context: SemanticContext): ValidationIssue[] {
         ),
       );
     }
+    const loanClubId = value.contract?.loan?.fromClubId;
+    if (
+      loanClubId !== undefined &&
+      (loanClubId === value.clubId || !existsIn(context, loanClubId, "clubs"))
+    ) {
+      issues.push(
+        makeIssue(
+          "ref.club_not_found",
+          "players",
+          [index, "contract", "loan", "fromClubId"],
+          { clubId: loanClubId },
+          value.id,
+        ),
+      );
+    }
   }
   return issues;
 }

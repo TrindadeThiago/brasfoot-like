@@ -150,17 +150,21 @@ describe("virada de temporada (R5–R8, FR-010 a FR-016)", () => {
       "record-history",
       "pay-prizes",
       "close-finance-season",
+      "return-loans",
       "evolve-players",
       "retire-players",
+      "expire-contracts",
       "regulate-world",
       "generate-youth",
       "balance-squads",
+      "age-out-free-agents",
       "promotion-relegation",
       "advance-year",
       "reset-season-stats",
       "generate-calendars",
       "pay-sponsorship",
       "ai-finance-review",
+      "reset-market",
     ]);
   });
 });
