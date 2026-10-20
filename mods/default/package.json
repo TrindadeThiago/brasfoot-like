@@ -8,6 +8,7 @@
     "./countries.json": "./countries.json",
     "./competitions.json": "./competitions.json",
     "./clubs.json": "./clubs.json",
-    "./players.json": "./players.json"
+    "./players.json": "./players.json",
+    "./rivalries.json": "./rivalries.json"
   }
 }
