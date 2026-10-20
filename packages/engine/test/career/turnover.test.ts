@@ -165,6 +165,7 @@ describe("virada de temporada (R5–R8, FR-010 a FR-016)", () => {
       "pay-sponsorship",
       "ai-finance-review",
       "reset-market",
+      "board-new-season",
     ]);
   });
 });

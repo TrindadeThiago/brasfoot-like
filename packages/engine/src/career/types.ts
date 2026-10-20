@@ -1,3 +1,4 @@
+import type { BoardState } from "../board/types";
 import type { FinanceState } from "../finance/types";
 import type { MarketState } from "../market/types";
 import type { CompletedBank } from "../model/types";
@@ -103,6 +104,8 @@ export interface TurnoverContext {
   renewal?: RenewalState;
   /** Mercado de transferências (010): livres, negociações e propostas. */
   market?: MarketState;
+  /** Diretorias, técnicos e carreira do técnico (012). */
+  board?: BoardState;
   /** Gerador próprio de cada etapa (não depende das outras etapas). */
   rng(stepId: string): Rng;
 }
@@ -126,6 +129,7 @@ export interface TurnoverOptions {
   managerClubId?: string;
   renewal?: RenewalState;
   market?: MarketState;
+  board?: BoardState;
 }
 
 export type TurnoverResult =
@@ -138,5 +142,6 @@ export type TurnoverResult =
       world: CompletedBank;
       renewal?: RenewalState;
       market?: MarketState;
+      board?: BoardState;
     }
   | { ok: false; error: SeasonError };

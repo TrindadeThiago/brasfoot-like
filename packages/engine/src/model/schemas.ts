@@ -216,6 +216,58 @@ export const marketSchema = z.object({
     .optional(),
 });
 
+/** Regras da diretoria (012, research.md R17); tudo opcional. */
+export const boardSchema = z
+  .object({
+    expectationRepPct: intInRange(0, 1000),
+    slackBase: intInRange(0, 100),
+    slackPerRepPct: intInRange(0, 1000),
+    bottomSlots: intInRange(0, 100),
+    tightMonths: intInRange(0, 60),
+    neutral: intInRange(0, 100),
+    win: intInRange(0, 100),
+    draw: intInRange(0, 100),
+    loss: intInRange(0, 100),
+    goalCheckFromRound: intInRange(0, 100),
+    gapWeight: intInRange(0, 100),
+    aheadWeight: intInRange(0, 100),
+    aheadCap: intInRange(0, 100),
+    driftDivisor: intInRange(1, 100),
+    crisisPenalty: intInRange(0, 100),
+    financePenalty: intInRange(0, 100),
+    patienceBasePct: intInRange(0, 1000),
+    patiencePerRepPct: intInRange(0, 1000),
+    patienceMinPct: intInRange(0, 1000),
+    keepRecent: intInRange(1, 100),
+    fireThreshold: intInRange(0, 100),
+    graceRounds: intInRange(0, 100),
+    endFireThreshold: intInRange(0, 100),
+    sportMetBonus: intInRange(0, 100),
+    missPerPosition: intInRange(0, 100),
+    missCap: intInRange(0, 100),
+    financeMetBonus: intInRange(0, 100),
+    financeMissPenalty: intInRange(0, 100),
+    aiFireChancePct: intInRange(0, 100),
+    initialReputation: intInRange(1, 100),
+    metBase: intInRange(0, 100),
+    upsidePct: intInRange(0, 1000),
+    missBase: intInRange(0, 100),
+    titleBonus: intInRange(0, 100),
+    promotionBonus: intInRange(0, 100),
+    relegationPenalty: intInRange(0, 100),
+    firePenalty: intInRange(0, 100),
+    downsidePct: intInRange(0, 1000),
+    vacancyRounds: intInRange(0, 50),
+    lowerMargin: intInRange(0, 100),
+    upperMargin: intInRange(0, 100),
+    offerChancePct: intInRange(0, 100),
+    maxOpenOffers: intInRange(0, 100),
+    offerRounds: intInRange(1, 50),
+    maxFreeCoaches: intInRange(0, 200),
+    coachSpread: intInRange(0, 100),
+  })
+  .partial();
+
 export const competitionSchema = z.object({
   id,
   countryId: id,
@@ -224,6 +276,7 @@ export const competitionSchema = z.object({
   divisions: list(divisionSchema, 1, 99),
   economy: economySchema.optional(),
   market: marketSchema.optional(),
+  board: boardSchema.optional(),
 });
 
 export const crestSchema = z.object({

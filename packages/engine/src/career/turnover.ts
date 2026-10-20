@@ -16,6 +16,7 @@
  * `generate-calendars`.
  */
 
+import { boardNewSeasonStep } from "../board/turnover";
 import { seasonDate } from "../calendar/date";
 import {
   aiFinanceReview,
@@ -73,6 +74,7 @@ export const TURNOVER_STEP_IDS = [
   "pay-sponsorship",
   "ai-finance-review",
   "reset-market",
+  "board-new-season",
 ] as const;
 
 /** Falha de uma etapa, convertida em erro da virada por `seasonTurnover`. */
@@ -185,6 +187,7 @@ export const DEFAULT_TURNOVER_STEPS: readonly TurnoverStep[] = [
   paySponsorship,
   aiFinanceReview,
   resetMarketStep,
+  boardNewSeasonStep,
 ];
 
 function stepsError(stepId: string, reason: string) {
@@ -294,6 +297,7 @@ export function seasonTurnover(
     ...(options.managerClubId ? { managerClubId: options.managerClubId } : {}),
     ...(options.renewal ? { renewal: options.renewal } : {}),
     ...(options.market ? { market: options.market } : {}),
+    ...(options.board ? { board: options.board } : {}),
   };
   try {
     for (const step of resolved.steps) context = step.run(context);
@@ -323,5 +327,6 @@ export function seasonTurnover(
     world: context.world,
     ...(context.renewal ? { renewal: context.renewal } : {}),
     ...(context.market ? { market: context.market } : {}),
+    ...(context.board ? { board: context.board } : {}),
   };
 }

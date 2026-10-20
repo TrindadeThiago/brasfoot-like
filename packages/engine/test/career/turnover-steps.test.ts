@@ -57,6 +57,7 @@ describe("pontos de extensão da virada (US6, FR-017 a FR-019)", () => {
       "pay-sponsorship",
       "ai-finance-review",
       "reset-market",
+      "board-new-season",
     ]);
   });
 
