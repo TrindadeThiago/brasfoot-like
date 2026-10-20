@@ -30,6 +30,7 @@ import { DerbyBadge } from "../../ui/fans/DerbyBadge";
 import { FansCard } from "../../ui/fans/FansCard";
 import { LineupNotice } from "../../ui/LineupNotice";
 import { MarketNotice, marketNoticeCounts } from "../../ui/MarketNotice";
+import { NewsCard } from "../../ui/news/NewsCard";
 import { RoundResults } from "../../ui/RoundResults";
 import { SquadChangeNotice } from "../../ui/SquadChangeNotice";
 import styles from "./page.module.css";
@@ -56,6 +57,9 @@ function Unemployed({
           <BoardNotice save={save} onDismiss={game.dismissBoardNotice} />
         </div>
       ) : null}
+      <div className={styles.wide}>
+        <NewsCard save={save} />
+      </div>
       <section aria-label={t("career.unemployed")} className={`${styles.card} ${styles.wide}`}>
         <h2>{t("career.unemployed")}</h2>
         <p>{t("career.unemployedDetail")}</p>
@@ -249,6 +253,9 @@ export default function HomePage() {
                 </>
               )}
             </section>
+            <div className={styles.wide}>
+              <NewsCard save={save} />
+            </div>
             <div className={styles.wide}>
               <FansCard save={save} clubId={save.clubId} />
             </div>

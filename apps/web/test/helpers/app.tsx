@@ -12,6 +12,7 @@ import SeasonEndPage from "../../src/app/jogo/fim-de-temporada/page";
 import FinancesPage from "../../src/app/jogo/financas/page";
 import HistoryPage from "../../src/app/jogo/historico/page";
 import MarketPage from "../../src/app/jogo/mercado/page";
+import NewsPage from "../../src/app/jogo/noticias/page";
 import HomePage from "../../src/app/jogo/page";
 import RoundPage from "../../src/app/jogo/rodada/page";
 import NewCareerPage from "../../src/app/nova-carreira/page";
@@ -37,6 +38,7 @@ const ROUTES: Record<string, ComponentType> = {
   "/jogo/financas": FinancesPage,
   "/jogo/mercado": MarketPage,
   "/jogo/carreira": CareerPage,
+  "/jogo/noticias": NewsPage,
 };
 
 function subscribe(listener: () => void) {

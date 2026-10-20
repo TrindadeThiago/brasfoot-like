@@ -4,12 +4,18 @@ import type { HistoryRow, SeasonHistoryEntry } from "@brasfoot-like/engine";
 import { divisionNameOf, type SaveFile } from "@brasfoot-like/save";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { GameLayout } from "../../../game/GameLayout";
 import { useT } from "../../../i18n";
 import { screenHref } from "../../../ui/AppHeader";
+import { Button } from "../../../ui/Button";
 import { Crest } from "../../../ui/Crest";
 import { type Column, DataTable } from "../../../ui/DataTable";
+import { ClubHistory, Records, Scorers, Titles } from "../../../ui/history/WorldHistory";
 import styles from "./page.module.css";
+
+type Tab = "seasons" | "titles" | "scorers" | "records" | "clubs";
+const TABS: readonly Tab[] = ["seasons", "titles", "scorers", "records", "clubs"];
 
 function historyHref(careerId: string, number: number): string {
   return `${screenHref("/jogo/historico", careerId)}&t=${number}`;
@@ -61,6 +67,20 @@ function HistoryList({ save }: { save: SaveFile }) {
             (division) => division.level === level,
           )?.championId;
           return championId ? <ClubCell save={save} clubId={championId} /> : null;
+        },
+      }),
+    ),
+    ...levels.map(
+      (level): Column<SeasonHistoryEntry> => ({
+        key: `scorer-${level}`,
+        header: `${t("history.topScorer")} · ${divisionNameOf(save, level)}`,
+        render: (entry) => {
+          const scorer = save.news.seasons
+            .find((item) => item.season === entry.number)
+            ?.scorers.find((item) => item.level === level);
+          return scorer?.name
+            ? t("history.topScorerValue", { name: scorer.name, goals: scorer.goals })
+            : t("history.noScorer");
         },
       }),
     ),
@@ -159,10 +179,39 @@ function History({ save }: { save: SaveFile }) {
   const params = useSearchParams();
   const requested = Number(params?.get("t"));
   const entry = save.history.find((item) => item.number === requested);
+  const [tab, setTab] = useState<Tab>("seasons");
+  if (entry) {
+    return (
+      <div className={styles.layout}>
+        <h1>{t("history.title")}</h1>
+        <HistoryDetail save={save} entry={entry} />
+      </div>
+    );
+  }
   return (
     <div className={styles.layout}>
       <h1>{t("history.title")}</h1>
-      {entry ? <HistoryDetail save={save} entry={entry} /> : <HistoryList save={save} />}
+      <div role="tablist" aria-label={t("history.tablist")} className={styles.tabs}>
+        {TABS.map((name) => (
+          <Button
+            key={name}
+            role="tab"
+            aria-selected={tab === name}
+            variant={tab === name ? "primary" : "secondary"}
+            onClick={() => setTab(name)}
+          >
+            {t(`history.tab.${name}`)}
+          </Button>
+        ))}
+      </div>
+      {tab === "seasons" ? <HistoryList save={save} /> : null}
+      {tab === "titles" ? <Titles save={save} /> : null}
+      {tab === "scorers" ? <Scorers save={save} /> : null}
+      {tab === "records" ? <Records save={save} /> : null}
+      {tab === "clubs" ? <ClubHistory save={save} /> : null}
+      <Link href={`${screenHref("/jogo/carreira", save.id)}&aba=history`}>
+        {t("history.managerLink")}
+      </Link>
     </div>
   );
 }

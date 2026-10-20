@@ -5,8 +5,10 @@ import {
   createBoard,
   createFans,
   createFinances,
+  createNews,
   createSeason,
   DEFAULT_BANK_SEED,
+  DEFAULT_NEWS,
   economyRules,
   emptyMarket,
   ensureContracts,
@@ -186,6 +188,30 @@ const addFans: Migration = {
   },
 };
 
+/**
+ * v9 → v10: notícias (014 R10). Feed, recordes e acumulados começam vazios; cada temporada já
+ * encerrada ganha um registro sem artilheiro (os gols por jogador não eram guardados). Campeões e
+ * títulos continuam vindo de `history`.
+ */
+const addNews: Migration = {
+  from: 9,
+  migrate(raw) {
+    const save = raw as { history: { number: number; year: number }[] };
+    return {
+      ...(raw as object),
+      formatVersion: 10,
+      news: {
+        ...createNews(),
+        seasons: save.history.map((entry) => ({
+          season: entry.number,
+          year: entry.year,
+          scorers: [],
+        })),
+      },
+    };
+  },
+};
+
 /** Migrações reais do formato, em ordem. */
 export const MIGRATIONS: readonly Migration[] = [
   addLineup,
@@ -196,6 +222,7 @@ export const MIGRATIONS: readonly Migration[] = [
   addReports,
   addBoard,
   addFans,
+  addNews,
 ];
 
 /** Problemas que tornam a escalação gravada ilegível (os demais o jogo corrige ou avisa). */
@@ -322,6 +349,21 @@ const envelopeSchema = z.object({
       z.object({ mood: z.int().min(0).max(100), recent: z.array(z.unknown()) }).loose(),
     ),
   }),
+  news: z
+    .object({
+      feed: z.array(
+        z
+          .object({ season: z.int(), round: z.int().min(0), headlines: z.array(z.unknown()) })
+          .loose(),
+      ),
+      records: z.object({
+        league: z.record(z.string(), z.unknown()),
+        clubs: z.record(z.string(), z.unknown()),
+      }),
+      allTime: z.object({ players: z.record(z.string(), z.unknown()) }),
+      seasons: z.array(z.object({ season: z.int(), year: z.int() }).loose()),
+    })
+    .loose(),
   lineupNotice: z.array(z.object({ kind: z.string() }).loose()).optional(),
 });
 
@@ -422,6 +464,18 @@ function fansProblem(save: SaveFile): string | undefined {
   return missing ? `clube sem torcida: ${missing}` : undefined;
 }
 
+/** Feed só das duas últimas temporadas e no limite por rodada (014 data-model.md). */
+function newsProblem(save: SaveFile): string | undefined {
+  const oldest = save.league.number - 1;
+  if (save.news.feed.some((round) => round.season < oldest)) return "manchetes antigas no feed";
+  const limit = save.bank.competitions[0]?.news?.feedLimit ?? DEFAULT_NEWS.feedLimit;
+  // A rodada 0 (resumo da temporada) não passa pelo limite do feed.
+  if (save.news.feed.some((round) => round.round > 0 && round.headlines.length > limit)) {
+    return "rodada com manchetes demais";
+  }
+  return undefined;
+}
+
 function versionOf(raw: unknown): number | undefined {
   if (raw === null || typeof raw !== "object") return undefined;
   const value = (raw as { formatVersion?: unknown }).formatVersion;
@@ -467,7 +521,8 @@ export function migrateSave(
     renewalProblem(save) ??
     marketProblem(save) ??
     boardProblem(save) ??
-    fansProblem(save);
+    fansProblem(save) ??
+    newsProblem(save);
   if (incoherence) return { status: "corrupt", reason: incoherence };
   const season = save.league.divisions.find((entry) => entry.clubIds.includes(save.clubId));
   if (!season) return { status: "corrupt", reason: "clube fora das divisões" };

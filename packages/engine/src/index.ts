@@ -138,6 +138,7 @@ export type {
   CareerBoard,
   CareerFans,
   CareerMarket,
+  CareerNews,
   CareerRenewal,
   CareerRoundResult,
 } from "./finance/round";
@@ -304,6 +305,42 @@ export type {
   Trait,
   ValidatedBank,
 } from "./model/types";
+export { clinched } from "./news/clinched";
+export { createNews } from "./news/create";
+export type { Fact } from "./news/facts";
+export { isComeback, matchFacts, streakOf } from "./news/facts";
+export { headlinesOf, latestFeed, rankFeed } from "./news/feed";
+export {
+  accumulate,
+  allTimeScorers,
+  clubLegends,
+  pruneAllTime,
+  titlesByClub,
+} from "./news/history";
+export type { RecordCandidate } from "./news/records";
+export { beats, updateRecords } from "./news/records";
+export { newsAfterRound, toHeadlines } from "./news/round";
+export type { NewsRules } from "./news/rules";
+export { DEFAULT_NEWS, newsRules } from "./news/rules";
+export { newsNewSeasonStep } from "./news/turnover";
+export type {
+  AllTime,
+  ClubRecordKind,
+  Headline,
+  HeadlineType,
+  HeadlineVars,
+  LeagueRecordKind,
+  Legend,
+  NewsContext,
+  NewsState,
+  PlayerTotals,
+  RecordEntry,
+  Records,
+  RoundFeed,
+  SeasonNews,
+} from "./news/types";
+export { CLUB_RECORD_KINDS, HEADLINE_TYPES, LEAGUE_RECORD_KINDS } from "./news/types";
+export { variantOf } from "./news/variants";
 export {
   evolutionDelta,
   evolvePlayers,

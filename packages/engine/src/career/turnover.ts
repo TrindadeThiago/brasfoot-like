@@ -32,6 +32,7 @@ import {
   returnLoansStep,
 } from "../market/turnover";
 import type { CompletedBank } from "../model/types";
+import { newsNewSeasonStep } from "../news/turnover";
 import {
   balanceSquadsStep,
   evolvePlayersStep,
@@ -59,6 +60,7 @@ import type {
 export const TURNOVER_STEP_IDS = [
   "record-history",
   "fans-new-season",
+  "news-new-season",
   "pay-prizes",
   "close-finance-season",
   "return-loans",
@@ -173,6 +175,7 @@ const generateCalendars: TurnoverStep = {
 export const DEFAULT_TURNOVER_STEPS: readonly TurnoverStep[] = [
   recordHistory,
   fansNewSeasonStep,
+  newsNewSeasonStep,
   payPrizes,
   closeFinanceSeason,
   returnLoansStep,
@@ -302,6 +305,7 @@ export function seasonTurnover(
     ...(options.market ? { market: options.market } : {}),
     ...(options.board ? { board: options.board } : {}),
     ...(options.fans ? { fans: options.fans } : {}),
+    ...(options.news ? { news: options.news } : {}),
   };
   try {
     for (const step of resolved.steps) context = step.run(context);
@@ -333,5 +337,6 @@ export function seasonTurnover(
     ...(context.market ? { market: context.market } : {}),
     ...(context.board ? { board: context.board } : {}),
     ...(context.fans ? { fans: context.fans } : {}),
+    ...(context.news ? { news: context.news } : {}),
   };
 }

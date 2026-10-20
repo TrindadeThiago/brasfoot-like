@@ -45,3 +45,8 @@
 .relegation {
   background: var(--color-danger);
 }
+
+.tabs {
+  display: flex;
+  gap: var(--space-2);
+}

@@ -3,6 +3,7 @@ import type { FansState } from "../fans/types";
 import type { FinanceState } from "../finance/types";
 import type { MarketState } from "../market/types";
 import type { CompletedBank } from "../model/types";
+import type { NewsState } from "../news/types";
 import type { RenewalState } from "../renewal/types";
 import type { Rng } from "../rng/xoshiro";
 import type { SeasonError } from "../season/errors";
@@ -109,6 +110,8 @@ export interface TurnoverContext {
   board?: BoardState;
   /** Humor das torcidas (013). */
   fans?: FansState;
+  /** Manchetes, recordes e memória do mundo (014). */
+  news?: NewsState;
   /** Gerador próprio de cada etapa (não depende das outras etapas). */
   rng(stepId: string): Rng;
 }
@@ -134,6 +137,7 @@ export interface TurnoverOptions {
   market?: MarketState;
   board?: BoardState;
   fans?: FansState;
+  news?: NewsState;
 }
 
 export type TurnoverResult =
@@ -148,5 +152,6 @@ export type TurnoverResult =
       market?: MarketState;
       board?: BoardState;
       fans?: FansState;
+      news?: NewsState;
     }
   | { ok: false; error: SeasonError };

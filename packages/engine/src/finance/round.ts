@@ -13,6 +13,8 @@ import { releaseManagerClub } from "../market/release";
 import type { MarketState } from "../market/types";
 import type { Lineup } from "../match/types";
 import type { CompletedBank } from "../model/types";
+import { newsAfterRound } from "../news/round";
+import type { NewsState } from "../news/types";
 import { evolvePlayers, midSeasonRound } from "../renewal/evolution";
 import type { RenewalState } from "../renewal/types";
 import type { SeasonError } from "../season/errors";
@@ -50,6 +52,12 @@ export interface CareerFans {
   state: FansState;
 }
 
+/** Notícias da carreira passadas à rodada (014): manchetes, recordes e memória do mundo. */
+export interface CareerNews {
+  state: NewsState;
+  careerSeed: string;
+}
+
 export type CareerRoundResult =
   | {
       ok: true;
@@ -61,6 +69,7 @@ export type CareerRoundResult =
       market?: MarketState;
       board?: BoardState;
       fans?: FansState;
+      news?: NewsState;
     }
   | { ok: false; error: SeasonError };
 
@@ -179,6 +188,7 @@ export function completeCareerRound(
   market?: CareerMarket,
   board?: CareerBoard,
   fans?: CareerFans,
+  news?: CareerNews,
 ): CareerRoundResult {
   const completed = completeLeagueRound(league, world, round);
   if (!completed.ok) return completed;
@@ -276,6 +286,23 @@ export function completeCareerRound(
       );
     }
   }
+  let nextNews = news?.state;
+  if (news) {
+    // Notícias (014 R2): por último, com mercado, diretoria e torcida já atualizados.
+    nextNews = newsAfterRound(
+      {
+        world: nextWorld,
+        league: completed.league,
+        news: news.state,
+        careerSeed: news.careerSeed,
+        managerClubId: nextBoard ? (nextBoard.manager.clubId ?? "") : managerClubId,
+        ...(nextMarket ? { market: nextMarket } : {}),
+        ...(board ? { boardBefore: board.state } : {}),
+        ...(nextBoard ? { boardAfter: nextBoard } : {}),
+      },
+      round.round,
+    );
+  }
   return {
     ok: true,
     league: completed.league,
@@ -285,6 +312,7 @@ export function completeCareerRound(
     ...(nextMarket ? { market: nextMarket } : {}),
     ...(nextBoard ? { board: nextBoard } : {}),
     ...(nextFans ? { fans: nextFans } : {}),
+    ...(nextNews ? { news: nextNews } : {}),
   };
 }
 
@@ -300,6 +328,7 @@ export function advanceCareer(
   market?: CareerMarket,
   board?: CareerBoard,
   fans?: CareerFans,
+  news?: CareerNews,
 ): CareerRoundResult {
   let next: {
     league: LeagueSeason;
@@ -309,6 +338,7 @@ export function advanceCareer(
     market?: MarketState;
     board?: BoardState;
     fans?: FansState;
+    news?: NewsState;
   } = {
     league,
     finances,
@@ -317,6 +347,7 @@ export function advanceCareer(
     ...(market ? { market: market.state } : {}),
     ...(board ? { board: board.state } : {}),
     ...(fans ? { fans: fans.state } : {}),
+    ...(news ? { news: news.state } : {}),
   };
   const total =
     "toEnd" in step
@@ -337,6 +368,7 @@ export function advanceCareer(
       market && next.market ? { state: next.market, careerSeed: market.careerSeed } : undefined,
       board && next.board ? { state: next.board, careerSeed: board.careerSeed } : undefined,
       fans && next.fans ? { state: next.fans } : undefined,
+      news && next.news ? { state: next.news, careerSeed: news.careerSeed } : undefined,
     );
     if (!completed.ok) return completed;
     next = {
@@ -347,6 +379,7 @@ export function advanceCareer(
       ...(completed.market ? { market: completed.market } : {}),
       ...(completed.board ? { board: completed.board } : {}),
       ...(completed.fans ? { fans: completed.fans } : {}),
+      ...(completed.news ? { news: completed.news } : {}),
     };
   }
   return { ok: true, ...next };

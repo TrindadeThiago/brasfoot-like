@@ -34,6 +34,7 @@ describe("virada financeira (US3, FR-011, FR-012, FR-025)", () => {
     expect(TURNOVER_STEP_IDS).toEqual([
       "record-history",
       "fans-new-season",
+      "news-new-season",
       "pay-prizes",
       "close-finance-season",
       "return-loans",

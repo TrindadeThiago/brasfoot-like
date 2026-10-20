@@ -1,0 +1,42 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.toolbar {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.card h2 {
+  margin: 0;
+  font-size: var(--text-md);
+  color: var(--color-muted);
+}
+
+.list {
+  margin: 0;
+  padding-left: var(--space-4);
+}
+
+.club {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.empty {
+  margin: 0;
+  color: var(--color-muted);
+}
