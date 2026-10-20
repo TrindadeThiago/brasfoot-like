@@ -13,7 +13,7 @@ import type {
 } from "@brasfoot-like/engine";
 
 /** Versão atual do formato do save (Princípio VI). */
-export const SAVE_FORMAT_VERSION = 10;
+export const SAVE_FORMAT_VERSION = 11;
 
 export const MANAGER_NAME_MAX = 40;
 
@@ -47,6 +47,8 @@ export interface SaveFile {
   fans: FansState;
   /** Manchetes, recordes e memória do mundo (v10). */
   news: NewsState;
+  /** Imagens de escudo do banco da carreira: caminho no pacote → data URI (v11). */
+  assets: Record<string, string>;
   /** Escalação do clube do jogador (v2). */
   lineup: Lineup;
   /** Trocas do último ajuste automático, até o jogador dispensar o aviso (v2). */

@@ -15,6 +15,8 @@ export interface SaveSummary {
   clubId: string;
   clubName: string;
   clubCrest: Crest;
+  /** Imagem do escudo (data URI) quando o mod tem uma (015). */
+  clubCrestImage?: string;
   /** Nível da divisão do clube do jogador (007). */
   divisionLevel: number;
   /** Nome da divisão do clube do jogador, vindo do mod. */
@@ -48,6 +50,9 @@ export function summarize(save: SaveFile): SaveSummary {
     clubId: save.clubId,
     clubName: club?.name ?? save.clubId,
     clubCrest: club?.crest ?? { shape: "classic", colors: ["#888888", "#FFFFFF"], initials: "?" },
+    ...(club?.crest.image && save.assets[club.crest.image]
+      ? { clubCrestImage: save.assets[club.crest.image] }
+      : {}),
     divisionLevel: userDivisionLevel(save),
     divisionName: divisionNameOf(save, userDivisionLevel(save)),
     seasonYear: seasonYearOf(save),
