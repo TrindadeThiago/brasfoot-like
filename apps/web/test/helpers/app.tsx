@@ -2,6 +2,7 @@ import { render } from "@testing-library/react";
 import { type ComponentType, useSyncExternalStore } from "react";
 import SavesPage from "../../src/app/carreiras/page";
 import CalendarPage from "../../src/app/jogo/calendario/page";
+import CareerPage from "../../src/app/jogo/carreira/page";
 import ScorersPage from "../../src/app/jogo/competicao/artilharia/page";
 import CompetitionPage from "../../src/app/jogo/competicao/page";
 import ResultsPage from "../../src/app/jogo/competicao/resultados/page";
@@ -35,6 +36,7 @@ const ROUTES: Record<string, ComponentType> = {
   "/jogo/historico": HistoryPage,
   "/jogo/financas": FinancesPage,
   "/jogo/mercado": MarketPage,
+  "/jogo/carreira": CareerPage,
 };
 
 function subscribe(listener: () => void) {

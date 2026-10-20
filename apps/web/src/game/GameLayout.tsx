@@ -1,9 +1,9 @@
 "use client";
 
 import { leagueRound, leagueTotalRounds } from "@brasfoot-like/engine";
-import type { SaveFile } from "@brasfoot-like/save";
-import { useRouter } from "next/navigation";
-import { type ReactNode, Suspense, useMemo, useState } from "react";
+import { isEmployed, type SaveFile } from "@brasfoot-like/save";
+import { usePathname, useRouter } from "next/navigation";
+import { type ReactNode, Suspense, useEffect, useMemo, useState } from "react";
 import { useT } from "../i18n";
 import { type RoundMode, readPreferences } from "../storage/preferences";
 import { AppHeader, GAME_SCREENS, screenHref } from "../ui/AppHeader";
@@ -16,19 +16,28 @@ import styles from "./GameLayout.module.css";
 import type { useGame } from "./GameProvider";
 import { useCareerFromQuery } from "./useCareerFromQuery";
 
+/** A rota é uma tela do clube (Elenco, Escalação, Finanças, Mercado). */
+function clubOnly(pathname: string): boolean {
+  return GAME_SCREENS.some(
+    (screen) => screen.club && (pathname === screen.path || pathname.startsWith(`${screen.path}/`)),
+  );
+}
+
 type Render = (save: SaveFile, game: ReturnType<typeof useGame>) => ReactNode;
 
 function Layout({ children }: { children: Render }) {
   const t = useT();
   const router = useRouter();
   const { save, game } = useCareerFromQuery();
+  const pathname = (usePathname() ?? "/jogo").replace(/\/+$/, "") || "/jogo";
   const [help, setHelp] = useState(false);
 
   const handlers = useMemo<Record<string, () => void>>(() => {
     if (!save) return {};
     const go = (index: number) => () => {
       const screen = GAME_SCREENS[index];
-      if (screen && confirmLeave()) router.push(screenHref(screen.path, save.id));
+      if (!screen || (screen.club && !isEmployed(save))) return;
+      if (confirmLeave()) router.push(screenHref(screen.path, save.id));
     };
     const play = async (mode: RoundMode) => {
       if (!confirmLeave()) return;
@@ -46,12 +55,19 @@ function Layout({ children }: { children: Render }) {
       "6": go(5),
       h: go(6),
       m: go(7),
+      c: go(8),
       s: () => void play(readPreferences().roundMode ?? "live"),
       d: () => void play("direct"),
       "?": () => setHelp((open) => !open),
     };
   }, [save, router, game]);
   useShortcuts(handlers);
+
+  // Desempregado (012): as telas do clube levam para a Início.
+  const blocked = save !== undefined && !isEmployed(save) && clubOnly(pathname);
+  useEffect(() => {
+    if (blocked && save) router.replace(screenHref("/jogo", save.id));
+  }, [blocked, save, router]);
 
   if (game.state.status === "error" && game.state.error) {
     return (
@@ -61,6 +77,7 @@ function Layout({ children }: { children: Render }) {
     );
   }
   if (!save) return <main className={styles.message}>{t("common.loading")}</main>;
+  if (blocked) return <main className={styles.message}>{t("common.loading")}</main>;
   return (
     <>
       <AppHeader save={save} onHelp={() => setHelp(true)} />

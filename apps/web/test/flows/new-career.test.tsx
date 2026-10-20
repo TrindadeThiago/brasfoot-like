@@ -110,4 +110,23 @@ describe("nova carreira (US1)", () => {
     await user.keyboard("4");
     await screen.findByRole("table", { name: t("competition.caption", { division: "Série B" }) });
   });
+
+  it("opção sem demissão: desmarcada por padrão e gravada na carreira (012 US7)", async () => {
+    const user = userEvent.setup();
+    const store = freshStore();
+    renderApp("/nova-carreira", store);
+    const option = screen.getByRole("checkbox", { name: t("newCareer.noFiring") });
+    expect((option as HTMLInputElement).checked).toBe(false);
+    expect(screen.getByText(t("newCareer.noFiringHelp"))).toBeDefined();
+    await user.type(screen.getByLabelText(t("newCareer.managerName")), "Ana Souza");
+    await user.click(option);
+    await user.click(clubRows()[0] as HTMLElement);
+    await user.click(screen.getByRole("button", { name: t("newCareer.confirm") }));
+    await waitFor(() => expect(memoryRouter.pathname()).toBe("/jogo"));
+    const [summary] = await store.listSummaries();
+    const loaded = await store.load(summary?.id ?? "");
+    if (loaded.status !== "ok") throw new Error(loaded.status);
+    expect(loaded.save.board.manager.noFiring).toBe(true);
+    expect(await screen.findByText(t("board.noFiring"))).toBeDefined();
+  });
 });

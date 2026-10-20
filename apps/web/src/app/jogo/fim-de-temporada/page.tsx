@@ -11,6 +11,7 @@ import { seasonEndSummary } from "../../../game/selectors";
 import { useT } from "../../../i18n";
 import { screenHref } from "../../../ui/AppHeader";
 import { Button } from "../../../ui/Button";
+import { Evaluation } from "../../../ui/board/Evaluation";
 import { SeasonSummary } from "../../../ui/SeasonSummary";
 import { useShortcuts } from "../../../ui/useShortcuts";
 import styles from "./page.module.css";
@@ -41,6 +42,7 @@ function SeasonEnd({ save, game }: { save: SaveFile; game: Game }) {
   return (
     <div className={styles.layout}>
       <h1>{t("seasonEnd.title", { year: summary.year })}</h1>
+      <Evaluation save={save} />
       <SeasonSummary save={save} summary={summary} />
       <div className={styles.actions}>
         <Button variant="primary" onClick={() => void next()} disabled={state === "busy"}>

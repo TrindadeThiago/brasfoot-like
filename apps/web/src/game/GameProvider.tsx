@@ -26,17 +26,22 @@ import {
   validateLineup,
 } from "@brasfoot-like/engine";
 import {
+  acceptManagerOffer,
   advanceCareerSeason,
   answerManagerClubCounter,
   answerManagerIncomingOffer,
   answerManagerPlayerDemand,
   cancelManagerNegotiation,
   createSave,
+  declineManagerOffer,
+  dismissBoardNotice as dismissSavedBoardNotice,
   dismissSquadNotice as dismissSavedSquadNotice,
   dismissWindowReport as dismissSavedWindowReport,
   type FinanceSaveResult,
   type IncomingSaveResult,
+  isEmployed,
   type MarketSaveResult,
+  managedClubId,
   proposeManagerContract,
   repayManagerLoan,
   type SaveError,
@@ -49,6 +54,7 @@ import {
   userSeason,
   withAdjustedLineup,
   withManagerFormation,
+  withRoundResult,
 } from "@brasfoot-like/save";
 import {
   createContext,
@@ -141,6 +147,8 @@ export interface CreateCareerInput {
   managerName: string;
   clubId: string;
   seed?: string;
+  /** Opção "sem demissão" (012). */
+  noFiring?: boolean;
 }
 
 export type CreateCareerResult = { ok: true; id: string } | { ok: false; error: SaveError };
@@ -198,6 +206,10 @@ interface GameContextValue {
   answerPlayerDemand(negotiationId: string, accept: boolean): MarketActionResult;
   cancelNegotiation(negotiationId: string): void;
   answerIncomingOffer(offerId: string, answer: IncomingAnswer): IncomingActionResult;
+  /** Carreira do técnico (012): aceitar/recusar proposta de emprego e dispensar o aviso. */
+  acceptJobOffer(offerId: string): boolean;
+  declineJobOffer(offerId: string): void;
+  dismissBoardNotice(): void;
 }
 
 export type IncomingActionResult =
@@ -279,6 +291,7 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
         managerName: input.managerName,
         clubId: input.clubId,
         seed,
+        ...(input.noFiring ? { noFiring: true } : {}),
         defaultBank: defaultBankInput(),
       });
       if (!result.ok) return result;
@@ -359,22 +372,13 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
         save.finances,
         save.bank,
         live,
-        save.clubId,
+        managedClubId(save),
         { state: save.renewal, careerSeed: save.seed },
         { state: save.market, careerSeed: save.seed },
+        { state: save.board, careerSeed: save.seed },
       );
       if (!result.ok) return;
-      const next = touch(
-        withAdjustedLineup({
-          ...save,
-          league: result.league,
-          finances: result.finances,
-          bank: result.world,
-          renewal: result.renewal ?? save.renewal,
-          market: result.market ?? save.market,
-        }),
-        new Date().toISOString(),
-      );
+      const next = touch(withRoundResult(save, result), new Date().toISOString());
       latestSave.current = next;
       dispatch({ type: "live" });
       dispatch({
@@ -395,6 +399,18 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       const save = latestSave.current;
       if (!save || isLeagueSeasonOver(save.league)) return "over";
       writePreferences({ roundMode: mode });
+      if (!isEmployed(save)) {
+        // Desempregado (012): a rodada roda só com a IA.
+        dispatch({ type: "simulateIssues" });
+        const started = startLeagueRound(save.league, save.bank);
+        if (!started.ok) return "blocked";
+        if (mode === "live") {
+          dispatch({ type: "live", value: started.round });
+          return "live";
+        }
+        await commitRound(finishRound(started.round));
+        return "done";
+      }
       const { squad, unavailable } = lineupContext(save);
       const validation = validateLineup(save.lineup, squad, unavailable);
       if (!validation.valid) {
@@ -632,6 +648,43 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
     [commitLineup],
   );
 
+  /** Aplica uma ação da carreira do técnico ao save atual e salva. */
+  const commitBoard = useCallback(
+    (update: (save: SaveFile) => SaveFile) => {
+      const save = latestSave.current;
+      if (!save) return;
+      const changed = update(save);
+      if (changed === save) return;
+      const next = touch(changed, new Date().toISOString());
+      latestSave.current = next;
+      dispatch({ type: "update", save: next });
+      void persist(next);
+    },
+    [persist],
+  );
+
+  const acceptJobOffer = useCallback(
+    (offerId: string): boolean => {
+      const save = latestSave.current;
+      if (!save) return false;
+      const result = acceptManagerOffer(save, offerId);
+      if (!result.ok) return false;
+      commitBoard(() => result.save);
+      return true;
+    },
+    [commitBoard],
+  );
+
+  const declineJobOffer = useCallback(
+    (offerId: string) => commitBoard((save) => declineManagerOffer(save, offerId)),
+    [commitBoard],
+  );
+
+  const dismissBoardNotice = useCallback(
+    () => commitBoard((save) => dismissSavedBoardNotice(save)),
+    [commitBoard],
+  );
+
   useEffect(
     () =>
       listenSaved((message) => {
@@ -675,6 +728,9 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       answerPlayerDemand,
       cancelNegotiation,
       answerIncomingOffer,
+      acceptJobOffer,
+      declineJobOffer,
+      dismissBoardNotice,
     }),
     [
       state,
@@ -707,6 +763,9 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       answerPlayerDemand,
       cancelNegotiation,
       answerIncomingOffer,
+      acceptJobOffer,
+      declineJobOffer,
+      dismissBoardNotice,
     ],
   );
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
