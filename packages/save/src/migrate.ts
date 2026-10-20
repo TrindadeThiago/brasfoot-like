@@ -3,13 +3,16 @@ import {
   type CompletedBank,
   clubUnavailability,
   createBoard,
+  createFans,
   createFinances,
   createSeason,
+  DEFAULT_BANK_SEED,
   economyRules,
   emptyMarket,
   ensureContracts,
   type FinanceState,
   FORMATION_IDS,
+  generateRivalries,
   initialRenewal,
   isSeasonOver,
   type LeagueSeason,
@@ -167,6 +170,22 @@ const addBoard: Migration = {
   },
 };
 
+/**
+ * v8 → v9: torcidas (013 R11), todas neutras. Carreiras no banco padrão ganham as rivalidades
+ * dele, geradas pela mesma função e seed do `rivalries.json` versionado; outros bancos ficam sem.
+ */
+const addFans: Migration = {
+  from: 8,
+  migrate(raw) {
+    const save = raw as { bank: CompletedBank; league: LeagueSeason };
+    const bank =
+      save.bank.manifest.id === "default" && save.bank.rivalries === undefined
+        ? { ...save.bank, rivalries: generateRivalries(save.bank.clubs, DEFAULT_BANK_SEED) }
+        : save.bank;
+    return { ...(raw as object), formatVersion: 9, bank, fans: createFans(bank, save.league) };
+  },
+};
+
 /** Migrações reais do formato, em ordem. */
 export const MIGRATIONS: readonly Migration[] = [
   addLineup,
@@ -176,6 +195,7 @@ export const MIGRATIONS: readonly Migration[] = [
   addMarket,
   addReports,
   addBoard,
+  addFans,
 ];
 
 /** Problemas que tornam a escalação gravada ilegível (os demais o jogo corrige ou avisa). */
@@ -296,6 +316,12 @@ const envelopeSchema = z.object({
       nextSeq: z.int().min(1),
     })
     .loose(),
+  fans: z.object({
+    clubs: z.record(
+      z.string(),
+      z.object({ mood: z.int().min(0).max(100), recent: z.array(z.unknown()) }).loose(),
+    ),
+  }),
   lineupNotice: z.array(z.object({ kind: z.string() }).loose()).optional(),
 });
 
@@ -388,6 +414,14 @@ function boardProblem(save: SaveFile): string | undefined {
   return undefined;
 }
 
+/** Toda equipe da liga tem torcida (013 data-model.md). */
+function fansProblem(save: SaveFile): string | undefined {
+  const missing = save.league.divisions
+    .flatMap((season) => season.clubIds)
+    .find((clubId) => !save.fans.clubs[clubId]);
+  return missing ? `clube sem torcida: ${missing}` : undefined;
+}
+
 function versionOf(raw: unknown): number | undefined {
   if (raw === null || typeof raw !== "object") return undefined;
   const value = (raw as { formatVersion?: unknown }).formatVersion;
@@ -432,7 +466,8 @@ export function migrateSave(
     financeProblem(save) ??
     renewalProblem(save) ??
     marketProblem(save) ??
-    boardProblem(save);
+    boardProblem(save) ??
+    fansProblem(save);
   if (incoherence) return { status: "corrupt", reason: incoherence };
   const season = save.league.divisions.find((entry) => entry.clubIds.includes(save.clubId));
   if (!season) return { status: "corrupt", reason: "clube fora das divisões" };

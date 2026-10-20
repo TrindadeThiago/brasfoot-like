@@ -78,6 +78,7 @@ export function withRoundResult(
     renewal: result.renewal ?? save.renewal,
     market: result.market ?? save.market,
     board: result.board ?? save.board,
+    fans: result.fans ?? save.fans,
   };
   if (save.board.manager.clubId !== null && next.board.manager.clubId === null) {
     const { lineupNotice: _notice, ...rest } = next;
@@ -101,6 +102,7 @@ export function advanceCareerSeason(
     renewal: save.renewal,
     market: save.market,
     board: save.board,
+    fans: save.fans,
   });
   if (!turned.ok) return turned;
   const next = withAdjustedLineup(
@@ -113,6 +115,7 @@ export function advanceCareerSeason(
       renewal: turned.renewal ?? save.renewal,
       market: turned.market ?? save.market,
       board: turned.board ?? save.board,
+      fans: turned.fans ?? save.fans,
       savedAt: now,
     }),
   );
