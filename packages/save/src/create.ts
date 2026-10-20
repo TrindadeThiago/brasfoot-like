@@ -5,6 +5,7 @@ import {
   createFans,
   createFinances,
   createLeagueSeason,
+  createNews,
   emptyMarket,
   ensureContracts,
   initialRenewal,
@@ -89,6 +90,7 @@ export function createSave(input: CreateSaveInput): CreateSaveResult {
       renewal: initialRenewal(bank),
       market: emptyMarket(),
       fans: createFans(bank, league.league),
+      news: createNews(),
       board: createBoard(bank, league.league, finances, input.seed, {
         clubId: input.clubId,
         noFiring: input.noFiring ?? false,

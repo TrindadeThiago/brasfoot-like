@@ -10,7 +10,7 @@ describe("migração v7 → v8 (012 R12, FR-038, SC-009)", () => {
     if (result.status !== "ok") throw new Error(JSON.stringify(result));
     expect(result.migratedFrom).toBe(7);
     const { board } = result.save;
-    expect(result.save.formatVersion).toBe(9);
+    expect(result.save.formatVersion).toBe(10);
     expect(board.manager).toMatchObject({
       clubId: v7.clubId,
       noFiring: false,
@@ -22,7 +22,14 @@ describe("migração v7 → v8 (012 R12, FR-038, SC-009)", () => {
     const others = Object.values(board.clubs).filter((club) => club.clubId !== v7.clubId);
     expect(others.every((club) => club.coachId !== null)).toBe(true);
     expect(board.history.stints).toEqual([{ clubId: v7.clubId, from: { season: 1, round: 10 } }]);
-    const { formatVersion: _v, board: _board, fans: _fans, bank: _bank, ...rest } = result.save;
+    const {
+      formatVersion: _v,
+      board: _board,
+      fans: _fans,
+      news: _news,
+      bank: _bank,
+      ...rest
+    } = result.save;
     const { formatVersion: _v7, bank: _bank7, ...restV7 } = v7;
     expect(rest).toEqual(restV7);
   });
