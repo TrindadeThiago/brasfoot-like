@@ -40,6 +40,7 @@ export default function NewCareerPage() {
   );
   const [managerName, setManagerName] = useState("");
   const [seed, setSeed] = useState("");
+  const [noFiring, setNoFiring] = useState(false);
   const [clubId, setClubId] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();
   const [creating, setCreating] = useState(false);
@@ -106,7 +107,7 @@ export default function NewCareerPage() {
       return;
     }
     setCreating(true);
-    const result = await createCareer({ managerName: trimmed, clubId, seed });
+    const result = await createCareer({ managerName: trimmed, clubId, seed, noFiring });
     setCreating(false);
     if (!result.ok) {
       setError(t(result.error.code, result.error.params));
@@ -128,6 +129,15 @@ export default function NewCareerPage() {
             onChange={(event) => setManagerName(event.target.value)}
           />
         </label>
+        <label className={styles.check}>
+          <input
+            type="checkbox"
+            checked={noFiring}
+            onChange={(event) => setNoFiring(event.target.checked)}
+          />
+          <span>{t("newCareer.noFiring")}</span>
+        </label>
+        <small className={styles.help}>{t("newCareer.noFiringHelp")}</small>
         <details className={styles.advanced}>
           <summary>{t("newCareer.advanced")}</summary>
           <label className={styles.field}>

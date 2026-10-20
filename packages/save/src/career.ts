@@ -1,7 +1,9 @@
 import {
   adjustLineup,
+  type CareerRoundResult,
   clubDivision,
   clubUnavailability,
+  managerClubOf,
   type Season,
   type SeasonError,
   seasonDate,
@@ -27,6 +29,8 @@ export function currentDate(save: SaveFile): string {
 
 /** Esquema do clube do jogador na temporada da sua divisão = o da escalação. */
 export function withManagerFormation(save: SaveFile): SaveFile {
+  // Desempregado (012): o clube em foco é da IA e escolhe o próprio esquema.
+  if (save.board.manager.clubId === null) return save;
   const level = userDivisionLevel(save);
   return {
     ...save,
@@ -46,6 +50,7 @@ export function withManagerFormation(save: SaveFile): SaveFile {
 
 /** Ajuste automático da escalação; as trocas se somam ao aviso ainda não dispensado. */
 export function withAdjustedLineup(save: SaveFile): SaveFile {
+  if (save.board.manager.clubId === null) return save;
   const squad = save.bank.players.filter((player) => player.clubId === save.clubId);
   const inSquad = new Set(squad.map((player) => player.id));
   const left = [...Object.values(save.lineup.starters), ...save.lineup.bench]
@@ -55,6 +60,30 @@ export function withAdjustedLineup(save: SaveFile): SaveFile {
   const { lineup, changes } = adjustLineup(save.lineup, squad, unavailable);
   if (changes.length === 0) return save;
   return { ...save, lineup, lineupNotice: [...(save.lineupNotice ?? []), ...changes] };
+}
+
+/**
+ * Grava no save o resultado de uma rodada da carreira (ao vivo ou direto). Se o técnico perdeu o
+ * clube na rodada (012), o aviso de escalação some; senão a escalação é ajustada.
+ */
+export function withRoundResult(
+  save: SaveFile,
+  result: Extract<CareerRoundResult, { ok: true }>,
+): SaveFile {
+  const next: SaveFile = {
+    ...save,
+    league: result.league,
+    finances: result.finances,
+    bank: result.world,
+    renewal: result.renewal ?? save.renewal,
+    market: result.market ?? save.market,
+    board: result.board ?? save.board,
+  };
+  if (save.board.manager.clubId !== null && next.board.manager.clubId === null) {
+    const { lineupNotice: _notice, ...rest } = next;
+    return rest;
+  }
+  return withAdjustedLineup(next);
 }
 
 /**
@@ -68,9 +97,10 @@ export function advanceCareerSeason(
   const turned = seasonTurnover(save.league, save.bank, save.history, {
     careerSeed: save.seed,
     finances: save.finances,
-    managerClubId: save.clubId,
+    managerClubId: managerClubOf(save.board),
     renewal: save.renewal,
     market: save.market,
+    board: save.board,
   });
   if (!turned.ok) return turned;
   const next = withAdjustedLineup(
@@ -82,6 +112,7 @@ export function advanceCareerSeason(
       bank: turned.world,
       renewal: turned.renewal ?? save.renewal,
       market: turned.market ?? save.market,
+      board: turned.board ?? save.board,
       savedAt: now,
     }),
   );

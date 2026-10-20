@@ -46,3 +46,14 @@
 .error {
   color: var(--color-danger);
 }
+
+.check {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.help {
+  color: var(--color-muted);
+  margin-top: calc(-1 * var(--space-2));
+}

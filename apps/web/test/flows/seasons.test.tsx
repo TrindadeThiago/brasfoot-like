@@ -1,6 +1,7 @@
 import {
   advanceLeague,
   ageOn,
+  createBoard,
   divisionSeason,
   type LeagueSeason,
   nextComposition,
@@ -34,7 +35,12 @@ async function endOfSeason(clubId?: string) {
   return storedCareer(1, (save) => {
     const club = clubId ?? save.clubId;
     const league = structuredClone(finishedLeague());
-    const next: SaveFile = { ...save, league, clubId: club };
+    // O técnico passa a treinar o clube escolhido (diretoria coerente com o clube em foco).
+    const board = createBoard(save.bank, league, save.finances, save.seed, {
+      clubId: club,
+      noFiring: false,
+    });
+    const next: SaveFile = { ...save, league, clubId: club, board };
     return { ...next, lineup: initialLineup(save.bank, userSeason(next), club) };
   });
 }

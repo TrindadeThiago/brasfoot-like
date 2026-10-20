@@ -7,6 +7,7 @@ import {
   type MarketContext,
   type MarketError,
   type MarketUpdate,
+  managerClubOf,
   marketAfterRound,
   type NegotiationStep,
   proposeContract,
@@ -27,7 +28,7 @@ export function marketContextOf(save: SaveFile): MarketContext {
     league: save.league,
     finances: save.finances,
     market: save.market,
-    managerClubId: save.clubId,
+    managerClubId: managerClubOf(save.board),
     careerSeed: save.seed,
   };
 }

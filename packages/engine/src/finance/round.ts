@@ -1,9 +1,13 @@
+import { managerClubOf } from "../board/create";
+import { boardAfterRound } from "../board/round";
+import type { BoardState } from "../board/types";
 import { seasonDate } from "../calendar/date";
 import { completeLeagueRound, startLeagueRound } from "../career/league-round";
 import type { LeagueSeason } from "../career/types";
 import { closedWindow, closeWindowReport } from "../market/ai/report";
 import { aiMarketRound } from "../market/ai/round";
 import { marketAfterRound } from "../market/incoming";
+import { releaseManagerClub } from "../market/release";
 import type { MarketState } from "../market/types";
 import type { Lineup } from "../match/types";
 import type { CompletedBank } from "../model/types";
@@ -33,6 +37,12 @@ export interface CareerMarket {
   careerSeed: string;
 }
 
+/** Diretoria da carreira passada à rodada (012): confiança, demissões, vagas e propostas. */
+export interface CareerBoard {
+  state: BoardState;
+  careerSeed: string;
+}
+
 export type CareerRoundResult =
   | {
       ok: true;
@@ -42,6 +52,7 @@ export type CareerRoundResult =
       world: CompletedBank;
       renewal?: RenewalState;
       market?: MarketState;
+      board?: BoardState;
     }
   | { ok: false; error: SeasonError };
 
@@ -149,6 +160,7 @@ export function completeCareerRound(
   managerClubId: string,
   renewal?: CareerRenewal,
   market?: CareerMarket,
+  board?: CareerBoard,
 ): CareerRoundResult {
   const completed = completeLeagueRound(league, world, round);
   if (!completed.ok) return completed;
@@ -200,6 +212,34 @@ export function completeCareerRound(
       nextMarket = closeWindowReport({ ...context, world: nextWorld, market: nextMarket }, closed);
     }
   }
+  let nextBoard = board?.state;
+  if (board) {
+    // Diretoria (012 R2): depois das finanças e do mercado da rodada.
+    const update = boardAfterRound(
+      {
+        world: nextWorld,
+        league: completed.league,
+        finances: nextFinances,
+        board: board.state,
+        careerSeed: board.careerSeed,
+      },
+      round.round,
+    );
+    nextBoard = update.board;
+    if (update.managerReleased && nextMarket) {
+      nextMarket = releaseManagerClub(
+        {
+          world: nextWorld,
+          league: completed.league,
+          finances: nextFinances,
+          market: nextMarket,
+          managerClubId: update.managerReleased,
+          careerSeed: board.careerSeed,
+        },
+        update.managerReleased,
+      );
+    }
+  }
   return {
     ok: true,
     league: completed.league,
@@ -207,6 +247,7 @@ export function completeCareerRound(
     world: nextWorld,
     ...(nextRenewal ? { renewal: nextRenewal } : {}),
     ...(nextMarket ? { market: nextMarket } : {}),
+    ...(nextBoard ? { board: nextBoard } : {}),
   };
 }
 
@@ -220,6 +261,7 @@ export function advanceCareer(
   lineups?: Record<string, Lineup>,
   renewal?: CareerRenewal,
   market?: CareerMarket,
+  board?: CareerBoard,
 ): CareerRoundResult {
   let next: {
     league: LeagueSeason;
@@ -227,12 +269,14 @@ export function advanceCareer(
     world: CompletedBank;
     renewal?: RenewalState;
     market?: MarketState;
+    board?: BoardState;
   } = {
     league,
     finances,
     world,
     ...(renewal ? { renewal: renewal.state } : {}),
     ...(market ? { market: market.state } : {}),
+    ...(board ? { board: board.state } : {}),
   };
   const total =
     "toEnd" in step
@@ -247,9 +291,11 @@ export function advanceCareer(
       next.finances,
       next.world,
       finishRound(started.round),
-      managerClubId,
+      // Com diretoria, o clube do técnico pode mudar no meio do avanço (demissão).
+      next.board ? managerClubOf(next.board) : managerClubId,
       renewal && next.renewal ? { state: next.renewal, careerSeed: renewal.careerSeed } : undefined,
       market && next.market ? { state: next.market, careerSeed: market.careerSeed } : undefined,
+      board && next.board ? { state: next.board, careerSeed: board.careerSeed } : undefined,
     );
     if (!completed.ok) return completed;
     next = {
@@ -258,6 +304,7 @@ export function advanceCareer(
       world: completed.world,
       ...(completed.renewal ? { renewal: completed.renewal } : {}),
       ...(completed.market ? { market: completed.market } : {}),
+      ...(completed.board ? { board: completed.board } : {}),
     };
   }
   return { ok: true, ...next };

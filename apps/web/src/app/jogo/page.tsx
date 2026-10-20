@@ -1,7 +1,19 @@
 "use client";
 
-import { isLeagueSeasonOver, leagueRound, leagueTotalRounds } from "@brasfoot-like/engine";
-import { divisionNameOf, userDivisionLevel, userSeason } from "@brasfoot-like/save";
+import {
+  isLeagueSeasonOver,
+  leagueRound,
+  leagueTotalRounds,
+  pendingOffers,
+} from "@brasfoot-like/engine";
+import {
+  divisionNameOf,
+  isEmployed,
+  managedClubId,
+  type SaveFile,
+  userDivisionLevel,
+  userSeason,
+} from "@brasfoot-like/save";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { GameLayout } from "../../game/GameLayout";
@@ -9,6 +21,9 @@ import { clubPosition, lastResults, nextFixture } from "../../game/selectors";
 import { formatMoney, useT } from "../../i18n";
 import { screenHref } from "../../ui/AppHeader";
 import { Button } from "../../ui/Button";
+import { BoardCard } from "../../ui/board/BoardCard";
+import { BoardNotice } from "../../ui/board/BoardNotice";
+import { JobOffers } from "../../ui/board/JobOffers";
 import { Crest } from "../../ui/Crest";
 import { FormChips } from "../../ui/FormChips";
 import { LineupNotice } from "../../ui/LineupNotice";
@@ -16,6 +31,72 @@ import { MarketNotice, marketNoticeCounts } from "../../ui/MarketNotice";
 import { RoundResults } from "../../ui/RoundResults";
 import { SquadChangeNotice } from "../../ui/SquadChangeNotice";
 import styles from "./page.module.css";
+
+type Game = Parameters<Parameters<typeof GameLayout>[0]["children"]>[1];
+
+/** Início do técnico desempregado (012 US4): reputação, propostas e as rodadas do mundo. */
+function Unemployed({
+  save,
+  game,
+  play,
+}: {
+  save: SaveFile;
+  game: Game;
+  play: (mode: "live" | "direct") => Promise<void>;
+}) {
+  const t = useT();
+  const over = isLeagueSeasonOver(save.league);
+  const lastRound = game.state.lastRound;
+  return (
+    <div className={styles.grid}>
+      {save.board.notice ? (
+        <div className={styles.wide}>
+          <BoardNotice save={save} onDismiss={game.dismissBoardNotice} />
+        </div>
+      ) : null}
+      <section aria-label={t("career.unemployed")} className={`${styles.card} ${styles.wide}`}>
+        <h2>{t("career.unemployed")}</h2>
+        <p>{t("career.unemployedDetail")}</p>
+        <p>{t("career.reputation", { value: save.board.manager.reputation })}</p>
+        <h2>{t("career.offers.title")}</h2>
+        <JobOffers
+          save={save}
+          disabled={game.state.live !== undefined}
+          onAccept={(offerId) => void game.acceptJobOffer(offerId)}
+          onDecline={(offerId) => game.declineJobOffer(offerId)}
+        />
+        <div className={styles.actions}>
+          <Button variant="primary" disabled={over} onClick={() => void play("live")}>
+            {t("home.playLive")}
+          </Button>
+          <Button disabled={over} onClick={() => void play("direct")}>
+            {t("home.simulate")}
+          </Button>
+        </div>
+        {over ? (
+          <div className={styles.actions}>
+            <Link href={screenHref("/jogo/fim-de-temporada", save.id)}>
+              {t("home.seasonEndLink")}
+            </Link>
+            <Button variant="primary" onClick={() => void game.advanceToNextSeason()}>
+              {t("home.nextSeason")}
+            </Button>
+          </div>
+        ) : null}
+      </section>
+      {lastRound && lastRound.length > 0 ? (
+        <div className={styles.wide}>
+          <RoundResults
+            round={lastRound[0]?.round ?? 0}
+            records={lastRound}
+            clubs={save.bank.clubs}
+            clubId={managedClubId(save)}
+          />
+        </div>
+      ) : null}
+    </div>
+  );
+}
 
 export default function HomePage() {
   const t = useT();
@@ -38,8 +119,23 @@ export default function HomePage() {
             router.push(screenHref("/jogo/fim-de-temporada", save.id));
           }
         };
+        if (!isEmployed(save)) return <Unemployed save={save} game={game} play={play} />;
+        const offers = pendingOffers(save.board).length;
         return (
           <div className={styles.grid}>
+            {save.board.notice ? (
+              <div className={styles.wide}>
+                <BoardNotice save={save} onDismiss={game.dismissBoardNotice} />
+              </div>
+            ) : null}
+            {offers > 0 ? (
+              <p role="status" className={`${styles.wide} ${styles.offers}`}>
+                {t("career.offers.notice", { count: offers })}{" "}
+                <Link href={`${screenHref("/jogo/carreira", save.id)}&aba=offers`}>
+                  {t("career.offers.open")}
+                </Link>
+              </p>
+            ) : null}
             {save.finances.clubs[save.clubId]?.inCrisis ? (
               <p role="alert" className={`${styles.wide} ${styles.crisis}`}>
                 {t("home.crisis", {
@@ -143,6 +239,9 @@ export default function HomePage() {
                 </>
               )}
             </section>
+            <div className={styles.wide}>
+              <BoardCard save={save} />
+            </div>
             {lastRound && lastRound.length > 0 ? (
               <div className={styles.wide}>
                 <RoundResults

@@ -50,6 +50,7 @@ describe("virada financeira (US3, FR-011, FR-012, FR-025)", () => {
       "pay-sponsorship",
       "ai-finance-review",
       "reset-market",
+      "board-new-season",
     ]);
   });
 

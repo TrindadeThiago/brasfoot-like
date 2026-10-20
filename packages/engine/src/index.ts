@@ -1,5 +1,61 @@
 // API pública do motor (contracts/engine-api.md). Nada fora deste arquivo é API pública.
 
+export { coachOf, coachReputation } from "./board/coaches";
+export { confidenceChange, patiencePct } from "./board/confidence";
+export type { CreateBoardManager } from "./board/create";
+export { createBoard, managerClubOf } from "./board/create";
+export { evaluateSeason, inGrace, shouldFireMidSeason } from "./board/evaluation";
+export {
+  currentPosition,
+  expectationOf,
+  financeMet,
+  goalProgress,
+  goalTiersFor,
+  playedRounds,
+  seasonGoals,
+} from "./board/goals";
+export type { AcceptResult } from "./board/offers";
+export {
+  acceptJobOffer,
+  compatibleClub,
+  declineJobOffer,
+  pendingOffers,
+} from "./board/offers";
+export type { ReputationInput } from "./board/reputation";
+export { reputationDelta } from "./board/reputation";
+export { boardAfterRound } from "./board/round";
+export type { BoardRules } from "./board/rules";
+export { boardRules, DEFAULT_BOARD } from "./board/rules";
+export { boardNewSeasonStep } from "./board/turnover";
+export type {
+  Achievement,
+  BoardContext,
+  BoardDecision,
+  BoardError,
+  BoardErrorCode,
+  BoardNotice,
+  BoardState,
+  BoardUpdate,
+  ClubBoard,
+  Coach,
+  ConfidenceChange,
+  ConfidenceFactor,
+  FinanceGoalKind,
+  GoalProgress,
+  GoalTierId,
+  JobOffer,
+  JobOfferStatus,
+  ManagerHistory,
+  ManagerProfile,
+  ManagerSeasonRecord,
+  RoundRef,
+  SeasonEvaluation,
+  SeasonGoals,
+  Stint,
+  StintExit,
+  Vacancy,
+} from "./board/types";
+export { CONFIDENCE_FACTORS, FINANCE_GOAL_KINDS, GOAL_TIERS } from "./board/types";
 export { ageOn, seasonDate } from "./calendar/date";
 export type { CompositionChange } from "./career/composition";
 export { nextComposition } from "./career/composition";
@@ -55,7 +111,12 @@ export type { FinanceError, FinanceErrorCode } from "./finance/errors";
 export { FINANCE_ERROR_CODES, FINANCE_ERROR_PARAMS, financeError } from "./finance/errors";
 export type { GateEstimate } from "./finance/gate";
 export { gateFor, nextHomeGateEstimate, powQuarters } from "./finance/gate";
-export type { CareerMarket, CareerRenewal, CareerRoundResult } from "./finance/round";
+export type {
+  CareerBoard,
+  CareerMarket,
+  CareerRenewal,
+  CareerRoundResult,
+} from "./finance/round";
 export { advanceCareer, applyRoundFinances, completeCareerRound } from "./finance/round";
 export { DEFAULT_ECONOMY, divisionEconomy, economyRules } from "./finance/rules";
 export { seasonFinanceSummary } from "./finance/summary";
@@ -114,6 +175,7 @@ export {
   startNegotiation,
 } from "./market/negotiation";
 export { attraction, exigency, respondToContract, wageDemand } from "./market/player-response";
+export { releaseManagerClub } from "./market/release";
 export { DEFAULT_MARKET, marketRules } from "./market/rules";
 export { comparePlayers, searchPlayers } from "./market/search";
 export { canAddPlayer, canRemovePlayer, squadSize, strengthRank } from "./market/squad";

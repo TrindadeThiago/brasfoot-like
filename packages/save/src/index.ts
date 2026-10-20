@@ -1,3 +1,12 @@
+export type { BoardSaveResult } from "./board";
+export {
+  acceptManagerOffer,
+  boardContextOf,
+  declineManagerOffer,
+  dismissBoardNotice,
+  isEmployed,
+  managedClubId,
+} from "./board";
 export {
   advanceCareerSeason,
   currentDate,
@@ -6,6 +15,7 @@ export {
   userSeason,
   withAdjustedLineup,
   withManagerFormation,
+  withRoundResult,
 } from "./career";
 export type { CreateSaveInput, CreateSaveResult } from "./create";
 export { createSave } from "./create";

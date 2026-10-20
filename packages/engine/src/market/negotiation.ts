@@ -354,11 +354,15 @@ export function answerPlayerDemand(
   });
 }
 
-/** Cancela uma negociação aberta sem custo. */
-export function cancelNegotiation(context: MarketContext, negotiationId: string): MarketUpdate {
+/** Cancela uma negociação aberta sem custo (`reason` explica cancelamentos automáticos). */
+export function cancelNegotiation(
+  context: MarketContext,
+  negotiationId: string,
+  reason?: string,
+): MarketUpdate {
   const negotiation = findNegotiation(context, negotiationId);
   if (!negotiation) return unchanged(context);
-  return closeNegotiation(context, negotiation, "rejected_by_user");
+  return closeNegotiation(context, negotiation, "rejected_by_user", reason);
 }
 
 /** Fecha o acordo e aplica os efeitos; revalida janela, caixa e elenco (R9). */

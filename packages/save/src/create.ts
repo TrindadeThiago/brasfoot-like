@@ -1,6 +1,7 @@
 import {
   clubDivision,
   completeHiddenAttributes,
+  createBoard,
   createFinances,
   createLeagueSeason,
   emptyMarket,
@@ -18,6 +19,8 @@ export interface CreateSaveInput {
   managerName: string;
   clubId: string;
   seed: string;
+  /** Opção "sem demissão" (012 FR-035); padrão desativada. */
+  noFiring?: boolean;
   /** Banco padrão já unido (`joinBankFiles`), ainda não validado. */
   defaultBank: unknown;
 }
@@ -67,6 +70,7 @@ export function createSave(input: CreateSaveInput): CreateSaveResult {
   if (!league.ok || !season) {
     return { ok: false, error: { code: "save.invalid_bank", params: { issues: 1 } } };
   }
+  const finances = createFinances(bank, league.league);
   return {
     ok: true,
     save: {
@@ -80,9 +84,13 @@ export function createSave(input: CreateSaveInput): CreateSaveResult {
       bank,
       league: league.league,
       history: [],
-      finances: createFinances(bank, league.league),
+      finances,
       renewal: initialRenewal(bank),
       market: emptyMarket(),
+      board: createBoard(bank, league.league, finances, input.seed, {
+        clubId: input.clubId,
+        noFiring: input.noFiring ?? false,
+      }),
       lineup: initialLineup(bank, season, input.clubId),
     },
   };
