@@ -29,6 +29,7 @@ describe("Elenco (FR-017)", () => {
       t("col.status"),
       t("col.inLineup"),
       t("col.evolution"),
+      t("col.contractUntil"),
       t("col.actions"),
     ]);
     const player = squad[0];

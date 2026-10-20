@@ -12,6 +12,7 @@ import { Button } from "../../ui/Button";
 import { Crest } from "../../ui/Crest";
 import { FormChips } from "../../ui/FormChips";
 import { LineupNotice } from "../../ui/LineupNotice";
+import { MarketNotice, marketNoticeCounts } from "../../ui/MarketNotice";
 import { RoundResults } from "../../ui/RoundResults";
 import { SquadChangeNotice } from "../../ui/SquadChangeNotice";
 import styles from "./page.module.css";
@@ -49,6 +50,11 @@ export default function HomePage() {
             {save.renewal.squadNotice ? (
               <div className={styles.wide}>
                 <SquadChangeNotice save={save} onDismiss={game.dismissSquadNotice} />
+              </div>
+            ) : null}
+            {marketNoticeCounts(save).offers + marketNoticeCounts(save).expiring > 0 ? (
+              <div className={styles.wide}>
+                <MarketNotice save={save} />
               </div>
             ) : null}
             {save.lineupNotice && save.lineupNotice.length > 0 ? (

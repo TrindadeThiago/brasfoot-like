@@ -10,6 +10,7 @@ import LineupPage from "../../src/app/jogo/escalacao/page";
 import SeasonEndPage from "../../src/app/jogo/fim-de-temporada/page";
 import FinancesPage from "../../src/app/jogo/financas/page";
 import HistoryPage from "../../src/app/jogo/historico/page";
+import MarketPage from "../../src/app/jogo/mercado/page";
 import HomePage from "../../src/app/jogo/page";
 import RoundPage from "../../src/app/jogo/rodada/page";
 import NewCareerPage from "../../src/app/nova-carreira/page";
@@ -33,6 +34,7 @@ const ROUTES: Record<string, ComponentType> = {
   "/jogo/calendario": CalendarPage,
   "/jogo/historico": HistoryPage,
   "/jogo/financas": FinancesPage,
+  "/jogo/mercado": MarketPage,
 };
 
 function subscribe(listener: () => void) {
