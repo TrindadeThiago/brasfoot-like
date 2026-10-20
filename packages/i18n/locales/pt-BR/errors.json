@@ -35,5 +35,19 @@
   "economy.unknown_division": "As regras econômicas citam a divisão de nível {level}, que não existe na competição.",
   "country.names_too_few": "O banco de nomes do país tem {count, plural, one {# {kind, select, firstNames {nome} other {sobrenome}}} other {# {kind, select, firstNames {nomes} other {sobrenomes}}}}; são necessários ao menos {min}.",
   "rivalry.same_club": "A rivalidade {entityId} liga o clube {clubId} a ele mesmo.",
-  "rivalry.duplicate_pair": "A rivalidade entre {clubA} e {clubB} já foi definida (índice {otherIndex})."
+  "rivalry.duplicate_pair": "A rivalidade entre {clubA} e {clubB} já foi definida (índice {otherIndex}).",
+  "package.not_zip": "O arquivo não é um pacote de mod (.zip) válido.",
+  "package.too_large": "O pacote tem {size} bytes; o máximo é {max} bytes.",
+  "package.images_too_large": "As imagens do pacote somam {size} bytes; o máximo é {max} bytes.",
+  "file.too_large": "O arquivo {file} tem {size} bytes; o máximo é {max} bytes.",
+  "image.missing": "O clube {clubId} usa a imagem {file}, que não está no pacote.",
+  "image.unused": "A imagem {file} está no pacote, mas nenhum clube a usa.",
+  "image.too_large": "A imagem {file} tem {size} bytes; o máximo é {max} bytes.",
+  "image.too_big_dimensions": "A imagem {file} tem {width} × {height} pixels; o máximo é {max} × {max}.",
+  "image.bad_format": "A imagem {file} não é PNG, JPEG nem WebP.",
+  "csv.missing_column": "Falta a coluna {column} no arquivo {file}.",
+  "csv.unknown_column": "A coluna {column} do arquivo {file} não é reconhecida e foi ignorada.",
+  "csv.row_length": "A linha {line} do arquivo {file} tem {found} colunas; eram esperadas {expected}.",
+  "csv.invalid_number": "Na linha {line} do arquivo {file}, a coluna {column} deveria ser um número, mas tem \"{value}\".",
+  "csv.unclosed_quote": "A linha {line} do arquivo {file} abre aspas que não são fechadas."
 }
