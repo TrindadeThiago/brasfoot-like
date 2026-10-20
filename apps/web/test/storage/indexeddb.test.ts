@@ -46,7 +46,7 @@ describe("SaveStore no IndexedDB (FR-006 a FR-010)", () => {
     const name = dbName();
     const store = createIndexedDbStore(name, migrateSave);
     await store.save(careerSave("ok"));
-    const raw = await openDB(name, 1);
+    const raw = await openDB(name, 2);
     await raw.put("saves", { lixo: true }, "quebrado");
     raw.close();
     const list = await store.listSummaries();

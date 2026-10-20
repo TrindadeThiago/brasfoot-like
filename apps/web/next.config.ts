@@ -10,6 +10,7 @@ const config: NextConfig = {
     "@brasfoot-like/i18n",
     "@brasfoot-like/save",
     "@brasfoot-like/default-mod",
+    "@brasfoot-like/modkit",
   ],
 };
 

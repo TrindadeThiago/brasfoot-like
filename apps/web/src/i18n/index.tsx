@@ -1,6 +1,7 @@
 "use client";
 
-import { formatLabel, formatUi } from "@brasfoot-like/i18n";
+import type { ValidationIssue } from "@brasfoot-like/engine";
+import { formatIssue, formatLabel, formatUi } from "@brasfoot-like/i18n";
 
 type Values = Record<string, string | number>;
 
@@ -37,4 +38,9 @@ export function formatNumber(value: number): string {
 /** Valor na moeda fictícia do jogo (inteiro), com o formato numérico do idioma. */
 export function formatMoney(value: number): string {
   return t("money", { negative: value < 0 ? "yes" : "no", amount: number.format(Math.abs(value)) });
+}
+
+/** Mensagem de um problema de validação do banco, do pacote ou de CSV (015). */
+export function issueText(issue: ValidationIssue): string {
+  return formatIssue(issue, "pt-BR");
 }

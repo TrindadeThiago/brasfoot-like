@@ -91,7 +91,7 @@ describe("saves (US2)", () => {
   it("saves danificados e de versão futura aparecem marcados e não abrem", async () => {
     const { name, store: saves } = store();
     await saves.save({ ...careerSave("futuro"), formatVersion: 99 });
-    const raw = await openDB(name, 1);
+    const raw = await openDB(name, 2);
     await raw.put("saves", "lixo", "quebrado");
     raw.close();
     renderApp("/carreiras", saves);
@@ -115,6 +115,7 @@ describe("saves (US2)", () => {
       load: () => Promise.reject(new Error("x")),
       save: () => Promise.resolve({ ok: false, reason: "unavailable" }),
       remove: () => Promise.resolve(),
+      exists: () => Promise.resolve(false),
     };
     renderApp("/", broken);
     expect(await screen.findByText(t("opening.storageUnavailable"))).toBeDefined();

@@ -15,10 +15,12 @@ import MarketPage from "../../src/app/jogo/mercado/page";
 import NewsPage from "../../src/app/jogo/noticias/page";
 import HomePage from "../../src/app/jogo/page";
 import RoundPage from "../../src/app/jogo/rodada/page";
+import ModsPage from "../../src/app/mods/page";
 import NewCareerPage from "../../src/app/nova-carreira/page";
 import OpeningPage from "../../src/app/page";
 import { GameProvider } from "../../src/game/GameProvider";
 import { createIndexedDbStore, type SaveStore } from "../../src/storage/indexeddb";
+import { createModStore, type ModStore } from "../../src/storage/mods";
 import { memoryRouter } from "./router";
 
 const ROUTES: Record<string, ComponentType> = {
@@ -39,6 +41,7 @@ const ROUTES: Record<string, ComponentType> = {
   "/jogo/mercado": MarketPage,
   "/jogo/carreira": CareerPage,
   "/jogo/noticias": NewsPage,
+  "/mods": ModsPage,
 };
 
 function subscribe(listener: () => void) {
@@ -60,10 +63,10 @@ export function freshStore(name = `teste-${Date.now()}-${counter++}`): SaveStore
 }
 
 /** Monta o app inteiro numa rota; montar de novo com o mesmo store simula recarregar a página. */
-export function renderApp(url: string, store: SaveStore) {
+export function renderApp(url: string, store: SaveStore, mods?: ModStore) {
   memoryRouter.reset(url);
   return render(
-    <GameProvider store={store}>
+    <GameProvider store={store} mods={mods ?? createModStore(`mods-${Date.now()}-${counter++}`)}>
       <Router />
     </GameProvider>,
   );
