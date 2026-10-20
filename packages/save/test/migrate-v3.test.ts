@@ -6,7 +6,7 @@ import {
 } from "@brasfoot-like/engine";
 import { describe, expect, it } from "vitest";
 import { migrateSave, type SaveFile } from "../src";
-import { saveV1, saveV2MidSeason, saveV2SeasonOver, validSave } from "./fixtures";
+import { saveV1, saveV2MidSeason, saveV2SeasonOver, validSave, withoutMarket } from "./fixtures";
 
 function migrated(raw: unknown): SaveFile & { migratedFrom?: number } {
   const result = migrateSave(raw);
@@ -22,7 +22,7 @@ describe("migração v2 → v3 (R9, FR-024, SC-007)", () => {
     if (result.status !== "ok") return;
     expect(result.migratedFrom).toBe(2);
     const { save } = result;
-    expect(save.formatVersion).toBe(5);
+    expect(save.formatVersion).toBe(6);
     expect("season" in save).toBe(false);
     expect(save.history).toEqual([]);
     expect(save.league).toMatchObject({
@@ -50,7 +50,7 @@ describe("migração v2 → v3 (R9, FR-024, SC-007)", () => {
       renewal: _renewal,
       formatVersion: _v,
       ...rest
-    } = save;
+    } = withoutMarket(save);
     const { season: _season, formatVersion: _v2, ...restV2 } = v2;
     expect(rest).toEqual(restV2);
   }, 30000);
@@ -68,7 +68,7 @@ describe("migração v2 → v3 (R9, FR-024, SC-007)", () => {
   it("v1 → v5 em cadeia", () => {
     const save = migrated(saveV1());
     expect(save.migratedFrom).toBe(1);
-    expect(save.formatVersion).toBe(5);
+    expect(save.formatVersion).toBe(6);
     expect(save.lineup.starters.gk).toBeDefined();
     expect(save.league.divisions).toHaveLength(2);
   });

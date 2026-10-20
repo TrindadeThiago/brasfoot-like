@@ -3,6 +3,8 @@ import {
   completeHiddenAttributes,
   createFinances,
   createLeagueSeason,
+  emptyMarket,
+  ensureContracts,
   initialRenewal,
   validateBank,
 } from "@brasfoot-like/engine";
@@ -44,7 +46,12 @@ export function createSave(input: CreateSaveInput): CreateSaveResult {
       error: { code: "save.invalid_bank", params: { issues: validation.errors.length } },
     };
   }
-  const bank = completeHiddenAttributes(validation.bank, input.seed);
+  const completed = completeHiddenAttributes(validation.bank, input.seed);
+  const bank = ensureContracts(
+    completed,
+    Number(completed.manifest.referenceDate.slice(0, 4)),
+    input.seed,
+  );
   const competition = bank.competitions[0];
   if (!competition?.divisions.some((division) => division.clubIds.includes(input.clubId))) {
     return {
@@ -75,6 +82,7 @@ export function createSave(input: CreateSaveInput): CreateSaveResult {
       history: [],
       finances: createFinances(bank, league.league),
       renewal: initialRenewal(bank),
+      market: emptyMarket(),
       lineup: initialLineup(bank, season, input.clubId),
     },
   };

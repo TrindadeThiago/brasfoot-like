@@ -19,6 +19,18 @@ export {
 export type { SaveError, SaveErrorCode, SaveFile } from "./format";
 export { MANAGER_NAME_MAX, SAVE_FORMAT_VERSION } from "./format";
 export { initialLineup } from "./lineup";
+export type { IncomingSaveResult, MarketSaveResult } from "./market";
+export {
+  answerManagerClubCounter,
+  answerManagerIncomingOffer,
+  answerManagerPlayerDemand,
+  applyMarketUpdate,
+  cancelManagerNegotiation,
+  marketAfterRoundOf,
+  marketContextOf,
+  proposeManagerContract,
+  startManagerNegotiation,
+} from "./market";
 export type { LoadResult, Migration } from "./migrate";
 export { MIGRATIONS, migrateSave } from "./migrate";
 export type { SaveSummary } from "./summary";

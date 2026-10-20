@@ -1,7 +1,7 @@
 import { clubUnavailability, managerAutoLineup } from "@brasfoot-like/engine";
 import { describe, expect, it } from "vitest";
 import { migrateSave, type SaveFile, userSeason } from "../src";
-import { type SaveV2, saveV1, saveV2 } from "./fixtures";
+import { type SaveV2, saveV1, saveV2, withoutMarket } from "./fixtures";
 
 describe("migração v1 → v2 (FR-024, SC-007)", () => {
   it("acrescenta a escalação automática no esquema do clube e preserva o resto", () => {
@@ -11,7 +11,7 @@ describe("migração v1 → v2 (FR-024, SC-007)", () => {
     if (result.status !== "ok") return;
     expect(result.migratedFrom).toBe(1);
     const { save } = result;
-    expect(save.formatVersion).toBe(5);
+    expect(save.formatVersion).toBe(6);
     const season = userSeason(save);
     const squad = save.bank.players.filter((player) => player.clubId === save.clubId);
     const expected = managerAutoLineup(
@@ -29,7 +29,7 @@ describe("migração v1 → v2 (FR-024, SC-007)", () => {
       finances: _finances,
       renewal: _renewal,
       ...rest
-    } = save;
+    } = withoutMarket(save);
     const { season: _season, ...restV1 } = v1;
     expect({ ...rest, formatVersion: 1 }).toEqual(restV1);
   });
