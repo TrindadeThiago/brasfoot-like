@@ -9,13 +9,16 @@ export const BANK_FILES: Record<Section, string> = {
   competitions: "competitions.json",
   clubs: "clubs.json",
   players: "players.json",
+  rivalries: "rivalries.json",
 };
 
 /** Converte o banco em `{ nomeDoArquivo: conteúdo }`, com JSON canônico. */
 export function splitBankFiles(bank: ModPackage): Record<string, string> {
   const files: Record<string, string> = {};
   for (const [section, file] of Object.entries(BANK_FILES)) {
-    files[file] = toCanonicalJson(bank[section as Section]);
+    // Seções opcionais (rivalidades, 013) só viram arquivo quando existem.
+    const content = bank[section as Section];
+    if (content !== undefined) files[file] = toCanonicalJson(content);
   }
   return files;
 }

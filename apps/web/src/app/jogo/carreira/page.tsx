@@ -14,10 +14,12 @@ import { ConfidenceMeter } from "../../../ui/board/ConfidenceMeter";
 import { GoalsList } from "../../../ui/board/GoalsList";
 import { JobOffers } from "../../../ui/board/JobOffers";
 import { ManagerHistory } from "../../../ui/board/ManagerHistory";
+import { FansCard } from "../../../ui/fans/FansCard";
+import { RivalsList } from "../../../ui/fans/RivalsList";
 
 type Game = ReturnType<typeof useGame>;
-type Tab = "board" | "offers" | "history" | "coaches";
-const TABS: readonly Tab[] = ["board", "offers", "history", "coaches"];
+type Tab = "board" | "fans" | "offers" | "history" | "coaches";
+const TABS: readonly Tab[] = ["board", "fans", "offers", "history", "coaches"];
 
 function BoardTab({ save }: { save: SaveFile }) {
   const t = useT();
@@ -89,6 +91,15 @@ function Career({ save, game }: { save: SaveFile; game: Game }) {
         ))}
       </div>
       {tab === "board" ? <BoardTab save={save} /> : null}
+      {tab === "fans" ? (
+        <div className={styles.columns}>
+          <FansCard save={save} clubId={save.clubId} />
+          <section className={styles.card}>
+            <h2>{t("fans.rivals.title")}</h2>
+            <RivalsList save={save} clubId={save.clubId} />
+          </section>
+        </div>
+      ) : null}
       {tab === "offers" ? (
         <section className={styles.card}>
           <h2>{t("career.offers.title")}</h2>

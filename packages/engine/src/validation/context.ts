@@ -1,4 +1,4 @@
-import type { Club, Competition, Country, Manifest, Player } from "../model/types";
+import type { Club, Competition, Country, Manifest, Player, Rivalry } from "../model/types";
 import type { Section, ValidationIssue } from "./issues";
 
 /** Item que passou na validação estrutural, com seu índice original na seção. */
@@ -29,6 +29,8 @@ export interface SemanticContext {
   competitions: ParsedItem<Competition>[];
   clubs: ParsedItem<Club>[];
   players: ParsedItem<Player>[];
+  /** Rivalidades (013); seção opcional. */
+  rivalries: ParsedItem<Rivalry>[];
   ids: Map<string, IdLocation[]>;
   /** Todos os jogadores da entrada (válidos ou não), para contar elencos sem cascata. */
   playerRefs: PlayerRef[];

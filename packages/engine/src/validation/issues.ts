@@ -4,7 +4,14 @@
  */
 export type Severity = "error" | "warning";
 
-export const SECTIONS = ["manifest", "countries", "competitions", "clubs", "players"] as const;
+export const SECTIONS = [
+  "manifest",
+  "countries",
+  "competitions",
+  "clubs",
+  "players",
+  "rivalries",
+] as const;
 export type Section = (typeof SECTIONS)[number];
 
 /** Parâmetros de cada código, na ordem do contrato. */
@@ -42,6 +49,8 @@ export const ISSUE_PARAMS = {
   "player.potential_below_strength": ["potential", "strength"],
   "player.duplicate_trait": ["trait"],
   "player.age_out_of_range": ["age", "min", "max"],
+  "rivalry.same_club": ["clubId"],
+  "rivalry.duplicate_pair": ["clubA", "clubB", "otherIndex"],
   "file.missing": ["file"],
   "file.invalid_json": ["file", "line", "column"],
 } as const satisfies Record<string, readonly string[]>;

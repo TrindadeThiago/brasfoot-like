@@ -2,6 +2,7 @@ import {
   clubDivision,
   completeHiddenAttributes,
   createBoard,
+  createFans,
   createFinances,
   createLeagueSeason,
   emptyMarket,
@@ -87,6 +88,7 @@ export function createSave(input: CreateSaveInput): CreateSaveResult {
       finances,
       renewal: initialRenewal(bank),
       market: emptyMarket(),
+      fans: createFans(bank, league.league),
       board: createBoard(bank, league.league, finances, input.seed, {
         clubId: input.clubId,
         noFiring: input.noFiring ?? false,

@@ -1,5 +1,8 @@
 import { clubDivision, divisionSeason } from "../career/league";
 import type { LeagueSeason } from "../career/types";
+import { gateMoodFactor } from "../fans/mood";
+import { fansRules } from "../fans/rules";
+import type { FansState } from "../fans/types";
 import type { CompletedBank } from "../model/types";
 import { createRng } from "../rng/xoshiro";
 import type { Fixture, MatchRecord } from "../season/types";
@@ -56,7 +59,7 @@ export function gateFor(
   world: CompletedBank,
   fixture: Pick<Fixture, "round" | "home" | "away" | "seed">,
   price: number,
-  options: { noise?: boolean } = {},
+  options: { noise?: boolean; mood?: number } = {},
 ): GateEstimate {
   const rules = economyRules(world, league.competitionId);
   const home = world.clubs.find((club) => club.id === fixture.home);
@@ -78,9 +81,14 @@ export function gateFor(
     3,
     Math.max(0.05, powQuarters(division.referencePrice / price, rules.priceElasticityPct)),
   );
+  // Humor da torcida do mandante (013 R5); sem humor informado, fator 1.
+  const mood =
+    options.mood === undefined
+      ? 1
+      : gateMoodFactor(fansRules(world, league.competitionId), options.mood);
   const attendance = Math.max(
     0,
-    Math.min(capacity, Math.floor(fans * form * opponent * noise * priceFactor)),
+    Math.min(capacity, Math.floor(fans * form * opponent * noise * priceFactor * mood)),
   );
   return { attendance, capacity, price, revenue: attendance * price };
 }
@@ -92,12 +100,19 @@ export function nextHomeGateEstimate(
   world: CompletedBank,
   clubId: string,
   price: number,
+  fanState?: FansState,
 ): GateEstimate | undefined {
   const season = clubDivision(league, clubId);
   if (!season) return undefined;
   for (const round of season.calendar.slice(season.nextRound - 1)) {
     const fixture = round.fixtures.find((entry) => entry.home === clubId);
-    if (fixture) return gateFor(finances, league, world, fixture, price, { noise: false });
+    const mood = fanState?.clubs[clubId]?.mood;
+    if (fixture) {
+      return gateFor(finances, league, world, fixture, price, {
+        noise: false,
+        ...(mood !== undefined ? { mood } : {}),
+      });
+    }
   }
   return undefined;
 }

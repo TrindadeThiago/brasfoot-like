@@ -75,6 +75,18 @@ export function expectationOf(context: Pick<BoardContext, "world" | "league">, c
   );
 }
 
+/** Expectativa de todos os clubes de uma divisão numa passada (mesma regra de `expectationOf`). */
+export function divisionExpectations(
+  context: Pick<BoardContext, "world" | "league">,
+  clubIds: readonly string[],
+): Map<string, number> {
+  const { expectationRepPct } = boardRules(context.world, context.league.competitionId);
+  const ranked = clubIds
+    .map((id) => ({ id, score: expectationScore(context.world, id, expectationRepPct) }))
+    .sort((a, b) => b.score - a.score || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+  return new Map(ranked.map((entry, index) => [entry.id, index + 1]));
+}
+
 /** Posição atual do clube na classificação da sua divisão. */
 export function currentPosition(
   context: Pick<BoardContext, "world" | "league">,

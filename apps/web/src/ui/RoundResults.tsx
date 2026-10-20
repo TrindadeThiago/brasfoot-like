@@ -1,8 +1,9 @@
 "use client";
 
-import type { Club, MatchRecord } from "@brasfoot-like/engine";
+import type { Club, MatchRecord, Rivalry } from "@brasfoot-like/engine";
 import { useT } from "../i18n";
 import { Crest } from "./Crest";
+import { DerbyBadge } from "./fans/DerbyBadge";
 import styles from "./RoundResults.module.css";
 
 interface RoundResultsProps {
@@ -11,10 +12,12 @@ interface RoundResultsProps {
   clubs: readonly Club[];
   /** Clube do jogador, destacado. */
   clubId: string;
+  /** Rivalidades do banco, para marcar os clássicos (013). */
+  rivalries?: readonly Rivalry[] | undefined;
 }
 
 /** Resultados dos jogos de uma rodada. */
-export function RoundResults({ round, records, clubs, clubId }: RoundResultsProps) {
+export function RoundResults({ round, records, clubs, clubId, rivalries }: RoundResultsProps) {
   const t = useT();
   const byId = new Map(clubs.map((club) => [club.id, club]));
   const title = t("home.lastRound", { round });
@@ -43,6 +46,7 @@ export function RoundResults({ round, records, clubs, clubId }: RoundResultsProp
                 {away ? <Crest crest={away.crest} label={away.name} size={20} /> : null}
                 {away?.shortName}
               </span>
+              <DerbyBadge rivalries={rivalries} home={record.home} away={record.away} />
             </li>
           );
         })}

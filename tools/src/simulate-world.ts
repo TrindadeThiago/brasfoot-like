@@ -1,5 +1,5 @@
 // Simula a renovação do mundo numa carreira sem interação e confere os limites da 009 (R9), do
-// mercado (011) e das trocas de técnico da diretoria (012).
+// mercado (011), das trocas de técnico da diretoria (012) e do humor das torcidas (013).
 // Uso: pnpm sim:world [--seed <seed>] [--seasons <n>]
 import { realpathSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -11,6 +11,7 @@ import {
   type CompletedBank,
   completeHiddenAttributes,
   createBoard,
+  createFans,
   createFinances,
   createLeagueSeason,
   type EvolutionRecord,
@@ -44,6 +45,8 @@ export const WORLD_LIMITS = {
   maxFreeAgents: 150,
   /** Parcela média de clubes que trocam de técnico por temporada (012, research.md R13). */
   coachChanges: [0.05, 0.35],
+  /** Humor médio das torcidas ao fim de cada temporada (013, research.md R12). */
+  meanMood: [35, 65],
 } as const;
 
 export interface SimulateWorldOptions {
@@ -87,6 +90,8 @@ export interface WorldSeason {
   /** Clubes que terminaram a virada com outro técnico (012) e total de clubes. */
   coachChanges: number;
   clubs: number;
+  /** Humor médio das torcidas ao fim da temporada (013). */
+  mood: number;
 }
 
 /** Executa a carreira e devolve as medidas de cada temporada (testável). */
@@ -107,6 +112,7 @@ export function simulateWorld(options: SimulateWorldOptions): WorldSeason[] {
   let renewal: RenewalState = initialRenewal(world);
   let history: SeasonHistoryEntry[] = [];
   let board: BoardState = createBoard(world, league, finances, options.seed);
+  let fans = createFans(world, league);
   const result: WorldSeason[] = [];
   for (let index = 0; index < seasons; index++) {
     const gaps: number[] = [];
@@ -120,6 +126,7 @@ export function simulateWorld(options: SimulateWorldOptions): WorldSeason[] {
       { state: renewal, careerSeed: options.seed },
       { state: market, careerSeed: options.seed },
       { state: board, careerSeed: options.seed },
+      { state: fans },
     );
     if (!played.ok) throw new Error(JSON.stringify(played.error));
     const reputation = (clubId?: string) =>
@@ -142,6 +149,7 @@ export function simulateWorld(options: SimulateWorldOptions): WorldSeason[] {
       renewal: played.renewal ?? renewal,
       market: played.market ?? market,
       board: played.board ?? board,
+      fans: played.fans ?? fans,
     });
     if (!turned.ok || !turned.finances || !turned.renewal || !turned.market || !turned.board) {
       throw new Error(JSON.stringify(turned));
@@ -149,6 +157,9 @@ export function simulateWorld(options: SimulateWorldOptions): WorldSeason[] {
     market = turned.market;
     const before = board;
     board = turned.board;
+    const moods = Object.values(played.fans?.clubs ?? {}).map((club) => club.mood);
+    const mood = moods.length ? moods.reduce((sum, value) => sum + value, 0) / moods.length : 50;
+    fans = turned.fans ?? fans;
     const coachChanges = Object.keys(before.clubs).filter(
       (clubId) => before.clubs[clubId]?.coachId !== board.clubs[clubId]?.coachId,
     ).length;
@@ -168,6 +179,7 @@ export function simulateWorld(options: SimulateWorldOptions): WorldSeason[] {
       upward,
       coachChanges,
       clubs: Object.keys(board.clubs).length,
+      mood,
     });
   }
   return result;
@@ -184,7 +196,7 @@ export function runSimulateWorld(options: SimulateWorldOptions): {
   const seasons = simulateWorld(options);
   const lines = [`Mundo em ${seasons.length} temporadas — seed "${options.seed}"`, ""];
   lines.push(
-    "Temp.  média  p10  p50  p90  máx  craques  idade  elencos  livres  compras  sobem  técnicos",
+    "Temp.  média  p10  p50  p90  máx  craques  idade  elencos  livres  compras  sobem  técnicos  torcida",
   );
   let ok = true;
   for (const [index, season] of seasons.entries()) {
@@ -198,10 +210,11 @@ export function runSimulateWorld(options: SimulateWorldOptions): {
       m.stars >= WORLD_LIMITS.minStars &&
       within(m.meanAge, WORLD_LIMITS.meanAge) &&
       season.problems.length === 0 &&
-      season.freeAgents <= WORLD_LIMITS.maxFreeAgents;
+      season.freeAgents <= WORLD_LIMITS.maxFreeAgents &&
+      within(season.mood, WORLD_LIMITS.meanMood);
     ok &&= seasonOk;
     lines.push(
-      `${seasonOk ? "✓" : "✗"} ${String(index + 1).padStart(3)}  ${m.mean.toFixed(1).padStart(5)} ${String(m.p10).padStart(4)} ${String(m.p50).padStart(4)} ${String(m.p90).padStart(4)} ${String(m.max).padStart(4)} ${String(m.stars).padStart(8)}  ${m.meanAge.toFixed(1).padStart(5)} ${String(season.problems.length).padStart(8)} ${String(season.freeAgents).padStart(7)} ${String(season.transfers).padStart(8)} ${(season.transfers ? (100 * season.upward) / season.transfers : 0).toFixed(0).padStart(5)}% ${String(season.coachChanges).padStart(9)}`,
+      `${seasonOk ? "✓" : "✗"} ${String(index + 1).padStart(3)}  ${m.mean.toFixed(1).padStart(5)} ${String(m.p10).padStart(4)} ${String(m.p50).padStart(4)} ${String(m.p90).padStart(4)} ${String(m.max).padStart(4)} ${String(m.stars).padStart(8)}  ${m.meanAge.toFixed(1).padStart(5)} ${String(season.problems.length).padStart(8)} ${String(season.freeAgents).padStart(7)} ${String(season.transfers).padStart(8)} ${(season.transfers ? (100 * season.upward) / season.transfers : 0).toFixed(0).padStart(5)}% ${String(season.coachChanges).padStart(9)} ${season.mood.toFixed(0).padStart(8)}`,
     );
   }
   const gaps = seasons.flatMap((season) => season.gaps);

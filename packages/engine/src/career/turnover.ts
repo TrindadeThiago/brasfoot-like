@@ -18,6 +18,7 @@
 
 import { boardNewSeasonStep } from "../board/turnover";
 import { seasonDate } from "../calendar/date";
+import { fansNewSeasonStep } from "../fans/turnover";
 import {
   aiFinanceReview,
   closeFinanceSeason,
@@ -57,6 +58,7 @@ import type {
 
 export const TURNOVER_STEP_IDS = [
   "record-history",
+  "fans-new-season",
   "pay-prizes",
   "close-finance-season",
   "return-loans",
@@ -170,6 +172,7 @@ const generateCalendars: TurnoverStep = {
 /** Etapas padrão, na ordem fixa documentada (FR-017). */
 export const DEFAULT_TURNOVER_STEPS: readonly TurnoverStep[] = [
   recordHistory,
+  fansNewSeasonStep,
   payPrizes,
   closeFinanceSeason,
   returnLoansStep,
@@ -298,6 +301,7 @@ export function seasonTurnover(
     ...(options.renewal ? { renewal: options.renewal } : {}),
     ...(options.market ? { market: options.market } : {}),
     ...(options.board ? { board: options.board } : {}),
+    ...(options.fans ? { fans: options.fans } : {}),
   };
   try {
     for (const step of resolved.steps) context = step.run(context);
@@ -328,5 +332,6 @@ export function seasonTurnover(
     ...(context.renewal ? { renewal: context.renewal } : {}),
     ...(context.market ? { market: context.market } : {}),
     ...(context.board ? { board: context.board } : {}),
+    ...(context.fans ? { fans: context.fans } : {}),
   };
 }

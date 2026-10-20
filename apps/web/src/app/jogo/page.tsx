@@ -26,6 +26,8 @@ import { BoardNotice } from "../../ui/board/BoardNotice";
 import { JobOffers } from "../../ui/board/JobOffers";
 import { Crest } from "../../ui/Crest";
 import { FormChips } from "../../ui/FormChips";
+import { DerbyBadge } from "../../ui/fans/DerbyBadge";
+import { FansCard } from "../../ui/fans/FansCard";
 import { LineupNotice } from "../../ui/LineupNotice";
 import { MarketNotice, marketNoticeCounts } from "../../ui/MarketNotice";
 import { RoundResults } from "../../ui/RoundResults";
@@ -91,6 +93,7 @@ function Unemployed({
             records={lastRound}
             clubs={save.bank.clubs}
             clubId={managedClubId(save)}
+            rivalries={save.bank.rivalries}
           />
         </div>
       ) : null}
@@ -172,7 +175,14 @@ export default function HomePage() {
                 <div className={styles.next}>
                   <Crest crest={opponent.crest} label={opponent.name} size={56} />
                   <div>
-                    <strong>{opponent.name}</strong>
+                    <strong>
+                      {opponent.name}
+                      <DerbyBadge
+                        rivalries={save.bank.rivalries}
+                        home={save.clubId}
+                        away={opponent.id}
+                      />
+                    </strong>
                     <span>{next.isHome ? t("home.homeGame") : t("home.awayGame")}</span>
                     <span>
                       {t("home.division", {
@@ -240,6 +250,9 @@ export default function HomePage() {
               )}
             </section>
             <div className={styles.wide}>
+              <FansCard save={save} clubId={save.clubId} />
+            </div>
+            <div className={styles.wide}>
               <BoardCard save={save} />
             </div>
             {lastRound && lastRound.length > 0 ? (
@@ -249,6 +262,7 @@ export default function HomePage() {
                   records={lastRound}
                   clubs={save.bank.clubs}
                   clubId={save.clubId}
+                  rivalries={save.bank.rivalries}
                 />
               </div>
             ) : null}

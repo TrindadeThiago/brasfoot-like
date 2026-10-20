@@ -4,6 +4,7 @@ import { SECTIONS, type ValidationIssue } from "./issues";
 import { checkCompetitions } from "./semantic/competitions";
 import { checkCountries } from "./semantic/countries";
 import { checkReferences } from "./semantic/references";
+import { checkRivalries } from "./semantic/rivalries";
 import { checkSquads } from "./semantic/squads";
 import { checkUniqueness } from "./semantic/uniqueness";
 import { validateStructure } from "./structural";
@@ -19,6 +20,7 @@ const SEMANTIC_RULES: SemanticRule[] = [
   checkCompetitions,
   checkCountries,
   checkSquads,
+  checkRivalries,
 ];
 
 function firstIndex(issue: ValidationIssue): number {
@@ -61,6 +63,10 @@ export function validateBank(input: unknown): ValidationResult {
     competitions: context.competitions.map((item) => item.value),
     clubs: context.clubs.map((item) => item.value),
     players: context.players.map((item) => item.value),
+    // Seção opcional (013): só aparece no banco se o mod a trouxe.
+    ...(typeof input === "object" && input !== null && "rivalries" in input
+      ? { rivalries: context.rivalries.map((item) => item.value) }
+      : {}),
   };
   return { ok: true, bank: bank as ValidatedBank, warnings };
 }

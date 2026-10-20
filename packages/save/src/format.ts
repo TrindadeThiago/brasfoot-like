@@ -1,6 +1,7 @@
 import type {
   BoardState,
   CompletedBank,
+  FansState,
   FinanceState,
   LeagueSeason,
   Lineup,
@@ -11,7 +12,7 @@ import type {
 } from "@brasfoot-like/engine";
 
 /** Versão atual do formato do save (Princípio VI). */
-export const SAVE_FORMAT_VERSION = 8;
+export const SAVE_FORMAT_VERSION = 9;
 
 export const MANAGER_NAME_MAX = 40;
 
@@ -41,6 +42,8 @@ export interface SaveFile {
   market: MarketState;
   /** Diretorias, técnicos da IA e carreira do técnico (v8). */
   board: BoardState;
+  /** Humor das torcidas (v9). Rivalidades ficam em `bank.rivalries`. */
+  fans: FansState;
   /** Escalação do clube do jogador (v2). */
   lineup: Lineup;
   /** Trocas do último ajuste automático, até o jogador dispensar o aviso (v2). */

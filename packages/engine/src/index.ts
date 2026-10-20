@@ -92,6 +92,29 @@ export type {
   TurnoverStep,
 } from "./career/types";
 export { deriveMarketValue, deriveWage } from "./derived/economy";
+export { createFans } from "./fans/create";
+export { idolEvents, idolsOf } from "./fans/idols";
+export {
+  derbyMultiplierPct,
+  fansAfterRound,
+  gateMoodFactor,
+  moodBand,
+  moodChange,
+  roundResult,
+} from "./fans/mood";
+export { isDerby, rivalriesOf, rivalryOf, rivalsOf } from "./fans/rivalries";
+export type { FansRules } from "./fans/rules";
+export { DEFAULT_FANS, fansRules } from "./fans/rules";
+export { fansNewSeasonStep } from "./fans/turnover";
+export type {
+  ClubFans,
+  FansContext,
+  FansState,
+  MoodBand,
+  MoodChange,
+  MoodFactor,
+} from "./fans/types";
+export { MOOD_BANDS, MOOD_FACTORS } from "./fans/types";
 export type { FinanceResult } from "./finance/actions";
 export {
   creditLine,
@@ -113,6 +136,7 @@ export type { GateEstimate } from "./finance/gate";
 export { gateFor, nextHomeGateEstimate, powQuarters } from "./finance/gate";
 export type {
   CareerBoard,
+  CareerFans,
   CareerMarket,
   CareerRenewal,
   CareerRoundResult,
@@ -258,6 +282,7 @@ export {
   TIEBREAKERS,
   TRAITS,
 } from "./model/catalogs";
+export { OPTIONAL_SECTIONS } from "./model/schemas";
 export type {
   Club,
   Competition,
@@ -274,6 +299,7 @@ export type {
   ModPackage,
   Player,
   Position,
+  Rivalry,
   Tiebreaker,
   Trait,
   ValidatedBank,
@@ -370,7 +396,9 @@ export type {
 export { ISSUE_CODES, ISSUE_PARAMS, makeIssue, SECTIONS, severityOf } from "./validation/issues";
 export type { ValidationResult } from "./validation/validate";
 export { validateBank } from "./validation/validate";
+export { DEFAULT_BANK_SEED } from "./worldgen/default-seed";
 export type { GenerateOptions } from "./worldgen/generate";
 export { generateDefaultBank } from "./worldgen/generate";
 export { completeHiddenAttributes } from "./worldgen/hidden";
 export { DISTRIBUTION_LIMITS, REPUTATION_TIERS, tierOf } from "./worldgen/limits";
+export { generateRivalries } from "./worldgen/rivalries";

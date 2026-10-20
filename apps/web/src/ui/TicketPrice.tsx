@@ -27,7 +27,7 @@ export function TicketPrice({
   const price = Number(value);
   const valid = Number.isInteger(price) && price >= min && price <= max;
   const estimate = valid
-    ? nextHomeGateEstimate(save.finances, save.league, save.bank, save.clubId, price)
+    ? nextHomeGateEstimate(save.finances, save.league, save.bank, save.clubId, price, save.fans)
     : undefined;
   const submit = (event: FormEvent) => {
     event.preventDefault();

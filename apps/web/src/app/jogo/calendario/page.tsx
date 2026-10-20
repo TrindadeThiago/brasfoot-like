@@ -9,6 +9,7 @@ import { useT } from "../../../i18n";
 import { Button } from "../../../ui/Button";
 import { Crest } from "../../../ui/Crest";
 import { type Column, DataTable } from "../../../ui/DataTable";
+import { DerbyBadge } from "../../../ui/fans/DerbyBadge";
 import styles from "./page.module.css";
 
 export default function CalendarPage() {
@@ -36,6 +37,7 @@ export default function CalendarPage() {
                 <span className={styles.club}>
                   <Crest crest={other.crest} label={other.name} size={20} />
                   {other.name}
+                  <DerbyBadge rivalries={save.bank.rivalries} home={save.clubId} away={other.id} />
                 </span>
               ) : null;
             },
@@ -102,6 +104,11 @@ export default function CalendarPage() {
                             : t("calendar.notPlayed")}
                         </strong>
                         <span>{clubs.get(fixture.away)?.shortName}</span>
+                        <DerbyBadge
+                          rivalries={save.bank.rivalries}
+                          home={fixture.home}
+                          away={fixture.away}
+                        />
                       </li>
                     );
                   })}

@@ -5,6 +5,7 @@ import type { SaveFile } from "@brasfoot-like/save";
 import { useT } from "../i18n";
 import { Crest } from "./Crest";
 import { clockText } from "./event-text";
+import { DerbyBadge } from "./fans/DerbyBadge";
 import styles from "./LiveGrid.module.css";
 
 function redCards(match: LiveMatch, side: "home" | "away"): number {
@@ -40,7 +41,14 @@ function MatchCard({ match, save, big }: { match: LiveMatch; save: SaveFile; big
         {match.state.score.home} × {match.state.score.away}
       </strong>
       {side("away")}
-      <span className={styles.clock}>{clock}</span>
+      <span className={styles.clock}>
+        {clock}
+        <DerbyBadge
+          rivalries={save.bank.rivalries}
+          home={match.sides.home}
+          away={match.sides.away}
+        />
+      </span>
     </div>
   );
 }

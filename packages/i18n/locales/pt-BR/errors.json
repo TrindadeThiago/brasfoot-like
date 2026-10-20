@@ -15,7 +15,7 @@
   "unique.duplicate_abbreviation": "A sigla {abbreviation} já é usada pelo clube {otherClubId}.",
   "unique.duplicate_country_code": "O código de país {code} já é usado pelo país {otherCountryId}.",
   "ref.country_not_found": "{section, select, players {O jogador} clubs {O clube} competitions {A competição} other {O item}} {entityId} referencia o país {countryId} no campo {field}, mas esse país não existe.",
-  "ref.club_not_found": "{section, select, players {O jogador} competitions {A competição} other {O item}} {entityId} referencia o clube {clubId}, que não existe.",
+  "ref.club_not_found": "{section, select, players {O jogador} competitions {A competição} rivalries {A rivalidade} other {O item}} {entityId} referencia o clube {clubId}, que não existe.",
   "division.levels_not_contiguous": "Os níveis das divisões ({levels}) devem ser contínuos e começar em 1.",
   "division.club_count": "A divisão tem {count, plural, one {# clube} other {# clubes}}, mas deve ter entre {min} e {max}.",
   "division.duplicate_club": "O clube {clubId} aparece mais de uma vez na mesma divisão.",
@@ -33,5 +33,7 @@
   "file.invalid_json": "O arquivo {file} não é um JSON válido (linha {line}, coluna {column}).",
   "economy.price_range": "O preço mínimo do ingresso ({min}) é maior que o máximo ({max}).",
   "economy.unknown_division": "As regras econômicas citam a divisão de nível {level}, que não existe na competição.",
-  "country.names_too_few": "O banco de nomes do país tem {count, plural, one {# {kind, select, firstNames {nome} other {sobrenome}}} other {# {kind, select, firstNames {nomes} other {sobrenomes}}}}; são necessários ao menos {min}."
+  "country.names_too_few": "O banco de nomes do país tem {count, plural, one {# {kind, select, firstNames {nome} other {sobrenome}}} other {# {kind, select, firstNames {nomes} other {sobrenomes}}}}; são necessários ao menos {min}.",
+  "rivalry.same_club": "A rivalidade {entityId} liga o clube {clubId} a ele mesmo.",
+  "rivalry.duplicate_pair": "A rivalidade entre {clubA} e {clubB} já foi definida (índice {otherIndex})."
 }

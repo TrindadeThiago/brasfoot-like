@@ -5,7 +5,8 @@ test("Série B: temporada direto, resumo, próxima temporada e rodada ao vivo (S
   page,
 }) => {
   test.setTimeout(240_000);
-  await createCareer(page, "Bia Lima", 0, "Série B");
+  // Sem demissão: o teste é da virada; uma demissão (012/013) mudaria a Início.
+  await createCareer(page, "Bia Lima", 0, "Série B", { noFiring: true });
   await expect(
     page.getByText(t("header.progress", { year: 2027, round: 1, total: 38, division: "Série B" })),
   ).toBeVisible();

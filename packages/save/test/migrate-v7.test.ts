@@ -8,9 +8,9 @@ describe("migração v6 → v7 (011 R13, FR-017, SC-009)", () => {
     const result = migrateSave(v6);
     if (result.status !== "ok") throw new Error(JSON.stringify(result));
     expect(result.migratedFrom).toBe(6);
-    expect(result.save.formatVersion).toBe(8);
+    expect(result.save.formatVersion).toBe(9);
     expect(result.save.market.reports).toEqual([]);
-    const { formatVersion: _v, market, board: _board, ...rest } = result.save;
+    const { formatVersion: _v, market, board: _board, fans: _fans, ...rest } = result.save;
     const { formatVersion: _v6, market: oldMarket, ...restV6 } = v6;
     expect(rest).toEqual(restV6);
     expect({ ...market, reports: undefined }).toEqual({ ...oldMarket, reports: undefined });

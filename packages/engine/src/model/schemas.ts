@@ -265,6 +265,42 @@ export const boardSchema = z
     offerRounds: intInRange(1, 50),
     maxFreeCoaches: intInRange(0, 200),
     coachSpread: intInRange(0, 100),
+    derbyPct: intInRange(0, 200),
+  })
+  .partial();
+
+/** Regras da torcida (013, research.md R14); tudo opcional. */
+export const fansSchema = z
+  .object({
+    neutral: intInRange(0, 100),
+    win: intInRange(0, 100),
+    draw: intInRange(0, 100),
+    loss: intInRange(0, 100),
+    checkFromRound: intInRange(0, 100),
+    gapWeight: intInRange(0, 100),
+    aheadWeight: intInRange(0, 100),
+    aheadCap: intInRange(0, 100),
+    driftDivisor: intInRange(1, 100),
+    calmDivisor: intInRange(1, 100),
+    keepRecent: intInRange(1, 100),
+    derbyPct: intInRange(0, 200),
+    idolCount: intInRange(0, 20),
+    idolLoss: intInRange(0, 100),
+    starSigning: intInRange(0, 100),
+    gateSwingPct: intInRange(0, 100),
+    fanPressureBelow: intInRange(0, 100),
+    fanSupportAbove: intInRange(0, 100),
+    fanDivisor: intInRange(1, 100),
+    carryPct: intInRange(0, 100),
+    titleBoost: intInRange(0, 100),
+    promotionBoost: intInRange(0, 100),
+    relegationDrop: intInRange(0, 100),
+    bands: z.tuple([
+      intInRange(0, 100),
+      intInRange(0, 100),
+      intInRange(0, 100),
+      intInRange(0, 100),
+    ]),
   })
   .partial();
 
@@ -277,6 +313,7 @@ export const competitionSchema = z.object({
   economy: economySchema.optional(),
   market: marketSchema.optional(),
   board: boardSchema.optional(),
+  fans: fansSchema.optional(),
 });
 
 export const crestSchema = z.object({
@@ -327,12 +364,22 @@ export const playerSchema = z.object({
 });
 
 /** Schema de cada item, por seção. A validação aplica um item por vez (research.md R8). */
+/** Rivalidade entre dois clubes (013, research.md R1); intensidade 1 a 3. */
+export const rivalrySchema = z.object({
+  clubIds: z.tuple([id, id]),
+  intensity: intInRange(1, 3),
+});
+
 export const SECTION_ITEM_SCHEMAS = {
   countries: countrySchema,
   competitions: competitionSchema,
   clubs: clubSchema,
   players: playerSchema,
+  rivalries: rivalrySchema,
 } as const;
+
+/** Seções que o mod pode omitir (ausente = lista vazia). */
+export const OPTIONAL_SECTIONS: readonly string[] = ["rivalries"];
 
 /** Número mínimo de itens por seção (data-model.md, ModPackage). */
 export const SECTION_MIN_ITEMS = {
@@ -340,4 +387,5 @@ export const SECTION_MIN_ITEMS = {
   competitions: 1,
   clubs: 2,
   players: 0,
+  rivalries: 0,
 } as const;

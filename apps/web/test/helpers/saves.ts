@@ -3,6 +3,7 @@ import competitions from "@brasfoot-like/default-mod/competitions.json" with { t
 import countries from "@brasfoot-like/default-mod/countries.json" with { type: "json" };
 import mod from "@brasfoot-like/default-mod/mod.json" with { type: "json" };
 import players from "@brasfoot-like/default-mod/players.json" with { type: "json" };
+import rivalries from "@brasfoot-like/default-mod/rivalries.json" with { type: "json" };
 import { createBoard, joinBankFiles } from "@brasfoot-like/engine";
 import { createSave, initialLineup, type SaveFile, userSeason } from "@brasfoot-like/save";
 
@@ -29,6 +30,7 @@ export function careerSave(
         "competitions.json": competitions,
         "clubs.json": clubs,
         "players.json": players,
+        "rivalries.json": rivalries,
       }),
     });
     if (!result.ok) throw new Error(JSON.stringify(result.error));

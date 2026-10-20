@@ -6,6 +6,7 @@ import { generateClubs } from "./clubs";
 import defaultNameBank from "./name-banks/default.json" with { type: "json" };
 import { nameBankSchema } from "./name-banks/schema";
 import { generateSquad } from "./players";
+import { generateRivalries } from "./rivalries";
 import { GENERATOR_TUNING } from "./tuning";
 
 export interface GenerateOptions {
@@ -95,6 +96,11 @@ export function generateDefaultBank(options: GenerateOptions): ValidatedBank {
     competitions: [competition],
     clubs: allClubs.map((generated) => generated.club),
     players,
+    // Rivalidades por regiões geradas (013 R2), com gerador próprio: os demais dados não mudam.
+    rivalries: generateRivalries(
+      allClubs.map((generated) => generated.club),
+      seed,
+    ),
   };
 
   const result = validateBank(bank);

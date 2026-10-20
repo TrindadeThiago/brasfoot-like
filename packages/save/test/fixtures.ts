@@ -3,6 +3,7 @@ import competitions from "@brasfoot-like/default-mod/competitions.json" with { t
 import countries from "@brasfoot-like/default-mod/countries.json" with { type: "json" };
 import mod from "@brasfoot-like/default-mod/mod.json" with { type: "json" };
 import players from "@brasfoot-like/default-mod/players.json" with { type: "json" };
+import rivalries from "@brasfoot-like/default-mod/rivalries.json" with { type: "json" };
 import {
   advanceCareer,
   advanceLeague,
@@ -23,6 +24,7 @@ export function defaultBank(): unknown {
     "competitions.json": competitions,
     "clubs.json": clubs,
     "players.json": players,
+    "rivalries.json": rivalries,
   });
 }
 
@@ -189,8 +191,9 @@ export function withoutMarket<T extends { bank: { players: { contract?: unknown 
   const {
     market: _market,
     board: _board,
+    fans: _fans,
     ...rest
-  } = save as T & { market?: unknown; board?: unknown };
+  } = save as T & { market?: unknown; board?: unknown; fans?: unknown };
   return {
     ...rest,
     bank: {
@@ -229,20 +232,20 @@ export function saveV5SeasonOver(): SaveV5 {
 }
 
 /** Save no formato da 010 (versão 6): mercado sem resumos de janela. */
-export type SaveV6 = Omit<SaveFile, "formatVersion" | "board"> & { formatVersion: 6 };
+export type SaveV6 = Omit<SaveFile, "formatVersion" | "board" | "fans"> & { formatVersion: 6 };
 
 export function saveV6(): SaveV6 {
-  const { formatVersion: _version, market, board: _board, ...rest } = validSave();
+  const { formatVersion: _version, market, board: _board, fans: _fans, ...rest } = validSave();
   const { reports: _reports, ...legacy } = market;
   return { ...rest, market: legacy as SaveFile["market"], formatVersion: 6 };
 }
 
 /** Save no formato da 011 (versão 7): mercado com resumos, sem diretoria. */
-export type SaveV7 = Omit<SaveFile, "formatVersion" | "board"> & { formatVersion: 7 };
+export type SaveV7 = Omit<SaveFile, "formatVersion" | "board" | "fans"> & { formatVersion: 7 };
 
 /** Save v7 com a carreira avançada `step` (sem diretoria). */
 export function saveV7(step: SeasonStep = { rounds: 0 }): SaveV7 {
-  const { formatVersion: _version, board: _board, ...rest } = validSave();
+  const { formatVersion: _version, board: _board, fans: _fans, ...rest } = validSave();
   let { league, finances, bank, market } = rest;
   if (!("rounds" in step) || step.rounds > 0) {
     const advanced = advanceCareer(
@@ -261,4 +264,13 @@ export function saveV7(step: SeasonStep = { rounds: 0 }): SaveV7 {
   return JSON.parse(
     JSON.stringify({ ...rest, formatVersion: 7, league, finances, bank, market }),
   ) as SaveV7;
+}
+
+/** Save no formato da 012 (versão 8): diretoria, sem torcidas nem rivalidades no banco. */
+export type SaveV8 = Omit<SaveFile, "formatVersion" | "fans"> & { formatVersion: 8 };
+
+export function saveV8(): SaveV8 {
+  const { formatVersion: _version, fans: _fans, ...rest } = validSave();
+  const { rivalries: _rivalries, ...bank } = rest.bank;
+  return JSON.parse(JSON.stringify({ ...rest, bank, formatVersion: 8 })) as SaveV8;
 }

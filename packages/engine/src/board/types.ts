@@ -1,4 +1,5 @@
 import type { LeagueSeason } from "../career/types";
+import type { FansState } from "../fans/types";
 import type { FinanceState } from "../finance/types";
 import type { CompletedBank } from "../model/types";
 
@@ -40,6 +41,10 @@ export const CONFIDENCE_FACTORS = [
   "financeGoal",
   "seasonStart",
   "hired",
+  "derbyWin",
+  "derbyDraw",
+  "derbyLoss",
+  "fans",
 ] as const;
 export type ConfidenceFactor = (typeof CONFIDENCE_FACTORS)[number];
 
@@ -188,6 +193,8 @@ export interface BoardContext {
   finances: FinanceState;
   board: BoardState;
   careerSeed: string;
+  /** Humor das torcidas (013): pressão ou apoio na confiança. */
+  fans?: FansState;
 }
 
 export interface BoardUpdate {

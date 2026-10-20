@@ -11,7 +11,7 @@ describe("migração v1 → v2 (FR-024, SC-007)", () => {
     if (result.status !== "ok") return;
     expect(result.migratedFrom).toBe(1);
     const { save } = result;
-    expect(save.formatVersion).toBe(8);
+    expect(save.formatVersion).toBe(9);
     const season = userSeason(save);
     const squad = save.bank.players.filter((player) => player.clubId === save.clubId);
     const expected = managerAutoLineup(

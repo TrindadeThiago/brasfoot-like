@@ -4,8 +4,14 @@ import { validateBank } from "../../src/validation/validate";
 import { makeValidBank } from "../helpers/build-bank";
 
 describe("bank-files", () => {
-  it("gera um arquivo por seção", () => {
-    expect(Object.keys(splitBankFiles(makeValidBank())).sort()).toEqual(
+  it("gera um arquivo por seção; as opcionais só quando existem", () => {
+    const required = Object.values(BANK_FILES).filter((file) => file !== "rivalries.json");
+    expect(Object.keys(splitBankFiles(makeValidBank())).sort()).toEqual(required.sort());
+    const withRivalries = {
+      ...makeValidBank(),
+      rivalries: [{ clubIds: ["clube-1", "clube-2"] as [string, string], intensity: 2 }],
+    };
+    expect(Object.keys(splitBankFiles(withRivalries)).sort()).toEqual(
       Object.values(BANK_FILES).sort(),
     );
   });
