@@ -1,15 +1,29 @@
 import type { Position } from "../model/catalogs";
 import type { CompletedBank } from "../model/types";
 import { SQUAD_RULES } from "../renewal/rules";
+import { aiMarketRules } from "./ai/rules";
 
 /** Quantos jogadores o clube tem (inclui emprestados recebidos). */
 export function squadSize(world: CompletedBank, clubId: string): number {
   return world.players.filter((player) => player.clubId === clubId).length;
 }
 
-/** Cabe mais um jogador sem passar do máximo da 009 (FR-016)? */
-export function canAddPlayer(world: CompletedBank, clubId: string): boolean {
-  return squadSize(world, clubId) < SQUAD_RULES.max;
+/** Teto por posição das regras (011 R3). */
+export function positionCap(world: CompletedBank, position: Position): number {
+  return aiMarketRules(world, world.competitions[0]?.id ?? "").positionMax[position];
+}
+
+/**
+ * Cabe mais um jogador sem passar do máximo da 009 (FR-016) e, com a posição informada, do teto
+ * por posição (011 FR-009)?
+ */
+export function canAddPlayer(world: CompletedBank, clubId: string, position?: Position): boolean {
+  if (squadSize(world, clubId) >= SQUAD_RULES.max) return false;
+  if (position === undefined) return true;
+  const inPosition = world.players.filter(
+    (player) => player.clubId === clubId && player.position === position,
+  ).length;
+  return inPosition < positionCap(world, position);
 }
 
 /** Pode sair um jogador sem ficar abaixo do mínimo, nem da cobertura da posição (FR-016)? */

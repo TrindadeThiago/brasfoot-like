@@ -1,10 +1,8 @@
-import { seasonDate } from "../calendar/date";
-import { annualWageBill } from "../finance/create";
 import { createRng } from "../rng/xoshiro";
+import { incomingOfferFor } from "./ai/offers";
 import { maxBidFor } from "./club-response";
 import { completeLoan, completeTransfer } from "./effects";
 import { marketRules } from "./rules";
-import { canAddPlayer, canRemovePlayer, strengthRank } from "./squad";
 import type {
   IncomingOffer,
   MarketContext,
@@ -13,15 +11,14 @@ import type {
   TransferRecord,
 } from "./types";
 import { fail } from "./types";
-import { marketValue } from "./value";
 import { isWindowOpen, roundsPlayed } from "./windows";
 
 /** Quantos titulares prováveis o comprador tem em campo (o jogador precisa entrar entre eles). */
 const STARTERS = 11;
 /** Parte das propostas que é por empréstimo (%), para jogadores fora dos titulares. */
-const LOAN_SHARE_PCT = 25;
+const _LOAN_SHARE_PCT = 25;
 
-function roundThousand(value: number): number {
+function _roundThousand(value: number): number {
   return Math.round(value / 1000) * 1000;
 }
 
@@ -53,7 +50,7 @@ function logEntry(
 }
 
 /** Força do 11º melhor do clube: o jogador precisa superá-la para ser titular lá. */
-function starterBar(context: MarketContext, clubId: string): number {
+function _starterBar(context: MarketContext, clubId: string): number {
   const strengths = context.world.players
     .filter((player) => player.clubId === clubId)
     .map((player) => player.strength)
@@ -103,11 +100,13 @@ export function marketAfterRound(context: MarketContext): MarketUpdate {
   if (open && incoming.length < rules.incoming.maxOpen) {
     const rng = createRng(`${context.careerSeed}:incoming:${context.league.number}:${played}`);
     if (rng.int(1, 100) <= rules.incoming.chancePct) {
-      const offer = pickOffer(
+      const offer = incomingOfferFor(
         context,
         rng,
-        incoming,
-        negotiations.map((entry) => entry.playerId),
+        new Set([
+          ...incoming.map((entry) => entry.playerId),
+          ...negotiations.map((entry) => entry.playerId),
+        ]),
       );
       if (offer) {
         const id = `off-${String(market.nextSeq).padStart(4, "0")}`;
@@ -120,59 +119,6 @@ export function marketAfterRound(context: MarketContext): MarketUpdate {
     }
   }
   return { ...unchanged(context), market };
-}
-
-function pickOffer(
-  context: MarketContext,
-  rng: ReturnType<typeof createRng>,
-  open: readonly IncomingOffer[],
-  negotiating: readonly string[],
-): Omit<IncomingOffer, "id" | "expiresRound"> | undefined {
-  const rules = marketRules(context.world, context.league.competitionId);
-  const year = context.league.year;
-  const date = seasonDate(context.world.manifest.referenceDate, year);
-  const blocked = new Set([...open.map((offer) => offer.playerId), ...negotiating]);
-  const own = context.world.players
-    .filter(
-      (player) =>
-        player.clubId === context.managerClubId &&
-        !player.contract?.loan &&
-        !blocked.has(player.id) &&
-        canRemovePlayer(context.world, context.managerClubId, player.id),
-    )
-    .sort((a, b) => (a.id < b.id ? -1 : 1));
-  const buyers = context.league.divisions
-    .flatMap((season) => season.clubIds)
-    .filter((clubId) => clubId !== context.managerClubId)
-    .sort();
-  const pairs: { playerId: string; fromClubId: string }[] = [];
-  for (const player of own) {
-    for (const clubId of buyers) {
-      if (player.strength <= starterBar(context, clubId)) continue;
-      if (!canAddPlayer(context.world, clubId)) continue;
-      pairs.push({ playerId: player.id, fromClubId: clubId });
-    }
-  }
-  while (pairs.length > 0) {
-    const index = rng.int(0, pairs.length - 1);
-    const pair = pairs.splice(index, 1)[0];
-    if (!pair) break;
-    const player = own.find((entry) => entry.id === pair.playerId);
-    if (!player) continue;
-    const value = marketValue(player, context.world, year);
-    const asLoan =
-      strengthRank(context.world, context.managerClubId, player.id) > STARTERS &&
-      rng.int(1, 100) <= LOAN_SHARE_PCT;
-    const fee = asLoan
-      ? roundThousand((value * rules.club.loanFeePct) / 100)
-      : roundThousand((value * rng.int(rules.incoming.minPct, rules.incoming.maxPct)) / 100);
-    const buffer = Math.round(
-      (annualWageBill(context.world, pair.fromClubId, date) * rules.incoming.cashBufferMonths) / 12,
-    );
-    if ((context.finances.clubs[pair.fromClubId]?.cash ?? 0) < fee + buffer) continue;
-    return { ...pair, fee, kind: asLoan ? "loan" : "buy" };
-  }
-  return undefined;
 }
 
 export type IncomingAnswer =

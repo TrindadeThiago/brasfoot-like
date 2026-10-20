@@ -105,3 +105,10 @@ export function answerManagerIncomingOffer(
     ...(result.value.response ? { response: result.value.response } : {}),
   };
 }
+
+/** Some com o aviso do último resumo de janela (011 R10). */
+export function dismissWindowReport(save: SaveFile): SaveFile {
+  const last = save.market.reports.at(-1);
+  if (!last || save.market.reportSeen === last.id) return save;
+  return { ...save, market: { ...save.market, reportSeen: last.id } };
+}

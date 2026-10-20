@@ -82,12 +82,35 @@ export interface TransferRecord {
   reason?: string;
 }
 
+/** Transferência no resumo da janela (011 R10). */
+export interface ReportEntry extends TransferRecord {
+  position: Position;
+  strength: number;
+  /** Nível da divisão do clube de origem e do destino (filtro do resumo). */
+  fromLevel?: number;
+  toLevel?: number;
+}
+
+/** Resumo das transferências de uma janela (011 R10). */
+export interface WindowReport {
+  /** `<temporada>-<janela>`. */
+  id: string;
+  season: number;
+  year: number;
+  window: number;
+  transfers: ReportEntry[];
+}
+
 export interface MarketState {
   freeAgents: FreeAgent[];
   negotiations: Negotiation[];
   incoming: IncomingOffer[];
   log: TransferRecord[];
   nextSeq: number;
+  /** Resumos das últimas janelas (011). */
+  reports: WindowReport[];
+  /** Id do último resumo que o jogador dispensou. */
+  reportSeen?: string;
 }
 
 export interface MarketWindow {
@@ -185,7 +208,7 @@ export interface MarketRow {
 }
 
 export function emptyMarket(): MarketState {
-  return { freeAgents: [], negotiations: [], incoming: [], log: [], nextSeq: 1 };
+  return { freeAgents: [], negotiations: [], incoming: [], log: [], nextSeq: 1, reports: [] };
 }
 
 export function marketError(

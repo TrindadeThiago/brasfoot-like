@@ -10,7 +10,7 @@ import type {
 } from "@brasfoot-like/engine";
 
 /** Versão atual do formato do save (Princípio VI). */
-export const SAVE_FORMAT_VERSION = 6;
+export const SAVE_FORMAT_VERSION = 7;
 
 export const MANAGER_NAME_MAX = 40;
 
@@ -32,7 +32,7 @@ export interface SaveFile {
   finances: FinanceState;
   /** Estado da renovação do mundo (v5). `bank` é o mundo vivo da carreira desde a 009. */
   renewal: RenewalState;
-  /** Livres, negociações e propostas do mercado (v6). Contratos ficam em `bank.players[].contract`. */
+  /** Livres, negociações, propostas (v6) e resumos de janela (v7) do mercado. Contratos ficam em `bank.players[].contract`. */
   market: MarketState;
   /** Escalação do clube do jogador (v2). */
   lineup: Lineup;

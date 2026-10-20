@@ -2,6 +2,7 @@
 
 import { type MarketRow, searchPlayers } from "@brasfoot-like/engine";
 import { marketContextOf, type SaveFile } from "@brasfoot-like/save";
+import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { GameLayout } from "../../../game/GameLayout";
 import type { useGame } from "../../../game/GameProvider";
@@ -20,17 +21,20 @@ import { MarketTable, type RowAction } from "../../../ui/market/MarketTable";
 import styles from "../../../ui/market/market.module.css";
 import { NegotiationDialog, type NegotiationTarget } from "../../../ui/market/NegotiationDialog";
 import { NegotiationsTab } from "../../../ui/market/NegotiationsTab";
+import { WindowReport } from "../../../ui/market/WindowReport";
 import { WindowStatus } from "../../../ui/market/WindowStatus";
 
 type Game = ReturnType<typeof useGame>;
 /** Linhas da tabela por vez: a lista inteira tem ~1.000 jogadores. */
 const PAGE_SIZE = 100;
-type Tab = "search" | "negotiations" | "incoming" | "contracts";
-const TABS: readonly Tab[] = ["search", "negotiations", "incoming", "contracts"];
+type Tab = "search" | "negotiations" | "incoming" | "contracts" | "report";
+const TABS: readonly Tab[] = ["search", "negotiations", "incoming", "contracts", "report"];
 
 function Market({ save, game }: { save: SaveFile; game: Game }) {
   const t = useT();
-  const [tab, setTab] = useState<Tab>("search");
+  // `?aba=report` abre o resumo da janela (link do aviso da Início).
+  const requested = useSearchParams().get("aba");
+  const [tab, setTab] = useState<Tab>(TABS.find((name) => name === requested) ?? "search");
   const [form, setForm] = useState<FilterForm>(EMPTY_FILTERS);
   const [selected, setSelected] = useState<ReadonlySet<string>>(new Set());
   const [comparing, setComparing] = useState(false);
@@ -122,6 +126,7 @@ function Market({ save, game }: { save: SaveFile; game: Game }) {
           onRenew={(row) => setTarget({ kind: "renew", row })}
         />
       ) : null}
+      {tab === "report" ? <WindowReport save={save} /> : null}
       <NegotiationDialog
         save={save}
         game={game}

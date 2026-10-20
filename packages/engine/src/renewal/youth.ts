@@ -1,4 +1,5 @@
 import type { LeagueSeason } from "../career/types";
+import { aiMarketRules } from "../market/ai/rules";
 import { POSITIONS, type Position } from "../model/catalogs";
 import type { Club, CompletedBank, CompletedPlayer } from "../model/types";
 import { intIrwinHall, triangular } from "../rng/distributions";
@@ -24,14 +25,23 @@ export function playerId(seq: number): string {
 }
 
 /** Posição mais carente do elenco em relação à composição-alvo do gerador. */
-export function neediestPosition(squad: readonly CompletedPlayer[], rng: Rng): Position {
+export function neediestPosition(
+  squad: readonly CompletedPlayer[],
+  rng: Rng,
+  caps?: Readonly<Record<Position, number>>,
+): Position {
   const counts = new Map<Position, number>(POSITIONS.map((position) => [position, 0]));
   for (const player of squad) counts.set(player.position, (counts.get(player.position) ?? 0) + 1);
   const shortage = (position: Position) =>
     (GENERATOR_TUNING.squad.min[position] - (counts.get(position) ?? 0)) /
     GENERATOR_TUNING.squad.min[position];
-  const best = Math.max(...POSITIONS.map(shortage));
-  return rng.pick(POSITIONS.filter((position) => shortage(position) === best));
+  // Posições no teto (011 R3) não recebem jovens; sem teto informado, todas concorrem.
+  const open = POSITIONS.filter(
+    (position) => !caps || (counts.get(position) ?? 0) < caps[position],
+  );
+  const candidates = open.length > 0 ? open : POSITIONS;
+  const best = Math.max(...candidates.map(shortage));
+  return rng.pick(candidates.filter((position) => shortage(position) === best));
 }
 
 /** Um jovem novo para o clube, numa posição (R6). */
@@ -89,6 +99,7 @@ export function generateYouth(
   date: string,
 ): { world: CompletedBank; renewal: RenewalState; arrived: PlayerRef[] } {
   const clubIds = league.divisions.flatMap((entry) => entry.clubIds).sort();
+  const caps = aiMarketRules(world, league.competitionId).positionMax;
   const players = [...world.players];
   const arrived: PlayerRef[] = [];
   let seq = renewal.nextPlayerSeq;
@@ -101,7 +112,7 @@ export function generateYouth(
       const youth = createYouth(
         world,
         club,
-        neediestPosition(squad, rng),
+        neediestPosition(squad, rng, caps),
         seq,
         renewal.regulator,
         date,

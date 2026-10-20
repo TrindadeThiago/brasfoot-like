@@ -220,3 +220,12 @@ export function saveV5MidSeason(): SaveV5 {
 export function saveV5SeasonOver(): SaveV5 {
   return saveV5({ toEnd: true });
 }
+
+/** Save no formato da 010 (versão 6): mercado sem resumos de janela. */
+export type SaveV6 = Omit<SaveFile, "formatVersion"> & { formatVersion: 6 };
+
+export function saveV6(): SaveV6 {
+  const { formatVersion: _version, market, ...rest } = validSave();
+  const { reports: _reports, ...legacy } = market;
+  return { ...rest, market: legacy as SaveFile["market"], formatVersion: 6 };
+}

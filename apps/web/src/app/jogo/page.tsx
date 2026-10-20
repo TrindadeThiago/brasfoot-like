@@ -52,9 +52,10 @@ export default function HomePage() {
                 <SquadChangeNotice save={save} onDismiss={game.dismissSquadNotice} />
               </div>
             ) : null}
-            {marketNoticeCounts(save).offers + marketNoticeCounts(save).expiring > 0 ? (
+            {marketNoticeCounts(save).offers + marketNoticeCounts(save).expiring > 0 ||
+            marketNoticeCounts(save).report ? (
               <div className={styles.wide}>
-                <MarketNotice save={save} />
+                <MarketNotice save={save} onDismissReport={game.dismissWindowReport} />
               </div>
             ) : null}
             {save.lineupNotice && save.lineupNotice.length > 0 ? (

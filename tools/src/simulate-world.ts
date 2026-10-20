@@ -76,6 +76,9 @@ export interface WorldSeason {
   problems: string[];
   gaps: number[];
   freeAgents: number;
+  /** Compras entre clubes da IA na temporada e quantas foram para clube de reputação maior. */
+  transfers: number;
+  upward: number;
 }
 
 /** Executa a carreira e devolve as medidas de cada temporada (testável). */
@@ -98,11 +101,25 @@ export function simulateWorld(options: SimulateWorldOptions): WorldSeason[] {
   const result: WorldSeason[] = [];
   for (let index = 0; index < seasons; index++) {
     const gaps: number[] = [];
-    const played = advanceCareer(league, finances, world, { toEnd: true }, "", undefined, {
-      state: renewal,
-      careerSeed: options.seed,
-    });
+    const played = advanceCareer(
+      league,
+      finances,
+      world,
+      { toEnd: true },
+      "",
+      undefined,
+      { state: renewal, careerSeed: options.seed },
+      { state: market, careerSeed: options.seed },
+    );
     if (!played.ok) throw new Error(JSON.stringify(played.error));
+    const reputation = (clubId?: string) =>
+      world.clubs.find((club) => club.id === clubId)?.reputation ?? 0;
+    const purchases = (played.market?.log ?? []).filter(
+      (entry) => entry.outcome === undefined && entry.kind === "sale" && entry.fromClubId,
+    );
+    const upward = purchases.filter(
+      (entry) => reputation(entry.toClubId) > reputation(entry.fromClubId),
+    ).length;
     const date = seasonDate(world.manifest.referenceDate, league.year);
     if (played.renewal?.lastEvolution) {
       const gap = youthMinutesGap(world, played.renewal.lastEvolution, date);
@@ -113,7 +130,7 @@ export function simulateWorld(options: SimulateWorldOptions): WorldSeason[] {
       finances: played.finances,
       managerClubId: "",
       renewal: played.renewal ?? renewal,
-      market,
+      market: played.market ?? market,
     });
     if (!turned.ok || !turned.finances || !turned.renewal || !turned.market) {
       throw new Error(JSON.stringify(turned));
@@ -131,6 +148,8 @@ export function simulateWorld(options: SimulateWorldOptions): WorldSeason[] {
       problems: squadProblems(world, league),
       gaps,
       freeAgents: market.freeAgents.length,
+      transfers: purchases.length,
+      upward,
     });
   }
   return result;
@@ -146,7 +165,7 @@ export function runSimulateWorld(options: SimulateWorldOptions): {
 } {
   const seasons = simulateWorld(options);
   const lines = [`Mundo em ${seasons.length} temporadas — seed "${options.seed}"`, ""];
-  lines.push("Temp.  média  p10  p50  p90  máx  craques  idade  elencos  livres");
+  lines.push("Temp.  média  p10  p50  p90  máx  craques  idade  elencos  livres  compras  sobem");
   let ok = true;
   for (const [index, season] of seasons.entries()) {
     const m = season.measure;
@@ -162,7 +181,7 @@ export function runSimulateWorld(options: SimulateWorldOptions): {
       season.freeAgents <= WORLD_LIMITS.maxFreeAgents;
     ok &&= seasonOk;
     lines.push(
-      `${seasonOk ? "✓" : "✗"} ${String(index + 1).padStart(3)}  ${m.mean.toFixed(1).padStart(5)} ${String(m.p10).padStart(4)} ${String(m.p50).padStart(4)} ${String(m.p90).padStart(4)} ${String(m.max).padStart(4)} ${String(m.stars).padStart(8)}  ${m.meanAge.toFixed(1).padStart(5)} ${String(season.problems.length).padStart(8)} ${String(season.freeAgents).padStart(7)}`,
+      `${seasonOk ? "✓" : "✗"} ${String(index + 1).padStart(3)}  ${m.mean.toFixed(1).padStart(5)} ${String(m.p10).padStart(4)} ${String(m.p50).padStart(4)} ${String(m.p90).padStart(4)} ${String(m.max).padStart(4)} ${String(m.stars).padStart(8)}  ${m.meanAge.toFixed(1).padStart(5)} ${String(season.problems.length).padStart(8)} ${String(season.freeAgents).padStart(7)} ${String(season.transfers).padStart(8)} ${(season.transfers ? (100 * season.upward) / season.transfers : 0).toFixed(0).padStart(5)}%`,
     );
   }
   const gaps = seasons.flatMap((season) => season.gaps);

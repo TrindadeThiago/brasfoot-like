@@ -33,10 +33,10 @@ import {
   cancelManagerNegotiation,
   createSave,
   dismissSquadNotice as dismissSavedSquadNotice,
+  dismissWindowReport as dismissSavedWindowReport,
   type FinanceSaveResult,
   type IncomingSaveResult,
   type MarketSaveResult,
-  marketAfterRoundOf,
   proposeManagerContract,
   repayManagerLoan,
   type SaveError,
@@ -181,6 +181,8 @@ interface GameContextValue {
   dismissLineupNotice(): void;
   /** Some com o aviso de mudanças do elenco da virada (009). */
   dismissSquadNotice(): void;
+  /** Some com o aviso do último resumo de janela (011). */
+  dismissWindowReport(): void;
   /** Ações financeiras do clube do jogador (008): validam no motor, salvam e devolvem o erro. */
   setTicketPrice(price: number): FinanceActionResult;
   takeLoan(amount: number): FinanceActionResult;
@@ -352,21 +354,25 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
     async (live: LiveRound) => {
       const save = latestSave.current;
       if (!save || live.round !== leagueRound(save.league)) return;
-      const result = completeCareerRound(save.league, save.finances, save.bank, live, save.clubId, {
-        state: save.renewal,
-        careerSeed: save.seed,
-      });
+      const result = completeCareerRound(
+        save.league,
+        save.finances,
+        save.bank,
+        live,
+        save.clubId,
+        { state: save.renewal, careerSeed: save.seed },
+        { state: save.market, careerSeed: save.seed },
+      );
       if (!result.ok) return;
       const next = touch(
-        withAdjustedLineup(
-          marketAfterRoundOf({
-            ...save,
-            league: result.league,
-            finances: result.finances,
-            bank: result.world,
-            renewal: result.renewal ?? save.renewal,
-          }),
-        ),
+        withAdjustedLineup({
+          ...save,
+          league: result.league,
+          finances: result.finances,
+          bank: result.world,
+          renewal: result.renewal ?? save.renewal,
+          market: result.market ?? save.market,
+        }),
         new Date().toISOString(),
       );
       latestSave.current = next;
@@ -611,6 +617,11 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
     [commitLineup],
   );
 
+  const dismissWindowReport = useCallback(
+    () => commitLineup((save) => dismissSavedWindowReport(save)),
+    [commitLineup],
+  );
+
   const dismissLineupNotice = useCallback(
     () =>
       commitLineup((save) => {
@@ -653,6 +664,7 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       autoLineup,
       dismissLineupNotice,
       dismissSquadNotice,
+      dismissWindowReport,
       setTicketPrice,
       takeLoan,
       repayLoan,
@@ -684,6 +696,7 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
       autoLineup,
       dismissLineupNotice,
       dismissSquadNotice,
+      dismissWindowReport,
       setTicketPrice,
       takeLoan,
       repayLoan,

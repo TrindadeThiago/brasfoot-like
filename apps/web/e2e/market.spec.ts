@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { createCareer, t } from "./helpers";
 
-test("mercado: busca, comparação, compra com contrato, elenco e janela fechada", async ({
+test("mercado: busca, comparação, compra com contrato, elenco, janela fechada e resumo da janela", async ({
   page,
 }) => {
   test.setTimeout(180_000);
@@ -57,4 +57,18 @@ test("mercado: busca, comparação, compra com contrato, elenco e janela fechada
     .getByRole("button", { name: t("market.action.offer") })
     .click();
   await expect(page.getByRole("dialog").getByRole("alert")).toContainText(/janela/i);
+  await page
+    .getByRole("dialog")
+    .getByRole("button", { name: t("common.close") })
+    .click();
+
+  // A janela fechada gera o resumo das transferências da IA (011).
+  await page.getByRole("tab", { name: t("market.tab.report") }).click();
+  await expect(page.getByRole("heading", { name: /Janela do início da temporada/ })).toBeVisible();
+  await expect(
+    page
+      .getByRole("table", { name: t("market.report.highlights") })
+      .locator("tbody tr")
+      .first(),
+  ).toBeVisible();
 });

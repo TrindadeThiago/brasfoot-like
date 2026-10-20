@@ -38,6 +38,9 @@ describe("finanças por rodada (US1)", () => {
       {
         [save.clubId]: save.lineup,
       },
+      { state: save.renewal, careerSeed: save.seed },
+      // O app fecha a rodada com o mercado da IA (011), que também movimenta caixas.
+      { state: save.market, careerSeed: save.seed },
     );
     if (!expected.ok) throw new Error("falhou");
     expect(saved.finances).toEqual(expected.finances);
@@ -70,6 +73,9 @@ describe("finanças por rodada (US1)", () => {
       {
         [save.clubId]: save.lineup,
       },
+      { state: save.renewal, careerSeed: save.seed },
+      // O app fecha a rodada com o mercado da IA (011), que também movimenta caixas.
+      { state: save.market, careerSeed: save.seed },
     );
     if (!expected.ok) throw new Error("falhou");
     expect((await loadSaved(store)).finances).toEqual(expected.finances);

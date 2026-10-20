@@ -86,17 +86,23 @@ export function runSimulateEconomy(options: SimulateEconomyOptions): SimulateEco
   let healthySum = 0;
   let lastMedian = 0;
   for (let index = 0; index < seasons; index++) {
-    const played = advanceCareer(league, finances, world, { toEnd: true }, "", undefined, {
-      state: renewal,
-      careerSeed: options.seed,
-    });
+    const played = advanceCareer(
+      league,
+      finances,
+      world,
+      { toEnd: true },
+      "",
+      undefined,
+      { state: renewal, careerSeed: options.seed },
+      { state: market, careerSeed: options.seed },
+    );
     if (!played.ok) throw new Error(JSON.stringify(played.error));
     const turned = seasonTurnover(played.league, played.world, history, {
       careerSeed: options.seed,
       finances: played.finances,
       managerClubId: "",
       renewal: played.renewal ?? renewal,
-      market,
+      market: played.market ?? market,
     });
     if (!turned.ok || !turned.finances) throw new Error(JSON.stringify(turned));
     market = turned.market ?? market;

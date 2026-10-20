@@ -53,17 +53,24 @@ function simulate(careerSeed: string): SeasonEnd[] {
   let history: SeasonHistoryEntry[] = [];
   const ends: SeasonEnd[] = [];
   for (let season = 0; season < SEASONS; season++) {
-    const played = advanceCareer(league, finances, world, { toEnd: true }, NO_MANAGER, undefined, {
-      state: renewal,
-      careerSeed,
-    });
+    const played = advanceCareer(
+      league,
+      finances,
+      world,
+      { toEnd: true },
+      NO_MANAGER,
+      undefined,
+      { state: renewal, careerSeed },
+      // Mercado da IA ativo (011): compras, empréstimos, livres e propostas a cada rodada.
+      { state: market, careerSeed },
+    );
     if (!played.ok) throw new Error(JSON.stringify(played.error));
     const turned = seasonTurnover(played.league, played.world, history, {
       careerSeed,
       finances: played.finances,
       managerClubId: NO_MANAGER,
       renewal: played.renewal ?? renewal,
-      market,
+      market: played.market ?? market,
     });
     if (!turned.ok || !turned.finances) throw new Error(JSON.stringify(turned));
     market = turned.market ?? market;
