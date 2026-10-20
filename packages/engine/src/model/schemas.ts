@@ -269,6 +269,49 @@ export const boardSchema = z
   })
   .partial();
 
+/** Regras das manchetes (014, research.md R12); tudo opcional. */
+const headlineMap = (max: number) =>
+  z
+    .object({
+      result: intInRange(0, max),
+      hatTrick: intInRange(0, max),
+      rout: intInRange(0, max),
+      comeback: intInRange(0, max),
+      upset: intInRange(0, max),
+      derby: intInRange(0, max),
+      streak: intInRange(0, max),
+      droughtEnd: intInRange(0, max),
+      record: intInRange(0, max),
+      coachFired: intInRange(0, max),
+      coachHired: intInRange(0, max),
+      managerFired: intInRange(0, max),
+      managerHired: intInRange(0, max),
+      bigTransfer: intInRange(0, max),
+      titleClinched: intInRange(0, max),
+      promotionClinched: intInRange(0, max),
+      relegationConfirmed: intInRange(0, max),
+      seasonSummary: intInRange(0, max),
+    })
+    .partial();
+
+export const newsSchema = z
+  .object({
+    routMargin: intInRange(1, 20),
+    upsetGap: intInRange(1, 40),
+    streakMin: intInRange(2, 40),
+    droughtMin: intInRange(2, 40),
+    bigTransferPct: intInRange(0, 100),
+    relevance: headlineMap(1000),
+    mineBonus: intInRange(0, 1000),
+    feedLimit: intInRange(1, 50),
+    homeLimit: intInRange(1, 20),
+    extrasPerMatch: intInRange(0, 5),
+    allTimeTop: intInRange(1, 1000),
+    legendsPerClub: intInRange(1, 100),
+    variants: headlineMap(20),
+  })
+  .partial();
+
 /** Regras da torcida (013, research.md R14); tudo opcional. */
 export const fansSchema = z
   .object({
@@ -314,6 +357,7 @@ export const competitionSchema = z.object({
   market: marketSchema.optional(),
   board: boardSchema.optional(),
   fans: fansSchema.optional(),
+  news: newsSchema.optional(),
 });
 
 export const crestSchema = z.object({

@@ -149,6 +149,7 @@ describe("virada de temporada (R5–R8, FR-010 a FR-016)", () => {
     expect(TURNOVER_STEP_IDS).toEqual([
       "record-history",
       "fans-new-season",
+      "news-new-season",
       "pay-prizes",
       "close-finance-season",
       "return-loans",
