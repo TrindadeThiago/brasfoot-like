@@ -61,7 +61,7 @@ function checkTransfer(
   if ((context.finances.clubs[buyerId]?.cash ?? 0) < fee) {
     return fail("market.insufficient_cash", { needed: fee });
   }
-  if (!canAddPlayer(context.world, buyerId)) return fail("market.squad_full");
+  if (!canAddPlayer(context.world, buyerId, player.position)) return fail("market.squad_full");
   if (!canRemovePlayer(context.world, player.clubId, player.id)) {
     return fail("market.squad_minimum");
   }
@@ -144,7 +144,9 @@ export function completeSigning(
   context: MarketContext,
   input: { agent: FreeAgent; clubId: string; contract: Contract },
 ): MarketResult<MarketUpdate> {
-  if (!canAddPlayer(context.world, input.clubId)) return fail("market.squad_full");
+  if (!canAddPlayer(context.world, input.clubId, input.agent.player.position)) {
+    return fail("market.squad_full");
+  }
   const update = working(context);
   const player = {
     ...input.agent.player,

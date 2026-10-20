@@ -175,6 +175,38 @@ export const marketSchema = z.object({
     })
     .optional(),
   freeAgents: z.object({ maxSeasons: intInRange(0, 10), retireAge: intInRange(30, 50) }).optional(),
+  aiMarket: z
+    .object({
+      weakGap: intInRange(0, 50),
+      targetBase: intInRange(0, 100),
+      targetPerAmbitionPct: intInRange(0, 100),
+      oldSquadAge: intInRange(18, 40),
+      reserveMonths: intInRange(0, 60),
+      minGain: intInRange(0, 50),
+      youthBonus: intInRange(0, 50),
+      maxBuysPerWindow: intInRange(0, 20),
+      maxSalesPerWindow: intInRange(0, 20),
+      maxDealsPerRound: intInRange(0, 200),
+      upwardMargin: intInRange(0, 100),
+      surplusDiscountPct: intInRange(1, 100),
+      loanMaxAge: intInRange(15, 30),
+      loanMinPotential: intInRange(1, 100),
+      loanBenchRank: intInRange(1, 60),
+      maxFreeSigningsPerRound: intInRange(0, 100),
+      positionMax: z
+        .object({
+          GK: intInRange(1, 30),
+          FB: intInRange(1, 30),
+          CB: intInRange(1, 30),
+          DM: intInRange(1, 30),
+          MF: intInRange(1, 30),
+          FW: intInRange(1, 30),
+        })
+        .partial(),
+      keepReports: intInRange(1, 20),
+    })
+    .partial()
+    .optional(),
   ai: z
     .object({
       renewMaxAge: intInRange(20, 50),

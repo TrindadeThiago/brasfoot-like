@@ -3,9 +3,9 @@ import type { TurnoverContext, TurnoverStep } from "../career/types";
 import { deriveWage } from "../derived/economy";
 import type { CompletedPlayer } from "../model/types";
 import { playerRef } from "../renewal/retirement";
-import { SQUAD_RULES } from "../renewal/rules";
 import { nextSeasonDate, withNotice } from "../renewal/turnover";
 import { createRng } from "../rng/xoshiro";
+import { aiRenewalDecision } from "./ai/renewals";
 import { initialContract } from "./contracts";
 import { addFreeAgents, toFreeAgent } from "./free-agents";
 import { marketRules } from "./rules";
@@ -38,35 +38,6 @@ export const returnLoansStep: TurnoverStep = {
     return { ...context, world: { ...context.world, players } };
   },
 };
-
-/** Clubes da IA mantêm quem importa; o resto vira livre (R10). */
-function aiKeeps(
-  squad: readonly CompletedPlayer[],
-  expiring: readonly CompletedPlayer[],
-  context: TurnoverContext,
-  date: string,
-): Set<string> {
-  const rules = marketRules(context.world, context.finished.competitionId);
-  const byStrength = [...squad].sort((a, b) => b.strength - a.strength || (a.id < b.id ? -1 : 1));
-  const topN = new Set(byStrength.slice(0, rules.ai.renewTopN).map((player) => player.id));
-  const keep = new Set<string>();
-  for (const player of expiring) {
-    const age = ageOn(player.birthDate, date);
-    if (topN.has(player.id) && age <= rules.ai.renewMaxAge) keep.add(player.id);
-  }
-  const staying = (position: CompletedPlayer["position"]) =>
-    squad.filter(
-      (player) =>
-        player.position === position && (!expiring.includes(player) || keep.has(player.id)),
-    ).length;
-  for (const player of [...expiring].sort(
-    (a, b) => b.strength - a.strength || (a.id < b.id ? -1 : 1),
-  )) {
-    if (keep.has(player.id)) continue;
-    if (staying(player.position) < SQUAD_RULES.positionMin[player.position]) keep.add(player.id);
-  }
-  return keep;
-}
 
 /**
  * Revisão anual dos salários dos clubes da IA (R10): quem evoluiu e ficou com o salário muito abaixo
@@ -115,7 +86,7 @@ export const expireContractsStep: TurnoverStep = {
         continue;
       }
       const squad = context.world.players.filter((player) => player.clubId === clubId);
-      const keep = aiKeeps(squad, expiring, context, date);
+      const keep = aiRenewalDecision(context, squad, expiring, date);
       for (const player of expiring) {
         if (!keep.has(player.id)) {
           freed.push(player);

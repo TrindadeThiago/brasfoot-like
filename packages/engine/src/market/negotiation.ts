@@ -152,7 +152,10 @@ export function startNegotiation(
     if (input.kind === "free" ? !free : owned?.clubId !== context.managerClubId) {
       return fail("market.not_found");
     }
-    if (input.kind === "free" && !canAddPlayer(context.world, context.managerClubId)) {
+    if (
+      input.kind === "free" &&
+      !canAddPlayer(context.world, context.managerClubId, player.position)
+    ) {
       return fail("market.squad_full");
     }
     if (owned?.contract?.loan) return fail("market.player_on_loan");
@@ -174,7 +177,9 @@ export function startNegotiation(
   if ((context.finances.clubs[context.managerClubId]?.cash ?? 0) < input.fee) {
     return fail("market.insufficient_cash", { needed: input.fee });
   }
-  if (!canAddPlayer(context.world, context.managerClubId)) return fail("market.squad_full");
+  if (!canAddPlayer(context.world, context.managerClubId, target.position)) {
+    return fail("market.squad_full");
+  }
 
   const response = respondToOffer(context, target, input.fee, input.kind);
   const opened: Negotiation = {

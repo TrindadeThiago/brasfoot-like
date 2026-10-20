@@ -1,6 +1,10 @@
 import { seasonDate } from "../calendar/date";
 import { completeLeagueRound, startLeagueRound } from "../career/league-round";
 import type { LeagueSeason } from "../career/types";
+import { closedWindow, closeWindowReport } from "../market/ai/report";
+import { aiMarketRound } from "../market/ai/round";
+import { marketAfterRound } from "../market/incoming";
+import type { MarketState } from "../market/types";
 import type { Lineup } from "../match/types";
 import type { CompletedBank } from "../model/types";
 import { evolvePlayers, midSeasonRound } from "../renewal/evolution";
@@ -23,14 +27,21 @@ export interface CareerRenewal {
   careerSeed: string;
 }
 
+/** Mercado da carreira passado à rodada (011): IA de mercado, propostas e expirações. */
+export interface CareerMarket {
+  state: MarketState;
+  careerSeed: string;
+}
+
 export type CareerRoundResult =
   | {
       ok: true;
       league: LeagueSeason;
       finances: FinanceState;
-      /** Mundo vivo depois da rodada (muda na evolução do meio da temporada). */
+      /** Mundo vivo depois da rodada (muda na evolução do meio da temporada e no mercado). */
       world: CompletedBank;
       renewal?: RenewalState;
+      market?: MarketState;
     }
   | { ok: false; error: SeasonError };
 
@@ -137,16 +148,19 @@ export function completeCareerRound(
   round: LiveRound,
   managerClubId: string,
   renewal?: CareerRenewal,
+  market?: CareerMarket,
 ): CareerRoundResult {
   const completed = completeLeagueRound(league, world, round);
   if (!completed.ok) return completed;
-  const nextFinances = applyRoundFinances(
+  let nextFinances = applyRoundFinances(
     finances,
     completed.league,
     world,
     round.round,
     managerClubId,
   );
+  let nextWorld = world;
+  let nextRenewal = renewal?.state;
   if (renewal && round.round === midSeasonRound(completed.league)) {
     // Evolução do meio da temporada (009 R3), no mesmo caminho do ao vivo e do direto.
     const evolved = evolvePlayers(
@@ -157,20 +171,42 @@ export function completeCareerRound(
       1,
       round.round,
     );
-    return {
-      ok: true,
+    nextWorld = evolved.world;
+    nextRenewal = { ...renewal.state, lastEvolution: evolved.record };
+  }
+  let nextMarket = market?.state;
+  if (market) {
+    // Mercado (011 R1): decisões da IA, depois propostas ao humano e expirações da 010.
+    const context = {
+      world: nextWorld,
       league: completed.league,
       finances: nextFinances,
-      world: evolved.world,
-      renewal: { ...renewal.state, lastEvolution: evolved.record },
+      market: market.state,
+      managerClubId,
+      careerSeed: market.careerSeed,
     };
+    const ai = aiMarketRound(context);
+    const after = marketAfterRound({
+      ...context,
+      world: ai.world,
+      finances: ai.finances,
+      market: ai.market,
+    });
+    nextWorld = after.world;
+    nextFinances = after.finances;
+    nextMarket = after.market;
+    const closed = closedWindow(context);
+    if (closed !== undefined) {
+      nextMarket = closeWindowReport({ ...context, world: nextWorld, market: nextMarket }, closed);
+    }
   }
   return {
     ok: true,
     league: completed.league,
     finances: nextFinances,
-    world,
-    ...(renewal ? { renewal: renewal.state } : {}),
+    world: nextWorld,
+    ...(nextRenewal ? { renewal: nextRenewal } : {}),
+    ...(nextMarket ? { market: nextMarket } : {}),
   };
 }
 
@@ -183,13 +219,21 @@ export function advanceCareer(
   managerClubId: string,
   lineups?: Record<string, Lineup>,
   renewal?: CareerRenewal,
+  market?: CareerMarket,
 ): CareerRoundResult {
   let next: {
     league: LeagueSeason;
     finances: FinanceState;
     world: CompletedBank;
     renewal?: RenewalState;
-  } = { league, finances, world, ...(renewal ? { renewal: renewal.state } : {}) };
+    market?: MarketState;
+  } = {
+    league,
+    finances,
+    world,
+    ...(renewal ? { renewal: renewal.state } : {}),
+    ...(market ? { market: market.state } : {}),
+  };
   const total =
     "toEnd" in step
       ? Math.max(...league.divisions.map((season) => season.calendar.length))
@@ -205,6 +249,7 @@ export function advanceCareer(
       finishRound(started.round),
       managerClubId,
       renewal && next.renewal ? { state: next.renewal, careerSeed: renewal.careerSeed } : undefined,
+      market && next.market ? { state: next.market, careerSeed: market.careerSeed } : undefined,
     );
     if (!completed.ok) return completed;
     next = {
@@ -212,6 +257,7 @@ export function advanceCareer(
       finances: completed.finances,
       world: completed.world,
       ...(completed.renewal ? { renewal: completed.renewal } : {}),
+      ...(completed.market ? { market: completed.market } : {}),
     };
   }
   return { ok: true, ...next };

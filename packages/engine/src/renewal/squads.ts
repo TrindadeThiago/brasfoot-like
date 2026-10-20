@@ -1,5 +1,6 @@
 import { ageOn } from "../calendar/date";
 import type { LeagueSeason } from "../career/types";
+import { aiMarketRules } from "../market/ai/rules";
 import { POSITIONS, type Position } from "../model/catalogs";
 import type { CompletedBank, CompletedPlayer } from "../model/types";
 import { createRng } from "../rng/xoshiro";
@@ -59,6 +60,7 @@ export function balanceSquads(
   const released: PlayerRef[] = [];
   const releasedPlayers: CompletedPlayer[] = [];
   let seq = renewal.nextPlayerSeq;
+  const caps = aiMarketRules(world, league.competitionId).positionMax;
   for (const clubId of league.divisions.flatMap((entry) => entry.clubIds).sort()) {
     const club = world.clubs.find((entry) => entry.id === clubId);
     if (!club) continue;
@@ -72,10 +74,22 @@ export function balanceSquads(
       players.push(youth);
       promoted.push(playerRef(youth, date));
     };
+    // Teto por posição (011 R3): libera os de menor utilidade acima dele.
+    for (const position of POSITIONS) {
+      while (count(position) > caps[position]) {
+        const out = squad()
+          .filter((player) => player.position === position)
+          .sort((a, b) => utility(a, date) - utility(b, date) || (a.id < b.id ? -1 : 1))[0];
+        if (!out) break;
+        released.push(playerRef(out, date));
+        releasedPlayers.push(out);
+        players = players.filter((player) => player.id !== out.id);
+      }
+    }
     for (const position of POSITIONS) {
       while (count(position) < SQUAD_RULES.positionMin[position]) add(position);
     }
-    while (squad().length < SQUAD_RULES.min) add(neediestPosition(squad(), rng));
+    while (squad().length < SQUAD_RULES.min) add(neediestPosition(squad(), rng, caps));
     while (squad().length > SQUAD_RULES.max) {
       const candidates = squad()
         .filter((player) => count(player.position) > SQUAD_RULES.positionMin[player.position])

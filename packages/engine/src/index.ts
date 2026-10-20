@@ -55,7 +55,7 @@ export type { FinanceError, FinanceErrorCode } from "./finance/errors";
 export { FINANCE_ERROR_CODES, FINANCE_ERROR_PARAMS, financeError } from "./finance/errors";
 export type { GateEstimate } from "./finance/gate";
 export { gateFor, nextHomeGateEstimate, powQuarters } from "./finance/gate";
-export type { CareerRenewal, CareerRoundResult } from "./finance/round";
+export type { CareerMarket, CareerRenewal, CareerRoundResult } from "./finance/round";
 export { advanceCareer, applyRoundFinances, completeCareerRound } from "./finance/round";
 export { DEFAULT_ECONOMY, divisionEconomy, economyRules } from "./finance/rules";
 export { seasonFinanceSummary } from "./finance/summary";
@@ -75,6 +75,18 @@ export type {
 } from "./finance/types";
 export { LEDGER_CATEGORIES } from "./finance/types";
 export * from "./lineup";
+export type { ClubNeeds, PositionNeed } from "./market/ai/needs";
+export { clubNeeds, STARTERS_BY_POSITION } from "./market/ai/needs";
+export { incomingOfferFor } from "./market/ai/offers";
+export {
+  closedWindow,
+  closeWindowReport,
+  reportForDivision,
+  reportHighlights,
+} from "./market/ai/report";
+export { aiClubs, aiContractYears, aiMarketRound } from "./market/ai/round";
+export type { AiMarketRules } from "./market/ai/rules";
+export { aiMarketRules, DEFAULT_AI_MARKET } from "./market/ai/rules";
 export { askingPrice, loanAskingPrice, maxBidFor, respondToOffer } from "./market/club-response";
 export {
   contractYearsRange,
@@ -125,8 +137,10 @@ export type {
   NegotiationStage,
   PlayerFilters,
   PlayerResponse,
+  ReportEntry,
   TransferKind,
   TransferRecord,
+  WindowReport,
 } from "./market/types";
 export { emptyMarket, marketError } from "./market/types";
 export { contractValuePct, marketValue } from "./market/value";
