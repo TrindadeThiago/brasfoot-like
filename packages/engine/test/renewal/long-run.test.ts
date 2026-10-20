@@ -6,6 +6,8 @@ import type { LeagueSeason, SeasonHistoryEntry } from "../../src/career/types";
 import { annualWageBill, createFinances } from "../../src/finance/create";
 import { advanceCareer } from "../../src/finance/round";
 import type { FinanceState } from "../../src/finance/types";
+import { ensureContracts } from "../../src/market/contracts";
+import { emptyMarket, type MarketState } from "../../src/market/types";
 import type { CompletedBank } from "../../src/model/types";
 import { initialRenewal, measureWorld } from "../../src/renewal/measure";
 import { squadProblems } from "../../src/renewal/squads";
@@ -33,6 +35,8 @@ const ECONOMY = {
   minSpearmanReputationCash: 0.4,
 };
 const NO_MANAGER = "";
+/** Livres ao fim de cada virada (010, research.md R11). */
+const MAX_FREE_AGENTS = 150;
 
 interface SeasonEnd {
   measure: WorldMeasure;
@@ -41,6 +45,9 @@ interface SeasonEnd {
   cash: Map<string, number>;
   crisis: number;
   gaps: number[];
+  freeAgents: number;
+  /** Jogadores com contrato vencido no mundo depois da virada. */
+  expired: number;
 }
 
 function median(values: number[]): number {
@@ -70,9 +77,11 @@ function youthGap(world: CompletedBank, record: EvolutionRecord, date: string): 
 }
 
 function simulate(careerSeed: string): SeasonEnd[] {
-  let world: CompletedBank = testWorld();
-  const created = createLeagueSeason(world, { competitionId: competitionId(), careerSeed });
+  const base = testWorld();
+  const created = createLeagueSeason(base, { competitionId: competitionId(), careerSeed });
   if (!created.ok) throw new Error("falhou");
+  let world: CompletedBank = ensureContracts(base, created.league.year, careerSeed);
+  let market: MarketState = emptyMarket();
   let league: LeagueSeason = created.league;
   let finances: FinanceState = createFinances(world, league);
   let renewal: RenewalState = initialRenewal(world);
@@ -94,8 +103,12 @@ function simulate(careerSeed: string): SeasonEnd[] {
       finances: played.finances,
       managerClubId: NO_MANAGER,
       renewal: played.renewal ?? renewal,
+      market,
     });
-    if (!turned.ok || !turned.finances || !turned.renewal) throw new Error(JSON.stringify(turned));
+    if (!turned.ok || !turned.finances || !turned.renewal || !turned.market) {
+      throw new Error(JSON.stringify(turned));
+    }
+    market = turned.market;
     const end = turned.renewal.lastEvolution;
     const endGap = end ? youthGap(played.world, end, date) : undefined;
     if (endGap !== undefined) gaps.push(endGap);
@@ -110,6 +123,9 @@ function simulate(careerSeed: string): SeasonEnd[] {
       cash: new Map(clubs.map((club) => [club.clubId, club.cash])),
       crisis: clubs.filter((club) => club.inCrisis).length,
       gaps,
+      freeAgents: market.freeAgents.length,
+      expired: world.players.filter((player) => (player.contract?.untilYear ?? 0) < league.year)
+        .length,
     });
   }
   return ends;
@@ -132,6 +148,15 @@ describe.each(["renovacao-1", "renovacao-2"])(
           expect(end.measure[key], `${label} ${key}`).toBeLessThanOrEqual(max);
         }
         expect(end.measure.stars, `${label} craques`).toBeGreaterThanOrEqual(MIN_STARS);
+      }
+    });
+
+    it("com contratos, o grupo de livres fica pequeno e ninguém joga com contrato vencido (SC-006)", () => {
+      for (const [index, end] of ends.entries()) {
+        expect(end.freeAgents, `temporada ${index + 1} livres`).toBeLessThanOrEqual(
+          MAX_FREE_AGENTS,
+        );
+        expect(end.expired, `temporada ${index + 1} vencidos`).toBe(0);
       }
     });
 

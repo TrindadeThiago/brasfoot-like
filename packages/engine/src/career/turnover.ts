@@ -23,6 +23,12 @@ import {
   payPrizes,
   paySponsorship,
 } from "../finance/turnover";
+import {
+  ageOutFreeAgentsStep,
+  expireContractsStep,
+  resetMarketStep,
+  returnLoansStep,
+} from "../market/turnover";
 import type { CompletedBank } from "../model/types";
 import {
   balanceSquadsStep,
@@ -52,17 +58,21 @@ export const TURNOVER_STEP_IDS = [
   "record-history",
   "pay-prizes",
   "close-finance-season",
+  "return-loans",
   "evolve-players",
   "retire-players",
+  "expire-contracts",
   "regulate-world",
   "generate-youth",
   "balance-squads",
+  "age-out-free-agents",
   "promotion-relegation",
   "advance-year",
   "reset-season-stats",
   "generate-calendars",
   "pay-sponsorship",
   "ai-finance-review",
+  "reset-market",
 ] as const;
 
 /** Falha de uma etapa, convertida em erro da virada por `seasonTurnover`. */
@@ -160,17 +170,21 @@ export const DEFAULT_TURNOVER_STEPS: readonly TurnoverStep[] = [
   recordHistory,
   payPrizes,
   closeFinanceSeason,
+  returnLoansStep,
   evolvePlayersStep,
   retirePlayersStep,
+  expireContractsStep,
   regulateWorldStep,
   generateYouthStep,
   balanceSquadsStep,
+  ageOutFreeAgentsStep,
   promotionRelegation,
   advanceYear,
   resetSeasonStats,
   generateCalendars,
   paySponsorship,
   aiFinanceReview,
+  resetMarketStep,
 ];
 
 function stepsError(stepId: string, reason: string) {
@@ -279,6 +293,7 @@ export function seasonTurnover(
     ...(options.finances ? { finances: options.finances } : {}),
     ...(options.managerClubId ? { managerClubId: options.managerClubId } : {}),
     ...(options.renewal ? { renewal: options.renewal } : {}),
+    ...(options.market ? { market: options.market } : {}),
   };
   try {
     for (const step of resolved.steps) context = step.run(context);
@@ -307,5 +322,6 @@ export function seasonTurnover(
     ...(context.finances ? { finances: context.finances } : {}),
     world: context.world,
     ...(context.renewal ? { renewal: context.renewal } : {}),
+    ...(context.market ? { market: context.market } : {}),
   };
 }

@@ -5,6 +5,8 @@ import type { LeagueSeason, SeasonHistoryEntry } from "../../src/career/types";
 import { annualWageBill, createFinances } from "../../src/finance/create";
 import { advanceCareer } from "../../src/finance/round";
 import type { FinanceState } from "../../src/finance/types";
+import { ensureContracts } from "../../src/market/contracts";
+import { emptyMarket, type MarketState } from "../../src/market/types";
 import type { CompletedBank } from "../../src/model/types";
 import { initialRenewal } from "../../src/renewal/measure";
 import type { RenewalState } from "../../src/renewal/types";
@@ -36,9 +38,13 @@ interface SeasonEnd {
 }
 
 function simulate(careerSeed: string): SeasonEnd[] {
-  let world: CompletedBank = testWorld();
-  const created = createLeagueSeason(world, { competitionId: competitionId(), careerSeed });
+  const base = testWorld();
+  const created = createLeagueSeason(base, { competitionId: competitionId(), careerSeed });
   if (!created.ok) throw new Error("falhou");
+  // Desde a 010 todo jogador tem contrato e os contratos vencem: a economia é verificada com
+  // renovações da IA, livres e salários contratuais.
+  let world: CompletedBank = ensureContracts(base, created.league.year, careerSeed);
+  let market: MarketState = emptyMarket();
   let league: LeagueSeason = created.league;
   let finances: FinanceState = createFinances(world, league);
   // Desde a 009 toda carreira tem renovação do mundo (evolução, aposentadoria, jovens): a economia
@@ -57,8 +63,10 @@ function simulate(careerSeed: string): SeasonEnd[] {
       finances: played.finances,
       managerClubId: NO_MANAGER,
       renewal: played.renewal ?? renewal,
+      market,
     });
     if (!turned.ok || !turned.finances) throw new Error(JSON.stringify(turned));
+    market = turned.market ?? market;
     ({ league, history, world } = turned);
     finances = turned.finances;
     renewal = turned.renewal ?? renewal;

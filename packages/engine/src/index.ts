@@ -75,6 +75,68 @@ export type {
 } from "./finance/types";
 export { LEDGER_CATEGORIES } from "./finance/types";
 export * from "./lineup";
+export { askingPrice, loanAskingPrice, maxBidFor, respondToOffer } from "./market/club-response";
+export {
+  contractYearsRange,
+  ensureContracts,
+  initialContract,
+  isLastYear,
+} from "./market/contracts";
+export {
+  completeLoan,
+  completeRenewal,
+  completeSigning,
+  completeTransfer,
+} from "./market/effects";
+export type { MarketErrorCode } from "./market/errors";
+export { MARKET_ERROR_CODES, MARKET_ERROR_PARAMS } from "./market/errors";
+export { addFreeAgents, toFreeAgent } from "./market/free-agents";
+export type { IncomingAnswer } from "./market/incoming";
+export { answerIncomingOffer, marketAfterRound } from "./market/incoming";
+export type { NegotiationStep, StartInput } from "./market/negotiation";
+export {
+  answerClubCounter,
+  answerPlayerDemand,
+  cancelNegotiation,
+  proposeContract,
+  startNegotiation,
+} from "./market/negotiation";
+export { attraction, exigency, respondToContract, wageDemand } from "./market/player-response";
+export { DEFAULT_MARKET, marketRules } from "./market/rules";
+export { comparePlayers, searchPlayers } from "./market/search";
+export { canAddPlayer, canRemovePlayer, squadSize, strengthRank } from "./market/squad";
+export type {
+  ClubResponse,
+  Contract,
+  FreeAgent,
+  FreePlayer,
+  IncomingOffer,
+  MarketContext,
+  MarketError,
+  MarketResult,
+  MarketRow,
+  MarketRules,
+  MarketState,
+  MarketUpdate,
+  MarketWindow,
+  Negotiation,
+  NegotiationKind,
+  NegotiationOutcome,
+  NegotiationStage,
+  PlayerFilters,
+  PlayerResponse,
+  TransferKind,
+  TransferRecord,
+} from "./market/types";
+export { emptyMarket, marketError } from "./market/types";
+export { contractValuePct, marketValue } from "./market/value";
+export {
+  currentWindowEnd,
+  isWindowOpen,
+  nextWindowRound,
+  roundsPlayed,
+  transferWindows,
+} from "./market/windows";
 export { adequacy } from "./match/adequacy";
 export type { AutoLineupOptions, AutoLineupResult } from "./match/auto-lineup";
 export { autoLineup } from "./match/auto-lineup";
