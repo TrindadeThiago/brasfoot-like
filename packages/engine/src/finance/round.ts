@@ -4,6 +4,8 @@ import type { BoardState } from "../board/types";
 import { seasonDate } from "../calendar/date";
 import { completeLeagueRound, startLeagueRound } from "../career/league-round";
 import type { LeagueSeason } from "../career/types";
+import { fansAfterRound } from "../fans/mood";
+import type { FansState } from "../fans/types";
 import { closedWindow, closeWindowReport } from "../market/ai/report";
 import { aiMarketRound } from "../market/ai/round";
 import { marketAfterRound } from "../market/incoming";
@@ -43,6 +45,11 @@ export interface CareerBoard {
   careerSeed: string;
 }
 
+/** Torcidas da carreira passadas à rodada (013): humor, público e pressão na diretoria. */
+export interface CareerFans {
+  state: FansState;
+}
+
 export type CareerRoundResult =
   | {
       ok: true;
@@ -53,6 +60,7 @@ export type CareerRoundResult =
       renewal?: RenewalState;
       market?: MarketState;
       board?: BoardState;
+      fans?: FansState;
     }
   | { ok: false; error: SeasonError };
 
@@ -71,6 +79,7 @@ export function applyRoundFinances(
   world: CompletedBank,
   round: number,
   managerClubId: string,
+  fans?: FansState,
 ): FinanceState {
   const rules = economyRules(world, league.competitionId);
   const working = draft(finances);
@@ -86,7 +95,15 @@ export function applyRoundFinances(
   for (const season of playing) {
     for (const fixture of season.calendar[round - 1]?.fixtures ?? []) {
       const price = working.clubs[fixture.home]?.ticketPrice ?? rules.priceRange.min;
-      const gate = gateFor(working, league, world, fixture, price);
+      const mood = fans?.clubs[fixture.home]?.mood;
+      const gate = gateFor(
+        working,
+        league,
+        world,
+        fixture,
+        price,
+        mood !== undefined ? { mood } : {},
+      );
       post(working, entry(fixture.home, "gate", gate.revenue));
       working.gates.push({
         season: league.number,
@@ -161,15 +178,18 @@ export function completeCareerRound(
   renewal?: CareerRenewal,
   market?: CareerMarket,
   board?: CareerBoard,
+  fans?: CareerFans,
 ): CareerRoundResult {
   const completed = completeLeagueRound(league, world, round);
   if (!completed.ok) return completed;
+  // A bilheteria usa o humor de antes do jogo (013 R10).
   let nextFinances = applyRoundFinances(
     finances,
     completed.league,
     world,
     round.round,
     managerClubId,
+    fans?.state,
   );
   let nextWorld = world;
   let nextRenewal = renewal?.state;
@@ -212,9 +232,24 @@ export function completeCareerRound(
       nextMarket = closeWindowReport({ ...context, world: nextWorld, market: nextMarket }, closed);
     }
   }
+  let nextFans = fans?.state;
+  if (fans) {
+    // Torcida (013 R10): resultado, expectativa e ídolos (log do mercado da rodada).
+    nextFans = fansAfterRound(
+      {
+        world: nextWorld,
+        league: completed.league,
+        finances: nextFinances,
+        fans: fans.state,
+        ...(nextMarket ? { market: nextMarket } : {}),
+      },
+      round.round,
+      managerClubId,
+    );
+  }
   let nextBoard = board?.state;
   if (board) {
-    // Diretoria (012 R2): depois das finanças e do mercado da rodada.
+    // Diretoria (012 R2): depois das finanças, do mercado e da torcida da rodada.
     const update = boardAfterRound(
       {
         world: nextWorld,
@@ -222,6 +257,7 @@ export function completeCareerRound(
         finances: nextFinances,
         board: board.state,
         careerSeed: board.careerSeed,
+        ...(nextFans ? { fans: nextFans } : {}),
       },
       round.round,
     );
@@ -248,6 +284,7 @@ export function completeCareerRound(
     ...(nextRenewal ? { renewal: nextRenewal } : {}),
     ...(nextMarket ? { market: nextMarket } : {}),
     ...(nextBoard ? { board: nextBoard } : {}),
+    ...(nextFans ? { fans: nextFans } : {}),
   };
 }
 
@@ -262,6 +299,7 @@ export function advanceCareer(
   renewal?: CareerRenewal,
   market?: CareerMarket,
   board?: CareerBoard,
+  fans?: CareerFans,
 ): CareerRoundResult {
   let next: {
     league: LeagueSeason;
@@ -270,6 +308,7 @@ export function advanceCareer(
     renewal?: RenewalState;
     market?: MarketState;
     board?: BoardState;
+    fans?: FansState;
   } = {
     league,
     finances,
@@ -277,6 +316,7 @@ export function advanceCareer(
     ...(renewal ? { renewal: renewal.state } : {}),
     ...(market ? { market: market.state } : {}),
     ...(board ? { board: board.state } : {}),
+    ...(fans ? { fans: fans.state } : {}),
   };
   const total =
     "toEnd" in step
@@ -296,6 +336,7 @@ export function advanceCareer(
       renewal && next.renewal ? { state: next.renewal, careerSeed: renewal.careerSeed } : undefined,
       market && next.market ? { state: next.market, careerSeed: market.careerSeed } : undefined,
       board && next.board ? { state: next.board, careerSeed: board.careerSeed } : undefined,
+      fans && next.fans ? { state: next.fans } : undefined,
     );
     if (!completed.ok) return completed;
     next = {
@@ -305,6 +346,7 @@ export function advanceCareer(
       ...(completed.renewal ? { renewal: completed.renewal } : {}),
       ...(completed.market ? { market: completed.market } : {}),
       ...(completed.board ? { board: completed.board } : {}),
+      ...(completed.fans ? { fans: completed.fans } : {}),
     };
   }
   return { ok: true, ...next };

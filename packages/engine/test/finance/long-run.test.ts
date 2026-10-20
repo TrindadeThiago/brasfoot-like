@@ -2,6 +2,8 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { createLeagueSeason } from "../../src/career/league";
 import { seasonTurnover } from "../../src/career/turnover";
 import type { LeagueSeason, SeasonHistoryEntry } from "../../src/career/types";
+import { createFans } from "../../src/fans/create";
+import type { FansState } from "../../src/fans/types";
 import { annualWageBill, createFinances } from "../../src/finance/create";
 import { advanceCareer } from "../../src/finance/round";
 import type { FinanceState } from "../../src/finance/types";
@@ -51,6 +53,8 @@ function simulate(careerSeed: string): SeasonEnd[] {
   // é verificada nesse cenário real, não com elencos congelados.
   let renewal: RenewalState = initialRenewal(world);
   let history: SeasonHistoryEntry[] = [];
+  // Desde a 013 o humor das torcidas mexe na bilheteria: a economia é verificada com ele.
+  let fans: FansState = createFans(world, league);
   const ends: SeasonEnd[] = [];
   for (let season = 0; season < SEASONS; season++) {
     const played = advanceCareer(
@@ -63,6 +67,8 @@ function simulate(careerSeed: string): SeasonEnd[] {
       { state: renewal, careerSeed },
       // Mercado da IA ativo (011): compras, empréstimos, livres e propostas a cada rodada.
       { state: market, careerSeed },
+      undefined,
+      { state: fans },
     );
     if (!played.ok) throw new Error(JSON.stringify(played.error));
     const turned = seasonTurnover(played.league, played.world, history, {
@@ -71,9 +77,11 @@ function simulate(careerSeed: string): SeasonEnd[] {
       managerClubId: NO_MANAGER,
       renewal: played.renewal ?? renewal,
       market: played.market ?? market,
+      fans: played.fans ?? fans,
     });
     if (!turned.ok || !turned.finances) throw new Error(JSON.stringify(turned));
     market = turned.market ?? market;
+    fans = turned.fans ?? fans;
     ({ league, history, world } = turned);
     finances = turned.finances;
     renewal = turned.renewal ?? renewal;

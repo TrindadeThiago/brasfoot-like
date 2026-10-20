@@ -1,4 +1,5 @@
 import type { BoardState } from "../board/types";
+import type { FansState } from "../fans/types";
 import type { FinanceState } from "../finance/types";
 import type { MarketState } from "../market/types";
 import type { CompletedBank } from "../model/types";
@@ -106,6 +107,8 @@ export interface TurnoverContext {
   market?: MarketState;
   /** Diretorias, técnicos e carreira do técnico (012). */
   board?: BoardState;
+  /** Humor das torcidas (013). */
+  fans?: FansState;
   /** Gerador próprio de cada etapa (não depende das outras etapas). */
   rng(stepId: string): Rng;
 }
@@ -130,6 +133,7 @@ export interface TurnoverOptions {
   renewal?: RenewalState;
   market?: MarketState;
   board?: BoardState;
+  fans?: FansState;
 }
 
 export type TurnoverResult =
@@ -143,5 +147,6 @@ export type TurnoverResult =
       renewal?: RenewalState;
       market?: MarketState;
       board?: BoardState;
+      fans?: FansState;
     }
   | { ok: false; error: SeasonError };

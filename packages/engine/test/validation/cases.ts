@@ -440,6 +440,35 @@ export const RULE_CASES: RuleCase[] = [
       params: { kind: "surnames", count: 2, min: 20 },
     },
   },
+  {
+    code: "rivalry.same_club",
+    description: "rivalidade de um clube com ele mesmo (013)",
+    mutate: (bank) => {
+      bank.rivalries = [{ clubIds: ["clube-1", "clube-1"], intensity: 1 }];
+    },
+    expect: {
+      section: "rivalries",
+      path: [0, "clubIds"],
+      entityId: "clube-1/clube-1",
+      params: { clubId: "clube-1" },
+    },
+  },
+  {
+    code: "rivalry.duplicate_pair",
+    description: "a mesma rivalidade em ordem invertida (013)",
+    mutate: (bank) => {
+      bank.rivalries = [
+        { clubIds: ["clube-1", "clube-2"], intensity: 3 },
+        { clubIds: ["clube-2", "clube-1"], intensity: 1 },
+      ];
+    },
+    expect: {
+      section: "rivalries",
+      path: [1, "clubIds"],
+      entityId: "clube-2/clube-1",
+      params: { clubA: "clube-2", clubB: "clube-1", otherIndex: 0 },
+    },
+  },
 ];
 
 export function bankFor(ruleCase: RuleCase): ModPackage {

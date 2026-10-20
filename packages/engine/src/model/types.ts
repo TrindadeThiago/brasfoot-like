@@ -9,6 +9,7 @@ import type {
   leagueFormatSchema,
   manifestSchema,
   playerSchema,
+  rivalrySchema,
 } from "./schemas";
 
 export type { CrestShape, Position, Tiebreaker, Trait } from "./catalogs";
@@ -22,6 +23,7 @@ export type Crest = z.infer<typeof crestSchema>;
 export type Club = z.infer<typeof clubSchema>;
 export type HiddenAttributes = z.infer<typeof hiddenAttributesSchema>;
 export type Player = z.infer<typeof playerSchema>;
+export type Rivalry = z.infer<typeof rivalrySchema>;
 
 export interface ModPackage {
   manifest: Manifest;
@@ -29,6 +31,8 @@ export interface ModPackage {
   competitions: Competition[];
   clubs: Club[];
   players: Player[];
+  /** Rivalidades (013); seção opcional do mod. */
+  rivalries?: Rivalry[];
 }
 
 declare const validatedBrand: unique symbol;

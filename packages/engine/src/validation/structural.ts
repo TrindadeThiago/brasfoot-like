@@ -1,6 +1,11 @@
 import { z } from "zod";
 import { RESERVED_FORMAT_TYPES, SUPPORTED_FORMAT_VERSIONS } from "../model/catalogs";
-import { manifestSchema, SECTION_ITEM_SCHEMAS, SECTION_MIN_ITEMS } from "../model/schemas";
+import {
+  manifestSchema,
+  OPTIONAL_SECTIONS,
+  SECTION_ITEM_SCHEMAS,
+  SECTION_MIN_ITEMS,
+} from "../model/schemas";
 import type { IdLocation, ParsedItem, SemanticContext } from "./context";
 import {
   type IssueCode,
@@ -191,6 +196,7 @@ function emptyContext(): SemanticContext {
     competitions: [],
     clubs: [],
     players: [],
+    rivalries: [],
     ids: new Map(),
     playerRefs: [],
   };
@@ -246,6 +252,7 @@ export function validateStructure(input: unknown): StructuralResult {
 
   for (const section of ITEM_SECTIONS) {
     const raw = input[section];
+    if (raw === undefined && OPTIONAL_SECTIONS.includes(section)) continue;
     if (raw === undefined) {
       issues.push(makeIssue("schema.required", section, [], { field: section }));
       continue;

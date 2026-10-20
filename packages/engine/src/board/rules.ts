@@ -58,6 +58,8 @@ export interface BoardRules {
   maxFreeCoaches: number;
   /** Reputação de um técnico gerado: reputação do clube ± este valor. */
   coachSpread: number;
+  /** Resultado de clássico na confiança × (100 + intensidade × derbyPct) / 100 (013). */
+  derbyPct: number;
 }
 
 export const DEFAULT_BOARD: BoardRules = {
@@ -107,6 +109,7 @@ export const DEFAULT_BOARD: BoardRules = {
   offerRounds: 2,
   maxFreeCoaches: 20,
   coachSpread: 8,
+  derbyPct: 40,
 };
 
 /** Regras da diretoria: `competition.board` com os padrões preenchidos. */
