@@ -28,6 +28,7 @@ export const GAME_SCREENS = [
   { path: "/jogo/historico", key: "nav.history", club: false },
   { path: "/jogo/mercado", key: "nav.market", club: true },
   { path: "/jogo/carreira", key: "nav.career", club: false },
+  { path: "/jogo/noticias", key: "nav.news", club: false },
 ] as const;
 
 /** Telas disponíveis para a carreira (sem as do clube quando desempregado). */

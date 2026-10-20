@@ -56,6 +56,7 @@ function Layout({ children }: { children: Render }) {
       h: go(6),
       m: go(7),
       c: go(8),
+      j: go(9),
       s: () => void play(readPreferences().roundMode ?? "live"),
       d: () => void play("direct"),
       "?": () => setHelp((open) => !open),

@@ -15,6 +15,7 @@ const SHORTCUTS: readonly [string, string][] = [
   ["H", "help.history"],
   ["M", "help.market"],
   ["C", "help.career"],
+  ["J", "help.news"],
   ["[ / ]", "help.divisions"],
   ["N", "help.nextSeason"],
   ["S", "help.playLive"],
