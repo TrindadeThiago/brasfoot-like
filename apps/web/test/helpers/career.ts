@@ -22,6 +22,7 @@ export async function storedCareer(
       { state: save.renewal, careerSeed: save.seed },
       { state: save.market, careerSeed: save.seed },
       { state: save.board, careerSeed: save.seed },
+      { state: save.fans },
     );
     if (!advanced.ok) throw new Error("falhou");
     save = {
@@ -32,6 +33,7 @@ export async function storedCareer(
       renewal: advanced.renewal ?? save.renewal,
       market: advanced.market ?? save.market,
       board: advanced.board ?? save.board,
+      fans: advanced.fans ?? save.fans,
     };
   }
   if (edit) save = edit(save);

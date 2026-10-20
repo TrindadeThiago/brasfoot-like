@@ -167,7 +167,13 @@ function RoundEnd({ save, round }: { save: SaveFile; round: number }) {
   const over = isLeagueSeasonOver(save.league);
   return (
     <div className={styles.layout}>
-      <RoundResults round={round} records={records} clubs={save.bank.clubs} clubId={save.clubId} />
+      <RoundResults
+        round={round}
+        records={records}
+        clubs={save.bank.clubs}
+        clubId={save.clubId}
+        rivalries={save.bank.rivalries}
+      />
       {mine ? <MatchSummary record={mine} save={save} /> : null}
       <div className={styles.actions}>
         <Link href={screenHref("/jogo/competicao", save.id)}>{t("round.toStandings")}</Link>

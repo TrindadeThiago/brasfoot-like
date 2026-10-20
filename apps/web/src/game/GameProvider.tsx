@@ -376,6 +376,7 @@ export function GameProvider({ children, store }: { children: ReactNode; store?:
         { state: save.renewal, careerSeed: save.seed },
         { state: save.market, careerSeed: save.seed },
         { state: save.board, careerSeed: save.seed },
+        { state: save.fans },
       );
       if (!result.ok) return;
       const next = touch(withRoundResult(save, result), new Date().toISOString());

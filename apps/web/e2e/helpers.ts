@@ -22,10 +22,14 @@ export async function createCareer(
   manager: string,
   row: number,
   division = "Série A",
+  options: { noFiring?: boolean } = {},
 ): Promise<string> {
   await page.goto("/");
   await page.getByRole("link", { name: t("opening.newCareer") }).click();
   await page.getByLabel(t("newCareer.managerName")).fill(manager);
+  if (options.noFiring) {
+    await page.getByRole("checkbox", { name: t("newCareer.noFiring") }).check();
+  }
   if (division !== "Série A") {
     await page.getByLabel(t("newCareer.division.filter")).selectOption({ label: division });
   }

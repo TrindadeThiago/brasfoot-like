@@ -3,6 +3,7 @@ import competitions from "@brasfoot-like/default-mod/competitions.json" with { t
 import countries from "@brasfoot-like/default-mod/countries.json" with { type: "json" };
 import mod from "@brasfoot-like/default-mod/mod.json" with { type: "json" };
 import players from "@brasfoot-like/default-mod/players.json" with { type: "json" };
+import rivalries from "@brasfoot-like/default-mod/rivalries.json" with { type: "json" };
 import { joinBankFiles } from "@brasfoot-like/engine";
 
 /** Banco padrão (o primeiro mod) unido num único objeto, ainda não validado. */
@@ -13,5 +14,6 @@ export function defaultBankInput(): unknown {
     "competitions.json": competitions,
     "clubs.json": clubs,
     "players.json": players,
+    "rivalries.json": rivalries,
   });
 }
