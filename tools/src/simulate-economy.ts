@@ -8,6 +8,7 @@ import {
   annualWageBill,
   type CompletedBank,
   completeHiddenAttributes,
+  createFans,
   createFinances,
   createLeagueSeason,
   emptyMarket,
@@ -70,6 +71,8 @@ export function runSimulateEconomy(options: SimulateEconomyOptions): SimulateEco
   let league = created.league;
   let finances: FinanceState = createFinances(world, league);
   let renewal = initialRenewal(world);
+  // Torcidas ativas (013): o humor mexe na bilheteria.
+  let fans = createFans(world, league);
   let history: SeasonHistoryEntry[] = [];
   const clubIds = Object.keys(finances.clubs).sort();
   const wages = median(
@@ -95,6 +98,8 @@ export function runSimulateEconomy(options: SimulateEconomyOptions): SimulateEco
       undefined,
       { state: renewal, careerSeed: options.seed },
       { state: market, careerSeed: options.seed },
+      undefined,
+      { state: fans },
     );
     if (!played.ok) throw new Error(JSON.stringify(played.error));
     const turned = seasonTurnover(played.league, played.world, history, {
@@ -103,9 +108,11 @@ export function runSimulateEconomy(options: SimulateEconomyOptions): SimulateEco
       managerClubId: "",
       renewal: played.renewal ?? renewal,
       market: played.market ?? market,
+      fans: played.fans ?? fans,
     });
     if (!turned.ok || !turned.finances) throw new Error(JSON.stringify(turned));
     market = turned.market ?? market;
+    fans = turned.fans ?? fans;
     league = turned.league;
     history = turned.history;
     finances = turned.finances;

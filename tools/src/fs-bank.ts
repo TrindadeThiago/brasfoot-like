@@ -5,6 +5,7 @@ import {
   BANK_FILES,
   type ModPackage,
   makeIssue,
+  OPTIONAL_SECTIONS,
   type Section,
   splitBankFiles,
   type ValidationIssue,
@@ -43,7 +44,10 @@ export function readBankDir(dir: string): ReadBankResult {
   for (const [section, file] of Object.entries(BANK_FILES) as [Section, string][]) {
     const path = join(dir, file);
     if (!existsSync(path)) {
-      issues.push(makeIssue("file.missing", section, [], { file }));
+      // Seções opcionais (rivalidades, 013) podem faltar.
+      if (!OPTIONAL_SECTIONS.includes(section)) {
+        issues.push(makeIssue("file.missing", section, [], { file }));
+      }
       continue;
     }
     const text = readFileSync(path, "utf8");
