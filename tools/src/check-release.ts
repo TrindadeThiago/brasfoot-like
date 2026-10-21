@@ -1,5 +1,6 @@
 // Verificações antes de publicar (016 contracts/release.md). Uso: pnpm check-release
-// (a tag vem de GITHUB_REF_NAME, ex.: v1.0.0; sem ela, a conferência da tag é pulada).
+// (a tag vem de RELEASE_TAG, ex.: v1.0.0, ou de GITHUB_REF_NAME em execução por tag; sem ela, a
+// conferência da tag é pulada).
 import { existsSync, readdirSync, readFileSync, realpathSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -87,7 +88,11 @@ if (invokedDirectly) {
   };
   const problems = checkRelease({
     version,
-    tag: process.env.GITHUB_REF_NAME || undefined,
+    // O runner não deixa sobrescrever GITHUB_REF_NAME; o workflow da `main` informa RELEASE_TAG.
+    tag:
+      process.env.RELEASE_TAG ||
+      (process.env.GITHUB_REF_TYPE === "tag" ? process.env.GITHUB_REF_NAME : undefined) ||
+      undefined,
     notes: releaseNotes("pt-BR").map((note) => note.version),
     outDir: join(REPO_ROOT, "apps", "web", "out"),
   });

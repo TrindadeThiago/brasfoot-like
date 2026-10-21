@@ -22,7 +22,7 @@
 1. Passos 1–4 do CI.
 2. `pnpm sim:world --seasons 30` e `pnpm sim:economy --seasons 30` (falham fora dos limites).
 3. `pnpm check-release` (`tools/src/check-release.ts`):
-   - tag (`GITHUB_REF_NAME` sem `v`, definida pelo workflow como `v<versão>`) = `package.json` `version`;
+   - tag (`RELEASE_TAG` sem `v`, definida pelo workflow como `v<versão>`) = `package.json` `version`;
    - `release-notes.json` tem a versão;
    - `apps/web/out/` existe, tem `index.html`, `sw.js`, `precache.json` com a versão,
      `manifest.webmanifest`, `vercel.json`, `screenshots/` com ≥ 4 imagens;

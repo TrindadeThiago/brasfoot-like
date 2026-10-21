@@ -119,8 +119,8 @@ jobs:
       - name: Conferir a versão, as notas e o build
         run: pnpm check-release
         env:
-          # Fora de uma tag, informa a tag que será criada para a conferência valer.
-          GITHUB_REF_NAME: v${{ needs.version.outputs.version }}
+          # A tag ainda não existe: informa a que será criada para a conferência valer.
+          RELEASE_TAG: v${{ needs.version.outputs.version }}
       - run: pnpm --filter @brasfoot-like/web exec playwright install --with-deps chromium
       - run: pnpm test:e2e
       - uses: actions/upload-artifact@v4
