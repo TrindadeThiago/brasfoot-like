@@ -5,24 +5,28 @@ import { divisionNameOf, type SaveFile } from "@brasfoot-like/save";
 import { GameLayout } from "../../../game/GameLayout";
 import { useDivision } from "../../../game/useDivision";
 import { useT } from "../../../i18n";
+import { CompetitionSelect } from "../../../ui/CompetitionSelect";
 import { CompetitionTabs } from "../../../ui/CompetitionTabs";
 import { DivisionTabs } from "../../../ui/DivisionTabs";
 import { StandingsTable } from "../../../ui/StandingsTable";
 
 function Standings({ save }: { save: SaveFile }) {
   const t = useT();
-  const { level, season } = useDivision(save);
+  const { competitionId, league, level, season } = useDivision(save);
   return (
     <>
-      <CompetitionTabs careerId={save.id} level={level} />
-      <DivisionTabs save={save} level={level} />
+      <CompetitionSelect save={save} competitionId={competitionId} />
+      <CompetitionTabs careerId={save.id} level={level} competitionId={competitionId} />
+      <DivisionTabs save={save} level={level} league={league} />
       <div data-tip-anchor="table">
         <StandingsTable
           key={level}
           save={save}
           season={season}
-          zones={divisionZones(save.bank, save.league.competitionId, level)}
-          caption={t("competition.caption", { division: divisionNameOf(save, level) })}
+          zones={divisionZones(save.bank, competitionId, level)}
+          caption={t("competition.caption", {
+            division: divisionNameOf(save, level, competitionId),
+          })}
         />
       </div>
     </>

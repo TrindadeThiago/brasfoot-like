@@ -1,8 +1,9 @@
 "use client";
 
-import { isLeagueSeasonOver, leagueRound, leagueTotalRounds } from "@brasfoot-like/engine";
+import { leagueRound, leagueTotalRounds } from "@brasfoot-like/engine";
 import {
   divisionNameOf,
+  isCareerSeasonOver,
   isEmployed,
   type SaveFile,
   seasonYearOf,
@@ -69,11 +70,11 @@ export function AppHeader({ save }: { save: SaveFile }) {
           <p className={styles.meta}>
             <span>{t("header.manager", { name: save.managerName })}</span>
             <span>
-              {isLeagueSeasonOver(save.league)
+              {isCareerSeasonOver(save)
                 ? t("header.seasonOver", { year, division })
                 : t("header.progress", {
                     year,
-                    round: leagueRound(save.league),
+                    round: Math.min(leagueRound(save.league), total),
                     total,
                     division,
                   })}

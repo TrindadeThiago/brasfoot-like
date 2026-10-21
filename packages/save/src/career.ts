@@ -1,13 +1,21 @@
 import {
   adjustLineup,
+  type CalendarDay,
   type CareerRoundResult,
+  type CareerSeasonState,
+  type ClubFixture,
   clubDivision,
-  clubUnavailability,
+  competitionSeason,
+  currentDay,
+  isCalendarOver,
+  leagueCalendar,
   managerClubOf,
+  nextClubFixture,
   type Season,
   type SeasonError,
   seasonDate,
   seasonTurnover,
+  upcomingUnavailability,
 } from "@brasfoot-like/engine";
 import type { SaveFile } from "./format";
 
@@ -56,21 +64,73 @@ export function withAdjustedLineup(save: SaveFile): SaveFile {
   const left = [...Object.values(save.lineup.starters), ...save.lineup.bench]
     .filter((playerId) => !inSquad.has(playerId))
     .map((playerId) => ({ playerId, reason: "left" as const, remaining: 0 }));
-  const unavailable = [...clubUnavailability(userSeason(save), save.bank, save.clubId), ...left];
+  // Suspensões valem por competição (017): conta a do próximo jogo do clube.
+  const unavailable = [...upcomingUnavailability(seasonStateOf(save), save.clubId), ...left];
   const { lineup, changes } = adjustLineup(save.lineup, squad, unavailable);
   if (changes.length === 0) return save;
   return { ...save, lineup, lineupNotice: [...(save.lineupNotice ?? []), ...changes] };
 }
 
+/** A parte do save que o dia de jogos da carreira lê e escreve (017). */
+export function seasonStateOf(save: SaveFile): CareerSeasonState {
+  return {
+    league: save.league,
+    competitions: save.competitions,
+    calendar: save.calendar,
+    fitness: save.fitness,
+    finances: save.finances,
+    world: save.bank,
+    renewal: save.renewal,
+    market: save.market,
+    board: save.board,
+    fans: save.fans,
+    news: save.news,
+  };
+}
+
+/** Todos os jogos de todas as competições foram disputados (a temporada pode virar). */
+export function isCareerSeasonOver(save: SaveFile): boolean {
+  return isCalendarOver(seasonStateOf(save));
+}
+
+/** Próximo dia de jogos da temporada (de qualquer competição); undefined com ela encerrada. */
+export function currentDayOf(save: SaveFile): CalendarDay | undefined {
+  return currentDay(seasonStateOf(save));
+}
+
+/** Próximo jogo do clube em foco, de qualquer competição; undefined sem jogos restantes. */
+export function nextFixture(save: SaveFile): ClubFixture | undefined {
+  return nextClubFixture(seasonStateOf(save), save.clubId);
+}
+
+/** Temporada da divisão que o clube do jogador disputa numa competição da carreira. */
+export function userSeasonFor(save: SaveFile, competitionId: string): Season | undefined {
+  return clubDivision(competitionSeason(seasonStateOf(save), competitionId), save.clubId);
+}
+
 /**
- * Grava no save o resultado de uma rodada da carreira (ao vivo ou direto). Se o técnico perdeu o
- * clube na rodada (012), o aviso de escalação some; senão a escalação é ajustada.
+ * Se o técnico perdeu o clube na rodada (012), o aviso de escalação some; senão a escalação é
+ * ajustada.
+ */
+function settled(before: SaveFile, next: SaveFile): SaveFile {
+  if (before.board.manager.clubId !== null && next.board.manager.clubId === null) {
+    const { lineupNotice: _notice, ...rest } = next;
+    return rest;
+  }
+  return withAdjustedLineup(next);
+}
+
+/**
+ * Grava no save o resultado de uma rodada da carreira (ao vivo ou direto), no caminho anterior ao
+ * calendário por datas.
+ *
+ * @deprecated use `withDayResult`.
  */
 export function withRoundResult(
   save: SaveFile,
   result: Extract<CareerRoundResult, { ok: true }>,
 ): SaveFile {
-  const next: SaveFile = {
+  return settled(save, {
     ...save,
     league: result.league,
     finances: result.finances,
@@ -80,12 +140,25 @@ export function withRoundResult(
     board: result.board ?? save.board,
     fans: result.fans ?? save.fans,
     news: result.news ?? save.news,
-  };
-  if (save.board.manager.clubId !== null && next.board.manager.clubId === null) {
-    const { lineupNotice: _notice, ...rest } = next;
-    return rest;
-  }
-  return withAdjustedLineup(next);
+  });
+}
+
+/** Grava no save o resultado de um dia de jogos da carreira (ao vivo ou direto). */
+export function withDayResult(save: SaveFile, state: CareerSeasonState): SaveFile {
+  return settled(save, {
+    ...save,
+    league: state.league,
+    competitions: state.competitions,
+    calendar: state.calendar,
+    fitness: state.fitness,
+    finances: state.finances,
+    bank: state.world,
+    renewal: state.renewal ?? save.renewal,
+    market: state.market ?? save.market,
+    board: state.board ?? save.board,
+    fans: state.fans ?? save.fans,
+    news: state.news ?? save.news,
+  });
 }
 
 /**
@@ -105,12 +178,20 @@ export function advanceCareerSeason(
     board: save.board,
     fans: save.fans,
     news: save.news,
+    competitions: save.competitions,
+    calendar: save.calendar,
+    competitionHistory: save.competitionHistory,
   });
   if (!turned.ok) return turned;
   const next = withAdjustedLineup(
     withManagerFormation({
       ...save,
       league: turned.league,
+      competitions: turned.competitions ?? [],
+      calendar: turned.calendar ?? leagueCalendar(turned.world, turned.league),
+      // A condição física volta ao máximo na pré-temporada (017 FR-022).
+      fitness: { players: {} },
+      competitionHistory: turned.competitionHistory ?? save.competitionHistory,
       history: turned.history,
       finances: turned.finances ?? save.finances,
       bank: turned.world,

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { advanceCareer } from "../../src/career/day";
 import { advanceLeague } from "../../src/career/league-round";
-import { advanceCareer, applyRoundFinances } from "../../src/finance/round";
+import { applyRoundFinances } from "../../src/finance/round";
 import { career, testWorld } from "./helpers";
 
 // Limites de desempenho da 008 (plan.md, Performance Goals).

@@ -5,6 +5,7 @@ import type { SaveFile } from "@brasfoot-like/save";
 import { GameLayout } from "../../../../game/GameLayout";
 import { useDivision } from "../../../../game/useDivision";
 import { useT } from "../../../../i18n";
+import { CompetitionSelect } from "../../../../ui/CompetitionSelect";
 import { CompetitionTabs } from "../../../../ui/CompetitionTabs";
 import { Crest } from "../../../../ui/Crest";
 import { type Column, DataTable } from "../../../../ui/DataTable";
@@ -60,11 +61,12 @@ function Scorers({ save, season }: { save: SaveFile; season: Season }) {
 }
 
 function ScorersScreen({ save }: { save: SaveFile }) {
-  const { level, season } = useDivision(save);
+  const { competitionId, league, level, season } = useDivision(save);
   return (
     <>
-      <CompetitionTabs careerId={save.id} level={level} />
-      <DivisionTabs save={save} level={level} />
+      <CompetitionSelect save={save} competitionId={competitionId} />
+      <CompetitionTabs careerId={save.id} level={level} competitionId={competitionId} />
+      <DivisionTabs save={save} level={level} league={league} />
       <Scorers key={level} save={save} season={season} />
     </>
   );

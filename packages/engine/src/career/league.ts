@@ -1,4 +1,5 @@
 import type { CompletedBank } from "../model/types";
+import { disciplineRules } from "../season/discipline";
 import { seasonError } from "../season/errors";
 import { createSeason, isSeasonOver } from "../season/season";
 import type { PlayerStatus, Season } from "../season/types";
@@ -86,7 +87,7 @@ export function createLeagueSeason(
       competitionId: competition.id,
       divisionLevel: division.level,
       seed,
-      ...(options.rules ? { rules: options.rules } : {}),
+      rules: { ...disciplineRules(world, competition.id), ...options.rules },
       ...(clubIds ? { clubIds } : {}),
       ...(status ? { status } : {}),
     });

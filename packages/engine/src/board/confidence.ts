@@ -1,11 +1,30 @@
 import { derbyMultiplierPct, roundResult } from "../fans/mood";
 import { fansRules } from "../fans/rules";
 import { currentPosition, financeMet } from "./goals";
-import { boardRules } from "./rules";
+import { type BoardRules, boardRules } from "./rules";
 import type { BoardContext, ConfidenceChange, ConfidenceFactor } from "./types";
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
+}
+
+/** Fator de confiança de um resultado, com o peso extra de clássico (013 R7). */
+export function confidenceResultFactor(
+  rules: BoardRules,
+  played: { result: "win" | "draw" | "loss"; intensity?: number },
+): { kind: ConfidenceFactor; amount: number } {
+  const base =
+    played.result === "win" ? rules.win : played.result === "loss" ? -rules.loss : rules.draw;
+  const amount = Math.trunc((base * derbyMultiplierPct(rules.derbyPct, played.intensity)) / 100);
+  const kind: ConfidenceFactor =
+    played.intensity === undefined
+      ? played.result
+      : played.result === "win"
+        ? "derbyWin"
+        : played.result === "loss"
+          ? "derbyLoss"
+          : "derbyDraw";
+  return { kind, amount };
 }
 
 /** Percentual aplicado às parcelas negativas: técnicos de mais reputação têm mais paciência. */
@@ -33,21 +52,8 @@ export function confidenceChange(
   const confidence = club?.confidence ?? rules.neutral;
   const raw: { kind: ConfidenceFactor; amount: number }[] = [];
   const played = roundResult(context, clubId, round);
-  if (played) {
-    // Clássico (013 R7): o resultado pesa mais, pela intensidade da rivalidade.
-    const base =
-      played.result === "win" ? rules.win : played.result === "loss" ? -rules.loss : rules.draw;
-    const amount = Math.trunc((base * derbyMultiplierPct(rules.derbyPct, played.intensity)) / 100);
-    const derby = played.intensity !== undefined;
-    const kind: ConfidenceFactor = !derby
-      ? played.result
-      : played.result === "win"
-        ? "derbyWin"
-        : played.result === "loss"
-          ? "derbyLoss"
-          : "derbyDraw";
-    raw.push({ kind, amount });
-  }
+  // Clássico (013 R7): o resultado pesa mais, pela intensidade da rivalidade.
+  if (played) raw.push(confidenceResultFactor(rules, played));
   const goals = club?.goals;
   if (goals && goals.season === context.league.number && round >= rules.goalCheckFromRound) {
     const gap = currentPosition(context, clubId) - goals.sport.position;

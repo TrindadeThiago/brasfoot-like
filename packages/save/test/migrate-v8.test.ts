@@ -10,7 +10,7 @@ describe("migração v7 → v8 (012 R12, FR-038, SC-009)", () => {
     if (result.status !== "ok") throw new Error(JSON.stringify(result));
     expect(result.migratedFrom).toBe(7);
     const { board } = result.save;
-    expect(result.save.formatVersion).toBe(11);
+    expect(result.save.formatVersion).toBe(12);
     expect(board.manager).toMatchObject({
       clubId: v7.clubId,
       noFiring: false,
@@ -28,6 +28,10 @@ describe("migração v7 → v8 (012 R12, FR-038, SC-009)", () => {
       fans: _fans,
       news: _news,
       assets: _assets,
+      calendar: _calendar,
+      competitions: _competitions,
+      fitness: _fitness,
+      competitionHistory: _competitionHistory,
       bank: _bank,
       ...rest
     } = result.save;

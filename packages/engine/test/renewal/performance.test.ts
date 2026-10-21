@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { advanceCareer } from "../../src/career/day";
 import { seasonTurnover } from "../../src/career/turnover";
 import { createFinances } from "../../src/finance/create";
-import { advanceCareer } from "../../src/finance/round";
 import { evolvePlayers } from "../../src/renewal/evolution";
 import { initialRenewal } from "../../src/renewal/measure";
 import { newLeague, testWorld } from "../career/helpers";

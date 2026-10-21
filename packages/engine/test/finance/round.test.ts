@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { advanceCareer, completeCareerRound } from "../../src/career/day";
 import { leagueRound } from "../../src/career/league";
 import { startLeagueRound } from "../../src/career/league-round";
 import { annualWageBill } from "../../src/finance/create";
-import { advanceCareer, completeCareerRound } from "../../src/finance/round";
 import { economyRules } from "../../src/finance/rules";
 import type { FinanceState } from "../../src/finance/types";
 import { managerAutoLineup } from "../../src/lineup/auto";

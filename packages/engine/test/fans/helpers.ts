@@ -1,10 +1,10 @@
 import { createBoard } from "../../src/board/create";
 import type { BoardState } from "../../src/board/types";
+import { advanceCareer } from "../../src/career/day";
 import type { LeagueSeason } from "../../src/career/types";
 import { createFans } from "../../src/fans/create";
 import type { FansState } from "../../src/fans/types";
 import { createFinances } from "../../src/finance/create";
-import { advanceCareer } from "../../src/finance/round";
 import type { FinanceState } from "../../src/finance/types";
 import { emptyMarket, type MarketState } from "../../src/market/types";
 import type { CompletedBank, Rivalry } from "../../src/model/types";

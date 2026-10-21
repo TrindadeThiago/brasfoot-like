@@ -1,10 +1,12 @@
 "use client";
 
-import { isLeagueSeasonOver, pendingOffers } from "@brasfoot-like/engine";
+import { pendingOffers } from "@brasfoot-like/engine";
 import {
   divisionNameOf,
+  isCareerSeasonOver,
   isEmployed,
   managedClubId,
+  nextFixture,
   type SaveFile,
   userDivisionLevel,
   userSeason,
@@ -12,8 +14,8 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { GameLayout } from "../../game/GameLayout";
-import { clubPosition, lastResults, nextFixture } from "../../game/selectors";
-import { formatMoney, useT } from "../../i18n";
+import { clubPosition, lastResults } from "../../game/selectors";
+import { formatDate, formatMoney, formatWeekday, useT } from "../../i18n";
 import { screenHref } from "../../ui/AppHeader";
 import { Button } from "../../ui/Button";
 import { BoardCard } from "../../ui/board/BoardCard";
@@ -43,7 +45,7 @@ function Unemployed({
   play: (mode: "live" | "direct") => Promise<void>;
 }) {
   const t = useT();
-  const over = isLeagueSeasonOver(save.league);
+  const over = isCareerSeasonOver(save);
   const lastRound = game.state.lastRound;
   return (
     <div className={styles.grid}>
@@ -112,9 +114,13 @@ export default function HomePage() {
     <GameLayout>
       {(save, game) => {
         const clubs = new Map(save.bank.clubs.map((club) => [club.id, club]));
-        const over = isLeagueSeasonOver(save.league);
-        const next = nextFixture(userSeason(save), save.clubId);
-        const opponent = next ? clubs.get(next.opponentId) : undefined;
+        const over = isCareerSeasonOver(save);
+        const next = nextFixture(save);
+        const isHome = next?.home === save.clubId;
+        const opponent = next ? clubs.get(isHome ? next.away : next.home) : undefined;
+        const competition = next
+          ? save.bank.competitions.find((entry) => entry.id === next.competitionId)
+          : undefined;
         const position = clubPosition(userSeason(save), save.bank, save.clubId);
         const results = lastResults(userSeason(save), save.clubId, 5);
         const lastRound = game.state.lastRound;
@@ -184,30 +190,53 @@ export default function HomePage() {
                         away={opponent.id}
                       />
                     </strong>
-                    <span>{next.isHome ? t("home.homeGame") : t("home.awayGame")}</span>
                     <span>
-                      {t("home.division", {
-                        division: divisionNameOf(save, userDivisionLevel(save)),
+                      {t("home.matchWhen", {
+                        weekday: formatWeekday(next.date),
+                        date: formatDate(next.date),
                       })}
                     </span>
+                    <span>{isHome ? t("home.homeGame") : t("home.awayGame")}</span>
+                    <span>{t("home.competition", { competition: competition?.name ?? "" })}</span>
+                    {(competition?.divisions.length ?? 0) > 1 ? (
+                      <span>
+                        {t("home.division", {
+                          division: divisionNameOf(save, userDivisionLevel(save)),
+                        })}
+                      </span>
+                    ) : null}
                     <span>{t("home.roundLabel", { round: next.round })}</span>
                   </div>
                 </div>
+              ) : !over ? (
+                <p>{t("home.noMoreMatches")}</p>
               ) : null}
               <div className={styles.actions} data-tip-anchor="play">
-                <Button
-                  variant="primary"
-                  disabled={over || game.state.simulating}
-                  onClick={() => void play("live")}
-                >
-                  {t("home.playLive")}
-                </Button>
-                <Button
-                  disabled={over || game.state.simulating}
-                  onClick={() => void play("direct")}
-                >
-                  {t("home.simulate")}
-                </Button>
+                {next || over ? (
+                  <>
+                    <Button
+                      variant="primary"
+                      disabled={over || game.state.simulating}
+                      onClick={() => void play("live")}
+                    >
+                      {t("home.playLive")}
+                    </Button>
+                    <Button
+                      disabled={over || game.state.simulating}
+                      onClick={() => void play("direct")}
+                    >
+                      {t("home.simulate")}
+                    </Button>
+                  </>
+                ) : (
+                  <Button
+                    variant="primary"
+                    disabled={game.state.simulating}
+                    onClick={() => void play("direct")}
+                  >
+                    {t("home.advanceToEnd")}
+                  </Button>
+                )}
                 {game.state.simulating ? <p role="status">{t("home.simulating")}</p> : null}
               </div>
               {over ? (

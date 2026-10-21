@@ -35,6 +35,10 @@ export interface RoundDecision {
 /** Rodada em andamento: só existe em memória (research.md R1). */
 export interface LiveRound {
   round: number;
+  /** Competição da rodada, quando criada pela liga/carreira (017). */
+  competitionId?: string;
+  /** Data do dia de jogos da rodada, quando criada pelo dia da carreira (017). */
+  date?: string;
   /** Passos do relógio já dados (o da partida mais longa). */
   tick: number;
   matches: LiveMatch[];

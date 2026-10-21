@@ -29,6 +29,10 @@ export function headlineVars(save: SaveFile, vars: HeadlineVars): HeadlineVars {
   }
   if (typeof vars.level === "number") resolved.division = divisionNameOf(save, vars.level);
   if (typeof vars.fee === "number") resolved.feeText = formatMoney(vars.fee);
+  if (typeof vars.competition === "string") {
+    const competition = save.bank.competitions.find((entry) => entry.id === vars.competition);
+    resolved.competition = competition?.name ?? vars.competition;
+  }
   resolved.hasScorer = typeof vars.player === "string" ? "yes" : "no";
   return resolved;
 }
@@ -39,7 +43,14 @@ export function Headline({ save, headline }: { save: SaveFile; headline: Headlin
   const vars = headlineVars(save, headline.vars);
   return (
     <li className={headline.mine ? styles.mine : undefined}>
-      <p className={styles.text}>{t(`news.${headline.type}.${headline.variant}`, vars)}</p>
+      <p className={styles.text}>
+        {typeof vars.competition === "string"
+          ? t("news.inCompetition", {
+              competition: vars.competition,
+              text: t(`news.${headline.type}.${headline.variant}`, vars),
+            })
+          : t(`news.${headline.type}.${headline.variant}`, vars)}
+      </p>
       {headline.extras?.map((extra) => (
         <p key={extra.type} className={styles.extra}>
           {t(`news.extra.${extra.type}`, headlineVars(save, extra.vars))}

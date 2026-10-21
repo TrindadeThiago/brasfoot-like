@@ -28,10 +28,10 @@ export interface SaveSummary {
   savedAt: string;
 }
 
-/** Nome (do mod) da divisão de um nível na competição da carreira. */
-export function divisionNameOf(save: SaveFile, level: number): string {
+/** Nome (do mod) da divisão de um nível na competição da carreira (ou na indicada). */
+export function divisionNameOf(save: SaveFile, level: number, competitionId?: string): string {
   const division = save.bank.competitions
-    .find((entry) => entry.id === save.league.competitionId)
+    .find((entry) => entry.id === (competitionId ?? save.league.competitionId))
     ?.divisions.find((entry) => entry.level === level);
   return division?.name ?? String(level);
 }

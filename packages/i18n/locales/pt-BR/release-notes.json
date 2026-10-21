@@ -1,5 +1,17 @@
 [
   {
+    "version": "1.1.0",
+    "date": "2026-10-21",
+    "changes": [
+      "A temporada agora é um calendário de datas: a Início mostra o próximo jogo com dia da semana, data e competição, e avançar leva até ele.",
+      "Calendário do clube com todos os jogos da temporada por data, com filtro por competição.",
+      "Condição física: os jogadores se cansam com os jogos e se recuperam com os dias de descanso; titulares cansados rendem menos e a escalação avisa.",
+      "Mods podem definir as datas de cada competição (campo schedule), as regras de cartões e a condição física; o banco com datas impossíveis é recusado com uma mensagem clara.",
+      "Tabela, resultados e artilharia ganham abas por competição quando o banco tem mais de uma; as janelas de transferência mostram as datas.",
+      "Carreiras salvas continuam abrindo na mesma rodada, com o mesmo histórico."
+    ]
+  },
+  {
     "version": "1.0.2",
     "date": "2026-10-21",
     "changes": [

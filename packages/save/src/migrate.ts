@@ -18,6 +18,7 @@ import {
   initialRenewal,
   isSeasonOver,
   type LeagueSeason,
+  leagueCalendar,
   leagueSeasonSeed,
   POSTURES,
   playerSeq,
@@ -220,6 +221,26 @@ const addAssets: Migration = {
   },
 };
 
+/**
+ * v11 → v12: calendário por datas (017 R12). A agenda padrão é aplicada às rodadas já existentes
+ * da principal, com o próximo dia na rodada que a carreira ainda não jogou; as outras competições
+ * entram na próxima virada; a condição física começa cheia.
+ */
+const addCalendar: Migration = {
+  from: 11,
+  migrate(raw) {
+    const save = raw as { bank: CompletedBank; league: LeagueSeason };
+    return {
+      ...(raw as object),
+      formatVersion: 12,
+      competitions: [],
+      calendar: leagueCalendar(save.bank, save.league),
+      fitness: { players: {} },
+      competitionHistory: [],
+    };
+  },
+};
+
 /** Migrações reais do formato, em ordem. */
 export const MIGRATIONS: readonly Migration[] = [
   addLineup,
@@ -232,6 +253,7 @@ export const MIGRATIONS: readonly Migration[] = [
   addFans,
   addNews,
   addAssets,
+  addCalendar,
 ];
 
 /** Problemas que tornam a escalação gravada ilegível (os demais o jogo corrige ou avisa). */
@@ -248,6 +270,27 @@ export type LoadResult =
   | { status: "future_version"; version: number }
   | { status: "corrupt"; reason: string };
 
+/** Temporada de uma competição: uma `Season` por divisão (só a estrutura que a carreira usa). */
+const leagueSchema = z.object({
+  competitionId: z.string().min(1),
+  number: z.int().min(1),
+  year: z.int(),
+  seed: z.string().min(1),
+  divisions: z
+    .array(
+      z.object({
+        divisionLevel: z.int().min(1),
+        seed: z.union([z.string(), z.number()]),
+        clubIds: z.array(z.string()),
+        calendar: z.array(z.unknown()),
+        nextRound: z.int().min(1),
+        records: z.array(z.unknown()),
+        status: z.record(z.string(), z.unknown()),
+      }),
+    )
+    .min(1),
+});
+
 const envelopeSchema = z.object({
   formatVersion: z.int(),
   id: z.string().min(1),
@@ -257,26 +300,23 @@ const envelopeSchema = z.object({
   clubId: z.string().min(1),
   seed: z.string().min(1),
   bank: z.unknown(),
-  league: z.object({
-    competitionId: z.string().min(1),
-    number: z.int().min(1),
-    year: z.int(),
-    seed: z.string().min(1),
-    divisions: z
-      .array(
-        z.object({
-          divisionLevel: z.int().min(1),
-          seed: z.union([z.string(), z.number()]),
-          clubIds: z.array(z.string()),
-          calendar: z.array(z.unknown()),
-          nextRound: z.int().min(1),
-          records: z.array(z.unknown()),
-          status: z.record(z.string(), z.unknown()),
-        }),
-      )
-      .min(1),
-  }),
+  league: leagueSchema,
   history: z.array(z.object({ number: z.int(), year: z.int() }).loose()),
+  competitions: z.array(leagueSchema),
+  calendar: z.object({
+    start: z.string().min(1),
+    end: z.string().min(1),
+    days: z.array(
+      z.object({
+        date: z.string().min(1),
+        slots: z.array(z.object({ competitionId: z.string().min(1), round: z.int().min(1) })),
+      }),
+    ),
+  }),
+  fitness: z.object({
+    players: z.record(z.string(), z.object({ value: z.int().min(0).max(100), date: z.string() })),
+  }),
+  competitionHistory: z.array(z.object({ number: z.int(), year: z.int() }).loose()),
   finances: z.object({
     clubs: z.record(
       z.string(),
@@ -466,6 +506,31 @@ function boardProblem(save: SaveFile): string | undefined {
   return undefined;
 }
 
+/**
+ * O calendário da temporada (017): datas em ordem e sem repetição, e cada rodada de cada
+ * competição da carreira em exatamente um dia.
+ */
+function calendarProblem(save: SaveFile): string | undefined {
+  const dates = save.calendar.days.map((day) => day.date);
+  if (dates.some((date, index) => index > 0 && date <= (dates[index - 1] ?? ""))) {
+    return "datas do calendário fora de ordem";
+  }
+  const seen = new Map<string, number[]>();
+  for (const slot of save.calendar.days.flatMap((day) => day.slots)) {
+    seen.set(slot.competitionId, [...(seen.get(slot.competitionId) ?? []), slot.round]);
+  }
+  const seasons = [save.league, ...save.competitions];
+  if (seen.size !== seasons.length) return "calendário com competições diferentes das da carreira";
+  for (const season of seasons) {
+    const total = Math.max(...season.divisions.map((division) => division.calendar.length));
+    const rounds = [...(seen.get(season.competitionId) ?? [])].sort((a, b) => a - b);
+    if (rounds.length !== total || rounds.some((round, index) => round !== index + 1)) {
+      return `calendário incompleto: ${season.competitionId}`;
+    }
+  }
+  return undefined;
+}
+
 /** Toda equipe da liga tem torcida (013 data-model.md). */
 function fansProblem(save: SaveFile): string | undefined {
   const missing = save.league.divisions
@@ -532,6 +597,7 @@ export function migrateSave(
     marketProblem(save) ??
     boardProblem(save) ??
     fansProblem(save) ??
+    calendarProblem(save) ??
     newsProblem(save);
   if (incoherence) return { status: "corrupt", reason: incoherence };
   const season = save.league.divisions.find((entry) => entry.clubIds.includes(save.clubId));

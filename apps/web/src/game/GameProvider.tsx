@@ -1,28 +1,30 @@
 "use client";
 
 import {
+  advanceCareerToNextMatch,
+  type CompletedPlayer,
   changeFormation as changeLineupFormation,
-  clubUnavailability,
-  completeCareerRound,
+  completeCareerDay,
   type FinanceError,
   type FormationId,
   finishRound,
+  fitnessRules,
   type IncomingAnswer,
-  isLeagueSeasonOver,
-  isSeasonOver,
   type Lineup,
   type LineupIssue,
   type LiveRound,
-  leagueRound,
   type MarketError,
   type MatchRecord,
   managerAutoLineup,
   type NegotiationStep,
+  otherSuspensions,
   type Place,
   type Posture,
   placePlayer as placeLineupPlayer,
   type StartInput,
-  startLeagueRound,
+  squadWithFitness,
+  startCareerDay,
+  upcomingUnavailability,
   validateLineup,
 } from "@brasfoot-like/engine";
 import {
@@ -33,28 +35,32 @@ import {
   answerManagerPlayerDemand,
   cancelManagerNegotiation,
   createSave,
+  currentDayOf,
   declineManagerOffer,
   dismissBoardNotice as dismissSavedBoardNotice,
   dismissSquadNotice as dismissSavedSquadNotice,
   dismissWindowReport as dismissSavedWindowReport,
   type FinanceSaveResult,
   type IncomingSaveResult,
+  isCareerSeasonOver,
   isEmployed,
   type MarketSaveResult,
   managedClubId,
+  nextFixture,
   proposeManagerContract,
   repayManagerLoan,
   type SaveError,
   type SaveFile,
+  seasonStateOf,
   setManagerTicketPrice,
   startManagerNegotiation,
   startManagerStadiumWorks,
   takeManagerLoan,
   touch,
-  userSeason,
+  userSeasonFor,
   withAdjustedLineup,
+  withDayResult,
   withManagerFormation,
-  withRoundResult,
 } from "@brasfoot-like/save";
 import {
   createContext,
@@ -249,7 +255,21 @@ export type FinanceActionResult = { ok: true } | { ok: false; error: FinanceErro
 /** Elenco do clube do jogador e indisponíveis do momento. */
 export function lineupContext(save: SaveFile) {
   const squad = save.bank.players.filter((player) => player.clubId === save.clubId);
-  return { squad, unavailable: clubUnavailability(userSeason(save), save.bank, save.clubId) };
+  const state = seasonStateOf(save);
+  const next = nextFixture(save);
+  const rules = fitnessRules(save.bank, save.league.competitionId);
+  const date = next?.date ?? currentDayOf(save)?.date ?? save.calendar.start;
+  return {
+    squad,
+    /** O elenco com a força reduzida pela condição, para a escalação automática. */
+    rested: squadWithFitness(squad, save.fitness, date, rules) as CompletedPlayer[],
+    /** Suspensões valem por competição (017): conta a do próximo jogo; lesões, de todas. */
+    unavailable: upcomingUnavailability(state, save.clubId),
+    /** Competição do próximo jogo (a principal, sem jogos restantes). */
+    competitionId: next?.competitionId ?? save.league.competitionId,
+    /** Suspensões em outras competições: só informação, não bloqueiam este jogo. */
+    elsewhere: otherSuspensions(state, save.clubId),
+  };
 }
 
 const GameContext = createContext<GameContextValue | null>(null);
@@ -407,27 +427,25 @@ export function GameProvider({
   const commitRound = useCallback(
     async (live: LiveRound) => {
       const save = latestSave.current;
-      if (!save || live.round !== leagueRound(save.league)) return;
-      const result = completeCareerRound(
-        save.league,
-        save.finances,
-        save.bank,
-        live,
-        managedClubId(save),
-        { state: save.renewal, careerSeed: save.seed },
-        { state: save.market, careerSeed: save.seed },
-        { state: save.board, careerSeed: save.seed },
-        { state: save.fans },
-        { state: save.news, careerSeed: save.seed },
-      );
+      if (!save || isCareerSeasonOver(save)) return;
+      let result: ReturnType<typeof completeCareerDay>;
+      try {
+        result = completeCareerDay(seasonStateOf(save), save.seed, managedClubId(save), live);
+      } catch {
+        // Rodada de outro dia ou de outra competição: não é a atual.
+        return;
+      }
       if (!result.ok) return;
-      const next = touch(withRoundResult(save, result), new Date().toISOString());
+      const next = touch(withDayResult(save, result.state), new Date().toISOString());
       latestSave.current = next;
       dispatch({ type: "live" });
       dispatch({
         type: "ready",
         save: next,
-        lastRound: userSeason(next).records.filter((record) => record.round === live.round),
+        lastRound:
+          userSeasonFor(next, live.competitionId ?? next.league.competitionId)?.records.filter(
+            (record) => record.round === live.round,
+          ) ?? [],
       });
       await persist(next);
     },
@@ -448,26 +466,58 @@ export function GameProvider({
       }
       await saved;
       const after = latestSave.current;
-      return after && isLeagueSeasonOver(after.league) ? "finished" : "done";
+      return after && isCareerSeasonOver(after) ? "finished" : "done";
     },
     [commitRound],
   );
 
+  /**
+   * Simula os dias até o próximo jogo do clube (017 FR-011) e grava. Sem mais jogos do clube,
+   * simula até o fim da temporada. Devolve o save já avançado, ou undefined se o motor recusou.
+   */
+  const advanceToMatch = useCallback(
+    async (save: SaveFile): Promise<SaveFile | undefined> => {
+      const advanced = advanceCareerToNextMatch(
+        seasonStateOf(save),
+        save.seed,
+        managedClubId(save),
+        save.clubId,
+      );
+      if (!advanced.ok) return undefined;
+      const next = withDayResult(save, advanced.state);
+      // Nenhum dia simulado: o clube já joga hoje.
+      if (next.league === save.league && next.competitions === save.competitions) return save;
+      const touched = touch(next, new Date().toISOString());
+      latestSave.current = touched;
+      dispatch({ type: "update", save: touched });
+      await persist(touched);
+      return touched;
+    },
+    [persist],
+  );
+
   const playRoundNow = useCallback(
     async (mode: RoundMode, options?: { confirmed?: boolean }): Promise<RoundOutcome> => {
-      const save = latestSave.current;
-      if (!save || isLeagueSeasonOver(save.league)) return "over";
+      const first = latestSave.current;
+      if (!first || isCareerSeasonOver(first)) return "over";
       writePreferences({ roundMode: mode });
+      const save = await advanceToMatch(first);
+      if (!save) return "blocked";
+      if (isCareerSeasonOver(save)) return "finished";
+      const startDay = (lineups?: Record<string, Lineup>) => {
+        const started = startCareerDay(seasonStateOf(save), save.clubId, lineups);
+        return started.ok ? started.live : undefined;
+      };
       if (!isEmployed(save)) {
         // Desempregado (012): a rodada roda só com a IA.
         dispatch({ type: "simulateIssues" });
-        const started = startLeagueRound(save.league, save.bank);
-        if (!started.ok) return "blocked";
+        const live = startDay();
+        if (!live) return "blocked";
         if (mode === "live") {
-          dispatch({ type: "live", value: started.round });
+          dispatch({ type: "live", value: live });
           return "live";
         }
-        return simulateDirect(started.round);
+        return simulateDirect(live);
       }
       const { squad, unavailable } = lineupContext(save);
       const validation = validateLineup(save.lineup, squad, unavailable);
@@ -492,20 +542,15 @@ export function GameProvider({
       }
       dispatch({ type: "simulateIssues" });
       const short = validation.issues.some((issue) => issue.code === "short_squad");
-      const playing = !isSeasonOver(userSeason(save));
-      const started = startLeagueRound(
-        save.league,
-        save.bank,
-        short || !playing ? undefined : { [save.clubId]: save.lineup },
-      );
-      if (!started.ok) return "blocked";
+      const live = startDay(short ? undefined : { [save.clubId]: save.lineup });
+      if (!live) return "blocked";
       if (mode === "live") {
-        dispatch({ type: "live", value: started.round });
+        dispatch({ type: "live", value: live });
         return "live";
       }
-      return simulateDirect(started.round);
+      return simulateDirect(live);
     },
-    [simulateDirect],
+    [advanceToMatch, simulateDirect],
   );
 
   // A rodada direta espera um quadro antes de calcular: chamadas seguidas entram na fila, para
@@ -590,9 +635,9 @@ export function GameProvider({
   const autoLineup = useCallback(
     () =>
       commitLineup((save) => {
-        const { squad, unavailable } = lineupContext(save);
+        const { rested, unavailable } = lineupContext(save);
         const { lineup } = managerAutoLineup(
-          squad,
+          rested,
           save.lineup.formation,
           save.lineup.posture,
           unavailable,

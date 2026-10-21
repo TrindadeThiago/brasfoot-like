@@ -23,7 +23,7 @@ export {
 } from "./board/offers";
 export type { ReputationInput } from "./board/reputation";
 export { reputationDelta } from "./board/reputation";
-export { boardAfterRound } from "./board/round";
+export { boardAfterExtraMatches, boardAfterRound } from "./board/round";
 export type { BoardRules } from "./board/rules";
 export { boardRules, DEFAULT_BOARD } from "./board/rules";
 export { boardNewSeasonStep } from "./board/turnover";
@@ -56,9 +56,37 @@ export type {
   Vacancy,
 } from "./board/types";
 export { CONFIDENCE_FACTORS, FINANCE_GOAL_KINDS, GOAL_TIERS } from "./board/types";
-export { ageOn, seasonDate } from "./calendar/date";
+export { addDays, ageOn, diffDays, seasonDate, weekdayOf } from "./calendar/date";
+export type { CompetitionSchedule } from "./calendar/schedule";
+export { DEFAULT_SCHEDULE, roundDates, scheduleOf } from "./calendar/schedule";
+export type {
+  CalendarCompetition,
+  CalendarDay,
+  CalendarIssue,
+  CalendarSlot,
+  SeasonCalendar,
+} from "./calendar/season-calendar";
+export {
+  buildSeasonCalendar,
+  calendarCompetitions,
+  dateOfRound,
+  dayIndexAfter,
+  SEASON_DAYS,
+  theoreticalRounds,
+} from "./calendar/season-calendar";
 export type { CompositionChange } from "./career/composition";
 export { nextComposition } from "./career/composition";
+export type { CareerDayResult } from "./career/day";
+export {
+  advanceCareer,
+  advanceCareerDays,
+  advanceCareerToNextMatch,
+  completeCareerDay,
+  completeCareerRound,
+  startCareerDay,
+} from "./career/day";
+export { competitionEntry } from "./career/history";
+export { availabilitySeason, clubsInRound, syncInjuries } from "./career/injuries";
 export {
   clubDivision,
   createLeagueSeason,
@@ -70,6 +98,27 @@ export {
   leagueTotalRounds,
 } from "./career/league";
 export { advanceLeague, completeLeagueRound, startLeagueRound } from "./career/league-round";
+export type {
+  CareerSeasonOptions,
+  CareerSeasonResult,
+  CareerSeasonSet,
+  CareerSeasonState,
+  ClubFixture,
+  DayMatch,
+} from "./career/season-state";
+export {
+  calendarNext,
+  clubFixtures,
+  competitionSeason,
+  createCareerSeason,
+  currentDay,
+  isCalendarOver,
+  leagueCalendar,
+  nextClubFixture,
+  otherSuspensions,
+  roundMatches,
+  upcomingUnavailability,
+} from "./career/season-state";
 export {
   DEFAULT_TURNOVER_STEPS,
   resolveTurnoverSteps,
@@ -96,6 +145,7 @@ export { createFans } from "./fans/create";
 export { idolEvents, idolsOf } from "./fans/idols";
 export {
   derbyMultiplierPct,
+  fansAfterExtraMatches,
   fansAfterRound,
   gateMoodFactor,
   moodBand,
@@ -142,7 +192,7 @@ export type {
   CareerRenewal,
   CareerRoundResult,
 } from "./finance/round";
-export { advanceCareer, applyRoundFinances, completeCareerRound } from "./finance/round";
+export { applyExtraGates, applyRoundFinances, applyRoundSystems } from "./finance/round";
 export { DEFAULT_ECONOMY, divisionEconomy, economyRules } from "./finance/rules";
 export { seasonFinanceSummary } from "./finance/summary";
 export { prizeFor } from "./finance/turnover";
@@ -160,6 +210,15 @@ export type {
   StadiumWorks,
 } from "./finance/types";
 export { LEDGER_CATEGORIES } from "./finance/types";
+export {
+  fitnessAfterMatches,
+  fitnessFactorBp,
+  fitnessOn,
+  squadWithFitness,
+  worldWithFitness,
+} from "./fitness/fitness";
+export { DEFAULT_FITNESS, fitnessRules } from "./fitness/rules";
+export type { FitnessEntry, FitnessRules, FitnessState } from "./fitness/types";
 export * from "./lineup";
 export type { ClubNeeds, PositionNeed } from "./market/ai/needs";
 export { clubNeeds, STARTERS_BY_POSITION } from "./market/ai/needs";
@@ -237,6 +296,8 @@ export {
   nextWindowRound,
   roundsPlayed,
   transferWindows,
+  type WindowDates,
+  windowDates,
 } from "./market/windows";
 export { adequacy } from "./match/adequacy";
 export type { AutoLineupOptions, AutoLineupResult } from "./match/auto-lineup";
@@ -320,7 +381,7 @@ export {
 } from "./news/history";
 export type { RecordCandidate } from "./news/records";
 export { beats, updateRecords } from "./news/records";
-export { newsAfterRound, toHeadlines } from "./news/round";
+export { newsAfterExtraMatches, newsAfterRound, toHeadlines } from "./news/round";
 export type { NewsRules } from "./news/rules";
 export { DEFAULT_NEWS, newsRules } from "./news/rules";
 export { newsNewSeasonStep } from "./news/turnover";

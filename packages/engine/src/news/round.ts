@@ -6,7 +6,7 @@ import { marketValue } from "../market/value";
 import type { MatchRecord, Season } from "../season/types";
 import { clinched } from "./clinched";
 import { type Fact, matchFacts, matchKey, streakOf } from "./facts";
-import { rankFeed } from "./feed";
+import { compare as compareHeadlines, rankFeed } from "./feed";
 import { type RecordCandidate, updateRecords } from "./records";
 import { newsRules } from "./rules";
 import type { Headline, NewsContext, NewsState } from "./types";
@@ -289,6 +289,76 @@ export function newsAfterRound(context: NewsContext, round: number): NewsState {
       (entry) => !(entry.season === context.league.number && entry.round === round),
     ),
     { season: context.league.number, year: context.league.year, round, headlines },
+  ];
+  return news;
+}
+
+/**
+ * Manchetes dos jogos do clube do jogador em outras competições num dia (017 FR-029): o resultado
+ * entra no feed da rodada da liga principal em que o dia cai, com a variável `competition`. Os
+ * recordes, as sequências e a tabela seguem a liga principal. Não altera a entrada.
+ */
+export function newsAfterExtraMatches(
+  context: NewsContext,
+  matches: readonly { competitionId: string; record: MatchRecord }[],
+  round: number,
+): NewsState {
+  const mine = matches.filter(
+    ({ record }) => record.home === context.managerClubId || record.away === context.managerClubId,
+  );
+  if (context.managerClubId === "" || mine.length === 0) return context.news;
+  const rules = newsRules(context.world, context.league.competitionId);
+  const season = context.league.number;
+  const news = clone(context.news);
+  const entry = news.feed.find((feed) => feed.season === season && feed.round === round);
+  const existing = entry?.headlines ?? [];
+  const added: Headline[] = mine.map(({ competitionId, record }, index) => {
+    const clubId = context.managerClubId;
+    const home = record.home === clubId;
+    const goalsFor = home ? record.score.home : record.score.away;
+    const goalsAgainst = home ? record.score.away : record.score.home;
+    const opponent = home ? record.away : record.home;
+    const outcome = goalsFor > goalsAgainst ? "win" : goalsFor < goalsAgainst ? "loss" : "draw";
+    const vars = {
+      club: clubId,
+      opponent,
+      goalsFor,
+      goalsAgainst,
+      outcome,
+      home: home ? 1 : 0,
+      streak: 0,
+      streakKind: "none",
+      competition: competitionId,
+    };
+    return {
+      id: `${season}-${round}-x${existing.length + index}`,
+      type: "result",
+      relevance: rules.relevance.result + rules.mineBonus,
+      variant: variantOf(
+        rules,
+        context.careerSeed,
+        `${season}:${round}:${competitionId}:${clubId}:${opponent}`,
+        "result",
+      ),
+      clubIds: [clubId, opponent],
+      vars,
+      mine: true,
+      match: `${competitionId}:${matchKey(record)}`,
+    };
+  });
+  const ranked = rankFeed(rules, [...existing, ...added]);
+  // O resultado do clube do jogador em outra competição nunca fica de fora do feed da rodada: toma
+  // o lugar da manchete menos relevante que não é do clube do jogador (o limite do feed vale).
+  const headlines = [...ranked];
+  for (const headline of added) {
+    if (headlines.some((entry) => entry.id === headline.id)) continue;
+    const index = headlines.findLastIndex((entry) => !entry.mine);
+    if (index >= 0) headlines[index] = headline;
+  }
+  headlines.sort(compareHeadlines);
+  news.feed = [
+    ...news.feed.filter((feed) => !(feed.season === season && feed.round === round)),
+    { season, year: context.league.year, round, headlines },
   ];
   return news;
 }

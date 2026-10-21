@@ -45,8 +45,9 @@ import { type SeasonError, seasonError } from "../season/errors";
 import { standings } from "../season/standings";
 import type { PlayerStatus, StandingRow } from "../season/types";
 import { nextComposition } from "./composition";
-import { historyEntry } from "./history";
-import { createLeagueSeason, isLeagueSeasonOver, leagueRound, leagueSeasonSeed } from "./league";
+import { competitionEntry, historyEntry } from "./history";
+import { isLeagueSeasonOver, leagueRound, leagueSeasonSeed } from "./league";
+import { createCareerSeason } from "./season-state";
 import type {
   LeagueSeason,
   SeasonHistoryEntry,
@@ -98,6 +99,13 @@ const recordHistory: TurnoverStep = {
         context.finished,
         context.finalStandings,
         nextComposition(context.finished, context.world),
+      ),
+    ],
+    // As competições secundárias guardam o próprio histórico (017 FR-034).
+    competitionHistory: [
+      ...(context.competitionHistory ?? []),
+      ...(context.finishedCompetitions ?? []).map((league) =>
+        competitionEntry(league, context.world),
       ),
     ],
   }),
@@ -156,18 +164,32 @@ const resetSeasonStats: TurnoverStep = {
 const generateCalendars: TurnoverStep = {
   id: "generate-calendars",
   run: (context) => {
-    const rules = context.finished.divisions[0]?.rules;
-    const created = createLeagueSeason(context.world, {
-      competitionId: context.finished.competitionId,
+    const carry = context.next.carryOver;
+    const compositions: Record<string, Record<number, readonly string[]>> = {
+      [context.finished.competitionId]: context.next.composition,
+    };
+    const statuses: Record<string, Record<string, PlayerStatus>> = {
+      [context.finished.competitionId]: carry,
+    };
+    for (const league of context.finishedCompetitions ?? []) {
+      compositions[league.competitionId] = nextComposition(league, context.world).composition;
+      // Lesões valem para todas as competições; os cartões recomeçam.
+      statuses[league.competitionId] = carry;
+    }
+    const created = createCareerSeason(context.world, {
       careerSeed: context.careerSeed,
       number: context.next.number,
       year: context.next.year,
-      composition: context.next.composition,
-      status: context.next.carryOver,
-      ...(rules ? { rules } : {}),
+      compositions,
+      statuses,
     });
     if (!created.ok) throw new TurnoverFailure(created.error);
-    return { ...context, league: created.league };
+    return {
+      ...context,
+      league: created.league,
+      competitions: created.competitions,
+      calendar: created.calendar,
+    };
   },
 };
 
@@ -306,6 +328,9 @@ export function seasonTurnover(
     ...(options.board ? { board: options.board } : {}),
     ...(options.fans ? { fans: options.fans } : {}),
     ...(options.news ? { news: options.news } : {}),
+    ...(options.competitions ? { finishedCompetitions: options.competitions } : {}),
+    ...(options.calendar ? { finishedCalendar: options.calendar } : {}),
+    ...(options.competitionHistory ? { competitionHistory: [...options.competitionHistory] } : {}),
   };
   try {
     for (const step of resolved.steps) context = step.run(context);
@@ -338,5 +363,8 @@ export function seasonTurnover(
     ...(context.board ? { board: context.board } : {}),
     ...(context.fans ? { fans: context.fans } : {}),
     ...(context.news ? { news: context.news } : {}),
+    ...(context.competitions ? { competitions: context.competitions } : {}),
+    ...(context.calendar ? { calendar: context.calendar } : {}),
+    ...(context.competitionHistory ? { competitionHistory: context.competitionHistory } : {}),
   };
 }

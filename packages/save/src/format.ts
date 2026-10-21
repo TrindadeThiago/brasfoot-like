@@ -3,17 +3,19 @@ import type {
   CompletedBank,
   FansState,
   FinanceState,
+  FitnessState,
   LeagueSeason,
   Lineup,
   LineupChange,
   MarketState,
   NewsState,
   RenewalState,
+  SeasonCalendar,
   SeasonHistoryEntry,
 } from "@brasfoot-like/engine";
 
 /** Versão atual do formato do save (Princípio VI). */
-export const SAVE_FORMAT_VERSION = 11;
+export const SAVE_FORMAT_VERSION = 12;
 
 export const MANAGER_NAME_MAX = 40;
 
@@ -35,6 +37,14 @@ export interface SaveFile {
   league: LeagueSeason;
   /** Uma entrada por temporada encerrada (v3). */
   history: SeasonHistoryEntry[];
+  /** Competições secundárias da temporada, na ordem do banco; vazio no banco padrão (v12). */
+  competitions: LeagueSeason[];
+  /** Calendário da temporada por datas, de todas as competições (v12). */
+  calendar: SeasonCalendar;
+  /** Condição física dos jogadores (v12). */
+  fitness: FitnessState;
+  /** Uma entrada por temporada encerrada de cada competição secundária (v12). */
+  competitionHistory: SeasonHistoryEntry[];
   /** Finanças de todos os clubes da competição (v4). */
   finances: FinanceState;
   /** Estado da renovação do mundo (v5). `bank` é o mundo vivo da carreira desde a 009. */

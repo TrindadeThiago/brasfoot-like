@@ -3,20 +3,21 @@
 import {
   FORMATION_IDS,
   type FormationId,
-  isLeagueSeasonOver,
   type Place,
   POSTURES,
   type Posture,
   SEASON_BENCH_LIMIT,
   validateLineup,
 } from "@brasfoot-like/engine";
-import type { SaveFile } from "@brasfoot-like/save";
+import { isCareerSeasonOver, type SaveFile } from "@brasfoot-like/save";
 import { useCallback, useMemo, useState } from "react";
 import { GameLayout } from "../../../game/GameLayout";
 import { lineupContext, type useGame } from "../../../game/GameProvider";
 import { occupantOf, selectPlace } from "../../../game/lineup-selection";
+import { fitnessAt } from "../../../game/selectors";
 import { label, useT } from "../../../i18n";
 import { Button } from "../../../ui/Button";
+import { TIRED_BELOW } from "../../../ui/FitnessMeter";
 import { LineupIssues } from "../../../ui/LineupIssues";
 import { LineupList } from "../../../ui/LineupList";
 import { playerName } from "../../../ui/lineup-text";
@@ -39,6 +40,10 @@ function LineupScreen({ save, game }: { save: SaveFile; game: ReturnType<typeof 
     [unavailable],
   );
   const validation = validateLineup(save.lineup, squad, unavailable);
+  const fitness = useMemo(() => fitnessAt(save), [save]);
+  const tiredStarters = Object.values(save.lineup.starters).filter(
+    (playerId) => fitness(playerId) < TIRED_BELOW,
+  ).length;
 
   const select = (place: Place) => {
     const step = selectPlace(save.lineup, source, place);
@@ -127,8 +132,11 @@ function LineupScreen({ save, game }: { save: SaveFile; game: ReturnType<typeof 
           {message}
         </span>
       </div>
-      {isLeagueSeasonOver(save.league) ? (
-        <p className={styles.note}>{t("lineup.seasonOver")}</p>
+      {isCareerSeasonOver(save) ? <p className={styles.note}>{t("lineup.seasonOver")}</p> : null}
+      {tiredStarters > 0 ? (
+        <p role="status" className={styles.note}>
+          {t("fitness.tired", { count: tiredStarters })}
+        </p>
       ) : null}
       <LineupIssues issues={validation.issues} save={save} />
       <div className={styles.board}>
@@ -136,6 +144,7 @@ function LineupScreen({ save, game }: { save: SaveFile; game: ReturnType<typeof 
           lineup={save.lineup}
           players={players}
           unavailable={blocked}
+          fitness={fitness}
           selected={source}
           onSelect={select}
           onFocusPlayer={setFocused}
@@ -145,6 +154,7 @@ function LineupScreen({ save, game }: { save: SaveFile; game: ReturnType<typeof 
           squad={squad}
           players={players}
           unavailable={blocked}
+          fitness={fitness}
           selected={source}
           onSelect={select}
           onFocusPlayer={setFocused}

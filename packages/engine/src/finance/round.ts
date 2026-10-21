@@ -1,8 +1,8 @@
-import { managerClubOf } from "../board/create";
 import { boardAfterRound } from "../board/round";
 import type { BoardState } from "../board/types";
 import { seasonDate } from "../calendar/date";
-import { completeLeagueRound, startLeagueRound } from "../career/league-round";
+import { leagueRound } from "../career/league";
+import type { DayMatch } from "../career/season-state";
 import type { LeagueSeason } from "../career/types";
 import { fansAfterRound } from "../fans/mood";
 import type { FansState } from "../fans/types";
@@ -11,16 +11,12 @@ import { aiMarketRound } from "../market/ai/round";
 import { marketAfterRound } from "../market/incoming";
 import { releaseManagerClub } from "../market/release";
 import type { MarketState } from "../market/types";
-import type { Lineup } from "../match/types";
 import type { CompletedBank } from "../model/types";
 import { newsAfterRound } from "../news/round";
 import type { NewsState } from "../news/types";
 import { evolvePlayers, midSeasonRound } from "../renewal/evolution";
 import type { RenewalState } from "../renewal/types";
 import type { SeasonError } from "../season/errors";
-import { finishRound, type LiveRound } from "../season/live-round";
-import { isSeasonOver } from "../season/season";
-import type { SeasonStep } from "../season/types";
 import { interestFor } from "./actions";
 import { aiRoundReview } from "./ai";
 import { annualWageBill } from "./create";
@@ -177,41 +173,89 @@ export function applyRoundFinances(
   return aiRoundReview(working, league, world, round, managerClubId);
 }
 
-/** Fecha a rodada da liga e aplica as finanças, num passo (ao vivo e direto usam este caminho). */
-export function completeCareerRound(
+/**
+ * Bilheteria dos jogos em casa de competições secundárias num dia (017 R7): o mesmo cálculo de
+ * público e renda da liga principal, que fornece o contexto (divisão, fase recente, preços).
+ * Folha, juros, obras e crise só andam nos dias da principal. Não altera a entrada.
+ */
+export function applyExtraGates(
+  finances: FinanceState,
+  principal: LeagueSeason,
+  world: CompletedBank,
+  matches: readonly DayMatch[],
+  fans?: FansState,
+): FinanceState {
+  if (matches.length === 0) return finances;
+  const rules = economyRules(world, principal.competitionId);
+  const working = draft(finances);
+  const round = leagueRound(principal);
+  for (const match of matches) {
+    const home = match.fixture.home;
+    const price = working.clubs[home]?.ticketPrice ?? rules.priceRange.min;
+    const mood = fans?.clubs[home]?.mood;
+    const gate = gateFor(
+      working,
+      principal,
+      world,
+      { ...match.fixture, round },
+      price,
+      mood !== undefined ? { mood } : {},
+    );
+    post(working, {
+      clubId: home,
+      season: principal.number,
+      round: round - 1,
+      category: "gate",
+      amount: gate.revenue,
+      date: match.date,
+      competitionId: match.competitionId,
+    });
+    working.gates.push({
+      season: principal.number,
+      round: round - 1,
+      clubId: home,
+      opponentId: match.fixture.away,
+      ...gate,
+      date: match.date,
+      competitionId: match.competitionId,
+    });
+  }
+  return working;
+}
+
+/**
+ * O que acontece depois que a rodada `round` da liga principal foi fechada (`league` já a
+ * traz): finanças, evolução do meio da temporada, mercado, torcida, diretoria e notícias, nessa
+ * ordem. É o caminho comum da rodada antiga e do dia de jogos da 017.
+ */
+export function applyRoundSystems(
   league: LeagueSeason,
   finances: FinanceState,
   world: CompletedBank,
-  round: LiveRound,
+  round: number,
   managerClubId: string,
   renewal?: CareerRenewal,
   market?: CareerMarket,
   board?: CareerBoard,
   fans?: CareerFans,
   news?: CareerNews,
+  /** Outras competições da carreira: seus minutos contam na evolução (017 R9). */
+  otherCompetitions: readonly LeagueSeason[] = [],
 ): CareerRoundResult {
-  const completed = completeLeagueRound(league, world, round);
-  if (!completed.ok) return completed;
   // A bilheteria usa o humor de antes do jogo (013 R10).
-  let nextFinances = applyRoundFinances(
-    finances,
-    completed.league,
-    world,
-    round.round,
-    managerClubId,
-    fans?.state,
-  );
+  let nextFinances = applyRoundFinances(finances, league, world, round, managerClubId, fans?.state);
   let nextWorld = world;
   let nextRenewal = renewal?.state;
-  if (renewal && round.round === midSeasonRound(completed.league)) {
+  if (renewal && round === midSeasonRound(league)) {
     // Evolução do meio da temporada (009 R3), no mesmo caminho do ao vivo e do direto.
     const evolved = evolvePlayers(
       world,
-      completed.league,
+      league,
       renewal.careerSeed,
       "mid",
       1,
-      round.round,
+      round,
+      otherCompetitions,
     );
     nextWorld = evolved.world;
     nextRenewal = { ...renewal.state, lastEvolution: evolved.record };
@@ -221,7 +265,7 @@ export function completeCareerRound(
     // Mercado (011 R1): decisões da IA, depois propostas ao humano e expirações da 010.
     const context = {
       world: nextWorld,
-      league: completed.league,
+      league,
       finances: nextFinances,
       market: market.state,
       managerClubId,
@@ -248,12 +292,12 @@ export function completeCareerRound(
     nextFans = fansAfterRound(
       {
         world: nextWorld,
-        league: completed.league,
+        league,
         finances: nextFinances,
         fans: fans.state,
         ...(nextMarket ? { market: nextMarket } : {}),
       },
-      round.round,
+      round,
       managerClubId,
     );
   }
@@ -263,20 +307,20 @@ export function completeCareerRound(
     const update = boardAfterRound(
       {
         world: nextWorld,
-        league: completed.league,
+        league,
         finances: nextFinances,
         board: board.state,
         careerSeed: board.careerSeed,
         ...(nextFans ? { fans: nextFans } : {}),
       },
-      round.round,
+      round,
     );
     nextBoard = update.board;
     if (update.managerReleased && nextMarket) {
       nextMarket = releaseManagerClub(
         {
           world: nextWorld,
-          league: completed.league,
+          league,
           finances: nextFinances,
           market: nextMarket,
           managerClubId: update.managerReleased,
@@ -292,7 +336,7 @@ export function completeCareerRound(
     nextNews = newsAfterRound(
       {
         world: nextWorld,
-        league: completed.league,
+        league,
         news: news.state,
         careerSeed: news.careerSeed,
         managerClubId: nextBoard ? (nextBoard.manager.clubId ?? "") : managerClubId,
@@ -300,12 +344,12 @@ export function completeCareerRound(
         ...(board ? { boardBefore: board.state } : {}),
         ...(nextBoard ? { boardAfter: nextBoard } : {}),
       },
-      round.round,
+      round,
     );
   }
   return {
     ok: true,
-    league: completed.league,
+    league,
     finances: nextFinances,
     world: nextWorld,
     ...(nextRenewal ? { renewal: nextRenewal } : {}),
@@ -314,73 +358,4 @@ export function completeCareerRound(
     ...(nextFans ? { fans: nextFans } : {}),
     ...(nextNews ? { news: nextNews } : {}),
   };
-}
-
-/** Equivalente de advanceLeague com finanças (simulações e testes). */
-export function advanceCareer(
-  league: LeagueSeason,
-  finances: FinanceState,
-  world: CompletedBank,
-  step: SeasonStep,
-  managerClubId: string,
-  lineups?: Record<string, Lineup>,
-  renewal?: CareerRenewal,
-  market?: CareerMarket,
-  board?: CareerBoard,
-  fans?: CareerFans,
-  news?: CareerNews,
-): CareerRoundResult {
-  let next: {
-    league: LeagueSeason;
-    finances: FinanceState;
-    world: CompletedBank;
-    renewal?: RenewalState;
-    market?: MarketState;
-    board?: BoardState;
-    fans?: FansState;
-    news?: NewsState;
-  } = {
-    league,
-    finances,
-    world,
-    ...(renewal ? { renewal: renewal.state } : {}),
-    ...(market ? { market: market.state } : {}),
-    ...(board ? { board: board.state } : {}),
-    ...(fans ? { fans: fans.state } : {}),
-    ...(news ? { news: news.state } : {}),
-  };
-  const total =
-    "toEnd" in step
-      ? Math.max(...league.divisions.map((season) => season.calendar.length))
-      : step.rounds;
-  for (let played = 0; played < total; played++) {
-    if (next.league.divisions.every(isSeasonOver)) break;
-    const started = startLeagueRound(next.league, next.world, played === 0 ? lineups : undefined);
-    if (!started.ok) return started;
-    const completed = completeCareerRound(
-      next.league,
-      next.finances,
-      next.world,
-      finishRound(started.round),
-      // Com diretoria, o clube do técnico pode mudar no meio do avanço (demissão).
-      next.board ? managerClubOf(next.board) : managerClubId,
-      renewal && next.renewal ? { state: next.renewal, careerSeed: renewal.careerSeed } : undefined,
-      market && next.market ? { state: next.market, careerSeed: market.careerSeed } : undefined,
-      board && next.board ? { state: next.board, careerSeed: board.careerSeed } : undefined,
-      fans && next.fans ? { state: next.fans } : undefined,
-      news && next.news ? { state: next.news, careerSeed: news.careerSeed } : undefined,
-    );
-    if (!completed.ok) return completed;
-    next = {
-      league: completed.league,
-      finances: completed.finances,
-      world: completed.world,
-      ...(completed.renewal ? { renewal: completed.renewal } : {}),
-      ...(completed.market ? { market: completed.market } : {}),
-      ...(completed.board ? { board: completed.board } : {}),
-      ...(completed.fans ? { fans: completed.fans } : {}),
-      ...(completed.news ? { news: completed.news } : {}),
-    };
-  }
-  return { ok: true, ...next };
 }

@@ -1,8 +1,8 @@
 import { createBoard } from "../../src/board/create";
 import type { BoardContext, BoardState } from "../../src/board/types";
+import { advanceCareer } from "../../src/career/day";
 import type { LeagueSeason } from "../../src/career/types";
 import { createFinances } from "../../src/finance/create";
-import { advanceCareer } from "../../src/finance/round";
 import type { FinanceState } from "../../src/finance/types";
 import { emptyMarket, type MarketState } from "../../src/market/types";
 import type { CompletedBank } from "../../src/model/types";

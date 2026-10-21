@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { advanceLeague } from "../../src/career/league-round";
+import { leagueCalendar } from "../../src/career/season-state";
 import { DEFAULT_MARKET, marketRules } from "../../src/market/rules";
 import {
   currentWindowEnd,
@@ -7,6 +8,7 @@ import {
   nextWindowRound,
   roundsPlayed,
   transferWindows,
+  windowDates,
 } from "../../src/market/windows";
 import { midSeasonRound } from "../../src/renewal/evolution";
 import { competitionId, editedWorld } from "../career/helpers";
@@ -61,5 +63,29 @@ describe("janelas de transferência (FR-006, R5)", () => {
     expect(isWindowOpen(after(0), rules)).toBe(false);
     expect(isWindowOpen(after(5), rules)).toBe(true);
     expect(nextWindowRound(after(0), rules)).toBe(5);
+  });
+});
+
+describe("datas das janelas (017 R8, FR-031, FR-032)", () => {
+  const calendar = leagueCalendar(world, league);
+  const id = competitionId(world);
+
+  it("as janelas padrão abrem e fecham nas datas das rodadas da liga", () => {
+    const windows = transferWindows(league, DEFAULT_MARKET);
+    const [first, second] = windowDates(calendar, id, windows);
+    // Primeira rodada: domingo 2027-01-03; a janela de início fecha ao jogar a 4ª rodada.
+    expect(first).toEqual({ opensOn: "2027-01-01", closesOn: "2027-01-24" });
+    expect(second?.opensOn).toBe(calendar.days[mid - 2]?.date);
+    expect(second?.closesOn).toBe(calendar.days[mid + 2]?.date);
+  });
+
+  it("janelas de mod em rodadas da liga viram datas e continuam válidas", () => {
+    const [window] = windowDates(calendar, id, [{ fromRound: 5, toRound: 8 }]);
+    expect(window).toEqual({ opensOn: calendar.days[4]?.date, closesOn: calendar.days[8]?.date });
+  });
+
+  it("janela que passa da última rodada termina na última data da liga", () => {
+    const [window] = windowDates(calendar, id, [{ fromRound: 30, toRound: 60 }]);
+    expect(window?.closesOn).toBe(calendar.days.at(-1)?.date);
   });
 });

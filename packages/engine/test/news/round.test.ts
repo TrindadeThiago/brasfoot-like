@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { completeCareerRound } from "../../src/career/day";
 import { startLeagueRound } from "../../src/career/league-round";
-import { completeCareerRound } from "../../src/finance/round";
 import { clinched } from "../../src/news/clinched";
 import { createNews } from "../../src/news/create";
 import { matchFacts } from "../../src/news/facts";

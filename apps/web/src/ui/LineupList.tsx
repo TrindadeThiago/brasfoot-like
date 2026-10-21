@@ -10,6 +10,7 @@ import {
 } from "@brasfoot-like/engine";
 import { samePlace as same } from "../game/lineup-selection";
 import { label, useT } from "../i18n";
+import { FitnessMeter } from "./FitnessMeter";
 import styles from "./LineupList.module.css";
 import { Condition } from "./PlayerCondition";
 
@@ -18,6 +19,8 @@ interface LineupListProps {
   squad: readonly CompletedPlayer[];
   players: ReadonlyMap<string, CompletedPlayer>;
   unavailable: ReadonlyMap<string, Unavailability>;
+  /** Condição física (0–100) de cada jogador na data do próximo jogo. */
+  fitness?: (playerId: string) => number;
   selected?: Place | undefined;
   onSelect(place: Place): void;
   onFocusPlayer(playerId: string | undefined): void;
@@ -31,6 +34,7 @@ export function LineupList({
   squad,
   players,
   unavailable,
+  fitness,
   selected,
   onSelect,
   onFocusPlayer,
@@ -60,6 +64,7 @@ export function LineupList({
           <span className={styles.position}>{label(`position.${player.position}`)}</span>
           <span className={styles.name}>{player.displayName}</span>
           <span className={styles.strength}>{player.strength}</span>
+          {fitness ? <FitnessMeter value={fitness(player.id)} /> : null}
           <Condition entry={unavailable.get(player.id)} hideAvailable />
         </button>
       </li>

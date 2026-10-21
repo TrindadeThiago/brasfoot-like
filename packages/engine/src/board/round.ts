@@ -1,5 +1,7 @@
 import { isLeagueSeasonOver } from "../career/league";
+import { matchResultFor } from "../fans/mood";
 import { createRng } from "../rng/xoshiro";
+import type { MatchRecord } from "../season/types";
 import {
   clubReputation,
   coachOf,
@@ -8,7 +10,7 @@ import {
   nextId,
   releaseCoach,
 } from "./coaches";
-import { confidenceChange } from "./confidence";
+import { confidenceChange, confidenceResultFactor, patiencePct } from "./confidence";
 import { evaluateSeason, shouldFireMidSeason } from "./evaluation";
 import { closeStint, openStint, seasonRecord } from "./history";
 import { considerVacancies, expireOffers, pruneOffers } from "./offers";
@@ -166,4 +168,45 @@ export function boardAfterRound(context: BoardContext, round: number): BoardUpda
   }
   pruneOffers(board, season);
   return { board, ...(managerReleased ? { managerReleased } : {}) };
+}
+
+/**
+ * Confiança depois dos jogos de outras competições num dia (017 FR-029): o resultado pesa como na
+ * liga principal (com clássico e paciência), sem avaliação, demissão ou metas, que seguem a liga.
+ * Não altera a entrada.
+ */
+export function boardAfterExtraMatches(
+  context: BoardContext,
+  matches: readonly { record: MatchRecord }[],
+  round: number,
+): BoardState {
+  if (matches.length === 0) return context.board;
+  const rules = boardRules(context.world, context.league.competitionId);
+  const board = clone(context.board);
+  const managerClubId = board.manager.clubId;
+  for (const { record } of matches) {
+    for (const clubId of [record.home, record.away]) {
+      const club = board.clubs[clubId];
+      if (!club || (club.coachId === null && clubId !== managerClubId)) continue;
+      const factor = confidenceResultFactor(rules, matchResultFor(context.world, record, clubId));
+      const patience = patiencePct(context, coachReputation(board, context.world, clubId));
+      const amount =
+        factor.amount < 0 ? -Math.round((-factor.amount * patience) / 100) : factor.amount;
+      const value = Math.min(100, Math.max(0, club.confidence + amount));
+      if (clubId === managerClubId) {
+        club.recent = [
+          ...club.recent,
+          {
+            season: context.league.number,
+            round,
+            delta: value - club.confidence,
+            value,
+            factors: amount === 0 ? [] : [{ kind: factor.kind, amount }],
+          },
+        ].slice(-rules.keepRecent);
+      }
+      club.confidence = value;
+    }
+  }
+  return board;
 }

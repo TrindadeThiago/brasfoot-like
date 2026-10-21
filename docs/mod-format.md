@@ -79,7 +79,12 @@ Lista com ao menos 1 país.
 
 ## 5. `competitions.json`
 
-Lista com ao menos 1 competição. Hoje o jogo usa a primeira, no formato de pontos corridos.
+Lista com ao menos 1 competição, todas no formato de pontos corridos. A **primeira** é a
+competição **principal**: dela vêm a economia, o mercado, a diretoria, a torcida, as manchetes, o
+acesso e o rebaixamento que o jogo acompanha e o histórico da carreira. As demais são
+**secundárias**: têm partidas, tabela e estatísticas próprias, e todos os seus clubes precisam estar
+também na principal. Os clubes podem repetir entre competições, e cada competição joga nas datas da
+sua agenda (`schedule`).
 
 | Campo | Tipo | Obrigatório | Descrição |
 |---|---|---|---|
@@ -93,6 +98,49 @@ Lista com ao menos 1 competição. Hoje o jogo usa a primeira, no formato de pon
 | `board` | objeto | não | regras da diretoria (seção 9) |
 | `fans` | objeto | não | regras da torcida (seção 9) |
 | `news` | objeto | não | regras das manchetes (seção 9) |
+| `schedule` | objeto | não | quando a competição joga (abaixo) |
+| `discipline` | objeto | não | regras de cartões da competição (abaixo) |
+| `fitness` | objeto | não | condição física dos jogadores; vale a da competição principal (abaixo) |
+
+### `schedule`
+
+Define as datas das rodadas. A temporada começa na data de referência do pacote e dura 52 semanas.
+Campos ausentes assumem o padrão: **uma rodada por domingo**, a partir do início da temporada.
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `weekday` | inteiro(1, 7) | dia da semana das rodadas: 1 = segunda-feira … 7 = domingo (padrão 7) |
+| `startWeek` | inteiro(0, 51) | semanas depois do primeiro `weekday` da temporada em que acontece a 1ª rodada (padrão 0) |
+| `everyWeeks` | inteiro(1, 4) | semanas entre rodadas consecutivas (padrão 1) |
+
+Exemplo: uma copa às quartas-feiras, de duas em duas semanas, começando na semana 1:
+`"schedule": { "weekday": 3, "startWeek": 1, "everyWeeks": 2 }`.
+
+Duas regras são conferidas ao carregar o pacote: nenhum clube pode ter dois jogos no mesmo dia
+(`calendar.club_double_booked`) e a última rodada de cada competição precisa caber nas 52 semanas
+(`calendar.competition_overflow`).
+
+### `discipline`
+
+Regras de cartões **da competição** (amarelos e suspensões contam por competição; lesões valem para
+todas). Campos ausentes assumem as regras de sempre.
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `yellowsForSuspension` | inteiro(1, 10) | amarelos acumulados que geram suspensão (padrão 3) |
+| `matchesPerRed` | inteiro(1, 10) | jogos de suspensão por expulsão (padrão 1) |
+
+### `fitness`
+
+Condição física dos jogadores (0 a 100): cai com os minutos jogados, volta a cada dia sem jogo e
+reduz a força na partida. Vale a configuração da competição **principal**; campos ausentes assumem
+o padrão.
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `drainPer90` | inteiro(0, 100) | pontos perdidos por 90 minutos jogados (padrão 30) |
+| `recoveryPerDay` | inteiro(0, 100) | pontos recuperados por dia (padrão 5) |
+| `penaltyBpPerPoint` | inteiro(0, 100) | perda de força, em 1/10000, por ponto de condição abaixo de 100 (padrão 40) |
 
 ### `format`
 
@@ -109,7 +157,7 @@ Lista com ao menos 1 competição. Hoje o jogo usa a primeira, no formato de pon
 |---|---|---|
 | `level` | inteiro(1, 99) | nível (1 = principal); os níveis devem ser contínuos começando em 1 |
 | `name` | texto(1, 60) | nome da divisão |
-| `clubIds` | lista de id | clubes da divisão: de 4 a 40, sem repetição, cada clube em uma só divisão |
+| `clubIds` | lista de id | clubes da divisão: de 4 a 40, sem repetição, cada clube em uma só divisão da competição |
 | `promotionSlots` | inteiro(0, 40) | vagas de acesso (0 na divisão principal) |
 | `relegationSlots` | inteiro(0, 40) | vagas de rebaixamento (0 na última divisão) |
 
@@ -260,6 +308,9 @@ Fora do jogo, `pnpm validate-bank <pasta|arquivo.zip>` faz a mesma validação n
 | `division.club_count` | A divisão tem {count, plural, one {# clube} other {# clubes}}, mas deve ter entre {min} e {max}. |
 | `division.duplicate_club` | O clube {clubId} aparece mais de uma vez na mesma divisão. |
 | `division.club_in_multiple` | O clube {clubId} já está em outra divisão (competição {otherCompetitionId}, nível {otherLevel}). |
+| `calendar.club_double_booked` | As competições {competitionId} e {otherCompetitionId} marcam jogos do clube {clubId} no mesmo dia ({date}). |
+| `calendar.competition_overflow` | A competição {competitionId} precisa de {needed, plural, one {# semana} other {# semanas}} para as suas rodadas, mas a temporada tem {available, plural, one {# semana} other {# semanas}}. |
+| `competition.club_outside_main` | O clube {clubId} da competição {competitionId} não está na competição principal (a primeira da lista). |
 | `division.top_has_promotion` | A divisão mais alta não pode ter vagas de acesso, mas tem {slots}. |
 | `division.bottom_has_relegation` | A divisão mais baixa não pode ter vagas de rebaixamento, mas tem {slots}. |
 | `division.slots_mismatch` | O nível {level} rebaixa {relegated, plural, one {# clube} other {# clubes}}, mas o nível {nextLevel} promove {promoted, plural, one {# clube} other {# clubes}}; os números devem ser iguais. |

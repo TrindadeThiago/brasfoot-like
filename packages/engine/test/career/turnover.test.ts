@@ -1,9 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { nextComposition } from "../../src/career/composition";
+import { advanceCareerDays } from "../../src/career/day";
 import { divisionSeason, leagueSeasonSeed } from "../../src/career/league";
+import type { CareerSeasonState } from "../../src/career/season-state";
 import { seasonTurnover, TURNOVER_STEP_IDS } from "../../src/career/turnover";
 import type { LeagueSeason, SeasonHistoryEntry } from "../../src/career/types";
+import { initialRenewal } from "../../src/renewal/measure";
 import { standings } from "../../src/season/standings";
+import { TOURNAMENT_ID, twoCompetitionsBank } from "../fixtures/two-competitions";
+import { MANAGER, newState } from "./day-helpers";
 import { newLeague, playedLeague, testWorld } from "./helpers";
 
 const SEED = "virada";
@@ -170,4 +175,79 @@ describe("virada de temporada (R5–R8, FR-010 a FR-016)", () => {
       "board-new-season",
     ]);
   });
+});
+
+describe("virada com outras competições (017 R11, FR-034)", () => {
+  const SEED = "virada-duas";
+  const world = twoCompetitionsBank();
+
+  function finishedState() {
+    const played = advanceCareerDays(newState(world, SEED), { toEnd: true }, SEED, MANAGER);
+    if (!played.ok) throw new Error(JSON.stringify(played.error));
+    return played.state;
+  }
+
+  function turn(state: CareerSeasonState) {
+    return seasonTurnover(state.league, state.world, [], {
+      careerSeed: SEED,
+      competitions: state.competitions,
+      calendar: state.calendar,
+      competitionHistory: [],
+    });
+  }
+
+  it("cria a nova temporada de cada competição e o calendário do ano seguinte", () => {
+    const result = turn(finishedState());
+    if (!result.ok) throw new Error(JSON.stringify(result.error));
+    expect(result.league.number).toBe(2);
+    expect(result.competitions).toHaveLength(1);
+    const cup = result.competitions?.[0];
+    expect(cup?.competitionId).toBe(TOURNAMENT_ID);
+    expect(cup?.number).toBe(2);
+    expect(cup?.divisions[0]?.nextRound).toBe(1);
+    expect(cup?.divisions[0]?.records).toEqual([]);
+    expect(cup?.divisions[0]?.clubIds).toHaveLength(10);
+    expect(result.calendar?.start).toBe("2028-01-01");
+    expect(result.calendar?.days.flatMap((day) => day.slots)).toHaveLength(38 + 18);
+  });
+
+  it("guarda o histórico do torneio sem mexer no da liga", () => {
+    const state = finishedState();
+    const result = turn(state);
+    if (!result.ok) throw new Error(JSON.stringify(result.error));
+    expect(result.history).toHaveLength(1);
+    expect(result.history[0]?.competitionId).toBe(state.league.competitionId);
+    expect(result.competitionHistory).toHaveLength(1);
+    const entry = result.competitionHistory?.[0];
+    expect(entry?.competitionId).toBe(TOURNAMENT_ID);
+    expect(entry?.divisions[0]?.standings).toHaveLength(10);
+    expect(entry?.divisions[0]?.championId).toBe(entry?.divisions[0]?.standings[0]?.clubId);
+  });
+
+  it("os jogos do torneio entram na evolução do fim da temporada (depois do meio do ano)", () => {
+    const state = finishedState();
+    const withSystems = { ...state, renewal: initialRenewal(state.world) };
+    const result = seasonTurnover(withSystems.league, withSystems.world, [], {
+      careerSeed: SEED,
+      renewal: withSystems.renewal,
+      competitions: state.competitions,
+      calendar: state.calendar,
+    });
+    if (!result.ok) throw new Error(JSON.stringify(result.error));
+    const cupPlayer = state.world.players.find((player) => player.clubId === "clube-001");
+    const minutes = result.renewal?.lastEvolution?.minutes[cupPlayer?.id ?? ""] ?? 0;
+    const leagueOnly = seasonTurnover(withSystems.league, withSystems.world, [], {
+      careerSeed: SEED,
+      renewal: withSystems.renewal,
+    });
+    if (!leagueOnly.ok) throw new Error("falhou");
+    expect(minutes).toBeGreaterThan(
+      leagueOnly.renewal?.lastEvolution?.minutes[cupPlayer?.id ?? ""] ?? 0,
+    );
+  }, 120_000);
+
+  it("é determinística", () => {
+    const state = finishedState();
+    expect(turn(state)).toEqual(turn(state));
+  }, 120_000);
 });

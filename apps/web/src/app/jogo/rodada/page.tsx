@@ -1,20 +1,23 @@
 "use client";
 
+import { competitionSeason, formationChange, type LiveRound, matchOf } from "@brasfoot-like/engine";
 import {
-  formationChange,
-  isLeagueSeasonOver,
-  type LiveRound,
-  leagueRound,
-  matchOf,
-} from "@brasfoot-like/engine";
-import { divisionNameOf, type SaveFile, userDivisionLevel, userSeason } from "@brasfoot-like/save";
+  currentDayOf,
+  divisionNameOf,
+  isCareerSeasonOver,
+  nextFixture,
+  type SaveFile,
+  seasonStateOf,
+  userDivisionLevel,
+  userSeasonFor,
+} from "@brasfoot-like/save";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { GameLayout } from "../../../game/GameLayout";
 import type { useGame } from "../../../game/GameProvider";
 import { divisionHref } from "../../../game/useDivision";
 import { SPEEDS, useLiveRound } from "../../../game/useLiveRound";
-import { useT } from "../../../i18n";
+import { formatDate, useT } from "../../../i18n";
 import type { RoundSpeed } from "../../../storage/preferences";
 import { screenHref } from "../../../ui/AppHeader";
 import { Button } from "../../../ui/Button";
@@ -153,11 +156,20 @@ function LiveRoundView({
   );
 }
 
-function RoundEnd({ save, round }: { save: SaveFile; round: number }) {
+function RoundEnd({
+  save,
+  round,
+  competitionId,
+}: {
+  save: SaveFile;
+  round: number;
+  competitionId: string;
+}) {
   const t = useT();
-  const records = userSeason(save).records.filter((record) => record.round === round);
+  const season = userSeasonFor(save, competitionId);
+  const records = season?.records.filter((record) => record.round === round) ?? [];
   const mine = records.find((record) => record.home === save.clubId || record.away === save.clubId);
-  const over = isLeagueSeasonOver(save.league);
+  const over = isCareerSeasonOver(save);
   return (
     <div className={styles.layout}>
       <RoundResults
@@ -169,20 +181,29 @@ function RoundEnd({ save, round }: { save: SaveFile; round: number }) {
       />
       {mine ? <MatchSummary record={mine} save={save} /> : null}
       <div className={styles.actions}>
-        <Link href={screenHref("/jogo/competicao", save.id)}>{t("round.toStandings")}</Link>
-        {save.league.divisions
-          .filter(
+        <Link
+          href={divisionHref(
+            "/jogo/competicao",
+            save.id,
+            userSeasonFor(save, competitionId)?.divisionLevel ?? 1,
+            competitionId,
+          )}
+        >
+          {t("round.toStandings")}
+        </Link>
+        {competitionSeason(seasonStateOf(save), competitionId)
+          .divisions.filter(
             (season) =>
-              season.divisionLevel !== userDivisionLevel(save) &&
+              season.divisionLevel !== userSeasonFor(save, competitionId)?.divisionLevel &&
               season.records.some((record) => record.round === round),
           )
           .map((season) => (
             <Link
               key={season.divisionLevel}
-              href={`${divisionHref("/jogo/competicao/resultados", save.id, season.divisionLevel)}&r=${round}`}
+              href={`${divisionHref("/jogo/competicao/resultados", save.id, season.divisionLevel, competitionId)}&r=${round}`}
             >
               {t("round.otherDivisionResults", {
-                division: divisionNameOf(save, season.divisionLevel),
+                division: divisionNameOf(save, season.divisionLevel, competitionId),
               })}
             </Link>
           ))}
@@ -198,27 +219,44 @@ function RoundEnd({ save, round }: { save: SaveFile; round: number }) {
 
 function RoundScreen({ save, game }: { save: SaveFile; game: Game }) {
   const t = useT();
-  const [done, setDone] = useState<number | undefined>();
+  const [done, setDone] = useState<{ round: number; competitionId: string } | undefined>();
   const live = game.state.live;
   const { commitRound } = game;
   const finish = useCallback(
     (round: LiveRound) => {
-      setDone(round.round);
+      setDone({
+        round: round.round,
+        competitionId: round.competitionId ?? save.league.competitionId,
+      });
       void commitRound(round);
     },
-    [commitRound],
+    [commitRound, save.league.competitionId],
   );
 
-  if (done !== undefined) return <RoundEnd save={save} round={done} />;
-  if (live && live.round === leagueRound(save.league)) {
+  if (done !== undefined) {
+    return <RoundEnd save={save} round={done.round} competitionId={done.competitionId} />;
+  }
+  if (live && live.date !== undefined && live.date === currentDayOf(save)?.date) {
     return (
       <>
         <h2 className={styles.title}>{t("round.title", { round: live.round })}</h2>
-        <LiveRoundView key={live.round} initial={live} save={save} onFinish={finish} />
+        <p className={styles.note}>
+          {t("round.dated", {
+            competition:
+              save.bank.competitions.find((entry) => entry.id === live.competitionId)?.name ?? "",
+            date: formatDate(live.date),
+          })}
+        </p>
+        <LiveRoundView
+          key={`${live.competitionId}-${live.round}`}
+          initial={live}
+          save={save}
+          onFinish={finish}
+        />
       </>
     );
   }
-  if (isLeagueSeasonOver(save.league)) {
+  if (isCareerSeasonOver(save)) {
     return (
       <p className={styles.note}>
         <Link href={screenHref("/jogo/fim-de-temporada", save.id)}>{t("home.seasonEndLink")}</Link>
@@ -229,7 +267,7 @@ function RoundScreen({ save, game }: { save: SaveFile; game: Game }) {
     <div className={styles.note}>
       <p>{t("round.notStarted")}</p>
       <Button variant="primary" onClick={() => void game.playRound("live")}>
-        {t("round.start", { round: leagueRound(save.league) })}
+        {t("round.start", { round: nextFixture(save)?.round ?? 0 })}
       </Button>
     </div>
   );

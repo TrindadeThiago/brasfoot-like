@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { advanceCareer } from "../../../src/finance/round";
+import { advanceCareer } from "../../../src/career/day";
 import { initialRenewal } from "../../../src/renewal/measure";
 import { MANAGER, marketContext, SEED } from "../helpers";
 

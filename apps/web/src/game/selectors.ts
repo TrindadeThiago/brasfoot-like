@@ -4,6 +4,8 @@ import {
   clubStrength,
   economyRules,
   type FormResult,
+  fitnessOn,
+  fitnessRules,
   type MatchRecord,
   type ModPackage,
   nextComposition,
@@ -11,7 +13,7 @@ import {
   type Season,
   standings,
 } from "@brasfoot-like/engine";
-import { type SaveFile, userSeason } from "@brasfoot-like/save";
+import { currentDayOf, nextFixture, type SaveFile, userSeason } from "@brasfoot-like/save";
 
 export interface LeagueClub {
   id: string;
@@ -49,21 +51,6 @@ export function competitionClubs(bank: ModPackage): LeagueClub[] {
       stadiumCapacity: club.stadiumCapacity,
       crest: club.crest,
     }));
-}
-
-export interface NextFixture {
-  round: number;
-  opponentId: string;
-  isHome: boolean;
-}
-
-/** Próximo jogo do clube (ou nada, se a temporada acabou ou o clube folga). */
-export function nextFixture(season: Season, clubId: string): NextFixture | undefined {
-  const round = season.calendar[season.nextRound - 1];
-  const fixture = round?.fixtures.find((entry) => entry.home === clubId || entry.away === clubId);
-  if (!round || !fixture) return undefined;
-  const isHome = fixture.home === clubId;
-  return { round: round.number, opponentId: isHome ? fixture.away : fixture.home, isHome };
 }
 
 export interface ClubResult {
@@ -189,4 +176,16 @@ export function seasonEndSummary(save: SaveFile): SeasonEndSummary {
     moves,
     mine: { situation, position, level, nextLevel, prize },
   };
+}
+
+/** Data em que a condição dos jogadores vale: a do próximo jogo do clube (ou do dia atual). */
+export function conditionDate(save: SaveFile): string {
+  return nextFixture(save)?.date ?? currentDayOf(save)?.date ?? save.calendar.start;
+}
+
+/** Condição física (0–100) de cada jogador do clube na data do próximo jogo (017). */
+export function fitnessAt(save: SaveFile): (playerId: string) => number {
+  const date = conditionDate(save);
+  const rules = fitnessRules(save.bank, save.league.competitionId);
+  return (playerId) => fitnessOn(save.fitness, playerId, date, rules);
 }

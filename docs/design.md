@@ -135,6 +135,12 @@ acessibilidade, versão e notas, aviso de atualização e publicação na Vercel
 1.0.0 publicada em https://treinador-fc.vercel.app. Falta o teste de usabilidade com quem
 nunca viu o jogo (`specs/016-polimento-publicacao/usability.md`).
 
+**Estado do M7:** calendário por datas e várias competições na mesma temporada (017): agenda de
+cada competição como dado (`schedule`), avanço até o próximo jogo do clube de qualquer competição,
+condição física e descanso entre jogos, cartões por competição, finanças, torcida, diretoria,
+manchetes, janelas e evolução por datas, calendário do clube e abas por competição. Saves v12.
+Faltam o mata-mata (018) e as fases de grupos.
+
 Os marcos 7 a 9 são pós-lançamento: trazem as copas e o mundo maior do §14 até o mod do
 futebol sul-americano. Os prompts estão em [`speckit-prompts/`](speckit-prompts/README.md)
 (017 a 024).

@@ -3,9 +3,9 @@ import {
   clubDivision,
   completeHiddenAttributes,
   createBoard,
+  createCareerSeason,
   createFans,
   createFinances,
-  createLeagueSeason,
   createNews,
   emptyMarket,
   ensureContracts,
@@ -81,15 +81,12 @@ export function createSave(input: CreateSaveInput): CreateSaveResult {
       error: { code: "save.club_not_in_league", params: { clubId: input.clubId } },
     };
   }
-  const league = createLeagueSeason(bank, {
-    competitionId: competition.id,
-    careerSeed: input.seed,
-  });
-  const season = league.ok ? clubDivision(league.league, input.clubId) : undefined;
-  if (!league.ok || !season) {
+  const seasons = createCareerSeason(bank, { careerSeed: input.seed });
+  const season = seasons.ok ? clubDivision(seasons.league, input.clubId) : undefined;
+  if (!seasons.ok || !season) {
     return { ok: false, error: { code: "save.invalid_bank", params: { issues: 1 } } };
   }
-  const finances = createFinances(bank, league.league);
+  const finances = createFinances(bank, seasons.league);
   return {
     ok: true,
     save: {
@@ -101,15 +98,19 @@ export function createSave(input: CreateSaveInput): CreateSaveResult {
       clubId: input.clubId,
       seed: input.seed,
       bank,
-      league: league.league,
+      league: seasons.league,
       history: [],
+      competitions: seasons.competitions,
+      calendar: seasons.calendar,
+      fitness: seasons.fitness,
+      competitionHistory: [],
       finances,
       renewal: initialRenewal(bank),
       market: emptyMarket(),
-      fans: createFans(bank, league.league),
+      fans: createFans(bank, seasons.league),
       news: createNews(),
       assets: usedAssets(bank, input.assets ?? {}),
-      board: createBoard(bank, league.league, finances, input.seed, {
+      board: createBoard(bank, seasons.league, finances, input.seed, {
         clubId: input.clubId,
         noFiring: input.noFiring ?? false,
       }),

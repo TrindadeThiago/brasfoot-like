@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { advanceCareer } from "../../src/career/day";
 import { seasonTurnover } from "../../src/career/turnover";
-import { advanceCareer } from "../../src/finance/round";
 import { toFreeAgent } from "../../src/market/free-agents";
 import { proposeContract, startNegotiation } from "../../src/market/negotiation";
 import { wageDemand } from "../../src/market/player-response";

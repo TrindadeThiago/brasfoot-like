@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import { managerClubOf } from "../../src/board/create";
 import { DEFAULT_BOARD } from "../../src/board/rules";
 import type { BoardState } from "../../src/board/types";
+import { advanceCareer, completeCareerRound } from "../../src/career/day";
 import { startLeagueRound } from "../../src/career/league-round";
-import { advanceCareer, completeCareerRound } from "../../src/finance/round";
 import { finishRound } from "../../src/season/live-round";
 import { type Career, MANAGER, newCareer, play } from "./helpers";
 

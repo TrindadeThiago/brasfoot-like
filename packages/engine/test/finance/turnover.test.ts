@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { nextComposition } from "../../src/career/composition";
+import { advanceCareer } from "../../src/career/day";
 import { clubDivision } from "../../src/career/league";
 import { seasonTurnover, TURNOVER_STEP_IDS } from "../../src/career/turnover";
 import { annualWageBill, sponsorshipFor } from "../../src/finance/create";
-import { advanceCareer } from "../../src/finance/round";
 import { divisionEconomy, economyRules } from "../../src/finance/rules";
 import { prizeFor } from "../../src/finance/turnover";
 import { LEDGER_CATEGORIES } from "../../src/finance/types";

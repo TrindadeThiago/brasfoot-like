@@ -10,6 +10,7 @@ import {
   type Unavailability,
 } from "@brasfoot-like/engine";
 import { label, useT } from "../i18n";
+import { FitnessMeter } from "./FitnessMeter";
 import styles from "./Pitch.module.css";
 import { Condition } from "./PlayerCondition";
 
@@ -19,6 +20,8 @@ interface PitchProps {
   lineup: Lineup;
   players: ReadonlyMap<string, CompletedPlayer>;
   unavailable: ReadonlyMap<string, Unavailability>;
+  /** Condição física (0–100) de cada jogador na data do próximo jogo. */
+  fitness?: (playerId: string) => number;
   selected?: Place | undefined;
   onSelect(place: Place): void;
   onFocusPlayer(playerId: string | undefined): void;
@@ -29,6 +32,7 @@ export function Pitch({
   lineup,
   players,
   unavailable,
+  fitness,
   selected,
   onSelect,
   onFocusPlayer,
@@ -81,6 +85,7 @@ export function Pitch({
                       {t("lineup.outOfPosition", { percent: Math.round(factor * 100) })}
                     </span>
                   ) : null}
+                  {playerId && fitness ? <FitnessMeter value={fitness(playerId)} /> : null}
                   {playerId ? <Condition entry={unavailable.get(playerId)} hideAvailable /> : null}
                 </button>
               );
