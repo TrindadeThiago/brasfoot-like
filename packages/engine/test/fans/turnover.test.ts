@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
+import { completeCareerRound } from "../../src/career/day";
 import { startLeagueRound } from "../../src/career/league-round";
 import { seasonTurnover } from "../../src/career/turnover";
 import { createFans } from "../../src/fans/create";
 import { DEFAULT_FANS } from "../../src/fans/rules";
-import { completeCareerRound } from "../../src/finance/round";
 import { finishRound } from "../../src/season/live-round";
 import { fansCareer, MANAGER, playFans, SEED } from "./helpers";
 

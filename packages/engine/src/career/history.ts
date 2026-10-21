@@ -1,5 +1,7 @@
+import type { CompletedBank } from "../model/types";
+import { standings } from "../season/standings";
 import type { StandingRow } from "../season/types";
-import type { CompositionChange } from "./composition";
+import { type CompositionChange, nextComposition } from "./composition";
 import type { HistoryRow, LeagueSeason, SeasonHistoryEntry } from "./types";
 
 function historyRow(row: StandingRow): HistoryRow {
@@ -31,4 +33,11 @@ export function historyEntry(
         };
       }),
   };
+}
+
+/** Entrada de histórico de uma competição encerrada, com as tabelas finais calculadas (017). */
+export function competitionEntry(league: LeagueSeason, world: CompletedBank): SeasonHistoryEntry {
+  const tables: Record<number, StandingRow[]> = {};
+  for (const season of league.divisions) tables[season.divisionLevel] = standings(season, world);
+  return historyEntry(league, tables, nextComposition(league, world));
 }

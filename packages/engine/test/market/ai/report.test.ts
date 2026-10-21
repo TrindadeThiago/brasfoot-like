@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { advanceCareer } from "../../../src/finance/round";
+import { advanceCareer } from "../../../src/career/day";
 import { reportForDivision, reportHighlights } from "../../../src/market/ai/report";
 import { DEFAULT_AI_MARKET } from "../../../src/market/ai/rules";
 import { initialRenewal } from "../../../src/renewal/measure";

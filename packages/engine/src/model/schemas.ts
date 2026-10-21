@@ -349,6 +349,32 @@ export const fansSchema = z
   })
   .partial();
 
+/** Agenda da competição (017 R1): campos ausentes assumem `DEFAULT_SCHEDULE`. */
+const scheduleSchema = z
+  .object({
+    weekday: intInRange(1, 7),
+    startWeek: intInRange(0, 51),
+    everyWeeks: intInRange(1, 4),
+  })
+  .partial();
+
+/** Regras de cartões da competição (017 R6): campos ausentes assumem as regras atuais da liga. */
+const disciplineSchema = z
+  .object({
+    yellowsForSuspension: intInRange(1, 10),
+    matchesPerRed: intInRange(1, 10),
+  })
+  .partial();
+
+/** Condição física (017 R5), lida da competição principal: campos ausentes assumem `DEFAULT_FITNESS`. */
+const fitnessSchema = z
+  .object({
+    drainPer90: intInRange(0, 100),
+    recoveryPerDay: intInRange(0, 100),
+    penaltyBpPerPoint: intInRange(0, 100),
+  })
+  .partial();
+
 export const competitionSchema = z.object({
   id,
   countryId: id,
@@ -360,6 +386,9 @@ export const competitionSchema = z.object({
   board: boardSchema.optional(),
   fans: fansSchema.optional(),
   news: newsSchema.optional(),
+  schedule: scheduleSchema.optional(),
+  discipline: disciplineSchema.optional(),
+  fitness: fitnessSchema.optional(),
 });
 
 export const crestSchema = z.object({

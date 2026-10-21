@@ -46,6 +46,10 @@ export interface LedgerEntry {
   round: number;
   category: LedgerCategory;
   amount: number;
+  /** Data do jogo, nas bilheterias do calendário por datas (017). */
+  date?: string;
+  /** Competição do jogo, nas bilheterias do calendário por datas (017). */
+  competitionId?: string;
 }
 
 export interface GateRecord {
@@ -57,6 +61,9 @@ export interface GateRecord {
   capacity: number;
   price: number;
   revenue: number;
+  /** Data e competição do jogo, nas bilheterias do calendário por datas (017). */
+  date?: string;
+  competitionId?: string;
 }
 
 export interface FinanceSeasonSummary {

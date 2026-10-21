@@ -1,10 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
+  addDays,
   ageOn,
   civilFromDays,
   daysFromCivil,
+  diffDays,
   formatIsoDate,
   parseIsoDate,
+  weekdayOf,
 } from "../../src/calendar/date";
 
 describe("parseIsoDate", () => {
@@ -68,5 +71,52 @@ describe("ageOn", () => {
 
   it("lança erro para datas inválidas", () => {
     expect(() => ageOn("2023-02-29", "2027-01-01")).toThrow();
+  });
+});
+
+describe("weekdayOf (017 R1)", () => {
+  it("devolve o dia da semana ISO (1 = segunda, 7 = domingo)", () => {
+    expect(weekdayOf("1970-01-01")).toBe(4);
+    expect(weekdayOf("2000-01-01")).toBe(6);
+    expect(weekdayOf("2024-02-29")).toBe(4);
+    expect(weekdayOf("2024-12-29")).toBe(7);
+    expect(weekdayOf("2026-10-21")).toBe(3);
+    expect(weekdayOf("2027-01-01")).toBe(5);
+    expect(weekdayOf("1969-12-31")).toBe(3);
+  });
+
+  it("avança um dia da semana por dia, em ciclo de 7", () => {
+    let date = "2027-01-03";
+    for (let step = 0; step < 21; step++) {
+      expect(weekdayOf(date)).toBe(((6 + step) % 7) + 1);
+      date = addDays(date, 1);
+    }
+  });
+
+  it("rejeita data inválida", () => {
+    expect(() => weekdayOf("2023-02-29")).toThrow();
+  });
+});
+
+describe("addDays e diffDays (017 R1)", () => {
+  it("atravessa fim de mês, de ano e ano bissexto", () => {
+    expect(addDays("2026-01-31", 1)).toBe("2026-02-01");
+    expect(addDays("2026-12-31", 1)).toBe("2027-01-01");
+    expect(addDays("2024-02-28", 1)).toBe("2024-02-29");
+    expect(addDays("2023-02-28", 1)).toBe("2023-03-01");
+    expect(addDays("2027-01-01", 363)).toBe("2027-12-30");
+    expect(addDays("2027-01-01", -1)).toBe("2026-12-31");
+  });
+
+  it("diffDays é o inverso de addDays", () => {
+    for (const [from, days] of [
+      ["2027-01-01", 0],
+      ["2027-01-01", 7],
+      ["2024-02-28", 400],
+      ["2026-12-31", -45],
+    ] as const) {
+      expect(diffDays(from, addDays(from, days))).toBe(days);
+    }
+    expect(diffDays("2027-01-03", "2027-01-01")).toBe(-2);
   });
 });

@@ -31,6 +31,11 @@ function completed(league: LeagueSeason, round: LiveRound): LeagueSeason {
 }
 
 describe("rodada da liga (R2)", () => {
+  it("a rodada traz a competição da liga (017)", () => {
+    const league = newLeague("rodada");
+    expect(started(league).competitionId).toBe(league.competitionId);
+  });
+
   it("monta uma única rodada com as 20 partidas, Série A primeiro", () => {
     const round = started(newLeague("rodada"));
     expect(round.round).toBe(1);

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { advanceCareer } from "../../src/career/day";
 import { seasonTurnover } from "../../src/career/turnover";
-import { advanceCareer } from "../../src/finance/round";
 import { economyRules } from "../../src/finance/rules";
 import type { FinanceState } from "../../src/finance/types";
 import { competitionId } from "../career/helpers";

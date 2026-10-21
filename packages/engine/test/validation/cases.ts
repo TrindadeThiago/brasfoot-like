@@ -1,4 +1,4 @@
-import type { ModPackage } from "../../src/model/types";
+import type { Competition, ModPackage } from "../../src/model/types";
 import type { IssueCode, IssueParams, Section } from "../../src/validation/issues";
 import { at, makeValidBank, removeField, setRaw } from "../helpers/build-bank";
 
@@ -12,6 +12,23 @@ export interface RuleCase {
     entityId?: string;
     params: IssueParams;
   };
+}
+
+/** Segunda competição de teste (017): uma divisão com os clubes dados, ida e volta. */
+function cup(bank: ModPackage, clubIds: string[], schedule: Competition["schedule"]): Competition {
+  const main = at(bank.competitions, 0);
+  const extra: Competition = {
+    id: "copa",
+    countryId: main.countryId,
+    name: "Copa de Teste",
+    format: JSON.parse(JSON.stringify(main.format)),
+    divisions: [
+      { level: 1, name: "Divisão única", clubIds, promotionSlots: 0, relegationSlots: 0 },
+    ],
+    ...(schedule ? { schedule } : {}),
+  };
+  bank.competitions.push(extra);
+  return extra;
 }
 
 const division = (bank: ModPackage, index: number) => at(at(bank.competitions, 0).divisions, index);
@@ -278,6 +295,51 @@ export const RULE_CASES: RuleCase[] = [
       path: [0, "divisions", 1, "clubIds", 4],
       entityId: "liga",
       params: { clubId: "clube-1", otherCompetitionId: "liga", otherLevel: 1 },
+    },
+  },
+  {
+    code: "calendar.club_double_booked",
+    description: "copa e liga marcam jogos dos mesmos clubes no mesmo domingo",
+    mutate: (bank) => {
+      cup(bank, ["clube-1", "clube-2", "clube-3", "clube-4"], { weekday: 7, startWeek: 1 });
+    },
+    expect: {
+      section: "competitions",
+      path: [1, "schedule"],
+      entityId: "copa",
+      params: {
+        competitionId: "copa",
+        otherCompetitionId: "liga",
+        clubId: "clube-1",
+        date: "2027-01-10",
+      },
+    },
+  },
+  {
+    code: "calendar.competition_overflow",
+    description: "copa que começa na semana 51 e não cabe na temporada",
+    mutate: (bank) => {
+      cup(bank, ["clube-5", "clube-6", "clube-7", "clube-8"], { weekday: 3, startWeek: 51 });
+    },
+    expect: {
+      section: "competitions",
+      path: [1, "schedule"],
+      entityId: "copa",
+      params: { competitionId: "copa", needed: 57, available: 52 },
+    },
+  },
+  {
+    code: "competition.club_outside_main",
+    description: "clube da copa que não está na liga principal",
+    mutate: (bank) => {
+      division(bank, 1).clubIds.pop();
+      cup(bank, ["clube-5", "clube-6", "clube-7", "clube-8"], { weekday: 3 });
+    },
+    expect: {
+      section: "competitions",
+      path: [1, "divisions", 0, "clubIds", 3],
+      entityId: "copa",
+      params: { clubId: "clube-8", competitionId: "copa" },
     },
   },
   {

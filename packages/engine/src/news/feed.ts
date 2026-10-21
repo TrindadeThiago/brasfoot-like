@@ -5,7 +5,8 @@ function typeOrder(headline: Headline): number {
   return HEADLINE_TYPES.indexOf(headline.type);
 }
 
-function compare(a: Headline, b: Headline): number {
+/** Ordem do feed: relevância, tipo e id. */
+export function compare(a: Headline, b: Headline): number {
   return (
     b.relevance - a.relevance ||
     typeOrder(a) - typeOrder(b) ||

@@ -1,9 +1,9 @@
 import { beforeAll, describe, expect, it } from "vitest";
+import { advanceCareer } from "../../src/career/day";
 import { createLeagueSeason } from "../../src/career/league";
 import { seasonTurnover } from "../../src/career/turnover";
 import type { LeagueSeason, SeasonHistoryEntry } from "../../src/career/types";
 import { createFinances } from "../../src/finance/create";
-import { advanceCareer } from "../../src/finance/round";
 import type { FinanceState } from "../../src/finance/types";
 import { DEFAULT_AI_MARKET } from "../../src/market/ai/rules";
 import { ensureContracts } from "../../src/market/contracts";

@@ -1,13 +1,13 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { createBoard } from "../../src/board/create";
 import type { BoardState } from "../../src/board/types";
+import { advanceCareer } from "../../src/career/day";
 import { createLeagueSeason } from "../../src/career/league";
 import { seasonTurnover } from "../../src/career/turnover";
 import type { LeagueSeason, SeasonHistoryEntry } from "../../src/career/types";
 import { createFans } from "../../src/fans/create";
 import type { FansState } from "../../src/fans/types";
 import { createFinances } from "../../src/finance/create";
-import { advanceCareer } from "../../src/finance/round";
 import type { FinanceState } from "../../src/finance/types";
 import { ensureContracts } from "../../src/market/contracts";
 import { emptyMarket, type MarketState } from "../../src/market/types";

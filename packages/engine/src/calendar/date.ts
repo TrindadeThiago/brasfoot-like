@@ -99,3 +99,19 @@ export function seasonDate(referenceDate: string, year: number): string {
   const { month, day } = parseOrThrow(referenceDate);
   return formatIsoDate({ year, month, day: Math.min(day, daysInMonth(year, month)) });
 }
+
+/** Dia da semana ISO da data: 1 = segunda-feira … 7 = domingo (1970-01-01 foi quinta-feira). */
+export function weekdayOf(isoDate: string): number {
+  const days = daysFromCivil(parseOrThrow(isoDate));
+  return ((((days + 3) % 7) + 7) % 7) + 1;
+}
+
+/** Soma `days` dias (negativo volta no tempo) a uma data ISO. */
+export function addDays(isoDate: string, days: number): string {
+  return formatIsoDate(civilFromDays(daysFromCivil(parseOrThrow(isoDate)) + days));
+}
+
+/** Dias de `from` até `to` (negativo se `to` for anterior). */
+export function diffDays(from: string, to: string): number {
+  return daysFromCivil(parseOrThrow(to)) - daysFromCivil(parseOrThrow(from));
+}

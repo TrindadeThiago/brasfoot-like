@@ -1,6 +1,25 @@
 import type { InjurySeverity, Side } from "../match/types";
+import type { CompletedBank } from "../model/types";
 import { createRng } from "../rng/xoshiro";
-import type { DisciplineRules, MatchRecord, PlayerStatus } from "./types";
+import {
+  DEFAULT_DISCIPLINE_RULES,
+  type DisciplineRules,
+  type MatchRecord,
+  type PlayerStatus,
+} from "./types";
+
+/** Regras de cartões da competição (017 R6): as do mod sobre as de sempre. */
+export function disciplineRules(
+  world: Pick<CompletedBank, "competitions">,
+  competitionId: string,
+): DisciplineRules {
+  const declared = world.competitions.find((entry) => entry.id === competitionId)?.discipline ?? {};
+  return {
+    yellowsForSuspension:
+      declared.yellowsForSuspension ?? DEFAULT_DISCIPLINE_RULES.yellowsForSuspension,
+    matchesPerRed: declared.matchesPerRed ?? DEFAULT_DISCIPLINE_RULES.matchesPerRed,
+  };
+}
 
 /** Partidas de afastamento por gravidade de lesão (FR-018). */
 export const INJURY_MATCHES: Record<InjurySeverity, readonly [number, number]> = {

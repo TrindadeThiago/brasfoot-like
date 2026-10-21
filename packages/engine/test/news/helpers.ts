@@ -1,6 +1,6 @@
+import { advanceCareer } from "../../src/career/day";
 import { seasonTurnover } from "../../src/career/turnover";
 import type { SeasonHistoryEntry } from "../../src/career/types";
-import { advanceCareer } from "../../src/finance/round";
 import { createNews } from "../../src/news/create";
 import type { NewsState } from "../../src/news/types";
 import type { MatchRecord } from "../../src/season/types";

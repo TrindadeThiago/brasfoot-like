@@ -43,7 +43,13 @@ export function startLeagueRound(
       }
     }
   }
-  const round: LiveRound = { round: number, tick: 0, matches: [], decisions: [] };
+  const round: LiveRound = {
+    round: number,
+    competitionId: league.competitionId,
+    tick: 0,
+    matches: [],
+    decisions: [],
+  };
   for (const season of divisions) {
     const own = lineups
       ? Object.fromEntries(

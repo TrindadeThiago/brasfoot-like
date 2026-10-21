@@ -1,5 +1,6 @@
 import { seasonDate } from "../calendar/date";
-import type { TurnoverContext, TurnoverStep } from "../career/types";
+import { dateOfRound } from "../calendar/season-calendar";
+import type { LeagueSeason, TurnoverContext, TurnoverStep } from "../career/types";
 import { ensureContracts } from "../market/contracts";
 import { addFreeAgents, toFreeAgent } from "../market/free-agents";
 import { evolvePlayers, midSeasonRound } from "./evolution";
@@ -15,6 +16,27 @@ import { generateYouth } from "./youth";
  * das finanças), não fazem nada.
  */
 
+/**
+ * Jogos das competições secundárias depois da data da evolução do meio da temporada (017 R9): os
+ * anteriores já contaram na evolução do meio.
+ */
+function playedAfterMidSeason(context: TurnoverContext): LeagueSeason[] {
+  const calendar = context.finishedCalendar;
+  const finished = context.finished;
+  if (!calendar) return [];
+  const midDate = dateOfRound(calendar, finished.competitionId, midSeasonRound(finished));
+  return (context.finishedCompetitions ?? []).map((league) => ({
+    ...league,
+    divisions: league.divisions.map((season) => ({
+      ...season,
+      records: season.records.filter((record) => {
+        const date = dateOfRound(calendar, league.competitionId, record.round);
+        return midDate === undefined || (date !== undefined && date > midDate);
+      }),
+    })),
+  }));
+}
+
 /** Evolução do fim da temporada: minutagem das rodadas depois da do meio até a última. */
 export const evolvePlayersStep: TurnoverStep = {
   id: "evolve-players",
@@ -29,6 +51,7 @@ export const evolvePlayersStep: TurnoverStep = {
       "end",
       midSeasonRound(finished) + 1,
       last,
+      playedAfterMidSeason(context),
     );
     return { ...context, world, renewal: { ...context.renewal, lastEvolution: record } };
   },

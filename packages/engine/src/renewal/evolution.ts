@@ -3,6 +3,7 @@ import type { LeagueSeason } from "../career/types";
 import type { CompletedBank, CompletedPlayer } from "../model/types";
 import { triangular } from "../rng/distributions";
 import { createRng, type Rng } from "../rng/xoshiro";
+import type { MatchRecord } from "../season/types";
 import { EVOLUTION_RULES } from "./rules";
 import type { EvolutionRecord } from "./types";
 
@@ -14,20 +15,30 @@ export function midSeasonRound(league: LeagueSeason): number {
   return Math.ceil(rounds / 2);
 }
 
-/** Minutos de cada jogador nas partidas da liga com rodada em [fromRound, toRound]. */
+/**
+ * Minutos de cada jogador nas partidas da liga com rodada em [fromRound, toRound]. As outras
+ * competições da carreira (`extra`, 017 R9) contam todas as partidas já disputadas.
+ */
 export function minutesInRounds(
   league: LeagueSeason,
   fromRound: number,
   toRound: number,
+  extra: readonly LeagueSeason[] = [],
 ): Map<string, number> {
   const minutes = new Map<string, number>();
+  const add = (record: MatchRecord) => {
+    for (const [playerId, line] of Object.entries(record.players)) {
+      minutes.set(playerId, (minutes.get(playerId) ?? 0) + line.minutes);
+    }
+  };
   for (const season of league.divisions) {
     for (const record of season.records) {
       if (record.round < fromRound || record.round > toRound) continue;
-      for (const [playerId, line] of Object.entries(record.players)) {
-        minutes.set(playerId, (minutes.get(playerId) ?? 0) + line.minutes);
-      }
+      add(record);
     }
+  }
+  for (const other of extra) {
+    for (const season of other.divisions) season.records.forEach(add);
   }
   return minutes;
 }
@@ -37,15 +48,22 @@ function matchesInRounds(
   league: LeagueSeason,
   fromRound: number,
   toRound: number,
+  extra: readonly LeagueSeason[] = [],
 ): Map<string, number> {
   const matches = new Map<string, number>();
+  const add = (record: MatchRecord) => {
+    for (const clubId of [record.home, record.away]) {
+      matches.set(clubId, (matches.get(clubId) ?? 0) + 1);
+    }
+  };
   for (const season of league.divisions) {
     for (const record of season.records) {
       if (record.round < fromRound || record.round > toRound) continue;
-      for (const clubId of [record.home, record.away]) {
-        matches.set(clubId, (matches.get(clubId) ?? 0) + 1);
-      }
+      add(record);
     }
+  }
+  for (const other of extra) {
+    for (const season of other.divisions) season.records.forEach(add);
   }
   return matches;
 }
@@ -92,11 +110,12 @@ export function evolvePlayers(
   moment: "mid" | "end",
   fromRound: number,
   toRound: number,
+  extra: readonly LeagueSeason[] = [],
 ): { world: CompletedBank; record: EvolutionRecord } {
   const date = seasonDate(world.manifest.referenceDate, league.year);
   const clubs = new Set(league.divisions.flatMap((season) => season.clubIds));
-  const minutes = minutesInRounds(league, fromRound, toRound);
-  const matches = matchesInRounds(league, fromRound, toRound);
+  const minutes = minutesInRounds(league, fromRound, toRound, extra);
+  const matches = matchesInRounds(league, fromRound, toRound, extra);
   const deltas: Record<string, number> = {};
   const played: Record<string, number> = {};
   const players = world.players.map((player) => {

@@ -141,9 +141,10 @@ function checkEconomy(index: number, competition: Competition): ValidationIssue[
 /** Formato de disputa e divisões de cada competição (FR-006 a FR-008, FR-021, FR-022). */
 export function checkCompetitions(context: SemanticContext): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
-  const placement = new Map<string, { competitionId: string; level: number }>();
 
   for (const { index, value: competition } of context.competitions) {
+    // Um clube só pode estar em uma divisão de cada competição; entre competições pode repetir (017).
+    const placement = new Map<string, { competitionId: string; level: number }>();
     issues.push(...checkFormat(index, competition));
     issues.push(...checkEconomy(index, competition));
 

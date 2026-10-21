@@ -1,6 +1,7 @@
 import { currentPosition, divisionExpectations, expectationOf } from "../board/goals";
 import { clubDivision } from "../career/league";
 import { standings } from "../season/standings";
+import type { MatchRecord } from "../season/types";
 import { idolEvents } from "./idols";
 import { rivalryOf } from "./rivalries";
 import { type FansRules, fansRules } from "./rules";
@@ -52,6 +53,25 @@ export function roundResult(
   return rivalry ? { result, intensity: rivalry.intensity } : { result };
 }
 
+/** Fator de humor de um resultado, com o peso extra de clássico. */
+export function resultFactor(
+  rules: FansRules,
+  played: { result: "win" | "draw" | "loss"; intensity?: number },
+): { kind: MoodFactor; amount: number } {
+  const base =
+    played.result === "win" ? rules.win : played.result === "loss" ? -rules.loss : rules.draw;
+  const amount = Math.trunc((base * derbyMultiplierPct(rules.derbyPct, played.intensity)) / 100);
+  const kind: MoodFactor =
+    played.intensity !== undefined
+      ? played.result === "win"
+        ? "derbyWin"
+        : played.result === "loss"
+          ? "derbyLoss"
+          : "derbyDraw"
+      : played.result;
+  return { kind, amount };
+}
+
 /**
  * Mudança de humor da torcida do clube na rodada (research.md R4, R6): resultado (com peso de
  * clássico), distância da posição esperada ou volta ao neutro, e ídolos. Fica em [0, 100].
@@ -84,20 +104,7 @@ export function moodChange(
   const mood = context.fans.clubs[clubId]?.mood ?? rules.neutral;
   const factors: { kind: MoodFactor; amount: number }[] = [];
   const played = roundResult(context, clubId, round);
-  if (played) {
-    const base =
-      played.result === "win" ? rules.win : played.result === "loss" ? -rules.loss : rules.draw;
-    const amount = Math.trunc((base * derbyMultiplierPct(rules.derbyPct, played.intensity)) / 100);
-    const derby = played.intensity !== undefined;
-    const kind: MoodFactor = derby
-      ? played.result === "win"
-        ? "derbyWin"
-        : played.result === "loss"
-          ? "derbyLoss"
-          : "derbyDraw"
-      : played.result;
-    factors.push({ kind, amount });
-  }
+  if (played) factors.push(resultFactor(rules, played));
   if (played && round >= rules.checkFromRound) {
     const gap =
       (snapshot?.position.get(clubId) ?? currentPosition(context, clubId)) -
@@ -142,6 +149,57 @@ export function fansAfterRound(
     club.mood = change.value;
     club.recent = clubId === managerClubId ? [...club.recent, change].slice(-rules.keepRecent) : [];
     next.clubs[clubId] = club;
+  }
+  return next;
+}
+
+/** Resultado de um jogo para um dos lados e a intensidade do clássico, se for um. */
+export function matchResultFor(
+  world: FansContext["world"],
+  record: Pick<MatchRecord, "home" | "away" | "score">,
+  clubId: string,
+): { result: "win" | "draw" | "loss"; intensity?: number } {
+  const own = record.home === clubId ? record.score.home : record.score.away;
+  const other = record.home === clubId ? record.score.away : record.score.home;
+  const result = own > other ? "win" : own < other ? "loss" : "draw";
+  const rivalry = rivalryOf(world, record.home, record.away);
+  return rivalry ? { result, intensity: rivalry.intensity } : { result };
+}
+
+/**
+ * Humor depois dos jogos de outras competições num dia (017 FR-029): cada lado reage ao resultado,
+ * com o peso de clássico, sem a deriva de tabela da liga principal. `round` é a rodada da liga
+ * principal em que o dia cai (para a lista de motivos recentes). Não altera a entrada.
+ */
+export function fansAfterExtraMatches(
+  context: FansContext,
+  matches: readonly { record: MatchRecord }[],
+  round: number,
+  managerClubId: string,
+): FansState {
+  if (matches.length === 0) return context.fans;
+  const rules = fansRules(context.world, context.league.competitionId);
+  const next = clone(context.fans);
+  for (const { record } of matches) {
+    for (const clubId of [record.home, record.away]) {
+      const club = next.clubs[clubId];
+      if (!club) continue;
+      const factor = resultFactor(rules, matchResultFor(context.world, record, clubId));
+      const value = clamp(club.mood + factor.amount, 0, 100);
+      if (clubId === managerClubId) {
+        club.recent = [
+          ...club.recent,
+          {
+            season: context.league.number,
+            round,
+            delta: value - club.mood,
+            value,
+            factors: [factor],
+          },
+        ].slice(-rules.keepRecent);
+      }
+      club.mood = value;
+    }
   }
   return next;
 }

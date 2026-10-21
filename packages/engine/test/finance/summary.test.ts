@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { advanceCareer } from "../../src/finance/round";
+import { advanceCareer } from "../../src/career/day";
 import { seasonFinanceSummary } from "../../src/finance/summary";
 import { LEDGER_CATEGORIES } from "../../src/finance/types";
 import { career, testWorld } from "./helpers";

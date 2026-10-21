@@ -1,4 +1,5 @@
 import type { BoardState } from "../board/types";
+import type { SeasonCalendar } from "../calendar/season-calendar";
 import type { FansState } from "../fans/types";
 import type { FinanceState } from "../finance/types";
 import type { MarketState } from "../market/types";
@@ -98,6 +99,14 @@ export interface TurnoverContext {
   next: NextSeasonDraft;
   /** Nova temporada, criada pela etapa `generate-calendars`. */
   league?: LeagueSeason;
+  /** Competições secundárias encerradas e o calendário da temporada encerrada (017). */
+  readonly finishedCompetitions?: readonly LeagueSeason[];
+  readonly finishedCalendar?: SeasonCalendar;
+  /** Competições secundárias e calendário da nova temporada, criados por `generate-calendars`. */
+  competitions?: LeagueSeason[];
+  calendar?: SeasonCalendar;
+  /** Histórico das competições secundárias (uma entrada por temporada encerrada, 017). */
+  competitionHistory?: SeasonHistoryEntry[];
   /** Finanças da carreira (008); ausentes em usos só da liga. */
   finances?: FinanceState;
   /** Clube do jogador: as decisões da IA não o alteram. */
@@ -138,6 +147,10 @@ export interface TurnoverOptions {
   board?: BoardState;
   fans?: FansState;
   news?: NewsState;
+  /** Competições secundárias encerradas, o calendário da temporada e o histórico delas (017). */
+  competitions?: readonly LeagueSeason[];
+  calendar?: SeasonCalendar;
+  competitionHistory?: readonly SeasonHistoryEntry[];
 }
 
 export type TurnoverResult =
@@ -153,5 +166,9 @@ export type TurnoverResult =
       board?: BoardState;
       fans?: FansState;
       news?: NewsState;
+      /** Competições secundárias e calendário da nova temporada (017). */
+      competitions?: LeagueSeason[];
+      calendar?: SeasonCalendar;
+      competitionHistory?: SeasonHistoryEntry[];
     }
   | { ok: false; error: SeasonError };
