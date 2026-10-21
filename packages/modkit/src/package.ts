@@ -132,5 +132,7 @@ export function writeModPackage(bank: ModPackage, images: Record<string, string>
   for (const [path, uri] of Object.entries(images).sort(([a], [b]) => (a < b ? -1 : 1))) {
     zip[path] = dataUriBytes(uri);
   }
-  return zipSync(zip, { level: 6, mtime: new Date("2026-01-01T00:00:00Z") });
+  // O zip grava a data no horário local (formato DOS): uma data montada pelos campos locais dá
+  // o mesmo arquivo em qualquer fuso (o CI roda em UTC).
+  return zipSync(zip, { level: 6, mtime: new Date(2026, 0, 1) });
 }
