@@ -1,5 +1,13 @@
 [
   {
+    "version": "1.0.1",
+    "date": "2026-10-21",
+    "changes": [
+      "Contagem anônima de visitas, sem cookies e sem dados pessoais; a página Sobre explica o que é contado.",
+      "O site informa a versão publicada, usada pelo selo de versão do repositório."
+    ]
+  },
+  {
     "version": "1.0.0",
     "date": "2026-10-20",
     "changes": [
