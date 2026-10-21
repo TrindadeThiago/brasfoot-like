@@ -129,6 +129,11 @@
       "type": "league"
     },
     "id": "liga-nacional",
-    "name": "Liga Norvaliana"
+    "name": "Liga Norvaliana",
+    "schedule": {
+      "everyWeeks": 1,
+      "startWeek": 0,
+      "weekday": 6
+    }
   }
 ]

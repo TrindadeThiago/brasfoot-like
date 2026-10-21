@@ -14,7 +14,7 @@ import { summarize } from "./summary";
 export const EXAMPLE_SEED = "norvalia-1";
 
 export function exampleBank() {
-  return generateDefaultBank({
+  const bank = generateDefaultBank({
     seed: EXAMPLE_SEED,
     names,
     divisionSize: 12,
@@ -27,6 +27,14 @@ export function exampleBank() {
       version: "1.0.0",
     },
   });
+  // Agenda explícita (017): a liga de Norvália joga aos sábados, a cada semana, como exemplo do
+  // campo `schedule` do formato (o padrão do jogo é o domingo).
+  const [league, ...others] = bank.competitions;
+  if (!league) throw new Error("banco sem competição");
+  return {
+    ...bank,
+    competitions: [{ ...league, schedule: { weekday: 6, startWeek: 0, everyWeeks: 1 } }, ...others],
+  };
 }
 
 const bank = exampleBank();
