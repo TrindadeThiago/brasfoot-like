@@ -88,10 +88,11 @@ a cada push. Para publicar uma versão:
 
 1. Atualize `version` no `package.json` da raiz e adicione as notas da versão em
    `packages/i18n/locales/pt-BR/release-notes.json`.
-2. Faça o merge na `main` e crie a tag: `git tag vX.Y.Z && git push --tags`.
-3. O workflow [`release`](.github/workflows/release.yml) roda todas as verificações (testes,
-   e2e, simulações e `check-release`) e só então publica o build testado e cria a release no
-   GitHub com as notas.
+2. Faça o merge na `main`. Não é preciso criar a tag.
+3. O workflow [`release`](.github/workflows/release.yml) dispara no push na `main`: se a versão do
+   `package.json` ainda não tem tag, roda todas as verificações (testes, e2e, simulações e
+   `check-release`), publica o build testado e então cria a tag `vX.Y.Z` e a release no GitHub com
+   as notas. Merge sem mudança de versão não publica nada.
 
 O badge de versão acima lê o `version.json` do site publicado, então muda sozinho a cada release.
 

@@ -20,8 +20,8 @@
 - **TypeScript + Next.js (React, static export) + Vitest + Biome.**
 - **Motor do jogo em TypeScript puro**, sem dependência de React, testável isoladamente (simulação, regras, IA).
 - **Hospedagem:** site estático na **Vercel** (Hobby), sem backend e sem integração Git: a
-  publicação é feita pelo workflow `release` do GitHub Actions a partir de uma tag `vX.Y.Z`, só
-  depois de todos os gates (016, `specs/016-polimento-publicacao/contracts/release.md`).
+  publicação é feita pelo workflow `release` do GitHub Actions quando a `main` ganha uma versão
+  nova (a tag `vX.Y.Z` é criada por ele ao fim), só depois de todos os gates (016, `specs/016-polimento-publicacao/contracts/release.md`).
   itch.io continua possível como distribuição adicional.
 - **i18n desde o dia 1**; apenas pt-BR no lançamento.
 
