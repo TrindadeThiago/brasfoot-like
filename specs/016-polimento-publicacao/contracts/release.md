@@ -32,6 +32,10 @@
 
 Qualquer passo falhando ⇒ nada é publicado; a versão anterior continua no ar.
 
+Organização em jobs (revisão de tempo): `checks` (typecheck + lint), `unit` (4 shards,
+`--maxWorkers=2`), `e2e` (build + `check-release` + e2e, envia o `out/` como artefato) e, no
+release, `simulations`; o job `deploy` depende de todos e publica o artefato testado.
+
 ## Segredos (cadastrados pelo mantenedor)
 
 `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`. O projeto Vercel é criado **sem**

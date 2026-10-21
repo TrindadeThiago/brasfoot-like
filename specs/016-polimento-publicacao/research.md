@@ -30,14 +30,14 @@ só o motor/save (sem IndexedDB nem React):
 | Rodada direta pela interface (clique → resultado, inclui salvar) | 320 ms (happy-dom) | **< 1 s** |
 | Virada pela interface (inclui salvar e resumo) | 212 ms (happy-dom) | **< 2 s** |
 
-Medição da implementação (2026-10-20, mesma máquina; testes `performance-30` e
+Medição da implementação (2026-10-20, mesma máquina; testes `long-career` e
 `performance.test.tsx`): virada no motor 65 ms e rodada da carreira (início + fim + sistemas)
 66 ms na temporada 31; pela interface, valores da tabela acima. Gates da release rodados
 localmente: typecheck, lint, 2578 testes unitários, 23 e2e (2× seguidas), `check-release` com
 `GITHUB_REF_NAME=v1.0.0`, `sim:world` e `sim:economy` de 30 temporadas — todos verdes.
 
 - **Decision**: limites ~4–5× acima do medido, para tolerar máquinas mais lentas e o ambiente de
-  CI; teste de motor em `packages/save/test/performance-30.test.ts` (gera a carreira de 30
+  CI; teste de motor em `packages/save/test/long-career.test.ts` (gera a carreira de 30
   temporadas uma vez, mede a mediana de 5 execuções) e teste de interface estendendo
   `apps/web/test/flows/performance.test.tsx` com um save de 30 temporadas. Indicador de
   progresso (FR-029) em qualquer operação assíncrona que passe de 1 s (virada já tem tela própria;
@@ -208,3 +208,17 @@ Checklist de `contracts/ui.md` aplicado tela a tela (código + varredura axe/tec
   "Desta tela".
 - Resultado da varredura axe (WCAG 2.1 A/AA) nas 15 telas/estados, nos dois temas: 0 violações
   de qualquer gravidade.
+
+## Tempo dos testes (revisão pós-implementação)
+
+- O `pnpm test` levava ~19 min no CI: repositório privado → runner com 2 vCPUs, e o Vitest usa
+  `cores − 1` = 1 worker. O CI agora divide os testes unitários em 4 shards paralelos com
+  `--maxWorkers=2` e roda typecheck/lint e e2e em jobs próprios (o release também; o deploy usa
+  o build testado pelo e2e).
+- Carreiras de 30 temporadas simuladas mais de uma vez: o desempenho do motor (016) passou para
+  o mesmo arquivo do teste de tamanho do save (014), `packages/save/test/long-career.test.ts`,
+  com uma única simulação; o teste de interface usa 10 temporadas.
+- `engine/test/renewal/long-run.test.ts` (121 s, o caminho crítico local) virou um arquivo por
+  seed, para as duas rodarem em paralelo; mesma cobertura.
+- E2E local: no WSL com rede "mirrored" a verificação de porta do Playwright em 127.0.0.1
+  esperava ~2,5 min por execução; fora do CI ela usa `[::1]`.
