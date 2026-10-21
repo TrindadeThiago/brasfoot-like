@@ -30,7 +30,9 @@ export const SERIE_B = (competitions[0]?.divisions[1]?.clubIds ?? []) as string[
 
 function bankFiles(withCup: boolean): unknown {
   return joinBankFiles({
-    "mod.json": mod,
+    // Sem a copa, o banco é de um "mod" qualquer: o mundo padrão sem copa ganha a copa na virada
+    // (018), o que mudaria a liga que estes testes medem. `adopt-cup.test.ts` usa o id "default".
+    "mod.json": withCup ? mod : { ...mod, id: "default-liga" },
     "countries.json": countries,
     // Os testes antigos da liga seguem sem a copa (018 T026): ela entra só em `defaultBankWithCup`.
     "competitions.json": withCup
@@ -365,7 +367,9 @@ export function saveV8(): SaveV8 {
     assets: _assets,
     ...rest
   } = legacySave();
-  const { rivalries: _rivalries, ...bank } = rest.bank;
+  const { rivalries: _rivalries, ...bankRest } = rest.bank;
+  // A migração só devolve as rivalidades ao banco de id "default" (o mundo padrão).
+  const bank = { ...bankRest, manifest: { ...bankRest.manifest, id: "default" } };
   return JSON.parse(JSON.stringify({ ...rest, bank, formatVersion: 8 })) as SaveV8;
 }
 
