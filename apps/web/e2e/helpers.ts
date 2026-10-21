@@ -31,20 +31,28 @@ export async function skipTips(page: Page): Promise<void> {
 }
 
 /**
+ * Seed fixa das carreiras do e2e: com seed aleatória, eventos de partida (expulsão, lesão,
+ * demissão) mudavam de uma execução para outra e os testes falhavam ao acaso no CI.
+ */
+export const E2E_SEED = "e2e";
+
+/**
  * Cria uma carreira pela interface e devolve o nome do clube escolhido (linha `row` da tabela da
- * divisão `division`).
+ * divisão `division`). A seed é fixa (`E2E_SEED`) para o teste jogar sempre a mesma carreira.
  */
 export async function createCareer(
   page: Page,
   manager: string,
   row: number,
   division = "Série A",
-  options: { noFiring?: boolean } = {},
+  options: { noFiring?: boolean; seed?: string } = {},
 ): Promise<string> {
   await skipTips(page);
   await page.goto("/");
   await page.getByRole("link", { name: t("opening.newCareer") }).click();
   await page.getByLabel(t("newCareer.managerName")).fill(manager);
+  await page.getByText(t("newCareer.advanced")).click();
+  await page.getByLabel(t("newCareer.seed")).fill(options.seed ?? E2E_SEED);
   if (options.noFiring) {
     await page.getByRole("checkbox", { name: t("newCareer.noFiring") }).check();
   }
