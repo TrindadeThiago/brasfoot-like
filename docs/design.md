@@ -125,16 +125,23 @@ Desenvolvimento via Spec-Driven Development com Spec Kit. Os prompts de `/specki
 | **M4 — Mercado** | Janelas, propostas, contratos, empréstimos, IA de transferências. | A IA monta elencos coerentes por 30 temporadas. |
 | **M5 — Drama** | Diretoria, demissão/propostas, torcida, manchetes, rivalidades, histórico. | Uma temporada "conta uma história". |
 | **M6 — Lançamento** | Polimento de UI, export de save, formato de mod documentado, publicação na web. | Um estranho consegue jogar sem explicação. |
+| **M7 — Copas** | Calendário por datas com várias competições, mata-mata (copa nacional no mundo padrão), fase de grupos e competições em fases. | Jogo uma temporada com liga e copa nacional no mesmo calendário, e a copa termina com um campeão. |
+| **M8 — Mundo** | Vários países, simulação resumida para escala, vagas entre competições e supercopas. | Um mundo com 10 países roda 30 temporadas dentro das metas de tamanho e tempo, e as vagas entre competições se renovam sozinhas. |
+| **M9 — Futebol sul-americano** | Competições continentais, estaduais e o gerador do mod sul-americano (nomes fictícios). | Uma carreira no mod passa por estadual, campeonato nacional, copa nacional e competição continental na mesma temporada. |
 
 **Estado do M6:** export/import de carreiras e formato de mod (015); dicas de primeiro acesso,
 Configurações (tema claro/escuro), ajuda de atalhos em todas as telas, revisão de
-acessibilidade, versão e notas, aviso de atualização e publicação na Vercel (016, versão
-1.0.0). Falta, antes da tag `v1.0.0`: o teste de usabilidade com quem nunca viu o jogo
-(`specs/016-polimento-publicacao/usability.md`) e o cadastro dos segredos da Vercel.
+acessibilidade, versão e notas, aviso de atualização e publicação na Vercel (016). Versão
+1.0.0 publicada em https://treinador-fc.vercel.app. Falta o teste de usabilidade com quem
+nunca viu o jogo (`specs/016-polimento-publicacao/usability.md`).
+
+Os marcos 7 a 9 são pós-lançamento: trazem as copas e o mundo maior do §14 até o mod do
+futebol sul-americano. Os prompts estão em [`speckit-prompts/`](speckit-prompts/README.md)
+(017 a 024).
 
 ## 14. Pós-lançamento
 
-- Copas e outras competições (nacionais, continentais)
+- Copas e outras competições (nacionais, continentais) → marcos 7 a 9
 - Editor de mods embutido
 - Gestão profunda: categorias de base, olheiros, estrutura do clube
 - Vestiário/moral e coletivas de imprensa
