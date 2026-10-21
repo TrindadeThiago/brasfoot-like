@@ -21,11 +21,14 @@
     "test:e2e": "pnpm --filter @brasfoot-like/web test:e2e",
     "sim:economy": "pnpm --filter @brasfoot-like/tools sim:economy",
     "sim:world": "pnpm --filter @brasfoot-like/tools sim:world",
-    "gen:example-mod": "pnpm --filter @brasfoot-like/tools gen:example-mod"
+    "gen:example-mod": "pnpm --filter @brasfoot-like/tools gen:example-mod",
+    "check-release": "pnpm --filter @brasfoot-like/tools check-release",
+    "screenshots": "pnpm --filter @brasfoot-like/tools screenshots"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",
     "typescript": "~6.0.3",
     "vitest": "^5.0.4"
-  }
+  },
+  "version": "1.0.0"
 }
