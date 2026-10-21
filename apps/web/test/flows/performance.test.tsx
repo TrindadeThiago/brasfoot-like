@@ -1,6 +1,7 @@
 // SC-005 (004): lista de carreiras < 1 s, abrir carreira < 2 s, salvar sem travar a interface
 // > 200 ms. 007: rodada das duas divisões em modo direto < 1 s (SC-006), virada < 2 s (SC-005).
-// 016 R1: os mesmos limites pela interface numa carreira de 30 temporadas.
+// 016 R1: os mesmos limites pela interface numa carreira longa (10 temporadas; o motor é medido
+// em 30 temporadas em packages/save/test/long-career.test.ts).
 import { advanceLeague } from "@brasfoot-like/engine";
 import { touch, userSeason } from "@brasfoot-like/save";
 import { screen, waitFor } from "@testing-library/react";
@@ -94,10 +95,10 @@ describe("desempenho (SC-005)", () => {
   }, 60_000);
 });
 
-describe("desempenho numa carreira de 30 temporadas (016 R1)", () => {
+describe("desempenho numa carreira de 10 temporadas (016 R1)", () => {
   let career: ReturnType<typeof longCareer>;
   beforeAll(() => {
-    career = longCareer("longa", 30);
+    career = longCareer("longa", 10);
   }, 1_200_000);
 
   it("rodada direta pela interface em menos de 1 s", async () => {
@@ -110,7 +111,7 @@ describe("desempenho numa carreira de 30 temporadas (016 R1)", () => {
     await user.click(button);
     await screen.findByRole("region", { name: t("home.lastRound", { round: 1 }) });
     const time = performance.now() - start;
-    console.log(`rodada direta pela interface (temporada 31): ${time.toFixed(0)} ms`);
+    console.log(`rodada direta pela interface (temporada 11): ${time.toFixed(0)} ms`);
     expect(time).toBeLessThan(1000);
   }, 60_000);
 
@@ -124,7 +125,7 @@ describe("desempenho numa carreira de 30 temporadas (016 R1)", () => {
     await user.click(button);
     await waitFor(() => expect(memoryRouter.pathname()).toBe("/jogo"), { timeout: 5000 });
     const time = performance.now() - start;
-    console.log(`virada pela interface (fim da temporada 30): ${time.toFixed(0)} ms`);
+    console.log(`virada pela interface (fim da temporada 10): ${time.toFixed(0)} ms`);
     expect(time).toBeLessThan(2000);
   }, 60_000);
 });

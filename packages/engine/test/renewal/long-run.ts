@@ -17,6 +17,7 @@ import { validateBank } from "../../src/validation/validate";
 import { competitionId, testWorld } from "../career/helpers";
 
 // Critérios de aceite da 009 (Princípio V, research.md R9) e da economia da 008, com renovação.
+// Um arquivo de teste por seed (`long-run-<n>.test.ts`): os mundos longos rodam em paralelo.
 const SEASONS = 30;
 const RANGES = {
   mean: [55, 63],
@@ -138,9 +139,9 @@ function simulate(careerSeed: string): SeasonEnd[] {
   return ends;
 }
 
-describe.each(["renovacao-1", "renovacao-2"])(
-  `mundo em ${SEASONS} temporadas (%s)`,
-  (seed) => {
+/** Critérios do mundo longo para uma seed (cada seed num arquivo de teste). */
+export function describeLongRun(seed: string): void {
+  describe(`mundo em ${SEASONS} temporadas (${seed})`, () => {
     let ends: SeasonEnd[] = [];
     beforeAll(() => {
       ends = simulate(seed);
@@ -220,6 +221,5 @@ describe.each(["renovacao-1", "renovacao-2"])(
       const again = simulate(seed);
       expect(again.map((end) => end.measure)).toEqual(ends.map((end) => end.measure));
     }, 600_000);
-  },
-  600_000,
-);
+  });
+}
