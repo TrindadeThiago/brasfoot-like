@@ -95,6 +95,29 @@ export function eventText(event: MatchEvent, match: LiveMatch, save: SaveFile): 
         club: club(match.sides[event.side]),
         formation: label(`formation.${event.formation}`),
       });
+    case "positions_change": {
+      const [first, second] = event.moves;
+      // Dois jogadores que trocaram de vaga entre si: o texto cita os dois.
+      if (
+        event.moves.length === 2 &&
+        first &&
+        second &&
+        first.fromSlotId === second.toSlotId &&
+        second.fromSlotId === first.toSlotId
+      ) {
+        return say("position_swap", {
+          minute,
+          club: club(match.sides[event.side]),
+          first: player(first.playerId),
+          second: player(second.playerId),
+        });
+      }
+      return say("positions", {
+        minute,
+        club: club(match.sides[event.side]),
+        count: event.moves.length,
+      });
+    }
     case "posture_change":
       return say("posture", {
         minute,
