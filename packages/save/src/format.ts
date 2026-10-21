@@ -1,6 +1,7 @@
 import type {
   BoardState,
   CompletedBank,
+  CupHistoryEntry,
   FansState,
   FinanceState,
   FitnessState,
@@ -15,7 +16,7 @@ import type {
 } from "@brasfoot-like/engine";
 
 /** Versão atual do formato do save (Princípio VI). */
-export const SAVE_FORMAT_VERSION = 12;
+export const SAVE_FORMAT_VERSION = 13;
 
 export const MANAGER_NAME_MAX = 40;
 
@@ -45,6 +46,8 @@ export interface SaveFile {
   fitness: FitnessState;
   /** Uma entrada por temporada encerrada de cada competição secundária (v12). */
   competitionHistory: SeasonHistoryEntry[];
+  /** Uma entrada por edição encerrada de cada copa (v13). */
+  cupHistory: CupHistoryEntry[];
   /** Finanças de todos os clubes da competição (v4). */
   finances: FinanceState;
   /** Estado da renovação do mundo (v5). `bank` é o mundo vivo da carreira desde a 009. */

@@ -181,6 +181,7 @@ export function advanceCareerSeason(
     competitions: save.competitions,
     calendar: save.calendar,
     competitionHistory: save.competitionHistory,
+    cupHistory: save.cupHistory,
   });
   if (!turned.ok) return turned;
   const next = withAdjustedLineup(
@@ -192,6 +193,7 @@ export function advanceCareerSeason(
       // A condição física volta ao máximo na pré-temporada (017 FR-022).
       fitness: { players: {} },
       competitionHistory: turned.competitionHistory ?? save.competitionHistory,
+      cupHistory: turned.cupHistory ?? save.cupHistory,
       history: turned.history,
       finances: turned.finances ?? save.finances,
       bank: turned.world,
