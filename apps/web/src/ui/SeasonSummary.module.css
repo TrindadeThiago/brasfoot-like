@@ -10,7 +10,7 @@
 
 .mine.champion {
   border-color: var(--color-warning);
-  background: linear-gradient(90deg, rgba(255, 204, 77, 0.18), transparent);
+  background: linear-gradient(90deg, var(--color-warning-soft), transparent);
 }
 
 .mine.promoted {
@@ -35,7 +35,7 @@
   padding: var(--space-4);
   border-radius: var(--radius);
   border: 1px solid var(--color-warning);
-  background: linear-gradient(90deg, rgba(255, 204, 77, 0.12), transparent);
+  background: linear-gradient(90deg, var(--color-warning-softer), transparent);
 }
 
 .champions p {

@@ -59,7 +59,7 @@ function Market({ save, game }: { save: SaveFile; game: Game }) {
   const open = (row: MarketRow, action: RowAction) => setTarget({ kind: action, row });
   return (
     <div className={styles.layout}>
-      <h1>{t("market.title")}</h1>
+      <h2 className="screen-title">{t("market.title")}</h2>
       <WindowStatus save={save} />
       {locked ? <p role="status">{t("market.liveLocked")}</p> : null}
       <div className={styles.tabs} role="tablist" aria-label={t("market.tablist")}>

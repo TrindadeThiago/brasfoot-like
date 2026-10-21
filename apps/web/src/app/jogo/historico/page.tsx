@@ -183,14 +183,14 @@ function History({ save }: { save: SaveFile }) {
   if (entry) {
     return (
       <div className={styles.layout}>
-        <h1>{t("history.title")}</h1>
+        <h2 className="screen-title">{t("history.title")}</h2>
         <HistoryDetail save={save} entry={entry} />
       </div>
     );
   }
   return (
     <div className={styles.layout}>
-      <h1>{t("history.title")}</h1>
+      <h2 className="screen-title">{t("history.title")}</h2>
       <div role="tablist" aria-label={t("history.tablist")} className={styles.tabs}>
         {TABS.map((name) => (
           <Button

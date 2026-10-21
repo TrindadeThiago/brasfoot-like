@@ -19,7 +19,7 @@ export function DivisionTabs({ save, level }: { save: SaveFile; level: number })
     const next = levels[levels.indexOf(level) + offset];
     if (next !== undefined) router.push(divisionHref(pathname, save.id, next));
   };
-  useShortcuts({ "[": go(-1), "]": go(1) });
+  useShortcuts({ "division-prev": go(-1), "division-next": go(1) });
   return (
     <nav aria-label={t("division.tabs.label")} className={styles.tabs}>
       {levels.map((entry) => {

@@ -26,7 +26,7 @@ function News({ save }: { save: SaveFile }) {
     }`;
   return (
     <div className={styles.layout}>
-      <h1>{t("news.page")}</h1>
+      <h2 className="screen-title">{t("news.page")}</h2>
       {rounds.length === 0 ? (
         <p className={styles.empty}>{t("news.empty")}</p>
       ) : (

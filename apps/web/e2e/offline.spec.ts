@@ -27,4 +27,14 @@ test("depois da primeira visita o jogo abre e continua sem rede (SC-007)", async
     await page.getByRole("link", { name: t(screen) }).click();
     await expect(page.getByRole("heading", { name: club })).toBeVisible();
   }
+
+  // Páginas novas da 016 também abrem sem rede (vêm do precache).
+  for (const [path, title] of [
+    ["/sobre/", "app.name"],
+    ["/configuracoes/", "settings.title"],
+    ["/notas-de-versao/", "notes.title"],
+  ] as const) {
+    await page.goto(path);
+    await expect(page.getByRole("heading", { level: 1, name: t(title) })).toBeVisible();
+  }
 });

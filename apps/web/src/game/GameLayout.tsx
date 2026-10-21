@@ -1,17 +1,18 @@
 "use client";
 
-import { leagueRound, leagueTotalRounds } from "@brasfoot-like/engine";
+import { leagueRound } from "@brasfoot-like/engine";
 import { isEmployed, type SaveFile } from "@brasfoot-like/save";
 import { usePathname, useRouter } from "next/navigation";
-import { type ReactNode, Suspense, useEffect, useMemo, useState } from "react";
+import { type ReactNode, Suspense, useEffect, useMemo } from "react";
 import { useT } from "../i18n";
 import { type RoundMode, readPreferences } from "../storage/preferences";
 import { AppHeader, GAME_SCREENS, screenHref } from "../ui/AppHeader";
 import { AssetsProvider } from "../ui/AssetsProvider";
 import { ConflictDialog } from "../ui/ConflictDialog";
 import { confirmLeave } from "../ui/leave-guard";
-import { ShortcutsHelp } from "../ui/ShortcutsHelp";
 import { SimulateDialogs } from "../ui/SimulateDialogs";
+import { type ShortcutId, screenOf } from "../ui/shortcuts";
+import { TipHost } from "../ui/tips/TipHost";
 import { useShortcuts } from "../ui/useShortcuts";
 import styles from "./GameLayout.module.css";
 import type { useGame } from "./GameProvider";
@@ -31,9 +32,8 @@ function Layout({ children }: { children: Render }) {
   const router = useRouter();
   const { save, game } = useCareerFromQuery();
   const pathname = (usePathname() ?? "/jogo").replace(/\/+$/, "") || "/jogo";
-  const [help, setHelp] = useState(false);
 
-  const handlers = useMemo<Record<string, () => void>>(() => {
+  const handlers = useMemo<Partial<Record<ShortcutId, () => void>>>(() => {
     if (!save) return {};
     const go = (index: number) => () => {
       const screen = GAME_SCREENS[index];
@@ -42,25 +42,23 @@ function Layout({ children }: { children: Render }) {
     };
     const play = async (mode: RoundMode) => {
       if (!confirmLeave()) return;
-      const last = leagueRound(save.league) === leagueTotalRounds(save.league);
       const outcome = await game.playRound(mode);
       if (outcome === "live") router.push(screenHref("/jogo/rodada", save.id));
-      if (outcome === "done" && last) router.push(screenHref("/jogo/fim-de-temporada", save.id));
+      if (outcome === "finished") router.push(screenHref("/jogo/fim-de-temporada", save.id));
     };
     return {
-      "1": go(0),
-      "2": go(1),
-      "3": go(2),
-      "4": go(3),
-      "5": go(4),
-      "6": go(5),
-      h: go(6),
-      m: go(7),
-      c: go(8),
-      j: go(9),
-      s: () => void play(readPreferences().roundMode ?? "live"),
-      d: () => void play("direct"),
-      "?": () => setHelp((open) => !open),
+      "go-home": go(0),
+      "go-squad": go(1),
+      "go-lineup": go(2),
+      "go-competition": go(3),
+      "go-calendar": go(4),
+      "go-finance": go(5),
+      "go-history": go(6),
+      "go-market": go(7),
+      "go-career": go(8),
+      "go-news": go(9),
+      play: () => void play(readPreferences().roundMode ?? "live"),
+      "play-direct": () => void play("direct"),
     };
   }, [save, router, game]);
   useShortcuts(handlers);
@@ -82,11 +80,14 @@ function Layout({ children }: { children: Render }) {
   if (blocked) return <main className={styles.message}>{t("common.loading")}</main>;
   return (
     <AssetsProvider assets={save.assets}>
-      <AppHeader save={save} onHelp={() => setHelp(true)} />
+      <AppHeader save={save} />
       <main className={styles.content}>{children(save, game)}</main>
       <ConflictDialog />
       <SimulateDialogs save={save} game={game} />
-      <ShortcutsHelp open={help} onClose={() => setHelp(false)} />
+      <TipHost
+        screen={screenOf(pathname)}
+        context={{ played: save.history.length > 0 || leagueRound(save.league) > 1 }}
+      />
     </AssetsProvider>
   );
 }

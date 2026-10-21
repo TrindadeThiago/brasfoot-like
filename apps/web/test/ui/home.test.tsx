@@ -1,6 +1,7 @@
 import { userSeason } from "@brasfoot-like/save";
-import { screen, within } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { screen, waitFor, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it, vi } from "vitest";
 import { t } from "../../src/i18n";
 import { renderApp } from "../helpers/app";
 import { storedCareer } from "../helpers/career";
@@ -32,5 +33,30 @@ describe("Início do clube (FR-016)", () => {
     const { store } = await storedCareer(1);
     renderApp("/jogo?c=tela", store);
     expect(await screen.findByText(t("home.noResults"))).toBeDefined();
+  });
+
+  it("mostra 'Simulando…' e trava os botões enquanto a rodada direta é calculada (016 FR-029)", async () => {
+    // Segura o próximo quadro para observar o estado antes do cálculo.
+    let paint: FrameRequestCallback | undefined;
+    vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => {
+      paint = callback;
+      return 1;
+    });
+    try {
+      const { store } = await storedCareer(1);
+      renderApp("/jogo?c=tela", store);
+      const simulate = await screen.findByRole("button", { name: t("home.simulate") });
+      await userEvent.setup().click(simulate);
+      await waitFor(() => expect(paint).toBeDefined());
+      expect(screen.getByText(t("home.simulating")).getAttribute("role")).toBe("status");
+      expect((simulate as HTMLButtonElement).disabled).toBe(true);
+      paint?.(0);
+      expect(
+        await screen.findByRole("region", { name: t("home.lastRound", { round: 1 }) }),
+      ).toBeDefined();
+      expect(screen.queryByText(t("home.simulating"))).toBeNull();
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 });

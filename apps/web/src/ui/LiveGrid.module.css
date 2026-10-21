@@ -80,7 +80,7 @@
   height: 16px;
   border-radius: 2px;
   background: var(--color-danger);
-  color: #fff;
+  color: var(--color-on-danger);
   font-size: 10px;
   font-weight: 700;
   flex: none;

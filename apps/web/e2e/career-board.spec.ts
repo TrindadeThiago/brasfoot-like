@@ -1,7 +1,8 @@
 import { expect, test } from "@playwright/test";
-import { simulate, t } from "./helpers";
+import { simulate, skipTips, t } from "./helpers";
 
 test("diretoria: sem demissão na criação, metas, confiança e Carreira (012)", async ({ page }) => {
+  await skipTips(page);
   await page.goto("/");
   await page.getByRole("link", { name: t("opening.newCareer") }).click();
   await page.getByLabel(t("newCareer.managerName")).fill("Ana Souza");

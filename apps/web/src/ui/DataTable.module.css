@@ -13,7 +13,7 @@
 }
 
 .sortButton:focus-visible {
-  box-shadow: var(--focus-ring);
+  outline: 3px solid var(--focus-color);
 }
 
 .arrow {
@@ -40,7 +40,7 @@
 }
 
 .clickable:focus-visible {
-  outline: 3px solid #7cc4ff;
+  outline: 3px solid var(--focus-color);
   outline-offset: -2px;
 }
 

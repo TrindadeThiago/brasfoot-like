@@ -25,9 +25,11 @@ a {
   color: var(--color-accent);
 }
 
+/* Foco visível em todo elemento focável, nos dois temas (016 FR-019). Contorno, e não sombra:
+   não some dentro de áreas com overflow escondido nem no modo de alto contraste. */
 :focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring);
+  outline: 3px solid var(--focus-color);
+  outline-offset: 2px;
   border-radius: 4px;
 }
 
@@ -36,6 +38,11 @@ h2,
 h3 {
   margin: 0 0 var(--space-3);
   line-height: 1.2;
+}
+
+/* Título da tela dentro do jogo: o <h1> é o clube, no cabeçalho (016, revisão de consistência). */
+.screen-title {
+  font-size: var(--text-xl);
 }
 
 table {
@@ -63,11 +70,13 @@ caption {
   padding-bottom: var(--space-2);
 }
 
-input {
+input,
+select,
+textarea {
   font: inherit;
   color: var(--color-text);
   background: var(--color-surface-2);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-control-border);
   border-radius: var(--radius);
   padding: var(--space-2) var(--space-3);
 }
@@ -79,4 +88,25 @@ input {
   overflow: hidden;
   clip: rect(0 0 0 0);
   white-space: nowrap;
+}
+
+/* Elemento apontado pela dica aberta (016 US1). */
+[data-tip-target] {
+  outline: 2px dashed var(--color-accent);
+  outline-offset: 4px;
+  border-radius: var(--radius);
+}
+
+/* Movimento reduzido (016 FR-021): sem animações nem transições não essenciais. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    /* biome-ignore-start lint/complexity/noImportantStyles: precisa vencer as classes dos componentes */
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+    /* biome-ignore-end lint/complexity/noImportantStyles: fim do bloco acima */
+  }
 }

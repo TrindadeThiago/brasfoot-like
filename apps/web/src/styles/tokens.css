@@ -1,4 +1,6 @@
+/* Tema escuro (padrão). O claro sobrescreve as cores em [data-theme="light"] (016). */
 :root {
+  color-scheme: dark;
   --color-bg: #0f1419;
   --color-surface: #182029;
   --color-surface-2: #212b36;
@@ -13,7 +15,20 @@
   --color-draw: #9aa7b4;
   --color-loss: #ff6b6b;
   --color-highlight: rgba(61, 220, 132, 0.12);
-  --focus-ring: 0 0 0 3px #7cc4ff;
+  --color-on-accent: #0b1a10;
+  --color-on-danger: #0b1a10;
+  --color-control-border: #748395;
+  --color-warning-soft: rgba(255, 204, 77, 0.18);
+  --color-warning-softer: rgba(255, 204, 77, 0.12);
+  --color-backdrop: rgba(0, 0, 0, 0.6);
+  /* O campo da escalação é sempre gramado escuro, nos dois temas. */
+  --pitch-grass-1: #17402a;
+  --pitch-grass-2: #12331f;
+  --pitch-line: #245c3b;
+  --pitch-card-bg: rgba(15, 20, 25, 0.82);
+  --pitch-card-selected: rgba(24, 48, 34, 0.95);
+  --pitch-card-text: #e8edf2;
+  --focus-color: #7cc4ff;
   --radius: 8px;
   --space-1: 4px;
   --space-2: 8px;
@@ -27,4 +42,29 @@
   --text-md: 15px;
   --text-lg: 18px;
   --text-xl: 24px;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-bg: #f4f6f9;
+  --color-surface: #ffffff;
+  --color-surface-2: #e9edf2;
+  --color-border: #ccd3db;
+  --color-text: #16202a;
+  --color-muted: #4e5b69;
+  --color-accent: #11703c;
+  --color-accent-strong: #0b5a30;
+  --color-danger: #b42828;
+  --color-warning: #8a5300;
+  --color-win: #11703c;
+  --color-draw: #5f6b78;
+  --color-loss: #b42828;
+  --color-highlight: rgba(17, 112, 60, 0.12);
+  --color-on-accent: #ffffff;
+  --color-on-danger: #ffffff;
+  --color-control-border: #6f7c8b;
+  --color-warning-soft: rgba(138, 83, 0, 0.14);
+  --color-warning-softer: rgba(138, 83, 0, 0.08);
+  --color-backdrop: rgba(22, 32, 42, 0.45);
+  --focus-color: #1f6fd1;
 }

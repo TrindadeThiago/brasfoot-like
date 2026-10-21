@@ -141,6 +141,7 @@ export default function NewCareerPage() {
   return (
     <AssetsProvider assets={mod?.images}>
       <main className={styles.page}>
+        <Link href="/">{t("common.back")}</Link>
         <h1>{t("newCareer.title")}</h1>
         <form onSubmit={submit} className={styles.form} noValidate>
           <label className={styles.field}>

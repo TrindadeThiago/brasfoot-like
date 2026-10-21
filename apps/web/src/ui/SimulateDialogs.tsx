@@ -45,8 +45,10 @@ export function SimulateDialogs({
             <Button
               onClick={async () => {
                 const mode = pending.mode;
-                if ((await game.playRound(mode, { confirmed: true })) === "live") {
-                  router.push(screenHref("/jogo/rodada", save.id));
+                const outcome = await game.playRound(mode, { confirmed: true });
+                if (outcome === "live") router.push(screenHref("/jogo/rodada", save.id));
+                if (outcome === "finished") {
+                  router.push(screenHref("/jogo/fim-de-temporada", save.id));
                 }
               }}
             >

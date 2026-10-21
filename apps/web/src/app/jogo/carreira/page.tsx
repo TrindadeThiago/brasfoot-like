@@ -74,8 +74,13 @@ function Career({ save, game }: { save: SaveFile; game: Game }) {
   const locked = game.state.live !== undefined;
   return (
     <div className={styles.layout}>
-      <h1>{t("career.title")}</h1>
-      <div className={styles.tabs} role="tablist" aria-label={t("career.tablist")}>
+      <h2 className="screen-title">{t("career.title")}</h2>
+      <div
+        className={styles.tabs}
+        role="tablist"
+        aria-label={t("career.tablist")}
+        data-tip-anchor="board"
+      >
         {TABS.map((name) => (
           <Button
             key={name}

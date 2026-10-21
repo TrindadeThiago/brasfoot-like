@@ -38,7 +38,7 @@ test("Série B: temporada direto, resumo, próxima temporada e rodada ao vivo (S
   await page.getByRole("button", { name: t("home.playLive") }).click();
   await expect(page).toHaveURL(/rodada/);
   await page.getByRole("button", { name: t("round.finishNow") }).click();
-  await expect(page.getByText(t("round.results", { round: 1 }))).toBeVisible();
+  await expect(page.getByText(t("home.lastRound", { round: 1 }))).toBeVisible();
   await page.getByRole("link", { name: t("round.toHome") }).click();
   await expect(page.getByText(/temporada 2028 · rodada 2 de 38/)).toBeVisible();
 });
