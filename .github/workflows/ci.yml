@@ -2,23 +2,11 @@ name: ci
 
 # Jobs em paralelo: o runner de repositório privado tem 2 vCPUs, então os testes unitários são
 # divididos em shards (arquivos distribuídos por hash) e o e2e roda num job próprio.
+# Só roda em pull request: a `main` é publicada pelo release.yml, que repete os gates.
 # Mudanças só de documentação (docs/, specs/, .specify/, .claude/ e arquivos .md) não rodam o
 # CI; a ordem dos padrões importa: os últimos voltam a incluir o que é lido pelo código.
 on:
   pull_request:
-    paths:
-      - "**"
-      - "!*.md"
-      - "!**/*.md"
-      - "!docs/**"
-      - "!specs/**"
-      - "!.specify/**"
-      - "!.claude/**"
-      # Lidos pelos testes (packages/modkit/test/docs.test.ts) e publicados no site.
-      - "docs/mod-format.md"
-      - "apps/web/public/docs/**"
-  push:
-    branches: [main]
     paths:
       - "**"
       - "!*.md"

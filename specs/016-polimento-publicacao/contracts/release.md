@@ -3,11 +3,12 @@
 ## Versão
 
 - Fonte única: `version` do `package.json` raiz (semver). Primeira pública: `1.0.0`.
-- Publicar = criar a tag `vX.Y.Z` na `main` igual à versão do `package.json`.
+- Publicar = mergear na `main` uma versão nova no `package.json`; o workflow `release` cria a tag
+  `vX.Y.Z` e o Release ao fim (alterado depois da 018: antes a tag era criada à mão).
 
 ## Workflows (GitHub Actions)
 
-### `.github/workflows/ci.yml` — PR e push na `main`
+### `.github/workflows/ci.yml` — PR
 
 1. `pnpm install --frozen-lockfile` (Node ≥ 22.13, pnpm do `packageManager`)
 2. `pnpm typecheck && pnpm lint && pnpm test`
@@ -16,12 +17,12 @@
    teclado, offline, sem terceiros)
 5. Artefato do relatório do Playwright em falha.
 
-### `.github/workflows/release.yml` — tag `v*.*.*`
+### `.github/workflows/release.yml` — push na `main` com versão sem tag
 
 1. Passos 1–4 do CI.
 2. `pnpm sim:world --seasons 30` e `pnpm sim:economy --seasons 30` (falham fora dos limites).
 3. `pnpm check-release` (`tools/src/check-release.ts`):
-   - tag (`GITHUB_REF_NAME` sem `v`) = `package.json` `version`;
+   - tag (`GITHUB_REF_NAME` sem `v`, definida pelo workflow como `v<versão>`) = `package.json` `version`;
    - `release-notes.json` tem a versão;
    - `apps/web/out/` existe, tem `index.html`, `sw.js`, `precache.json` com a versão,
      `manifest.webmanifest`, `vercel.json`, `screenshots/` com ≥ 4 imagens;

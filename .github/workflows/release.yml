@@ -2,10 +2,26 @@ name: release
 
 # Publica na Vercel só depois de todos os gates (016 contracts/release.md). Os gates rodam em
 # paralelo; o deploy usa exatamente o build testado pelo e2e (artefato `site`).
+# Dispara no push na `main`: se a versão do `package.json` ainda não tem tag `vX.Y.Z`, roda os
+# gates, publica e cria a tag e o Release do GitHub no fim. Versão já publicada = nada a fazer.
+# Mudanças só de documentação não disparam (mesmos filtros do ci.yml). `workflow_dispatch` serve
+# para refazer uma publicação que falhou antes de criar a tag.
 # Segredos: VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID.
 on:
   push:
-    tags: ["v*.*.*"]
+    branches: [main]
+    paths:
+      - "**"
+      - "!*.md"
+      - "!**/*.md"
+      - "!docs/**"
+      - "!specs/**"
+      - "!.specify/**"
+      - "!.claude/**"
+      # Lidos pelos testes (packages/modkit/test/docs.test.ts) e publicados no site.
+      - "docs/mod-format.md"
+      - "apps/web/public/docs/**"
+  workflow_dispatch:
 
 concurrency:
   group: release
@@ -15,7 +31,30 @@ permissions:
   contents: write
 
 jobs:
+  version:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      publish: ${{ steps.check.outputs.publish }}
+      version: ${{ steps.check.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: check
+        name: A versão já tem tag?
+        run: |
+          version=$(node -p 'require("./package.json").version')
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if [ -n "$(git ls-remote --tags origin "refs/tags/v$version")" ]; then
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            echo "A tag v$version já existe: nada a publicar."
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+            echo "Publicando a versão $version."
+          fi
+
   checks:
+    needs: version
+    if: needs.version.outputs.publish == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -30,6 +69,8 @@ jobs:
       - run: pnpm lint
 
   unit:
+    needs: version
+    if: needs.version.outputs.publish == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     strategy:
@@ -46,6 +87,8 @@ jobs:
       - run: pnpm test --shard=${{ matrix.shard }}/4 --maxWorkers=2
 
   simulations:
+    needs: version
+    if: needs.version.outputs.publish == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -60,6 +103,8 @@ jobs:
       - run: pnpm sim:economy --seasons 30
 
   e2e:
+    needs: version
+    if: needs.version.outputs.publish == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -71,7 +116,11 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build:web
-      - run: pnpm check-release
+      - name: Conferir a versão, as notas e o build
+        run: pnpm check-release
+        env:
+          # Fora de uma tag, informa a tag que será criada para a conferência valer.
+          GITHUB_REF_NAME: v${{ needs.version.outputs.version }}
       - run: pnpm --filter @brasfoot-like/web exec playwright install --with-deps chromium
       - run: pnpm test:e2e
       - uses: actions/upload-artifact@v4
@@ -90,12 +139,13 @@ jobs:
           retention-days: 14
 
   deploy:
-    needs: [checks, unit, simulations, e2e]
+    needs: [version, checks, unit, simulations, e2e]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERSION: ${{ needs.version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
@@ -110,12 +160,13 @@ jobs:
         run: |
           node -e '
             const notes = require("./packages/i18n/locales/pt-BR/release-notes.json");
-            const version = process.env.GITHUB_REF_NAME.replace(/^v/, "");
+            const version = process.env.VERSION;
             const entry = notes.find((note) => note.version === version);
             if (!entry) { console.error("sem notas para " + version); process.exit(1); }
             console.log(entry.changes.map((change) => "- " + change).join("\n"));
           ' > release-notes.md
       - name: Release do GitHub
-        run: gh release create "$GITHUB_REF_NAME" --title "Treinador FC $GITHUB_REF_NAME" --notes-file release-notes.md
+        # Cria a tag `v$VERSION` no commit publicado e o Release, só depois do deploy.
+        run: gh release create "v$VERSION" --target "$GITHUB_SHA" --title "Treinador FC v$VERSION" --notes-file release-notes.md
         env:
           GH_TOKEN: ${{ github.token }}
