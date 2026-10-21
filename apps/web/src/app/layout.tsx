@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { GameProvider } from "../game/GameProvider";
 import { GlobalShortcuts } from "../ui/GlobalShortcuts";
+import { SiteAnalytics } from "../ui/SiteAnalytics";
 import { THEME_SCRIPT, ThemeSync } from "../ui/ThemeProvider";
 import { UpdateNotice } from "../ui/UpdateNotice";
 import "../styles/global.css";
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <UpdateNotice />
         </GameProvider>
         <RegisterServiceWorker />
+        <SiteAnalytics />
       </body>
     </html>
   );

@@ -355,6 +355,10 @@ chave de tradução sem uso/sem texto.
   forma reproduzível, para não conter nenhum conteúdo real.
 - **FR-037**: O jogo publicado NÃO DEVE incluir telemetria, rastreamento, anúncios ou chamadas de
   rede além do carregamento dos próprios arquivos.
+  *Emenda (2026-10-21, após a 1.0.0):* decisão do mantenedor de usar o Vercel Web Analytics
+  (contagem anônima de visitas, sem cookies, script e envio no próprio domínio, só no build de
+  produção, sem a query das URLs). Continua proibido: rastreamento individual, cookies, anúncios
+  e requisições a domínios de terceiros. Ver research.md R14.
 - **FR-038**: O nome do jogo visível ao jogador DEVE ser "Treinador FC", vindo de uma única fonte
   traduzível; nenhum texto visível ao jogador, página ou metadado publicado DEVE conter
   "brasfoot".

@@ -41,7 +41,7 @@ rede), simulações `sim:world`/`sim:economy`
 < 250 ms no motor; pela interface, rodada direta < 1 s e virada < 2 s; indicação de progresso
 acima de 1 s
 
-**Constraints**: offline após a primeira visita; sem rede de terceiros; sem telemetria; textos
+**Constraints**: offline após a primeira visita; sem rede de terceiros; sem telemetria (emenda pós-1.0.0: contagem anônima de visitas da Vercel, R14); textos
 só por i18n; nada visível com "brasfoot"; publicação só depois de todos os gates
 
 **Scale/Scope**: ~20 telas; 8 dicas; ~35 atalhos; 3 rotas novas; 2 workflows
