@@ -37,6 +37,66 @@ function bankFiles() {
   });
 }
 
+/** Id e nome do torneio do banco de duas competições (017 R14). */
+export const TOURNAMENT_ID = "torneio-teste";
+export const TOURNAMENT_NAME = "Torneio de Teste";
+
+/** Banco padrão mais o Torneio de Teste: 10 clubes, ida e volta, às quartas, a cada 2 semanas. */
+function twoCompetitionsBank() {
+  const main = competitions[0];
+  if (!main) throw new Error("sem competição");
+  const serieB = (main.divisions[1]?.clubIds ?? []) as string[];
+  const tournament = {
+    id: TOURNAMENT_ID,
+    countryId: main.countryId,
+    name: TOURNAMENT_NAME,
+    format: JSON.parse(JSON.stringify(main.format)),
+    divisions: [
+      {
+        level: 1,
+        name: "Divisão única",
+        clubIds: [...[...SERIE_A].sort().slice(0, 6), ...[...serieB].sort().slice(0, 4)],
+        promotionSlots: 0,
+        relegationSlots: 0,
+      },
+    ],
+    schedule: { weekday: 3, startWeek: 1, everyWeeks: 2 },
+  };
+  return joinBankFiles({
+    "mod.json": mod,
+    "countries.json": countries,
+    "competitions.json": [...competitions, tournament],
+    "clubs.json": clubs,
+    "players.json": players,
+    "rivalries.json": rivalries,
+  });
+}
+
+let twoBase: SaveFile | undefined;
+
+/**
+ * Carreira num banco com duas competições (017): o clube escolhido é o `clubIndex`-ésimo da
+ * Série A. Os 6 primeiros por id jogam também o torneio.
+ */
+export function twoCompetitionsSave(id: string, clubIndex = 0): SaveFile {
+  const clubId = SERIE_A[clubIndex] as string;
+  const key = `${clubIndex}`;
+  if (!twoBase || twoBase.clubId !== clubId) {
+    const result = createSave({
+      id: "base-duas",
+      now: "2026-10-21T12:00:00.000Z",
+      managerName: "Ana Souza",
+      clubId,
+      seed: `teste-web-${key}`,
+      defaultBank: twoCompetitionsBank(),
+    });
+    if (!result.ok) throw new Error(JSON.stringify(result.error));
+    twoBase = result.save;
+  }
+  const copy = JSON.parse(JSON.stringify(twoBase)) as SaveFile;
+  return { ...copy, id };
+}
+
 /** Save válido com id, data e clube escolhidos (o banco é calculado uma vez e clonado). */
 export function careerSave(
   id: string,

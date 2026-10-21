@@ -8,6 +8,7 @@ import { GameLayout } from "../../../../game/GameLayout";
 import { useDivision } from "../../../../game/useDivision";
 import { useT } from "../../../../i18n";
 import { Button } from "../../../../ui/Button";
+import { CompetitionSelect } from "../../../../ui/CompetitionSelect";
 import { CompetitionTabs } from "../../../../ui/CompetitionTabs";
 import { Crest } from "../../../../ui/Crest";
 import { Dialog } from "../../../../ui/Dialog";
@@ -105,13 +106,14 @@ function Results({ save, season, initial }: { save: SaveFile; season: Season; in
 
 function ResultsScreen({ save }: { save: SaveFile }) {
   const params = useSearchParams();
-  const { level, season } = useDivision(save);
+  const { competitionId, league, level, season } = useDivision(save);
   const played = Math.max(1, season.nextRound - 1);
   const requested = Number(params?.get("r"));
   return (
     <>
-      <CompetitionTabs careerId={save.id} level={level} />
-      <DivisionTabs save={save} level={level} />
+      <CompetitionSelect save={save} competitionId={competitionId} />
+      <CompetitionTabs careerId={save.id} level={level} competitionId={competitionId} />
+      <DivisionTabs save={save} level={level} league={league} />
       <Results
         key={level}
         save={save}

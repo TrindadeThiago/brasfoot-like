@@ -1,38 +1,71 @@
 "use client";
 
-import type { Round } from "@brasfoot-like/engine";
-import { userSeason } from "@brasfoot-like/save";
+import { type ClubFixture, clubFixtures, competitionSeason } from "@brasfoot-like/engine";
+import { nextFixture, seasonStateOf } from "@brasfoot-like/save";
 import { useState } from "react";
 import { GameLayout } from "../../../game/GameLayout";
-import { resultInRound } from "../../../game/selectors";
-import { useT } from "../../../i18n";
+import { formatDate, formatWeekday, useT } from "../../../i18n";
 import { Button } from "../../../ui/Button";
 import { Crest } from "../../../ui/Crest";
 import { type Column, DataTable } from "../../../ui/DataTable";
 import { DerbyBadge } from "../../../ui/fans/DerbyBadge";
 import styles from "./page.module.css";
 
+const ALL = "all";
+
+/** Chave estável de um jogo do clube: dia do calendário e competição. */
+const keyOf = (fixture: ClubFixture) => `${fixture.day}-${fixture.competitionId}`;
+
 export default function CalendarPage() {
   const t = useT();
-  const [open, setOpen] = useState<number | undefined>();
+  const [open, setOpen] = useState<string | undefined>();
+  const [filter, setFilter] = useState<string>(ALL);
   return (
     <GameLayout>
       {(save) => {
+        const state = seasonStateOf(save);
         const clubs = new Map(save.bank.clubs.map((club) => [club.id, club]));
-        const mine = (round: Round) =>
-          round.fixtures.find(
-            (fixture) => fixture.home === save.clubId || fixture.away === save.clubId,
-          );
-        const columns: Column<Round>[] = [
-          { key: "round", header: t("col.round"), render: (round) => round.number, align: "right" },
+        const all = clubFixtures(state, save.clubId);
+        const competitionIds = [...new Set(all.map((fixture) => fixture.competitionId))];
+        const nameOf = (competitionId: string) =>
+          save.bank.competitions.find((entry) => entry.id === competitionId)?.name ?? "";
+        const rows = filter === ALL ? all : all.filter((f) => f.competitionId === filter);
+        const next = nextFixture(save);
+        const opponentOf = (fixture: ClubFixture) =>
+          clubs.get(fixture.home === save.clubId ? fixture.away : fixture.home);
+        const columns: Column<ClubFixture>[] = [
+          {
+            key: "date",
+            header: t("col.date"),
+            render: (fixture) =>
+              t("home.matchWhen", {
+                weekday: formatWeekday(fixture.date),
+                date: formatDate(fixture.date),
+              }),
+            sortValue: (fixture) => fixture.date,
+          },
+          ...(competitionIds.length > 1
+            ? [
+                {
+                  key: "competition",
+                  header: t("col.competition"),
+                  render: (fixture: ClubFixture) => nameOf(fixture.competitionId),
+                  sortValue: (fixture: ClubFixture) => nameOf(fixture.competitionId),
+                },
+              ]
+            : []),
+          {
+            key: "round",
+            header: t("col.round"),
+            render: (fixture) => fixture.round,
+            sortValue: (fixture) => fixture.round,
+            align: "right",
+          },
           {
             key: "opponent",
             header: t("col.opponent"),
-            render: (round) => {
-              const fixture = mine(round);
-              const other = fixture
-                ? clubs.get(fixture.home === save.clubId ? fixture.away : fixture.home)
-                : undefined;
+            render: (fixture) => {
+              const other = opponentOf(fixture);
               return other ? (
                 <span className={styles.club}>
                   <Crest crest={other.crest} label={other.name} size={20} />
@@ -45,17 +78,21 @@ export default function CalendarPage() {
           {
             key: "venue",
             header: t("col.venue"),
-            render: (round) =>
-              mine(round)?.home === save.clubId ? t("calendar.home") : t("calendar.away"),
+            render: (fixture) =>
+              fixture.home === save.clubId ? t("calendar.home") : t("calendar.away"),
           },
           {
             key: "score",
             header: t("col.score"),
-            render: (round) => {
-              const result = resultInRound(userSeason(save), save.clubId, round.number);
+            render: (fixture) => {
+              const record = fixture.record;
+              if (!record) return <span className={styles.score}>{t("calendar.notPlayed")}</span>;
+              const mine = fixture.home === save.clubId;
+              const goalsFor = mine ? record.score.home : record.score.away;
+              const goalsAgainst = mine ? record.score.away : record.score.home;
               return (
                 <span className={styles.score}>
-                  {result ? `${result.goalsFor} × ${result.goalsAgainst}` : t("calendar.notPlayed")}
+                  {goalsFor} × {goalsAgainst}
                 </span>
               );
             },
@@ -63,37 +100,58 @@ export default function CalendarPage() {
           {
             key: "details",
             header: "",
-            render: (round) => (
+            render: (fixture) => (
               <Button
-                aria-label={t("calendar.showRound", { round: round.number })}
-                aria-expanded={open === round.number}
-                onClick={() => setOpen(round.number)}
+                aria-label={t("calendar.showRound", { round: fixture.round })}
+                aria-expanded={open === keyOf(fixture)}
+                onClick={() => setOpen(keyOf(fixture))}
               >
                 {t("calendar.showRoundShort")}
               </Button>
             ),
           },
         ];
-        const selected = open ? userSeason(save).calendar[open - 1] : undefined;
+        const selected = open ? all.find((fixture) => keyOf(fixture) === open) : undefined;
+        const detail = selected
+          ? competitionSeason(state, selected.competitionId).divisions.find(
+              (division) => division.divisionLevel === selected.divisionLevel,
+            )
+          : undefined;
+        const detailRound = selected ? detail?.calendar[selected.round - 1] : undefined;
         return (
           <div className={styles.layout}>
-            <DataTable
-              rows={userSeason(save).calendar}
-              columns={columns}
-              rowKey={(round) => String(round.number)}
-              caption={t("calendar.caption", { club: clubs.get(save.clubId)?.name ?? "" })}
-              highlight={(round) => round.number === userSeason(save).nextRound}
-            />
-            {selected ? (
+            <div>
+              {competitionIds.length > 1 ? (
+                <label className={styles.filter}>
+                  <span>{t("calendar.filter")}</span>
+                  <select value={filter} onChange={(event) => setFilter(event.target.value)}>
+                    <option value={ALL}>{t("calendar.all")}</option>
+                    {competitionIds.map((id) => (
+                      <option key={id} value={id}>
+                        {nameOf(id)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              ) : null}
+              <DataTable
+                rows={rows}
+                columns={columns}
+                rowKey={keyOf}
+                caption={t("calendar.caption", { club: clubs.get(save.clubId)?.name ?? "" })}
+                highlight={(fixture) => next !== undefined && keyOf(fixture) === keyOf(next)}
+              />
+            </div>
+            {selected && detailRound ? (
               <section
-                aria-label={t("calendar.roundMatches", { round: selected.number })}
+                aria-label={t("calendar.roundMatches", { round: selected.round })}
                 className={styles.detail}
               >
-                <h2>{t("calendar.roundMatches", { round: selected.number })}</h2>
+                <h2>{t("calendar.roundMatches", { round: selected.round })}</h2>
                 <ul>
-                  {selected.fixtures.map((fixture) => {
-                    const record = userSeason(save).records.find(
-                      (entry) => entry.round === selected.number && entry.home === fixture.home,
+                  {detailRound.fixtures.map((fixture) => {
+                    const record = detail?.records.find(
+                      (entry) => entry.round === selected.round && entry.home === fixture.home,
                     );
                     return (
                       <li key={fixture.home}>

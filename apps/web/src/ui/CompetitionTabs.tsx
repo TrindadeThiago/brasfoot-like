@@ -13,7 +13,15 @@ const TABS = [
 ] as const;
 
 /** Abas da competição: classificação, resultados e artilharia, mantendo a divisão escolhida. */
-export function CompetitionTabs({ careerId, level }: { careerId: string; level: number }) {
+export function CompetitionTabs({
+  careerId,
+  level,
+  competitionId,
+}: {
+  careerId: string;
+  level: number;
+  competitionId?: string;
+}) {
   const t = useT();
   const pathname = (usePathname() ?? "").replace(/\/$/, "");
   return (
@@ -21,7 +29,7 @@ export function CompetitionTabs({ careerId, level }: { careerId: string; level: 
       {TABS.map((tab) => (
         <Link
           key={tab.path}
-          href={divisionHref(tab.path, careerId, level)}
+          href={divisionHref(tab.path, careerId, level, competitionId)}
           aria-current={pathname === tab.path ? "page" : undefined}
           className={pathname === tab.path ? styles.active : undefined}
         >

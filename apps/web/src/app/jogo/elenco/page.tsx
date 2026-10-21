@@ -11,6 +11,7 @@ import { currentDate, type SaveFile } from "@brasfoot-like/save";
 import { useCallback, useMemo, useState } from "react";
 import { GameLayout } from "../../../game/GameLayout";
 import { lineupContext } from "../../../game/GameProvider";
+import { fitnessAt } from "../../../game/selectors";
 import { label, useT } from "../../../i18n";
 import {
   readPreferences,
@@ -21,6 +22,7 @@ import {
 import { Button } from "../../../ui/Button";
 import { type Column, DataTable } from "../../../ui/DataTable";
 import { evolutionText, lastEvolution } from "../../../ui/evolution-text";
+import { FitnessMeter } from "../../../ui/FitnessMeter";
 import { conditionText } from "../../../ui/PlayerCondition";
 import { PlayerDetails } from "../../../ui/PlayerDetails";
 import styles from "./page.module.css";
@@ -42,13 +44,17 @@ function SquadScreen({ save }: { save: SaveFile }) {
   const [filter, setFilter] = useState(() => readPreferences().squadFilter ?? NO_FILTER);
   const [details, setDetails] = useState<string | undefined>();
   const closeDetails = useCallback(() => setDetails(undefined), []);
-  const { squad, unavailable } = useMemo(() => lineupContext(save), [save]);
+  const { squad, unavailable, competitionId, elsewhere } = useMemo(
+    () => lineupContext(save),
+    [save],
+  );
   const blocked = useMemo(
     () => new Map(unavailable.map((entry) => [entry.playerId, entry])),
     [unavailable],
   );
   const club = save.bank.clubs.find((entry) => entry.id === save.clubId);
   const reference = currentDate(save);
+  const fitness = useMemo(() => fitnessAt(save), [save]);
 
   const updateFilter = (next: typeof filter) => {
     setFilter(next);
@@ -67,7 +73,28 @@ function SquadScreen({ save }: { save: SaveFile }) {
       ? t("squad.inLineup.bench")
       : t("squad.inLineup.out");
   };
-  const status = (player: CompletedPlayer) => conditionText(t, blocked.get(player.id));
+  const competitionName = (id: string) =>
+    save.bank.competitions.find((entry) => entry.id === id)?.name ?? "";
+  const several = save.bank.competitions.length > 1;
+  const suspendedElsewhere = new Map(elsewhere.map((entry) => [entry.playerId, entry]));
+  // Suspensão com o nome da competição em que é cumprida (017 FR-026).
+  const status = (player: CompletedPlayer) => {
+    const entry = blocked.get(player.id);
+    if (several && entry?.reason === "suspension") {
+      return t("squad.suspendedIn", {
+        matches: entry.remaining,
+        competition: competitionName(competitionId),
+      });
+    }
+    const other = suspendedElsewhere.get(player.id);
+    if (!entry && other) {
+      return t("squad.suspendedIn", {
+        matches: other.remaining,
+        competition: competitionName(other.competitionId),
+      });
+    }
+    return conditionText(t, entry);
+  };
 
   const rows = squad.filter(
     (player) =>
@@ -110,6 +137,13 @@ function SquadScreen({ save }: { save: SaveFile }) {
     },
     { key: "status", header: t("col.status"), render: status, sortValue: status },
     { key: "lineup", header: t("col.inLineup"), render: placeOf, sortValue: placeOf },
+    {
+      key: "fitness",
+      header: t("col.fitness"),
+      render: (player) => <FitnessMeter value={fitness(player.id)} />,
+      sortValue: (player) => fitness(player.id),
+      align: "right",
+    },
     {
       key: "evolution",
       header: t("col.evolution"),

@@ -1,0 +1,39 @@
+.meter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+}
+
+.bar {
+  position: relative;
+  width: 36px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-surface-2);
+  overflow: hidden;
+}
+
+.fill {
+  display: block;
+  height: 100%;
+  background: var(--color-accent);
+}
+
+.tired .fill {
+  background: var(--color-warning);
+}
+
+.exhausted .fill {
+  background: var(--color-danger);
+}
+
+.tired {
+  color: var(--color-warning);
+}
+
+.exhausted {
+  color: var(--color-danger);
+}

@@ -1,7 +1,7 @@
 "use client";
 
-import { isLeagueSeasonOver } from "@brasfoot-like/engine";
-import type { SaveFile } from "@brasfoot-like/save";
+import { competitionEntry } from "@brasfoot-like/engine";
+import { isCareerSeasonOver, type SaveFile } from "@brasfoot-like/save";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -12,6 +12,7 @@ import { useT } from "../../../i18n";
 import { screenHref } from "../../../ui/AppHeader";
 import { Button } from "../../../ui/Button";
 import { Evaluation } from "../../../ui/board/Evaluation";
+import { OtherCompetitions } from "../../../ui/history/OtherCompetitions";
 import { SeasonSummary } from "../../../ui/SeasonSummary";
 import { useShortcuts } from "../../../ui/useShortcuts";
 import styles from "./page.module.css";
@@ -22,7 +23,7 @@ function SeasonEnd({ save, game }: { save: SaveFile; game: Game }) {
   const t = useT();
   const router = useRouter();
   const [state, setState] = useState<"idle" | "busy" | "failed">("idle");
-  const over = isLeagueSeasonOver(save.league);
+  const over = isCareerSeasonOver(save);
   const next = async () => {
     if (!over || state === "busy") return;
     setState("busy");
@@ -44,6 +45,10 @@ function SeasonEnd({ save, game }: { save: SaveFile; game: Game }) {
       <h2 className="screen-title">{t("seasonEnd.title", { year: summary.year })}</h2>
       <Evaluation save={save} />
       <SeasonSummary save={save} summary={summary} />
+      <OtherCompetitions
+        save={save}
+        entries={save.competitions.map((league) => competitionEntry(league, save.bank))}
+      />
       <div className={styles.actions}>
         <Button variant="primary" onClick={() => void next()} disabled={state === "busy"}>
           {state === "busy" ? t("seasonEnd.preparing") : t("seasonEnd.next")}

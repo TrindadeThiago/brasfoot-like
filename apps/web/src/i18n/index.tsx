@@ -53,6 +53,13 @@ export function formatDate(isoDate: string): string {
   );
 }
 
+/** Dia da semana de uma data `AAAA-MM-DD` ("domingo"), sem fuso. */
+export function formatWeekday(isoDate: string): string {
+  return new Intl.DateTimeFormat(locale, { weekday: "long", timeZone: "UTC" }).format(
+    new Date(`${isoDate}T00:00:00Z`),
+  );
+}
+
 export function formatNumber(value: number): string {
   return number.format(value);
 }

@@ -11,6 +11,7 @@ import { screenHref } from "../../../ui/AppHeader";
 import { Button } from "../../../ui/Button";
 import { Crest } from "../../../ui/Crest";
 import { type Column, DataTable } from "../../../ui/DataTable";
+import { OtherCompetitions } from "../../../ui/history/OtherCompetitions";
 import { ClubHistory, Records, Scorers, Titles } from "../../../ui/history/WorldHistory";
 import styles from "./page.module.css";
 
@@ -99,12 +100,15 @@ function HistoryList({ save }: { save: SaveFile }) {
     },
   ];
   return (
-    <DataTable
-      rows={[...save.history].reverse()}
-      columns={columns}
-      rowKey={(entry) => String(entry.number)}
-      caption={t("history.caption")}
-    />
+    <>
+      <DataTable
+        rows={[...save.history].reverse()}
+        columns={columns}
+        rowKey={(entry) => String(entry.number)}
+        caption={t("history.caption")}
+      />
+      <OtherCompetitions save={save} entries={[...save.competitionHistory].reverse()} />
+    </>
   );
 }
 
