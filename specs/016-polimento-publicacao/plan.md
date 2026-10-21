@@ -147,7 +147,7 @@ packages/i18n/
 ├── locales/pt-BR/release-notes.json # novo
 └── src/                           # LOCALES, releaseNotes(locale) com Zod
 
-packages/save/test/performance-30.test.ts # novo
+packages/save/test/long-career.test.ts # tamanho (014) + desempenho em 30 temporadas
 
 tools/src/
 ├── check-release.ts               # novo

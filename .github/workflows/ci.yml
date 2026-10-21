@@ -1,5 +1,7 @@
 name: ci
 
+# Jobs em paralelo: o runner de repositório privado tem 2 vCPUs, então os testes unitários são
+# divididos em shards (arquivos distribuídos por hash) e o e2e roda num job próprio.
 on:
   pull_request:
   push:
@@ -10,9 +12,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  gates:
+  checks:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -23,7 +25,36 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm lint
-      - run: pnpm test
+
+  unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.13
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Com 2 vCPUs o Vitest usaria 1 worker por padrão.
+      - run: pnpm test --shard=${{ matrix.shard }}/4 --maxWorkers=2
+
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.13
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
       - run: pnpm build:web
       - run: pnpm --filter @brasfoot-like/web exec playwright install --with-deps chromium
       - run: pnpm test:e2e

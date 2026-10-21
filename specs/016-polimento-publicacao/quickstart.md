@@ -12,7 +12,7 @@ pnpm build:web && pnpm test:e2e            # inclui a11y (2 temas), teclado, off
 pnpm check-release                         # depois do build
 ```
 
-Esperado: tudo verde. Testes de desempenho (`packages/save/test/performance-30.test.ts`,
+Esperado: tudo verde. Testes de desempenho (`packages/save/test/long-career.test.ts`,
 `apps/web/test/flows/performance.test.tsx`) dentro dos limites de `research.md` R1.
 
 ## Cenários manuais (`pnpm dev:web` ou `pnpm preview:web`)
