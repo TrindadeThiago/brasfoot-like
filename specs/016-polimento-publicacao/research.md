@@ -175,13 +175,28 @@ localmente: typecheck, lint, 2578 testes unitários, 23 e2e (2× seguidas), `che
 
 - **Decision**: e2e `no-third-party.spec.ts` registra todas as requisições durante criar
   carreira e jogar uma rodada e falha com qualquer origem diferente da do site. Nenhuma fonte,
-  script ou analytics externo é adicionado.
+  script ou analytics externo é adicionado (a contagem de visitas da R14 usa o próprio domínio).
 
 ## R13 — Teste com quem nunca viu o jogo (SC-001)
 
 - **Decision**: roteiro em `quickstart.md` §Teste de usabilidade (tarefa, regras do observador,
   o que anotar); resultado registrado em `specs/016-polimento-publicacao/usability.md` antes da
   tag 1.0.0. Problemas encontrados viram ajustes de dica/texto antes do lançamento.
+
+## R14 — Contagem anônima de visitas (emenda pós-1.0.0, FR-037)
+
+- **Decision** (2026-10-21, pedido do mantenedor): Vercel Web Analytics (`@vercel/analytics`),
+  montado no layout raiz por `apps/web/src/ui/SiteAnalytics.tsx`.
+  - Sem cookies e sem dados pessoais; contagem agregada de visitas e páginas.
+  - Script e envio no próprio domínio (`/_vercel/insights/*`): o e2e de "nenhuma origem de
+    terceiros" continua valendo.
+  - Só no build de produção: no `next dev` o pacote carregaria um script de
+    `va.vercel-scripts.com`.
+  - A query é removida antes do envio (`?c=<carreira>`), só o caminho da página é contado.
+  - Sem rede, o envio falha em silêncio; o jogo não depende dele.
+  - Texto da página Sobre (`about.free`) atualizado para dizer o que é contado.
+- **Constituição**: o princípio VIII proíbe telemetria que exija servidor próprio; esta não exige.
+- **Pendência operacional**: ativar o Web Analytics no painel do projeto `treinador-fc` na Vercel.
 
 ## Revisão de consistência (T039, implementação)
 
