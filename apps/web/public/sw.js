@@ -1,6 +1,8 @@
-// Service worker do brasfoot-like (R7): guarda todos os arquivos do build na primeira visita e
-// serve do cache primeiro, para o jogo abrir sem rede. A versão é gravada pelo
-// tools/src/precache.ts depois do build; versão nova → cache novo, o antigo é apagado.
+// Service worker do jogo (R7): guarda todos os arquivos do build na primeira visita e serve do
+// cache primeiro, para o jogo abrir sem rede. A versão é gravada pelo tools/src/precache.ts
+// depois do build; versão nova → cache novo, o antigo é apagado quando ela assume.
+// Atualização (016 R3): só a primeira instalação assume sozinha; uma versão nova fica em espera
+// até o jogador aceitar o aviso (mensagem SKIP_WAITING), para não trocar no meio da rodada.
 const VERSION = "__PRECACHE_VERSION__";
 const CACHE = `brasfoot-like-${VERSION}`;
 
@@ -11,9 +13,13 @@ self.addEventListener("install", (event) => {
       const { files } = await response.json();
       const cache = await caches.open(CACHE);
       await cache.addAll(files);
-      await self.skipWaiting();
+      if (!self.registration.active) await self.skipWaiting();
     })(),
   );
+});
+
+self.addEventListener("message", (event) => {
+  if (event.data?.type === "SKIP_WAITING") self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {

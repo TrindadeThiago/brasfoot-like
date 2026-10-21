@@ -14,6 +14,7 @@ import { useT } from "../i18n";
 import styles from "./AppHeader.module.css";
 import { Button } from "./Button";
 import { Crest } from "./Crest";
+import { useOpenShortcutsHelp } from "./GlobalShortcuts";
 import { confirmLeave } from "./leave-guard";
 import { SaveIndicator } from "./SaveIndicator";
 
@@ -49,8 +50,9 @@ export function screenHref(path: string, careerId: string): string {
 }
 
 /** Cabeçalho sempre visível do jogo: clube, técnico, temporada, navegação e salvamento (FR-015). */
-export function AppHeader({ save, onHelp }: { save: SaveFile; onHelp: () => void }) {
+export function AppHeader({ save }: { save: SaveFile }) {
   const t = useT();
+  const openHelp = useOpenShortcutsHelp();
   const pathname = (usePathname() ?? "/jogo").replace(/\/+$/, "") || "/jogo";
   const club = save.bank.clubs.find((entry) => entry.id === save.clubId);
   const year = seasonYearOf(save);
@@ -103,7 +105,25 @@ export function AppHeader({ save, onHelp }: { save: SaveFile; onHelp: () => void
       </nav>
       <div className={styles.tools}>
         <SaveIndicator />
-        <Button onClick={onHelp}>{t("nav.help")}</Button>
+        <Link
+          href="/"
+          className={styles.tool}
+          onClick={(event) => {
+            if (!confirmLeave()) event.preventDefault();
+          }}
+        >
+          {t("nav.opening")}
+        </Link>
+        <Link
+          href="/configuracoes/"
+          className={styles.tool}
+          onClick={(event) => {
+            if (!confirmLeave()) event.preventDefault();
+          }}
+        >
+          {t("nav.settings")}
+        </Link>
+        <Button onClick={openHelp}>{t("nav.help")}</Button>
       </div>
     </header>
   );

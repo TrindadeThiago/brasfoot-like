@@ -14,6 +14,23 @@ export function t(key: string, values: Record<string, string | number> = {}): st
 }
 
 /**
+ * Desliga as dicas do primeiro acesso (016) nos testes que não são sobre elas: só define `tips`
+ * se o teste ainda não definiu, preservando as outras preferências.
+ */
+export async function skipTips(page: Page): Promise<void> {
+  await page.addInitScript(() => {
+    const key = "brasfoot-like:preferences";
+    const prefs = JSON.parse(localStorage.getItem(key) ?? "{}");
+    if (prefs.tips === undefined) {
+      localStorage.setItem(
+        key,
+        JSON.stringify({ ...prefs, tips: { dismissed: [], skipAll: true } }),
+      );
+    }
+  });
+}
+
+/**
  * Cria uma carreira pela interface e devolve o nome do clube escolhido (linha `row` da tabela da
  * divisão `division`).
  */
@@ -24,6 +41,7 @@ export async function createCareer(
   division = "Série A",
   options: { noFiring?: boolean } = {},
 ): Promise<string> {
+  await skipTips(page);
   await page.goto("/");
   await page.getByRole("link", { name: t("opening.newCareer") }).click();
   await page.getByLabel(t("newCareer.managerName")).fill(manager);

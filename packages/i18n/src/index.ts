@@ -12,6 +12,10 @@ export {
   formatMessage,
   formatSeasonError,
   formatUi,
+  isLocale,
+  LOCALES,
   messageKeys,
   uiKeys,
 } from "./format";
+export type { ReleaseNote } from "./release-notes";
+export { releaseNotes, releaseNotesSchema } from "./release-notes";

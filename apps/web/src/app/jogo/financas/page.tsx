@@ -20,7 +20,7 @@ function Finances({ save, game }: { save: SaveFile; game: Game }) {
   const locked = game.state.live !== undefined;
   return (
     <div className={styles.layout}>
-      <h1>{t("finance.title")}</h1>
+      <h2 className="screen-title">{t("finance.title")}</h2>
       <div className={styles.top}>
         <span>
           {t("finance.balance")}:{" "}

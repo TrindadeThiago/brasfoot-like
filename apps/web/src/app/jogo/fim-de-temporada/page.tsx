@@ -30,7 +30,7 @@ function SeasonEnd({ save, game }: { save: SaveFile; game: Game }) {
     if (outcome === "done") router.push(screenHref("/jogo", save.id));
     else setState("failed");
   };
-  useShortcuts({ n: () => void next() });
+  useShortcuts({ "next-season": () => void next() });
   if (!over) {
     return (
       <p className={styles.note}>
@@ -41,7 +41,7 @@ function SeasonEnd({ save, game }: { save: SaveFile; game: Game }) {
   const summary = seasonEndSummary(save);
   return (
     <div className={styles.layout}>
-      <h1>{t("seasonEnd.title", { year: summary.year })}</h1>
+      <h2 className="screen-title">{t("seasonEnd.title", { year: summary.year })}</h2>
       <Evaluation save={save} />
       <SeasonSummary save={save} summary={summary} />
       <div className={styles.actions}>

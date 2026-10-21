@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { createCareer, simulate, t } from "./helpers";
+import { createCareer, simulate, skipTips, t } from "./helpers";
 
 test("criar carreira, recarregar e continuar na mesma rodada (SC-002)", async ({ page }) => {
   const club = await createCareer(page, "Ana Souza", 2);
@@ -11,6 +11,7 @@ test("criar carreira, recarregar e continuar na mesma rodada (SC-002)", async ({
   await expect(
     page.getByText(t("header.progress", { year: 2027, round: 4, total: 38, division: "Série A" })),
   ).toBeVisible();
+  await skipTips(page);
   await page.goto("/");
   await page.getByRole("link", { name: new RegExp(t("opening.continue")) }).click();
   await expect(page.getByRole("heading", { name: club })).toBeVisible();

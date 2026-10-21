@@ -1,5 +1,6 @@
 // SC-005 (004): lista de carreiras < 1 s, abrir carreira < 2 s, salvar sem travar a interface
 // > 200 ms. 007: rodada das duas divisões em modo direto < 1 s (SC-006), virada < 2 s (SC-005).
+// 016 R1: os mesmos limites pela interface numa carreira de 30 temporadas.
 import { advanceLeague } from "@brasfoot-like/engine";
 import { touch, userSeason } from "@brasfoot-like/save";
 import { screen, waitFor } from "@testing-library/react";
@@ -9,7 +10,7 @@ import { t } from "../../src/i18n";
 import { freshStore, renderApp } from "../helpers/app";
 import { loadSaved } from "../helpers/live";
 import { memoryRouter } from "../helpers/router";
-import { careerSave } from "../helpers/saves";
+import { careerSave, longCareer } from "../helpers/saves";
 
 beforeAll(() => {
   careerSave("aquecimento"); // monta o banco base fora da medição
@@ -90,5 +91,40 @@ describe("desempenho (SC-005)", () => {
     await user.click(button);
     await waitFor(() => expect(memoryRouter.pathname()).toBe("/jogo"));
     expect(performance.now() - start).toBeLessThan(2000);
+  }, 60_000);
+});
+
+describe("desempenho numa carreira de 30 temporadas (016 R1)", () => {
+  let career: ReturnType<typeof longCareer>;
+  beforeAll(() => {
+    career = longCareer("longa", 30);
+  }, 1_200_000);
+
+  it("rodada direta pela interface em menos de 1 s", async () => {
+    const store = freshStore();
+    await store.save(career.next);
+    renderApp("/jogo?c=longa", store);
+    const button = await screen.findByRole("button", { name: t("home.simulate") });
+    const user = userEvent.setup();
+    const start = performance.now();
+    await user.click(button);
+    await screen.findByRole("region", { name: t("home.lastRound", { round: 1 }) });
+    const time = performance.now() - start;
+    console.log(`rodada direta pela interface (temporada 31): ${time.toFixed(0)} ms`);
+    expect(time).toBeLessThan(1000);
+  }, 60_000);
+
+  it("virada de temporada pela interface em menos de 2 s", async () => {
+    const store = freshStore();
+    await store.save(career.seasonOver);
+    renderApp("/jogo/fim-de-temporada?c=longa", store);
+    const button = await screen.findByRole("button", { name: t("seasonEnd.next") });
+    const user = userEvent.setup();
+    const start = performance.now();
+    await user.click(button);
+    await waitFor(() => expect(memoryRouter.pathname()).toBe("/jogo"), { timeout: 5000 });
+    const time = performance.now() - start;
+    console.log(`virada pela interface (fim da temporada 30): ${time.toFixed(0)} ms`);
+    expect(time).toBeLessThan(2000);
   }, 60_000);
 });

@@ -1,9 +1,10 @@
 import { expect, test } from "@playwright/test";
-import { t } from "./helpers";
+import { skipTips, t } from "./helpers";
 
 test("baixar o mod de exemplo, carregá-lo e jogar uma rodada em Norvália (015 US2/US3)", async ({
   page,
 }) => {
+  await skipTips(page);
   await page.goto("/");
   await page.getByRole("link", { name: t("nav.mods") }).click();
   await expect(page.getByRole("heading", { name: t("mods.title"), exact: true })).toBeVisible();

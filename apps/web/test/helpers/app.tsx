@@ -1,6 +1,7 @@
 import { render } from "@testing-library/react";
 import { type ComponentType, useSyncExternalStore } from "react";
 import SavesPage from "../../src/app/carreiras/page";
+import SettingsPage from "../../src/app/configuracoes/page";
 import CalendarPage from "../../src/app/jogo/calendario/page";
 import CareerPage from "../../src/app/jogo/carreira/page";
 import ScorersPage from "../../src/app/jogo/competicao/artilharia/page";
@@ -16,11 +17,14 @@ import NewsPage from "../../src/app/jogo/noticias/page";
 import HomePage from "../../src/app/jogo/page";
 import RoundPage from "../../src/app/jogo/rodada/page";
 import ModsPage from "../../src/app/mods/page";
+import NotesPage from "../../src/app/notas-de-versao/page";
 import NewCareerPage from "../../src/app/nova-carreira/page";
 import OpeningPage from "../../src/app/page";
 import { GameProvider } from "../../src/game/GameProvider";
 import { createIndexedDbStore, type SaveStore } from "../../src/storage/indexeddb";
 import { createModStore, type ModStore } from "../../src/storage/mods";
+import { GlobalShortcuts } from "../../src/ui/GlobalShortcuts";
+import { ThemeSync } from "../../src/ui/ThemeProvider";
 import { memoryRouter } from "./router";
 
 const ROUTES: Record<string, ComponentType> = {
@@ -42,6 +46,8 @@ const ROUTES: Record<string, ComponentType> = {
   "/jogo/carreira": CareerPage,
   "/jogo/noticias": NewsPage,
   "/mods": ModsPage,
+  "/configuracoes": SettingsPage,
+  "/notas-de-versao": NotesPage,
 };
 
 function subscribe(listener: () => void) {
@@ -67,7 +73,10 @@ export function renderApp(url: string, store: SaveStore, mods?: ModStore) {
   memoryRouter.reset(url);
   return render(
     <GameProvider store={store} mods={mods ?? createModStore(`mods-${Date.now()}-${counter++}`)}>
-      <Router />
+      <ThemeSync />
+      <GlobalShortcuts>
+        <Router />
+      </GlobalShortcuts>
     </GameProvider>,
   );
 }

@@ -1,7 +1,8 @@
 # brasfoot-like — Documento de Design
 
-> Nome provisório. Jogo de gerenciamento de futebol no estilo do clássico Brasfoot.
-> Decisões tomadas em sessão de refinamento em 2026-10-14.
+> Nome público do jogo: **Treinador FC** (decidido na 016). "brasfoot-like" segue só como nome
+> interno do repositório e dos pacotes. Jogo de gerenciamento de futebol no estilo do clássico
+> Brasfoot. Decisões tomadas em sessão de refinamento em 2026-10-14.
 
 ## 1. Visão
 
@@ -18,7 +19,10 @@
 - **Web primeiro**, **desktop depois** (Electron).
 - **TypeScript + Next.js (React, static export) + Vitest + Biome.**
 - **Motor do jogo em TypeScript puro**, sem dependência de React, testável isoladamente (simulação, regras, IA).
-- **Hospedagem:** site estático (GitHub Pages / Cloudflare Pages / itch.io). Sem backend.
+- **Hospedagem:** site estático na **Vercel** (Hobby), sem backend e sem integração Git: a
+  publicação é feita pelo workflow `release` do GitHub Actions a partir de uma tag `vX.Y.Z`, só
+  depois de todos os gates (016, `specs/016-polimento-publicacao/contracts/release.md`).
+  itch.io continua possível como distribuição adicional.
 - **i18n desde o dia 1**; apenas pt-BR no lançamento.
 
 ## 3. Mundo do jogo
@@ -120,7 +124,13 @@ Desenvolvimento via Spec-Driven Development com Spec Kit. Os prompts de `/specki
 | **M3 — Carreira** | Série B, acesso/rebaixamento, finanças, evolução/aposentadoria, jovens, regulador, teste de 30 temporadas. | Jogo 5 temporadas e o mundo continua saudável. |
 | **M4 — Mercado** | Janelas, propostas, contratos, empréstimos, IA de transferências. | A IA monta elencos coerentes por 30 temporadas. |
 | **M5 — Drama** | Diretoria, demissão/propostas, torcida, manchetes, rivalidades, histórico. | Uma temporada "conta uma história". |
-| **M6 — Lançamento** | Polimento de UI, export de save, formato de mod documentado, publicação no itch.io. | Um estranho consegue jogar sem explicação. |
+| **M6 — Lançamento** | Polimento de UI, export de save, formato de mod documentado, publicação na web. | Um estranho consegue jogar sem explicação. |
+
+**Estado do M6:** export/import de carreiras e formato de mod (015); dicas de primeiro acesso,
+Configurações (tema claro/escuro), ajuda de atalhos em todas as telas, revisão de
+acessibilidade, versão e notas, aviso de atualização e publicação na Vercel (016, versão
+1.0.0). Falta, antes da tag `v1.0.0`: o teste de usabilidade com quem nunca viu o jogo
+(`specs/016-polimento-publicacao/usability.md`) e o cadastro dos segredos da Vercel.
 
 ## 14. Pós-lançamento
 
@@ -134,6 +144,6 @@ Desenvolvimento via Spec-Driven Development com Spec Kit. Os prompts de `/specki
 
 ## 15. Em aberto
 
+- ~~Nome definitivo do jogo~~ → **Treinador FC** (016).
 - Abrir o código-fonte (open source) ou não — decidir antes do lançamento.
-- Nome definitivo do jogo.
 - Disponibilidade semanal / estimativa de prazos.

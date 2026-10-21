@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="t">
+  <title id="t">Ícone do jogo</title>
+  <rect width="512" height="512" rx="96" fill="#0f1419"/>
+  <path d="M96 72 H416 V256 C416 368 336 424 256 456 C176 424 96 368 96 256 Z" fill="#3ddc84"/>
+  <path d="M96 72 H416 V150 H96 Z" fill="#2bb56b"/>
+  <text x="256" y="320" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="168" font-weight="700" fill="#0b1a10">TF</text>
+</svg>

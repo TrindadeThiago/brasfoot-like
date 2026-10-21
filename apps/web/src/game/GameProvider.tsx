@@ -75,6 +75,8 @@ import { newCareerId, newSeed } from "./ids";
 
 export type SavingStatus = "idle" | "saving" | "saved" | "failed";
 
+export type RoundOutcome = "blocked" | "confirm" | "live" | "done" | "finished" | "over";
+
 export interface GameState {
   status: "idle" | "loading" | "ready" | "error";
   save?: SaveFile;
@@ -89,6 +91,8 @@ export interface GameState {
   simulateIssues?: { kind: "blocked" | "confirm"; issues: LineupIssue[]; mode: RoundMode };
   /** Rodada ao vivo preparada (só em memória; descartada ao sair). */
   live?: LiveRound;
+  /** Rodada direta em cálculo (016 FR-029: "Simulando…"). */
+  simulating?: boolean;
 }
 
 export type GameAction =
@@ -103,7 +107,17 @@ export type GameAction =
       value?: { kind: "blocked" | "confirm"; issues: LineupIssue[]; mode: RoundMode };
     }
   | { type: "live"; value?: LiveRound }
+  | { type: "simulating"; value: boolean }
   | { type: "close" };
+
+/** Espera o navegador pintar o próximo quadro. */
+function nextPaint(): Promise<void> {
+  return new Promise((resolve) => {
+    if (typeof requestAnimationFrame === "function") {
+      requestAnimationFrame(() => setTimeout(resolve, 0));
+    } else setTimeout(resolve, 0);
+  });
+}
 
 export const initialGameState: GameState = { status: "idle", saving: "idle", conflict: false };
 
@@ -134,6 +148,10 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
     case "simulateIssues": {
       const { simulateIssues: _issues, ...rest } = state;
       return action.value ? { ...rest, simulateIssues: action.value } : rest;
+    }
+    case "simulating": {
+      const { simulating: _simulating, ...rest } = state;
+      return action.value ? { ...rest, simulating: true } : rest;
     }
     case "live": {
       const { live: _live, ...rest } = state;
@@ -177,12 +195,11 @@ interface GameContextValue {
   simulateNextRound(options?: { confirmed?: boolean }): Promise<void>;
   /**
    * Joga a próxima rodada ao vivo (prepara a rodada em memória) ou direto (simula e salva).
-   * Escalação inválida ou sem goleiro param antes, com o diálogo do layout.
+   * Escalação inválida ou sem goleiro param antes, com o diálogo do layout. Chamadas seguidas
+   * (atalho apertado várias vezes) rodam uma depois da outra. `finished` = rodada direta jogada
+   * e a temporada acabou.
    */
-  playRound(
-    mode: RoundMode,
-    options?: { confirmed?: boolean },
-  ): Promise<"blocked" | "confirm" | "live" | "done" | "over">;
+  playRound(mode: RoundMode, options?: { confirmed?: boolean }): Promise<RoundOutcome>;
   /** Fecha uma rodada ao vivo terminada na temporada e salva (FR-006). */
   commitRound(live: LiveRound): Promise<void>;
   discardLiveRound(): void;
@@ -417,11 +434,27 @@ export function GameProvider({
     [persist],
   );
 
-  const playRound = useCallback(
-    async (
-      mode: RoundMode,
-      options?: { confirmed?: boolean },
-    ): Promise<"blocked" | "confirm" | "live" | "done" | "over"> => {
+  // A simulação direta trava a thread por um instante: pinta o "Simulando…" antes de começar.
+  const simulateDirect = useCallback(
+    async (round: LiveRound): Promise<"done" | "finished"> => {
+      dispatch({ type: "simulating", value: true });
+      let saved: Promise<void> = Promise.resolve();
+      try {
+        await nextPaint();
+        // O cálculo é síncrono; o que fica pendente é só gravar (a rodada já está no estado).
+        saved = commitRound(finishRound(round));
+      } finally {
+        dispatch({ type: "simulating", value: false });
+      }
+      await saved;
+      const after = latestSave.current;
+      return after && isLeagueSeasonOver(after.league) ? "finished" : "done";
+    },
+    [commitRound],
+  );
+
+  const playRoundNow = useCallback(
+    async (mode: RoundMode, options?: { confirmed?: boolean }): Promise<RoundOutcome> => {
       const save = latestSave.current;
       if (!save || isLeagueSeasonOver(save.league)) return "over";
       writePreferences({ roundMode: mode });
@@ -434,8 +467,7 @@ export function GameProvider({
           dispatch({ type: "live", value: started.round });
           return "live";
         }
-        await commitRound(finishRound(started.round));
-        return "done";
+        return simulateDirect(started.round);
       }
       const { squad, unavailable } = lineupContext(save);
       const validation = validateLineup(save.lineup, squad, unavailable);
@@ -471,10 +503,21 @@ export function GameProvider({
         dispatch({ type: "live", value: started.round });
         return "live";
       }
-      await commitRound(finishRound(started.round));
-      return "done";
+      return simulateDirect(started.round);
     },
-    [commitRound],
+    [simulateDirect],
+  );
+
+  // A rodada direta espera um quadro antes de calcular: chamadas seguidas entram na fila, para
+  // cada uma partir da rodada deixada pela anterior.
+  const roundQueue = useRef<Promise<unknown>>(Promise.resolve());
+  const playRound = useCallback(
+    (mode: RoundMode, options?: { confirmed?: boolean }): Promise<RoundOutcome> => {
+      const run = roundQueue.current.then(() => playRoundNow(mode, options));
+      roundQueue.current = run.catch(() => undefined);
+      return run;
+    },
+    [playRoundNow],
   );
 
   const simulateNextRound = useCallback(

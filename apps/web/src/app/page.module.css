@@ -43,7 +43,7 @@
 
 .primary {
   background: var(--color-accent);
-  color: #0b1a10;
+  color: var(--color-on-accent);
 }
 
 .primary small {
@@ -53,4 +53,38 @@
 .secondary {
   border: 1px solid var(--color-border);
   color: var(--color-text);
+}
+
+.footer {
+  display: flex;
+  gap: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+/* "Atalhos" no rodapé: botão com a aparência dos links ao lado. */
+.linkButton {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--color-accent);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.notice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-4);
+}
+
+.notice p {
+  margin: 0;
+  font-weight: 600;
 }

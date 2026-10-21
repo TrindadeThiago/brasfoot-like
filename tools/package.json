@@ -11,7 +11,9 @@
     "sim:season": "tsx src/simulate-season.ts",
     "sim:economy": "tsx src/simulate-economy.ts",
     "sim:world": "tsx src/simulate-world.ts",
-    "gen:example-mod": "tsx src/gen-example-mod.ts"
+    "gen:example-mod": "tsx src/gen-example-mod.ts",
+    "check-release": "tsx src/check-release.ts",
+    "screenshots": "tsx src/screenshots.ts"
   },
   "dependencies": {
     "@brasfoot-like/engine": "workspace:*",
@@ -20,6 +22,7 @@
     "fflate": "^0.8.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "@types/node": "^22.20.5",
     "tsx": "^4.23.15"
   }

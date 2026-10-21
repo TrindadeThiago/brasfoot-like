@@ -16,13 +16,15 @@ function Standings({ save }: { save: SaveFile }) {
     <>
       <CompetitionTabs careerId={save.id} level={level} />
       <DivisionTabs save={save} level={level} />
-      <StandingsTable
-        key={level}
-        save={save}
-        season={season}
-        zones={divisionZones(save.bank, save.league.competitionId, level)}
-        caption={t("competition.caption", { division: divisionNameOf(save, level) })}
-      />
+      <div data-tip-anchor="table">
+        <StandingsTable
+          key={level}
+          save={save}
+          season={season}
+          zones={divisionZones(save.bank, save.league.competitionId, level)}
+          caption={t("competition.caption", { division: divisionNameOf(save, level) })}
+        />
+      </div>
     </>
   );
 }

@@ -5,7 +5,8 @@ test("finanças: preço com estimativa, rodada em casa, crédito, obra e histór
   page,
 }) => {
   test.setTimeout(240_000);
-  await createCareer(page, "Ana Souza", 0);
+  // Sem demissão: a seed da carreira é aleatória e uma demissão na virada esconderia Finanças.
+  await createCareer(page, "Ana Souza", 0, "Série A", { noFiring: true });
   await page.keyboard.press("6");
   await expect(page).toHaveURL(/financas/);
 

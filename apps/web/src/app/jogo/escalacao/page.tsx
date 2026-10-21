@@ -22,6 +22,7 @@ import { LineupList } from "../../../ui/LineupList";
 import { playerName } from "../../../ui/lineup-text";
 import { Pitch } from "../../../ui/Pitch";
 import { PlayerDetails } from "../../../ui/PlayerDetails";
+import type { ShortcutId } from "../../../ui/shortcuts";
 import { useShortcuts } from "../../../ui/useShortcuts";
 import styles from "./page.module.css";
 
@@ -75,13 +76,13 @@ function LineupScreen({ save, game }: { save: SaveFile; game: ReturnType<typeof 
   };
 
   const closeDetails = useCallback(() => setDetails(undefined), []);
-  const shortcuts = useMemo<Record<string, () => void>>(
+  const shortcuts = useMemo<Partial<Record<ShortcutId, () => void>>>(
     () => ({
-      a: () => game.autoLineup(),
-      i: () => {
+      "auto-lineup": () => game.autoLineup(),
+      details: () => {
         if (focused) setDetails(focused);
       },
-      Escape: () => {
+      cancel: () => {
         setSource(undefined);
         setMessage(t("lineup.cancelled"));
       },
@@ -91,7 +92,7 @@ function LineupScreen({ save, game }: { save: SaveFile; game: ReturnType<typeof 
   useShortcuts(shortcuts);
 
   return (
-    <div className={styles.layout}>
+    <div className={styles.layout} data-tip-anchor="lineup">
       <div className={styles.toolbar}>
         <label className={styles.field}>
           <span>{t("lineup.formation")}</span>

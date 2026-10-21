@@ -66,14 +66,7 @@ function LiveRoundView({
     round.setSpeed(SPEEDS[Math.min(SPEEDS.length - 1, SPEEDS.indexOf(round.speed) + 1)] ?? "fast");
   const slower = () =>
     round.setSpeed(SPEEDS[Math.max(0, SPEEDS.indexOf(round.speed) - 1)] ?? "slow");
-  const shortcuts: Record<string, () => void> = {
-    " ": round.toggle,
-    "+": faster,
-    "=": faster,
-    "-": slower,
-    f: round.finishNow,
-  };
-  useShortcuts(shortcuts);
+  useShortcuts({ pause: round.toggle, faster, slower, finish: round.finishNow });
 
   const announcement = useMemo(() => {
     const item = round.feed.find(
@@ -88,7 +81,7 @@ function LiveRoundView({
 
   return (
     <div className={styles.layout}>
-      <div className={styles.controls}>
+      <div className={styles.controls} data-tip-anchor="round-controls">
         <span className={styles.clock}>{mine ? clockText(mine.match.state) : ""}</span>
         <label className={styles.field}>
           <span>{t("round.speed")}</span>
@@ -220,7 +213,7 @@ function RoundScreen({ save, game }: { save: SaveFile; game: Game }) {
   if (live && live.round === leagueRound(save.league)) {
     return (
       <>
-        <h1 className={styles.title}>{t("round.title", { round: live.round })}</h1>
+        <h2 className={styles.title}>{t("round.title", { round: live.round })}</h2>
         <LiveRoundView key={live.round} initial={live} save={save} onFinish={finish} />
       </>
     );

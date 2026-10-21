@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  isLeagueSeasonOver,
-  leagueRound,
-  leagueTotalRounds,
-  pendingOffers,
-} from "@brasfoot-like/engine";
+import { isLeagueSeasonOver, pendingOffers } from "@brasfoot-like/engine";
 import {
   divisionNameOf,
   isEmployed,
@@ -71,13 +66,18 @@ function Unemployed({
           onAccept={(offerId) => void game.acceptJobOffer(offerId)}
           onDecline={(offerId) => game.declineJobOffer(offerId)}
         />
-        <div className={styles.actions}>
-          <Button variant="primary" disabled={over} onClick={() => void play("live")}>
+        <div className={styles.actions} data-tip-anchor="play">
+          <Button
+            variant="primary"
+            disabled={over || game.state.simulating}
+            onClick={() => void play("live")}
+          >
             {t("home.playLive")}
           </Button>
-          <Button disabled={over} onClick={() => void play("direct")}>
+          <Button disabled={over || game.state.simulating} onClick={() => void play("direct")}>
             {t("home.simulate")}
           </Button>
+          {game.state.simulating ? <p role="status">{t("home.simulating")}</p> : null}
         </div>
         {over ? (
           <div className={styles.actions}>
@@ -119,12 +119,9 @@ export default function HomePage() {
         const results = lastResults(userSeason(save), save.clubId, 5);
         const lastRound = game.state.lastRound;
         const play = async (mode: "live" | "direct") => {
-          const last = leagueRound(save.league) === leagueTotalRounds(save.league);
           const outcome = await game.playRound(mode);
           if (outcome === "live") router.push(screenHref("/jogo/rodada", save.id));
-          if (outcome === "done" && last) {
-            router.push(screenHref("/jogo/fim-de-temporada", save.id));
-          }
+          if (outcome === "finished") router.push(screenHref("/jogo/fim-de-temporada", save.id));
         };
         if (!isEmployed(save)) return <Unemployed save={save} game={game} play={play} />;
         const offers = pendingOffers(save.board).length;
@@ -197,13 +194,21 @@ export default function HomePage() {
                   </div>
                 </div>
               ) : null}
-              <div className={styles.actions}>
-                <Button variant="primary" disabled={over} onClick={() => void play("live")}>
+              <div className={styles.actions} data-tip-anchor="play">
+                <Button
+                  variant="primary"
+                  disabled={over || game.state.simulating}
+                  onClick={() => void play("live")}
+                >
                   {t("home.playLive")}
                 </Button>
-                <Button disabled={over} onClick={() => void play("direct")}>
+                <Button
+                  disabled={over || game.state.simulating}
+                  onClick={() => void play("direct")}
+                >
                   {t("home.simulate")}
                 </Button>
+                {game.state.simulating ? <p role="status">{t("home.simulating")}</p> : null}
               </div>
               {over ? (
                 <div className={styles.actions}>
