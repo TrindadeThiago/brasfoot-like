@@ -46,6 +46,15 @@ const BUNDLES: Record<Locale, LocaleBundle> = {
   },
 };
 
+/** Idiomas disponíveis (016): os pacotes de tradução existentes, com o nome de cada um. */
+export const LOCALES: readonly { id: Locale; name: string }[] = (
+  Object.keys(BUNDLES) as Locale[]
+).map((id) => ({ id, name: BUNDLES[id].ui["locale.name"] ?? id }));
+
+export function isLocale(value: unknown): value is Locale {
+  return typeof value === "string" && Object.hasOwn(BUNDLES, value);
+}
+
 /** Parâmetros cujo valor é um id de catálogo e deve ser exibido pelo rótulo traduzido. */
 const CATALOG_PARAMS: Record<string, string> = {
   trait: "trait",

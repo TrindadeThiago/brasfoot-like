@@ -1,0 +1,17 @@
+[
+  {
+    "version": "1.0.0",
+    "date": "2026-10-20",
+    "changes": [
+      "Primeira versão pública do jogo, gratuita e sem anúncios.",
+      "Carreira de técnico com Série A e Série B, acesso e rebaixamento e temporadas sem fim.",
+      "Escalação, rodada ao vivo com substituições ou simulação direta, tabela, artilharia e calendário.",
+      "Finanças, estádio e ingressos; evolução, aposentadoria e novos jogadores a cada temporada.",
+      "Mercado de transferências com janelas, propostas, contratos e empréstimos.",
+      "Diretoria com metas, demissão e propostas de outros clubes; torcida, rivalidades, manchetes e histórico.",
+      "Exportar e importar carreiras em arquivo e carregar mods com outros bancos de dados.",
+      "Dicas no primeiro acesso, tela de configurações com tema claro ou escuro e ajuda de atalhos em todas as telas.",
+      "Funciona sem internet depois do primeiro acesso."
+    ]
+  }
+]
