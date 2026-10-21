@@ -7,7 +7,14 @@ import { releaseNotes } from "@brasfoot-like/i18n";
 import { REPO_ROOT } from "./fs-bank";
 
 export const MIN_SCREENSHOTS = 4;
-const REQUIRED = ["index.html", "sw.js", "precache.json", "manifest.webmanifest", "vercel.json"];
+const REQUIRED = [
+  "index.html",
+  "sw.js",
+  "precache.json",
+  "manifest.webmanifest",
+  "vercel.json",
+  "version.json",
+];
 
 function walk(dir: string): string[] {
   return readdirSync(dir).flatMap((name) => {
@@ -44,6 +51,15 @@ export function checkRelease({ version, tag, notes, outDir }: ReleaseInput): str
   if (!existsSync(outDir)) return [...problems, `build não encontrado em ${outDir}`];
   for (const file of REQUIRED) {
     if (!existsSync(join(outDir, file))) problems.push(`falta ${file} no build`);
+  }
+  // Fonte do badge de versão do README (lido pelo shields.io no site publicado).
+  const versionFile = join(outDir, "version.json");
+  if (existsSync(versionFile)) {
+    const published = (JSON.parse(readFileSync(versionFile, "utf8")) as { version?: string })
+      .version;
+    if (published !== version) {
+      problems.push(`version.json diz ${published}, mas a versão é ${version}`);
+    }
   }
   const shots = existsSync(join(outDir, "screenshots"))
     ? readdirSync(join(outDir, "screenshots")).filter((name) => /\.(webp|png)$/.test(name))
