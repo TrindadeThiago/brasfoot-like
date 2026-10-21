@@ -214,6 +214,50 @@ describe("mudanças válidas (FR-023)", () => {
     expect(changed.events.at(-1)).toMatchObject({ type: "formation_change", formation: "4-3-3" });
   });
 
+  it("mesma formação com outra distribuição troca jogadores de posição, sem gastar substituição", () => {
+    const state = at(40);
+    const team = state.teams.home;
+    const [first, second] = FORMATIONS[team.formation].slots
+      .map((slot) => slot.id)
+      .filter((slotId) => team.onField[slotId]);
+    if (!first || !second) throw new Error("time sem jogadores");
+    const playerA = team.onField[first] as string;
+    const playerB = team.onField[second] as string;
+    const assignment = { ...team.onField, [first]: playerB, [second]: playerA };
+    const changed = apply(state, "home", {
+      type: "formation",
+      formation: team.formation,
+      assignment,
+    });
+    expect(changed.teams.home.formation).toBe(team.formation);
+    expect(changed.teams.home.onField[first]).toBe(playerB);
+    expect(changed.teams.home.onField[second]).toBe(playerA);
+    expect(changed.teams.home.substitutionsUsed).toBe(team.substitutionsUsed);
+    expect(changed.events.at(-1)).toEqual(
+      expect.objectContaining({
+        type: "positions_change",
+        side: "home",
+        moves: [
+          { playerId: playerA, fromSlotId: first, toSlotId: second },
+          { playerId: playerB, fromSlotId: second, toSlotId: first },
+        ],
+      }),
+    );
+    expect(changed.events.some((event) => event.type === "formation_change")).toBe(false);
+  });
+
+  it("mesma formação e mesma distribuição não muda nada nem gera evento", () => {
+    const state = at(40);
+    const team = state.teams.home;
+    const changed = apply(state, "home", {
+      type: "formation",
+      formation: team.formation,
+      assignment: { ...team.onField },
+    });
+    expect(changed.events).toHaveLength(state.events.length);
+    expect(changed.teams.home.onField).toEqual(team.onField);
+  });
+
   it("troca de postura gera evento", () => {
     const changed = apply(at(20), "away", { type: "posture", posture: "defensive" });
     expect(changed.teams.away.posture).toBe("defensive");

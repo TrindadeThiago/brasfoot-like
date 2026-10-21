@@ -268,6 +268,7 @@ export type {
   MatchStatus,
   PendingChange,
   PlayerMatchState,
+  PositionMove,
   ShotKind,
   ShotOutcome,
   Side,
