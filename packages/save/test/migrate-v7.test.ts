@@ -8,7 +8,7 @@ describe("migração v6 → v7 (011 R13, FR-017, SC-009)", () => {
     const result = migrateSave(v6);
     if (result.status !== "ok") throw new Error(JSON.stringify(result));
     expect(result.migratedFrom).toBe(6);
-    expect(result.save.formatVersion).toBe(11);
+    expect(result.save.formatVersion).toBe(12);
     expect(result.save.market.reports).toEqual([]);
     const {
       formatVersion: _v,
@@ -17,6 +17,10 @@ describe("migração v6 → v7 (011 R13, FR-017, SC-009)", () => {
       fans: _fans,
       news: _news,
       assets: _assets,
+      calendar: _calendar,
+      competitions: _competitions,
+      fitness: _fitness,
+      competitionHistory: _competitionHistory,
       ...rest
     } = result.save;
     const { formatVersion: _v6, market: oldMarket, ...restV6 } = v6;

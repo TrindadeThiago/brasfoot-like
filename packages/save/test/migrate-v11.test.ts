@@ -8,9 +8,17 @@ describe("migração v10 → v11 (015 R6, FR-010)", () => {
     const result = migrateSave(v10);
     if (result.status !== "ok") throw new Error(JSON.stringify(result));
     expect(result.migratedFrom).toBe(10);
-    expect(result.save.formatVersion).toBe(11);
+    expect(result.save.formatVersion).toBe(12);
     expect(result.save.assets).toEqual({});
-    const { formatVersion: _v, assets: _assets, ...rest } = result.save;
+    const {
+      formatVersion: _v,
+      assets: _assets,
+      calendar: _calendar,
+      competitions: _competitions,
+      fitness: _fitness,
+      competitionHistory: _competitionHistory,
+      ...rest
+    } = result.save;
     const { formatVersion: _v10, ...restV10 } = v10;
     expect(rest).toEqual(restV10);
   });

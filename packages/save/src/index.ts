@@ -10,10 +10,16 @@ export {
 export {
   advanceCareerSeason,
   currentDate,
+  currentDayOf,
   dismissSquadNotice,
+  isCareerSeasonOver,
+  nextFixture,
+  seasonStateOf,
   userDivisionLevel,
   userSeason,
+  userSeasonFor,
   withAdjustedLineup,
+  withDayResult,
   withManagerFormation,
   withRoundResult,
 } from "./career";

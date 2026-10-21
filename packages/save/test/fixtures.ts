@@ -8,11 +8,20 @@ import {
   advanceCareer,
   advanceLeague,
   advanceSeason,
+  completeCareerDay,
   joinBankFiles,
   type Season,
   type SeasonStep,
 } from "@brasfoot-like/engine";
-import { createSave, type SaveFile } from "../src";
+import {
+  advanceCareerSeason,
+  createSave,
+  isCareerSeasonOver,
+  managedClubId,
+  type SaveFile,
+  seasonStateOf,
+  withDayResult,
+} from "../src";
 
 export const SERIE_A = (competitions[0]?.divisions[0]?.clubIds ?? []) as string[];
 export const SERIE_B = (competitions[0]?.divisions[1]?.clubIds ?? []) as string[];
@@ -29,6 +38,21 @@ export function defaultBank(): unknown {
 }
 
 const cached = new Map<string, SaveFile>();
+
+/** Campos criados pela 017 (versão 12): as fixtures de versões antigas não os têm. */
+type V12Fields = "competitions" | "calendar" | "fitness" | "competitionHistory";
+
+/** Save atual sem os campos da v12, a base das fixtures de versões antigas. */
+function legacySave(): Omit<SaveFile, V12Fields> {
+  const {
+    competitions: _competitions,
+    calendar: _calendar,
+    fitness: _fitness,
+    competitionHistory: _history,
+    ...rest
+  } = validSave();
+  return rest;
+}
 
 /** Save válido da versão atual (memorizado por clube; clonar antes de alterar). */
 export function validSave(clubId: string = SERIE_A[0] as string): SaveFile {
@@ -52,7 +76,7 @@ export function validSave(clubId: string = SERIE_A[0] as string): SaveFile {
 /** Save no formato da 005/006 (versão 2): uma única `season` da Série A, sem liga nem histórico. */
 export type SaveV2 = Omit<
   SaveFile,
-  "formatVersion" | "league" | "history" | "finances" | "renewal" | "market"
+  V12Fields | "formatVersion" | "league" | "history" | "finances" | "renewal" | "market"
 > & {
   formatVersion: 2;
   season: Season;
@@ -72,7 +96,7 @@ export function saveV2(step: SeasonStep = { rounds: 0 }): SaveV2 {
       renewal: _renewal,
       formatVersion: _version,
       ...rest
-    } = withoutMarket(validSave());
+    } = withoutMarket(legacySave());
     const serieA = league.divisions[0];
     if (!serieA) throw new Error("sem Série A");
     let season = serieA;
@@ -106,7 +130,10 @@ export function saveV1(mutate?: (save: SaveV2) => void) {
 }
 
 /** Save no formato da 007 (versão 3): liga e histórico, sem finanças. */
-export type SaveV3 = Omit<SaveFile, "formatVersion" | "finances" | "renewal" | "market"> & {
+export type SaveV3 = Omit<
+  SaveFile,
+  V12Fields | "formatVersion" | "finances" | "renewal" | "market"
+> & {
   formatVersion: 3;
 };
 
@@ -122,7 +149,7 @@ export function saveV3(step: SeasonStep = { rounds: 0 }): SaveV3 {
       renewal: _renewal,
       formatVersion: _version,
       ...rest
-    } = withoutMarket(validSave());
+    } = withoutMarket(legacySave());
     let league = rest.league;
     if (!("rounds" in step) || step.rounds > 0) {
       const advanced = advanceLeague(league, rest.bank, step);
@@ -146,12 +173,12 @@ export function saveV3SeasonOver(): SaveV3 {
 }
 
 /** Save no formato da 008 (versão 4): finanças, sem renovação. */
-export type SaveV4 = Omit<SaveFile, "formatVersion" | "renewal" | "market"> & {
+export type SaveV4 = Omit<SaveFile, V12Fields | "formatVersion" | "renewal" | "market"> & {
   formatVersion: 4;
 };
 
 /** Save no formato da 009 (versão 5): renovação, sem contratos nem mercado. */
-export type SaveV5 = Omit<SaveFile, "formatVersion" | "market"> & { formatVersion: 5 };
+export type SaveV5 = Omit<SaveFile, V12Fields | "formatVersion" | "market"> & { formatVersion: 5 };
 
 const v4Cache = new Map<string, SaveV4>();
 
@@ -160,7 +187,7 @@ export function saveV4(step: SeasonStep = { rounds: 0 }): SaveV4 {
   const key = JSON.stringify(step);
   let save = v4Cache.get(key);
   if (!save) {
-    const { renewal: _renewal, formatVersion: _version, ...rest } = withoutMarket(validSave());
+    const { renewal: _renewal, formatVersion: _version, ...rest } = withoutMarket(legacySave());
     let { league, finances } = rest;
     if (!("rounds" in step) || step.rounds > 0) {
       const advanced = advanceCareer(league, finances, rest.bank, step, rest.clubId);
@@ -194,6 +221,10 @@ export function withoutMarket<T extends { bank: { players: { contract?: unknown 
     fans: _fans,
     news: _news,
     assets: _assets,
+    competitions: _competitions,
+    calendar: _calendar,
+    fitness: _fitness,
+    competitionHistory: _competitionHistory,
     ...rest
   } = save as T & {
     market?: unknown;
@@ -201,6 +232,10 @@ export function withoutMarket<T extends { bank: { players: { contract?: unknown 
     fans?: unknown;
     news?: unknown;
     assets?: unknown;
+    competitions?: unknown;
+    calendar?: unknown;
+    fitness?: unknown;
+    competitionHistory?: unknown;
   };
   return {
     ...rest,
@@ -218,7 +253,7 @@ export function saveV5(step: SeasonStep = { rounds: 0 }): SaveV5 {
   const key = JSON.stringify(step);
   let save = v5Cache.get(key);
   if (!save) {
-    const { formatVersion: _version, ...rest } = withoutMarket(validSave());
+    const { formatVersion: _version, ...rest } = withoutMarket(legacySave());
     let { league, finances } = rest;
     if (!("rounds" in step) || step.rounds > 0) {
       const advanced = advanceCareer(league, finances, rest.bank, step, rest.clubId);
@@ -240,7 +275,10 @@ export function saveV5SeasonOver(): SaveV5 {
 }
 
 /** Save no formato da 010 (versão 6): mercado sem resumos de janela. */
-export type SaveV6 = Omit<SaveFile, "formatVersion" | "board" | "fans" | "news" | "assets"> & {
+export type SaveV6 = Omit<
+  SaveFile,
+  V12Fields | "formatVersion" | "board" | "fans" | "news" | "assets"
+> & {
   formatVersion: 6;
 };
 
@@ -253,13 +291,16 @@ export function saveV6(): SaveV6 {
     news: _news,
     assets: _assets,
     ...rest
-  } = validSave();
+  } = legacySave();
   const { reports: _reports, ...legacy } = market;
   return { ...rest, market: legacy as SaveFile["market"], formatVersion: 6 };
 }
 
 /** Save no formato da 011 (versão 7): mercado com resumos, sem diretoria. */
-export type SaveV7 = Omit<SaveFile, "formatVersion" | "board" | "fans" | "news" | "assets"> & {
+export type SaveV7 = Omit<
+  SaveFile,
+  V12Fields | "formatVersion" | "board" | "fans" | "news" | "assets"
+> & {
   formatVersion: 7;
 };
 
@@ -272,7 +313,7 @@ export function saveV7(step: SeasonStep = { rounds: 0 }): SaveV7 {
     news: _news,
     assets: _assets,
     ...rest
-  } = validSave();
+  } = legacySave();
   let { league, finances, bank, market } = rest;
   if (!("rounds" in step) || step.rounds > 0) {
     const advanced = advanceCareer(
@@ -294,7 +335,7 @@ export function saveV7(step: SeasonStep = { rounds: 0 }): SaveV7 {
 }
 
 /** Save no formato da 012 (versão 8): diretoria, sem torcidas nem rivalidades no banco. */
-export type SaveV8 = Omit<SaveFile, "formatVersion" | "fans" | "news" | "assets"> & {
+export type SaveV8 = Omit<SaveFile, V12Fields | "formatVersion" | "fans" | "news" | "assets"> & {
   formatVersion: 8;
 };
 
@@ -305,23 +346,83 @@ export function saveV8(): SaveV8 {
     news: _news,
     assets: _assets,
     ...rest
-  } = validSave();
+  } = legacySave();
   const { rivalries: _rivalries, ...bank } = rest.bank;
   return JSON.parse(JSON.stringify({ ...rest, bank, formatVersion: 8 })) as SaveV8;
 }
 
 /** Save no formato da 013 (versão 9): torcidas, sem notícias. */
-export type SaveV9 = Omit<SaveFile, "formatVersion" | "news" | "assets"> & { formatVersion: 9 };
+export type SaveV9 = Omit<SaveFile, V12Fields | "formatVersion" | "news" | "assets"> & {
+  formatVersion: 9;
+};
 
 export function saveV9(): SaveV9 {
-  const { formatVersion: _version, news: _news, assets: _assets, ...rest } = validSave();
+  const { formatVersion: _version, news: _news, assets: _assets, ...rest } = legacySave();
   return JSON.parse(JSON.stringify({ ...rest, formatVersion: 9 })) as SaveV9;
 }
 
 /** Save no formato da 014 (versão 10): notícias, sem imagens de escudo. */
-export type SaveV10 = Omit<SaveFile, "formatVersion" | "assets"> & { formatVersion: 10 };
+export type SaveV10 = Omit<SaveFile, V12Fields | "formatVersion" | "assets"> & {
+  formatVersion: 10;
+};
 
 export function saveV10(): SaveV10 {
-  const { formatVersion: _version, assets: _assets, ...rest } = validSave();
+  const { formatVersion: _version, assets: _assets, ...rest } = legacySave();
   return JSON.parse(JSON.stringify({ ...rest, formatVersion: 10 })) as SaveV10;
+}
+
+/** Quanto da carreira o save v11 já jogou: rodadas da 1ª temporada, o fim dela ou temporadas inteiras. */
+export type SaveV11Step = { rounds: number } | { toEnd: true } | { seasons: number };
+
+const NOW_V11 = "2026-10-21T00:00:00.000Z";
+
+/** Um dia de jogos (uma rodada da liga, com o banco padrão) pelo caminho da carreira. */
+export function playDay(save: SaveFile): SaveFile {
+  const managed = managedClubId(save);
+  const result = completeCareerDay(
+    seasonStateOf(save),
+    save.seed,
+    managed,
+    undefined,
+    managed ? { [managed]: save.lineup } : undefined,
+  );
+  if (!result.ok) throw new Error(JSON.stringify(result.error));
+  return withDayResult(save, result.state);
+}
+
+function playedCurrentSave(step: SaveV11Step): SaveFile {
+  let save = validSave();
+  const seasons = "seasons" in step ? step.seasons : 0;
+  for (let season = 0; season < seasons; season++) {
+    while (!isCareerSeasonOver(save)) save = playDay(save);
+    const turned = advanceCareerSeason(save, NOW_V11);
+    if (!turned.ok) throw new Error(JSON.stringify(turned.error));
+    save = turned.save;
+  }
+  const rounds = "rounds" in step ? step.rounds : "toEnd" in step ? Number.POSITIVE_INFINITY : 0;
+  for (let played = 0; played < rounds && !isCareerSeasonOver(save); played++) save = playDay(save);
+  return save;
+}
+
+/** Save no formato da 015 (versão 11): sem calendário por datas nem condição física. */
+export type SaveV11 = Omit<SaveFile, V12Fields | "formatVersion"> & { formatVersion: 11 };
+
+const v11Cache = new Map<string, SaveV11>();
+
+export function saveV11(step: SaveV11Step = { rounds: 0 }): SaveV11 {
+  const key = JSON.stringify(step);
+  let save = v11Cache.get(key);
+  if (!save) {
+    const {
+      formatVersion: _version,
+      competitions: _competitions,
+      calendar: _calendar,
+      fitness: _fitness,
+      competitionHistory: _history,
+      ...rest
+    } = playedCurrentSave(step);
+    save = { ...rest, formatVersion: 11 };
+    v11Cache.set(key, save);
+  }
+  return JSON.parse(JSON.stringify(save)) as SaveV11;
 }
