@@ -12,6 +12,8 @@ export function minuteText(event: { minute: number; stoppage: number }): string 
 export function clockText(state: MatchState): string {
   if (state.status === "not_started") return "0'";
   if (state.status === "half_time") return t("round.halfTime");
+  if (state.status === "extra_half_time") return t("round.extraHalfTime");
+  if (state.status === "penalties") return t("round.penalties");
   if (state.status === "finished" || state.status === "abandoned") return t("round.fullTime");
   return minuteText(state.clock);
 }
@@ -41,6 +43,29 @@ export function eventText(event: MatchEvent, match: LiveMatch, save: SaveFile): 
     case "full_time": {
       const score = scoreAt(match.state, event.seq);
       return say(event.type, { home, away, homeScore: score.home, awayScore: score.away });
+    }
+    case "extra_time_start":
+      return say("extra_time_start", { home, away });
+    case "extra_half_time":
+    case "extra_time_end": {
+      const score = scoreAt(match.state, event.seq);
+      return say(event.type, { home, away, homeScore: score.home, awayScore: score.away });
+    }
+    case "shootout_start":
+      return say("shootout_start", {});
+    case "shootout_kick":
+      return say(`shootout_${event.outcome === "goal" ? "goal" : event.outcome}`, {
+        order: event.order + 1,
+        player: player(event.playerId),
+        club: club(match.sides[event.side]),
+      });
+    case "shootout_end": {
+      const score = match.state.shootout?.score ?? { home: 0, away: 0 };
+      return say("shootout_end", {
+        club: club(match.sides[event.winner]),
+        winnerScore: score[event.winner],
+        loserScore: score[event.winner === "home" ? "away" : "home"],
+      });
     }
     case "abandoned":
       return say("abandoned", { club: club(match.sides[event.side]) });

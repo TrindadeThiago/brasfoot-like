@@ -16,6 +16,7 @@ import { fitnessFactorBp, fitnessOn } from "../../src/fitness/fitness";
 import { DEFAULT_FITNESS } from "../../src/fitness/rules";
 import { finishRound } from "../../src/season/live-round";
 import { TOURNAMENT_ID, twoCompetitionsBank } from "../fixtures/two-competitions";
+import { leagueFormatOf } from "../helpers/build-bank";
 import { testWorld } from "../season/helpers/world";
 import { MANAGER, newState } from "./day-helpers";
 
@@ -154,7 +155,7 @@ describe("advanceCareerToNextMatch (017 FR-011, FR-013)", () => {
 
   it("sem jogos restantes, simula até o fim da temporada de todas as competições", () => {
     const longTournament = twoCompetitionsBank((tournament) => {
-      tournament.format.rounds = 1;
+      leagueFormatOf(tournament).rounds = 1;
       tournament.schedule = { weekday: 3, startWeek: 36, everyWeeks: 1 };
     });
     const state = newState(longTournament, SEED);

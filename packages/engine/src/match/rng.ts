@@ -1,7 +1,8 @@
 import { createRng, type Rng } from "../rng/xoshiro";
+import type { MatchHalf } from "./types";
 
 export interface ClockKey {
-  half: 1 | 2;
+  half: MatchHalf;
   minute: number;
   stoppage: number;
 }

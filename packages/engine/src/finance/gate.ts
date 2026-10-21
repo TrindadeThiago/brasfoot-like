@@ -59,16 +59,17 @@ export function gateFor(
   world: CompletedBank,
   fixture: Pick<Fixture, "round" | "home" | "away" | "seed">,
   price: number,
-  options: { noise?: boolean; mood?: number } = {},
+  options: { noise?: boolean; mood?: number; capacity?: number } = {},
 ): GateEstimate {
   const rules = economyRules(world, league.competitionId);
   const home = world.clubs.find((club) => club.id === fixture.home);
   const away = world.clubs.find((club) => club.id === fixture.away);
-  const capacity = finances.clubs[fixture.home]?.capacity ?? 0;
+  const capacity = options.capacity ?? finances.clubs[fixture.home]?.capacity ?? 0;
   const season = clubDivision(league, fixture.home);
   const division = divisionEconomy(rules, season?.divisionLevel ?? 1);
   const competition = world.competitions.find((entry) => entry.id === league.competitionId);
-  const points = competition?.format.points ?? { win: 3, draw: 1 };
+  const points =
+    competition?.format.type === "league" ? competition.format.points : { win: 3, draw: 1 };
   const records = season ? (divisionSeason(league, season.divisionLevel)?.records ?? []) : [];
   const fans =
     ((rules.fansBase + rules.fansPerReputation * (home?.reputation ?? 0)) * division.fanFactorPct) /

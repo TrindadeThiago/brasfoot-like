@@ -2,6 +2,7 @@ import type { BoardState } from "../board/types";
 import type { SeasonCalendar } from "../calendar/season-calendar";
 import type { FansState } from "../fans/types";
 import type { FinanceState } from "../finance/types";
+import type { CupHistoryEntry } from "../knockout/history";
 import type { MarketState } from "../market/types";
 import type { CompletedBank } from "../model/types";
 import type { NewsState } from "../news/types";
@@ -107,6 +108,8 @@ export interface TurnoverContext {
   calendar?: SeasonCalendar;
   /** Histórico das competições secundárias (uma entrada por temporada encerrada, 017). */
   competitionHistory?: SeasonHistoryEntry[];
+  /** Histórico das copas (uma entrada por edição encerrada, 018). */
+  cupHistory?: CupHistoryEntry[];
   /** Finanças da carreira (008); ausentes em usos só da liga. */
   finances?: FinanceState;
   /** Clube do jogador: as decisões da IA não o alteram. */
@@ -151,6 +154,7 @@ export interface TurnoverOptions {
   competitions?: readonly LeagueSeason[];
   calendar?: SeasonCalendar;
   competitionHistory?: readonly SeasonHistoryEntry[];
+  cupHistory?: readonly CupHistoryEntry[];
 }
 
 export type TurnoverResult =
@@ -170,5 +174,6 @@ export type TurnoverResult =
       competitions?: LeagueSeason[];
       calendar?: SeasonCalendar;
       competitionHistory?: SeasonHistoryEntry[];
+      cupHistory?: CupHistoryEntry[];
     }
   | { ok: false; error: SeasonError };

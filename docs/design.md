@@ -139,7 +139,10 @@ nunca viu o jogo (`specs/016-polimento-publicacao/usability.md`).
 cada competição como dado (`schedule`), avanço até o próximo jogo do clube de qualquer competição,
 condição física e descanso entre jogos, cartões por competição, finanças, torcida, diretoria,
 manchetes, janelas e evolução por datas, calendário do clube e abas por competição. Saves v12.
-Faltam o mata-mata (018) e as fases de grupos.
+Mata-mata e copa nacional (018): formato `knockout` descrito só por dados (fases, ida e volta,
+entradas tardias, mando, campo neutro, prêmios), prorrogação e pênaltis na partida, inclusive ao
+vivo, chaveamento, prêmios e bilheteria, reflexo na torcida, diretoria e manchetes, histórico das
+copas. Saves v13. Faltam as fases de grupos.
 
 Os marcos 7 a 9 são pós-lançamento: trazem as copas e o mundo maior do §14 até o mod do
 futebol sul-americano. Os prompts estão em [`speckit-prompts/`](speckit-prompts/README.md)

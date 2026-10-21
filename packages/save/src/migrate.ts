@@ -241,6 +241,14 @@ const addCalendar: Migration = {
   },
 };
 
+/** v12 → v13: histórico de copas (018), vazio; as copas vivem dentro de `competitions`. */
+const addCupHistory: Migration = {
+  from: 12,
+  migrate(raw) {
+    return { ...(raw as object), formatVersion: 13, cupHistory: [] };
+  },
+};
+
 /** Migrações reais do formato, em ordem. */
 export const MIGRATIONS: readonly Migration[] = [
   addLineup,
@@ -254,6 +262,7 @@ export const MIGRATIONS: readonly Migration[] = [
   addNews,
   addAssets,
   addCalendar,
+  addCupHistory,
 ];
 
 /** Problemas que tornam a escalação gravada ilegível (os demais o jogo corrige ou avisa). */
@@ -317,6 +326,17 @@ const envelopeSchema = z.object({
     players: z.record(z.string(), z.object({ value: z.int().min(0).max(100), date: z.string() })),
   }),
   competitionHistory: z.array(z.object({ number: z.int(), year: z.int() }).loose()),
+  cupHistory: z.array(
+    z
+      .object({
+        number: z.int(),
+        year: z.int(),
+        competitionId: z.string().min(1),
+        championId: z.string().min(1),
+        runnerUpId: z.string().min(1),
+      })
+      .loose(),
+  ),
   finances: z.object({
     clubs: z.record(
       z.string(),
@@ -531,6 +551,23 @@ function calendarProblem(save: SaveFile): string | undefined {
   return undefined;
 }
 
+/** Copas (018): fase sorteada tem confrontos e fixtures completas em cada perna. */
+function cupProblem(save: SaveFile): string | undefined {
+  for (const league of [save.league, ...save.competitions]) {
+    const season = league.divisions[0];
+    for (const phase of season?.bracket?.phases ?? []) {
+      if (!phase.drawn) continue;
+      if (phase.ties.length === 0) return `fase sorteada sem confrontos: ${league.competitionId}`;
+      for (const round of phase.rounds) {
+        if (season?.calendar[round - 1]?.fixtures.length !== phase.ties.length) {
+          return `fixtures incompletas na copa ${league.competitionId}, rodada ${round}`;
+        }
+      }
+    }
+  }
+  return undefined;
+}
+
 /** Toda equipe da liga tem torcida (013 data-model.md). */
 function fansProblem(save: SaveFile): string | undefined {
   const missing = save.league.divisions
@@ -598,6 +635,7 @@ export function migrateSave(
     boardProblem(save) ??
     fansProblem(save) ??
     calendarProblem(save) ??
+    cupProblem(save) ??
     newsProblem(save);
   if (incoherence) return { status: "corrupt", reason: incoherence };
   const season = save.league.divisions.find((entry) => entry.clubIds.includes(save.clubId));

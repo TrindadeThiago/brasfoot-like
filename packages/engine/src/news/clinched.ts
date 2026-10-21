@@ -32,7 +32,7 @@ export function clinched(context: NewsContext, round: number): Fact[] {
   const competition = context.world.competitions.find(
     (entry) => entry.id === context.league.competitionId,
   );
-  const win = competition?.format.points.win ?? 3;
+  const win = competition?.format.type === "league" ? competition.format.points.win : 3;
   for (const season of context.league.divisions) {
     const remaining = Math.max(0, season.calendar.length - round);
     const table = standings(season, context.world);

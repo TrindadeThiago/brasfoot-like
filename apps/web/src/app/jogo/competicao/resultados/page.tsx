@@ -11,6 +11,7 @@ import { Button } from "../../../../ui/Button";
 import { CompetitionSelect } from "../../../../ui/CompetitionSelect";
 import { CompetitionTabs } from "../../../../ui/CompetitionTabs";
 import { Crest } from "../../../../ui/Crest";
+import { phaseLabel } from "../../../../ui/cup/phase";
 import { Dialog } from "../../../../ui/Dialog";
 import { DivisionTabs } from "../../../../ui/DivisionTabs";
 import { MatchSummary } from "../../../../ui/MatchSummary";
@@ -23,8 +24,11 @@ function Results({ save, season, initial }: { save: SaveFile; season: Season; in
   const [open, setOpen] = useState<MatchRecord | undefined>();
   const close = useCallback(() => setOpen(undefined), []);
   const clubs = new Map(save.bank.clubs.map((club) => [club.id, club]));
+  const label = (number: number) =>
+    phaseLabel(save, season.competitionId, number) ?? String(number);
   const fixtures = season.calendar[round - 1]?.fixtures ?? [];
   const records = season.records.filter((record) => record.round === round);
+  const caption = season.bracket ? label(round) : t("results.caption", { round });
   return (
     <div className={styles.layout}>
       <div className={styles.picker}>
@@ -36,7 +40,7 @@ function Results({ save, season, initial }: { save: SaveFile; season: Season; in
           <select value={round} onChange={(event) => setRound(Number(event.target.value))}>
             {season.calendar.map((entry) => (
               <option key={entry.number} value={entry.number}>
-                {entry.number}
+                {label(entry.number)}
               </option>
             ))}
           </select>
@@ -48,8 +52,8 @@ function Results({ save, season, initial }: { save: SaveFile; season: Season; in
           {t("results.next")}
         </Button>
       </div>
-      <section aria-label={t("results.caption", { round })}>
-        <h2>{t("results.caption", { round })}</h2>
+      <section aria-label={caption}>
+        <h2>{caption}</h2>
         <ul className={styles.list}>
           {fixtures.map((fixture) => {
             const record = records.find((entry) => entry.home === fixture.home);
@@ -64,6 +68,17 @@ function Results({ save, season, initial }: { save: SaveFile; season: Season; in
                 </span>
                 <strong>
                   {record ? `${record.score.home} × ${record.score.away}` : t("results.notPlayed")}
+                  {record?.decision?.shootout ? (
+                    <small>
+                      {" "}
+                      {t("cup.result.penalties", {
+                        home: record.decision.shootout.score.home,
+                        away: record.decision.shootout.score.away,
+                      })}
+                    </small>
+                  ) : record?.decision?.by === "extra-time" ? (
+                    <small> {t("cup.extraTime")}</small>
+                  ) : null}
                 </strong>
                 <span className={styles.away}>
                   {away ? <Crest crest={away.crest} label={away.name} size={20} /> : null}
@@ -112,8 +127,13 @@ function ResultsScreen({ save }: { save: SaveFile }) {
   return (
     <>
       <CompetitionSelect save={save} competitionId={competitionId} />
-      <CompetitionTabs careerId={save.id} level={level} competitionId={competitionId} />
-      <DivisionTabs save={save} level={level} league={league} />
+      <CompetitionTabs
+        careerId={save.id}
+        level={level}
+        competitionId={competitionId}
+        cup={season.bracket !== undefined}
+      />
+      {season.bracket ? null : <DivisionTabs save={save} level={level} league={league} />}
       <Results
         key={level}
         save={save}

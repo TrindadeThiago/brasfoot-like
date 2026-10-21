@@ -40,6 +40,11 @@ type EventInput = MatchEvent extends infer E
     : never
   : never;
 
+/** Substituições permitidas: o limite da partida e mais uma na prorrogação (018). */
+export function substitutionCap(state: MatchState): number {
+  return state.input.substitutionLimit + (state.extraTime ? 1 : 0);
+}
+
 export function opponent(side: Side): Side {
   return side === "home" ? "away" : "home";
 }
@@ -229,7 +234,7 @@ function playChance(
     tuning.posture[state.teams[side].posture].own *
     tuning.posture[state.teams[other].posture].conceded;
   let push = 1;
-  if (clock.half === 2 && clock.minute >= tuning.trailingPush.fromMinute) {
+  if (clock.half >= 2 && clock.minute >= tuning.trailingPush.fromMinute) {
     if (state.score[side] < state.score[other]) push *= tuning.trailingPush.own;
     if (state.score[other] < state.score[side]) push *= tuning.trailingPush.conceded;
   }

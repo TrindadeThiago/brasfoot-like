@@ -1,7 +1,7 @@
 import { cloneState } from "./engine";
 import { type MatchError, matchError } from "./errors";
 import { FORMATIONS } from "./formations";
-import { emit, playerState } from "./minute";
+import { emit, playerState, substitutionCap } from "./minute";
 import type { MatchChange, MatchState, PositionMove, Side } from "./types";
 
 export type ChangeResult = { ok: true; state: MatchState } | { ok: false; error: MatchError };
@@ -16,8 +16,8 @@ function substitution(
   change: Extract<MatchChange, { type: "substitution" }>,
 ): ChangeResult {
   const team = state.teams[side];
-  if (team.substitutionsUsed >= state.input.substitutionLimit) {
-    return fail(matchError("change.limit_reached", { limit: state.input.substitutionLimit }, side));
+  if (team.substitutionsUsed >= substitutionCap(state)) {
+    return fail(matchError("change.limit_reached", { limit: substitutionCap(state) }, side));
   }
   // Quem sai está em campo, ou é o jogador de uma pendência (lesionado que já deixou o campo).
   const outSlot = Object.keys(team.onField).find((slot) => team.onField[slot] === change.out);

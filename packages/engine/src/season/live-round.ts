@@ -1,3 +1,4 @@
+import { deciderFor } from "../knockout/tie";
 import { slotValue } from "../match/auto-lineup";
 import { applyChange } from "../match/changes";
 import { advanceMatch, startMatch } from "../match/engine";
@@ -53,6 +54,11 @@ function isOver(state: MatchState): boolean {
 export function matchTicks(state: MatchState): number {
   if (state.status === "not_started") return 0;
   const { half, minute, stoppage } = state.clock;
+  const regulation = 90 + (state.stoppage.first ?? 0) + (state.stoppage.second ?? 0);
+  // Prorrogação (minutos 91–120, sem acréscimos) e pênaltis (um passo por cobrança), 018.
+  const kicks = state.shootout?.kicks.length ?? 0;
+  if (half >= 3) return regulation + (minute - 90) + kicks;
+  if (state.shootout) return regulation + kicks;
   if (half === 1) return minute + stoppage;
   return 45 + (state.stoppage.first ?? 0) + (minute - 45) + stoppage;
 }
@@ -76,7 +82,8 @@ export function startRound(
   const squads = squadsByClub(world);
   const matches: LiveMatch[] = [];
   for (const fixture of round.fixtures) {
-    const prepared = prepareFixture(season, fixture, squads, lineups);
+    const decider = fixture.tie ? deciderFor(world, season, fixture) : undefined;
+    const prepared = prepareFixture(season, fixture, squads, lineups, decider);
     if (!prepared.ok) return prepared;
     const started = startMatch(prepared.value.input);
     if (!started.ok) {

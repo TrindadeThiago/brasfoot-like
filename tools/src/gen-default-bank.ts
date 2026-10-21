@@ -16,7 +16,7 @@ const { values } = parseArgs({
 const seed = values.seed ?? DEFAULT_SEED;
 const outDir = values.out ? resolveUserPath(values.out) : join(REPO_ROOT, "mods", "default");
 
-const bank: ValidatedBank = generateDefaultBank({ seed });
+const bank: ValidatedBank = generateDefaultBank({ seed, cup: true });
 writeBankDir(outDir, bank);
 
 const shown = relative(REPO_ROOT, outDir);

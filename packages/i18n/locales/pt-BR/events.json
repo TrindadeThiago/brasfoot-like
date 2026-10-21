@@ -34,5 +34,14 @@
   "event.half_time.1": "Intervalo: {home} {homeScore} × {awayScore} {away}.",
   "event.second_half.1": "Começa o segundo tempo entre {home} e {away}.",
   "event.full_time.1": "Fim de jogo: {home} {homeScore} × {awayScore} {away}.",
-  "event.abandoned.1": "Partida encerrada: o {club} ficou com menos de 7 jogadores."
+  "event.abandoned.1": "Partida encerrada: o {club} ficou com menos de 7 jogadores.",
+  "event.extra_time_start.1": "Empatou no tempo normal: {home} e {away} vão à prorrogação.",
+  "event.extra_half_time.1": "Fim do primeiro tempo da prorrogação: {home} {homeScore} × {awayScore} {away}.",
+  "event.extra_time_end.1": "Fim da prorrogação: {home} {homeScore} × {awayScore} {away}.",
+  "event.shootout_start.1": "Segue empatado: a vaga será decidida nos pênaltis.",
+  "event.shootout_goal.1": "Pênalti {order}: {player} ({club}) converte!",
+  "event.shootout_saved.1": "Pênalti {order}: o goleiro defende a cobrança de {player} ({club})!",
+  "event.shootout_post.1": "Pênalti {order}: {player} ({club}) acerta a trave!",
+  "event.shootout_off.1": "Pênalti {order}: {player} ({club}) manda para fora!",
+  "event.shootout_end.1": "{club} vence nos pênaltis por {winnerScore} × {loserScore}."
 }

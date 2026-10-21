@@ -1,0 +1,38 @@
+.panel {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+}
+
+.panel h3 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-md);
+}
+
+.score {
+  margin: 0 0 var(--space-2);
+  font-weight: 600;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-1);
+}
+
+.kick {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.scored {
+  font-weight: 600;
+}
+
+.missed {
+  color: var(--color-muted);
+}

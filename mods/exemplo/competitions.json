@@ -135,5 +135,121 @@
       "startWeek": 0,
       "weekday": 6
     }
+  },
+  {
+    "countryId": "nrv",
+    "divisions": [
+      {
+        "clubIds": [
+          "clube-001",
+          "clube-002",
+          "clube-003",
+          "clube-004",
+          "clube-005",
+          "clube-006",
+          "clube-007",
+          "clube-008",
+          "clube-009",
+          "clube-010",
+          "clube-011",
+          "clube-012",
+          "clube-013",
+          "clube-014",
+          "clube-015",
+          "clube-016",
+          "clube-017",
+          "clube-018",
+          "clube-019",
+          "clube-020",
+          "clube-021",
+          "clube-022",
+          "clube-023",
+          "clube-024"
+        ],
+        "level": 1,
+        "name": "Copa Norvaliana",
+        "promotionSlots": 0,
+        "relegationSlots": 0
+      }
+    ],
+    "format": {
+      "entries": [
+        {
+          "clubIds": [
+            "clube-009",
+            "clube-006",
+            "clube-004",
+            "clube-003",
+            "clube-005",
+            "clube-012",
+            "clube-002",
+            "clube-010"
+          ],
+          "phase": 1
+        }
+      ],
+      "phases": [
+        {
+          "home": "division",
+          "legs": 1,
+          "name": "Primeira fase",
+          "prize": 60000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "home": "division",
+          "legs": 1,
+          "name": "Oitavas de final",
+          "prize": 90000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "home": "division",
+          "legs": 1,
+          "name": "Quartas de final",
+          "prize": 150000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "home": "draw",
+          "legs": 2,
+          "name": "Semifinal",
+          "prize": 250000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "gapWeeks": 1,
+          "home": "draw",
+          "legs": 1,
+          "name": "Final",
+          "neutral": true,
+          "prize": 500000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        }
+      ],
+      "type": "knockout"
+    },
+    "id": "copa-nacional",
+    "name": "Copa Norvaliana",
+    "schedule": {
+      "everyWeeks": 2,
+      "startWeek": 1,
+      "weekday": 3
+    }
   }
 ]

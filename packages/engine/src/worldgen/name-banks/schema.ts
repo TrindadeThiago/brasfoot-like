@@ -10,6 +10,8 @@ export const nameBankSchema = z.object({
   countryName: z.string().min(1).max(60),
   countryCode: z.string().regex(/^[A-Z]{3}$/),
   competitionName: z.string().min(1).max(80),
+  /** Nome da copa nacional (018); padrão "Copa Nacional". */
+  cupName: z.string().min(1).max(80).optional(),
   firstNames: names(200),
   surnames: names(200),
   cities: z.array(z.string().min(1).max(20)).refine((items) => items.length >= 60),

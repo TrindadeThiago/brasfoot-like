@@ -10,13 +10,14 @@ import { useT } from "../../../i18n";
 import { screenHref } from "../../../ui/AppHeader";
 import { Button } from "../../../ui/Button";
 import { Crest } from "../../../ui/Crest";
+import { CupHistory } from "../../../ui/cup/CupHistory";
 import { type Column, DataTable } from "../../../ui/DataTable";
 import { OtherCompetitions } from "../../../ui/history/OtherCompetitions";
 import { ClubHistory, Records, Scorers, Titles } from "../../../ui/history/WorldHistory";
 import styles from "./page.module.css";
 
-type Tab = "seasons" | "titles" | "scorers" | "records" | "clubs";
-const TABS: readonly Tab[] = ["seasons", "titles", "scorers", "records", "clubs"];
+type Tab = "seasons" | "titles" | "scorers" | "records" | "clubs" | "cups";
+const TABS: readonly Tab[] = ["seasons", "titles", "scorers", "records", "clubs", "cups"];
 
 function historyHref(careerId: string, number: number): string {
   return `${screenHref("/jogo/historico", careerId)}&t=${number}`;
@@ -184,6 +185,8 @@ function History({ save }: { save: SaveFile }) {
   const requested = Number(params?.get("t"));
   const entry = save.history.find((item) => item.number === requested);
   const [tab, setTab] = useState<Tab>("seasons");
+  const hasCup = save.bank.competitions.some((item) => item.format.type === "knockout");
+  const tabs = TABS.filter((name) => name !== "cups" || hasCup);
   if (entry) {
     return (
       <div className={styles.layout}>
@@ -196,7 +199,7 @@ function History({ save }: { save: SaveFile }) {
     <div className={styles.layout}>
       <h2 className="screen-title">{t("history.title")}</h2>
       <div role="tablist" aria-label={t("history.tablist")} className={styles.tabs}>
-        {TABS.map((name) => (
+        {tabs.map((name) => (
           <Button
             key={name}
             role="tab"
@@ -213,6 +216,7 @@ function History({ save }: { save: SaveFile }) {
       {tab === "scorers" ? <Scorers save={save} /> : null}
       {tab === "records" ? <Records save={save} /> : null}
       {tab === "clubs" ? <ClubHistory save={save} /> : null}
+      {tab === "cups" ? <CupHistory save={save} /> : null}
       <Link href={`${screenHref("/jogo/carreira", save.id)}&aba=history`}>
         {t("history.managerLink")}
       </Link>

@@ -121,3 +121,14 @@ export function at<T>(items: readonly T[], index: number): T {
   }
   return item;
 }
+
+/** Formato de liga da competição (falha se for outro): os testes de liga editam pontos e desempates. */
+export function leagueFormatOf(competition: { format: { type: string } }): {
+  type: "league";
+  rounds: number;
+  points: { win: number; draw: number; loss: number };
+  tiebreakers: string[];
+} {
+  if (competition.format.type !== "league") throw new Error("a competição não é uma liga");
+  return competition.format as never;
+}

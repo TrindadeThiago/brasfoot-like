@@ -7,6 +7,7 @@ import { GameLayout } from "../../../game/GameLayout";
 import { formatDate, formatWeekday, useT } from "../../../i18n";
 import { Button } from "../../../ui/Button";
 import { Crest } from "../../../ui/Crest";
+import { phaseLabel } from "../../../ui/cup/phase";
 import { type Column, DataTable } from "../../../ui/DataTable";
 import { DerbyBadge } from "../../../ui/fans/DerbyBadge";
 import styles from "./page.module.css";
@@ -57,7 +58,8 @@ export default function CalendarPage() {
           {
             key: "round",
             header: t("col.round"),
-            render: (fixture) => fixture.round,
+            render: (fixture) =>
+              phaseLabel(save, fixture.competitionId, fixture.round) ?? fixture.round,
             sortValue: (fixture) => fixture.round,
             align: "right",
           },

@@ -18,6 +18,7 @@ export function exampleBank() {
     seed: EXAMPLE_SEED,
     names,
     divisionSize: 12,
+    cup: true,
     slots: 2,
     divisionNames: ["Primeira Divisão", "Segunda Divisão"],
     manifest: {

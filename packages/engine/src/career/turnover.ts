@@ -25,6 +25,7 @@ import {
   payPrizes,
   paySponsorship,
 } from "../finance/turnover";
+import { cupEntry, cupSeasonOf } from "../knockout/history";
 import {
   ageOutFreeAgentsStep,
   expireContractsStep,
@@ -101,12 +102,16 @@ const recordHistory: TurnoverStep = {
         nextComposition(context.finished, context.world),
       ),
     ],
-    // As competições secundárias guardam o próprio histórico (017 FR-034).
+    // As competições secundárias guardam o próprio histórico (017 FR-034); as copas, o delas (018).
     competitionHistory: [
       ...(context.competitionHistory ?? []),
-      ...(context.finishedCompetitions ?? []).map((league) =>
-        competitionEntry(league, context.world),
-      ),
+      ...(context.finishedCompetitions ?? [])
+        .filter((league) => !cupSeasonOf(league))
+        .map((league) => competitionEntry(league, context.world)),
+    ],
+    cupHistory: [
+      ...(context.cupHistory ?? []),
+      ...(context.finishedCompetitions ?? []).flatMap((league) => cupEntry(league) ?? []),
     ],
   }),
 };
@@ -172,6 +177,11 @@ const generateCalendars: TurnoverStep = {
       [context.finished.competitionId]: carry,
     };
     for (const league of context.finishedCompetitions ?? []) {
+      if (cupSeasonOf(league)) {
+        // A copa recomeça do zero com novo sorteio; só as lesões passam (018).
+        statuses[league.competitionId] = carry;
+        continue;
+      }
       compositions[league.competitionId] = nextComposition(league, context.world).composition;
       // Lesões valem para todas as competições; os cartões recomeçam.
       statuses[league.competitionId] = carry;
@@ -331,6 +341,7 @@ export function seasonTurnover(
     ...(options.competitions ? { finishedCompetitions: options.competitions } : {}),
     ...(options.calendar ? { finishedCalendar: options.calendar } : {}),
     ...(options.competitionHistory ? { competitionHistory: [...options.competitionHistory] } : {}),
+    ...(options.cupHistory ? { cupHistory: [...options.cupHistory] } : {}),
   };
   try {
     for (const step of resolved.steps) context = step.run(context);
@@ -366,5 +377,6 @@ export function seasonTurnover(
     ...(context.competitions ? { competitions: context.competitions } : {}),
     ...(context.calendar ? { calendar: context.calendar } : {}),
     ...(context.competitionHistory ? { competitionHistory: context.competitionHistory } : {}),
+    ...(context.cupHistory ? { cupHistory: context.cupHistory } : {}),
   };
 }

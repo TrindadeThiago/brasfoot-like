@@ -2,6 +2,8 @@ import { coachOf } from "../board/coaches";
 import { divisionExpectations } from "../board/goals";
 import type { BoardState } from "../board/types";
 import { clubDivision } from "../career/league";
+import type { CupEvent } from "../knockout/events";
+import { knockoutFormat } from "../knockout/rules";
 import { marketValue } from "../market/value";
 import type { MatchRecord, Season } from "../season/types";
 import { clinched } from "./clinched";
@@ -9,7 +11,7 @@ import { type Fact, matchFacts, matchKey, streakOf } from "./facts";
 import { compare as compareHeadlines, rankFeed } from "./feed";
 import { type RecordCandidate, updateRecords } from "./records";
 import { newsRules } from "./rules";
-import type { Headline, NewsContext, NewsState } from "./types";
+import type { Headline, HeadlineType, NewsContext, NewsState } from "./types";
 import { variantOf } from "./variants";
 
 function clone<T>(value: T): T {
@@ -353,6 +355,83 @@ export function newsAfterExtraMatches(
   for (const headline of added) {
     if (headlines.some((entry) => entry.id === headline.id)) continue;
     const index = headlines.findLastIndex((entry) => !entry.mine);
+    if (index >= 0) headlines[index] = headline;
+  }
+  headlines.sort(compareHeadlines);
+  news.feed = [
+    ...news.feed.filter((feed) => !(feed.season === season && feed.round === round)),
+    { season, year: context.league.year, round, headlines },
+  ];
+  return news;
+}
+
+/**
+ * Manchetes de copa do dia (018 R13): zebra (clube de divisão mais baixa elimina um de divisão mais
+ * alta), eliminação, chegada à final e título do clube do jogador. Não altera a entrada.
+ */
+export function newsAfterCup(
+  context: NewsContext,
+  events: readonly CupEvent[],
+  competitionId: string,
+  round: number,
+): NewsState {
+  if (events.length === 0) return context.news;
+  const rules = newsRules(context.world, context.league.competitionId);
+  const format = knockoutFormat(context.world, competitionId);
+  const mainLevels = new Map<string, number>();
+  const main = context.world.competitions.find((entry) => entry.format.type === "league");
+  for (const division of main?.divisions ?? []) {
+    for (const clubId of division.clubIds) mainLevels.set(clubId, division.level);
+  }
+  const season = context.league.number;
+  const news = clone(context.news);
+  const entry = news.feed.find((feed) => feed.season === season && feed.round === round);
+  const existing = entry?.headlines ?? [];
+  const mine = context.managerClubId;
+  const added: Headline[] = [];
+  const add = (
+    type: HeadlineType,
+    event: CupEvent,
+    clubId: string,
+    opponentId: string,
+    phaseName: string,
+  ): void => {
+    const isMine = clubId === mine || opponentId === mine;
+    added.push({
+      id: `${season}-${round}-c${existing.length + added.length}`,
+      type,
+      relevance: rules.relevance[type] + (isMine ? rules.mineBonus : 0),
+      variant: variantOf(
+        rules,
+        context.careerSeed,
+        `${season}:${competitionId}:${event.tie}:${clubId}`,
+        type,
+      ),
+      clubIds: [clubId, opponentId],
+      vars: { club: clubId, opponent: opponentId, phase: phaseName, competition: competitionId },
+      mine: isMine,
+    });
+  };
+  for (const event of events) {
+    const phaseName = format.phases[event.phase]?.name ?? "";
+    if (event.kind === "title") {
+      add("cupChampion", event, event.clubId, event.opponentId, phaseName);
+      continue;
+    }
+    const winnerLevel = mainLevels.get(event.opponentId) ?? 1;
+    const loserLevel = mainLevels.get(event.clubId) ?? 1;
+    if (winnerLevel > loserLevel) add("cupUpset", event, event.opponentId, event.clubId, phaseName);
+    if (event.clubId === mine)
+      add("cupElimination", event, event.clubId, event.opponentId, phaseName);
+    if (event.phase === event.phases - 2) {
+      const next = format.phases[event.phase + 1]?.name ?? "";
+      add("cupFinal", event, event.opponentId, event.clubId, next);
+    }
+  }
+  const headlines = rankFeed(rules, [...existing, ...added]);
+  for (const headline of added) {
+    if (!headline.mine || headlines.some((item) => item.id === headline.id)) continue;
+    const index = headlines.findLastIndex((item) => !item.mine);
     if (index >= 0) headlines[index] = headline;
   }
   headlines.sort(compareHeadlines);

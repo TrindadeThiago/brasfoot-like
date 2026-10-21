@@ -1,6 +1,6 @@
 import type { Competition, ModPackage } from "../../src/model/types";
 import type { IssueCode, IssueParams, Section } from "../../src/validation/issues";
-import { at, makeValidBank, removeField, setRaw } from "../helpers/build-bank";
+import { at, leagueFormatOf, makeValidBank, removeField, setRaw } from "../helpers/build-bank";
 
 export interface RuleCase {
   code: IssueCode;
@@ -29,6 +29,50 @@ function cup(bank: ModPackage, clubIds: string[], schedule: Competition["schedul
   };
   bank.competitions.push(extra);
   return extra;
+}
+
+/** Copa de teste (018): 8 clubes, quartas, semifinal e final; `edit` monta cada variante inválida. */
+function knockoutCup(bank: ModPackage, edit: (copa: Competition) => void): void {
+  const main = at(bank.competitions, 0);
+  const phase = (name: string) => ({
+    name,
+    legs: 1 as const,
+    tiebreakers: ["penalties" as const],
+    home: "draw" as const,
+    prize: 0,
+  });
+  const copa: Competition = {
+    id: "copa",
+    countryId: main.countryId,
+    name: "Copa de Teste",
+    format: { type: "knockout", phases: [phase("Quartas"), phase("Semifinal"), phase("Final")] },
+    divisions: [
+      {
+        level: 1,
+        name: "Chave",
+        clubIds: [
+          "clube-1",
+          "clube-2",
+          "clube-3",
+          "clube-4",
+          "clube-5",
+          "clube-6",
+          "clube-7",
+          "clube-8",
+        ],
+        promotionSlots: 0,
+        relegationSlots: 0,
+      },
+    ],
+    schedule: { weekday: 3, startWeek: 1, everyWeeks: 2 },
+  };
+  edit(copa);
+  bank.competitions.push(copa);
+}
+
+function knockoutOf(copa: Competition) {
+  if (copa.format.type !== "knockout") throw new Error("não é copa");
+  return copa.format;
 }
 
 const division = (bank: ModPackage, index: number) => at(at(bank.competitions, 0).divisions, index);
@@ -158,7 +202,7 @@ export const RULE_CASES: RuleCase[] = [
     code: "format.points_order",
     description: "empate valendo o mesmo que vitória",
     mutate: (bank) => {
-      at(bank.competitions, 0).format.points = { win: 1, draw: 1, loss: 0 };
+      leagueFormatOf(at(bank.competitions, 0)).points = { win: 1, draw: 1, loss: 0 };
     },
     expect: {
       section: "competitions",
@@ -171,7 +215,7 @@ export const RULE_CASES: RuleCase[] = [
     code: "format.duplicate_tiebreaker",
     description: "critério de desempate repetido",
     mutate: (bank) => {
-      at(bank.competitions, 0).format.tiebreakers = ["wins", "wins"];
+      leagueFormatOf(at(bank.competitions, 0)).tiebreakers = ["wins", "wins"];
     },
     expect: {
       section: "competitions",
@@ -326,6 +370,128 @@ export const RULE_CASES: RuleCase[] = [
       path: [1, "schedule"],
       entityId: "copa",
       params: { competitionId: "copa", needed: 57, available: 52 },
+    },
+  },
+  {
+    code: "knockout.phase_count",
+    description: "copa com 7 clubes: a primeira fase não fecha",
+    mutate: (bank) =>
+      knockoutCup(bank, (copa) => {
+        at(copa.divisions, 0).clubIds.pop();
+      }),
+    expect: {
+      section: "competitions",
+      path: [1, "divisions", 0, "clubIds"],
+      entityId: "copa",
+      params: { phase: 1, count: 7, delta: 1 },
+    },
+  },
+  {
+    code: "knockout.entry_phase",
+    description: "entrada numa fase que não existe",
+    mutate: (bank) =>
+      knockoutCup(bank, (copa) => {
+        copa.format = { ...knockoutOf(copa), entries: [{ phase: 5, clubIds: [] }] };
+      }),
+    expect: {
+      section: "competitions",
+      path: [1, "format", "entries", 0, "phase"],
+      entityId: "copa",
+      params: { phase: 5, phases: 3 },
+    },
+  },
+  {
+    code: "knockout.entry_duplicate",
+    description: "o mesmo clube em duas entradas",
+    mutate: (bank) =>
+      knockoutCup(bank, (copa) => {
+        copa.format = {
+          ...knockoutOf(copa),
+          entries: [
+            { phase: 1, clubIds: ["clube-1"] },
+            { phase: 2, clubIds: ["clube-1"] },
+          ],
+        };
+      }),
+    expect: {
+      section: "competitions",
+      path: [1, "format", "entries", 1, "clubIds", 0],
+      entityId: "copa",
+      params: { clubId: "clube-1" },
+    },
+  },
+  {
+    code: "knockout.entry_not_participant",
+    description: "entrada de clube que não está na divisão da copa",
+    mutate: (bank) =>
+      knockoutCup(bank, (copa) => {
+        at(copa.divisions, 0).clubIds.pop();
+        copa.format = { ...knockoutOf(copa), entries: [{ phase: 1, clubIds: ["clube-8"] }] };
+      }),
+    expect: {
+      section: "competitions",
+      path: [1, "format", "entries", 0, "clubIds", 0],
+      entityId: "copa",
+      params: { clubId: "clube-8" },
+    },
+  },
+  {
+    code: "knockout.no_decider",
+    description: "fase sem pênaltis como último critério",
+    mutate: (bank) =>
+      knockoutCup(bank, (copa) => {
+        const format = knockoutOf(copa);
+        copa.format = {
+          ...format,
+          phases: format.phases.map((phase, index) =>
+            index === 1 ? { ...phase, tiebreakers: ["extra-time"] } : phase,
+          ),
+        };
+      }),
+    expect: {
+      section: "competitions",
+      path: [1, "format", "phases", 1, "tiebreakers"],
+      entityId: "copa",
+      params: { phase: 2 },
+    },
+  },
+  {
+    code: "knockout.neutral_two_legs",
+    description: "campo neutro numa fase de ida e volta",
+    mutate: (bank) =>
+      knockoutCup(bank, (copa) => {
+        const format = knockoutOf(copa);
+        copa.format = {
+          ...format,
+          phases: format.phases.map((phase, index) =>
+            index === 1 ? { ...phase, legs: 2, neutral: true } : phase,
+          ),
+        };
+      }),
+    expect: {
+      section: "competitions",
+      path: [1, "format", "phases", 1, "neutral"],
+      entityId: "copa",
+      params: { phase: 2 },
+    },
+  },
+  {
+    code: "knockout.single_division",
+    description: "copa com duas divisões",
+    mutate: (bank) =>
+      knockoutCup(bank, (copa) => {
+        const [first] = copa.divisions;
+        if (!first) return;
+        copa.divisions = [
+          { ...first, clubIds: first.clubIds.slice(0, 4) },
+          { ...first, level: 2, name: "Outra", clubIds: first.clubIds.slice(4) },
+        ];
+      }),
+    expect: {
+      section: "competitions",
+      path: [1, "divisions"],
+      entityId: "copa",
+      params: { divisions: 2 },
     },
   },
   {

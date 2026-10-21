@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { createCareer, t } from "./helpers";
+import { createCareer, simulateSeason, t } from "./helpers";
 
 test("finanças: preço com estimativa, rodada em casa, crédito, obra e histórico na temporada seguinte", async ({
   page,
@@ -31,7 +31,7 @@ test("finanças: preço com estimativa, rodada em casa, crédito, obra e histór
     .click();
   await expect(stadium.getByText(/Obra em andamento/)).toBeVisible();
 
-  for (let round = 1; round <= 38; round++) await page.keyboard.press("d");
+  await simulateSeason(page);
   await expect(page).toHaveURL(/fim-de-temporada/);
   await expect(page.getByText(/Premiação recebida/)).toBeVisible();
   await page.getByRole("button", { name: t("seasonEnd.next") }).click();

@@ -5,6 +5,7 @@ import { emit, type MatchContext, newPlayerState, onFieldCount, playMinute } fro
 import { registerPending, resolvePending } from "./pending";
 import { matchResult } from "./result";
 import { type ClockKey, minuteRng } from "./rng";
+import { startShootout, takeKick } from "./shootout";
 import { stoppageFor } from "./stoppage";
 import { MATCH_TUNING } from "./tuning";
 import type { MatchInput, MatchResult, MatchState, Side, TeamState } from "./types";
@@ -70,6 +71,17 @@ export function cloneState(state: MatchState): MatchState {
     teams: { home: cloneTeam(state.teams.home), away: cloneTeam(state.teams.away) },
     events: [...state.events],
     possession: { ...state.possession },
+    ...(state.regulationScore ? { regulationScore: { ...state.regulationScore } } : {}),
+    ...(state.shootout
+      ? {
+          shootout: {
+            ...state.shootout,
+            order: { home: [...state.shootout.order.home], away: [...state.shootout.order.away] },
+            kicks: [...state.shootout.kicks],
+            score: { ...state.shootout.score },
+          },
+        }
+      : {}),
   };
 }
 
@@ -98,6 +110,11 @@ function checkAbandonment(state: MatchState, clock: ClockKey): boolean {
 
 function nextClock(state: MatchState): ClockKey {
   const { half, minute, stoppage } = state.clock;
+  if (state.status === "extra_first_half") {
+    return { half: 3, minute: half === 3 ? minute + 1 : 91, stoppage: 0 };
+  }
+  if (state.status === "extra_half_time") return { half: 4, minute: 106, stoppage: 0 };
+  if (state.status === "extra_second_half") return { half: 4, minute: minute + 1, stoppage: 0 };
   if (state.status === "not_started") return { half: 1, minute: 1, stoppage: 0 };
   if (state.status === "half_time") return { half: 2, minute: 46, stoppage: 0 };
   const end = half === 1 ? 45 : 90;
@@ -105,9 +122,75 @@ function nextClock(state: MatchState): ClockKey {
   return { half, minute, stoppage: stoppage + 1 };
 }
 
+/** Quem avança pelo agregado (gols e, se valer, gols fora) depois do placar atual, se alguém. */
+function aggregateLeader(
+  state: MatchState,
+): { winner: Side; by: "aggregate" | "away-goals" } | undefined {
+  const decider = state.input.decider;
+  if (!decider) return undefined;
+  const home = decider.before.home.goals + state.score.home;
+  const away = decider.before.away.goals + state.score.away;
+  if (home !== away) return { winner: home > away ? "home" : "away", by: "aggregate" };
+  if (decider.awayGoals) {
+    const homeAway = decider.before.home.awayGoals;
+    const awayAway = decider.before.away.awayGoals + state.score.away;
+    if (homeAway !== awayAway) {
+      return { winner: homeAway > awayAway ? "home" : "away", by: "away-goals" };
+    }
+  }
+  return undefined;
+}
+
+/** Fim dos 90 minutos de um jogo com `decider`: decide, joga a prorrogação ou vai aos pênaltis. */
+function endRegulation(state: MatchState, context: MatchContext): void {
+  const decider = state.input.decider;
+  if (!decider) {
+    state.status = "finished";
+    return;
+  }
+  const leader = aggregateLeader(state);
+  if (leader) {
+    state.decision = { by: leader.by, winner: leader.winner };
+    state.status = "finished";
+    return;
+  }
+  if (decider.extraTime) {
+    state.regulationScore = { ...state.score };
+    state.extraTime = true;
+    emit(state, state.clock, { type: "extra_time_start" });
+    state.status = "extra_first_half";
+    return;
+  }
+  startShootout(state, context.root);
+}
+
+/** Fim da prorrogação: decide pelo agregado ou vai aos pênaltis. */
+function endExtraTime(state: MatchState, context: MatchContext): void {
+  emit(state, state.clock, { type: "extra_time_end" });
+  const leader = aggregateLeader(state);
+  if (leader) {
+    const regulation = state.regulationScore ?? { home: 0, away: 0 };
+    state.decision = {
+      by: "extra-time",
+      winner: leader.winner,
+      extraTimeScore: {
+        home: state.score.home - regulation.home,
+        away: state.score.away - regulation.away,
+      },
+    };
+    state.status = "finished";
+    return;
+  }
+  startShootout(state, context.root);
+}
+
 /** Um passo do relógio: um minuto regulamentar ou de acréscimo, com as transições de tempo. */
 function tick(state: MatchState, context: MatchContext): void {
   if (isOver(state)) return;
+  if (state.status === "penalties") {
+    takeKick(state, context.root);
+    return;
+  }
   const clock = nextClock(state);
 
   if (state.status === "not_started") {
@@ -116,6 +199,8 @@ function tick(state: MatchState, context: MatchContext): void {
   } else if (state.status === "half_time") {
     emit(state, { half: 2, minute: 45, stoppage: 0 }, { type: "second_half" });
     state.status = "second_half";
+  } else if (state.status === "extra_half_time") {
+    state.status = "extra_second_half";
   }
 
   resolvePending(state, context, clock);
@@ -125,20 +210,32 @@ function tick(state: MatchState, context: MatchContext): void {
   state.clock = { ...clock };
   if (checkAbandonment(state, clock)) return;
 
-  const end = clock.half === 1 ? 45 : 90;
+  if (clock.half >= 3) {
+    // Prorrogação: dois tempos de 15 minutos, sem acréscimos (018 R8).
+    if (clock.half === 3 && clock.minute === 105) {
+      emit(state, clock, { type: "extra_half_time" });
+      state.status = "extra_half_time";
+    } else if (clock.half === 4 && clock.minute === 120) {
+      endExtraTime(state, context);
+    }
+    return;
+  }
+
+  const half = clock.half as 1 | 2;
+  const end = half === 1 ? 45 : 90;
   if (clock.minute !== end) return;
-  const key = clock.half === 1 ? "first" : "second";
+  const key = half === 1 ? "first" : "second";
   if (state.stoppage[key] === undefined) {
-    const rng = minuteRng(context.root, { half: clock.half, minute: end, stoppage: 0 }, "stoppage");
-    state.stoppage[key] = stoppageFor(state.events, clock.half, rng);
+    const rng = minuteRng(context.root, { half, minute: end, stoppage: 0 }, "stoppage");
+    state.stoppage[key] = stoppageFor(state.events, half, rng);
   }
   if (clock.stoppage >= (state.stoppage[key] ?? 0)) {
-    if (clock.half === 1) {
+    if (half === 1) {
       emit(state, clock, { type: "half_time" });
       state.status = "half_time";
     } else {
       emit(state, clock, { type: "full_time" });
-      state.status = "finished";
+      endRegulation(state, context);
     }
   }
 }

@@ -41,6 +41,15 @@ export function RoundResults({ round, records, clubs, clubId, rivalries }: Round
               </span>
               <span className={styles.score}>
                 {record.score.home} × {record.score.away}
+                {record.decision?.shootout ? (
+                  <small>
+                    {" "}
+                    {t("cup.result.penalties", {
+                      home: record.decision.shootout.score.home,
+                      away: record.decision.shootout.score.away,
+                    })}
+                  </small>
+                ) : null}
               </span>
               {/* O selo fica na célula do visitante: a linha mantém 3 colunas e o placar centrado. */}
               <span className={`${styles.team} ${styles.away}`}>

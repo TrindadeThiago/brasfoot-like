@@ -1,12 +1,32 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { advanceCareerSeason, createSave } from "@brasfoot-like/save";
+import { completeCareerDay } from "@brasfoot-like/engine";
+import {
+  advanceCareerSeason,
+  createSave,
+  isCareerSeasonOver,
+  type SaveFile,
+  seasonStateOf,
+  withDayResult,
+} from "@brasfoot-like/save";
 import { describe, expect, it } from "vitest";
-import { playRounds } from "../../save/test/helpers";
 import { readModPackage, writeModPackage } from "../src";
 import { DEFAULT_MOD, EXAMPLE_MOD, modBank } from "./fixtures";
 
 const PUBLIC_ZIP = join(import.meta.dirname, "../../../apps/web/public/mods/exemplo.zip");
+
+/** Joga a temporada inteira dia a dia (liga e copa), com a escalação do jogador. */
+function playSeason(start: SaveFile): SaveFile {
+  let save = start;
+  while (!isCareerSeasonOver(save)) {
+    const result = completeCareerDay(seasonStateOf(save), save.seed, save.clubId, undefined, {
+      [save.clubId]: save.lineup,
+    });
+    if (!result.ok) throw new Error(JSON.stringify(result.error));
+    save = withDayResult(save, result.state);
+  }
+  return save;
+}
 
 describe("mod de exemplo (015 US3, critério de aceite 2, SC-003)", () => {
   const example = modBank(EXAMPLE_MOD);
@@ -33,7 +53,7 @@ describe("mod de exemplo (015 US3, critério de aceite 2, SC-003)", () => {
       defaultBank: example,
     });
     if (!created.ok) throw new Error(JSON.stringify(created.error));
-    const end = playRounds(created.save, 100);
+    const end = playSeason(created.save);
     const turned = advanceCareerSeason(end, "2026-10-20T00:00:00.000Z");
     if (!turned.ok) throw new Error("virada");
     expect(turned.save.history).toHaveLength(end.history.length + 1);

@@ -7,12 +7,22 @@ import { useDivision } from "../../../game/useDivision";
 import { useT } from "../../../i18n";
 import { CompetitionSelect } from "../../../ui/CompetitionSelect";
 import { CompetitionTabs } from "../../../ui/CompetitionTabs";
+import { Bracket } from "../../../ui/cup/Bracket";
 import { DivisionTabs } from "../../../ui/DivisionTabs";
 import { StandingsTable } from "../../../ui/StandingsTable";
 
 function Standings({ save }: { save: SaveFile }) {
   const t = useT();
   const { competitionId, league, level, season } = useDivision(save);
+  if (season.bracket) {
+    return (
+      <>
+        <CompetitionSelect save={save} competitionId={competitionId} />
+        <CompetitionTabs careerId={save.id} level={level} competitionId={competitionId} cup />
+        <Bracket save={save} season={season} />
+      </>
+    );
+  }
   return (
     <>
       <CompetitionSelect save={save} competitionId={competitionId} />

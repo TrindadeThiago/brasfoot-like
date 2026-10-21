@@ -1,5 +1,5 @@
 import { MATCH_TUNING } from "./tuning";
-import type { MatchResult, MatchState, Side, TeamStats } from "./types";
+import type { MatchDecision, MatchResult, MatchState, Side, TeamStats } from "./types";
 
 function teamStats(state: MatchState, side: Side, possession: number): TeamStats {
   const stats: TeamStats = {
@@ -41,11 +41,23 @@ function finalScore(state: MatchState): Record<Side, number> {
   return { [loser]: 0, [winner]: minimum } as Record<Side, number>;
 }
 
+/** Quem avançou num jogo com `decider`; partida abandonada vale o placar atribuído. */
+function decisionOf(state: MatchState): MatchDecision | undefined {
+  if (state.decision) return state.decision;
+  const decider = state.input.decider;
+  if (!decider || state.status !== "abandoned") return undefined;
+  const score = finalScore(state);
+  const home = decider.before.home.goals + score.home;
+  const away = decider.before.away.goals + score.away;
+  return { by: "aggregate", winner: home >= away ? "home" : "away" };
+}
+
 /** Resultado de uma partida encerrada (FR-031, FR-032). */
 export function matchResult(state: MatchState): MatchResult {
   if (state.status !== "finished" && state.status !== "abandoned") {
     throw new Error(`a partida ainda não terminou (status ${state.status})`);
   }
+  const decision = decisionOf(state);
   const { home, total } = state.possession;
   const homePossession = total === 0 ? 50 : Math.round((100 * home) / total);
   return {
@@ -57,5 +69,6 @@ export function matchResult(state: MatchState): MatchResult {
       away: teamStats(state, "away", 100 - homePossession),
     },
     players: { ...state.teams.home.players, ...state.teams.away.players },
+    ...(decision ? { decision } : {}),
   };
 }

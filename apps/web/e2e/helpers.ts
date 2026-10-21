@@ -75,3 +75,20 @@ export async function simulate(page: Page, times: number): Promise<void> {
     await expect(page.getByText(/rodada \d+ de 38/)).not.toHaveText(before ?? "");
   }
 }
+
+/**
+ * Simula a temporada inteira (liga e copa) com o atalho "d", até a tela de fim de temporada. Os
+ * dias de copa não mudam a rodada da liga no cabeçalho, então espera o botão voltar a ficar livre.
+ */
+export async function simulateSeason(page: Page): Promise<void> {
+  for (let day = 0; day < 140; day++) {
+    if (/fim-de-temporada/.test(page.url())) return;
+    await page.keyboard.press("d");
+    await page.waitForTimeout(100);
+    if (/fim-de-temporada/.test(page.url())) return;
+    const button = page.getByRole("button", { name: t("home.simulate") });
+    // Fora da Início não há botão: um respiro basta para a simulação do dia terminar.
+    if ((await button.count()) > 0) await expect(button).toBeEnabled();
+    else await page.waitForTimeout(250);
+  }
+}

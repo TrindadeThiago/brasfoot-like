@@ -21,6 +21,7 @@ import { formatDate, useT } from "../../../i18n";
 import type { RoundSpeed } from "../../../storage/preferences";
 import { screenHref } from "../../../ui/AppHeader";
 import { Button } from "../../../ui/Button";
+import { ShootoutPanel } from "../../../ui/cup/ShootoutPanel";
 import { EventFeed } from "../../../ui/EventFeed";
 import { clockText, eventText } from "../../../ui/event-text";
 import { LiveGrid } from "../../../ui/LiveGrid";
@@ -33,7 +34,7 @@ import styles from "./page.module.css";
 
 type Game = ReturnType<typeof useGame>;
 
-const ANNOUNCED = new Set(["shot", "red_card", "injury"]);
+const ANNOUNCED = new Set(["shot", "red_card", "injury", "shootout_kick"]);
 
 function LiveRoundView({
   initial,
@@ -129,6 +130,20 @@ function LiveRoundView({
                 )
               : round.applyDecision(change)
           }
+        />
+      ) : null}
+      {mine?.match.state.extraTime ? (
+        <p role="status" className={styles.notice}>
+          {t("cup.extraTimeNotice")}
+        </p>
+      ) : null}
+      {mine?.match.state.shootout ? (
+        <ShootoutPanel
+          save={save}
+          home={mine.match.sides.home}
+          away={mine.match.sides.away}
+          kicks={mine.match.state.shootout.kicks}
+          score={mine.match.state.shootout.score}
         />
       ) : null}
       <div className={styles.board}>

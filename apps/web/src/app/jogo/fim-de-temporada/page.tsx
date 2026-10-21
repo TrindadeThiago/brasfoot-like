@@ -1,6 +1,6 @@
 "use client";
 
-import { competitionEntry } from "@brasfoot-like/engine";
+import { competitionEntry, cupEntry, cupSeasonOf } from "@brasfoot-like/engine";
 import { isCareerSeasonOver, type SaveFile } from "@brasfoot-like/save";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,6 +12,7 @@ import { useT } from "../../../i18n";
 import { screenHref } from "../../../ui/AppHeader";
 import { Button } from "../../../ui/Button";
 import { Evaluation } from "../../../ui/board/Evaluation";
+import { CupResult } from "../../../ui/cup/CupHistory";
 import { OtherCompetitions } from "../../../ui/history/OtherCompetitions";
 import { SeasonSummary } from "../../../ui/SeasonSummary";
 import { useShortcuts } from "../../../ui/useShortcuts";
@@ -47,7 +48,13 @@ function SeasonEnd({ save, game }: { save: SaveFile; game: Game }) {
       <SeasonSummary save={save} summary={summary} />
       <OtherCompetitions
         save={save}
-        entries={save.competitions.map((league) => competitionEntry(league, save.bank))}
+        entries={save.competitions
+          .filter((league) => !cupSeasonOf(league))
+          .map((league) => competitionEntry(league, save.bank))}
+      />
+      <CupResult
+        save={save}
+        entries={save.competitions.flatMap((league) => cupEntry(league) ?? [])}
       />
       <div className={styles.actions}>
         <Button variant="primary" onClick={() => void next()} disabled={state === "busy"}>

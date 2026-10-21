@@ -8,8 +8,10 @@ import {
   advanceCareer,
   advanceLeague,
   advanceSeason,
+  type Competition,
   completeCareerDay,
   joinBankFiles,
+  type ModPackage,
   type Season,
   type SeasonStep,
 } from "@brasfoot-like/engine";
@@ -26,21 +28,34 @@ import {
 export const SERIE_A = (competitions[0]?.divisions[0]?.clubIds ?? []) as string[];
 export const SERIE_B = (competitions[0]?.divisions[1]?.clubIds ?? []) as string[];
 
-export function defaultBank(): unknown {
+function bankFiles(withCup: boolean): unknown {
   return joinBankFiles({
     "mod.json": mod,
     "countries.json": countries,
-    "competitions.json": competitions,
+    // Os testes antigos da liga seguem sem a copa (018 T026): ela entra só em `defaultBankWithCup`.
+    "competitions.json": withCup
+      ? competitions
+      : competitions.filter((competition) => competition.format.type !== "knockout"),
     "clubs.json": clubs,
     "players.json": players,
     "rivalries.json": rivalries,
   });
 }
 
+/** Banco padrão sem a copa: o mundo da liga, idêntico ao de antes da 018. */
+export function defaultBank(): unknown {
+  return bankFiles(false);
+}
+
+/** Banco padrão como é distribuído, com a copa nacional. */
+export function defaultBankWithCup(): unknown {
+  return bankFiles(true);
+}
+
 const cached = new Map<string, SaveFile>();
 
 /** Campos criados pela 017 (versão 12): as fixtures de versões antigas não os têm. */
-type V12Fields = "competitions" | "calendar" | "fitness" | "competitionHistory";
+type V12Fields = "competitions" | "calendar" | "fitness" | "competitionHistory" | "cupHistory";
 
 /** Save atual sem os campos da v12, a base das fixtures de versões antigas. */
 function legacySave(): Omit<SaveFile, V12Fields> {
@@ -49,6 +64,7 @@ function legacySave(): Omit<SaveFile, V12Fields> {
     calendar: _calendar,
     fitness: _fitness,
     competitionHistory: _history,
+    cupHistory: _cups,
     ...rest
   } = validSave();
   return rest;
@@ -225,6 +241,7 @@ export function withoutMarket<T extends { bank: { players: { contract?: unknown 
     calendar: _calendar,
     fitness: _fitness,
     competitionHistory: _competitionHistory,
+    cupHistory: _cupHistory,
     ...rest
   } = save as T & {
     market?: unknown;
@@ -236,6 +253,7 @@ export function withoutMarket<T extends { bank: { players: { contract?: unknown 
     calendar?: unknown;
     fitness?: unknown;
     competitionHistory?: unknown;
+    cupHistory?: unknown;
   };
   return {
     ...rest,
@@ -419,10 +437,64 @@ export function saveV11(step: SaveV11Step = { rounds: 0 }): SaveV11 {
       calendar: _calendar,
       fitness: _fitness,
       competitionHistory: _history,
+      cupHistory: _cups,
       ...rest
     } = playedCurrentSave(step);
     save = { ...rest, formatVersion: 11 };
     v11Cache.set(key, save);
   }
   return JSON.parse(JSON.stringify(save)) as SaveV11;
+}
+
+/** Save no formato da 017 (versão 12): sem o histórico de copas. */
+export type SaveV12 = Omit<SaveFile, "cupHistory" | "formatVersion"> & { formatVersion: 12 };
+
+const v12Cache = new Map<string, SaveV12>();
+
+export function saveV12(step: SaveV11Step = { rounds: 0 }): SaveV12 {
+  const key = JSON.stringify(step);
+  let save = v12Cache.get(key);
+  if (!save) {
+    const { formatVersion: _version, cupHistory: _cups, ...rest } = playedCurrentSave(step);
+    save = { ...rest, formatVersion: 12 };
+    v12Cache.set(key, save);
+  }
+  return JSON.parse(JSON.stringify(save)) as SaveV12;
+}
+
+/** Banco padrão com uma copa de 16 clubes (8 de cada divisão), quartas a cada 2 semanas (018). */
+export function bankWithCup(): ModPackage {
+  const bank = JSON.parse(JSON.stringify(defaultBank())) as ModPackage;
+  const main = bank.competitions[0] as Competition;
+  const pick = (index: number) => [...(main.divisions[index]?.clubIds ?? [])].sort().slice(0, 8);
+  const single = {
+    legs: 1 as const,
+    tiebreakers: ["extra-time", "penalties"] as ("extra-time" | "penalties")[],
+    home: "ranking" as const,
+  };
+  bank.competitions.push({
+    id: "copa-teste",
+    countryId: main.countryId,
+    name: "Copa de Teste",
+    format: {
+      type: "knockout",
+      phases: [
+        { name: "Oitavas", ...single, prize: 100_000 },
+        { name: "Quartas", ...single, prize: 200_000 },
+        { name: "Semifinal", ...single, legs: 2, home: "draw", prize: 400_000 },
+        { name: "Final", ...single, home: "draw", neutral: true, prize: 800_000 },
+      ],
+    },
+    divisions: [
+      {
+        level: 1,
+        name: "Chave",
+        clubIds: [...pick(0), ...pick(1)],
+        promotionSlots: 0,
+        relegationSlots: 0,
+      },
+    ],
+    schedule: { weekday: 3, startWeek: 1, everyWeeks: 2 },
+  });
+  return bank;
 }

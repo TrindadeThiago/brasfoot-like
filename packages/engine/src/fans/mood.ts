@@ -1,5 +1,6 @@
 import { currentPosition, divisionExpectations, expectationOf } from "../board/goals";
 import { clubDivision } from "../career/league";
+import type { CupEvent } from "../knockout/events";
 import { standings } from "../season/standings";
 import type { MatchRecord } from "../season/types";
 import { idolEvents } from "./idols";
@@ -200,6 +201,42 @@ export function fansAfterExtraMatches(
       }
       club.mood = value;
     }
+  }
+  return next;
+}
+
+/**
+ * Humor depois de eliminações e do título numa copa (018 R13): a eliminação pesa mais nas fases
+ * adiantadas e o título anima a torcida. Só o clube do técnico guarda o motivo recente.
+ */
+export function fansAfterCup(
+  context: FansContext,
+  events: readonly CupEvent[],
+  round: number,
+  managerClubId: string,
+): FansState {
+  if (events.length === 0) return context.fans;
+  const rules = fansRules(context.world, context.league.competitionId);
+  const next = clone(context.fans);
+  for (const event of events) {
+    const club = next.clubs[event.clubId];
+    if (!club) continue;
+    const kind: MoodFactor = event.kind === "title" ? "cupTitle" : "cupOut";
+    const amount = event.kind === "title" ? rules.cupTitle : -rules.cupOut * (event.phase + 1);
+    const value = clamp(club.mood + amount, 0, 100);
+    if (event.clubId === managerClubId) {
+      club.recent = [
+        ...club.recent,
+        {
+          season: context.league.number,
+          round,
+          delta: value - club.mood,
+          value,
+          factors: [{ kind, amount }],
+        },
+      ].slice(-rules.keepRecent);
+    }
+    club.mood = value;
   }
   return next;
 }

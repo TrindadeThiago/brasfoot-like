@@ -36,13 +36,24 @@ export function scheduleOf(
   return scheduleOfCompetition(competition);
 }
 
-/** Datas das `rounds` primeiras rodadas de uma competição que joga na `schedule` (017 R1). */
-export function roundDates(schedule: CompetitionSchedule, start: string, rounds: number): string[] {
+/**
+ * Datas das `rounds` primeiras rodadas de uma competição que joga na `schedule` (017 R1). `gaps[i]`
+ * são semanas extras antes da rodada `i + 1` (e das seguintes), como o respiro antes da final da
+ * copa (018 R2).
+ */
+export function roundDates(
+  schedule: CompetitionSchedule,
+  start: string,
+  rounds: number,
+  gaps: readonly number[] = [],
+): string[] {
   const ahead = (schedule.weekday - weekdayOf(start) + 7) % 7;
   const first = addDays(start, ahead + schedule.startWeek * 7);
   const dates: string[] = [];
+  let extra = 0;
   for (let round = 0; round < rounds; round++) {
-    dates.push(addDays(first, round * schedule.everyWeeks * 7));
+    extra += gaps[round] ?? 0;
+    dates.push(addDays(first, (round * schedule.everyWeeks + extra) * 7));
   }
   return dates;
 }

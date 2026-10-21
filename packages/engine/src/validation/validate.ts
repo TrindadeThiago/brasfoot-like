@@ -4,6 +4,7 @@ import { SECTIONS, type ValidationIssue } from "./issues";
 import { checkCalendar } from "./semantic/calendar";
 import { checkCompetitions } from "./semantic/competitions";
 import { checkCountries } from "./semantic/countries";
+import { checkKnockout } from "./semantic/knockout";
 import { checkReferences } from "./semantic/references";
 import { checkRivalries } from "./semantic/rivalries";
 import { checkSquads } from "./semantic/squads";
@@ -19,6 +20,7 @@ const SEMANTIC_RULES: SemanticRule[] = [
   checkUniqueness,
   checkReferences,
   checkCompetitions,
+  checkKnockout,
   checkCalendar,
   checkCountries,
   checkSquads,

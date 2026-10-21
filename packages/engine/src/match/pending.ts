@@ -1,7 +1,7 @@
 import type { CompletedPlayer } from "../model/types";
 import { slotValue } from "./auto-lineup";
 import { slotPosition } from "./formations";
-import { emit, type MatchContext, playerState, type RemovalHook } from "./minute";
+import { emit, type MatchContext, playerState, type RemovalHook, substitutionCap } from "./minute";
 import type { ClockKey } from "./rng";
 import type { MatchState, PendingChange, Side } from "./types";
 
@@ -117,7 +117,7 @@ function resolveOne(
 ): void {
   const team = state.teams[side];
   const isGoal = slotPosition(team.formation, pending.slotId) === "GK";
-  const canSubstitute = team.substitutionsUsed < state.input.substitutionLimit;
+  const canSubstitute = team.substitutionsUsed < substitutionCap(state);
   const reserve = canSubstitute ? bestReserve(state, side, context, pending.slotId) : undefined;
 
   if (pending.reason === "injury") {

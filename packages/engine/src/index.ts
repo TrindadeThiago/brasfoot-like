@@ -219,6 +219,32 @@ export {
 } from "./fitness/fitness";
 export { DEFAULT_FITNESS, fitnessRules } from "./fitness/rules";
 export type { FitnessEntry, FitnessRules, FitnessState } from "./fitness/types";
+export {
+  createCupSeason,
+  drawReady,
+  ensurePhaseDrawn,
+  phaseParticipants,
+} from "./knockout/bracket";
+export type { DrawClub, DrawnPair, DrawRules } from "./knockout/draw";
+export { drawPhase } from "./knockout/draw";
+export type { CupHistoryEntry } from "./knockout/history";
+export { cupEntry, cupSeasonOf } from "./knockout/history";
+export {
+  DEFAULT_KNOCKOUT,
+  knockoutFormat,
+  phaseOfRound,
+  phaseRounds,
+  totalLegs,
+} from "./knockout/rules";
+export {
+  cupChampion,
+  cupReached,
+  deciderFor,
+  phaseDecided,
+  phaseWinners,
+  tieState,
+} from "./knockout/tie";
+export type { Bracket, BracketPhase, Tie, TieDecidedBy, TieState } from "./knockout/types";
 export * from "./lineup";
 export type { ClubNeeds, PositionNeed } from "./market/ai/needs";
 export { clubNeeds, STARTERS_BY_POSITION } from "./market/ai/needs";
@@ -314,15 +340,19 @@ export { MATCH_REALISM_LIMITS } from "./match/limits";
 export type { MatchMetrics, MetricCheck } from "./match/metrics";
 export { checkRealism, createMetricsAccumulator } from "./match/metrics";
 export { matchResult } from "./match/result";
+export { penaltyChance, shootoutOrder, shootoutProgress } from "./match/shootout";
 export type { TeamStrength } from "./match/strength";
 export { teamStrength } from "./match/strength";
 export { MATCH_TUNING } from "./match/tuning";
 export type {
+  Decider,
   InjurySeverity,
   Lineup,
   MatchChange,
   MatchClock,
+  MatchDecision,
   MatchEvent,
+  MatchHalf,
   MatchInput,
   MatchResult,
   MatchState,
@@ -330,6 +360,9 @@ export type {
   PendingChange,
   PlayerMatchState,
   PositionMove,
+  ShootoutKick,
+  ShootoutOutcome,
+  ShootoutState,
   ShotKind,
   ShotOutcome,
   Side,
@@ -339,6 +372,8 @@ export type {
 } from "./match/types";
 export {
   CREST_SHAPES,
+  KNOCKOUT_HOME_RULES,
+  KNOCKOUT_TIEBREAKERS,
   POSITIONS,
   RESERVED_FORMAT_TYPES,
   SUPPORTED_FORMAT_VERSIONS,
@@ -358,6 +393,10 @@ export type {
   CrestShape,
   Division,
   HiddenAttributes,
+  KnockoutEntry,
+  KnockoutFormat,
+  KnockoutPhase,
+  LeagueFormat,
   Manifest,
   ModPackage,
   Player,

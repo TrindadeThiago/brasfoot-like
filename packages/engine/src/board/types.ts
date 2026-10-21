@@ -45,6 +45,9 @@ export const CONFIDENCE_FACTORS = [
   "derbyDraw",
   "derbyLoss",
   "fans",
+  "cupOut",
+  "cupTitle",
+  "cupGoal",
 ] as const;
 export type ConfidenceFactor = (typeof CONFIDENCE_FACTORS)[number];
 

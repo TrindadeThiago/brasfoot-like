@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { validateBank } from "../../src/validation/validate";
-import { at, makeValidBank, setRaw } from "../helpers/build-bank";
+import { at, leagueFormatOf, makeValidBank, setRaw } from "../helpers/build-bank";
 
 describe("vários defeitos (SC-004)", () => {
   it("N defeitos independentes produzem N erros, em ordem determinística", () => {
     const bank = makeValidBank();
     at(bank.countries, 0).code = "tst";
-    at(bank.competitions, 0).format.tiebreakers = ["wins", "wins"];
+    leagueFormatOf(at(bank.competitions, 0)).tiebreakers = ["wins", "wins"];
     at(bank.clubs, 2).abbreviation = "AAA";
     at(bank.clubs, 5).stadiumCapacity = 10;
     at(bank.players, 20).strength = 0;

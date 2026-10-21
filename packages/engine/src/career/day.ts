@@ -1,8 +1,9 @@
 import { managerClubOf } from "../board/create";
-import { boardAfterExtraMatches } from "../board/round";
+import { boardAfterCup, boardAfterExtraMatches } from "../board/round";
 import type { CalendarSlot } from "../calendar/season-calendar";
-import { fansAfterExtraMatches } from "../fans/mood";
+import { fansAfterCup, fansAfterExtraMatches } from "../fans/mood";
 import {
+  applyCupPrizes,
   applyExtraGates,
   applyRoundSystems,
   type CareerBoard,
@@ -15,9 +16,12 @@ import {
 import type { FinanceState } from "../finance/types";
 import { fitnessAfterMatches, worldWithFitness } from "../fitness/fitness";
 import { fitnessRules } from "../fitness/rules";
+import { drawReady } from "../knockout/bracket";
+import { type CupEnd, type CupEvent, cupEnd, cupEvents } from "../knockout/events";
+import { cupPrizes } from "../knockout/prizes";
 import type { Lineup } from "../match/types";
 import type { CompletedBank } from "../model/types";
-import { newsAfterExtraMatches } from "../news/round";
+import { newsAfterCup, newsAfterExtraMatches } from "../news/round";
 import type { SeasonError } from "../season/errors";
 import { finishRound, type LiveRound } from "../season/live-round";
 import type { MatchRecord, SeasonStep } from "../season/types";
@@ -66,7 +70,18 @@ function playsIn(
 function slotSeason(state: CareerSeasonState, slot: CalendarSlot): LeagueSeason {
   const season = competitionSeason(state, slot.competitionId);
   if (slot.competitionId === state.league.competitionId) return season;
-  return syncInjuries(state.league, season, state.world, clubsInRound(season, slot.round));
+  return drawn(
+    syncInjuries(state.league, season, state.world, clubsInRound(season, slot.round)),
+    state.world,
+  );
+}
+
+/** Copa: sorteia as fases prontas (idempotente); as demais competições não mudam (018 R4). */
+function drawn(league: LeagueSeason, world: CompletedBank): LeagueSeason {
+  const season = league.divisions[0];
+  if (!season?.bracket) return league;
+  const ready = drawReady(season, world);
+  return ready === season ? league : { ...league, divisions: [ready] };
 }
 
 /** Slot do dia em que o clube joga, se jogar. */
@@ -172,7 +187,7 @@ export function completeCareerDay(
     }
     const completed = completeLeagueRound(season, next.world, round);
     if (!completed.ok) return completed;
-    next = withLeague(next, completed.league);
+    next = withLeague(next, drawn(completed.league, next.world));
     if (slot.competitionId !== state.league.competitionId) {
       // As lesões novas e o desconto do jogo voltam para a principal.
       const clubs = clubsInRound(completed.league, slot.round);
@@ -223,7 +238,8 @@ function afterExtraMatches(
   const round = Math.max(1, leagueRound(state.league) - 1);
   const manager = currentManager(state, managerClubId);
   // A bilheteria usa o humor de antes do jogo.
-  const finances = applyExtraGates(state.finances, state.league, state.world, matches, state.fans);
+  const gated = applyExtraGates(state.finances, state.league, state.world, matches, state.fans);
+  const finances = withCupPrizes(state, gated, matches);
   let next: CareerSeasonState = { ...state, finances };
   if (next.fans) {
     next = {
@@ -253,6 +269,36 @@ function afterExtraMatches(
       ),
     };
   }
+  const cup = cupFacts(next, matches);
+  if (next.fans && cup.events.length > 0) {
+    next = {
+      ...next,
+      fans: fansAfterCup(
+        { world: next.world, league: next.league, finances, fans: next.fans },
+        cup.events,
+        round,
+        manager,
+      ),
+    };
+  }
+  if (next.board && (cup.events.length > 0 || cup.ends.length > 0)) {
+    next = {
+      ...next,
+      board: boardAfterCup(
+        {
+          world: next.world,
+          league: next.league,
+          finances,
+          board: next.board,
+          careerSeed,
+          ...(next.fans ? { fans: next.fans } : {}),
+        },
+        cup.events,
+        cup.ends[0],
+        round,
+      ),
+    };
+  }
   if (next.news) {
     next = {
       ...next,
@@ -269,7 +315,63 @@ function afterExtraMatches(
       ),
     };
   }
+  if (next.news) {
+    for (const [competitionId, events] of cup.byCompetition) {
+      next = {
+        ...next,
+        news: newsAfterCup(
+          {
+            world: next.world,
+            league: next.league,
+            news: next.news as NonNullable<typeof next.news>,
+            careerSeed,
+            managerClubId: manager,
+          },
+          events,
+          competitionId,
+          round,
+        ),
+      };
+    }
+  }
   return next;
+}
+
+/** Eliminações, títulos e fim das copas nos jogos do dia (018 R13). */
+function cupFacts(
+  state: CareerSeasonState,
+  matches: readonly DayMatch[],
+): { events: CupEvent[]; ends: CupEnd[]; byCompetition: [string, CupEvent[]][] } {
+  const events: CupEvent[] = [];
+  const ends: CupEnd[] = [];
+  const byCompetition: [string, CupEvent[]][] = [];
+  for (const league of state.competitions) {
+    const season = league.divisions[0];
+    if (!season?.bracket) continue;
+    const own = cupEvents(state.world, season, matches);
+    events.push(...own);
+    if (own.length > 0) byCompetition.push([league.competitionId, own]);
+    const end = cupEnd(state.world, season, matches);
+    if (end) ends.push(end);
+  }
+  return { events, ends, byCompetition };
+}
+
+/** Prêmios dos confrontos de copa decididos nos jogos do dia (018 R12). */
+function withCupPrizes(
+  state: CareerSeasonState,
+  finances: FinanceState,
+  matches: readonly DayMatch[],
+): FinanceState {
+  const prizes = state.competitions.flatMap((league) => {
+    const season = league.divisions[0];
+    if (!season?.bracket) return [];
+    return cupPrizes(state.world, season, matches).map((prize) => ({
+      ...prize,
+      competitionId: league.competitionId,
+    }));
+  });
+  return applyCupPrizes(finances, state.league, prizes);
 }
 
 /** O clube do técnico: com diretoria, pode mudar no meio do avanço (demissão). */

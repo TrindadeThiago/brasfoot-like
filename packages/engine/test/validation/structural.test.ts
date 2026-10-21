@@ -121,14 +121,14 @@ describe("erros estruturais", () => {
 
   it("formato de disputa reservado ⇒ format.unsupported sem erros derivados", () => {
     const bank = makeValidBank();
-    setRaw(at(bank.competitions, 0), "format", { type: "knockout", legs: 2 });
+    setRaw(at(bank.competitions, 0), "format", { type: "groups", legs: 2 });
     expect(errorsOf(bank)).toEqual([
       expect.objectContaining({
         code: "format.unsupported",
         section: "competitions",
         path: [0, "format", "type"],
         entityId: "liga",
-        params: { type: "knockout" },
+        params: { type: "groups" },
       }),
     ]);
   });

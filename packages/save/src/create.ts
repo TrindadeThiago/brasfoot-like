@@ -104,6 +104,7 @@ export function createSave(input: CreateSaveInput): CreateSaveResult {
       calendar: seasons.calendar,
       fitness: seasons.fitness,
       competitionHistory: [],
+      cupHistory: [],
       finances,
       renewal: initialRenewal(bank),
       market: emptyMarket(),

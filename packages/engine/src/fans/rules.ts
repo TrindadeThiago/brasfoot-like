@@ -33,6 +33,9 @@ export interface FansRules {
   titleBoost: number;
   promotionBoost: number;
   relegationDrop: number;
+  /** Copa (018): eliminação tira cupOut × (fase + 1); o título dá cupTitle. */
+  cupOut: number;
+  cupTitle: number;
   /** Limites das faixas: revoltada < [0] ≤ insatisfeita < [1] ≤ neutra ≤ [2] < animada ≤ [3] < eufórica. */
   bands: [number, number, number, number];
 }
@@ -61,6 +64,8 @@ export const DEFAULT_FANS: FansRules = {
   titleBoost: 10,
   promotionBoost: 10,
   relegationDrop: 10,
+  cupOut: 2,
+  cupTitle: 15,
   bands: [20, 40, 60, 80],
 };
 
