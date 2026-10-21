@@ -17,6 +17,8 @@ cadastro e funciona sem internet depois do primeiro acesso.
   temporada (evolução, aposentadoria e novos jogadores).
 - **Partidas:** rodada ao vivo com substituições ou simulação direta, tabela, artilharia e
   calendário.
+- **Copa nacional:** mata-mata com prorrogação e pênaltis ao vivo, chaveamento e histórico de
+  campeões; mods podem descrever copas só com dados.
 - **Clube:** escalação, finanças, estádio e ingressos.
 - **Mercado de transferências:** janelas, propostas, contratos e empréstimos, com a IA montando os
   elencos dos outros clubes.
