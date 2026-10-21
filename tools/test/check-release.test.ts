@@ -12,6 +12,7 @@ function fixture(edit?: (dir: string) => void): string {
   for (const file of ["sw.js", "precache.json", "vercel.json"])
     writeFileSync(join(dir, file), "{}");
   writeFileSync(join(dir, "manifest.webmanifest"), JSON.stringify({ name: "Treinador FC" }));
+  writeFileSync(join(dir, "version.json"), JSON.stringify({ version: "1.0.0" }));
   writeFileSync(
     join(dir, "index.html"),
     '<html><head><title>Treinador FC</title><script>localStorage.getItem("brasfoot-like:preferences")</script></head><body>Treinador FC</body></html>',
@@ -50,6 +51,17 @@ describe("check-release (016)", () => {
     expect(problems.join("\n")).toMatch(/vercel\.json/);
     expect(problems.join("\n")).toMatch(/capturas/);
     expect(problems.join("\n")).toMatch(/sobre\.html/);
+  });
+
+  it("falha sem version.json ou com outra versão nele (fonte do badge do README)", () => {
+    const missing = fixture((dir) => rmSync(join(dir, "version.json")));
+    expect(checkRelease({ ...base, outDir: missing }).join("\n")).toMatch(/version\.json/);
+    const stale = fixture((dir) =>
+      writeFileSync(join(dir, "version.json"), JSON.stringify({ version: "0.9.0" })),
+    );
+    expect(checkRelease({ ...base, outDir: stale })).toEqual([
+      "version.json diz 0.9.0, mas a versão é 1.0.0",
+    ]);
   });
 
   it("sem tag, só confere o resto", () => {

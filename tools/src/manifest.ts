@@ -1,6 +1,7 @@
 // Gera apps/web/out/manifest.webmanifest a partir das traduções (016 FR-038: o nome do jogo tem
-// uma fonte só, `app.name`). Roda no build, antes do precache.
-import { writeFileSync } from "node:fs";
+// uma fonte só, `app.name`) e apps/web/out/version.json com a versão do package.json da raiz
+// (lido pelo badge de versão do README). Roda no build, antes do precache.
+import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { formatUi } from "@brasfoot-like/i18n";
 import { REPO_ROOT } from "./fs-bank";
@@ -26,6 +27,10 @@ export function manifest() {
   };
 }
 
-const path = join(REPO_ROOT, "apps", "web", "out", "manifest.webmanifest");
-writeFileSync(path, `${JSON.stringify(manifest(), null, 2)}\n`);
-console.log("manifest.webmanifest gerado");
+const OUT = join(REPO_ROOT, "apps", "web", "out");
+writeFileSync(join(OUT, "manifest.webmanifest"), `${JSON.stringify(manifest(), null, 2)}\n`);
+const { version } = JSON.parse(readFileSync(join(REPO_ROOT, "package.json"), "utf8")) as {
+  version: string;
+};
+writeFileSync(join(OUT, "version.json"), `${JSON.stringify({ version })}\n`);
+console.log(`manifest.webmanifest e version.json (${version}) gerados`);
