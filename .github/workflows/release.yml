@@ -103,7 +103,7 @@ jobs:
           name: site
           path: apps/web/out/
       - name: Publicar na Vercel
-        run: npx --yes vercel@62.5.0 deploy apps/web/out --prod --yes --token "$VERCEL_TOKEN"
+        run: npx --yes vercel@63.1.2 deploy apps/web/out --prod --yes --token "$VERCEL_TOKEN"
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       - name: Notas da versão
