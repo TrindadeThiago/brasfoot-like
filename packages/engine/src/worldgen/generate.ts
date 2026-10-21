@@ -3,6 +3,7 @@ import type { Competition, Country, ModPackage, ValidatedBank } from "../model/t
 import { createRng } from "../rng/xoshiro";
 import { validateBank } from "../validation/validate";
 import { generateClubs } from "./clubs";
+import { generateCup } from "./cup";
 import defaultNameBank from "./name-banks/default.json" with { type: "json" };
 import { nameBankSchema } from "./name-banks/schema";
 import { generateSquad } from "./players";
@@ -21,6 +22,8 @@ export interface GenerateOptions {
   manifest?: { id: string; name: string; author: string; version: string };
   /** Nomes das divisões (padrão Série A e Série B). */
   divisionNames?: [string, string];
+  /** Inclui a copa nacional (018); padrão `false`, para não mudar os demais usos do gerador. */
+  cup?: boolean;
 }
 
 /**
@@ -108,7 +111,17 @@ export function generateDefaultBank(options: GenerateOptions): ValidatedBank {
       referenceDate,
     },
     countries: [country],
-    competitions: [competition],
+    competitions: [
+      competition,
+      ...(options.cup
+        ? [
+            generateCup("copa-nacional", names.cupName ?? "Copa Nacional", country.id, [
+              ...clubs.serieA.map((generated) => ({ ...generated.club, level: 1 })),
+              ...clubs.serieB.map((generated) => ({ ...generated.club, level: 2 })),
+            ]),
+          ]
+        : []),
+    ],
     clubs: allClubs.map((generated) => generated.club),
     players,
     // Rivalidades por regiões geradas (013 R2), com gerador próprio: os demais dados não mudam.

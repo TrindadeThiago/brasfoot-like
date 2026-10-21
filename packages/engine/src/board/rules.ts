@@ -60,6 +60,10 @@ export interface BoardRules {
   coachSpread: number;
   /** Resultado de clássico na confiança × (100 + intensidade × derbyPct) / 100 (013). */
   derbyPct: number;
+  /** Copa (018): eliminação tira cupOut × (fase + 1); título dá cupTitle; meta de copa ± cupGoal. */
+  cupOut: number;
+  cupTitle: number;
+  cupGoal: number;
 }
 
 export const DEFAULT_BOARD: BoardRules = {
@@ -110,6 +114,9 @@ export const DEFAULT_BOARD: BoardRules = {
   maxFreeCoaches: 20,
   coachSpread: 8,
   derbyPct: 40,
+  cupOut: 1,
+  cupTitle: 8,
+  cupGoal: 5,
 };
 
 /** Regras da diretoria: `competition.board` com os padrões preenchidos. */

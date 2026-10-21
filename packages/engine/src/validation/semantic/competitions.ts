@@ -7,6 +7,8 @@ const MAX_CLUBS = 40;
 
 function checkFormat(index: number, competition: Competition): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
+  // Copas têm as próprias regras de formato (validation/semantic/knockout.ts).
+  if (competition.format.type !== "league") return issues;
   const { points, tiebreakers } = competition.format;
   if (!(points.win > points.draw && points.draw >= points.loss)) {
     issues.push(

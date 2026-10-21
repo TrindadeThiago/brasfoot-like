@@ -103,3 +103,20 @@ export const MATCH_TUNING = {
   minimumPlayers: 7,
   abandonedScore: 3,
 } as const satisfies { traits: Record<string, number>; [key: string]: unknown };
+
+/** Disputa de pênaltis (018 R9): probabilidade de gol, tipos de falha e teto de segurança. */
+export const SHOOTOUT_TUNING = {
+  /** Chance de gol com cobrador e goleiro iguais. */
+  base: 0.75,
+  /** Variação por ponto de força do cobrador acima do goleiro. */
+  slope: 1 / 400,
+  min: 0.55,
+  max: 0.9,
+  /** Entre as falhas: defendido, trave (o resto é para fora). */
+  saved: 0.5,
+  post: 0.2,
+  /** Cobranças por lado depois das quais um sorteio determinístico encerra a disputa. */
+  capPerSide: 40,
+  /** Bônus de aptidão na ordem dos cobradores (o goleiro cobra por último). */
+  aptitude: { FW: 6, MF: 4, DM: 2, FB: 1, CB: 0, GK: -100 },
+} as const;

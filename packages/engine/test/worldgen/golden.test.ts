@@ -13,7 +13,7 @@ const MOD_DIR = join(import.meta.dirname, "..", "..", "..", "..", "mods", "defau
  * `pnpm gen:default-bank` e revise o diff.
  */
 describe("mods/default (golden)", () => {
-  const generated = splitBankFiles(generateDefaultBank({ seed: DEFAULT_SEED }));
+  const generated = splitBankFiles(generateDefaultBank({ seed: DEFAULT_SEED, cup: true }));
 
   it.each(Object.values(BANK_FILES))("%s é idêntico ao gerado", (file) => {
     expect(readFileSync(join(MOD_DIR, file), "utf8")).toBe(generated[file]);

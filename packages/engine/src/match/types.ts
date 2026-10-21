@@ -20,6 +20,19 @@ export interface TeamInput {
   unavailable?: string[];
 }
 
+/**
+ * Regra de decisão de um jogo eliminatório (018 R8): os gols dos jogos anteriores do confronto e
+ * os critérios que valem depois dos 90 minutos. Sem ela, a partida termina nos 90 minutos.
+ */
+export interface Decider {
+  /** Gols de cada lado nos jogos anteriores do confronto (`awayGoals`: os feitos fora de casa). */
+  before: Record<Side, { goals: number; awayGoals: number }>;
+  /** Gols fora de casa desempatam o agregado. */
+  awayGoals: boolean;
+  /** Joga a prorrogação se o agregado seguir empatado; senão vai direto aos pênaltis. */
+  extraTime: boolean;
+}
+
 export interface MatchInput {
   home: TeamInput;
   away: TeamInput;
@@ -27,6 +40,8 @@ export interface MatchInput {
   neutral?: boolean;
   substitutionLimit?: number;
   benchLimit?: number;
+  /** Jogo eliminatório decidido pelo motor (prorrogação e pênaltis). */
+  decider?: Decider;
 }
 
 /** Entrada com os valores padrão aplicados. */
@@ -36,8 +51,11 @@ export interface NormalizedMatchInput extends MatchInput {
   benchLimit: number;
 }
 
+/** Tempo da partida: 1 e 2 são os regulamentares, 3 e 4 os da prorrogação. */
+export type MatchHalf = 1 | 2 | 3 | 4;
+
 export interface MatchClock {
-  half: 1 | 2;
+  half: MatchHalf;
   minute: number;
   stoppage: number;
 }
@@ -47,6 +65,10 @@ export type MatchStatus =
   | "first_half"
   | "half_time"
   | "second_half"
+  | "extra_first_half"
+  | "extra_half_time"
+  | "extra_second_half"
+  | "penalties"
   | "finished"
   | "abandoned";
 
@@ -83,16 +105,45 @@ export interface TeamState {
 export type ShotKind = "open" | "header" | "counter" | "free_kick" | "penalty";
 export type ShotOutcome = "goal" | "saved" | "blocked" | "off_target";
 
+/** Resultado de uma cobrança de pênalti da disputa. */
+export type ShootoutOutcome = "goal" | "saved" | "post" | "off";
+
+export interface ShootoutKick {
+  /** Ordem da cobrança na disputa, a partir de 0. */
+  order: number;
+  side: Side;
+  playerId: string;
+  outcome: ShootoutOutcome;
+}
+
 interface EventBase {
   seq: number;
-  half: 1 | 2;
+  half: MatchHalf;
   minute: number;
   stoppage: number;
 }
 
 export type MatchEvent = EventBase &
   (
-    | { type: "kickoff" | "half_time" | "second_half" | "full_time" }
+    | {
+        type:
+          | "kickoff"
+          | "half_time"
+          | "second_half"
+          | "full_time"
+          | "extra_time_start"
+          | "extra_half_time"
+          | "extra_time_end"
+          | "shootout_start";
+      }
+    | {
+        type: "shootout_kick";
+        side: Side;
+        playerId: string;
+        outcome: ShootoutOutcome;
+        order: number;
+      }
+    | { type: "shootout_end"; winner: Side }
     | { type: "abandoned"; side: Side }
     | {
         type: "shot";
@@ -131,6 +182,25 @@ export interface PositionMove {
   toSlotId: string;
 }
 
+/** Disputa de pênaltis em andamento ou encerrada. */
+export interface ShootoutState {
+  /** Quem cobra primeiro. */
+  first: Side;
+  /** Cobradores de cada lado, em ordem (repete quando acaba). */
+  order: Record<Side, string[]>;
+  kicks: ShootoutKick[];
+  score: Record<Side, number>;
+}
+
+/** Como o jogo eliminatório foi decidido (018). */
+export interface MatchDecision {
+  by: "aggregate" | "away-goals" | "extra-time" | "penalties";
+  winner: Side;
+  /** Gols feitos só na prorrogação, quando houve. */
+  extraTimeScore?: Record<Side, number>;
+  shootout?: { kicks: ShootoutKick[]; score: Record<Side, number> };
+}
+
 export interface MatchState {
   input: NormalizedMatchInput;
   status: MatchStatus;
@@ -141,6 +211,12 @@ export interface MatchState {
   events: MatchEvent[];
   /** Soma das frações de posse do mandante por minuto e minutos jogados. */
   possession: { home: number; total: number };
+  /** Placar ao fim dos 90 minutos, guardado quando a partida segue para a prorrogação. */
+  regulationScore?: Record<Side, number>;
+  /** A prorrogação começou: o limite de substituições sobe em um. */
+  extraTime?: boolean;
+  shootout?: ShootoutState;
+  decision?: MatchDecision;
 }
 
 export type MatchChange =
@@ -164,4 +240,6 @@ export interface MatchResult {
   events: MatchEvent[];
   stats: Record<Side, TeamStats>;
   players: Record<string, PlayerMatchState>;
+  /** Presente nos jogos com `decider`: quem avançou e como. */
+  decision?: MatchDecision;
 }

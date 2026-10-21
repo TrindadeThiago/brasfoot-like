@@ -1,5 +1,6 @@
 import { isLeagueSeasonOver } from "../career/league";
 import { matchResultFor } from "../fans/mood";
+import type { CupEnd, CupEvent } from "../knockout/events";
 import { createRng } from "../rng/xoshiro";
 import type { MatchRecord } from "../season/types";
 import {
@@ -209,4 +210,57 @@ export function boardAfterExtraMatches(
     }
   }
   return board;
+}
+
+/**
+ * Confiança depois de eliminações e do título numa copa e da meta de copa (018 R13): a meta de copa
+ * sai da reputação do clube (fase esperada) e é avaliada quando a copa termina; só mexe na
+ * confiança (a demissão segue a avaliação da liga). Não altera a entrada.
+ */
+export function boardAfterCup(
+  context: BoardContext,
+  events: readonly CupEvent[],
+  end: CupEnd | undefined,
+  round: number,
+): BoardState {
+  if (events.length === 0 && !end) return context.board;
+  const rules = boardRules(context.world, context.league.competitionId);
+  const board = clone(context.board);
+  const managerClubId = board.manager.clubId ?? "";
+  const apply = (clubId: string, kind: "cupOut" | "cupTitle" | "cupGoal", amount: number): void => {
+    const club = board.clubs[clubId];
+    if (!club || amount === 0 || (club.coachId === null && clubId !== managerClubId)) return;
+    const value = Math.min(100, Math.max(0, club.confidence + amount));
+    if (clubId === managerClubId) {
+      club.recent = [
+        ...club.recent,
+        {
+          season: context.league.number,
+          round,
+          delta: value - club.confidence,
+          value,
+          factors: [{ kind, amount }],
+        },
+      ].slice(-rules.keepRecent);
+    }
+    club.confidence = value;
+  };
+  for (const event of events) {
+    if (event.kind === "title") apply(event.clubId, "cupTitle", rules.cupTitle);
+    else apply(event.clubId, "cupOut", -rules.cupOut * (event.phase + 1));
+  }
+  const reached = end?.reached[managerClubId];
+  if (end && reached !== undefined) {
+    const reputation =
+      context.world.clubs.find((club) => club.id === managerClubId)?.reputation ?? 0;
+    const expected = cupGoalPhase(reputation, end.phases);
+    apply(managerClubId, "cupGoal", reached >= expected ? rules.cupGoal : -rules.cupGoal);
+  }
+  return board;
+}
+
+/** Fase que a diretoria espera da copa (índice; o título vale `phases`), pela reputação. */
+export function cupGoalPhase(reputation: number, phases: number): number {
+  const fromFinal = reputation >= 75 ? 2 : reputation >= 55 ? 3 : 4;
+  return Math.max(0, phases - fromFinal);
 }

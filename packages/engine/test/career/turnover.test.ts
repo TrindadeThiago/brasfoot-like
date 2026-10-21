@@ -7,6 +7,7 @@ import { seasonTurnover, TURNOVER_STEP_IDS } from "../../src/career/turnover";
 import type { LeagueSeason, SeasonHistoryEntry } from "../../src/career/types";
 import { initialRenewal } from "../../src/renewal/measure";
 import { standings } from "../../src/season/standings";
+import { CUP_ID, cupBank } from "../fixtures/cup-bank";
 import { TOURNAMENT_ID, twoCompetitionsBank } from "../fixtures/two-competitions";
 import { MANAGER, newState } from "./day-helpers";
 import { newLeague, playedLeague, testWorld } from "./helpers";
@@ -249,5 +250,44 @@ describe("virada com outras competições (017 R11, FR-034)", () => {
   it("é determinística", () => {
     const state = finishedState();
     expect(turn(state)).toEqual(turn(state));
+  }, 120_000);
+});
+
+describe("virada com a copa (018 R11)", () => {
+  const SEED = "virada-copa";
+  const world = cupBank();
+
+  function finished() {
+    const played = advanceCareerDays(newState(world, SEED), { toEnd: true }, SEED, MANAGER);
+    if (!played.ok) throw new Error(JSON.stringify(played.error));
+    return played.state;
+  }
+
+  it("registra a edição no histórico de copas e cria a nova, sorteada e zerada", () => {
+    const state = finished();
+    const result = seasonTurnover(state.league, state.world, [], {
+      careerSeed: SEED,
+      competitions: state.competitions,
+      calendar: state.calendar,
+      competitionHistory: [],
+      cupHistory: [],
+    });
+    if (!result.ok) throw new Error(JSON.stringify(result.error));
+    expect(result.cupHistory).toHaveLength(1);
+    const entry = result.cupHistory?.[0];
+    expect(entry?.competitionId).toBe(CUP_ID);
+    expect(entry?.championId).not.toBe(entry?.runnerUpId);
+    expect(entry?.final.decidedBy).toBeDefined();
+    expect(Object.keys(entry?.reached ?? {})).toHaveLength(16);
+    // A copa não entra no histórico de ligas.
+    expect(result.competitionHistory).toEqual([]);
+    const next = result.competitions?.find((league) => league.competitionId === CUP_ID);
+    expect(next?.number).toBe(2);
+    const cup = next?.divisions[0];
+    expect(cup?.records).toEqual([]);
+    expect(cup?.nextRound).toBe(1);
+    expect(cup?.bracket?.phases[0]?.drawn).toBe(true);
+    expect(cup?.bracket?.phases[1]?.drawn).toBe(false);
+    expect(result.calendar?.start).toBe("2028-01-01");
   }, 120_000);
 });

@@ -38,6 +38,10 @@ const RELEVANCE: Record<HeadlineType, number> = {
   promotionClinched: 80,
   relegationConfirmed: 80,
   seasonSummary: 100,
+  cupUpset: 55,
+  cupElimination: 50,
+  cupFinal: 60,
+  cupChampion: 85,
 };
 
 const VARIANTS = Object.fromEntries(

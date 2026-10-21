@@ -1,6 +1,13 @@
 import { z } from "zod";
 import { parseIsoDate } from "../calendar/date";
-import { CREST_SHAPES, FORMAT_TYPES, POSITIONS, TIEBREAKERS, TRAITS } from "./catalogs";
+import {
+  CREST_SHAPES,
+  KNOCKOUT_HOME_RULES,
+  KNOCKOUT_TIEBREAKERS,
+  POSITIONS,
+  TIEBREAKERS,
+  TRAITS,
+} from "./catalogs";
 
 /**
  * Schemas Zod do formato de banco v1 (data-model.md). As regras de faixa, tamanho e formato
@@ -67,7 +74,7 @@ export const countrySchema = z.object({
 });
 
 export const leagueFormatSchema = z.object({
-  type: z.enum(FORMAT_TYPES),
+  type: z.literal("league"),
   rounds: intInRange(1, 4),
   points: z.object({
     win: intInRange(0, 10),
@@ -76,6 +83,36 @@ export const leagueFormatSchema = z.object({
   }),
   tiebreakers: list(z.enum(TIEBREAKERS), 1, TIEBREAKERS.length),
 });
+
+/** Fase de uma copa (018 R2): jogo único ou ida e volta, desempate, mando, sorteio e prêmio. */
+export const knockoutPhaseSchema = z.object({
+  name: text(1, 40),
+  legs: z.union([z.literal(1), z.literal(2)]),
+  tiebreakers: list(z.enum(KNOCKOUT_TIEBREAKERS), 1, KNOCKOUT_TIEBREAKERS.length),
+  neutral: z.boolean().optional(),
+  home: z.enum(KNOCKOUT_HOME_RULES),
+  seeded: z.boolean().optional(),
+  prize: intInRange(0, 1_000_000_000),
+  gapWeeks: intInRange(0, 8).optional(),
+  neutralCapacity: intInRange(1000, 150000).optional(),
+});
+
+/** Clubes que só entram na copa numa fase posterior à primeira. */
+export const knockoutEntrySchema = z.object({
+  phase: intInRange(1, 7),
+  clubIds: z.array(id),
+});
+
+export const knockoutFormatSchema = z.object({
+  type: z.literal("knockout"),
+  phases: list(knockoutPhaseSchema, 2, 8),
+  entries: z.array(knockoutEntrySchema).optional(),
+});
+
+export const competitionFormatSchema = z.discriminatedUnion("type", [
+  leagueFormatSchema,
+  knockoutFormatSchema,
+]);
 
 export const divisionSchema = z.object({
   level: intInRange(1, 99),
@@ -268,6 +305,9 @@ export const boardSchema = z
     maxFreeCoaches: intInRange(0, 200),
     coachSpread: intInRange(0, 100),
     derbyPct: intInRange(0, 200),
+    cupOut: intInRange(0, 100),
+    cupTitle: intInRange(0, 100),
+    cupGoal: intInRange(0, 100),
   })
   .partial();
 
@@ -293,6 +333,10 @@ const headlineMap = (max: number) =>
       promotionClinched: intInRange(0, max),
       relegationConfirmed: intInRange(0, max),
       seasonSummary: intInRange(0, max),
+      cupUpset: intInRange(0, max),
+      cupElimination: intInRange(0, max),
+      cupFinal: intInRange(0, max),
+      cupChampion: intInRange(0, max),
     })
     .partial();
 
@@ -340,6 +384,8 @@ export const fansSchema = z
     titleBoost: intInRange(0, 100),
     promotionBoost: intInRange(0, 100),
     relegationDrop: intInRange(0, 100),
+    cupOut: intInRange(0, 100),
+    cupTitle: intInRange(0, 100),
     bands: z.tuple([
       intInRange(0, 100),
       intInRange(0, 100),
@@ -379,7 +425,7 @@ export const competitionSchema = z.object({
   id,
   countryId: id,
   name: text(1, 80),
-  format: leagueFormatSchema,
+  format: competitionFormatSchema,
   divisions: list(divisionSchema, 1, 99),
   economy: economySchema.optional(),
   market: marketSchema.optional(),

@@ -1,5 +1,6 @@
+import type { Bracket } from "../knockout/types";
 import type { FormationId } from "../match/formations";
-import type { InjurySeverity, MatchEvent, Side, TeamStats } from "../match/types";
+import type { InjurySeverity, MatchDecision, MatchEvent, Side, TeamStats } from "../match/types";
 
 export interface DisciplineRules {
   yellowsForSuspension: number;
@@ -28,6 +29,10 @@ export interface Fixture {
   away: string;
   /** Seed da partida, derivada da seed da temporada (research.md R9). */
   seed: string;
+  /** Jogo de copa: o confronto e a perna (018). */
+  tie?: { phase: number; id: string; leg: 1 | 2; legs: 1 | 2 };
+  /** Campo neutro (a final da copa, 018). */
+  neutral?: boolean;
 }
 
 export interface Round {
@@ -73,6 +78,8 @@ export interface MatchRecord {
   stats: Record<Side, TeamStats>;
   players: Record<string, PlayerLine>;
   unavailable: Record<Side, Absence[]>;
+  /** Jogo eliminatório: quem avançou e como, com prorrogação e pênaltis (018). */
+  decision?: MatchDecision;
 }
 
 export interface SeasonWarning {
@@ -95,6 +102,8 @@ export interface Season {
   records: MatchRecord[];
   status: Record<string, PlayerStatus>;
   warnings: SeasonWarning[];
+  /** Chaveamento da copa; só nas competições eliminatórias (018). */
+  bracket?: Bracket;
 }
 
 export type SeasonStep = { rounds: number } | { toEnd: true };

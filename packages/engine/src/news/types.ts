@@ -23,6 +23,10 @@ export const HEADLINE_TYPES = [
   "promotionClinched",
   "relegationConfirmed",
   "seasonSummary",
+  "cupUpset",
+  "cupElimination",
+  "cupFinal",
+  "cupChampion",
 ] as const;
 export type HeadlineType = (typeof HEADLINE_TYPES)[number];
 

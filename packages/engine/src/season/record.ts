@@ -54,5 +54,6 @@ export function toMatchRecord(
     stats: result.stats,
     players,
     unavailable,
+    ...(result.decision ? { decision: result.decision } : {}),
   };
 }

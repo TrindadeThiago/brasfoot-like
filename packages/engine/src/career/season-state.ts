@@ -6,22 +6,30 @@ import {
   type CalendarCompetition,
   type CalendarDay,
   dayIndexAfter,
+  gapsOf,
   SEASON_DAYS,
   type SeasonCalendar,
 } from "../calendar/season-calendar";
 import type { FansState } from "../fans/types";
 import type { FinanceState } from "../finance/types";
 import type { FitnessState } from "../fitness/types";
+import { createCupSeason, drawReady } from "../knockout/bracket";
 import type { SeasonUnavailability } from "../lineup/types";
 import { clubUnavailability } from "../lineup/unavailability";
 import type { MarketState } from "../market/types";
-import type { CompletedBank } from "../model/types";
+import type { Competition, CompletedBank } from "../model/types";
 import type { NewsState } from "../news/types";
 import type { RenewalState } from "../renewal/types";
 import type { SeasonError } from "../season/errors";
 import type { Fixture, MatchRecord, PlayerStatus } from "../season/types";
 import { availabilitySeason } from "./injuries";
-import { clubDivision, createLeagueSeason, leagueRound, leagueTotalRounds } from "./league";
+import {
+  clubDivision,
+  createLeagueSeason,
+  leagueRound,
+  leagueSeasonSeed,
+  leagueTotalRounds,
+} from "./league";
 import type { LeagueSeason } from "./types";
 
 /**
@@ -128,6 +136,25 @@ export function createCareerSeason(
 ): CareerSeasonResult {
   const created: LeagueSeason[] = [];
   for (const [position, competition] of world.competitions.entries()) {
+    if (competition.format.type === "knockout") {
+      const number = options.number ?? 1;
+      const careerSeed = `${options.careerSeed}:${competition.id}`;
+      const seed = leagueSeasonSeed(careerSeed, number);
+      const cup = createCupSeason(world, {
+        competitionId: competition.id,
+        seed,
+        ...(options.statuses?.[competition.id] ? { status: options.statuses[competition.id] } : {}),
+      });
+      if (!cup.ok) return cup;
+      created.push({
+        competitionId: competition.id,
+        number,
+        year: options.year ?? Number(world.manifest.referenceDate.slice(0, 4)),
+        seed,
+        divisions: [drawReady(cup.season, world)],
+      });
+      continue;
+    }
     const result = createLeagueSeason(world, {
       competitionId: competition.id,
       careerSeed: position === 0 ? options.careerSeed : `${options.careerSeed}:${competition.id}`,
@@ -148,6 +175,7 @@ export function createCareerSeason(
     rounds: leagueTotalRounds(season),
     clubIds: [...new Set(season.divisions.flatMap((division) => division.clubIds))].sort(),
     schedule: scheduleOf(world, season.competitionId),
+    ...gapsOf(world.competitions.find((entry) => entry.id === season.competitionId) as Competition),
   }));
   const start = seasonDate(world.manifest.referenceDate, league.year);
   const built = buildSeasonCalendar(inputs, start);

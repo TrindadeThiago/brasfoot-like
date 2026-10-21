@@ -1,11 +1,13 @@
 import type { z } from "zod";
 import type {
   clubSchema,
+  competitionFormatSchema,
   competitionSchema,
   countrySchema,
   crestSchema,
   divisionSchema,
   hiddenAttributesSchema,
+  knockoutFormatSchema,
   leagueFormatSchema,
   manifestSchema,
   playerSchema,
@@ -16,7 +18,11 @@ export type { CrestShape, Position, Tiebreaker, Trait } from "./catalogs";
 
 export type Manifest = z.infer<typeof manifestSchema>;
 export type Country = z.infer<typeof countrySchema>;
-export type CompetitionFormat = z.infer<typeof leagueFormatSchema>;
+export type LeagueFormat = z.infer<typeof leagueFormatSchema>;
+export type KnockoutFormat = z.infer<typeof knockoutFormatSchema>;
+export type KnockoutPhase = KnockoutFormat["phases"][number];
+export type KnockoutEntry = NonNullable<KnockoutFormat["entries"]>[number];
+export type CompetitionFormat = z.infer<typeof competitionFormatSchema>;
 export type Division = z.infer<typeof divisionSchema>;
 export type Competition = z.infer<typeof competitionSchema>;
 export type Crest = z.infer<typeof crestSchema>;

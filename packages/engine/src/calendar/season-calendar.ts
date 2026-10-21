@@ -62,6 +62,8 @@ export interface CalendarCompetition {
   /** Clubes de todas as divisões, em ordem de id. */
   clubIds: readonly string[];
   schedule: CompetitionSchedule;
+  /** Semanas extras antes de cada rodada (o respiro antes da final da copa). */
+  gaps?: readonly number[];
 }
 
 export type CalendarIssue =
@@ -87,18 +89,40 @@ export function theoreticalRounds(clubCount: number, turns: number): number {
   return turns * (clubCount % 2 === 0 ? clubCount - 1 : clubCount);
 }
 
+/** Rodadas (datas) de uma competição: as da liga ou uma por perna de cada fase da copa. */
+function roundsOf(competition: Competition): number {
+  const { format } = competition;
+  if (format.type === "knockout") {
+    return format.phases.reduce((sum, phase) => sum + phase.legs, 0);
+  }
+  return Math.max(
+    0,
+    ...competition.divisions.map((division) =>
+      theoreticalRounds(division.clubIds.length, format.rounds),
+    ),
+  );
+}
+
+/** Respiros da copa: semanas extras antes da primeira rodada de cada fase com `gapWeeks`. */
+export function gapsOf(competition: Competition): { gaps?: number[] } {
+  const { format } = competition;
+  if (format.type !== "knockout" || format.phases.every((phase) => !phase.gapWeeks)) return {};
+  const gaps: number[] = [];
+  for (const phase of format.phases) {
+    gaps.push(phase.gapWeeks ?? 0);
+    for (let leg = 1; leg < phase.legs; leg++) gaps.push(0);
+  }
+  return { gaps };
+}
+
 /** Competições do banco no formato do calendário, na ordem do banco. */
 export function calendarCompetitions(competitions: readonly Competition[]): CalendarCompetition[] {
   return competitions.map((competition) => ({
     competitionId: competition.id,
-    rounds: Math.max(
-      0,
-      ...competition.divisions.map((division) =>
-        theoreticalRounds(division.clubIds.length, competition.format.rounds),
-      ),
-    ),
+    rounds: roundsOf(competition),
     clubIds: [...new Set(competition.divisions.flatMap((division) => division.clubIds))].sort(),
     schedule: scheduleOfCompetition(competition),
+    ...gapsOf(competition),
   }));
 }
 
@@ -119,7 +143,9 @@ export function buildSeasonCalendar(
 ): { ok: true; calendar: SeasonCalendar } | { ok: false; issues: CalendarIssue[] } {
   const end = addDays(start, SEASON_DAYS - 1);
   const issues: CalendarIssue[] = [];
-  const dates = competitions.map((entry) => roundDates(entry.schedule, start, entry.rounds));
+  const dates = competitions.map((entry) =>
+    roundDates(entry.schedule, start, entry.rounds, entry.gaps),
+  );
   competitions.forEach((entry, index) => {
     const mine = dates[index] ?? [];
     const last = mine.at(-1);

@@ -5,7 +5,10 @@ import { seasonTurnover } from "../../src/career/turnover";
 import { annualWageBill } from "../../src/finance/create";
 import { fitnessOn } from "../../src/fitness/fitness";
 import { DEFAULT_FITNESS } from "../../src/fitness/rules";
+import type { CompletedBank } from "../../src/model/types";
 import { spearman } from "../../src/season/credibility";
+import { generateDefaultBank } from "../../src/worldgen/generate";
+import { completeHiddenAttributes } from "../../src/worldgen/hidden";
 import { MANAGER, newState } from "../career/day-helpers";
 import { twoCompetitionsBank } from "../fixtures/two-competitions";
 
@@ -24,6 +27,8 @@ interface SeasonEnd {
   matches: number;
   meanFitness: number;
   doubleBooked: number;
+  /** Edições da copa registradas no histórico até esta virada (018). */
+  cupEditions: number;
   cash: Map<string, number>;
   crisis: number;
 }
@@ -55,10 +60,11 @@ function doubleBookings(state: CareerSeasonState): number {
   return count;
 }
 
-function simulate(seed: string): SeasonEnd[] {
-  let state = newState(twoCompetitionsBank(), seed, { systems: true });
+function simulate(world: CompletedBank, seed: string): SeasonEnd[] {
+  let state = newState(world, seed, { systems: true });
   let history = state.board ? [] : [];
   let competitionHistory: never[] = [];
+  let cupHistory: never[] = [];
   const ends: SeasonEnd[] = [];
   for (let season = 0; season < SEASONS; season++) {
     const doubleBooked = doubleBookings(state);
@@ -101,6 +107,7 @@ function simulate(seed: string): SeasonEnd[] {
       competitions: state.competitions,
       calendar: state.calendar,
       competitionHistory,
+      cupHistory,
     });
     if (!turned.ok || !turned.finances || !turned.competitions || !turned.calendar) {
       throw new Error(JSON.stringify(turned));
@@ -111,11 +118,13 @@ function simulate(seed: string): SeasonEnd[] {
       matches: matches.length,
       meanFitness: fitnessSamples.reduce((a, b) => a + b, 0) / fitnessSamples.length,
       doubleBooked,
+      cupEditions: (turned.cupHistory ?? []).length,
       cash: new Map(clubs.map((club) => [club.clubId, club.cash])),
       crisis: clubs.filter((club) => club.inCrisis).length,
     });
     history = turned.history as never;
     competitionHistory = turned.competitionHistory as never;
+    cupHistory = (turned.cupHistory ?? []) as never;
     state = {
       league: turned.league,
       competitions: turned.competitions,
@@ -139,7 +148,7 @@ describe.each(["calendario-1", "calendario-2"])(
     const world = twoCompetitionsBank();
     let ends: SeasonEnd[] = [];
     beforeAll(() => {
-      ends = simulate(seed);
+      ends = simulate(world, seed);
     }, 1_200_000);
 
     it("nenhum clube joga duas vezes no mesmo dia em nenhuma temporada", () => {
@@ -190,3 +199,51 @@ describe.each(["calendario-1", "calendario-2"])(
     });
   },
 );
+
+// 018 SC-003, SC-007: o banco padrão com a copa nacional, liga e copa por 10 temporadas.
+describe.each(["copa-1", "copa-2"])(`${SEASONS} temporadas com liga e copa (%s)`, (seed) => {
+  const world = completeHiddenAttributes(
+    generateDefaultBank({ seed: "brasfoot-like-default-1", cup: true }),
+    seed,
+  );
+  let ends: SeasonEnd[] = [];
+  beforeAll(() => {
+    ends = simulate(world, seed);
+  }, 1_800_000);
+
+  it("ninguém joga duas vezes no mesmo dia e toda edição da copa tem campeão no histórico", () => {
+    expect(ends).toHaveLength(SEASONS);
+    ends.forEach((end, index) => {
+      expect(end.doubleBooked).toBe(0);
+      expect(end.cupEditions).toBe(index + 1);
+    });
+  });
+
+  it("joga a liga e a copa inteiras (41 jogos de copa por temporada)", () => {
+    const league = ends[0]?.matches ?? 0;
+    for (const end of ends) expect(end.matches).toBe(league);
+    expect(league).toBeGreaterThan(41);
+  });
+
+  it("placares e condição física dentro dos limites", () => {
+    for (const end of ends) {
+      expect(end.goalsPerMatch).toBeGreaterThanOrEqual(GOALS_PER_MATCH.min);
+      expect(end.goalsPerMatch).toBeLessThanOrEqual(GOALS_PER_MATCH.max);
+      expect(end.meanFitness).toBeGreaterThanOrEqual(MIN_MEAN_PREMATCH_FITNESS);
+    }
+  });
+
+  it("economia dentro dos limites da 008", () => {
+    const clubIds = [...(ends[0]?.cash.keys() ?? [])].sort();
+    const wages = median(
+      clubIds.map((clubId) => annualWageBill(world, clubId, world.manifest.referenceDate)),
+    );
+    for (const end of ends) {
+      const cash = [...end.cash.values()];
+      expect(Math.max(...cash) - median(cash)).toBeLessThanOrEqual(
+        MAX_ABOVE_MEDIAN_IN_WAGE_BILLS * wages,
+      );
+      expect(1 - end.crisis / clubIds.length).toBeGreaterThanOrEqual(MIN_HEALTHY_SHARE_EACH_SEASON);
+    }
+  });
+});

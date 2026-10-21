@@ -15,6 +15,13 @@ function leagueFormat(
 ): { points: Points; tiebreakers: Tiebreaker[] } {
   const competition = world.competitions.find((entry) => entry.id === season.competitionId);
   if (!competition) throw new Error(`competição inexistente: ${season.competitionId}`);
+  // Uma copa não tem classificação por pontos; os padrões só evitam falhar se alguém a pedir.
+  if (competition.format.type !== "league") {
+    return {
+      points: { win: 3, draw: 1, loss: 0 },
+      tiebreakers: ["wins", "goal-difference", "goals-for", "draw-lots"],
+    };
+  }
   return { points: competition.format.points, tiebreakers: competition.format.tiebreakers };
 }
 

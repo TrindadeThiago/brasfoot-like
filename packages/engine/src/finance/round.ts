@@ -6,6 +6,7 @@ import type { DayMatch } from "../career/season-state";
 import type { LeagueSeason } from "../career/types";
 import { fansAfterRound } from "../fans/mood";
 import type { FansState } from "../fans/types";
+import { neutralCapacityOf } from "../knockout/prizes";
 import { closedWindow, closeWindowReport } from "../market/ai/report";
 import { aiMarketRound } from "../market/ai/round";
 import { marketAfterRound } from "../market/incoming";
@@ -193,31 +194,70 @@ export function applyExtraGates(
     const home = match.fixture.home;
     const price = working.clubs[home]?.ticketPrice ?? rules.priceRange.min;
     const mood = fans?.clubs[home]?.mood;
-    const gate = gateFor(
-      working,
-      principal,
-      world,
-      { ...match.fixture, round },
-      price,
-      mood !== undefined ? { mood } : {},
-    );
-    post(working, {
-      clubId: home,
-      season: principal.number,
-      round: round - 1,
-      category: "gate",
-      amount: gate.revenue,
-      date: match.date,
-      competitionId: match.competitionId,
+    const neutral = match.fixture.neutral === true && match.fixture.tie !== undefined;
+    const gate = gateFor(working, principal, world, { ...match.fixture, round }, price, {
+      ...(mood !== undefined ? { mood } : {}),
+      ...(neutral && match.fixture.tie
+        ? {
+            capacity: neutralCapacityOf(world, match.competitionId, match.fixture.tie.phase),
+          }
+        : {}),
     });
-    working.gates.push({
+    // Campo neutro: a renda é dividida entre os dois clubes (018 R12); o resto fica com o mandante.
+    const shares = neutral
+      ? [
+          { clubId: home, revenue: Math.ceil(gate.revenue / 2), opponentId: match.fixture.away },
+          {
+            clubId: match.fixture.away,
+            revenue: Math.floor(gate.revenue / 2),
+            opponentId: home,
+          },
+        ]
+      : [{ clubId: home, revenue: gate.revenue, opponentId: match.fixture.away }];
+    for (const share of shares) {
+      post(working, {
+        clubId: share.clubId,
+        season: principal.number,
+        round: round - 1,
+        category: "gate",
+        amount: share.revenue,
+        date: match.date,
+        competitionId: match.competitionId,
+      });
+      working.gates.push({
+        season: principal.number,
+        round: round - 1,
+        clubId: share.clubId,
+        opponentId: share.opponentId,
+        ...gate,
+        revenue: share.revenue,
+        date: match.date,
+        competitionId: match.competitionId,
+      });
+    }
+  }
+  return working;
+}
+
+/** Lança os prêmios da copa no caixa dos clubes (018 R12). Não altera a entrada. */
+export function applyCupPrizes(
+  finances: FinanceState,
+  principal: LeagueSeason,
+  prizes: readonly { clubId: string; amount: number; date: string; competitionId: string }[],
+): FinanceState {
+  if (prizes.length === 0) return finances;
+  const working = draft(finances);
+  const round = leagueRound(principal);
+  for (const prize of prizes) {
+    if (!working.clubs[prize.clubId]) continue;
+    post(working, {
+      clubId: prize.clubId,
       season: principal.number,
       round: round - 1,
-      clubId: home,
-      opponentId: match.fixture.away,
-      ...gate,
-      date: match.date,
-      competitionId: match.competitionId,
+      category: "prize",
+      amount: prize.amount,
+      date: prize.date,
+      competitionId: prize.competitionId,
     });
   }
   return working;
