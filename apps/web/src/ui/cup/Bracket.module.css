@@ -1,0 +1,65 @@
+.bracket {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(220px, 1fr);
+  gap: var(--space-4);
+  overflow-x: auto;
+  padding-bottom: var(--space-2);
+}
+
+.phase h3 {
+  font-size: var(--text-md);
+  color: var(--color-muted);
+  margin: 0 0 var(--space-2);
+}
+
+.phase ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.tie {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+  display: grid;
+  gap: 2px;
+}
+
+.mine {
+  outline: 2px solid var(--color-accent);
+}
+
+.side {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.side .goals {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.winner {
+  font-weight: 700;
+}
+
+.loser {
+  color: var(--color-muted);
+}
+
+.note {
+  font-size: 12px;
+  color: var(--color-muted);
+}
+
+.tbd {
+  color: var(--color-muted);
+  font-style: italic;
+  padding: var(--space-2) 0;
+}

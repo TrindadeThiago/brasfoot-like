@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { createCareer, t } from "./helpers";
+import { createCareer, simulateSeason, t } from "./helpers";
 
 test("Série B: temporada direto, resumo, próxima temporada e rodada ao vivo (SC-004, SC-005)", async ({
   page,
@@ -10,16 +10,7 @@ test("Série B: temporada direto, resumo, próxima temporada e rodada ao vivo (S
   await expect(
     page.getByText(t("header.progress", { year: 2027, round: 1, total: 38, division: "Série B" })),
   ).toBeVisible();
-  for (let round = 1; round <= 38; round++) {
-    await page.keyboard.press("d");
-    if (round < 38) {
-      await expect(
-        page.getByText(
-          t("header.progress", { year: 2027, round: round + 1, total: 38, division: "Série B" }),
-        ),
-      ).toBeVisible();
-    }
-  }
+  await simulateSeason(page);
   await expect(page).toHaveURL(/fim-de-temporada/);
   await expect(
     page

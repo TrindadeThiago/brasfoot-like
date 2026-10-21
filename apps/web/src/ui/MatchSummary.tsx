@@ -4,6 +4,7 @@ import type { MatchRecord, TeamStats } from "@brasfoot-like/engine";
 import type { SaveFile } from "@brasfoot-like/save";
 import { useT } from "../i18n";
 import { Crest } from "./Crest";
+import { ShootoutPanel } from "./cup/ShootoutPanel";
 import { minuteText } from "./event-text";
 import styles from "./MatchSummary.module.css";
 
@@ -128,6 +129,23 @@ export function MatchSummary({ record, save }: { record: MatchRecord; save: Save
           </tbody>
         </table>
       </div>
+      {record.decision?.extraTimeScore ? (
+        <p className={styles.none}>
+          {t("cup.extraTimeGoals")}: {record.decision.extraTimeScore.home} ×{" "}
+          {record.decision.extraTimeScore.away}
+        </p>
+      ) : record.decision?.shootout ? (
+        <p className={styles.none}>{t("cup.extraTime")}</p>
+      ) : null}
+      {record.decision?.shootout ? (
+        <ShootoutPanel
+          save={save}
+          home={record.home}
+          away={record.away}
+          kicks={record.decision.shootout.kicks}
+          score={record.decision.shootout.score}
+        />
+      ) : null}
     </article>
   );
 }

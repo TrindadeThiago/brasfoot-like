@@ -111,14 +111,14 @@ test("duas competições: avançar alterna domingo e quarta, calendário filtra,
   expect(Math.min(...levels)).toBeLessThan(100);
 });
 
-test("banco padrão: uma competição só, sem abas nem filtro de competição (017)", async ({
+test("banco padrão: liga e copa, seletor de competição e calendário só com a liga no início (017, 018)", async ({
   page,
 }) => {
   await createCareer(page, "Ana Souza", 3);
   const menu = page.getByRole("navigation", { name: t("nav.menu") });
   await menu.getByRole("link", { name: t("nav.competition") }).click();
   await expect(page.getByRole("navigation", { name: t("division.tabs.label") })).toBeVisible();
-  await expect(page.getByRole("navigation", { name: t("competition.select") })).toHaveCount(0);
+  await expect(page.getByRole("navigation", { name: t("competition.select") })).toBeVisible();
   await menu.getByRole("link", { name: t("nav.calendar") }).click();
   await expect(page.getByLabel(t("calendar.filter"))).toHaveCount(0);
   await expect(page.locator("tbody tr")).toHaveCount(38);

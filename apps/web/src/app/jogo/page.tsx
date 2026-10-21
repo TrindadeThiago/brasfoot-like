@@ -22,6 +22,7 @@ import { BoardCard } from "../../ui/board/BoardCard";
 import { BoardNotice } from "../../ui/board/BoardNotice";
 import { JobOffers } from "../../ui/board/JobOffers";
 import { Crest } from "../../ui/Crest";
+import { phaseLabel } from "../../ui/cup/phase";
 import { FormChips } from "../../ui/FormChips";
 import { DerbyBadge } from "../../ui/fans/DerbyBadge";
 import { FansCard } from "../../ui/fans/FansCard";
@@ -205,7 +206,10 @@ export default function HomePage() {
                         })}
                       </span>
                     ) : null}
-                    <span>{t("home.roundLabel", { round: next.round })}</span>
+                    <span>
+                      {phaseLabel(save, next.competitionId, next.round) ??
+                        t("home.roundLabel", { round: next.round })}
+                    </span>
                   </div>
                 </div>
               ) : !over ? (

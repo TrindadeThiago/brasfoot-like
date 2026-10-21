@@ -26,11 +26,16 @@ export const SERIE_A = (competitions[0]?.divisions[0]?.clubIds ?? []) as string[
 
 let base: SaveFile | undefined;
 
-function bankFiles() {
+/** O banco padrão da liga: sem a copa nacional (018), que tem os próprios testes. */
+const leagueCompetitions = competitions.filter(
+  (competition) => competition.format.type !== "knockout",
+);
+
+function bankFiles(withCup = false) {
   return joinBankFiles({
     "mod.json": mod,
     "countries.json": countries,
-    "competitions.json": competitions,
+    "competitions.json": withCup ? competitions : leagueCompetitions,
     "clubs.json": clubs,
     "players.json": players,
     "rivalries.json": rivalries,
@@ -43,7 +48,7 @@ export const TOURNAMENT_NAME = "Torneio de Teste";
 
 /** Banco padrão mais o Torneio de Teste: 10 clubes, ida e volta, às quartas, a cada 2 semanas. */
 function twoCompetitionsBank() {
-  const main = competitions[0];
+  const main = leagueCompetitions[0];
   if (!main) throw new Error("sem competição");
   const serieB = (main.divisions[1]?.clubIds ?? []) as string[];
   const tournament = {
@@ -65,7 +70,7 @@ function twoCompetitionsBank() {
   return joinBankFiles({
     "mod.json": mod,
     "countries.json": countries,
-    "competitions.json": [...competitions, tournament],
+    "competitions.json": [...leagueCompetitions, tournament],
     "clubs.json": clubs,
     "players.json": players,
     "rivalries.json": rivalries,
@@ -181,4 +186,25 @@ export function longCareer(id: string, seasons: number): { seasonOver: SaveFile;
     save = turned.save;
   }
   return { seasonOver, next: save };
+}
+
+let cupBase: SaveFile | undefined;
+
+/** Carreira no banco padrão como é distribuído, com a copa nacional (018). */
+export function cupSave(id: string, clubIndex = 0): SaveFile {
+  const clubId = SERIE_A[clubIndex] as string;
+  if (!cupBase || cupBase.clubId !== clubId) {
+    const result = createSave({
+      id: "base-copa",
+      now: "2026-10-21T12:00:00.000Z",
+      managerName: "Ana Souza",
+      clubId,
+      seed: `teste-web-copa-${clubIndex}`,
+      defaultBank: bankFiles(true),
+      noFiring: true,
+    });
+    if (!result.ok) throw new Error(JSON.stringify(result.error));
+    cupBase = result.save;
+  }
+  return { ...(JSON.parse(JSON.stringify(cupBase)) as SaveFile), id };
 }

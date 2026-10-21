@@ -79,7 +79,7 @@ Lista com ao menos 1 país.
 
 ## 5. `competitions.json`
 
-Lista com ao menos 1 competição, todas no formato de pontos corridos. A **primeira** é a
+Lista com ao menos 1 competição, em pontos corridos (`league`) ou mata-mata (`knockout`, uma copa). A **primeira** é a
 competição **principal**: dela vêm a economia, o mercado, a diretoria, a torcida, as manchetes, o
 acesso e o rebaixamento que o jogo acompanha e o histórico da carreira. As demais são
 **secundárias**: têm partidas, tabela e estatísticas próprias, e todos os seus clubes precisam estar
@@ -142,14 +142,74 @@ o padrão.
 | `recoveryPerDay` | inteiro(0, 100) | pontos recuperados por dia (padrão 5) |
 | `penaltyBpPerPoint` | inteiro(0, 100) | perda de força, em 1/10000, por ponto de condição abaixo de 100 (padrão 40) |
 
-### `format`
+### `format` (pontos corridos)
 
 | Campo | Tipo | Descrição |
 |---|---|---|
-| `type` | `"league"` | pontos corridos (`knockout` e `groups` são reservados para o futuro) |
+| `type` | `"league"` | pontos corridos (`knockout` é a copa, descrita abaixo; `groups` é reservado para o futuro) |
 | `rounds` | inteiro(1, 4) | turnos (2 = ida e volta) |
 | `points` | objeto | `win`, `draw`, `loss`, inteiros(0, 10); vitória > empate ≥ derrota |
 | `tiebreakers` | lista | critérios de desempate, sem repetição: `wins`, `goal-difference`, `goals-for`, `head-to-head`, `fewest-red-cards`, `draw-lots` |
+
+### `format` (copa: `"type": "knockout"`)
+
+Uma copa de mata-mata tem **uma única divisão** (`divisions` com um item, nível 1, sem vagas de acesso
+nem rebaixamento) cujos `clubIds` são os participantes, todos também na competição principal. As
+fases (`phases`) são jogadas em ordem; cada fase tem as próprias regras.
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `type` | `"knockout"` | copa de mata-mata |
+| `phases` | lista (2 a 8) | fases, da primeira à final |
+| `entries` | lista | clubes que só entram numa fase posterior (opcional) |
+
+Cada item de `phases`:
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `name` | texto(1, 40) | nome da fase (por exemplo, "Quartas de final") |
+| `legs` | 1 ou 2 | jogo único ou ida e volta |
+| `tiebreakers` | lista | critérios para decidir um confronto empatado, em ordem: `away-goals` (gols fora, só em ida e volta), `extra-time` (prorrogação de 2 × 15 min) e `penalties`; o último precisa ser `penalties`, para sempre haver um classificado |
+| `home` | texto | quem manda o jogo: `draw` (sorteio), `ranking` (o de maior reputação) ou `division` (o de divisão mais baixa; na mesma divisão, sorteio) |
+| `prize` | inteiro(0, 1000000000) | prêmio pago ao **vencedor** de cada confronto da fase, em reais (o campeão recebe o da final) |
+| `neutral` | verdadeiro/falso | campo neutro (só em jogo único); a renda do jogo fica sem mando (padrão falso) |
+| `neutralCapacity` | inteiro(1000, 150000) | capacidade do estádio neutro (só com `neutral`; padrão 40000) |
+| `seeded` | verdadeiro/falso | cabeças de chave: os de maior reputação não se cruzam enquanto houver vaga (padrão falso) |
+| `gapWeeks` | inteiro(0, 8) | semanas de respiro antes da fase, somadas ao intervalo da agenda (padrão 0) |
+
+Cada item de `entries`:
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `phase` | inteiro(1, 7) | índice da fase em que os clubes entram (0 é a primeira; só vale de 1 até a penúltima) |
+| `clubIds` | lista de id | clubes que entram nessa fase, todos participantes da divisão e em uma só entrada |
+
+**Quantos clubes por fase.** A primeira fase tem os participantes menos os clubes das `entries`.
+Cada fase seguinte tem a metade dos classificados da anterior mais os clubes que entram nela. Todo
+número precisa ser par e a última fase tem exatamente 2 clubes (`knockout.phase_count` diz a fase e
+quantos clubes faltam ou sobram). Cada fase usa uma rodada por perna, nas datas da `schedule`.
+
+Exemplo, uma copa de 8 clubes (quartas, semifinal em ida e volta e final em campo neutro):
+
+```json
+{
+  "id": "copa-exemplo",
+  "countryId": "pais-1",
+  "name": "Copa Exemplo",
+  "format": {
+    "type": "knockout",
+    "phases": [
+      { "name": "Quartas de final", "legs": 1, "tiebreakers": ["extra-time", "penalties"], "home": "ranking", "prize": 100000 },
+      { "name": "Semifinal", "legs": 2, "tiebreakers": ["away-goals", "extra-time", "penalties"], "home": "draw", "prize": 250000 },
+      { "name": "Final", "legs": 1, "tiebreakers": ["extra-time", "penalties"], "home": "draw", "neutral": true, "neutralCapacity": 60000, "prize": 600000, "gapWeeks": 1 }
+    ]
+  },
+  "divisions": [
+    { "level": 1, "name": "Chave", "clubIds": ["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8"], "promotionSlots": 0, "relegationSlots": 0 }
+  ],
+  "schedule": { "weekday": 3, "startWeek": 1, "everyWeeks": 2 }
+}
+```
 
 ### `divisions`
 
@@ -242,9 +302,9 @@ valores padrão do jogo, e você pode informar só o que quer mudar. Todos os va
   exigências dos jogadores (`player`), propostas recebidas (`incoming`), livres (`freeAgents`), IA de
   mercado (`aiMarket`) e renovações da IA (`ai`).
 - `board` — metas, confiança, demissão, reputação, vagas e propostas da diretoria, e o peso dos
-  clássicos (`derbyPct`).
+  clássicos (`derbyPct`) e a copa (`cupOut`, `cupTitle`, `cupGoal`).
 - `fans` — humor da torcida: pesos de resultado, expectativa, clássicos, ídolos, público, pressão na
-  diretoria, virada de temporada e faixas (`bands`, 4 limites).
+  diretoria, virada de temporada, faixas (`bands`, 4 limites) e a copa (`cupOut`, `cupTitle`).
 - `news` — manchetes: limiares (`routMargin`, `upsetGap`, `streakMin`, `droughtMin`,
   `bigTransferPct`), relevância e variações por tipo (`relevance`, `variants`), limites do feed
   (`feedLimit`, `homeLimit`, `extrasPerMatch`) e do histórico (`allTimeTop`, `legendsPerClub`).
@@ -310,6 +370,13 @@ Fora do jogo, `pnpm validate-bank <pasta|arquivo.zip>` faz a mesma validação n
 | `division.club_in_multiple` | O clube {clubId} já está em outra divisão (competição {otherCompetitionId}, nível {otherLevel}). |
 | `calendar.club_double_booked` | As competições {competitionId} e {otherCompetitionId} marcam jogos do clube {clubId} no mesmo dia ({date}). |
 | `calendar.competition_overflow` | A competição {competitionId} precisa de {needed, plural, one {# semana} other {# semanas}} para as suas rodadas, mas a temporada tem {available, plural, one {# semana} other {# semanas}}. |
+| `knockout.phase_count` | A fase {phase} da copa fica com {count, plural, one {# clube} other {# clubes}} e o chaveamento não fecha (cada fase precisa de número par de clubes e a última, de 2). Diferença para fechar: {delta} (positivo = faltam clubes; negativo = sobram). |
+| `knockout.entry_phase` | A entrada na fase {phase} é inválida: a copa tem {phases, plural, one {# fase} other {# fases}} e as entradas só valem da fase 1 até a penúltima. |
+| `knockout.entry_duplicate` | O clube {clubId} aparece em mais de uma entrada da copa. |
+| `knockout.entry_not_participant` | O clube {clubId} da entrada não está na divisão da copa. |
+| `knockout.no_decider` | A fase {phase} da copa precisa terminar com o critério "penalties" para sempre ter um classificado. |
+| `knockout.neutral_two_legs` | A fase {phase} da copa não pode ter campo neutro em ida e volta. |
+| `knockout.single_division` | A copa precisa de uma única divisão, mas tem {divisions}. |
 | `competition.club_outside_main` | O clube {clubId} da competição {competitionId} não está na competição principal (a primeira da lista). |
 | `division.top_has_promotion` | A divisão mais alta não pode ter vagas de acesso, mas tem {slots}. |
 | `division.bottom_has_relegation` | A divisão mais baixa não pode ter vagas de rebaixamento, mas tem {slots}. |

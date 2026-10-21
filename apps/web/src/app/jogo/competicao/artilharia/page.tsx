@@ -65,8 +65,13 @@ function ScorersScreen({ save }: { save: SaveFile }) {
   return (
     <>
       <CompetitionSelect save={save} competitionId={competitionId} />
-      <CompetitionTabs careerId={save.id} level={level} competitionId={competitionId} />
-      <DivisionTabs save={save} level={level} league={league} />
+      <CompetitionTabs
+        careerId={save.id}
+        level={level}
+        competitionId={competitionId}
+        cup={season.bracket !== undefined}
+      />
+      {season.bracket ? null : <DivisionTabs save={save} level={level} league={league} />}
       <Scorers key={level} save={save} season={season} />
     </>
   );

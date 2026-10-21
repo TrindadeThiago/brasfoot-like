@@ -1,5 +1,17 @@
 [
   {
+    "version": "1.2.0",
+    "date": "2026-10-21",
+    "changes": [
+      "Copa nacional: um mata-mata com todos os clubes, em fases de jogo único e semifinal em ida e volta, e a final em campo neutro.",
+      "Prorrogação e disputa de pênaltis: o jogo empatado segue até haver um classificado, e a rodada ao vivo mostra cada cobrança.",
+      "Chaveamento, resultados por fase e histórico de campeões da copa; o Início e o calendário mostram a fase do próximo jogo.",
+      "Prêmios por fase, bilheteria e reflexo da copa na torcida, na diretoria e nas manchetes (zebra, eliminação, final e título).",
+      "Mods podem descrever copas só com dados (fases, entradas, mando, campo neutro e prêmios); o banco inválido é recusado com mensagem clara.",
+      "Carreiras salvas continuam abrindo normalmente; a copa vem nas carreiras novas e em mods que a descrevem."
+    ]
+  },
+  {
     "version": "1.1.0",
     "date": "2026-10-21",
     "changes": [

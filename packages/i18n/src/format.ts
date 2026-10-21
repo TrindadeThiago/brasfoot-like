@@ -200,6 +200,15 @@ export const EVENT_TYPES = [
   "second_half",
   "full_time",
   "abandoned",
+  "extra_time_start",
+  "extra_half_time",
+  "extra_time_end",
+  "shootout_start",
+  "shootout_goal",
+  "shootout_saved",
+  "shootout_post",
+  "shootout_off",
+  "shootout_end",
 ] as const;
 export type EventType = (typeof EVENT_TYPES)[number];
 
