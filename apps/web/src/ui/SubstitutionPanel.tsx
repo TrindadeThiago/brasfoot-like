@@ -7,6 +7,7 @@ import {
   type FormationId,
   type LiveMatch,
   type MatchChange,
+  type PlayerMatchState,
   POSTURES,
   type Posture,
   type Side,
@@ -25,7 +26,33 @@ interface PanelProps {
   ): { ok: true } | { ok: false; code: string; limit?: number };
 }
 
-/** Painel do time durante a pausa: substituições (dois passos), esquema e postura (FR-008/FR-009). */
+/** Cartões do jogador nesta partida (amarelos e expulsão), com texto para leitor de tela. */
+function Cards({ state }: { state: PlayerMatchState | undefined }) {
+  const t = useT();
+  if (!state) return null;
+  if (state.sentOff) {
+    return (
+      <span
+        role="img"
+        aria-label={t("round.card.red")}
+        className={`${styles.card} ${styles.red}`}
+      />
+    );
+  }
+  if (state.yellowCards === 0) return null;
+  return (
+    <span
+      role="img"
+      aria-label={t("round.card.yellow", { count: state.yellowCards })}
+      className={`${styles.card} ${styles.yellow}`}
+    />
+  );
+}
+
+/**
+ * Painel do time durante a pausa (FR-008/FR-009): substituições e trocas de posição em dois
+ * passos (escolher um titular, depois um reserva ou outro titular), esquema e postura.
+ */
 export function SubstitutionPanel({ match, side, save, onChange }: PanelProps) {
   const t = useT();
   const [out, setOut] = useState<string | undefined>();
@@ -51,6 +78,23 @@ export function SubstitutionPanel({ match, side, save, onChange }: PanelProps) {
           ? t(`round.error.${result.code}`, { limit: result.limit ?? limit })
           : t("round.error.generic"),
       );
+  };
+
+  // Dois titulares trocam de vaga: mesma formação, outra distribuição (não gasta substituição).
+  const swapWith = (otherId: string) => {
+    if (!out) return;
+    const slotOf = (playerId: string) =>
+      Object.entries(team.onField).find(([, id]) => id === playerId)?.[0];
+    const first = slotOf(out);
+    const second = slotOf(otherId);
+    if (!first || !second) return;
+    const result = onChange({
+      type: "formation",
+      formation: team.formation,
+      assignment: { ...team.onField, [first]: otherId, [second]: out },
+    });
+    report(result, t("round.swapDone", { first: name(out), second: name(otherId) }));
+    setOut(undefined);
   };
 
   const chooseIn = (inId: string) => {
@@ -113,16 +157,27 @@ export function SubstitutionPanel({ match, side, save, onChange }: PanelProps) {
               if (!id) return null;
               const player = players.get(id);
               const factor = player ? adequacy(player.position, slot.position) : 1;
+              const outOfPosition = player !== undefined && player.position !== slot.position;
               return (
                 <li key={slot.id}>
                   <button
                     type="button"
                     aria-pressed={out === id}
                     className={`${styles.row} ${out === id ? styles.selected : ""}`}
-                    onClick={() => setOut(out === id ? undefined : id)}
+                    onClick={() => {
+                      if (out === id) setOut(undefined);
+                      else if (out) swapWith(id);
+                      else setOut(id);
+                    }}
                   >
                     <span className={styles.position}>{label(`position.${slot.position}`)}</span>
-                    <span>{name(id)}</span>
+                    <span className={styles.name}>{name(id)}</span>
+                    <Cards state={team.players[id]} />
+                    {outOfPosition ? (
+                      <span className={styles.natural}>
+                        {t("lineup.natural", { position: label(`position.${player.position}`) })}
+                      </span>
+                    ) : null}
                     <span className={styles.strength}>
                       {Math.round((player?.strength ?? 0) * factor)}
                     </span>
@@ -148,7 +203,7 @@ export function SubstitutionPanel({ match, side, save, onChange }: PanelProps) {
                     <span className={styles.position}>
                       {label(`position.${players.get(id)?.position ?? "MF"}`)}
                     </span>
-                    <span>{name(id)}</span>
+                    <span className={styles.name}>{name(id)}</span>
                     <span className={styles.strength}>{players.get(id)?.strength}</span>
                   </button>
                 </li>
@@ -157,7 +212,10 @@ export function SubstitutionPanel({ match, side, save, onChange }: PanelProps) {
           <h3>{t("round.substituted")}</h3>
           <ul aria-label={t("round.substituted")} className={styles.left}>
             {left.map((id) => (
-              <li key={id}>{name(id)}</li>
+              <li key={id}>
+                <span>{name(id)}</span>
+                <Cards state={team.players[id]} />
+              </li>
             ))}
           </ul>
         </div>

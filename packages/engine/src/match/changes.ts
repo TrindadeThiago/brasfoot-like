@@ -2,7 +2,7 @@ import { cloneState } from "./engine";
 import { type MatchError, matchError } from "./errors";
 import { FORMATIONS } from "./formations";
 import { emit, playerState } from "./minute";
-import type { MatchChange, MatchState, Side } from "./types";
+import type { MatchChange, MatchState, PositionMove, Side } from "./types";
 
 export type ChangeResult = { ok: true; state: MatchState } | { ok: false; error: MatchError };
 
@@ -62,6 +62,27 @@ function substitution(
   return { ok: true, state: next };
 }
 
+/** Jogadores que mudaram de vaga, na ordem das vagas de origem. */
+function positionMoves(
+  slots: readonly string[],
+  before: Readonly<Record<string, string | null>>,
+  after: Readonly<Record<string, string | null>>,
+): PositionMove[] {
+  const slotOf = new Map(
+    slots.flatMap((slotId) => {
+      const playerId = after[slotId];
+      return playerId ? [[playerId, slotId] as const] : [];
+    }),
+  );
+  return slots.flatMap((fromSlotId) => {
+    const playerId = before[fromSlotId];
+    const toSlotId = playerId ? slotOf.get(playerId) : undefined;
+    return playerId && toSlotId && toSlotId !== fromSlotId
+      ? [{ playerId, fromSlotId, toSlotId }]
+      : [];
+  });
+}
+
 function formation(
   state: MatchState,
   side: Side,
@@ -88,6 +109,16 @@ function formation(
     new Set(assigned).size === assigned.length &&
     assigned.every((playerId) => current.includes(playerId));
   if (!sameSet) return invalid();
+
+  // Mesma formação: só troca de posições (ou nada, se a distribuição é a mesma).
+  if (change.formation === team.formation) {
+    const moves = positionMoves(slots, team.onField, change.assignment);
+    if (moves.length === 0) return { ok: true, state };
+    const next = cloneState(state);
+    next.teams[side].onField = { ...change.assignment };
+    emit(next, next.clock, { type: "positions_change", side, moves });
+    return { ok: true, state: next };
+  }
 
   const next = cloneState(state);
   next.teams[side].formation = change.formation;

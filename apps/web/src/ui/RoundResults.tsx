@@ -42,11 +42,12 @@ export function RoundResults({ round, records, clubs, clubId, rivalries }: Round
               <span className={styles.score}>
                 {record.score.home} × {record.score.away}
               </span>
+              {/* O selo fica na célula do visitante: a linha mantém 3 colunas e o placar centrado. */}
               <span className={`${styles.team} ${styles.away}`}>
                 {away ? <Crest crest={away.crest} label={away.name} size={20} /> : null}
                 {away?.shortName}
+                <DerbyBadge rivalries={rivalries} home={record.home} away={record.away} />
               </span>
-              <DerbyBadge rivalries={rivalries} home={record.home} away={record.away} />
             </li>
           );
         })}

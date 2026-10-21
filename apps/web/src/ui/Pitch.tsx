@@ -63,6 +63,15 @@ export function Pitch({
                     {player?.displayName ?? t("lineup.emptySlot")}
                   </span>
                   {player ? (
+                    <span
+                      className={
+                        player.position === slot.position ? styles.natural : styles.naturalOther
+                      }
+                    >
+                      {t("lineup.naturalShort", { position: label(`position.${player.position}`) })}
+                    </span>
+                  ) : null}
+                  {player ? (
                     <span className={styles.meta}>
                       {t("lineup.effective", { value: Math.round(player.strength * factor) })}
                     </span>

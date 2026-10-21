@@ -192,6 +192,8 @@ export const EVENT_TYPES = [
   "substitution",
   "substitution_auto",
   "formation",
+  "position_swap",
+  "positions",
   "posture",
   "kickoff",
   "half_time",

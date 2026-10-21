@@ -1,5 +1,15 @@
 [
   {
+    "version": "1.0.2",
+    "date": "2026-10-21",
+    "changes": [
+      "Rodada ao vivo: ao pausar, cartões amarelos e vermelhos aparecem ao lado dos jogadores.",
+      "Rodada ao vivo: dá para trocar dois titulares de posição sem gastar substituição; a troca aparece no lance a lance.",
+      "Escalação: cada titular mostra a posição natural, em destaque quando joga fora dela.",
+      "Resultados da rodada: o selo de clássico fica na linha do jogo, ao lado do visitante."
+    ]
+  },
+  {
     "version": "1.0.1",
     "date": "2026-10-21",
     "changes": [

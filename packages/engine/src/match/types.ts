@@ -116,11 +116,20 @@ export type MatchEvent = EventBase &
         automatic: boolean;
       }
     | { type: "formation_change"; side: Side; formation: FormationId }
+    /** Técnico trocou jogadores de posição sem mudar a formação. */
+    | { type: "positions_change"; side: Side; moves: PositionMove[] }
     | { type: "posture_change"; side: Side; posture: Posture }
     | { type: "reorganization"; side: Side; playerId: string; fromSlotId: string; toSlotId: string }
   );
 
 export type MatchEventType = MatchEvent["type"];
+
+/** Um jogador que mudou de vaga numa troca de posições (na ordem das vagas da formação). */
+export interface PositionMove {
+  playerId: string;
+  fromSlotId: string;
+  toSlotId: string;
+}
 
 export interface MatchState {
   input: NormalizedMatchInput;

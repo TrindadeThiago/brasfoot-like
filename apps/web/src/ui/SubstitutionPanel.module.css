@@ -68,8 +68,13 @@
   font: inherit;
   width: 100%;
   display: grid;
-  grid-template-columns: 40px 1fr 32px;
-  gap: var(--space-2);
+  /* posição | nome + cartões | força; a posição natural fica embaixo do nome */
+  grid-template-columns: 40px auto 1fr 32px;
+  grid-template-areas:
+    "position name cards strength"
+    ". natural natural .";
+  align-items: center;
+  gap: 0 var(--space-2);
   padding: 4px var(--space-2);
   border-radius: 6px;
   border: 2px solid transparent;
@@ -95,16 +100,49 @@
 }
 
 .position {
+  grid-area: position;
   font-size: 11px;
   font-weight: 700;
   color: var(--color-muted);
 }
 
 .strength {
+  grid-area: strength;
   text-align: right;
 }
 
+.name {
+  grid-area: name;
+}
+
+.natural {
+  grid-area: natural;
+  font-size: 11px;
+  color: var(--color-warning);
+}
+
+/* Cartão como na súmula: retângulo amarelo ou vermelho. */
+.card {
+  grid-area: cards;
+  display: inline-block;
+  width: 10px;
+  height: 14px;
+  border-radius: 2px;
+  vertical-align: middle;
+}
+
+.yellow {
+  background: var(--color-warning);
+}
+
+.red {
+  background: var(--color-danger);
+}
+
 .left li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   font-size: var(--text-sm);
   color: var(--color-muted);
 }
