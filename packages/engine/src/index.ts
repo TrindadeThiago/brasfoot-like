@@ -535,6 +535,7 @@ export type {
 export { ISSUE_CODES, ISSUE_PARAMS, makeIssue, SECTIONS, severityOf } from "./validation/issues";
 export type { ValidationResult } from "./validation/validate";
 export { validateBank } from "./validation/validate";
+export { withNationalCup } from "./worldgen/add-cup";
 export { DEFAULT_BANK_SEED } from "./worldgen/default-seed";
 export type { GenerateOptions } from "./worldgen/generate";
 export { generateDefaultBank } from "./worldgen/generate";

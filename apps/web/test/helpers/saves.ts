@@ -33,7 +33,8 @@ const leagueCompetitions = competitions.filter(
 
 function bankFiles(withCup = false) {
   return joinBankFiles({
-    "mod.json": mod,
+    // Sem a copa o banco é de um "mod" qualquer: o mundo padrão sem copa a ganha na virada (018).
+    "mod.json": withCup ? mod : { ...mod, id: "default-liga" },
     "countries.json": countries,
     "competitions.json": withCup ? competitions : leagueCompetitions,
     "clubs.json": clubs,
@@ -68,7 +69,7 @@ function twoCompetitionsBank() {
     schedule: { weekday: 3, startWeek: 1, everyWeeks: 2 },
   };
   return joinBankFiles({
-    "mod.json": mod,
+    "mod.json": { ...mod, id: "default-torneio" },
     "countries.json": countries,
     "competitions.json": [...leagueCompetitions, tournament],
     "clubs.json": clubs,

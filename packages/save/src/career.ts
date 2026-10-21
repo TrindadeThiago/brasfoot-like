@@ -16,6 +16,7 @@ import {
   seasonDate,
   seasonTurnover,
   upcomingUnavailability,
+  withNationalCup,
 } from "@brasfoot-like/engine";
 import type { SaveFile } from "./format";
 
@@ -162,6 +163,14 @@ export function withDayResult(save: SaveFile, state: CareerSeasonState): SaveFil
 }
 
 /**
+ * Mundo da virada: carreiras do mundo padrão criadas antes da 018 não têm a copa nacional; ela
+ * entra aqui e a próxima temporada já a traz. Mods e mundos com copa não mudam.
+ */
+function worldForNextSeason(save: SaveFile): SaveFile["bank"] {
+  return save.bank.manifest.id === "default" ? withNationalCup(save.bank) : save.bank;
+}
+
+/**
  * Virada da carreira (atômica): virada de temporada do motor, esquema do clube do jogador na
  * nova divisão e escalação ajustada às ausências herdadas. Devolve o save novo, sem salvar.
  */
@@ -169,7 +178,7 @@ export function advanceCareerSeason(
   save: SaveFile,
   now: string,
 ): { ok: true; save: SaveFile } | { ok: false; error: SeasonError } {
-  const turned = seasonTurnover(save.league, save.bank, save.history, {
+  const turned = seasonTurnover(save.league, worldForNextSeason(save), save.history, {
     careerSeed: save.seed,
     finances: save.finances,
     managerClubId: managerClubOf(save.board),
