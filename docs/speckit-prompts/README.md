@@ -35,3 +35,11 @@ ficam na constituição e entram no `/speckit-plan`.
 | | [014](marco5/prompt014.md) | Manchetes e histórico | 013 |
 | M6 — Lançamento | [015](marco6/prompt015.md) | Saves portáteis e formato de mod | 014 |
 | | [016](marco6/prompt016.md) | Polimento e publicação | 015 |
+| M7 — Copas | [017](marco7/prompt017.md) | Calendário multi-competição | 016 |
+| | [018](marco7/prompt018.md) | Mata-mata e copa nacional | 017 |
+| | [019](marco7/prompt019.md) | Fase de grupos e competições em fases | 018 |
+| M8 — Mundo | [020](marco8/prompt020.md) | Vários países e simulação em escala | 017 |
+| | [021](marco8/prompt021.md) | Classificação entre competições | 018, 020 |
+| M9 — Futebol sul-americano | [022](marco9/prompt022.md) | Competições continentais | 019, 021 |
+| | [023](marco9/prompt023.md) | Estaduais | 019, 021 |
+| | [024](marco9/prompt024.md) | Mod do futebol sul-americano | 022, 023 |
