@@ -1,4 +1,4 @@
-import { type LiveMatch, startLeagueRound } from "@brasfoot-like/engine";
+import { advanceMatch, type LiveMatch, startLeagueRound } from "@brasfoot-like/engine";
 import { managedClubId } from "@brasfoot-like/save";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
@@ -32,5 +32,17 @@ describe("contador de substituições", () => {
     match.state.teams[side].substitutionsUsed = 5;
     render(<SubstitutionPanel match={match} side={side} save={save} onChange={vi.fn()} />);
     expect(screen.getByText(t("round.substitutionsLeft", { used: 5, limit: 6 }))).toBeDefined();
+  });
+});
+
+describe("energia ao vivo", () => {
+  it("o titular perde energia pelos minutos em campo e os reservas seguem inteiros", () => {
+    const { save, match, side } = myMatch();
+    match.state = advanceMatch(match.state, { minutes: 60 });
+    render(<SubstitutionPanel match={match} side={side} save={save} onChange={vi.fn()} />);
+    const meters = screen.getAllByRole("meter").map((meter) => meter.getAttribute("aria-valuenow"));
+    // 60 minutos × 30 pontos por 90: 20 pontos a menos para quem jogou todo o tempo.
+    expect(meters).toContain("80");
+    expect(meters).toContain("100");
   });
 });

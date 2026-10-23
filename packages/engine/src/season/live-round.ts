@@ -1,3 +1,4 @@
+import { fitnessRules } from "../fitness/rules";
 import { deciderFor } from "../knockout/tie";
 import { slotValue } from "../match/auto-lineup";
 import { applyChange } from "../match/changes";
@@ -80,10 +81,13 @@ export function startRound(
   const round = season.calendar[season.nextRound - 1];
   if (!round) throw new Error("temporada encerrada");
   const squads = squadsByClub(world);
+  // O desgaste na partida usa as taxas da condição física da competição (017 R5).
+  const { drainPer90, penaltyBpPerPoint } = fitnessRules(world, season.competitionId);
+  const fatigue = { drainPer90, penaltyBpPerPoint };
   const matches: LiveMatch[] = [];
   for (const fixture of round.fixtures) {
     const decider = fixture.tie ? deciderFor(world, season, fixture) : undefined;
-    const prepared = prepareFixture(season, fixture, squads, lineups, decider);
+    const prepared = prepareFixture(season, fixture, squads, lineups, decider, fatigue);
     if (!prepared.ok) return prepared;
     const started = startMatch(prepared.value.input);
     if (!started.ok) {

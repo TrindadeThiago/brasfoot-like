@@ -1,5 +1,13 @@
 [
   {
+    "version": "1.3.0",
+    "date": "2026-10-23",
+    "changes": [
+      "Energia ao vivo: durante a partida cada jogador perde energia a cada minuto em campo (30 pontos em 90 minutos, como no desgaste entre jogos) e rende menos conforme cansa. O painel de substituições mostra a energia de titulares e reservas, e a força de cada um já com o cansaço, para você decidir quem sai.",
+      "Início: um indicador mostra se a janela de transferências está aberta ou fechada, com a data e quantas rodadas faltam para fechar ou abrir. O mesmo texto da tela de Mercado passou a trazer as rodadas."
+    ]
+  },
+  {
     "version": "1.2.8",
     "date": "2026-10-23",
     "changes": [

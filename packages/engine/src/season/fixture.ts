@@ -1,5 +1,5 @@
 import { unavailabilityOf } from "../lineup/unavailability";
-import type { Decider, Lineup, MatchInput, Side } from "../match/types";
+import type { Decider, Lineup, MatchFatigue, MatchInput, Side } from "../match/types";
 import type { CompletedBank, CompletedPlayer } from "../model/types";
 import { type SeasonError, seasonError } from "./errors";
 import { lineupForMatch } from "./lineups";
@@ -82,6 +82,7 @@ export function prepareFixture(
   squads: Map<string, CompletedPlayer[]>,
   lineups: Record<string, Lineup> | undefined,
   decider?: Decider,
+  fatigue?: MatchFatigue,
 ): { ok: true; value: PreparedFixture } | { ok: false; error: SeasonError } {
   const clubs: Record<Side, string> = { home: fixture.home, away: fixture.away };
   const prepared: Partial<Record<Side, SideLineup>> = {};
@@ -119,6 +120,7 @@ export function prepareFixture(
         seed: fixture.seed,
         ...(fixture.neutral ? { neutral: true } : {}),
         ...(decider ? { decider } : {}),
+        ...(fatigue ? { fatigue } : {}),
       },
       sides: { home, away },
     },

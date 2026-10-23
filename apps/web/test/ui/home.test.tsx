@@ -29,6 +29,14 @@ describe("Início do clube (FR-016)", () => {
     expect(within(last).getAllByRole("listitem")).toHaveLength(5);
   });
 
+  it("mostra se a janela de transferências está aberta ou fechada, com as rodadas", async () => {
+    const { store } = await storedCareer(1);
+    renderApp("/jogo?c=tela", store);
+    const status = await screen.findByRole("status", { name: "" });
+    expect(status.getAttribute("data-window")).toBe("open");
+    expect(status.textContent).toMatch(/Janela aberta até .* \(faltam \d+ rodadas?\)/);
+  });
+
   it("antes do primeiro jogo, avisa que não há resultados", async () => {
     const { store } = await storedCareer(1);
     renderApp("/jogo?c=tela", store);

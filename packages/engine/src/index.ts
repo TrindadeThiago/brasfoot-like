@@ -354,7 +354,7 @@ export { FORMATION_IDS, FORMATIONS, POSTURES, slotPosition } from "./match/forma
 export { MATCH_REALISM_LIMITS } from "./match/limits";
 export type { MatchMetrics, MetricCheck } from "./match/metrics";
 export { checkRealism, createMetricsAccumulator } from "./match/metrics";
-export { substitutionCap } from "./match/minute";
+export { fatiguedStrength, matchDrain, substitutionCap } from "./match/minute";
 export { liveStats, matchResult } from "./match/result";
 export { penaltyChance, shootoutOrder, shootoutProgress } from "./match/shootout";
 export type { TeamStrength } from "./match/strength";
@@ -368,6 +368,7 @@ export type {
   MatchClock,
   MatchDecision,
   MatchEvent,
+  MatchFatigue,
   MatchHalf,
   MatchInput,
   MatchResult,
