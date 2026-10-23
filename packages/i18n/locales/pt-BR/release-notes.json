@@ -1,5 +1,16 @@
 [
   {
+    "version": "1.2.5",
+    "date": "2026-10-23",
+    "changes": [
+      "Calendário: cada jogo disputado mostra se foi vitória, empate ou derrota; na copa, empate decidido nos pênaltis conta para quem avançou e mostra o placar da disputa.",
+      "Pendurados: um cartão amarelo marca, no Elenco e na Escalação, quem está a um amarelo de ser suspenso.",
+      "Os reservas aparecem ordenados por posição (goleiro, laterais, zagueiros, volantes, meias e atacantes), na Escalação e nas substituições ao vivo.",
+      "Mercado: a tabela mostra as características de cada jogador.",
+      "Campos de valor (salário, oferta, empréstimo, contraproposta e crédito) mostram o separador de milhar enquanto você digita e o valor por extenso embaixo (\"1,5 milhão\")."
+    ]
+  },
+  {
     "version": "1.2.4",
     "date": "2026-10-23",
     "changes": [

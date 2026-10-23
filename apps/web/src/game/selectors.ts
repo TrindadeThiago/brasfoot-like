@@ -1,7 +1,9 @@
 import {
   type CompletedBank,
   type Crest,
+  clubDivision,
   clubStrength,
+  competitionSeason,
   economyRules,
   type FormResult,
   fitnessOn,
@@ -13,7 +15,13 @@ import {
   type Season,
   standings,
 } from "@brasfoot-like/engine";
-import { currentDayOf, nextFixture, type SaveFile, userSeason } from "@brasfoot-like/save";
+import {
+  currentDayOf,
+  nextFixture,
+  type SaveFile,
+  seasonStateOf,
+  userSeason,
+} from "@brasfoot-like/save";
 
 export interface LeagueClub {
   id: string;
@@ -74,6 +82,23 @@ function asClubResult(record: MatchRecord, clubId: string): ClubResult {
     goalsAgainst,
     result: goalsFor > goalsAgainst ? "W" : goalsFor === goalsAgainst ? "D" : "L",
   };
+}
+
+/**
+ * V/E/D do clube num jogo. Empate decidido na prorrogação ou nos pênaltis conta para quem
+ * avançou; o empate de uma ida (decidida pelo agregado) segue empate.
+ */
+export function matchResult(record: MatchRecord, clubId: string): FormResult {
+  const result = asClubResult(record, clubId).result;
+  const decision = record.decision;
+  if (
+    result !== "D" ||
+    !decision ||
+    (decision.by !== "penalties" && decision.by !== "extra-time")
+  ) {
+    return result;
+  }
+  return decision.winner === (record.home === clubId ? "home" : "away") ? "W" : "L";
 }
 
 /** Últimos `count` resultados do clube, do mais antigo para o mais recente. */
@@ -188,4 +213,23 @@ export function fitnessAt(save: SaveFile): (playerId: string) => number {
   const date = conditionDate(save);
   const rules = fitnessRules(save.bank, save.league.competitionId);
   return (playerId) => fitnessOn(save.fitness, playerId, date, rules);
+}
+
+/**
+ * Jogadores do clube a um amarelo de suspensão na competição (pendurados). Quem já está
+ * suspenso ou lesionado não entra: o que importa é a indisponibilidade.
+ */
+export function hangingPlayers(save: SaveFile, competitionId: string): ReadonlySet<string> {
+  const season = clubDivision(competitionSeason(seasonStateOf(save), competitionId), save.clubId);
+  if (!season) return new Set();
+  const limit = season.rules.yellowsForSuspension;
+  const hanging = new Set<string>();
+  for (const player of save.bank.players) {
+    if (player.clubId !== save.clubId) continue;
+    const entry = season.status[player.id];
+    if (entry && entry.suspension <= 0 && entry.injury <= 0 && entry.yellows >= limit - 1) {
+      hanging.add(player.id);
+    }
+  }
+  return hanging;
 }

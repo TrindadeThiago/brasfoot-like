@@ -33,7 +33,7 @@ function LineupScreen({ save, game }: { save: SaveFile; game: ReturnType<typeof 
   const [message, setMessage] = useState("");
   const [focused, setFocused] = useState<string | undefined>();
   const [details, setDetails] = useState<string | undefined>();
-  const { squad, unavailable } = useMemo(() => lineupContext(save), [save]);
+  const { squad, unavailable, hanging } = useMemo(() => lineupContext(save), [save]);
   const players = useMemo(() => new Map(squad.map((player) => [player.id, player])), [squad]);
   const blocked = useMemo(
     () => new Map(unavailable.map((entry) => [entry.playerId, entry])),
@@ -144,6 +144,7 @@ function LineupScreen({ save, game }: { save: SaveFile; game: ReturnType<typeof 
           lineup={save.lineup}
           players={players}
           unavailable={blocked}
+          hanging={hanging}
           fitness={fitness}
           selected={source}
           onSelect={select}
@@ -154,6 +155,7 @@ function LineupScreen({ save, game }: { save: SaveFile; game: ReturnType<typeof 
           squad={squad}
           players={players}
           unavailable={blocked}
+          hanging={hanging}
           fitness={fitness}
           selected={source}
           onSelect={select}

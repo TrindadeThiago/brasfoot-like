@@ -78,6 +78,7 @@ import { createModStore, type ModStore } from "../storage/mods";
 import { type RoundMode, readPreferences, writePreferences } from "../storage/preferences";
 import { defaultBankInput } from "./default-bank";
 import { newCareerId, newSeed } from "./ids";
+import { hangingPlayers } from "./selectors";
 
 export type SavingStatus = "idle" | "saving" | "saved" | "failed";
 
@@ -269,6 +270,8 @@ export function lineupContext(save: SaveFile) {
     competitionId: next?.competitionId ?? save.league.competitionId,
     /** Suspensões em outras competições: só informação, não bloqueiam este jogo. */
     elsewhere: otherSuspensions(state, save.clubId),
+    /** Pendurados: a um amarelo de suspensão na competição do próximo jogo. */
+    hanging: hangingPlayers(save, next?.competitionId ?? save.league.competitionId),
   };
 }
 

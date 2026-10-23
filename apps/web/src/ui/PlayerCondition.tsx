@@ -31,3 +31,17 @@ export function conditionText(
     matches: entry.remaining,
   });
 }
+
+/** Cartão amarelo de quem está pendurado (a um amarelo de suspensão). */
+export function HangingBadge({ hanging }: { hanging: boolean }) {
+  const t = useT();
+  if (!hanging) return null;
+  return (
+    <span
+      role="img"
+      className={styles.hanging}
+      title={t("squad.hanging")}
+      aria-label={t("squad.hanging")}
+    />
+  );
+}

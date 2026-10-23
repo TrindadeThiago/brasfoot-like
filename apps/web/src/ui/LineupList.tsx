@@ -12,13 +12,15 @@ import { samePlace as same } from "../game/lineup-selection";
 import { label, useT } from "../i18n";
 import { FitnessMeter } from "./FitnessMeter";
 import styles from "./LineupList.module.css";
-import { Condition } from "./PlayerCondition";
+import { Condition, HangingBadge } from "./PlayerCondition";
 
 interface LineupListProps {
   lineup: Lineup;
   squad: readonly CompletedPlayer[];
   players: ReadonlyMap<string, CompletedPlayer>;
   unavailable: ReadonlyMap<string, Unavailability>;
+  /** Pendurados: a um amarelo de suspensão. */
+  hanging?: ReadonlySet<string>;
   /** Condição física (0–100) de cada jogador na data do próximo jogo. */
   fitness?: (playerId: string) => number;
   selected?: Place | undefined;
@@ -34,6 +36,7 @@ export function LineupList({
   squad,
   players,
   unavailable,
+  hanging,
   fitness,
   selected,
   onSelect,
@@ -48,6 +51,17 @@ export function LineupList({
         POSITIONS.indexOf(a.position) - POSITIONS.indexOf(b.position) ||
         b.strength - a.strength ||
         a.id.localeCompare(b.id),
+    );
+
+  // Só a exibição segue a ordem das posições (GOL, LAT, ZAG…); o índice no banco não muda.
+  const benchByPosition = lineup.bench
+    .map((playerId, index) => ({ player: players.get(playerId), index }))
+    .filter((entry): entry is { player: CompletedPlayer; index: number } => !!entry.player)
+    .sort(
+      (a, b) =>
+        POSITIONS.indexOf(a.player.position) - POSITIONS.indexOf(b.player.position) ||
+        b.player.strength - a.player.strength ||
+        a.index - b.index,
     );
 
   const row = (place: Place, player: CompletedPlayer) => {
@@ -66,6 +80,7 @@ export function LineupList({
           <span className={styles.strength}>{player.strength}</span>
           {fitness ? <FitnessMeter value={fitness(player.id)} /> : null}
           <Condition entry={unavailable.get(player.id)} hideAvailable />
+          <HangingBadge hanging={hanging?.has(player.id) ?? false} />
         </button>
       </li>
     );
@@ -78,10 +93,7 @@ export function LineupList({
       <section aria-label={benchTitle} className={styles.group}>
         <h2>{benchTitle}</h2>
         <ul>
-          {lineup.bench.map((playerId, index) => {
-            const player = players.get(playerId);
-            return player ? row({ kind: "bench", index }, player) : null;
-          })}
+          {benchByPosition.map(({ player, index }) => row({ kind: "bench", index }, player))}
           {lineup.bench.length < SEASON_BENCH_LIMIT ? (
             <li>
               <button

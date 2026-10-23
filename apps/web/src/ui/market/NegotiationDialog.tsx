@@ -13,6 +13,7 @@ import type { MarketActionResult, useGame } from "../../game/GameProvider";
 import { formatMoney, label, useT } from "../../i18n";
 import { Button } from "../Button";
 import { Dialog } from "../Dialog";
+import { MoneyInput } from "../MoneyInput";
 import styles from "./market.module.css";
 
 type Game = ReturnType<typeof useGame>;
@@ -132,12 +133,7 @@ export function NegotiationBody({
           >
             <label className={styles.field}>
               <span>{t("market.form.wage")}</span>
-              <input
-                type="number"
-                inputMode="numeric"
-                value={wage}
-                onChange={(event) => setWage(event.target.value)}
-              />
+              <MoneyInput value={wage} onValueChange={setWage} />
             </label>
             <label className={styles.field}>
               <span>{t("market.form.years")}</span>
@@ -287,12 +283,7 @@ export function NegotiationDialog({
         >
           <label className={styles.field}>
             <span>{t(kind === "loan" ? "market.form.loanFee" : "market.form.fee")}</span>
-            <input
-              type="number"
-              inputMode="numeric"
-              value={feeValue}
-              onChange={(event) => setFee(event.target.value)}
-            />
+            <MoneyInput value={feeValue} onValueChange={setFee} />
           </label>
           <Button type="submit" variant="primary" disabled={disabled}>
             {t(kind === "loan" ? "market.action.loan" : "market.action.offer")}
