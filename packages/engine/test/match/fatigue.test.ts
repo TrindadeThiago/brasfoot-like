@@ -66,4 +66,14 @@ describe("fadiga na partida", () => {
     const input = { ...makeInput(home, away, { seed: "fadiga-2" }), fatigue: FATIGUE };
     expect(simulateMatch(input)).toEqual(simulateMatch(input));
   });
+
+  it("avançar em passos dá o mesmo jogo que avançar de uma vez", () => {
+    const input = { ...makeInput(home, away, { seed: "fadiga-3" }), fatigue: FATIGUE };
+    const whole = advanceMatch(started(input), { toEnd: true });
+    let stepped = started(input);
+    for (const minutes of [7, 23, 11, 40]) stepped = advanceMatch(stepped, { minutes });
+    stepped = advanceMatch(stepped, { toEnd: true });
+    expect(stepped.events).toEqual(whole.events);
+    expect(stepped.score).toEqual(whole.score);
+  });
 });

@@ -69,19 +69,25 @@ export function matchDrain(player: Runner, minutes: number, fatigue: MatchFatigu
   return Math.min(100, Math.round((minutes * fatigue.drainPer90 * drainRate(player)) / 90));
 }
 
-/** Força depois de `minutes` em campo; a própria força se a partida não tem fadiga. */
+/** Minutos em campo contados em blocos: a força muda a cada bloco, o que mantém a escalação em cache. */
+function fatigueBlock(minutes: number): number {
+  return Math.floor(minutes / FATIGUE_TUNING.blockMinutes);
+}
+
+/** Força depois de `minutes` em campo (em blocos); a própria força se a partida não tem fadiga. */
 export function fatiguedStrength(
   player: Runner & { strength: number },
   minutes: number,
   fatigue?: MatchFatigue,
 ) {
-  if (!fatigue || minutes <= 0) return player.strength;
-  const factor = 10000 - matchDrain(player, minutes, fatigue) * fatigue.penaltyBpPerPoint;
+  const counted = fatigueBlock(minutes) * FATIGUE_TUNING.blockMinutes;
+  if (!fatigue || counted <= 0) return player.strength;
+  const factor = 10000 - matchDrain(player, counted, fatigue) * fatigue.penaltyBpPerPoint;
   return Math.round((player.strength * factor) / 10000);
 }
 
 function tiredPlayer(player: CompletedPlayer, minutes: number, fatigue?: MatchFatigue) {
-  if (!fatigue || minutes <= 0) return player;
+  if (!fatigue || fatigueBlock(minutes) <= 0) return player;
   return { ...player, strength: fatiguedStrength(player, minutes, fatigue) };
 }
 
@@ -125,6 +131,7 @@ export function playerState(state: MatchState, side: Side, playerId: string): Pl
 function lineupOf(state: MatchState, side: Side, context: MatchContext): LineupCache {
   const team = state.teams[side];
   const slots = FORMATIONS[team.formation].slots;
+  const fatigue = state.input.fatigue;
   const cached = context.lineups[side];
   if (cached && cached.formation === team.formation) {
     let same = true;
@@ -137,7 +144,6 @@ function lineupOf(state: MatchState, side: Side, context: MatchContext): LineupC
     if (same) return cached;
   }
   const ids = slots.map((slot) => team.onField[slot.id] ?? null);
-  const fatigue = state.input.fatigue;
   const onPitch = (playerId: string | null | undefined) => {
     const player = playerId ? context.players.get(playerId) : undefined;
     return player && tiredPlayer(player, team.players[player.id]?.minutesPlayed ?? 0, fatigue);
@@ -423,11 +429,15 @@ export function playMinute(
 ): void {
   for (const side of ["home", "away"] as const) {
     for (const playerId of Object.values(state.teams[side].onField)) {
-      if (playerId) playerState(state, side, playerId).minutesPlayed += 1;
+      if (!playerId) continue;
+      const played = playerState(state, side, playerId);
+      played.minutesPlayed += 1;
+      // Ao completar um bloco a força do jogador muda: a escalação em cache deixa de valer.
+      if (state.input.fatigue && played.minutesPlayed % FATIGUE_TUNING.blockMinutes === 0) {
+        delete context.lineups[side];
+      }
     }
   }
-  // Com fadiga a força muda a cada minuto: a escalação em cache deixa de valer.
-  if (state.input.fatigue) context.lineups = {};
 
   const strength = {
     home: strengthOf(state, "home", context),

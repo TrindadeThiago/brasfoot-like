@@ -116,6 +116,8 @@ export const FATIGUE_TUNING = {
     number
   >,
   paceTrait: 1.12,
+  /** A força cai em degraus deste tamanho (minutos em campo): barato de recalcular e igual em qualquer passo. */
+  blockMinutes: 5,
   /** Variação individual: de 1 − spread a 1 + spread. */
   individualSpread: 0.2,
 } as const;
