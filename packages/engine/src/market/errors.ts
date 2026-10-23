@@ -10,6 +10,7 @@ export const MARKET_ERROR_PARAMS = {
   "market.invalid_amount": [],
   "market.not_found": [],
   "market.invalid_stage": [],
+  "market.no_buyer": [],
 } as const satisfies Record<string, readonly string[]>;
 
 export type MarketErrorCode = keyof typeof MARKET_ERROR_PARAMS;

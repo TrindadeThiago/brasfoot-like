@@ -11,8 +11,14 @@ import {
   marketAfterRound,
   type NegotiationStep,
   proposeContract,
+  quoteSale,
+  quoteTermination,
+  type SaleQuote,
   type StartInput,
+  sellNow,
   startNegotiation,
+  type TerminationQuote,
+  terminateContract,
 } from "@brasfoot-like/engine";
 import { withAdjustedLineup } from "./career";
 import type { SaveFile } from "./format";
@@ -112,4 +118,36 @@ export function dismissWindowReport(save: SaveFile): SaveFile {
   const last = save.market.reports.at(-1);
   if (!last || save.market.reportSeen === last.id) return save;
   return { ...save, market: { ...save.market, reportSeen: last.id } };
+}
+
+export type DisposalSaveResult = { ok: true; save: SaveFile } | { ok: false; error: MarketError };
+
+/** Cotação da venda imediata de um jogador do clube (a que `sellManagerPlayer` executa). */
+export function quoteManagerSale(
+  save: SaveFile,
+  playerId: string,
+): { ok: true; quote: SaleQuote } | { ok: false; error: MarketError } {
+  const result = quoteSale(marketContextOf(save), playerId);
+  return result.ok ? { ok: true, quote: result.value } : result;
+}
+
+/** Cotação da rescisão de um jogador do clube (a que `terminateManagerContract` executa). */
+export function quoteManagerTermination(
+  save: SaveFile,
+  playerId: string,
+): { ok: true; quote: TerminationQuote } | { ok: false; error: MarketError } {
+  const result = quoteTermination(marketContextOf(save), playerId);
+  return result.ok ? { ok: true, quote: result.value } : result;
+}
+
+/** Vende o jogador na hora; quem sai também sai da escalação (com aviso). */
+export function sellManagerPlayer(save: SaveFile, playerId: string): DisposalSaveResult {
+  const result = sellNow(marketContextOf(save), playerId);
+  return result.ok ? { ok: true, save: applyMarketUpdate(save, result.value) } : result;
+}
+
+/** Rescinde o contrato, pagando a multa; o jogador vira livre. */
+export function terminateManagerContract(save: SaveFile, playerId: string): DisposalSaveResult {
+  const result = terminateContract(marketContextOf(save), playerId);
+  return result.ok ? { ok: true, save: applyMarketUpdate(save, result.value) } : result;
 }

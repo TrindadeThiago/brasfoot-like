@@ -36,6 +36,7 @@ import {
   cancelManagerNegotiation,
   createSave,
   currentDayOf,
+  type DisposalSaveResult,
   declineManagerOffer,
   dismissBoardNotice as dismissSavedBoardNotice,
   dismissSquadNotice as dismissSavedSquadNotice,
@@ -52,10 +53,12 @@ import {
   type SaveError,
   type SaveFile,
   seasonStateOf,
+  sellManagerPlayer,
   setManagerTicketPrice,
   startManagerNegotiation,
   startManagerStadiumWorks,
   takeManagerLoan,
+  terminateManagerContract,
   touch,
   userSeasonFor,
   withAdjustedLineup,
@@ -237,11 +240,16 @@ interface GameContextValue {
   answerPlayerDemand(negotiationId: string, accept: boolean): MarketActionResult;
   cancelNegotiation(negotiationId: string): void;
   answerIncomingOffer(offerId: string, answer: IncomingAnswer): IncomingActionResult;
+  /** Venda imediata a um clube da IA e rescisão de contrato (010): validam no motor e salvam. */
+  sellPlayer(playerId: string): DisposalActionResult;
+  terminateContract(playerId: string): DisposalActionResult;
   /** Carreira do técnico (012): aceitar/recusar proposta de emprego e dispensar o aviso. */
   acceptJobOffer(offerId: string): boolean;
   declineJobOffer(offerId: string): void;
   dismissBoardNotice(): void;
 }
+
+export type DisposalActionResult = { ok: true } | { ok: false; error: MarketError };
 
 export type IncomingActionResult =
   | { ok: true; response?: "accepted" | "refused" }
@@ -745,6 +753,32 @@ export function GameProvider({
     [persist],
   );
 
+  const disposePlayer = useCallback(
+    (
+      action: (save: SaveFile, playerId: string) => DisposalSaveResult,
+      playerId: string,
+    ): DisposalActionResult => {
+      const save = latestSave.current;
+      if (!save) return { ok: false, error: { code: "market.not_found", params: {} } };
+      const result = action(save, playerId);
+      if (!result.ok) return result;
+      const next = touch(result.save, new Date().toISOString());
+      latestSave.current = next;
+      dispatch({ type: "update", save: next });
+      void persist(next);
+      return { ok: true };
+    },
+    [persist],
+  );
+  const sellPlayer = useCallback(
+    (playerId: string) => disposePlayer(sellManagerPlayer, playerId),
+    [disposePlayer],
+  );
+  const terminateContract = useCallback(
+    (playerId: string) => disposePlayer(terminateManagerContract, playerId),
+    [disposePlayer],
+  );
+
   const dismissSquadNotice = useCallback(
     () => commitLineup((save) => dismissSavedSquadNotice(save)),
     [commitLineup],
@@ -846,6 +880,8 @@ export function GameProvider({
       answerPlayerDemand,
       cancelNegotiation,
       answerIncomingOffer,
+      sellPlayer,
+      terminateContract,
       acceptJobOffer,
       declineJobOffer,
       dismissBoardNotice,
@@ -882,6 +918,8 @@ export function GameProvider({
       answerPlayerDemand,
       cancelNegotiation,
       answerIncomingOffer,
+      sellPlayer,
+      terminateContract,
       acceptJobOffer,
       declineJobOffer,
       dismissBoardNotice,

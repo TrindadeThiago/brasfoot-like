@@ -31,3 +31,8 @@
 .empty {
   color: var(--color-muted);
 }
+
+.rowActions {
+  display: inline-flex;
+  gap: var(--space-2);
+}

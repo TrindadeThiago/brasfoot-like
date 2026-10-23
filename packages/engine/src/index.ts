@@ -265,6 +265,15 @@ export {
   initialContract,
   isLastYear,
 } from "./market/contracts";
+export type { SaleQuote, TerminationQuote } from "./market/disposal";
+export {
+  QUICK_SALE_PCT,
+  quoteSale,
+  quoteTermination,
+  sellNow,
+  TERMINATION_PCT,
+  terminateContract,
+} from "./market/disposal";
 export {
   completeLoan,
   completeRenewal,
