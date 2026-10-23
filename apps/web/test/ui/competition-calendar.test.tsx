@@ -66,14 +66,69 @@ describe("Calendário (FR-019)", () => {
     expect(within(rows[10] as HTMLElement).getByText(t("calendar.notPlayed"))).toBeDefined();
   });
 
-  it("mostra todos os jogos de uma rodada", async () => {
+  it("mostra todos os jogos de uma rodada num diálogo", async () => {
     const { store } = await storedCareer(4);
     renderApp("/jogo/calendario?c=tela", store);
     const user = userEvent.setup();
     await user.click(
       await screen.findByRole("button", { name: t("calendar.showRound", { round: 2 }) }),
     );
-    const region = screen.getByRole("region", { name: t("calendar.roundMatches", { round: 2 }) });
-    expect(within(region).getAllByRole("listitem")).toHaveLength(10);
+    const dialog = screen.getByRole("dialog", { name: t("calendar.roundMatches", { round: 2 }) });
+    expect(within(dialog).getAllByRole("listitem")).toHaveLength(10);
+  });
+
+  describe("fechar a lista da rodada", () => {
+    async function openRound() {
+      const { store } = await storedCareer(4);
+      renderApp("/jogo/calendario?c=tela", store);
+      const user = userEvent.setup();
+      await user.click(
+        await screen.findByRole("button", { name: t("calendar.showRound", { round: 2 }) }),
+      );
+      await screen.findByRole("dialog");
+      return user;
+    }
+
+    it("pelo botão Fechar", async () => {
+      const user = await openRound();
+      await user.click(screen.getByRole("button", { name: t("common.close") }));
+      expect(screen.queryByRole("dialog")).toBeNull();
+    });
+
+    it("pelo Esc", async () => {
+      const user = await openRound();
+      await user.keyboard("{Escape}");
+      expect(screen.queryByRole("dialog")).toBeNull();
+    });
+
+    it("clicando fora do diálogo", async () => {
+      const user = await openRound();
+      const dialog = screen.getByRole("dialog");
+      await user.click(dialog.parentElement as HTMLElement);
+      expect(screen.queryByRole("dialog")).toBeNull();
+    });
+
+    it("clicar dentro do diálogo não fecha", async () => {
+      const user = await openRound();
+      await user.click(screen.getByRole("dialog"));
+      expect(screen.getByRole("dialog")).toBeDefined();
+    });
+
+    it("o Resumo de um jogo da rodada abre e Voltar retorna à lista", async () => {
+      const user = await openRound();
+      const [summary] = within(screen.getByRole("dialog")).getAllByRole("button", {
+        name: /^Ver resumo de /,
+      });
+      if (!summary) throw new Error("rodada 2 sem jogo disputado");
+      await user.click(summary);
+      const dialog = await screen.findByRole("dialog", { name: /^Ver resumo de / });
+      expect(within(dialog).getByRole("article")).toBeDefined();
+      await user.click(
+        within(dialog).getByRole("button", { name: t("calendar.backToRound", { round: 2 }) }),
+      );
+      expect(
+        await screen.findByRole("dialog", { name: t("calendar.roundMatches", { round: 2 }) }),
+      ).toBeDefined();
+    });
   });
 });

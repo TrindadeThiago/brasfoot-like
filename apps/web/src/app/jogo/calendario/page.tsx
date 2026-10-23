@@ -182,13 +182,44 @@ export default function CalendarPage() {
                 highlight={(fixture) => next !== undefined && keyOf(fixture) === keyOf(next)}
               />
             </div>
-            {selected && detailRound ? (
-              <section
-                aria-label={t("calendar.roundMatches", { round: selected.round })}
-                className={styles.detail}
+            {summary ? (
+              <Dialog
+                open
+                dismissOnBackdrop
+                title={t("summary.open", {
+                  home: clubs.get(summary.home)?.shortName ?? "",
+                  away: clubs.get(summary.away)?.shortName ?? "",
+                })}
+                onClose={() => setSummary(undefined)}
+                actions={
+                  <>
+                    {selected && detailRound ? (
+                      <Button onClick={() => setSummary(undefined)}>
+                        {t("calendar.backToRound", { round: selected.round })}
+                      </Button>
+                    ) : null}
+                    <Button
+                      onClick={() => {
+                        setSummary(undefined);
+                        setOpen(undefined);
+                      }}
+                    >
+                      {t("common.close")}
+                    </Button>
+                  </>
+                }
               >
-                <h2>{t("calendar.roundMatches", { round: selected.round })}</h2>
-                <ul>
+                <MatchSummary record={summary} save={save} />
+              </Dialog>
+            ) : selected && detailRound ? (
+              <Dialog
+                open
+                dismissOnBackdrop
+                title={t("calendar.roundMatches", { round: selected.round })}
+                onClose={() => setOpen(undefined)}
+                actions={<Button onClick={() => setOpen(undefined)}>{t("common.close")}</Button>}
+              >
+                <ul className={styles.roundList}>
                   {detailRound.fixtures.map((fixture) => {
                     const record = detail?.records.find(
                       (entry) => entry.round === selected.round && entry.home === fixture.home,
@@ -222,19 +253,6 @@ export default function CalendarPage() {
                     );
                   })}
                 </ul>
-              </section>
-            ) : null}
-            {summary ? (
-              <Dialog
-                open
-                title={t("summary.open", {
-                  home: clubs.get(summary.home)?.shortName ?? "",
-                  away: clubs.get(summary.away)?.shortName ?? "",
-                })}
-                onClose={() => setSummary(undefined)}
-                actions={<Button onClick={() => setSummary(undefined)}>{t("common.close")}</Button>}
-              >
-                <MatchSummary record={summary} save={save} />
               </Dialog>
             ) : null}
           </div>

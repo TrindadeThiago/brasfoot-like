@@ -112,6 +112,7 @@
   "calendar.roundMatches": "Jogos da rodada {round}",
   "calendar.notPlayed": "a disputar",
   "calendar.penalties": "({mine}-{theirs} pên.)",
+  "calendar.backToRound": "Voltar à rodada {round}",
   "calendar.col.highlights": "Gols e cartões",
   "highlights.goals": "Gols",
   "highlights.penalty": "pên.",
