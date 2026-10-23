@@ -1,5 +1,12 @@
 [
   {
+    "version": "1.3.1",
+    "date": "2026-10-23",
+    "changes": [
+      "Energia ao vivo: cada jogador agora se desgasta no seu ritmo durante a partida. O goleiro cansa bem menos, laterais e meias cansam mais, quem tem a característica Velocidade gasta mais energia, e cada atleta tem um preparo físico próprio, fixo de jogo a jogo. Antes todos perdiam energia na mesma velocidade."
+    ]
+  },
+  {
     "version": "1.3.0",
     "date": "2026-10-23",
     "changes": [

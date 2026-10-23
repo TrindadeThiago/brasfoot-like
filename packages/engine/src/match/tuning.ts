@@ -1,3 +1,4 @@
+import type { Position } from "../model/catalogs";
 import type { Posture } from "./formations";
 import type { InjurySeverity, ShotKind } from "./types";
 
@@ -103,6 +104,23 @@ export const MATCH_TUNING = {
   minimumPlayers: 7,
   abandonedScore: 3,
 } as const satisfies { traits: Record<string, number>; [key: string]: unknown };
+
+/**
+ * Ritmo de desgaste de cada jogador na partida: multiplica `drainPer90`. Vem da posição (o goleiro
+ * quase não corre, laterais e meias percorrem mais campo), de ter a característica `pace` e de uma
+ * variação fixa por jogador (o preparo físico individual, estável de jogo a jogo).
+ */
+export const FATIGUE_TUNING = {
+  position: { GK: 0.45, CB: 0.85, FB: 1.15, DM: 1.05, MF: 1.15, FW: 1 } satisfies Record<
+    Position,
+    number
+  >,
+  paceTrait: 1.12,
+  /** A força cai em degraus deste tamanho (minutos em campo): barato de recalcular e igual em qualquer passo. */
+  blockMinutes: 5,
+  /** Variação individual: de 1 − spread a 1 + spread. */
+  individualSpread: 0.2,
+} as const;
 
 /** Disputa de pênaltis (018 R9): probabilidade de gol, tipos de falha e teto de segurança. */
 export const SHOOTOUT_TUNING = {
