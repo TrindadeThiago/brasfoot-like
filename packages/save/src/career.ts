@@ -69,7 +69,25 @@ export function withAdjustedLineup(save: SaveFile): SaveFile {
   const unavailable = [...upcomingUnavailability(seasonStateOf(save), save.clubId), ...left];
   const { lineup, changes } = adjustLineup(save.lineup, squad, unavailable);
   if (changes.length === 0) return save;
-  return { ...save, lineup, lineupNotice: [...(save.lineupNotice ?? []), ...changes] };
+  const named = changes.map((change) => {
+    if (change.kind === "short_squad") return change;
+    // Quem segue no banco tem o nome à mão; só quem saiu do mundo precisa dele no aviso.
+    if (save.bank.players.some((player) => player.id === change.outId)) return change;
+    const outName = departedName(save, change.outId);
+    return outName === undefined ? change : { ...change, outName };
+  });
+  return { ...save, lineup, lineupNotice: [...(save.lineupNotice ?? []), ...named] };
+}
+
+/** Nome de um jogador, mesmo se já saiu do mundo (aposentado, dispensado ou agente livre). */
+function departedName(save: SaveFile, playerId: string): string | undefined {
+  const notice = save.renewal.squadNotice;
+  const gone = notice ? [...notice.retired, ...notice.released] : [];
+  return (
+    save.bank.players.find((player) => player.id === playerId)?.displayName ??
+    gone.find((ref) => ref.playerId === playerId)?.displayName ??
+    save.market.freeAgents.find((agent) => agent.player.id === playerId)?.player.displayName
+  );
 }
 
 /** A parte do save que o dia de jogos da carreira lê e escreve (017). */

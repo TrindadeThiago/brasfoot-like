@@ -6,7 +6,8 @@ import { useT } from "../../i18n";
 import { Crest } from "../Crest";
 import styles from "./ShootoutPanel.module.css";
 
-const ICON = { goal: "✔", saved: "✋", post: "▯", off: "✖" } as const;
+// U+FE0E força o glifo de texto: sem ele, ✔ e ✖ viram emoji colorido em alguns sistemas.
+const ICON = { goal: "✔\uFE0E", saved: "⊘", post: "▯", off: "✖\uFE0E" } as const;
 
 /** Disputa de pênaltis: cada cobrança em ordem, com o placar da série separado do jogo. */
 export function ShootoutPanel({
