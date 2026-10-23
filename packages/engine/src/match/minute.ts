@@ -1,12 +1,13 @@
 import type { Trait } from "../model/catalogs";
 import type { CompletedPlayer } from "../model/types";
+import { cyrb128 } from "../rng/hash";
 import type { Rng } from "../rng/xoshiro";
 import { adequacy } from "./adequacy";
 import { FORMATIONS } from "./formations";
 import { type FieldPlayer, pickAssister, pickFouler, pickInjured, pickShooter } from "./picker";
 import { type ClockKey, minuteRng } from "./rng";
 import { computeStrength, type TeamStrength } from "./strength";
-import { MATCH_TUNING } from "./tuning";
+import { FATIGUE_TUNING, MATCH_TUNING } from "./tuning";
 import type {
   InjurySeverity,
   MatchEvent,
@@ -46,21 +47,42 @@ export function substitutionCap(state: MatchState): number {
   return state.input.substitutionLimit + (state.extraTime ? 1 : 0);
 }
 
+/** Jogador que importa para o desgaste: posição, características e identidade. */
+type Runner = Pick<CompletedPlayer, "id" | "position" | "traits">;
+
+const individualRate = new Map<string, number>();
+
+/** Multiplicador do desgaste do jogador (FATIGUE_TUNING): posição × característica × preparo. */
+function drainRate(player: Runner): number {
+  let preparation = individualRate.get(player.id);
+  if (preparation === undefined) {
+    const unit = (cyrb128(`fadiga:${player.id}`)[0] ?? 0) / 0xffffffff;
+    preparation = 1 + (unit * 2 - 1) * FATIGUE_TUNING.individualSpread;
+    individualRate.set(player.id, preparation);
+  }
+  const pace = player.traits.includes("pace") ? FATIGUE_TUNING.paceTrait : 1;
+  return FATIGUE_TUNING.position[player.position] * pace * preparation;
+}
+
 /** Energia perdida na partida por quem jogou `minutes` minutos (0–100). */
-export function matchDrain(minutes: number, fatigue: MatchFatigue): number {
-  return Math.min(100, Math.round((minutes * fatigue.drainPer90) / 90));
+export function matchDrain(player: Runner, minutes: number, fatigue: MatchFatigue): number {
+  return Math.min(100, Math.round((minutes * fatigue.drainPer90 * drainRate(player)) / 90));
 }
 
 /** Força depois de `minutes` em campo; a própria força se a partida não tem fadiga. */
-export function fatiguedStrength(strength: number, minutes: number, fatigue?: MatchFatigue) {
-  if (!fatigue || minutes <= 0) return strength;
-  const factor = 10000 - matchDrain(minutes, fatigue) * fatigue.penaltyBpPerPoint;
-  return Math.round((strength * factor) / 10000);
+export function fatiguedStrength(
+  player: Runner & { strength: number },
+  minutes: number,
+  fatigue?: MatchFatigue,
+) {
+  if (!fatigue || minutes <= 0) return player.strength;
+  const factor = 10000 - matchDrain(player, minutes, fatigue) * fatigue.penaltyBpPerPoint;
+  return Math.round((player.strength * factor) / 10000);
 }
 
 function tiredPlayer(player: CompletedPlayer, minutes: number, fatigue?: MatchFatigue) {
   if (!fatigue || minutes <= 0) return player;
-  return { ...player, strength: fatiguedStrength(player.strength, minutes, fatigue) };
+  return { ...player, strength: fatiguedStrength(player, minutes, fatigue) };
 }
 
 export function opponent(side: Side): Side {

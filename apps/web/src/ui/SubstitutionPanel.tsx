@@ -71,10 +71,15 @@ export function SubstitutionPanel({ match, side, save, onChange }: PanelProps) {
   const startFitness = fitnessAt(save);
   const squad = new Map(match.state.input[side].squad.map((player) => [player.id, player]));
   const minutesOf = (id: string) => team.players[id]?.minutesPlayed ?? 0;
-  const energy = (id: string) =>
-    Math.max(0, startFitness(id) - (fatigue ? matchDrain(minutesOf(id), fatigue) : 0));
-  const strengthNow = (id: string) =>
-    fatiguedStrength(squad.get(id)?.strength ?? 0, minutesOf(id), fatigue);
+  const energy = (id: string) => {
+    const player = squad.get(id);
+    const drained = fatigue && player ? matchDrain(player, minutesOf(id), fatigue) : 0;
+    return Math.max(0, startFitness(id) - drained);
+  };
+  const strengthNow = (id: string) => {
+    const player = squad.get(id);
+    return player ? fatiguedStrength(player, minutesOf(id), fatigue) : 0;
+  };
   // O limite da partida e mais uma na prorrogação (018): o contador mostra o que vale agora.
   const limit = substitutionCap(match.state);
   const unavailable = new Set(match.state.input[side].unavailable ?? []);

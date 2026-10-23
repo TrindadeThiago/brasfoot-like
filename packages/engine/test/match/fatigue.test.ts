@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { advanceMatch, buildContext, simulateMatch, startMatch } from "../../src/match/engine";
 import { fatiguedStrength, matchDrain, strengthOf } from "../../src/match/minute";
 import type { MatchFatigue, MatchInput, MatchState } from "../../src/match/types";
+import type { Position, Trait } from "../../src/model/catalogs";
 import { clubIds, makeInput } from "./helpers/teams";
 
 const [home, away] = clubIds() as [string, string];
@@ -14,17 +15,41 @@ function started(input: MatchInput): MatchState {
 }
 
 describe("fadiga na partida", () => {
+  const runner = (id: string, position: Position = "FW", traits: Trait[] = []) => ({
+    id,
+    position,
+    traits,
+    strength: 80,
+  });
+
   it("o desgaste é proporcional aos minutos e limitado a 100", () => {
-    expect(matchDrain(0, FATIGUE)).toBe(0);
-    expect(matchDrain(45, FATIGUE)).toBe(15);
-    expect(matchDrain(90, FATIGUE)).toBe(30);
-    expect(matchDrain(1000, FATIGUE)).toBe(100);
+    const player = runner("jogador-1");
+    expect(matchDrain(player, 0, FATIGUE)).toBe(0);
+    expect(matchDrain(player, 90, FATIGUE)).toBeGreaterThan(matchDrain(player, 45, FATIGUE));
+    expect(matchDrain(player, 1000, FATIGUE)).toBe(100);
+  });
+
+  it("cada jogador cansa num ritmo: posição, pace e preparo individual", () => {
+    const outfield = runner("jogador-1", "MF");
+    expect(matchDrain(runner("jogador-1", "GK"), 90, FATIGUE)).toBeLessThan(
+      matchDrain(outfield, 90, FATIGUE),
+    );
+    expect(matchDrain(runner("jogador-1", "MF", ["pace"]), 90, FATIGUE)).toBeGreaterThan(
+      matchDrain(outfield, 90, FATIGUE),
+    );
+    const drains = new Set(
+      Array.from({ length: 30 }, (_, i) => matchDrain(runner(`atleta-${i}`, "MF"), 90, FATIGUE)),
+    );
+    expect(drains.size).toBeGreaterThan(3);
+    // O preparo é fixo: o mesmo jogador cansa igual em qualquer jogo.
+    expect(matchDrain(outfield, 90, FATIGUE)).toBe(matchDrain(outfield, 90, FATIGUE));
   });
 
   it("a força cai com os minutos; sem fadiga ou sem minutos não muda", () => {
-    expect(fatiguedStrength(80, 90, FATIGUE)).toBe(70);
-    expect(fatiguedStrength(80, 0, FATIGUE)).toBe(80);
-    expect(fatiguedStrength(80, 90)).toBe(80);
+    const player = runner("jogador-1");
+    expect(fatiguedStrength(player, 90, FATIGUE)).toBeLessThan(80);
+    expect(fatiguedStrength(player, 0, FATIGUE)).toBe(80);
+    expect(fatiguedStrength(player, 90)).toBe(80);
   });
 
   it("o time rende menos no fim do jogo do que no começo, e só com a fadiga ligada", () => {

@@ -36,13 +36,16 @@ describe("contador de substituições", () => {
 });
 
 describe("energia ao vivo", () => {
-  it("o titular perde energia pelos minutos em campo e os reservas seguem inteiros", () => {
+  it("o titular perde energia pelos minutos em campo, cada um no seu ritmo, e os reservas seguem inteiros", () => {
     const { save, match, side } = myMatch();
     match.state = advanceMatch(match.state, { minutes: 60 });
     render(<SubstitutionPanel match={match} side={side} save={save} onChange={vi.fn()} />);
-    const meters = screen.getAllByRole("meter").map((meter) => meter.getAttribute("aria-valuenow"));
-    // 60 minutos × 30 pontos por 90: 20 pontos a menos para quem jogou todo o tempo.
-    expect(meters).toContain("80");
-    expect(meters).toContain("100");
+    const values = screen
+      .getAllByRole("meter")
+      .map((meter) => Number(meter.getAttribute("aria-valuenow")));
+    expect(values).toContain(100);
+    const tired = values.filter((value) => value < 100);
+    expect(tired.length).toBeGreaterThan(0);
+    expect(new Set(tired).size).toBeGreaterThan(1);
   });
 });
