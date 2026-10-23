@@ -27,9 +27,15 @@
   gap: var(--space-1);
 }
 
+.actions {
+  display: inline-flex;
+  gap: var(--space-2);
+}
+
 .detail li {
   display: grid;
-  grid-template-columns: 1fr 70px 1fr;
+  grid-template-columns: 1fr 70px 1fr auto auto;
+  align-items: center;
   gap: var(--space-2);
 }
 

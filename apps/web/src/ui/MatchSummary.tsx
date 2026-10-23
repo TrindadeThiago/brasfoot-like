@@ -1,21 +1,13 @@
 "use client";
 
-import type { MatchRecord, TeamStats } from "@brasfoot-like/engine";
+import type { MatchRecord } from "@brasfoot-like/engine";
 import type { SaveFile } from "@brasfoot-like/save";
 import { useT } from "../i18n";
 import { Crest } from "./Crest";
 import { ShootoutPanel } from "./cup/ShootoutPanel";
 import { minuteText } from "./event-text";
 import styles from "./MatchSummary.module.css";
-
-const STATS: readonly (keyof TeamStats)[] = [
-  "shots",
-  "shotsOnTarget",
-  "possession",
-  "yellowCards",
-  "redCards",
-  "penalties",
-];
+import { StatsTable } from "./StatsTable";
 
 /** Resumo de uma partida a partir do registro da temporada (FR-015). */
 export function MatchSummary({ record, save }: { record: MatchRecord; save: SaveFile }) {
@@ -72,13 +64,6 @@ export function MatchSummary({ record, save }: { record: MatchRecord; save: Save
     }
   }
 
-  const value = (stats: TeamStats, key: keyof TeamStats) => {
-    if (key === "possession") return t("summary.possessionValue", { value: stats.possession });
-    if (key === "penalties")
-      return t("summary.penaltiesValue", { scored: stats.penaltiesScored, total: stats.penalties });
-    return String(stats[key]);
-  };
-
   const section = (key: string, lines: string[]) => (
     <section aria-label={t(key)} className={styles.section}>
       <h3>{t(key)}</h3>
@@ -109,25 +94,7 @@ export function MatchSummary({ record, save }: { record: MatchRecord; save: Save
           {section("summary.injuries", injuries)}
           {section("summary.substitutions", substitutions)}
         </div>
-        <table className={styles.stats}>
-          <caption>{t("summary.stats")}</caption>
-          <thead>
-            <tr>
-              <th scope="col">{home?.shortName}</th>
-              <th scope="col" />
-              <th scope="col">{away?.shortName}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {STATS.map((key) => (
-              <tr key={key}>
-                <td>{value(record.stats.home, key)}</td>
-                <th scope="row">{t(`summary.stat.${key}`)}</th>
-                <td>{value(record.stats.away, key)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <StatsTable home={home?.shortName} away={away?.shortName} stats={record.stats} />
       </div>
       {record.decision?.extraTimeScore ? (
         <p className={styles.none}>

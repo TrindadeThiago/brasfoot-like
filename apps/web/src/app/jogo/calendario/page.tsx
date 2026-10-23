@@ -1,6 +1,11 @@
 "use client";
 
-import { type ClubFixture, clubFixtures, competitionSeason } from "@brasfoot-like/engine";
+import {
+  type ClubFixture,
+  clubFixtures,
+  competitionSeason,
+  type MatchRecord,
+} from "@brasfoot-like/engine";
 import { nextFixture, seasonStateOf } from "@brasfoot-like/save";
 import { useState } from "react";
 import { GameLayout } from "../../../game/GameLayout";
@@ -10,8 +15,11 @@ import { Button } from "../../../ui/Button";
 import { Crest } from "../../../ui/Crest";
 import { phaseLabel } from "../../../ui/cup/phase";
 import { type Column, DataTable } from "../../../ui/DataTable";
+import { Dialog } from "../../../ui/Dialog";
 import { FormChips } from "../../../ui/FormChips";
 import { DerbyBadge } from "../../../ui/fans/DerbyBadge";
+import { MatchHighlights } from "../../../ui/MatchHighlights";
+import { MatchSummary } from "../../../ui/MatchSummary";
 import styles from "./page.module.css";
 
 const ALL = "all";
@@ -22,6 +30,7 @@ const keyOf = (fixture: ClubFixture) => `${fixture.day}-${fixture.competitionId}
 export default function CalendarPage() {
   const t = useT();
   const [open, setOpen] = useState<string | undefined>();
+  const [summary, setSummary] = useState<MatchRecord | undefined>();
   const [filter, setFilter] = useState<string>(ALL);
   return (
     <GameLayout>
@@ -110,16 +119,35 @@ export default function CalendarPage() {
             },
           },
           {
+            key: "highlights",
+            header: t("calendar.col.highlights"),
+            render: (fixture) =>
+              fixture.record ? <MatchHighlights record={fixture.record} save={save} /> : null,
+          },
+          {
             key: "details",
             header: "",
             render: (fixture) => (
-              <Button
-                aria-label={t("calendar.showRound", { round: fixture.round })}
-                aria-expanded={open === keyOf(fixture)}
-                onClick={() => setOpen(keyOf(fixture))}
-              >
-                {t("calendar.showRoundShort")}
-              </Button>
+              <span className={styles.actions}>
+                {fixture.record ? (
+                  <Button
+                    aria-label={t("summary.open", {
+                      home: clubs.get(fixture.home)?.shortName ?? "",
+                      away: clubs.get(fixture.away)?.shortName ?? "",
+                    })}
+                    onClick={() => setSummary(fixture.record)}
+                  >
+                    {t("summary.button")}
+                  </Button>
+                ) : null}
+                <Button
+                  aria-label={t("calendar.showRound", { round: fixture.round })}
+                  aria-expanded={open === keyOf(fixture)}
+                  onClick={() => setOpen(keyOf(fixture))}
+                >
+                  {t("calendar.showRoundShort")}
+                </Button>
+              </span>
             ),
           },
         ];
@@ -179,11 +207,35 @@ export default function CalendarPage() {
                           home={fixture.home}
                           away={fixture.away}
                         />
+                        {record ? (
+                          <Button
+                            aria-label={t("summary.open", {
+                              home: clubs.get(fixture.home)?.shortName ?? "",
+                              away: clubs.get(fixture.away)?.shortName ?? "",
+                            })}
+                            onClick={() => setSummary(record)}
+                          >
+                            {t("summary.button")}
+                          </Button>
+                        ) : null}
                       </li>
                     );
                   })}
                 </ul>
               </section>
+            ) : null}
+            {summary ? (
+              <Dialog
+                open
+                title={t("summary.open", {
+                  home: clubs.get(summary.home)?.shortName ?? "",
+                  away: clubs.get(summary.away)?.shortName ?? "",
+                })}
+                onClose={() => setSummary(undefined)}
+                actions={<Button onClick={() => setSummary(undefined)}>{t("common.close")}</Button>}
+              >
+                <MatchSummary record={summary} save={save} />
+              </Dialog>
             ) : null}
           </div>
         );

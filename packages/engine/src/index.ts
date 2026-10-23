@@ -339,7 +339,7 @@ export { FORMATION_IDS, FORMATIONS, POSTURES, slotPosition } from "./match/forma
 export { MATCH_REALISM_LIMITS } from "./match/limits";
 export type { MatchMetrics, MetricCheck } from "./match/metrics";
 export { checkRealism, createMetricsAccumulator } from "./match/metrics";
-export { matchResult } from "./match/result";
+export { liveStats, matchResult } from "./match/result";
 export { penaltyChance, shootoutOrder, shootoutProgress } from "./match/shootout";
 export type { TeamStrength } from "./match/strength";
 export { teamStrength } from "./match/strength";

@@ -1,0 +1,24 @@
+.stats {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.stats caption {
+  text-align: left;
+  color: var(--color-muted);
+  font-weight: 600;
+  padding-bottom: var(--space-2);
+}
+
+.stats td,
+.stats th {
+  padding: 4px var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.stats tbody th {
+  font-weight: 400;
+  color: var(--color-muted);
+}
