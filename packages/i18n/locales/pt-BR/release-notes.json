@@ -1,5 +1,13 @@
 [
   {
+    "version": "1.2.4",
+    "date": "2026-10-23",
+    "changes": [
+      "Menos cartões amarelos: a média por jogo caiu de 4,7 para 3,5, e as suspensões deixam de acontecer em quase toda rodada (cerca de 28% menos jogos de suspensão por temporada).",
+      "As expulsões também diminuíram um pouco, por consequência (menos segundo amarelo)."
+    ]
+  },
+  {
     "version": "1.2.3",
     "date": "2026-10-23",
     "changes": [

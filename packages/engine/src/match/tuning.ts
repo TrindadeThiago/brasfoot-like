@@ -77,7 +77,7 @@ export const MATCH_TUNING = {
   foulWeight: { GK: 0.15, CB: 1.3, FB: 1.1, DM: 1.4, MF: 0.9, FW: 0.7 },
 
   /** Disciplina e lesões, por time e minuto. */
-  yellowRate: 0.024,
+  yellowRate: 0.018,
   directRedRate: 0.0003,
   injuryRate: 0.0016,
   injurySeverity: { minor: 60, moderate: 30, severe: 10 } satisfies Record<InjurySeverity, number>,
