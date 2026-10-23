@@ -51,6 +51,10 @@ describe("rodada ao vivo (US1, US3)", () => {
       ),
     ).toHaveLength(9);
 
+    // Estatísticas do jogo do clube visíveis desde o início, com a posse dos dois times.
+    const stats = screen.getByRole("table", { name: t("summary.stats") });
+    expect(within(stats).getByText(t("summary.stat.possession"))).toBeDefined();
+
     await elapse(10_000);
     expect(within(mine).queryByText("0'")).toBeNull();
 

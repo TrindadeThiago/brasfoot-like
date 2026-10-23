@@ -25,6 +25,7 @@ import { ShootoutPanel } from "../../../ui/cup/ShootoutPanel";
 import { EventFeed } from "../../../ui/EventFeed";
 import { clockText, eventText } from "../../../ui/event-text";
 import { LiveGrid } from "../../../ui/LiveGrid";
+import { LiveStats } from "../../../ui/LiveStats";
 import { setLeaveGuard } from "../../../ui/leave-guard";
 import { MatchSummary } from "../../../ui/MatchSummary";
 import { RoundResults } from "../../../ui/RoundResults";
@@ -146,6 +147,7 @@ function LiveRoundView({
           score={mine.match.state.shootout.score}
         />
       ) : null}
+      {mine ? <LiveStats match={mine.match} save={save} /> : null}
       <div className={styles.board}>
         <LiveGrid
           matches={round.live.matches.filter((match) => match.divisionLevel === shownLevel)}

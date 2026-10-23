@@ -52,22 +52,27 @@ function decisionOf(state: MatchState): MatchDecision | undefined {
   return { by: "aggregate", winner: home >= away ? "home" : "away" };
 }
 
+/** Estatísticas de uma partida em andamento (as mesmas do resultado final). */
+export function liveStats(state: MatchState): Record<Side, TeamStats> {
+  const { home, total } = state.possession;
+  const homePossession = total === 0 ? 50 : Math.round((100 * home) / total);
+  return {
+    home: teamStats(state, "home", homePossession),
+    away: teamStats(state, "away", 100 - homePossession),
+  };
+}
+
 /** Resultado de uma partida encerrada (FR-031, FR-032). */
 export function matchResult(state: MatchState): MatchResult {
   if (state.status !== "finished" && state.status !== "abandoned") {
     throw new Error(`a partida ainda não terminou (status ${state.status})`);
   }
   const decision = decisionOf(state);
-  const { home, total } = state.possession;
-  const homePossession = total === 0 ? 50 : Math.round((100 * home) / total);
   return {
     score: finalScore(state),
     status: state.status,
     events: state.events,
-    stats: {
-      home: teamStats(state, "home", homePossession),
-      away: teamStats(state, "away", 100 - homePossession),
-    },
+    stats: liveStats(state),
     players: { ...state.teams.home.players, ...state.teams.away.players },
     ...(decision ? { decision } : {}),
   };

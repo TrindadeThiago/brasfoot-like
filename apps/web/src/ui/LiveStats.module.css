@@ -1,0 +1,11 @@
+.panel {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+}
+
+.panel summary {
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+}

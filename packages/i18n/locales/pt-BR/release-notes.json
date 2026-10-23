@@ -1,5 +1,13 @@
 [
   {
+    "version": "1.2.6",
+    "date": "2026-10-23",
+    "changes": [
+      "Calendário: uma coluna mostra os gols (com minuto e pênaltis) e os cartões de cada jogo disputado, e o botão Resumo abre o resumo completo do jogo, inclusive de outros jogos da rodada.",
+      "Rodada ao vivo: um painel de estatísticas do seu jogo (posse, finalizações, no alvo, cartões e pênaltis) é atualizado durante a partida e pode ser recolhido."
+    ]
+  },
+  {
     "version": "1.2.5",
     "date": "2026-10-23",
     "changes": [
