@@ -6,7 +6,8 @@
       "Vender jogador: no Elenco, o botão Vender mostra o clube comprador e o preço antes de confirmar. É uma venda imediata, por 75% do valor de mercado, só com a janela de transferências aberta; o dinheiro vem do caixa do clube comprador.",
       "Rescindir contrato: o botão Rescindir mostra a multa (metade do salário que ainda restava no contrato, que diminui conforme a temporada avança) e, ao confirmar, o jogador sai do elenco e fica livre no mercado. Vale em qualquer época.",
       "As multas de rescisão aparecem em Finanças junto dos salários.",
-      "Calendário: a lista de jogos da rodada agora abre num diálogo que fecha pelo botão Fechar, pelo Esc ou clicando fora, e deixa de apertar a tabela; a coluna de gols e cartões ficou mais compacta (cartões viram contagem) e o resumo de um jogo tem o botão Voltar à rodada."
+      "Calendário: a lista de jogos da rodada agora abre num diálogo que fecha pelo botão Fechar, pelo Esc ou clicando fora, e deixa de apertar a tabela; a coluna de gols e cartões ficou mais compacta (cartões viram contagem) e o resumo de um jogo tem o botão Voltar à rodada.",
+      "Mercado: a aba Contratos mostra a idade de cada jogador, para decidir quem renovar."
     ]
   },
   {

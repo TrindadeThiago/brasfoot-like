@@ -41,6 +41,13 @@ export function ContractsTab({
       sortValue: (row) => row.position,
     },
     {
+      key: "age",
+      header: t("col.age"),
+      render: (row) => row.age,
+      sortValue: (row) => row.age,
+      align: "right",
+    },
+    {
       key: "strength",
       header: t("col.strength"),
       render: (row) => row.strength,
