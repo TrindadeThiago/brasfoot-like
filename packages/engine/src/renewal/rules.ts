@@ -57,7 +57,10 @@ export const YOUTH_RULES = {
 
 export const SQUAD_RULES = {
   min: 22,
+  /** Máximo dos clubes da IA (a economia e o mundo são calibrados com ele). */
   max: 28,
+  /** Máximo do clube do jogador, sem o teto por posição da IA: o elenco é escolha dele. */
+  userMax: 40,
   positionMin: { GK: 3, FB: 3, CB: 3, DM: 2, MF: 3, FW: 3 } satisfies Record<Position, number>,
   /** Utilidade para dispensa: força + youthWeight × margem (idade ≤ youthAge) − agePenalty × anos acima de 30. */
   utility: { youthAge: 22, youthWeight: 0.5, ageFrom: 30, agePenalty: 2 },

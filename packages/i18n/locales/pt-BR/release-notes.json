@@ -7,7 +7,8 @@
       "Rescindir contrato: o botão Rescindir mostra a multa (metade do salário que ainda restava no contrato, que diminui conforme a temporada avança) e, ao confirmar, o jogador sai do elenco e fica livre no mercado. Vale em qualquer época.",
       "As multas de rescisão aparecem em Finanças junto dos salários.",
       "Calendário: a lista de jogos da rodada agora abre num diálogo que fecha pelo botão Fechar, pelo Esc ou clicando fora, e deixa de apertar a tabela; a coluna de gols e cartões ficou mais compacta (cartões viram contagem) e o resumo de um jogo tem o botão Voltar à rodada.",
-      "Mercado: a aba Contratos mostra a idade de cada jogador, para decidir quem renovar."
+      "Mercado: a aba Contratos mostra a idade de cada jogador, para decidir quem renovar.",
+      "Elenco maior: o seu clube pode ter até 40 jogadores (antes 28), sem o limite por posição; os clubes da IA seguem em 28. Um contador (por exemplo 30/40) aparece no Elenco e no Mercado, e a virada de temporada só dispensa quem passa de 40."
     ]
   },
   {

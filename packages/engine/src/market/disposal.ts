@@ -62,7 +62,7 @@ export function quoteSale(context: MarketContext, playerId: string): MarketResul
     .flatMap((season) => season.clubIds)
     .filter((clubId) => clubId !== context.managerClubId)
     .sort()
-    .filter((clubId) => canAddPlayer(context.world, clubId, player.position))
+    .filter((clubId) => canAddPlayer(context.world, clubId, player.position, context.managerClubId))
     .map((clubId) => ({ clubId, needs: clubNeeds(context, clubId) }))
     .filter(({ needs }) => needs.budget >= fee)
     .sort(

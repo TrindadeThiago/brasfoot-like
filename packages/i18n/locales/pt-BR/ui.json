@@ -158,6 +158,8 @@
   "lineup.benchFull": "O banco já tem {max} reservas.",
   "lineup.details": "Detalhes",
   "lineup.detailsOf": "Detalhes de {name}",
+  "squad.count": "Elenco: {count}/{max} jogadores",
+  "squad.count.hint": "O elenco comporta até {max} jogadores; com o limite cheio, só dá para contratar depois de vender ou rescindir alguém.",
   "squad.sell": "Vender",
   "squad.sellOf": "Vender {name}",
   "squad.terminate": "Rescindir",

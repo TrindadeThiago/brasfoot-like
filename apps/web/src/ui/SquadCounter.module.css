@@ -1,0 +1,10 @@
+.counter {
+  margin: 0;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Elenco no limite: só avisa; contratar fica bloqueado até alguém sair. */
+.full {
+  color: var(--color-warning);
+}

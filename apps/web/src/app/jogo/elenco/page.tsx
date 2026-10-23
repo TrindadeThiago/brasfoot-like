@@ -26,6 +26,7 @@ import { evolutionText, lastEvolution } from "../../../ui/evolution-text";
 import { FitnessMeter } from "../../../ui/FitnessMeter";
 import { conditionText, HangingBadge } from "../../../ui/PlayerCondition";
 import { PlayerDetails } from "../../../ui/PlayerDetails";
+import { SquadCounter } from "../../../ui/SquadCounter";
 import styles from "./page.module.css";
 
 const SECTORS: readonly SquadSector[] = ["all", "GK", "DEF", "MID", "ATT"];
@@ -217,6 +218,7 @@ function SquadScreen({ save, game }: { save: SaveFile; game: Game }) {
   return (
     <div className={styles.layout}>
       {notice ? <p role="status">{notice}</p> : null}
+      <SquadCounter save={save} />
       <div className={styles.filters}>
         <label className={styles.field}>
           <span>{t("squad.filterSector")}</span>

@@ -164,6 +164,7 @@ export const balanceSquadsStep: TurnoverStep = {
       context.careerSeed,
       context.finished.number,
       date,
+      context.managerClubId,
     );
     const after = new Map(world.players.map((player) => [player.id, player.clubId]));
     let next = withNotice(

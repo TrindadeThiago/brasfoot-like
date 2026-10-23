@@ -1,6 +1,7 @@
 import { ageOn } from "../calendar/date";
 import type { LeagueSeason } from "../career/types";
 import { aiMarketRules } from "../market/ai/rules";
+import { squadLimit } from "../market/squad";
 import { POSITIONS, type Position } from "../model/catalogs";
 import type { CompletedBank, CompletedPlayer } from "../model/types";
 import { createRng } from "../rng/xoshiro";
@@ -19,11 +20,15 @@ function utility(player: CompletedPlayer, date: string): number {
 }
 
 /** Problemas de elenco de cada clube da competição (vazio = todos dentro das regras). */
-export function squadProblems(world: CompletedBank, league: LeagueSeason): string[] {
+export function squadProblems(
+  world: CompletedBank,
+  league: LeagueSeason,
+  managerClubId?: string,
+): string[] {
   const problems: string[] = [];
   for (const clubId of league.divisions.flatMap((season) => season.clubIds).sort()) {
     const squad = world.players.filter((player) => player.clubId === clubId);
-    if (squad.length < SQUAD_RULES.min || squad.length > SQUAD_RULES.max) {
+    if (squad.length < SQUAD_RULES.min || squad.length > squadLimit(clubId, managerClubId)) {
       problems.push(`${clubId}: ${squad.length} jogadores`);
     }
     for (const position of POSITIONS) {
@@ -47,6 +52,7 @@ export function balanceSquads(
   careerSeed: string,
   season: number,
   date: string,
+  managerClubId?: string,
 ): {
   world: CompletedBank;
   renewal: RenewalState;
@@ -74,8 +80,11 @@ export function balanceSquads(
       players.push(youth);
       promoted.push(playerRef(youth, date));
     };
+    // O elenco do jogador só tem o máximo total: ele decide quem fica (sem teto por posição).
+    const isManager = clubId === managerClubId;
+    const max = squadLimit(clubId, managerClubId);
     // Teto por posição (011 R3): libera os de menor utilidade acima dele.
-    for (const position of POSITIONS) {
+    for (const position of isManager ? [] : POSITIONS) {
       while (count(position) > caps[position]) {
         const out = squad()
           .filter((player) => player.position === position)
@@ -90,7 +99,7 @@ export function balanceSquads(
       while (count(position) < SQUAD_RULES.positionMin[position]) add(position);
     }
     while (squad().length < SQUAD_RULES.min) add(neediestPosition(squad(), rng, caps));
-    while (squad().length > SQUAD_RULES.max) {
+    while (squad().length > max) {
       const candidates = squad()
         .filter((player) => count(player.position) > SQUAD_RULES.positionMin[player.position])
         .sort((a, b) => utility(a, date) - utility(b, date) || (a.id < b.id ? -1 : 1));

@@ -297,7 +297,13 @@ export { attraction, exigency, respondToContract, wageDemand } from "./market/pl
 export { releaseManagerClub } from "./market/release";
 export { DEFAULT_MARKET, marketRules } from "./market/rules";
 export { comparePlayers, searchPlayers } from "./market/search";
-export { canAddPlayer, canRemovePlayer, squadSize, strengthRank } from "./market/squad";
+export {
+  canAddPlayer,
+  canRemovePlayer,
+  squadLimit,
+  squadSize,
+  strengthRank,
+} from "./market/squad";
 export type {
   ClubResponse,
   Contract,

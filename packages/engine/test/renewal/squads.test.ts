@@ -74,6 +74,60 @@ describe("elencos válidos (US4, R7)", () => {
     }
   });
 
+  describe("elenco do jogador (até 40, sem teto por posição)", () => {
+    /** O clube ganha `count` meio-campistas fracos e veteranos (os primeiros a sair). */
+    function withExtra(count: number) {
+      return editedWorld((w) => {
+        const template = w.players.find(
+          (player) => player.clubId === CLUB && player.position === "MF",
+        );
+        if (!template) return;
+        for (let index = 0; index < count; index++) {
+          w.players.push({
+            ...template,
+            id: `jogador-9${String(index).padStart(4, "0")}`,
+            strength: 25 + (index % 10),
+            birthDate: "1993-01-01",
+            hidden: { ...template.hidden, potential: 40 },
+          });
+        }
+      });
+    }
+    const own = (world: CompletedBank) => world.players.filter((player) => player.clubId === CLUB);
+
+    it("não dispensa quem passa dos 28 da IA nem dos tetos por posição", () => {
+      const world = withExtra(8);
+      expect(own(world).length).toBeGreaterThan(SQUAD_RULES.max);
+      const kept = balanceSquads(
+        world,
+        newLeague("elencos", {}, world),
+        initialRenewal(world),
+        "s",
+        1,
+        DATE,
+        CLUB,
+      );
+      expect(own(kept.world)).toHaveLength(own(world).length);
+      expect(kept.released.filter((ref) => ref.playerId.startsWith("jogador-9"))).toHaveLength(0);
+      // Sem ser o clube do jogador, o mesmo elenco é cortado até 28.
+      expect(own(balance(world).world)).toHaveLength(SQUAD_RULES.max);
+    });
+
+    it("dispensa só o que passa de 40", () => {
+      const world = withExtra(30);
+      const result = balanceSquads(
+        world,
+        newLeague("elencos", {}, world),
+        initialRenewal(world),
+        "s",
+        1,
+        DATE,
+        CLUB,
+      );
+      expect(own(result.world)).toHaveLength(SQUAD_RULES.userMax);
+    });
+  });
+
   it("todo clube termina dentro das regras, o banco segue válido e é determinístico", () => {
     const result = balance(testWorld());
     expect(squadProblems(result.world, newLeague("elencos"))).toEqual([]);
