@@ -28,6 +28,7 @@ import { DerbyBadge } from "../../ui/fans/DerbyBadge";
 import { FansCard } from "../../ui/fans/FansCard";
 import { LineupNotice } from "../../ui/LineupNotice";
 import { MarketNotice, marketNoticeCounts } from "../../ui/MarketNotice";
+import { WindowStatus } from "../../ui/market/WindowStatus";
 import { NewsCard } from "../../ui/news/NewsCard";
 import { RoundResults } from "../../ui/RoundResults";
 import { SquadChangeNotice } from "../../ui/SquadChangeNotice";
@@ -159,6 +160,9 @@ export default function HomePage() {
                 <SquadChangeNotice save={save} onDismiss={game.dismissSquadNotice} />
               </div>
             ) : null}
+            <div className={styles.wide}>
+              <WindowStatus save={save} />
+            </div>
             {marketNoticeCounts(save).offers + marketNoticeCounts(save).expiring > 0 ||
             marketNoticeCounts(save).report ? (
               <div className={styles.wide}>

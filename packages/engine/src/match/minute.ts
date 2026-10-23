@@ -10,6 +10,7 @@ import { MATCH_TUNING } from "./tuning";
 import type {
   InjurySeverity,
   MatchEvent,
+  MatchFatigue,
   MatchState,
   PlayerMatchState,
   ShotKind,
@@ -43,6 +44,23 @@ type EventInput = MatchEvent extends infer E
 /** Substituições permitidas: o limite da partida e mais uma na prorrogação (018). */
 export function substitutionCap(state: MatchState): number {
   return state.input.substitutionLimit + (state.extraTime ? 1 : 0);
+}
+
+/** Energia perdida na partida por quem jogou `minutes` minutos (0–100). */
+export function matchDrain(minutes: number, fatigue: MatchFatigue): number {
+  return Math.min(100, Math.round((minutes * fatigue.drainPer90) / 90));
+}
+
+/** Força depois de `minutes` em campo; a própria força se a partida não tem fadiga. */
+export function fatiguedStrength(strength: number, minutes: number, fatigue?: MatchFatigue) {
+  if (!fatigue || minutes <= 0) return strength;
+  const factor = 10000 - matchDrain(minutes, fatigue) * fatigue.penaltyBpPerPoint;
+  return Math.round((strength * factor) / 10000);
+}
+
+function tiredPlayer(player: CompletedPlayer, minutes: number, fatigue?: MatchFatigue) {
+  if (!fatigue || minutes <= 0) return player;
+  return { ...player, strength: fatiguedStrength(player.strength, minutes, fatigue) };
 }
 
 export function opponent(side: Side): Side {
@@ -97,16 +115,17 @@ function lineupOf(state: MatchState, side: Side, context: MatchContext): LineupC
     if (same) return cached;
   }
   const ids = slots.map((slot) => team.onField[slot.id] ?? null);
+  const fatigue = state.input.fatigue;
+  const onPitch = (playerId: string | null | undefined) => {
+    const player = playerId ? context.players.get(playerId) : undefined;
+    return player && tiredPlayer(player, team.players[player.id]?.minutesPlayed ?? 0, fatigue);
+  };
   const field: FieldPlayer[] = [];
   slots.forEach((slot, index) => {
-    const playerId = ids[index];
-    const player = playerId ? context.players.get(playerId) : undefined;
+    const player = onPitch(ids[index]);
     if (player) field.push({ player, slotId: slot.id, slotPosition: slot.position });
   });
-  const strength = computeStrength(team.formation, (slotId) => {
-    const playerId = team.onField[slotId];
-    return playerId ? context.players.get(playerId) : undefined;
-  });
+  const strength = computeStrength(team.formation, (slotId) => onPitch(team.onField[slotId]));
   const entry = { formation: team.formation, ids, field, strength };
   context.lineups[side] = entry;
   return entry;
@@ -385,6 +404,8 @@ export function playMinute(
       if (playerId) playerState(state, side, playerId).minutesPlayed += 1;
     }
   }
+  // Com fadiga a força muda a cada minuto: a escalação em cache deixa de valer.
+  if (state.input.fatigue) context.lineups = {};
 
   const strength = {
     home: strengthOf(state, "home", context),

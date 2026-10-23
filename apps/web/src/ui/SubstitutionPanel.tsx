@@ -5,8 +5,10 @@ import {
   FORMATION_IDS,
   FORMATIONS,
   type FormationId,
+  fatiguedStrength,
   type LiveMatch,
   type MatchChange,
+  matchDrain,
   type PlayerMatchState,
   POSITIONS,
   POSTURES,
@@ -16,7 +18,9 @@ import {
 } from "@brasfoot-like/engine";
 import type { SaveFile } from "@brasfoot-like/save";
 import { useState } from "react";
+import { fitnessAt } from "../game/selectors";
 import { label, useT } from "../i18n";
+import { FitnessMeter } from "./FitnessMeter";
 import styles from "./SubstitutionPanel.module.css";
 
 interface PanelProps {
@@ -62,6 +66,15 @@ export function SubstitutionPanel({ match, side, save, onChange }: PanelProps) {
   const team = match.state.teams[side];
   const players = new Map(save.bank.players.map((player) => [player.id, player]));
   const name = (id: string) => players.get(id)?.displayName ?? id;
+  // Energia ao vivo: a condição de saída menos o desgaste dos minutos em campo (e a força cai junto).
+  const { fatigue } = match.state.input;
+  const startFitness = fitnessAt(save);
+  const squad = new Map(match.state.input[side].squad.map((player) => [player.id, player]));
+  const minutesOf = (id: string) => team.players[id]?.minutesPlayed ?? 0;
+  const energy = (id: string) =>
+    Math.max(0, startFitness(id) - (fatigue ? matchDrain(minutesOf(id), fatigue) : 0));
+  const strengthNow = (id: string) =>
+    fatiguedStrength(squad.get(id)?.strength ?? 0, minutesOf(id), fatigue);
   // O limite da partida e mais uma na prorrogação (018): o contador mostra o que vale agora.
   const limit = substitutionCap(match.state);
   const unavailable = new Set(match.state.input[side].unavailable ?? []);
@@ -187,9 +200,10 @@ export function SubstitutionPanel({ match, side, save, onChange }: PanelProps) {
                         {t("lineup.natural", { position: label(`position.${player.position}`) })}
                       </span>
                     ) : null}
-                    <span className={styles.strength}>
-                      {Math.round((player?.strength ?? 0) * factor)}
+                    <span className={styles.energy}>
+                      <FitnessMeter value={energy(id)} />
                     </span>
+                    <span className={styles.strength}>{Math.round(strengthNow(id) * factor)}</span>
                   </button>
                 </li>
               );
@@ -213,7 +227,10 @@ export function SubstitutionPanel({ match, side, save, onChange }: PanelProps) {
                       {label(`position.${players.get(id)?.position ?? "MF"}`)}
                     </span>
                     <span className={styles.name}>{name(id)}</span>
-                    <span className={styles.strength}>{players.get(id)?.strength}</span>
+                    <span className={styles.energy}>
+                      <FitnessMeter value={energy(id)} />
+                    </span>
+                    <span className={styles.strength}>{strengthNow(id)}</span>
                   </button>
                 </li>
               ))}

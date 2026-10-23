@@ -33,6 +33,17 @@ export interface Decider {
   extraTime: boolean;
 }
 
+/**
+ * Desgaste dentro da partida (mesmas taxas da condição física, 017 R5): a cada minuto em campo o
+ * jogador perde energia e, com ela, rendimento. Sem isto a força fica fixa durante os 90 minutos.
+ */
+export interface MatchFatigue {
+  /** Pontos de energia perdidos por 90 minutos em campo. */
+  drainPer90: number;
+  /** Perda de força, em pontos-base (1/10000), por ponto de energia perdido na partida. */
+  penaltyBpPerPoint: number;
+}
+
 export interface MatchInput {
   home: TeamInput;
   away: TeamInput;
@@ -42,6 +53,8 @@ export interface MatchInput {
   benchLimit?: number;
   /** Jogo eliminatório decidido pelo motor (prorrogação e pênaltis). */
   decider?: Decider;
+  /** Fadiga durante a partida; ausente, a força dos jogadores não muda com os minutos. */
+  fatigue?: MatchFatigue;
 }
 
 /** Entrada com os valores padrão aplicados. */
