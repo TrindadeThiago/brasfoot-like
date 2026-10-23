@@ -44,10 +44,17 @@ export type LineupChange =
       kind: "starter_replaced";
       slotId: string;
       outId: string;
+      /** Nome de quem saiu, gravado na hora: quem deixa o mundo (aposentado) perde o cadastro. */
+      outName?: string;
       inId: string;
       reason: Unavailability["reason"];
     }
-  | { kind: "bench_removed"; outId: string; reason: Unavailability["reason"] }
+  | {
+      kind: "bench_removed";
+      outId: string;
+      outName?: string;
+      reason: Unavailability["reason"];
+    }
   | { kind: "short_squad"; fielded: string[] };
 
 /** Lugar na tela de escalação: vaga do esquema, posição no banco ou jogador fora da relação. */

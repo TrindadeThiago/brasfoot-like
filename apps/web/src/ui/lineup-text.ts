@@ -8,6 +8,7 @@ export function playerName(save: SaveFile, playerId: string): string {
   return (
     save.bank.players.find((player) => player.id === playerId)?.displayName ??
     gone.find((ref) => ref.playerId === playerId)?.displayName ??
+    save.market.freeAgents.find((agent) => agent.player.id === playerId)?.player.displayName ??
     playerId
   );
 }
@@ -31,14 +32,14 @@ export function changeText(change: LineupChange, save: SaveFile): string {
   switch (change.kind) {
     case "starter_replaced":
       return t("lineupChange.starter_replaced", {
-        out: playerName(save, change.outId),
+        out: change.outName ?? playerName(save, change.outId),
         in: playerName(save, change.inId),
         reason: change.reason,
         position: positionOfSlot(save, change.slotId),
       });
     case "bench_removed":
       return t("lineupChange.bench_removed", {
-        out: playerName(save, change.outId),
+        out: change.outName ?? playerName(save, change.outId),
         reason: change.reason,
       });
     case "short_squad":

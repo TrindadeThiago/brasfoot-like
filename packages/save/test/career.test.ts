@@ -17,6 +17,7 @@ import {
   summarize,
   userDivisionLevel,
   userSeason,
+  withAdjustedLineup,
 } from "../src";
 import { defaultBank, SERIE_A, SERIE_B, validSave } from "./fixtures";
 
@@ -238,5 +239,46 @@ describe("aviso de mudanças do elenco (009 US6)", () => {
     expect(dismissed.renewal.squadNotice).toBeUndefined();
     expect(dismissed.renewal.nextPlayerSeq).toBe(save.renewal.nextPlayerSeq);
     expect(dismissSquadNotice(save)).toBe(save);
+  });
+});
+
+describe("ajuste da escalação com jogador que saiu do mundo", () => {
+  it("grava o nome de quem saiu, para o aviso não mostrar o id depois que o aviso do elenco some", () => {
+    const save = validSave();
+    const starter = Object.values(save.lineup.starters)[0] as string;
+    const name = save.bank.players.find((player) => player.id === starter)?.displayName;
+    // Aposentado: sai do banco, e só o aviso do elenco ainda guarda o nome.
+    const gone = save.bank.players.find((player) => player.id === starter);
+    if (!gone || !name) throw new Error("titular sem cadastro");
+    const retired = {
+      ...save,
+      bank: { ...save.bank, players: save.bank.players.filter((player) => player.id !== starter) },
+      renewal: {
+        ...save.renewal,
+        squadNotice: {
+          season: 2,
+          clubId: save.clubId,
+          retired: [
+            {
+              playerId: starter,
+              displayName: name,
+              position: gone.position,
+              age: 35,
+              strength: gone.strength,
+            },
+          ],
+          arrived: [],
+          released: [],
+          promoted: [],
+          risers: [],
+          fallers: [],
+        },
+      },
+    } as SaveFile;
+    const adjusted = withAdjustedLineup(retired);
+    const change = adjusted.lineupNotice?.find(
+      (entry) => entry.kind === "starter_replaced" && entry.outId === starter,
+    );
+    expect(change).toMatchObject({ outName: name });
   });
 });
