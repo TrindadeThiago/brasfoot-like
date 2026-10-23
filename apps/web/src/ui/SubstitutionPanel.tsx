@@ -12,6 +12,7 @@ import {
   POSTURES,
   type Posture,
   type Side,
+  substitutionCap,
 } from "@brasfoot-like/engine";
 import type { SaveFile } from "@brasfoot-like/save";
 import { useState } from "react";
@@ -61,7 +62,8 @@ export function SubstitutionPanel({ match, side, save, onChange }: PanelProps) {
   const team = match.state.teams[side];
   const players = new Map(save.bank.players.map((player) => [player.id, player]));
   const name = (id: string) => players.get(id)?.displayName ?? id;
-  const limit = match.state.input.substitutionLimit;
+  // O limite da partida e mais uma na prorrogação (018): o contador mostra o que vale agora.
+  const limit = substitutionCap(match.state);
   const unavailable = new Set(match.state.input[side].unavailable ?? []);
   const left = Object.entries(team.players)
     .filter(([, state]) => state.subbedOut !== null || state.sentOff)

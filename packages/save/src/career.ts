@@ -16,6 +16,7 @@ import {
   seasonDate,
   seasonTurnover,
   upcomingUnavailability,
+  withDefaultCupLegs,
   withNationalCup,
 } from "@brasfoot-like/engine";
 import type { SaveFile } from "./format";
@@ -182,10 +183,13 @@ export function withDayResult(save: SaveFile, state: CareerSeasonState): SaveFil
 
 /**
  * Mundo da virada: carreiras do mundo padrão criadas antes da 018 não têm a copa nacional; ela
- * entra aqui e a próxima temporada já a traz. Mods e mundos com copa não mudam.
+ * entra aqui e a próxima temporada já a traz. As que têm a copa de jogo único recebem as pernas
+ * de hoje (ida e volta nas oitavas, quartas e semifinal). Mods não mudam.
  */
 function worldForNextSeason(save: SaveFile): SaveFile["bank"] {
-  return save.bank.manifest.id === "default" ? withNationalCup(save.bank) : save.bank;
+  return save.bank.manifest.id === "default"
+    ? withDefaultCupLegs(withNationalCup(save.bank))
+    : save.bank;
 }
 
 /**

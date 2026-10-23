@@ -354,6 +354,7 @@ export { FORMATION_IDS, FORMATIONS, POSTURES, slotPosition } from "./match/forma
 export { MATCH_REALISM_LIMITS } from "./match/limits";
 export type { MatchMetrics, MetricCheck } from "./match/metrics";
 export { checkRealism, createMetricsAccumulator } from "./match/metrics";
+export { substitutionCap } from "./match/minute";
 export { liveStats, matchResult } from "./match/result";
 export { penaltyChance, shootoutOrder, shootoutProgress } from "./match/shootout";
 export type { TeamStrength } from "./match/strength";
@@ -550,7 +551,7 @@ export type {
 export { ISSUE_CODES, ISSUE_PARAMS, makeIssue, SECTIONS, severityOf } from "./validation/issues";
 export type { ValidationResult } from "./validation/validate";
 export { validateBank } from "./validation/validate";
-export { withNationalCup } from "./worldgen/add-cup";
+export { withDefaultCupLegs, withNationalCup } from "./worldgen/add-cup";
 export { DEFAULT_BANK_SEED } from "./worldgen/default-seed";
 export type { GenerateOptions } from "./worldgen/generate";
 export { generateDefaultBank } from "./worldgen/generate";

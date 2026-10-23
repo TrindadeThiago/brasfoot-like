@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.2.8",
+    "date": "2026-10-23",
+    "changes": [
+      "Copa nacional com ida e volta: oitavas, quartas e semifinal agora têm dois jogos (decide o agregado e, se empatar, prorrogação e pênaltis no jogo da volta). As fases iniciais seguem em jogo único e a final é um jogo só, em campo neutro.",
+      "Carreiras já em andamento recebem a copa com ida e volta na próxima virada de temporada; mods continuam como o modder os descreveu.",
+      "Rodada ao vivo: na prorrogação o contador de substituições passa a mostrar a substituição a mais (por exemplo 5/6); ela já era permitida, mas o painel seguia mostrando o limite dos 90 minutos."
+    ]
+  },
+  {
     "version": "1.2.7",
     "date": "2026-10-23",
     "changes": [

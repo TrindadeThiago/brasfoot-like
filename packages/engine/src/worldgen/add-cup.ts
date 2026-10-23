@@ -1,5 +1,5 @@
 import type { CompletedBank } from "../model/types";
-import { generateCup } from "./cup";
+import { cupLegs, generateCup } from "./cup";
 import defaultNameBank from "./name-banks/default.json" with { type: "json" };
 
 /**
@@ -31,4 +31,28 @@ export function withNationalCup<T extends Pick<CompletedBank, "competitions" | "
     clubs,
   );
   return { ...world, competitions: [...world.competitions, cup] };
+}
+
+/**
+ * Copa do banco padrão com as pernas de hoje (oitavas, quartas e semifinal em ida e volta): as
+ * carreiras criadas antes da mudança guardam a copa de jogo único no save e a recebem na virada de
+ * temporada. Só mexe na copa gerada pelo banco padrão (`copa-nacional`); qualquer outra copa, de
+ * mod, fica como o modder a descreveu. Devolve o próprio mundo se nada muda.
+ */
+export function withDefaultCupLegs<T extends Pick<CompletedBank, "competitions">>(world: T): T {
+  let changed = false;
+  const competitions = world.competitions.map((competition) => {
+    if (competition.id !== "copa-nacional" || competition.format.type !== "knockout") {
+      return competition;
+    }
+    const { phases } = competition.format;
+    const updated = phases.map((phase, index) => {
+      const legs = cupLegs(phases.length - 1 - index);
+      return phase.legs === legs ? phase : { ...phase, legs };
+    });
+    if (updated.every((phase, index) => phase === phases[index])) return competition;
+    changed = true;
+    return { ...competition, format: { ...competition.format, phases: updated } };
+  });
+  return changed ? { ...world, competitions } : world;
 }
