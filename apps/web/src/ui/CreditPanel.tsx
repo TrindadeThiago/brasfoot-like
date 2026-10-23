@@ -8,6 +8,7 @@ import type { FinanceActionResult } from "../game/GameProvider";
 import { formatMoney, useT } from "../i18n";
 import { Button } from "./Button";
 import styles from "./FinancePanel.module.css";
+import { MoneyInput } from "./MoneyInput";
 
 /** Crédito bancário: limite, custo e as ações de tomar, amortizar e quitar (US5, FR-013 a FR-015). */
 export function CreditPanel({
@@ -54,12 +55,10 @@ export function CreditPanel({
       <div className={styles.row}>
         <label className={styles.field}>
           <span>{t("finance.credit.amount")}</span>
-          <input
-            type="number"
-            inputMode="numeric"
+          <MoneyInput
             value={value}
-            onChange={(event) => {
-              setValue(event.target.value);
+            onValueChange={(digits) => {
+              setValue(digits);
               setError(undefined);
             }}
           />

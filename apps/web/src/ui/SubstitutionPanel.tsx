@@ -8,6 +8,7 @@ import {
   type LiveMatch,
   type MatchChange,
   type PlayerMatchState,
+  POSITIONS,
   POSTURES,
   type Posture,
   type Side,
@@ -66,6 +67,12 @@ export function SubstitutionPanel({ match, side, save, onChange }: PanelProps) {
     .filter(([, state]) => state.subbedOut !== null || state.sentOff)
     .map(([id]) => id);
   const slots = FORMATIONS[team.formation].slots;
+  // Reservas na ordem das posições (GOL, LAT, ZAG…), do mais forte ao mais fraco.
+  const rank = (id: string) => POSITIONS.indexOf(players.get(id)?.position ?? "MF");
+  const benchInOrder = [...team.bench].sort(
+    (a, b) =>
+      rank(a) - rank(b) || (players.get(b)?.strength ?? 0) - (players.get(a)?.strength ?? 0),
+  );
 
   const report = (
     result: { ok: true } | { ok: false; code: string; limit?: number },
@@ -190,7 +197,7 @@ export function SubstitutionPanel({ match, side, save, onChange }: PanelProps) {
         <div>
           <h3>{t("round.bench")}</h3>
           <ul>
-            {team.bench
+            {benchInOrder
               .filter((id) => !unavailable.has(id))
               .map((id) => (
                 <li key={id}>

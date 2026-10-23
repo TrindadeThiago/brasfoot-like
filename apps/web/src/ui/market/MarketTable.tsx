@@ -68,6 +68,11 @@ export function MarketTable({
       align: "right",
     },
     {
+      key: "traits",
+      header: t("col.traits"),
+      render: (row) => row.traits.map((trait) => label(`trait.${trait}`)).join(", ") || "—",
+    },
+    {
       key: "club",
       header: t("market.col.club"),
       render: (row) =>

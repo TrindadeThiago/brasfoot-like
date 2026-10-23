@@ -23,7 +23,7 @@ import { Button } from "../../../ui/Button";
 import { type Column, DataTable } from "../../../ui/DataTable";
 import { evolutionText, lastEvolution } from "../../../ui/evolution-text";
 import { FitnessMeter } from "../../../ui/FitnessMeter";
-import { conditionText } from "../../../ui/PlayerCondition";
+import { conditionText, HangingBadge } from "../../../ui/PlayerCondition";
 import { PlayerDetails } from "../../../ui/PlayerDetails";
 import styles from "./page.module.css";
 
@@ -44,7 +44,7 @@ function SquadScreen({ save }: { save: SaveFile }) {
   const [filter, setFilter] = useState(() => readPreferences().squadFilter ?? NO_FILTER);
   const [details, setDetails] = useState<string | undefined>();
   const closeDetails = useCallback(() => setDetails(undefined), []);
-  const { squad, unavailable, competitionId, elsewhere } = useMemo(
+  const { squad, unavailable, competitionId, elsewhere, hanging } = useMemo(
     () => lineupContext(save),
     [save],
   );
@@ -135,7 +135,18 @@ function SquadScreen({ save }: { save: SaveFile }) {
       header: t("col.traits"),
       render: (player) => player.traits.map((trait) => label(`trait.${trait}`)).join(", "),
     },
-    { key: "status", header: t("col.status"), render: status, sortValue: status },
+    {
+      key: "status",
+      header: t("col.status"),
+      render: (player) => (
+        <>
+          {status(player)}
+          {hanging.has(player.id) ? " " : null}
+          <HangingBadge hanging={hanging.has(player.id)} />
+        </>
+      ),
+      sortValue: status,
+    },
     { key: "lineup", header: t("col.inLineup"), render: placeOf, sortValue: placeOf },
     {
       key: "fitness",

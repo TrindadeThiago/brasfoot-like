@@ -69,6 +69,21 @@ export function formatMoney(value: number): string {
   return t("money", { negative: value < 0 ? "yes" : "no", amount: number.format(Math.abs(value)) });
 }
 
+const compact = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 2 });
+
+/** Valor por extenso para conferir de relance ("250 mil", "1,5 milhão"); vazio abaixo de mil. */
+export function formatMoneyWords(value: number): string {
+  const amount = Math.abs(value);
+  if (amount >= 1_000_000) {
+    const millions = amount / 1_000_000;
+    return t(millions >= 2 ? "money.words.millions" : "money.words.million", {
+      amount: compact.format(millions),
+    });
+  }
+  if (amount >= 1_000) return t("money.words.thousand", { amount: compact.format(amount / 1_000) });
+  return "";
+}
+
 /** Mensagem de um problema de validação do banco, do pacote ou de CSV (015). */
 export function issueText(issue: ValidationIssue): string {
   return formatIssue(issue, locale);

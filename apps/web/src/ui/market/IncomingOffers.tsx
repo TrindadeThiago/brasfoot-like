@@ -6,6 +6,7 @@ import { useState } from "react";
 import type { useGame } from "../../game/GameProvider";
 import { formatMoney, useT } from "../../i18n";
 import { Button } from "../Button";
+import { MoneyInput } from "../MoneyInput";
 import styles from "./market.module.css";
 
 type Game = ReturnType<typeof useGame>;
@@ -90,13 +91,9 @@ export function IncomingOffers({ save, game }: { save: SaveFile; game: Game }) {
                   >
                     <label className={styles.field}>
                       <span>{t("market.incoming.counterFee")}</span>
-                      <input
-                        type="number"
-                        inputMode="numeric"
+                      <MoneyInput
                         value={counters[offer.id] ?? String(offer.fee)}
-                        onChange={(event) =>
-                          setCounters({ ...counters, [offer.id]: event.target.value })
-                        }
+                        onValueChange={(digits) => setCounters({ ...counters, [offer.id]: digits })}
                       />
                     </label>
                     <Button type="submit" disabled={disabled}>

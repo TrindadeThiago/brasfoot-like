@@ -4,11 +4,13 @@ import { type ClubFixture, clubFixtures, competitionSeason } from "@brasfoot-lik
 import { nextFixture, seasonStateOf } from "@brasfoot-like/save";
 import { useState } from "react";
 import { GameLayout } from "../../../game/GameLayout";
+import { matchResult } from "../../../game/selectors";
 import { formatDate, formatWeekday, useT } from "../../../i18n";
 import { Button } from "../../../ui/Button";
 import { Crest } from "../../../ui/Crest";
 import { phaseLabel } from "../../../ui/cup/phase";
 import { type Column, DataTable } from "../../../ui/DataTable";
+import { FormChips } from "../../../ui/FormChips";
 import { DerbyBadge } from "../../../ui/fans/DerbyBadge";
 import styles from "./page.module.css";
 
@@ -92,9 +94,17 @@ export default function CalendarPage() {
               const mine = fixture.home === save.clubId;
               const goalsFor = mine ? record.score.home : record.score.away;
               const goalsAgainst = mine ? record.score.away : record.score.home;
+              const shootout = record.decision?.shootout?.score;
               return (
                 <span className={styles.score}>
-                  {goalsFor} × {goalsAgainst}
+                  <FormChips form={[matchResult(record, save.clubId)]} /> {goalsFor} ×{" "}
+                  {goalsAgainst}
+                  {shootout
+                    ? ` ${t("calendar.penalties", {
+                        mine: mine ? shootout.home : shootout.away,
+                        theirs: mine ? shootout.away : shootout.home,
+                      })}`
+                    : ""}
                 </span>
               );
             },

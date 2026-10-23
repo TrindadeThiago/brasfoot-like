@@ -12,7 +12,7 @@ import {
 import { label, useT } from "../i18n";
 import { FitnessMeter } from "./FitnessMeter";
 import styles from "./Pitch.module.css";
-import { Condition } from "./PlayerCondition";
+import { Condition, HangingBadge } from "./PlayerCondition";
 
 const LINES: readonly (readonly Position[])[] = [["FW"], ["DM", "MF"], ["FB", "CB"], ["GK"]];
 
@@ -20,6 +20,8 @@ interface PitchProps {
   lineup: Lineup;
   players: ReadonlyMap<string, CompletedPlayer>;
   unavailable: ReadonlyMap<string, Unavailability>;
+  /** Pendurados: a um amarelo de suspensão. */
+  hanging?: ReadonlySet<string>;
   /** Condição física (0–100) de cada jogador na data do próximo jogo. */
   fitness?: (playerId: string) => number;
   selected?: Place | undefined;
@@ -32,6 +34,7 @@ export function Pitch({
   lineup,
   players,
   unavailable,
+  hanging,
   fitness,
   selected,
   onSelect,
@@ -87,6 +90,7 @@ export function Pitch({
                   ) : null}
                   {playerId && fitness ? <FitnessMeter value={fitness(playerId)} /> : null}
                   {playerId ? <Condition entry={unavailable.get(playerId)} hideAvailable /> : null}
+                  {playerId ? <HangingBadge hanging={hanging?.has(playerId) ?? false} /> : null}
                 </button>
               );
             })}

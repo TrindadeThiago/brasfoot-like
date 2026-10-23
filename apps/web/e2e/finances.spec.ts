@@ -18,7 +18,7 @@ test("finanças: preço com estimativa, rodada em casa, crédito, obra e histór
   await expect(ticket.getByText(t("finance.ticket.applied"))).toBeVisible();
 
   const credit = page.getByRole("region", { name: t("finance.credit.title") });
-  await credit.getByRole("spinbutton").fill("500000");
+  await credit.getByRole("textbox").fill("500000");
   await credit.getByRole("button", { name: t("finance.credit.take") }).click();
   await expect(page.getByText(/Dívida: \$\s500\.000/)).toBeVisible();
   await credit.getByRole("button", { name: t("finance.credit.settle") }).click();
