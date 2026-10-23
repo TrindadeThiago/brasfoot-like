@@ -47,7 +47,7 @@ export function incomingOfferFor(
       if (!needs.priorities.includes(player.position)) continue;
       const need = needs.positions[player.position];
       if (!need.uncovered && player.strength - need.starter < ai.minGain) continue;
-      if (!canAddPlayer(context.world, clubId, player.position)) continue;
+      if (!canAddPlayer(context.world, clubId, player.position, context.managerClubId)) continue;
       pairs.push({ playerId: player.id, fromClubId: clubId, budget: needs.budget });
     }
   }

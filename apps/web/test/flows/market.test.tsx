@@ -1,5 +1,5 @@
-import { searchPlayers } from "@brasfoot-like/engine";
-import { marketContextOf } from "@brasfoot-like/save";
+import { ageOn, searchPlayers } from "@brasfoot-like/engine";
+import { currentDate, marketContextOf } from "@brasfoot-like/save";
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
@@ -162,6 +162,30 @@ describe("mercado — contratos e renovação (US6)", () => {
     renderApp("/jogo?c=tela", store);
     const card = await screen.findByRole("region", { name: t("market.notice.title") });
     expect(within(card).getByText(t("market.notice.expiring", { count }))).toBeDefined();
+  });
+
+  it("a aba Contratos mostra a idade de cada jogador", async () => {
+    const user = userEvent.setup();
+    const { store, save } = await storedCareer(1);
+    renderApp("/jogo/mercado?c=tela", store);
+    await screen.findByRole("table", { name: t("market.resultsCaption") });
+    await user.click(screen.getByRole("tab", { name: t("market.tab.contracts") }));
+    const table = await screen.findByRole("table", { name: t("market.contracts.caption") });
+    const headers = within(table)
+      .getAllByRole("columnheader")
+      .map((header) => header.textContent?.replace(/[▲▼]/g, "").trim());
+    const ageColumn = headers.indexOf(t("col.age"));
+    expect(ageColumn).toBeGreaterThan(0);
+    const reference = currentDate(save);
+    const body = within(table).getAllByRole("rowgroup")[1] as HTMLElement;
+    for (const row of within(body).getAllByRole("row")) {
+      const cells = within(row).getAllByRole("cell");
+      const player = save.bank.players.find(
+        (entry) => entry.clubId === save.clubId && entry.displayName === cells[0]?.textContent,
+      );
+      if (!player) throw new Error("jogador da linha não encontrado");
+      expect(cells[ageColumn]?.textContent).toBe(String(ageOn(player.birthDate, reference)));
+    }
   });
 
   it("renova um atleta pela aba Contratos", async () => {

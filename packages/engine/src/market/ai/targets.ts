@@ -33,7 +33,8 @@ export function purchaseTarget(
 ): PurchasePlan | undefined {
   const rules = aiMarketRules(context.world, context.league.competitionId);
   const buyer = needs.clubId;
-  if (needs.budget <= 0 || !canAddPlayer(context.world, buyer, position)) return undefined;
+  if (needs.budget <= 0 || !canAddPlayer(context.world, buyer, position, context.managerClubId))
+    return undefined;
   const need = needs.positions[position];
   const date = seasonDate(context.world.manifest.referenceDate, context.league.year);
   const negotiating = new Set(context.market.negotiations.map((entry) => entry.playerId));

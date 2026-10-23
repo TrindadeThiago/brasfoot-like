@@ -13,13 +13,23 @@ export function positionCap(world: CompletedBank, position: Position): number {
   return aiMarketRules(world, world.competitions[0]?.id ?? "").positionMax[position];
 }
 
+/** Máximo de jogadores do clube: o do jogador (`managerClubId`) é maior que o da IA. */
+export function squadLimit(clubId: string, managerClubId?: string): number {
+  return clubId === managerClubId ? SQUAD_RULES.userMax : SQUAD_RULES.max;
+}
+
 /**
- * Cabe mais um jogador sem passar do máximo da 009 (FR-016) e, com a posição informada, do teto
- * por posição (011 FR-009)?
+ * Cabe mais um jogador sem passar do máximo (FR-016) e, com a posição informada, do teto por
+ * posição (011 FR-009)? O clube do jogador só tem o máximo total.
  */
-export function canAddPlayer(world: CompletedBank, clubId: string, position?: Position): boolean {
-  if (squadSize(world, clubId) >= SQUAD_RULES.max) return false;
-  if (position === undefined) return true;
+export function canAddPlayer(
+  world: CompletedBank,
+  clubId: string,
+  position?: Position,
+  managerClubId?: string,
+): boolean {
+  if (squadSize(world, clubId) >= squadLimit(clubId, managerClubId)) return false;
+  if (position === undefined || clubId === managerClubId) return true;
   const inPosition = world.players.filter(
     (player) => player.clubId === clubId && player.position === position,
   ).length;

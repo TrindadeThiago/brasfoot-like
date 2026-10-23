@@ -10,7 +10,7 @@ import {
 import { currentDate, type SaveFile } from "@brasfoot-like/save";
 import { useCallback, useMemo, useState } from "react";
 import { GameLayout } from "../../../game/GameLayout";
-import { lineupContext } from "../../../game/GameProvider";
+import { lineupContext, type useGame } from "../../../game/GameProvider";
 import { fitnessAt } from "../../../game/selectors";
 import { label, useT } from "../../../i18n";
 import {
@@ -21,10 +21,12 @@ import {
 } from "../../../storage/preferences";
 import { Button } from "../../../ui/Button";
 import { type Column, DataTable } from "../../../ui/DataTable";
+import { type Disposal, DisposalDialog } from "../../../ui/DisposalDialog";
 import { evolutionText, lastEvolution } from "../../../ui/evolution-text";
 import { FitnessMeter } from "../../../ui/FitnessMeter";
 import { conditionText, HangingBadge } from "../../../ui/PlayerCondition";
 import { PlayerDetails } from "../../../ui/PlayerDetails";
+import { SquadCounter } from "../../../ui/SquadCounter";
 import styles from "./page.module.css";
 
 const SECTORS: readonly SquadSector[] = ["all", "GK", "DEF", "MID", "ATT"];
@@ -37,12 +39,16 @@ const SECTOR_OF: Record<Position, SquadSector> = {
   MF: "MID",
   FW: "ATT",
 };
+type Game = ReturnType<typeof useGame>;
 const NO_FILTER = { sector: "all", availability: "all" } as const;
 
-function SquadScreen({ save }: { save: SaveFile }) {
+function SquadScreen({ save, game }: { save: SaveFile; game: Game }) {
   const t = useT();
   const [filter, setFilter] = useState(() => readPreferences().squadFilter ?? NO_FILTER);
   const [details, setDetails] = useState<string | undefined>();
+  const [disposal, setDisposal] = useState<Disposal | undefined>();
+  const [notice, setNotice] = useState<string | undefined>();
+  const locked = game.state.live !== undefined;
   const closeDetails = useCallback(() => setDetails(undefined), []);
   const { squad, unavailable, competitionId, elsewhere, hanging } = useMemo(
     () => lineupContext(save),
@@ -183,18 +189,36 @@ function SquadScreen({ save }: { save: SaveFile }) {
       key: "actions",
       header: t("col.actions"),
       render: (player) => (
-        <Button
-          aria-label={t("lineup.detailsOf", { name: player.displayName })}
-          onClick={() => setDetails(player.id)}
-        >
-          {t("lineup.details")}
-        </Button>
+        <span className={styles.rowActions}>
+          <Button
+            aria-label={t("lineup.detailsOf", { name: player.displayName })}
+            onClick={() => setDetails(player.id)}
+          >
+            {t("lineup.details")}
+          </Button>
+          <Button
+            aria-label={t("squad.sellOf", { name: player.displayName })}
+            disabled={locked}
+            onClick={() => setDisposal({ kind: "sell", playerId: player.id })}
+          >
+            {t("squad.sell")}
+          </Button>
+          <Button
+            aria-label={t("squad.terminateOf", { name: player.displayName })}
+            disabled={locked}
+            onClick={() => setDisposal({ kind: "terminate", playerId: player.id })}
+          >
+            {t("squad.terminate")}
+          </Button>
+        </span>
       ),
     },
   ];
 
   return (
     <div className={styles.layout}>
+      {notice ? <p role="status">{notice}</p> : null}
+      <SquadCounter save={save} />
       <div className={styles.filters}>
         <label className={styles.field}>
           <span>{t("squad.filterSector")}</span>
@@ -238,10 +262,17 @@ function SquadScreen({ save }: { save: SaveFile }) {
       />
       {rows.length === 0 ? <p className={styles.empty}>{t("squad.noMatch")}</p> : null}
       <PlayerDetails save={save} playerId={details} onClose={closeDetails} />
+      <DisposalDialog
+        save={save}
+        game={game}
+        target={disposal}
+        onClose={() => setDisposal(undefined)}
+        onDone={setNotice}
+      />
     </div>
   );
 }
 
 export default function SquadPage() {
-  return <GameLayout>{(save) => <SquadScreen save={save} />}</GameLayout>;
+  return <GameLayout>{(save, game) => <SquadScreen save={save} game={game} />}</GameLayout>;
 }

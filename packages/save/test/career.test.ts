@@ -3,6 +3,7 @@ import {
   advanceLeague,
   leagueRound,
   nextComposition,
+  SQUAD_RULES,
   seasonDate,
 } from "@brasfoot-like/engine";
 import { describe, expect, it } from "vitest";
@@ -126,6 +127,29 @@ describe("virada da carreira (US2, contracts/save-format-v3.md)", () => {
       suspension: 0,
       injury: 4,
     });
+  }, 60000);
+
+  it("na virada, o elenco do jogador mantém até 40 jogadores (a IA fica em 28)", () => {
+    const base = finished(SERIE_A[0]);
+    const own = base.bank.players.filter((player) => player.clubId === base.clubId);
+    const extra = Array.from({ length: Math.max(0, 36 - own.length) }, (_, index) => ({
+      ...(own[index % own.length] as (typeof own)[number]),
+      id: `jogador-9${String(index).padStart(4, "0")}`,
+      strength: 30,
+      birthDate: "2001-01-01",
+    }));
+    const save = { ...base, bank: { ...base.bank, players: [...base.bank.players, ...extra] } };
+    const result = advanceCareerSeason(save, "2026-10-20T00:00:00.000Z");
+    if (!result.ok) throw new Error(JSON.stringify(result.error));
+    const count = (clubId: string) =>
+      result.save.bank.players.filter((player) => player.clubId === clubId).length;
+    // Aposentadoria e fim de contrato tiram alguns, mas ninguém é cortado nos 28 da IA; só passar
+    // de 40 corta.
+    expect(count(save.clubId)).toBeGreaterThan(SQUAD_RULES.max);
+    expect(count(save.clubId)).toBeLessThanOrEqual(SQUAD_RULES.userMax);
+    for (const clubId of SERIE_A.filter((id) => id !== save.clubId)) {
+      expect(count(clubId)).toBeLessThanOrEqual(28);
+    }
   }, 60000);
 
   it("recusa carreira com a temporada em andamento", () => {

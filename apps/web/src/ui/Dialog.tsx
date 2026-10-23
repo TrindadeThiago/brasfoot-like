@@ -9,10 +9,19 @@ interface DialogProps {
   onClose: () => void;
   children: ReactNode;
   actions?: ReactNode;
+  /** Clicar fora do diálogo também fecha (para diálogos só de consulta). */
+  dismissOnBackdrop?: boolean;
 }
 
 /** Diálogo modal acessível: foco preso, fecha com Esc. */
-export function Dialog({ open, title, onClose, children, actions }: DialogProps) {
+export function Dialog({
+  open,
+  title,
+  onClose,
+  children,
+  actions,
+  dismissOnBackdrop = false,
+}: DialogProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -52,7 +61,14 @@ export function Dialog({ open, title, onClose, children, actions }: DialogProps)
 
   if (!open) return null;
   return (
-    <div className={styles.backdrop}>
+    // biome-ignore lint/a11y/noStaticElementInteractions: o Esc e o botão Fechar já são o caminho por teclado
+    // biome-ignore lint/a11y/useKeyWithClickEvents: idem
+    <div
+      className={styles.backdrop}
+      onClick={
+        dismissOnBackdrop ? (event) => event.target === event.currentTarget && onClose() : undefined
+      }
+    >
       <div
         ref={ref}
         className={styles.dialog}

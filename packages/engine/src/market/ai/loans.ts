@@ -55,7 +55,7 @@ export function youthLoan(
   for (const player of prospects) {
     let best: { clubId: string; starter: number } | undefined;
     for (const borrower of borrowers) {
-      if (!canAddPlayer(context.world, borrower, player.position)) continue;
+      if (!canAddPlayer(context.world, borrower, player.position, context.managerClubId)) continue;
       if (buysInWindow(context, borrower) >= rules.maxBuysPerWindow) continue;
       const starter = cachedNeeds(context, borrower, cache).positions[player.position].starter;
       if (player.strength < starter) continue;

@@ -265,6 +265,15 @@ export {
   initialContract,
   isLastYear,
 } from "./market/contracts";
+export type { SaleQuote, TerminationQuote } from "./market/disposal";
+export {
+  QUICK_SALE_PCT,
+  quoteSale,
+  quoteTermination,
+  sellNow,
+  TERMINATION_PCT,
+  terminateContract,
+} from "./market/disposal";
 export {
   completeLoan,
   completeRenewal,
@@ -288,7 +297,13 @@ export { attraction, exigency, respondToContract, wageDemand } from "./market/pl
 export { releaseManagerClub } from "./market/release";
 export { DEFAULT_MARKET, marketRules } from "./market/rules";
 export { comparePlayers, searchPlayers } from "./market/search";
-export { canAddPlayer, canRemovePlayer, squadSize, strengthRank } from "./market/squad";
+export {
+  canAddPlayer,
+  canRemovePlayer,
+  squadLimit,
+  squadSize,
+  strengthRank,
+} from "./market/squad";
 export type {
   ClubResponse,
   Contract,

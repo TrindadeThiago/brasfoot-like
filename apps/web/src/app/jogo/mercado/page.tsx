@@ -23,6 +23,7 @@ import { NegotiationDialog, type NegotiationTarget } from "../../../ui/market/Ne
 import { NegotiationsTab } from "../../../ui/market/NegotiationsTab";
 import { WindowReport } from "../../../ui/market/WindowReport";
 import { WindowStatus } from "../../../ui/market/WindowStatus";
+import { SquadCounter } from "../../../ui/SquadCounter";
 
 type Game = ReturnType<typeof useGame>;
 /** Linhas da tabela por vez: a lista inteira tem ~1.000 jogadores. */
@@ -61,6 +62,7 @@ function Market({ save, game }: { save: SaveFile; game: Game }) {
     <div className={styles.layout}>
       <h2 className="screen-title">{t("market.title")}</h2>
       <WindowStatus save={save} />
+      <SquadCounter save={save} />
       {locked ? <p role="status">{t("market.liveLocked")}</p> : null}
       <div className={styles.tabs} role="tablist" aria-label={t("market.tablist")}>
         {TABS.map((name) => (

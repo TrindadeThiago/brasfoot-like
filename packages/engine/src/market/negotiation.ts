@@ -154,7 +154,7 @@ export function startNegotiation(
     }
     if (
       input.kind === "free" &&
-      !canAddPlayer(context.world, context.managerClubId, player.position)
+      !canAddPlayer(context.world, context.managerClubId, player.position, context.managerClubId)
     ) {
       return fail("market.squad_full");
     }
@@ -177,7 +177,7 @@ export function startNegotiation(
   if ((context.finances.clubs[context.managerClubId]?.cash ?? 0) < input.fee) {
     return fail("market.insufficient_cash", { needed: input.fee });
   }
-  if (!canAddPlayer(context.world, context.managerClubId, target.position)) {
+  if (!canAddPlayer(context.world, context.managerClubId, target.position, context.managerClubId)) {
     return fail("market.squad_full");
   }
 

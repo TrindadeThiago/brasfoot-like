@@ -26,7 +26,8 @@ export function freeAgentFor(
     if (excluded.has(player.id) || !needs.priorities.includes(player.position)) continue;
     const need = needs.positions[player.position];
     if (!need.uncovered && player.strength - need.starter < rules.minGain) continue;
-    if (!canAddPlayer(context.world, needs.clubId, player.position)) continue;
+    if (!canAddPlayer(context.world, needs.clubId, player.position, context.managerClubId))
+      continue;
     const wage = wageDemand(context, player, needs.clubId);
     if (12 * wage > needs.budget && !need.uncovered) continue;
     if (respondToContract(context, player, needs.clubId, wage).kind !== "accepted") continue;

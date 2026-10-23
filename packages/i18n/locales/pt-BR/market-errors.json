@@ -8,5 +8,6 @@
   "market.invalid_duration": "A duração do contrato deve ficar entre {min} e {max} {max, plural, one {temporada} other {temporadas}}.",
   "market.invalid_amount": "O valor informado não é válido.",
   "market.not_found": "Jogador ou negociação não encontrado.",
-  "market.invalid_stage": "Essa ação não está disponível nesta etapa da negociação."
+  "market.invalid_stage": "Essa ação não está disponível nesta etapa da negociação.",
+  "market.no_buyer": "Nenhum clube quer ou pode pagar por esse jogador agora."
 }
