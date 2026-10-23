@@ -54,3 +54,36 @@ describe("carreiras do mundo padrão sem copa ganham a copa na virada (018)", ()
     expect(turned.save.competitions).toHaveLength(0);
   });
 });
+
+describe("carreiras com a copa de jogo único ganham a ida e volta na virada", () => {
+  /** Carreira de temporada encerrada cuja copa ainda é a antiga: jogo único, só a semifinal dupla. */
+  function withOldCup(): SaveFile {
+    const turned = advanceCareerSeason(endOfSeason(), NOW);
+    if (!turned.ok) throw new Error(JSON.stringify(turned.error));
+    const bank = {
+      ...turned.save.bank,
+      competitions: turned.save.bank.competitions.map((competition) =>
+        competition.format.type === "knockout"
+          ? {
+              ...competition,
+              format: {
+                ...competition.format,
+                phases: competition.format.phases.map((phase, index, all) => ({
+                  ...phase,
+                  legs: index === all.length - 2 ? (2 as const) : (1 as const),
+                })),
+              },
+            }
+          : competition,
+      ),
+    };
+    return playRounds({ ...turned.save, bank }, 200);
+  }
+
+  it("a temporada nova joga as oitavas, quartas e semifinal em ida e volta", () => {
+    const turned = advanceCareerSeason(withOldCup(), NOW);
+    if (!turned.ok) throw new Error(JSON.stringify(turned.error));
+    const cup = turned.save.competitions[0]?.divisions[0]?.bracket;
+    expect(cup?.phases.map((phase) => phase.rounds.length)).toEqual([1, 1, 2, 2, 2, 1]);
+  }, 120_000);
+});

@@ -30,7 +30,7 @@ describe("copa nacional do banco padrão (018 R14)", () => {
       "Semifinal",
       "Final",
     ]);
-    expect(cup.format.phases.map((phase) => phase.legs)).toEqual([1, 1, 1, 1, 2, 1]);
+    expect(cup.format.phases.map((phase) => phase.legs)).toEqual([1, 1, 2, 2, 2, 1]);
     expect(cup.format.phases.at(-1)?.neutral).toBe(true);
     expect(cup.divisions[0]?.clubIds).toHaveLength(40);
     const entering = cup.format.entries?.[0];
@@ -38,17 +38,18 @@ describe("copa nacional do banco padrão (018 R14)", () => {
     expect(entering?.clubIds).toHaveLength(24);
     const serieA = bank.competitions[0]?.divisions[0]?.clubIds ?? [];
     for (const clubId of serieA) expect(entering?.clubIds).toContain(clubId);
-    expect(totalLegs(cup.format)).toBe(7);
+    expect(totalLegs(cup.format)).toBe(9);
   });
 
-  it("joga a copa inteira com 41 jogos e um campeão", () => {
+  it("joga a copa inteira com 53 jogos e um campeão", () => {
     const world = completeHiddenAttributes(bank, "copa-padrao");
     const created = createCupSeason(world, { competitionId: "copa-nacional", seed: "c" });
     if (!created.ok) throw new Error(JSON.stringify(created.error));
     expect(phaseRounds(knockoutFormat(world, "copa-nacional"))).toHaveLength(6);
     expect(ensurePhaseDrawn(created.season, world, 0).bracket?.phases[0]?.ties).toHaveLength(8);
     const done = playCup(world, created.season);
-    expect(done.records).toHaveLength(8 + 16 + 8 + 4 + 4 + 1);
+    // Primeira fase e fase de 32 em jogo único; oitavas, quartas e semifinal em ida e volta; final única.
+    expect(done.records).toHaveLength(8 + 16 + 16 + 8 + 4 + 1);
   }, 120_000);
 
   it("um banco de 12 clubes por divisão (Norvália) também fecha as fases", () => {

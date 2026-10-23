@@ -254,7 +254,7 @@
         },
         {
           "home": "division",
-          "legs": 1,
+          "legs": 2,
           "name": "Oitavas de final",
           "prize": 90000,
           "tiebreakers": [
@@ -264,7 +264,7 @@
         },
         {
           "home": "division",
-          "legs": 1,
+          "legs": 2,
           "name": "Quartas de final",
           "prize": 150000,
           "tiebreakers": [
