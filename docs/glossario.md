@@ -15,6 +15,8 @@ novo, use estes termos; ao traduzir, mantenha a mesma distinção entre eles.
 | Termo | Uso | Evitar |
 |---|---|---|
 | **Treinador FC** | nome do jogo (vem de `app.name`; nunca escrito à mão) | "brasfoot" em qualquer texto visível |
+| **país** | o país do banco, com as suas competições, regras econômicas e banco de nomes ("País", "Todos os países") | nação, liga (para o país) |
+| **simulação resumida** | o jogo resolvido sem narração (placar, gols, cartões e lesões), das ligas de outros países; no texto, "resumo" | simulação rápida, automática |
 | **técnico** | o papel do jogador ("Você é o técnico", "Carreira do técnico") | treinador (só no nome do jogo) |
 | **clube** | a instituição: elenco, finanças, diretoria, torcida, escudo | time, para a instituição |
 | **time** | os jogadores em campo, a equipe que joga ("meu time", "escalar o time", "time sem goleiro") | equipe |

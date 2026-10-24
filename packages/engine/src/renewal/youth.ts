@@ -7,6 +7,7 @@ import { createRng, type Rng } from "../rng/xoshiro";
 import { birthDateFor, personName, pickTraits } from "../worldgen/players";
 import { GENERATOR_TUNING } from "../worldgen/tuning";
 import { nameBankFor } from "./names";
+import { regulatorFor } from "./regulator";
 import { playerRef } from "./retirement";
 import { EVOLUTION_RULES, YOUTH_RULES } from "./rules";
 import type { PlayerRef, RegulatorState, RenewalState } from "./types";
@@ -114,7 +115,7 @@ export function generateYouth(
         club,
         neediestPosition(squad, rng, caps),
         seq,
-        renewal.regulator,
+        regulatorFor(renewal, world, league),
         date,
         rng,
       );

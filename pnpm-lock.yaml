@@ -167,6 +167,9 @@ importers:
       '@brasfoot-like/modkit':
         specifier: workspace:*
         version: link:../packages/modkit
+      '@brasfoot-like/save':
+        specifier: workspace:*
+        version: link:../packages/save
       fflate:
         specifier: ^0.8.2
         version: 0.8.3

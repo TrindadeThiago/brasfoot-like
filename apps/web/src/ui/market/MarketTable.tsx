@@ -28,6 +28,8 @@ export function MarketTable({
   const t = useT();
   const clubName = (clubId?: string) =>
     save.bank.clubs.find((club) => club.id === clubId)?.shortName ?? "";
+  const codeOf = (countryId?: string) =>
+    save.bank.countries.find((country) => country.id === countryId)?.code ?? "";
   const columns: Column<MarketRow>[] = [
     {
       key: "compare",
@@ -86,6 +88,16 @@ export function MarketTable({
         ),
       sortValue: (row) => (row.free ? "" : clubName(row.clubId)),
     },
+    ...(rows.some((row) => row.countryId !== undefined)
+      ? [
+          {
+            key: "country",
+            header: t("col.country"),
+            render: (row: MarketRow) => codeOf(row.countryId),
+            sortValue: (row: MarketRow) => codeOf(row.countryId),
+          },
+        ]
+      : []),
     {
       key: "value",
       header: t("market.col.value"),

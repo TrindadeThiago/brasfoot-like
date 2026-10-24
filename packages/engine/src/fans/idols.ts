@@ -1,10 +1,10 @@
 import type { CompletedBank, CompletedPlayer } from "../model/types";
+import { playerById, squadOf } from "../world/squads";
 import type { FansContext } from "./types";
 
 /** Ídolos do clube: os `count` jogadores mais fortes do elenco atual (desempate por id). */
 export function idolsOf(world: CompletedBank, clubId: string, count: number): CompletedPlayer[] {
-  return world.players
-    .filter((player) => player.clubId === clubId)
+  return [...squadOf(world, clubId)]
     .sort((a, b) => b.strength - a.strength || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
     .slice(0, count);
 }
@@ -39,7 +39,7 @@ export function idolEvents(
   for (const entry of log) {
     if (entry.season !== context.league.number || entry.round !== round) continue;
     if (entry.outcome !== undefined) continue;
-    const player = context.world.players.find((candidate) => candidate.id === entry.playerId);
+    const player = playerById(context.world, entry.playerId);
     if (!player) continue;
     const sold = entry.kind === "buy" || entry.kind === "sale";
     if (sold && entry.fromClubId === clubId && wouldBeIdol(context.world, clubId, player, count)) {

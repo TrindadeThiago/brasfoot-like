@@ -5,9 +5,11 @@ import {
   clubDivision,
   createRng,
   declineJobOffer,
+  mainLeagueOfClub,
   managerClubOf,
+  switchManagerCountry,
 } from "@brasfoot-like/engine";
-import { withManagerFormation } from "./career";
+import { seasonStateOf, withManagerFormation } from "./career";
 import type { SaveFile } from "./format";
 import { initialLineup } from "./lineup";
 
@@ -38,6 +40,9 @@ export type BoardSaveResult = { ok: true; save: SaveFile } | { ok: false; error:
  * automática nova; o clube deixado passa à IA e o mercado dele é liberado.
  */
 export function acceptManagerOffer(save: SaveFile, offerId: string): BoardSaveResult {
+  // Proposta de clube de outro país (020): as metas e a rodada vêm da liga principal dele.
+  const offered = save.board.offers.find((entry) => entry.id === offerId)?.clubId;
+  const target = offered ? mainLeagueOfClub(seasonStateOf(save), offered) : undefined;
   const result = acceptJobOffer(
     {
       world: save.bank,
@@ -46,19 +51,24 @@ export function acceptManagerOffer(save: SaveFile, offerId: string): BoardSaveRe
       board: save.board,
       market: save.market,
       careerSeed: save.seed,
+      ...(target ? { targetLeague: target } : {}),
     },
     offerId,
     createRng(`${save.seed}:board:accept:${offerId}`),
   );
   if (!result.ok) return result;
   const clubId = result.board.manager.clubId ?? save.clubId;
-  const season = clubDivision(save.league, clubId);
+  // A liga em foco acompanha o país do novo clube; o calendário não muda (é por data).
+  const moved = switchManagerCountry(seasonStateOf(save), clubId);
+  const season = clubDivision(moved.league, clubId);
   if (!season) return { ok: false, error: { code: "board.offer_not_found", params: { offerId } } };
   const { lineupNotice: _notice, ...rest } = save;
   return {
     ok: true,
     save: withManagerFormation({
       ...rest,
+      league: moved.league,
+      competitions: moved.competitions,
       clubId,
       board: result.board,
       market: result.market,

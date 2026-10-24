@@ -1,5 +1,6 @@
 import { diffDays } from "../calendar/date";
 import type { CompletedBank, CompletedPlayer } from "../model/types";
+import { playerLines } from "../season/record";
 import type { MatchRecord } from "../season/types";
 import type { FitnessRules, FitnessState } from "./types";
 
@@ -72,7 +73,7 @@ export function fitnessAfterMatches(
     if (fitnessOn(state, id, date, rules) < FULL) players[id] = entry;
   }
   for (const record of records) {
-    for (const [id, line] of Object.entries(record.players)) {
+    for (const [id, line] of Object.entries(playerLines(record))) {
       if (line.minutes <= 0) continue;
       const current = fitnessOn({ players }, id, date, rules);
       const value = Math.max(0, current - Math.round((line.minutes * rules.drainPer90) / 90));

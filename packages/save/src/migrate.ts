@@ -16,6 +16,7 @@ import {
   FORMATION_IDS,
   generateRivalries,
   initialRenewal,
+  isCountryMain,
   isSeasonOver,
   type LeagueSeason,
   leagueCalendar,
@@ -261,6 +262,18 @@ const addStages: Migration = {
   },
 };
 
+/**
+ * v14 → v15: vários países (020). `league` passa a ser a liga principal do país do clube em foco e
+ * as ligas dos outros países ficam em `competitions`; num save antigo há um país só, então nada
+ * muda além da versão.
+ */
+const addWorld: Migration = {
+  from: 14,
+  migrate(raw) {
+    return { ...(raw as object), formatVersion: 15 };
+  },
+};
+
 /** Migrações reais do formato, em ordem. */
 export const MIGRATIONS: readonly Migration[] = [
   addLineup,
@@ -276,6 +289,7 @@ export const MIGRATIONS: readonly Migration[] = [
   addCalendar,
   addCupHistory,
   addStages,
+  addWorld,
 ];
 
 /** Problemas que tornam a escalação gravada ilegível (os demais o jogo corrige ou avisa). */
@@ -453,7 +467,10 @@ const envelopeSchema = z.object({
 /** Motivo pelo qual a liga não combina com a carreira, ou nada se combina. */
 function leagueProblem(save: SaveFile): string | undefined {
   const { league } = save;
-  if (league.seed !== leagueSeasonSeed(save.seed, league.number)) {
+  // A primeira competição do banco tem a seed da carreira; as demais, a seed com o id (020).
+  const first = save.bank.competitions[0]?.id === league.competitionId;
+  const careerSeed = first ? save.seed : `${save.seed}:${league.competitionId}`;
+  if (league.seed !== leagueSeasonSeed(careerSeed, league.number)) {
     return "seed da temporada incoerente com a carreira";
   }
   if (league.divisions.some((season) => String(season.seed) !== league.seed)) {
@@ -468,22 +485,32 @@ function leagueProblem(save: SaveFile): string | undefined {
   return undefined;
 }
 
+/** As ligas principais da carreira: a em foco e as dos outros países (020). */
+function mainLeagues(save: SaveFile): SaveFile["league"][] {
+  return [
+    save.league,
+    ...save.competitions.filter((league) => isCountryMain(save.bank, league.competitionId)),
+  ];
+}
+
 /** Motivo pelo qual as finanças não combinam com a liga ou entre si, ou nada se combinam. */
 function financeProblem(save: SaveFile): string | undefined {
   const { finances } = save;
-  const { min, max } = economyRules(save.bank, save.league.competitionId).priceRange;
   const sums = new Map<string, number>();
   for (const entry of finances.ledger)
     sums.set(entry.clubId, (sums.get(entry.clubId) ?? 0) + entry.amount);
-  for (const season of save.league.divisions) {
-    for (const clubId of season.clubIds) {
-      const club = finances.clubs[clubId];
-      if (!club) return `clube sem finanças: ${clubId}`;
-      if (club.cash !== club.seasonStartCash + (sums.get(clubId) ?? 0)) {
-        return `caixa incoerente com os lançamentos: ${clubId}`;
+  for (const league of mainLeagues(save)) {
+    const { min, max } = economyRules(save.bank, league.competitionId).priceRange;
+    for (const season of league.divisions) {
+      for (const clubId of season.clubIds) {
+        const club = finances.clubs[clubId];
+        if (!club) return `clube sem finanças: ${clubId}`;
+        if (club.cash !== club.seasonStartCash + (sums.get(clubId) ?? 0)) {
+          return `caixa incoerente com os lançamentos: ${clubId}`;
+        }
+        if (club.ticketPrice < min || club.ticketPrice > max)
+          return `ingresso fora da faixa: ${clubId}`;
       }
-      if (club.ticketPrice < min || club.ticketPrice > max)
-        return `ingresso fora da faixa: ${clubId}`;
     }
   }
   return undefined;
@@ -517,7 +544,9 @@ function boardProblem(save: SaveFile): string | undefined {
     if (employer !== save.clubId) return "clube do técnico difere do clube em foco";
     if (board.clubs[employer]?.coachId !== null) return "clube do técnico com técnico da IA";
   }
-  const competing = save.league.divisions.flatMap((season) => season.clubIds);
+  const competing = mainLeagues(save).flatMap((league) =>
+    league.divisions.flatMap((season) => season.clubIds),
+  );
   const coaches = new Map(board.coaches.map((coach) => [coach.id, coach]));
   const vacant = new Set(board.vacancies.map((vacancy) => vacancy.clubId));
   if (vacant.size !== board.vacancies.length) return "mais de uma vaga por clube";
@@ -633,8 +662,8 @@ function stagesProblem(save: SaveFile): string | undefined {
 
 /** Toda equipe da liga tem torcida (013 data-model.md). */
 function fansProblem(save: SaveFile): string | undefined {
-  const missing = save.league.divisions
-    .flatMap((season) => season.clubIds)
+  const missing = mainLeagues(save)
+    .flatMap((league) => league.divisions.flatMap((season) => season.clubIds))
     .find((clubId) => !save.fans.clubs[clubId]);
   return missing ? `clube sem torcida: ${missing}` : undefined;
 }

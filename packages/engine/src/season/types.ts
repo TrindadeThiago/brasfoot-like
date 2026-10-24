@@ -85,6 +85,14 @@ export interface MatchRecord {
   unavailable: Record<Side, Absence[]>;
   /** Jogo eliminatório: quem avançou e como, com prorrogação e pênaltis (018). */
   decision?: MatchDecision;
+  /**
+   * Jogo da simulação resumida (020 R4): `players` guarda só quem teve gol, assistência, cartão,
+   * lesão ou minutos diferentes de `fullTime`; os titulares e a duração dão o resto. Leia as linhas
+   * dos jogadores sempre por `playerLines`.
+   */
+  summary?: true;
+  starters?: Record<Side, string[]>;
+  fullTime?: number;
 }
 
 export interface SeasonWarning {

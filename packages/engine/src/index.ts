@@ -97,7 +97,18 @@ export {
   leagueSeasonSeed,
   leagueTotalRounds,
 } from "./career/league";
-export { advanceLeague, completeLeagueRound, startLeagueRound } from "./career/league-round";
+export {
+  advanceLeague,
+  completeLeagueRound,
+  playSummaryLeagueRound,
+  startLeagueRound,
+} from "./career/league-round";
+export {
+  type CareerHistory,
+  EMPTY_HISTORY,
+  type NextSeason,
+  startNextSeason,
+} from "./career/next-season";
 export type {
   CareerSeasonOptions,
   CareerSeasonResult,
@@ -360,6 +371,8 @@ export { liveStats, matchResult } from "./match/result";
 export { penaltyChance, shootoutOrder, shootoutProgress } from "./match/shootout";
 export type { TeamStrength } from "./match/strength";
 export { teamStrength } from "./match/strength";
+export { summarizeMatch } from "./match/summary";
+export { SUMMARY_TUNING } from "./match/summary-tuning";
 export { MATCH_TUNING } from "./match/tuning";
 export type {
   Decider,
@@ -530,10 +543,12 @@ export {
   matchTicks,
   startRound,
 } from "./season/live-round";
+export { playerLines, toSummaryRecord } from "./season/record";
 export type { AdvanceSeasonResult, CreateSeasonResult } from "./season/season";
 export { advanceSeason, createSeason, isSeasonOver, unavailablePlayers } from "./season/season";
 export { standings } from "./season/standings";
 export { seasonStats, topAssists, topScorers } from "./season/stats";
+export { playSummaryRound } from "./season/summary-round";
 export type {
   Absence,
   DisciplineRules,
@@ -610,6 +625,24 @@ export type {
 export { ISSUE_CODES, ISSUE_PARAMS, makeIssue, SECTIONS, severityOf } from "./validation/issues";
 export type { ValidationResult } from "./validation/validate";
 export { validateBank } from "./validation/validate";
+export {
+  countryOf,
+  isCountryMain,
+  mainCompetitionOf,
+  mainCompetitions,
+  rulesCompetitionOf,
+} from "./world/countries";
+export { createWorldSystems, worldLeagues } from "./world/create";
+export {
+  canSignForeign,
+  foreignCount,
+} from "./world/foreign";
+export {
+  mainLeagueOfClub,
+  type SimulationKind,
+  simulationKindFor,
+  switchManagerCountry,
+} from "./world/leagues";
 export { withDefaultCupLegs, withNationalCup } from "./worldgen/add-cup";
 export { DEFAULT_BANK_SEED } from "./worldgen/default-seed";
 export type { GenerateOptions } from "./worldgen/generate";
@@ -619,3 +652,4 @@ export { DISTRIBUTION_LIMITS, REPUTATION_TIERS, tierOf } from "./worldgen/limits
 export { generateRivalries } from "./worldgen/rivalries";
 export type { StagesBankOptions } from "./worldgen/stages-example";
 export { generateStagesBank, STAGES_REGION_SIZES } from "./worldgen/stages-example";
+export { generateWorldBank, type WorldBankOptions } from "./worldgen/world-example";

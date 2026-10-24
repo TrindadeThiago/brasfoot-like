@@ -57,7 +57,10 @@ export interface SquadChangeNotice {
 export interface RenewalState {
   /** Próximo número de id de jogador (`jogador-NNNNN`). */
   nextPlayerSeq: number;
+  /** Regulador do primeiro país do banco (único, num banco de um país). */
   regulator: RegulatorState;
+  /** Reguladores dos demais países, por id do país (020 R13); ausente = ainda no estado inicial. */
+  regulators?: Record<string, RegulatorState>;
   lastEvolution?: EvolutionRecord;
   squadNotice?: SquadChangeNotice;
 }

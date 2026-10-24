@@ -1,6 +1,7 @@
 import { expectationOf } from "../board/goals";
 import { clubDivision } from "../career/league";
 import { rivalryOf } from "../fans/rivalries";
+import { playerLines } from "../season/record";
 import type { MatchRecord, Season } from "../season/types";
 import { newsRules } from "./rules";
 import type { HeadlineType, HeadlineVars, NewsContext } from "./types";
@@ -154,7 +155,7 @@ export function matchFacts(
     }
   }
 
-  for (const [playerId, line] of Object.entries(record.players).sort(([a], [b]) =>
+  for (const [playerId, line] of Object.entries(playerLines(record)).sort(([a], [b]) =>
     a < b ? -1 : 1,
   )) {
     if (line.goals < 3) continue;

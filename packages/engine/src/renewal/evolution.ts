@@ -3,6 +3,7 @@ import type { LeagueSeason } from "../career/types";
 import type { CompletedBank, CompletedPlayer } from "../model/types";
 import { triangular } from "../rng/distributions";
 import { createRng, type Rng } from "../rng/xoshiro";
+import { playerLines } from "../season/record";
 import type { MatchRecord } from "../season/types";
 import { EVOLUTION_RULES } from "./rules";
 import type { EvolutionRecord } from "./types";
@@ -27,7 +28,7 @@ export function minutesInRounds(
 ): Map<string, number> {
   const minutes = new Map<string, number>();
   const add = (record: MatchRecord) => {
-    for (const [playerId, line] of Object.entries(record.players)) {
+    for (const [playerId, line] of Object.entries(playerLines(record))) {
       minutes.set(playerId, (minutes.get(playerId) ?? 0) + line.minutes);
     }
   };

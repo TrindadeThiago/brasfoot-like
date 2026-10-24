@@ -2,6 +2,7 @@
 
 import type { HistoryRow, SeasonHistoryEntry } from "@brasfoot-like/engine";
 import { divisionNameOf, type SaveFile } from "@brasfoot-like/save";
+import { useState } from "react";
 import { useT } from "../../i18n";
 import { Crest } from "../Crest";
 import { type Column, DataTable } from "../DataTable";
@@ -16,7 +17,17 @@ export function OtherCompetitions({
   entries: readonly SeasonHistoryEntry[];
 }) {
   const t = useT();
+  // Num mundo de vários países as tabelas de todos eles seriam centenas: um seletor de país (020).
+  const countryOf = (competitionId: string) =>
+    save.bank.competitions.find((item) => item.id === competitionId)?.countryId ?? "";
+  const countryIds = [...new Set(entries.map((entry) => countryOf(entry.competitionId)))];
+  const own = countryOf(save.league.competitionId);
+  const [chosen, setChosen] = useState(countryIds.includes(own) ? own : (countryIds[0] ?? ""));
   if (entries.length === 0) return null;
+  const shown =
+    countryIds.length > 1
+      ? entries.filter((entry) => countryOf(entry.competitionId) === chosen)
+      : entries;
   const clubs = new Map(save.bank.clubs.map((club) => [club.id, club]));
   const columns: Column<HistoryRow>[] = [
     { key: "position", header: t("col.position"), render: (row) => row.position, align: "right" },
@@ -39,7 +50,19 @@ export function OtherCompetitions({
   return (
     <section aria-label={t("history.otherCompetitions")} className={styles.section}>
       <h2>{t("history.otherCompetitions")}</h2>
-      {entries.flatMap((entry) => {
+      {countryIds.length > 1 ? (
+        <label className={styles.country}>
+          <span>{t("history.country")}</span>
+          <select value={chosen} onChange={(event) => setChosen(event.target.value)}>
+            {countryIds.map((id) => (
+              <option key={id} value={id}>
+                {save.bank.countries.find((country) => country.id === id)?.name ?? id}
+              </option>
+            ))}
+          </select>
+        </label>
+      ) : null}
+      {shown.flatMap((entry) => {
         const name = save.bank.competitions.find((item) => item.id === entry.competitionId)?.name;
         return entry.divisions.map((division) => {
           const champion = clubs.get(division.championId)?.name ?? division.championId;

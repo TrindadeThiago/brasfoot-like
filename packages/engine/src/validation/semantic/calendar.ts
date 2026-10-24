@@ -2,6 +2,7 @@ import { parseIsoDate } from "../../calendar/date";
 import { buildSeasonCalendar, calendarCompetitions } from "../../calendar/season-calendar";
 import type { SemanticContext } from "../context";
 import { makeIssue, type ValidationIssue } from "../issues";
+import { mainCompetitions } from "./countries";
 
 /**
  * Calendário e competições (017 R2, R3): clube de competição secundária fora da principal e datas
@@ -9,26 +10,26 @@ import { makeIssue, type ValidationIssue } from "../issues";
  */
 export function checkCalendar(context: SemanticContext): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
-  const main = context.competitions.find((item) => item.index === 0);
-  if (main) {
+  // A principal é a primeira competição de cada país (020 R1); as demais têm de ter clubes dela.
+  const mains = mainCompetitions(context);
+  for (const { index, value: competition } of context.competitions) {
+    const main = mains.get(competition.countryId);
+    if (!main || main.index === index) continue;
     const inMain = new Set(main.value.divisions.flatMap((division) => division.clubIds));
-    for (const { index, value: competition } of context.competitions) {
-      if (index === 0) continue;
-      competition.divisions.forEach((division, position) => {
-        division.clubIds.forEach((clubId, clubIndex) => {
-          if (inMain.has(clubId)) return;
-          issues.push(
-            makeIssue(
-              "competition.club_outside_main",
-              "competitions",
-              [index, "divisions", position, "clubIds", clubIndex],
-              { clubId, competitionId: competition.id },
-              competition.id,
-            ),
-          );
-        });
+    competition.divisions.forEach((division, position) => {
+      division.clubIds.forEach((clubId, clubIndex) => {
+        if (inMain.has(clubId)) return;
+        issues.push(
+          makeIssue(
+            "competition.club_outside_main",
+            "competitions",
+            [index, "divisions", position, "clubIds", clubIndex],
+            { clubId, competitionId: competition.id },
+            competition.id,
+          ),
+        );
       });
-    }
+    });
   }
 
   const start = context.manifest?.referenceDate;

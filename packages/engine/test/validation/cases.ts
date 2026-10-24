@@ -82,6 +82,46 @@ function knockoutOf(copa: Competition) {
   return copa.format;
 }
 
+/**
+ * Segundo país (020): `pais-2` com banco de nomes, os clubes 9 a 16 (cópias dos 1 a 8, com
+ * nacionalidade do país) e a liga `liga-2` com as mesmas duas divisões.
+ */
+function secondCountry(bank: ModPackage): void {
+  const names = {
+    firstNames: Array.from({ length: 20 }, (_, index) => `Nome${index}`),
+    surnames: Array.from({ length: 20 }, (_, index) => `Sobrenome${index}`),
+  };
+  bank.countries.push({ id: "pais-2", name: "Segundo País", code: "SEG", names });
+  const abbreviations = ["III", "JJJ", "KKK", "LLL", "MMM", "NNN", "OOO", "PPP"];
+  const original = [...bank.clubs];
+  original.forEach((club, index) => {
+    const id = `clube-${index + 9}`;
+    bank.clubs.push({
+      ...JSON.parse(JSON.stringify(club)),
+      id,
+      abbreviation: abbreviations[index] ?? "ZZZ",
+      countryId: "pais-2",
+    });
+    for (const player of bank.players.filter((entry) => entry.clubId === club.id)) {
+      bank.players.push({
+        ...JSON.parse(JSON.stringify(player)),
+        id: player.id.replace(club.id, id),
+        clubId: id,
+        nationalityId: "pais-2",
+      });
+    }
+  });
+  const main = JSON.parse(JSON.stringify(at(bank.competitions, 0))) as Competition;
+  main.id = "liga-2";
+  main.countryId = "pais-2";
+  for (const entry of main.divisions) {
+    entry.clubIds = entry.clubIds.map((id) =>
+      id.replace(/clube-(\d+)/, (_, n) => `clube-${Number(n) + 8}`),
+    );
+  }
+  bank.competitions.push(main);
+}
+
 const division = (bank: ModPackage, index: number) => at(at(bank.competitions, 0).divisions, index);
 
 /**
@@ -992,6 +1032,65 @@ export const RULE_CASES: RuleCase[] = [
       path: [...LOWER_STAGE, 0, "draw", "rules", 0],
       entityId: "liga-nacional",
       params: { stage: 1, attribute: "country", value: "val", clubs: 20, groups: 4 },
+    },
+  },
+  {
+    code: "country.main_not_league",
+    description: "a primeira competição do país é uma copa de mata-mata",
+    mutate: (bank) => {
+      knockoutCup(bank, () => {});
+      bank.competitions.reverse();
+    },
+    expect: {
+      section: "competitions",
+      path: [0, "format", "type"],
+      entityId: "copa",
+      params: { countryId: "pais-1", competitionId: "copa" },
+    },
+  },
+  {
+    code: "country.names_missing",
+    description: "banco com dois países e um deles sem banco de nomes",
+    mutate: (bank) => {
+      secondCountry(bank);
+      removeField(at(bank.countries, 1), "names");
+    },
+    expect: {
+      section: "countries",
+      path: [1, "names"],
+      entityId: "pais-2",
+      params: { countryId: "pais-2" },
+    },
+  },
+  {
+    code: "country.foreign_limit_exceeded",
+    description: "clube com mais estrangeiros que o limite do país",
+    mutate: (bank) => {
+      secondCountry(bank);
+      at(bank.countries, 0).rules = { foreignLimit: 1 };
+      const squad = bank.players.filter((player) => player.clubId === "clube-1");
+      at(squad, 0).nationalityId = "pais-2";
+      at(squad, 1).nationalityId = "pais-2";
+    },
+    expect: {
+      section: "clubs",
+      path: [0],
+      entityId: "clube-1",
+      params: { clubId: "clube-1", limit: 1, count: 2 },
+    },
+  },
+  {
+    code: "unique.duplicate_club_in_country",
+    description: "o mesmo clube na competição principal de dois países",
+    mutate: (bank) => {
+      secondCountry(bank);
+      at(at(bank.competitions, 1).divisions, 0).clubIds[0] = "clube-1";
+    },
+    expect: {
+      section: "competitions",
+      path: [1, "divisions", 0, "clubIds", 0],
+      entityId: "liga-2",
+      params: { clubId: "clube-1", otherCompetitionId: "liga" },
     },
   },
 ];

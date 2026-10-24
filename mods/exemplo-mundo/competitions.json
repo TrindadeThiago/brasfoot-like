@@ -1,0 +1,478 @@
+[
+  {
+    "countryId": "ned",
+    "divisions": [
+      {
+        "clubIds": [
+          "clube-ned-001",
+          "clube-ned-002",
+          "clube-ned-003",
+          "clube-ned-004",
+          "clube-ned-005",
+          "clube-ned-006",
+          "clube-ned-007",
+          "clube-ned-008",
+          "clube-ned-009",
+          "clube-ned-010",
+          "clube-ned-011",
+          "clube-ned-012"
+        ],
+        "level": 1,
+        "name": "Série A",
+        "promotionSlots": 0,
+        "relegationSlots": 0
+      }
+    ],
+    "economy": {
+      "credit": {
+        "interestBp": 30,
+        "perReputation": 22500
+      },
+      "crisisRounds": 10,
+      "divisions": [
+        {
+          "creditBase": 1500000,
+          "fanFactorPct": 100,
+          "level": 1,
+          "prizes": {
+            "first": 1500000,
+            "last": 225000,
+            "title": 750000
+          },
+          "referencePrice": 12,
+          "sponsorship": {
+            "base": 675000,
+            "perReputation": 1,
+            "wageSharePct": 30
+          }
+        }
+      ],
+      "fansBase": 12000,
+      "fansPerReputation": 38,
+      "priceElasticityPct": 150,
+      "priceRange": {
+        "max": 200,
+        "min": 5
+      },
+      "stadium": {
+        "maxCapacity": 75000,
+        "options": [
+          {
+            "cost": 1125000,
+            "rounds": 6,
+            "seats": 1500
+          },
+          {
+            "cost": 3000000,
+            "rounds": 12,
+            "seats": 3800
+          },
+          {
+            "cost": 6750000,
+            "rounds": 20,
+            "seats": 7500
+          }
+        ]
+      },
+      "wageFactorPct": 75
+    },
+    "format": {
+      "points": {
+        "draw": 1,
+        "loss": 0,
+        "win": 3
+      },
+      "rounds": 2,
+      "tiebreakers": [
+        "wins",
+        "goal-difference",
+        "goals-for",
+        "head-to-head",
+        "draw-lots"
+      ],
+      "type": "league"
+    },
+    "id": "liga-ned-nacional",
+    "name": "Campeonato Central de Nedonária"
+  },
+  {
+    "countryId": "puk",
+    "divisions": [
+      {
+        "clubIds": [
+          "clube-puk-001",
+          "clube-puk-002",
+          "clube-puk-003",
+          "clube-puk-004",
+          "clube-puk-005",
+          "clube-puk-006",
+          "clube-puk-007",
+          "clube-puk-008",
+          "clube-puk-009",
+          "clube-puk-010",
+          "clube-puk-011",
+          "clube-puk-012"
+        ],
+        "level": 1,
+        "name": "Série A",
+        "promotionSlots": 0,
+        "relegationSlots": 4
+      },
+      {
+        "clubIds": [
+          "clube-puk-013",
+          "clube-puk-014",
+          "clube-puk-015",
+          "clube-puk-016",
+          "clube-puk-017",
+          "clube-puk-018",
+          "clube-puk-019",
+          "clube-puk-020",
+          "clube-puk-021",
+          "clube-puk-022",
+          "clube-puk-023",
+          "clube-puk-024"
+        ],
+        "level": 2,
+        "name": "Série B",
+        "promotionSlots": 4,
+        "relegationSlots": 0
+      }
+    ],
+    "economy": {
+      "credit": {
+        "interestBp": 30,
+        "perReputation": 37500
+      },
+      "crisisRounds": 10,
+      "divisions": [
+        {
+          "creditBase": 2500000,
+          "fanFactorPct": 100,
+          "level": 1,
+          "prizes": {
+            "first": 2500000,
+            "last": 375000,
+            "title": 1250000
+          },
+          "referencePrice": 12,
+          "sponsorship": {
+            "base": 1125000,
+            "perReputation": 1,
+            "wageSharePct": 30
+          }
+        },
+        {
+          "creditBase": 1250000,
+          "fanFactorPct": 70,
+          "level": 2,
+          "prizes": {
+            "first": 1125000,
+            "last": 187500,
+            "title": 500000
+          },
+          "referencePrice": 8,
+          "sponsorship": {
+            "base": 500000,
+            "perReputation": 1,
+            "wageSharePct": 60
+          }
+        }
+      ],
+      "fansBase": 20000,
+      "fansPerReputation": 63,
+      "priceElasticityPct": 150,
+      "priceRange": {
+        "max": 200,
+        "min": 5
+      },
+      "stadium": {
+        "maxCapacity": 125000,
+        "options": [
+          {
+            "cost": 1875000,
+            "rounds": 6,
+            "seats": 2500
+          },
+          {
+            "cost": 5000000,
+            "rounds": 12,
+            "seats": 6300
+          },
+          {
+            "cost": 11250000,
+            "rounds": 20,
+            "seats": 12500
+          }
+        ]
+      },
+      "wageFactorPct": 125
+    },
+    "format": {
+      "points": {
+        "draw": 1,
+        "loss": 0,
+        "win": 3
+      },
+      "rounds": 2,
+      "tiebreakers": [
+        "wins",
+        "goal-difference",
+        "goals-for",
+        "head-to-head",
+        "draw-lots"
+      ],
+      "type": "league"
+    },
+    "id": "liga-puk-nacional",
+    "name": "Campeonato Oriental de Pukaônia"
+  },
+  {
+    "countryId": "ved",
+    "divisions": [
+      {
+        "clubIds": [
+          "clube-ved-001",
+          "clube-ved-002",
+          "clube-ved-003",
+          "clube-ved-004",
+          "clube-ved-005",
+          "clube-ved-006",
+          "clube-ved-007",
+          "clube-ved-008",
+          "clube-ved-009",
+          "clube-ved-010",
+          "clube-ved-011",
+          "clube-ved-012"
+        ],
+        "level": 1,
+        "name": "Série A",
+        "promotionSlots": 0,
+        "relegationSlots": 4
+      },
+      {
+        "clubIds": [
+          "clube-ved-013",
+          "clube-ved-014",
+          "clube-ved-015",
+          "clube-ved-016",
+          "clube-ved-017",
+          "clube-ved-018",
+          "clube-ved-019",
+          "clube-ved-020",
+          "clube-ved-021",
+          "clube-ved-022",
+          "clube-ved-023",
+          "clube-ved-024"
+        ],
+        "level": 2,
+        "name": "Série B",
+        "promotionSlots": 4,
+        "relegationSlots": 0
+      }
+    ],
+    "economy": {
+      "credit": {
+        "interestBp": 30,
+        "perReputation": 30000
+      },
+      "crisisRounds": 10,
+      "divisions": [
+        {
+          "creditBase": 2000000,
+          "fanFactorPct": 100,
+          "level": 1,
+          "prizes": {
+            "first": 2000000,
+            "last": 300000,
+            "title": 1000000
+          },
+          "referencePrice": 12,
+          "sponsorship": {
+            "base": 900000,
+            "perReputation": 1,
+            "wageSharePct": 30
+          }
+        },
+        {
+          "creditBase": 1000000,
+          "fanFactorPct": 70,
+          "level": 2,
+          "prizes": {
+            "first": 900000,
+            "last": 150000,
+            "title": 400000
+          },
+          "referencePrice": 8,
+          "sponsorship": {
+            "base": 400000,
+            "perReputation": 1,
+            "wageSharePct": 60
+          }
+        }
+      ],
+      "fansBase": 16000,
+      "fansPerReputation": 50,
+      "priceElasticityPct": 150,
+      "priceRange": {
+        "max": 200,
+        "min": 5
+      },
+      "stadium": {
+        "maxCapacity": 100000,
+        "options": [
+          {
+            "cost": 1500000,
+            "rounds": 6,
+            "seats": 2000
+          },
+          {
+            "cost": 4000000,
+            "rounds": 12,
+            "seats": 5000
+          },
+          {
+            "cost": 9000000,
+            "rounds": 20,
+            "seats": 10000
+          }
+        ]
+      },
+      "wageFactorPct": 100
+    },
+    "format": {
+      "points": {
+        "draw": 1,
+        "loss": 0,
+        "win": 3
+      },
+      "rounds": 2,
+      "tiebreakers": [
+        "wins",
+        "goal-difference",
+        "goals-for",
+        "head-to-head",
+        "draw-lots"
+      ],
+      "type": "league"
+    },
+    "id": "liga-ved-nacional",
+    "name": "Campeonato Unido de Vedelândia"
+  },
+  {
+    "countryId": "ved",
+    "divisions": [
+      {
+        "clubIds": [
+          "clube-ved-001",
+          "clube-ved-002",
+          "clube-ved-003",
+          "clube-ved-004",
+          "clube-ved-005",
+          "clube-ved-006",
+          "clube-ved-007",
+          "clube-ved-008",
+          "clube-ved-009",
+          "clube-ved-010",
+          "clube-ved-011",
+          "clube-ved-012",
+          "clube-ved-013",
+          "clube-ved-014",
+          "clube-ved-015",
+          "clube-ved-016",
+          "clube-ved-017",
+          "clube-ved-018",
+          "clube-ved-019",
+          "clube-ved-020",
+          "clube-ved-021",
+          "clube-ved-022",
+          "clube-ved-023",
+          "clube-ved-024"
+        ],
+        "level": 1,
+        "name": "Copa de Vedelândia",
+        "promotionSlots": 0,
+        "relegationSlots": 0
+      }
+    ],
+    "format": {
+      "entries": [
+        {
+          "clubIds": [
+            "clube-ved-001",
+            "clube-ved-006",
+            "clube-ved-002",
+            "clube-ved-003",
+            "clube-ved-004",
+            "clube-ved-009",
+            "clube-ved-008",
+            "clube-ved-010"
+          ],
+          "phase": 1
+        }
+      ],
+      "phases": [
+        {
+          "home": "division",
+          "legs": 1,
+          "name": "Primeira fase",
+          "prize": 60000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "home": "division",
+          "legs": 2,
+          "name": "Oitavas de final",
+          "prize": 90000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "home": "division",
+          "legs": 2,
+          "name": "Quartas de final",
+          "prize": 150000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "home": "draw",
+          "legs": 2,
+          "name": "Semifinal",
+          "prize": 250000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "gapWeeks": 1,
+          "home": "draw",
+          "legs": 1,
+          "name": "Final",
+          "neutral": true,
+          "prize": 500000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        }
+      ],
+      "type": "knockout"
+    },
+    "id": "copa-ved-nacional",
+    "name": "Copa de Vedelândia",
+    "schedule": {
+      "everyWeeks": 2,
+      "startWeek": 1,
+      "weekday": 3
+    }
+  }
+]

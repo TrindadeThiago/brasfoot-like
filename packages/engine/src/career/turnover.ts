@@ -45,6 +45,7 @@ import { createRng } from "../rng/xoshiro";
 import { type SeasonError, seasonError } from "../season/errors";
 import { standings } from "../season/standings";
 import type { PlayerStatus, StandingRow } from "../season/types";
+import { isCountryMain } from "../world/countries";
 import { nextComposition } from "./composition";
 import { competitionEntry, historyEntry } from "./history";
 import { isLeagueSeasonOver, leagueRound, leagueSeasonSeed } from "./league";
@@ -192,6 +193,7 @@ const generateCalendars: TurnoverStep = {
       year: context.next.year,
       compositions,
       statuses,
+      leagueCompetitionId: context.finished.competitionId,
     });
     if (!created.ok) throw new TurnoverFailure(created.error);
     return {
@@ -203,29 +205,101 @@ const generateCalendars: TurnoverStep = {
   },
 };
 
+function countryOfCompetition(world: CompletedBank, competitionId: string): string | undefined {
+  return world.competitions.find((entry) => entry.id === competitionId)?.countryId;
+}
+
+/** Ligas principais encerradas dos outros países, na ordem do banco (020 R6). */
+function foreignFinished(context: TurnoverContext): LeagueSeason[] {
+  return (context.finishedCompetitions ?? []).filter((league) =>
+    isCountryMain(context.world, league.competitionId),
+  );
+}
+
+/** O contexto da virada visto de uma liga principal de outro país (020 R6). */
+function foreignContext(context: TurnoverContext, league: LeagueSeason): TurnoverContext {
+  const { world } = context;
+  const country = countryOfCompetition(world, league.competitionId);
+  const sameCountry = (competitionId: string) =>
+    competitionId !== league.competitionId &&
+    countryOfCompetition(world, competitionId) === country;
+  const finalStandings: Record<number, StandingRow[]> = {};
+  for (const season of league.divisions) {
+    finalStandings[season.divisionLevel] = standings(season, world);
+  }
+  const { league: _league, competitions: _competitions, ...rest } = context;
+  const created = context.competitions?.find(
+    (entry) => entry.competitionId === league.competitionId,
+  );
+  return {
+    ...rest,
+    finished: league,
+    finalStandings,
+    finishedCompetitions: (context.finishedCompetitions ?? []).filter((entry) =>
+      sameCountry(entry.competitionId),
+    ),
+    ...(created
+      ? {
+          league: created,
+          competitions: (context.competitions ?? []).filter((entry) =>
+            sameCountry(entry.competitionId),
+          ),
+        }
+      : {}),
+  };
+}
+
+/**
+ * Etapa que age sobre uma liga (020 R6): roda para as ligas principais dos outros países, cada uma
+ * com o seu contexto, e por último para a do técnico (que fica com a última palavra sobre o que o
+ * jogador vê, como a última evolução). Sem outros países, é a própria etapa.
+ */
+function perCountry(step: TurnoverStep): TurnoverStep {
+  return {
+    id: step.id,
+    run: (context) => {
+      let current = context;
+      for (const league of foreignFinished(context)) {
+        const done = step.run(foreignContext(current, league));
+        current = {
+          ...current,
+          world: done.world,
+          ...(done.finances ? { finances: done.finances } : {}),
+          ...(done.renewal ? { renewal: done.renewal } : {}),
+          ...(done.market ? { market: done.market } : {}),
+          ...(done.board ? { board: done.board } : {}),
+          ...(done.fans ? { fans: done.fans } : {}),
+          ...(done.news ? { news: done.news } : {}),
+        };
+      }
+      return step.run(current);
+    },
+  };
+}
+
 /** Etapas padrão, na ordem fixa documentada (FR-017). */
 export const DEFAULT_TURNOVER_STEPS: readonly TurnoverStep[] = [
   recordHistory,
   fansNewSeasonStep,
   newsNewSeasonStep,
-  payPrizes,
+  perCountry(payPrizes),
   closeFinanceSeason,
   returnLoansStep,
-  evolvePlayersStep,
-  retirePlayersStep,
+  perCountry(evolvePlayersStep),
+  perCountry(retirePlayersStep),
   expireContractsStep,
-  regulateWorldStep,
-  generateYouthStep,
-  balanceSquadsStep,
+  perCountry(regulateWorldStep),
+  perCountry(generateYouthStep),
+  perCountry(balanceSquadsStep),
   ageOutFreeAgentsStep,
   promotionRelegation,
   advanceYear,
   resetSeasonStats,
   generateCalendars,
-  paySponsorship,
-  aiFinanceReview,
+  perCountry(paySponsorship),
+  perCountry(aiFinanceReview),
   resetMarketStep,
-  boardNewSeasonStep,
+  perCountry(boardNewSeasonStep),
 ];
 
 function stepsError(stepId: string, reason: string) {

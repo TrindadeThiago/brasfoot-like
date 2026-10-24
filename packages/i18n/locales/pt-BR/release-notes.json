@@ -1,5 +1,17 @@
 [
   {
+    "version": "1.5.0",
+    "date": "2026-10-24",
+    "changes": [
+      "Vários países: um banco pode ter quantos países quiser, cada um com a sua pirâmide de competições, as suas regras econômicas e o seu banco de nomes, só com dados. Todos os países jogam a mesma temporada e viram o ano juntos, cada um com campeão, acesso e rebaixamento próprios. O mundo padrão continua com um país e não muda.",
+      "Nova carreira em qualquer país: a escolha de clube ganhou filtros de país e de divisão e uma busca por nome. A tela da competição, o histórico e o mercado também ganharam o seletor de país.",
+      "Mercado entre países: a taxa é paga pelo valor de mercado do jogador, sem conversão, e o salário segue a escala do país do clube de destino. A IA também contrata de outros países, com um teto por clube e janela, e um país pode limitar o número de estrangeiros por clube.",
+      "Propostas de emprego de clubes de qualquer país: aceitar uma proposta de outro país leva a carreira para lá, a qualquer momento da temporada, com as metas e as regras econômicas do novo país.",
+      "Mundo grande: os jogos das ligas de outros países que você não acompanha usam uma simulação resumida (resultado, gols, cartões e lesões), estatisticamente equivalente à completa, e o save guarda o histórico deles de forma compacta. Um mundo de 10 países e 400 clubes roda 30 temporadas dentro de metas declaradas de tamanho, tempo e memória.",
+      "Modders: novo mod de exemplo com três países de estruturas diferentes (mods/exemplo-mundo), regras de país (limite de estrangeiros) e a seção \"Vários países\" no documento do formato. Saves antigos abrem normalmente como mundos de um país (save v15)."
+    ]
+  },
+  {
     "version": "1.4.0",
     "date": "2026-10-23",
     "changes": [

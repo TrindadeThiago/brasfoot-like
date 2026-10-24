@@ -38,6 +38,23 @@ export function buysInWindow(context: MarketContext, clubId: string): number {
   ).length;
 }
 
+/** Compras do clube na janela a clubes de outro país (020 R13). */
+export function internationalBuysInWindow(context: MarketContext, clubId: string): number {
+  const countryOf = (id: string | undefined) =>
+    context.world.clubs.find((club) => club.id === id)?.countryId;
+  const own = countryOf(clubId);
+  return windowDeals(context).filter(
+    (entry) =>
+      entry.toClubId === clubId &&
+      entry.fromClubId !== undefined &&
+      countryOf(entry.fromClubId) !== own &&
+      (entry.kind === "buy" ||
+        entry.kind === "sale" ||
+        entry.kind === "loan" ||
+        entry.kind === "loan_out"),
+  ).length;
+}
+
 /** Vendas e empréstimos cedidos pelo clube na janela. */
 export function salesInWindow(context: MarketContext, clubId: string): number {
   return windowDeals(context).filter(

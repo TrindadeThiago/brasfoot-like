@@ -96,6 +96,7 @@ export function MatchSummary({ record, save }: { record: MatchRecord; save: Save
         </div>
         <StatsTable home={home?.shortName} away={away?.shortName} stats={record.stats} />
       </div>
+      {record.summary ? <p className={styles.none}>{t("summary.simplified")}</p> : null}
       {record.decision?.extraTimeScore ? (
         <p className={styles.none}>
           {t("cup.extraTimeGoals")}: {record.decision.extraTimeScore.home} ×{" "}

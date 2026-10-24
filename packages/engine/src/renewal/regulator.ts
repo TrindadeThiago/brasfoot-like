@@ -1,5 +1,39 @@
+import type { LeagueSeason } from "../career/types";
+import type { CompletedBank } from "../model/types";
 import { REGULATOR_RULES } from "./rules";
-import type { RegulatorState, WorldMeasure } from "./types";
+import type { RegulatorState, RenewalState, WorldMeasure } from "./types";
+
+/** País da liga (o da competição). */
+function leagueCountry(world: CompletedBank, league: LeagueSeason): string | undefined {
+  return world.competitions.find((entry) => entry.id === league.competitionId)?.countryId;
+}
+
+/** Regulador do país da liga (020 R13): o primeiro país do banco usa `regulator`, os demais `regulators`. */
+export function regulatorFor(
+  renewal: Pick<RenewalState, "regulator" | "regulators">,
+  world: CompletedBank,
+  league: LeagueSeason,
+): RegulatorState {
+  const country = leagueCountry(world, league);
+  if (country === undefined || country === world.competitions[0]?.countryId) {
+    return renewal.regulator;
+  }
+  return renewal.regulators?.[country] ?? { strengthOffset: 0, potentialBonus: 0 };
+}
+
+/** Grava o regulador do país da liga. Não altera a entrada. */
+export function withRegulator(
+  renewal: RenewalState,
+  world: CompletedBank,
+  league: LeagueSeason,
+  state: RegulatorState,
+): RenewalState {
+  const country = leagueCountry(world, league);
+  if (country === undefined || country === world.competitions[0]?.countryId) {
+    return { ...renewal, regulator: state };
+  }
+  return { ...renewal, regulators: { ...renewal.regulators, [country]: state } };
+}
 
 function clamp(value: number, [min, max]: readonly [number, number]): number {
   return Math.min(max, Math.max(min, value));

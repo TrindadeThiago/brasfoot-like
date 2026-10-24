@@ -1,15 +1,15 @@
 import {
+  type Competition,
   type CompletedBank,
   clubDivision,
   completeHiddenAttributes,
-  createBoard,
   createCareerSeason,
-  createFans,
-  createFinances,
   createNews,
+  createWorldSystems,
   emptyMarket,
   ensureContracts,
   initialRenewal,
+  mainCompetitions,
   validateBank,
 } from "@brasfoot-like/engine";
 import { MANAGER_NAME_MAX, SAVE_FORMAT_VERSION, type SaveError, type SaveFile } from "./format";
@@ -28,6 +28,10 @@ export interface CreateSaveInput {
   defaultBank: unknown;
   /** Imagens do mod (caminho → data URI); só as usadas pelos escudos vão para o save (015). */
   assets?: Record<string, string>;
+}
+
+function hasClub(competition: Competition, clubId: string): boolean {
+  return competition.divisions.some((division) => division.clubIds.includes(clubId));
 }
 
 /** Imagens referenciadas pelos escudos dos clubes do banco. */
@@ -74,19 +78,23 @@ export function createSave(input: CreateSaveInput): CreateSaveResult {
     Number(completed.manifest.referenceDate.slice(0, 4)),
     input.seed,
   );
-  const competition = bank.competitions[0];
-  if (!competition?.divisions.some((division) => division.clubIds.includes(input.clubId))) {
+  // O clube é de qualquer país do banco (020): a liga em foco é a principal do país dele.
+  if (!mainCompetitions(bank).some((main) => hasClub(main, input.clubId))) {
     return {
       ok: false,
       error: { code: "save.club_not_in_league", params: { clubId: input.clubId } },
     };
   }
-  const seasons = createCareerSeason(bank, { careerSeed: input.seed });
+  const seasons = createCareerSeason(bank, { careerSeed: input.seed, focusClubId: input.clubId });
   const season = seasons.ok ? clubDivision(seasons.league, input.clubId) : undefined;
   if (!seasons.ok || !season) {
     return { ok: false, error: { code: "save.invalid_bank", params: { issues: 1 } } };
   }
-  const finances = createFinances(bank, seasons.league);
+  const systems = createWorldSystems(bank, seasons, input.seed, {
+    clubId: input.clubId,
+    noFiring: input.noFiring ?? false,
+  });
+  const { finances } = systems;
   return {
     ok: true,
     save: {
@@ -108,13 +116,10 @@ export function createSave(input: CreateSaveInput): CreateSaveResult {
       finances,
       renewal: initialRenewal(bank),
       market: emptyMarket(),
-      fans: createFans(bank, seasons.league),
+      fans: systems.fans,
       news: createNews(),
       assets: usedAssets(bank, input.assets ?? {}),
-      board: createBoard(bank, seasons.league, finances, input.seed, {
-        clubId: input.clubId,
-        noFiring: input.noFiring ?? false,
-      }),
+      board: systems.board,
       lineup: initialLineup(bank, season, input.clubId),
     },
   };

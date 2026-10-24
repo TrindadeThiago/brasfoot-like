@@ -1,3 +1,4 @@
+import { playerLines } from "./record";
 import type { PlayerSeasonStats, Season } from "./types";
 
 /** Estatísticas de cada jogador na temporada, derivadas dos registros (FR-021). */
@@ -23,7 +24,7 @@ export function seasonStats(season: Season): PlayerSeasonStats[] {
     return current;
   };
   for (const record of season.records) {
-    for (const [playerId, line] of Object.entries(record.players)) {
+    for (const [playerId, line] of Object.entries(playerLines(record))) {
       const current = row(playerId, line.side === "home" ? record.home : record.away);
       current.matches += 1;
       current.minutes += line.minutes;

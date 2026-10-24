@@ -19,7 +19,20 @@ export function daysInMonth(year: number, month: number): number {
   return month === 4 || month === 6 || month === 9 || month === 11 ? 30 : 31;
 }
 
+/** Datas já lidas: o mercado e a idade leem as mesmas poucas datas milhares de vezes por dia. */
+const PARSED = new Map<string, CivilDate | null>();
+const PARSED_LIMIT = 100_000;
+
 export function parseIsoDate(text: string): CivilDate | null {
+  const hit = PARSED.get(text);
+  if (hit !== undefined) return hit;
+  const parsed = parseUncached(text);
+  if (PARSED.size >= PARSED_LIMIT) PARSED.clear();
+  PARSED.set(text, parsed);
+  return parsed;
+}
+
+function parseUncached(text: string): CivilDate | null {
   const match = ISO_DATE.exec(text);
   if (!match) return null;
   const year = Number(match[1]);
@@ -28,7 +41,7 @@ export function parseIsoDate(text: string): CivilDate | null {
   if (month < 1 || month > 12 || day < 1 || day > daysInMonth(year, month)) {
     return null;
   }
-  return { year, month, day };
+  return Object.freeze({ year, month, day });
 }
 
 function pad(value: number, width: number): string {

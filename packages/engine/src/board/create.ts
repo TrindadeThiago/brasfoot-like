@@ -29,9 +29,7 @@ export function createBoard(
   manager?: CreateBoardManager,
 ): BoardState {
   const rules = boardRules(world, league.competitionId);
-  const played = playedRounds(league);
-  const at = { season: league.number, round: played };
-  const over = isLeagueSeasonOver(league);
+  const at = { season: league.number, round: playedRounds(league) };
   const managerClubId = manager?.clubId ?? null;
   const board: BoardState = {
     manager: {
@@ -50,7 +48,29 @@ export function createBoard(
     history: { stints: [{ clubId: managerClubId, from: at }], seasons: [] },
     nextSeq: 1,
   };
-  const rng = createRng(`${careerSeed}:board:create:${league.number}`);
+  addLeagueClubs(
+    board,
+    world,
+    league,
+    finances,
+    rules,
+    createRng(`${careerSeed}:board:create:${league.number}`),
+  );
+  return board;
+}
+
+/** Diretorias e técnicos da IA dos clubes de uma liga, no quadro `board`. Altera `board`. */
+function addLeagueClubs(
+  board: BoardState,
+  world: CompletedBank,
+  league: LeagueSeason,
+  finances: FinanceState,
+  rules: ReturnType<typeof boardRules>,
+  rng: ReturnType<typeof createRng>,
+): void {
+  const at = { season: league.number, round: playedRounds(league) };
+  const over = isLeagueSeasonOver(league);
+  const managerClubId = board.manager.clubId;
   const context = { world, league, finances };
   const clubIds = league.divisions.flatMap((season) => season.clubIds).sort();
   for (const clubId of clubIds) {
@@ -69,7 +89,25 @@ export function createBoard(
       recent: [],
     };
   }
-  return board;
+}
+
+/**
+ * Acrescenta ao quadro as diretorias e os técnicos da IA dos clubes de outra liga principal
+ * (020): o mundo com vários países tem uma diretoria por clube de todos os países. Não altera a
+ * entrada.
+ */
+export function extendBoard(
+  board: BoardState,
+  world: CompletedBank,
+  league: LeagueSeason,
+  finances: FinanceState,
+  careerSeed: string,
+): BoardState {
+  const next = JSON.parse(JSON.stringify(board)) as BoardState;
+  const rules = boardRules(world, league.competitionId);
+  const rng = createRng(`${careerSeed}:board:create:${league.number}:${league.competitionId}`);
+  addLeagueClubs(next, world, league, finances, rules, rng);
+  return next;
 }
 
 /** Clube do jogador para as chamadas do motor: `""` quando desempregado (research.md R3). */

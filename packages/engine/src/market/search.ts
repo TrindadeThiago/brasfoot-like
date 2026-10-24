@@ -5,9 +5,16 @@ import type { FreeAgent, MarketContext, MarketResult, MarketRow, PlayerFilters }
 import { fail } from "./types";
 import { marketValue } from "./value";
 
+/** Só um banco de vários países mostra o país nas linhas (020): os demais ficam como eram. */
+function manyCountries(context: MarketContext): boolean {
+  return new Set(context.world.competitions.map((entry) => entry.countryId)).size > 1;
+}
+
 function rowOf(context: MarketContext, player: CompletedPlayer, date: string): MarketRow {
   const year = context.league.year;
+  const country = context.world.clubs.find((club) => club.id === player.clubId)?.countryId;
   return {
+    ...(country !== undefined && manyCountries(context) ? { countryId: country } : {}),
     playerId: player.id,
     displayName: player.displayName,
     position: player.position,
@@ -30,6 +37,7 @@ function freeRow(context: MarketContext, agent: FreeAgent, date: string): Market
     ? deriveWage({ ...player, clubId: agent.lastClubId } as CompletedPlayer, club, date)
     : 0;
   return {
+    ...(manyCountries(context) ? { countryId: player.nationalityId } : {}),
     playerId: player.id,
     displayName: player.displayName,
     position: player.position,
@@ -61,6 +69,7 @@ function matches(row: MarketRow, filters: PlayerFilters): boolean {
     if (row.untilYear === undefined || row.untilYear > filters.contractUntilMax) return false;
   }
   if (filters.excludeClubId !== undefined && row.clubId === filters.excludeClubId) return false;
+  if (filters.countryId !== undefined && row.countryId !== filters.countryId) return false;
   if (filters.text) {
     if (!row.displayName.toLowerCase().includes(filters.text.trim().toLowerCase())) return false;
   }

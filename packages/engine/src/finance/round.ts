@@ -22,7 +22,7 @@ import { interestFor } from "./actions";
 import { aiRoundReview } from "./ai";
 import { annualWageBill } from "./create";
 import { gateFor } from "./gate";
-import { draft, post } from "./ledger";
+import { draft, post, pushGate } from "./ledger";
 import { economyRules } from "./rules";
 import type { FinanceState } from "./types";
 
@@ -111,7 +111,7 @@ export function applyRoundFinances(
         mood !== undefined ? { mood } : {},
       );
       post(working, entry(fixture.home, "gate", gate.revenue));
-      working.gates.push({
+      pushGate(working, {
         season: league.number,
         round,
         clubId: fixture.home,
@@ -231,7 +231,7 @@ export function applyExtraGates(
         date: match.date,
         competitionId: match.competitionId,
       });
-      working.gates.push({
+      pushGate(working, {
         season: principal.number,
         round: round - 1,
         clubId: share.clubId,
@@ -288,7 +288,14 @@ export function applyRoundSystems(
   news?: CareerNews,
   /** Outras competições da carreira: seus minutos contam na evolução (017 R9). */
   otherCompetitions: readonly LeagueSeason[] = [],
+  /**
+   * Liga de outro país que não o do técnico (020 R6): só decisões da IA. O mercado do jogador
+   * (negociações, propostas recebidas e resumo de janela) e a última evolução mostrada a ele não
+   * são tocados, e a diretoria só avalia os clubes da liga.
+   */
+  options: { foreign?: boolean } = {},
 ): CareerRoundResult {
+  const foreign = options.foreign === true;
   // A bilheteria usa o humor de antes do jogo (013 R10).
   let nextFinances = applyRoundFinances(finances, league, world, round, managerClubId, fans?.state);
   let nextWorld = world;
@@ -305,7 +312,7 @@ export function applyRoundSystems(
       otherCompetitions,
     );
     nextWorld = evolved.world;
-    nextRenewal = { ...renewal.state, lastEvolution: evolved.record };
+    nextRenewal = foreign ? renewal.state : { ...renewal.state, lastEvolution: evolved.record };
   }
   let nextMarket = market?.state;
   if (market) {
@@ -319,16 +326,18 @@ export function applyRoundSystems(
       careerSeed: market.careerSeed,
     };
     const ai = aiMarketRound(context);
-    const after = marketAfterRound({
-      ...context,
-      world: ai.world,
-      finances: ai.finances,
-      market: ai.market,
-    });
+    const after = foreign
+      ? { world: ai.world, finances: ai.finances, market: ai.market }
+      : marketAfterRound({
+          ...context,
+          world: ai.world,
+          finances: ai.finances,
+          market: ai.market,
+        });
     nextWorld = after.world;
     nextFinances = after.finances;
     nextMarket = after.market;
-    const closed = closedWindow(context);
+    const closed = foreign ? undefined : closedWindow(context);
     if (closed !== undefined) {
       nextMarket = closeWindowReport({ ...context, world: nextWorld, market: nextMarket }, closed);
     }
@@ -359,6 +368,7 @@ export function applyRoundSystems(
         board: board.state,
         careerSeed: board.careerSeed,
         ...(nextFans ? { fans: nextFans } : {}),
+        ...(foreign ? { foreign: true } : {}),
       },
       round,
     );

@@ -1,0 +1,1405 @@
+[
+  {
+    "abbreviation": "GUD",
+    "city": "Gudel",
+    "colors": {
+      "primary": "#006B3F",
+      "secondary": "#FFD100"
+    },
+    "countryId": "ned",
+    "crest": {
+      "colors": [
+        "#006B3F",
+        "#FFD100",
+        "#C8102E"
+      ],
+      "initials": "ECG",
+      "shape": "classic"
+    },
+    "id": "clube-ned-001",
+    "initialCash": 2620000,
+    "name": "Esporte Clube Gudel",
+    "reputation": 65,
+    "shortName": "Gudel",
+    "stadiumCapacity": 16000
+  },
+  {
+    "abbreviation": "LIM",
+    "city": "Limbomar",
+    "colors": {
+      "primary": "#F47920",
+      "secondary": "#C8102E"
+    },
+    "countryId": "ned",
+    "crest": {
+      "colors": [
+        "#F47920",
+        "#C8102E"
+      ],
+      "initials": "CAL",
+      "shape": "triangle"
+    },
+    "id": "clube-ned-002",
+    "initialCash": 4880000,
+    "name": "Clube Atlético Limbomar",
+    "reputation": 69,
+    "shortName": "Limbomar",
+    "stadiumCapacity": 22500
+  },
+  {
+    "abbreviation": "FED",
+    "city": "Fedgeran",
+    "colors": {
+      "primary": "#1D428A",
+      "secondary": "#FFD100"
+    },
+    "countryId": "ned",
+    "crest": {
+      "colors": [
+        "#1D428A",
+        "#FFD100",
+        "#00A3E0"
+      ],
+      "initials": "FFR",
+      "shape": "rectangle"
+    },
+    "id": "clube-ned-003",
+    "initialCash": 5990000,
+    "name": "Fedgeran Futebol e Regatas",
+    "reputation": 86,
+    "shortName": "Fedgeran",
+    "stadiumCapacity": 41500
+  },
+  {
+    "abbreviation": "FAS",
+    "city": "Fasamo",
+    "colors": {
+      "primary": "#FFFFFF",
+      "secondary": "#C8102E"
+    },
+    "countryId": "ned",
+    "crest": {
+      "colors": [
+        "#FFFFFF",
+        "#C8102E",
+        "#0033A0"
+      ],
+      "initials": "FFC",
+      "shape": "classic"
+    },
+    "id": "clube-ned-004",
+    "initialCash": 4570000,
+    "name": "Fasamo Futebol Clube",
+    "reputation": 81,
+    "shortName": "Fasamo",
+    "stadiumCapacity": 38500
+  },
+  {
+    "abbreviation": "LOM",
+    "city": "Loma",
+    "colors": {
+      "primary": "#004C45",
+      "secondary": "#C8102E"
+    },
+    "countryId": "ned",
+    "crest": {
+      "colors": [
+        "#004C45",
+        "#C8102E"
+      ],
+      "initials": "AAL",
+      "shape": "triangle"
+    },
+    "id": "clube-ned-005",
+    "initialCash": 2590000,
+    "name": "Associação Atlética Loma",
+    "reputation": 65,
+    "shortName": "Loma",
+    "stadiumCapacity": 13500
+  },
+  {
+    "abbreviation": "LON",
+    "city": "Lono",
+    "colors": {
+      "primary": "#FFFFFF",
+      "secondary": "#006B3F"
+    },
+    "countryId": "ned",
+    "crest": {
+      "colors": [
+        "#FFFFFF",
+        "#006B3F"
+      ],
+      "initials": "UEL",
+      "shape": "triangle"
+    },
+    "id": "clube-ned-006",
+    "initialCash": 3300000,
+    "name": "União Esportiva Lono",
+    "reputation": 67,
+    "shortName": "Lono",
+    "stadiumCapacity": 22000
+  },
+  {
+    "abbreviation": "GAA",
+    "city": "Gaan",
+    "colors": {
+      "primary": "#004C45",
+      "secondary": "#9EA2A2"
+    },
+    "countryId": "ned",
+    "crest": {
+      "colors": [
+        "#004C45",
+        "#9EA2A2"
+      ],
+      "initials": "SEG",
+      "shape": "classic"
+    },
+    "id": "clube-ned-007",
+    "initialCash": 1630000,
+    "name": "Sociedade Esportiva Gaan",
+    "reputation": 45,
+    "shortName": "Gaan",
+    "stadiumCapacity": 11500
+  },
+  {
+    "abbreviation": "SAR",
+    "city": "Saris",
+    "colors": {
+      "primary": "#8B5A2B",
+      "secondary": "#FFFFFF"
+    },
+    "countryId": "ned",
+    "crest": {
+      "colors": [
+        "#8B5A2B",
+        "#FFFFFF",
+        "#004C45"
+      ],
+      "initials": "SCR",
+      "shape": "triangle"
+    },
+    "id": "clube-ned-008",
+    "initialCash": 3980000,
+    "name": "Saris Clube de Regatas",
+    "reputation": 62,
+    "shortName": "Saris",
+    "stadiumCapacity": 27500
+  },
+  {
+    "abbreviation": "SOU",
+    "city": "Sou",
+    "colors": {
+      "primary": "#FFFFFF",
+      "secondary": "#FFD100"
+    },
+    "countryId": "ned",
+    "crest": {
+      "colors": [
+        "#FFFFFF",
+        "#FFD100",
+        "#7A1F3D"
+      ],
+      "initials": "SAC",
+      "shape": "rectangle"
+    },
+    "id": "clube-ned-009",
+    "initialCash": 2560000,
+    "name": "Sou Atlético Clube",
+    "reputation": 53,
+    "shortName": "Sou",
+    "stadiumCapacity": 10000
+  },
+  {
+    "abbreviation": "SEM",
+    "city": "Semu",
+    "colors": {
+      "primary": "#004C45",
+      "secondary": "#5B2C83"
+    },
+    "countryId": "ned",
+    "crest": {
+      "colors": [
+        "#004C45",
+        "#5B2C83"
+      ],
+      "initials": "ECS",
+      "shape": "round"
+    },
+    "id": "clube-ned-010",
+    "initialCash": 2040000,
+    "name": "Esporte Clube Semu",
+    "reputation": 54,
+    "shortName": "Semu",
+    "stadiumCapacity": 12500
+  },
+  {
+    "abbreviation": "FOZ",
+    "city": "Fozade",
+    "colors": {
+      "primary": "#004C45",
+      "secondary": "#FFD100"
+    },
+    "countryId": "ned",
+    "crest": {
+      "colors": [
+        "#004C45",
+        "#FFD100",
+        "#C8102E"
+      ],
+      "initials": "UEF",
+      "shape": "rectangle"
+    },
+    "id": "clube-ned-011",
+    "initialCash": 1570000,
+    "name": "União Esportiva Fozade",
+    "reputation": 44,
+    "shortName": "Fozade",
+    "stadiumCapacity": 8000
+  },
+  {
+    "abbreviation": "LEN",
+    "city": "Lenar",
+    "colors": {
+      "primary": "#00A3E0",
+      "secondary": "#006B3F"
+    },
+    "countryId": "ned",
+    "crest": {
+      "colors": [
+        "#00A3E0",
+        "#006B3F"
+      ],
+      "initials": "LFR",
+      "shape": "classic"
+    },
+    "id": "clube-ned-012",
+    "initialCash": 3950000,
+    "name": "Lenar Futebol e Regatas",
+    "reputation": 64,
+    "shortName": "Lenar",
+    "stadiumCapacity": 12000
+  },
+  {
+    "abbreviation": "BUN",
+    "city": "Bunsuku",
+    "colors": {
+      "primary": "#006B3F",
+      "secondary": "#C8102E"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#006B3F",
+        "#C8102E",
+        "#7A1F3D"
+      ],
+      "initials": "AAB",
+      "shape": "triangle"
+    },
+    "id": "clube-puk-001",
+    "initialCash": 13480000,
+    "name": "Associação Atlética Bunsuku",
+    "reputation": 95,
+    "shortName": "Bunsuku",
+    "stadiumCapacity": 67000
+  },
+  {
+    "abbreviation": "POM",
+    "city": "Pompori",
+    "colors": {
+      "primary": "#00A3E0",
+      "secondary": "#000000"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#00A3E0",
+        "#000000"
+      ],
+      "initials": "PCR",
+      "shape": "rectangle"
+    },
+    "id": "clube-puk-002",
+    "initialCash": 2660000,
+    "name": "Pompori Clube de Regatas",
+    "reputation": 50,
+    "shortName": "Pompori",
+    "stadiumCapacity": 10500
+  },
+  {
+    "abbreviation": "JAM",
+    "city": "Jamu",
+    "colors": {
+      "primary": "#FFD100",
+      "secondary": "#8B5A2B"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#FFD100",
+        "#8B5A2B"
+      ],
+      "initials": "UEJ",
+      "shape": "rectangle"
+    },
+    "id": "clube-puk-003",
+    "initialCash": 5980000,
+    "name": "União Esportiva Jamu",
+    "reputation": 67,
+    "shortName": "Jamu",
+    "stadiumCapacity": 37000
+  },
+  {
+    "abbreviation": "BAN",
+    "city": "Bangesar",
+    "colors": {
+      "primary": "#FFFFFF",
+      "secondary": "#F47920"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#FFFFFF",
+        "#F47920",
+        "#0033A0"
+      ],
+      "initials": "AAB",
+      "shape": "triangle"
+    },
+    "id": "clube-puk-004",
+    "initialCash": 3250000,
+    "name": "Associação Atlética Bangesar",
+    "reputation": 57,
+    "shortName": "Bangesar",
+    "stadiumCapacity": 40000
+  },
+  {
+    "abbreviation": "MUM",
+    "city": "Mumbemel",
+    "colors": {
+      "primary": "#5B2C83",
+      "secondary": "#004C45"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#5B2C83",
+        "#004C45"
+      ],
+      "initials": "CAM",
+      "shape": "triangle"
+    },
+    "id": "clube-puk-005",
+    "initialCash": 4450000,
+    "name": "Clube Atlético Mumbemel",
+    "reputation": 57,
+    "shortName": "Mumbemel",
+    "stadiumCapacity": 32000
+  },
+  {
+    "abbreviation": "SOS",
+    "city": "Sosis",
+    "colors": {
+      "primary": "#004C45",
+      "secondary": "#0033A0"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#004C45",
+        "#0033A0"
+      ],
+      "initials": "SFC",
+      "shape": "triangle"
+    },
+    "id": "clube-puk-006",
+    "initialCash": 2760000,
+    "name": "Sosis Futebol Clube",
+    "reputation": 43,
+    "shortName": "Sosis",
+    "stadiumCapacity": 13000
+  },
+  {
+    "abbreviation": "GES",
+    "city": "Gesel",
+    "colors": {
+      "primary": "#FFD100",
+      "secondary": "#FFFFFF"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#FFD100",
+        "#FFFFFF"
+      ],
+      "initials": "GFC",
+      "shape": "round"
+    },
+    "id": "clube-puk-007",
+    "initialCash": 5230000,
+    "name": "Gesel Futebol Clube",
+    "reputation": 58,
+    "shortName": "Gesel",
+    "stadiumCapacity": 37500
+  },
+  {
+    "abbreviation": "MOS",
+    "city": "Mossinel",
+    "colors": {
+      "primary": "#C8102E",
+      "secondary": "#000000"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#C8102E",
+        "#000000",
+        "#FFD100"
+      ],
+      "initials": "MCR",
+      "shape": "triangle"
+    },
+    "id": "clube-puk-008",
+    "initialCash": 8510000,
+    "name": "Mossinel Clube de Regatas",
+    "reputation": 90,
+    "shortName": "Mossinel",
+    "stadiumCapacity": 89500
+  },
+  {
+    "abbreviation": "SIR",
+    "city": "Sirjuko",
+    "colors": {
+      "primary": "#5B2C83",
+      "secondary": "#1D428A"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#5B2C83",
+        "#1D428A"
+      ],
+      "initials": "ECS",
+      "shape": "triangle"
+    },
+    "id": "clube-puk-009",
+    "initialCash": 10500000,
+    "name": "Esporte Clube Sirjuko",
+    "reputation": 83,
+    "shortName": "Sirjuko",
+    "stadiumCapacity": 95500
+  },
+  {
+    "abbreviation": "GAN",
+    "city": "Ganmemi",
+    "colors": {
+      "primary": "#8B5A2B",
+      "secondary": "#0033A0"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#8B5A2B",
+        "#0033A0",
+        "#7A1F3D"
+      ],
+      "initials": "GEC",
+      "shape": "triangle"
+    },
+    "id": "clube-puk-010",
+    "initialCash": 5030000,
+    "name": "Ganmemi Esporte Clube",
+    "reputation": 60,
+    "shortName": "Ganmemi",
+    "stadiumCapacity": 49500
+  },
+  {
+    "abbreviation": "RAR",
+    "city": "Raro",
+    "colors": {
+      "primary": "#006B3F",
+      "secondary": "#1D428A"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#006B3F",
+        "#1D428A"
+      ],
+      "initials": "RFR",
+      "shape": "rectangle"
+    },
+    "id": "clube-puk-011",
+    "initialCash": 2360000,
+    "name": "Raro Futebol e Regatas",
+    "reputation": 44,
+    "shortName": "Raro",
+    "stadiumCapacity": 17000
+  },
+  {
+    "abbreviation": "ZIR",
+    "city": "Ziris",
+    "colors": {
+      "primary": "#0033A0",
+      "secondary": "#004C45"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#0033A0",
+        "#004C45"
+      ],
+      "initials": "ZFC",
+      "shape": "triangle"
+    },
+    "id": "clube-puk-012",
+    "initialCash": 4060000,
+    "name": "Ziris Futebol Clube",
+    "reputation": 59,
+    "shortName": "Ziris",
+    "stadiumCapacity": 44000
+  },
+  {
+    "abbreviation": "PEK",
+    "city": "Pekis",
+    "colors": {
+      "primary": "#C8102E",
+      "secondary": "#7A1F3D"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#C8102E",
+        "#7A1F3D",
+        "#0033A0"
+      ],
+      "initials": "ECP",
+      "shape": "classic"
+    },
+    "id": "clube-puk-013",
+    "initialCash": 930000,
+    "name": "Esporte Clube Pekis",
+    "reputation": 26,
+    "shortName": "Pekis",
+    "stadiumCapacity": 20500
+  },
+  {
+    "abbreviation": "GER",
+    "city": "Gere",
+    "colors": {
+      "primary": "#1D428A",
+      "secondary": "#000000"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#1D428A",
+        "#000000"
+      ],
+      "initials": "GFR",
+      "shape": "classic"
+    },
+    "id": "clube-puk-014",
+    "initialCash": 2650000,
+    "name": "Gere Futebol e Regatas",
+    "reputation": 42,
+    "shortName": "Gere",
+    "stadiumCapacity": 19500
+  },
+  {
+    "abbreviation": "PES",
+    "city": "Pesar",
+    "colors": {
+      "primary": "#004C45",
+      "secondary": "#000000"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#004C45",
+        "#000000",
+        "#8B5A2B"
+      ],
+      "initials": "PFR",
+      "shape": "classic"
+    },
+    "id": "clube-puk-015",
+    "initialCash": 2760000,
+    "name": "Pesar Futebol e Regatas",
+    "reputation": 48,
+    "shortName": "Pesar",
+    "stadiumCapacity": 43000
+  },
+  {
+    "abbreviation": "HOK",
+    "city": "Hoku",
+    "colors": {
+      "primary": "#FFFFFF",
+      "secondary": "#1D428A"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#FFFFFF",
+        "#1D428A",
+        "#8B5A2B"
+      ],
+      "initials": "HCR",
+      "shape": "round"
+    },
+    "id": "clube-puk-016",
+    "initialCash": 5540000,
+    "name": "Hoku Clube de Regatas",
+    "reputation": 58,
+    "shortName": "Hoku",
+    "stadiumCapacity": 30500
+  },
+  {
+    "abbreviation": "BUM",
+    "city": "Bumsesel",
+    "colors": {
+      "primary": "#000000",
+      "secondary": "#00A3E0"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#000000",
+        "#00A3E0"
+      ],
+      "initials": "BFR",
+      "shape": "rectangle"
+    },
+    "id": "clube-puk-017",
+    "initialCash": 2180000,
+    "name": "Bumsesel Futebol e Regatas",
+    "reputation": 43,
+    "shortName": "Bumsesel",
+    "stadiumCapacity": 22500
+  },
+  {
+    "abbreviation": "JIN",
+    "city": "Jinu",
+    "colors": {
+      "primary": "#006B3F",
+      "secondary": "#7A1F3D"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#006B3F",
+        "#7A1F3D",
+        "#0033A0"
+      ],
+      "initials": "JFC",
+      "shape": "rectangle"
+    },
+    "id": "clube-puk-018",
+    "initialCash": 4490000,
+    "name": "Jinu Futebol Clube",
+    "reputation": 56,
+    "shortName": "Jinu",
+    "stadiumCapacity": 23000
+  },
+  {
+    "abbreviation": "ZOR",
+    "city": "Zorhukan",
+    "colors": {
+      "primary": "#1D428A",
+      "secondary": "#7A1F3D"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#1D428A",
+        "#7A1F3D"
+      ],
+      "initials": "ZFC",
+      "shape": "round"
+    },
+    "id": "clube-puk-019",
+    "initialCash": 990000,
+    "name": "Zorhukan Futebol Clube",
+    "reputation": 31,
+    "shortName": "Zorhukan",
+    "stadiumCapacity": 22500
+  },
+  {
+    "abbreviation": "PEM",
+    "city": "Pemjeris",
+    "colors": {
+      "primary": "#5B2C83",
+      "secondary": "#00A3E0"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#5B2C83",
+        "#00A3E0",
+        "#7A1F3D"
+      ],
+      "initials": "SEP",
+      "shape": "classic"
+    },
+    "id": "clube-puk-020",
+    "initialCash": 9440000,
+    "name": "Sociedade Esportiva Pemjeris",
+    "reputation": 77,
+    "shortName": "Pemjeris",
+    "stadiumCapacity": 59500
+  },
+  {
+    "abbreviation": "PEP",
+    "city": "Pespikar",
+    "colors": {
+      "primary": "#5B2C83",
+      "secondary": "#004C45"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#5B2C83",
+        "#004C45"
+      ],
+      "initials": "PAC",
+      "shape": "rectangle"
+    },
+    "id": "clube-puk-021",
+    "initialCash": 1060000,
+    "name": "Pespikar Atlético Clube",
+    "reputation": 30,
+    "shortName": "Pespikar",
+    "stadiumCapacity": 22000
+  },
+  {
+    "abbreviation": "PIR",
+    "city": "Pirsimi",
+    "colors": {
+      "primary": "#FFFFFF",
+      "secondary": "#9EA2A2"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#FFFFFF",
+        "#9EA2A2"
+      ],
+      "initials": "CAP",
+      "shape": "triangle"
+    },
+    "id": "clube-puk-022",
+    "initialCash": 980000,
+    "name": "Clube Atlético Pirsimi",
+    "reputation": 30,
+    "shortName": "Pirsimi",
+    "stadiumCapacity": 14500
+  },
+  {
+    "abbreviation": "PUM",
+    "city": "Pumsokon",
+    "colors": {
+      "primary": "#7A1F3D",
+      "secondary": "#000000"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#7A1F3D",
+        "#000000",
+        "#0033A0"
+      ],
+      "initials": "AAP",
+      "shape": "rectangle"
+    },
+    "id": "clube-puk-023",
+    "initialCash": 3850000,
+    "name": "Associação Atlética Pumsokon",
+    "reputation": 58,
+    "shortName": "Pumsokon",
+    "stadiumCapacity": 36500
+  },
+  {
+    "abbreviation": "GON",
+    "city": "Gonrako",
+    "colors": {
+      "primary": "#C8102E",
+      "secondary": "#9EA2A2"
+    },
+    "countryId": "puk",
+    "crest": {
+      "colors": [
+        "#C8102E",
+        "#9EA2A2"
+      ],
+      "initials": "CAG",
+      "shape": "triangle"
+    },
+    "id": "clube-puk-024",
+    "initialCash": 2910000,
+    "name": "Clube Atlético Gonrako",
+    "reputation": 42,
+    "shortName": "Gonrako",
+    "stadiumCapacity": 22500
+  },
+  {
+    "abbreviation": "GOK",
+    "city": "Goko",
+    "colors": {
+      "primary": "#C8102E",
+      "secondary": "#000000"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#C8102E",
+        "#000000"
+      ],
+      "initials": "GFC",
+      "shape": "round"
+    },
+    "id": "clube-ved-001",
+    "initialCash": 3400000,
+    "name": "Goko Futebol Clube",
+    "reputation": 61,
+    "shortName": "Goko",
+    "stadiumCapacity": 18000
+  },
+  {
+    "abbreviation": "VUR",
+    "city": "Vurnidis",
+    "colors": {
+      "primary": "#C8102E",
+      "secondary": "#8B5A2B"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#C8102E",
+        "#8B5A2B",
+        "#000000"
+      ],
+      "initials": "VFR",
+      "shape": "classic"
+    },
+    "id": "clube-ved-002",
+    "initialCash": 4690000,
+    "name": "Vurnidis Futebol e Regatas",
+    "reputation": 64,
+    "shortName": "Vurnidis",
+    "stadiumCapacity": 20000
+  },
+  {
+    "abbreviation": "BUK",
+    "city": "Bukhue",
+    "colors": {
+      "primary": "#FFFFFF",
+      "secondary": "#8B5A2B"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#FFFFFF",
+        "#8B5A2B",
+        "#00A3E0"
+      ],
+      "initials": "ECB",
+      "shape": "rectangle"
+    },
+    "id": "clube-ved-003",
+    "initialCash": 5420000,
+    "name": "Esporte Clube Bukhue",
+    "reputation": 66,
+    "shortName": "Bukhue",
+    "stadiumCapacity": 30500
+  },
+  {
+    "abbreviation": "TEO",
+    "city": "Teon",
+    "colors": {
+      "primary": "#00A3E0",
+      "secondary": "#0033A0"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#00A3E0",
+        "#0033A0",
+        "#5B2C83"
+      ],
+      "initials": "CAT",
+      "shape": "rectangle"
+    },
+    "id": "clube-ved-004",
+    "initialCash": 5050000,
+    "name": "Clube Atlético Teon",
+    "reputation": 67,
+    "shortName": "Teon",
+    "stadiumCapacity": 26000
+  },
+  {
+    "abbreviation": "SOE",
+    "city": "Soe",
+    "colors": {
+      "primary": "#5B2C83",
+      "secondary": "#FFD100"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#5B2C83",
+        "#FFD100"
+      ],
+      "initials": "SAC",
+      "shape": "rectangle"
+    },
+    "id": "clube-ved-005",
+    "initialCash": 3130000,
+    "name": "Soe Atlético Clube",
+    "reputation": 52,
+    "shortName": "Soe",
+    "stadiumCapacity": 8500
+  },
+  {
+    "abbreviation": "VID",
+    "city": "Vidar",
+    "colors": {
+      "primary": "#7A1F3D",
+      "secondary": "#FFFFFF"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#7A1F3D",
+        "#FFFFFF"
+      ],
+      "initials": "VFR",
+      "shape": "round"
+    },
+    "id": "clube-ved-006",
+    "initialCash": 4060000,
+    "name": "Vidar Futebol e Regatas",
+    "reputation": 61,
+    "shortName": "Vidar",
+    "stadiumCapacity": 17000
+  },
+  {
+    "abbreviation": "FUM",
+    "city": "Fumis",
+    "colors": {
+      "primary": "#F47920",
+      "secondary": "#FFD100"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#F47920",
+        "#FFD100",
+        "#FFFFFF"
+      ],
+      "initials": "FEC",
+      "shape": "round"
+    },
+    "id": "clube-ved-007",
+    "initialCash": 3320000,
+    "name": "Fumis Esporte Clube",
+    "reputation": 53,
+    "shortName": "Fumis",
+    "stadiumCapacity": 18000
+  },
+  {
+    "abbreviation": "FUR",
+    "city": "Furar",
+    "colors": {
+      "primary": "#0033A0",
+      "secondary": "#006B3F"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#0033A0",
+        "#006B3F"
+      ],
+      "initials": "SEF",
+      "shape": "classic"
+    },
+    "id": "clube-ved-008",
+    "initialCash": 7680000,
+    "name": "Sociedade Esportiva Furar",
+    "reputation": 85,
+    "shortName": "Furar",
+    "stadiumCapacity": 45500
+  },
+  {
+    "abbreviation": "ZUA",
+    "city": "Zuar",
+    "colors": {
+      "primary": "#5B2C83",
+      "secondary": "#00A3E0"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#5B2C83",
+        "#00A3E0"
+      ],
+      "initials": "UEZ",
+      "shape": "classic"
+    },
+    "id": "clube-ved-009",
+    "initialCash": 7890000,
+    "name": "União Esportiva Zuar",
+    "reputation": 82,
+    "shortName": "Zuar",
+    "stadiumCapacity": 46500
+  },
+  {
+    "abbreviation": "HIR",
+    "city": "Hirel",
+    "colors": {
+      "primary": "#FFFFFF",
+      "secondary": "#7A1F3D"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#FFFFFF",
+        "#7A1F3D"
+      ],
+      "initials": "ECH",
+      "shape": "round"
+    },
+    "id": "clube-ved-010",
+    "initialCash": 8650000,
+    "name": "Esporte Clube Hirel",
+    "reputation": 90,
+    "shortName": "Hirel",
+    "stadiumCapacity": 43000
+  },
+  {
+    "abbreviation": "VOK",
+    "city": "Voko",
+    "colors": {
+      "primary": "#004C45",
+      "secondary": "#0033A0"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#004C45",
+        "#0033A0"
+      ],
+      "initials": "VCR",
+      "shape": "classic"
+    },
+    "id": "clube-ved-011",
+    "initialCash": 1890000,
+    "name": "Voko Clube de Regatas",
+    "reputation": 47,
+    "shortName": "Voko",
+    "stadiumCapacity": 10500
+  },
+  {
+    "abbreviation": "NAR",
+    "city": "Narhado",
+    "colors": {
+      "primary": "#FFD100",
+      "secondary": "#1D428A"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#FFD100",
+        "#1D428A"
+      ],
+      "initials": "ADN",
+      "shape": "rectangle"
+    },
+    "id": "clube-ved-012",
+    "initialCash": 2480000,
+    "name": "Associação Desportiva Narhado",
+    "reputation": 50,
+    "shortName": "Narhado",
+    "stadiumCapacity": 17500
+  },
+  {
+    "abbreviation": "ZOD",
+    "city": "Zodu",
+    "colors": {
+      "primary": "#9EA2A2",
+      "secondary": "#7A1F3D"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#9EA2A2",
+        "#7A1F3D"
+      ],
+      "initials": "ZFC",
+      "shape": "round"
+    },
+    "id": "clube-ved-013",
+    "initialCash": 510000,
+    "name": "Zodu Futebol Clube",
+    "reputation": 25,
+    "shortName": "Zodu",
+    "stadiumCapacity": 11500
+  },
+  {
+    "abbreviation": "NAD",
+    "city": "Nadvida",
+    "colors": {
+      "primary": "#FFFFFF",
+      "secondary": "#004C45"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#FFFFFF",
+        "#004C45"
+      ],
+      "initials": "ECN",
+      "shape": "rectangle"
+    },
+    "id": "clube-ved-014",
+    "initialCash": 880000,
+    "name": "Esporte Clube Nadvida",
+    "reputation": 33,
+    "shortName": "Nadvida",
+    "stadiumCapacity": 5000
+  },
+  {
+    "abbreviation": "ZUR",
+    "city": "Zuran",
+    "colors": {
+      "primary": "#00A3E0",
+      "secondary": "#C8102E"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#00A3E0",
+        "#C8102E"
+      ],
+      "initials": "ZCR",
+      "shape": "rectangle"
+    },
+    "id": "clube-ved-015",
+    "initialCash": 6490000,
+    "name": "Zuran Clube de Regatas",
+    "reputation": 78,
+    "shortName": "Zuran",
+    "stadiumCapacity": 65500
+  },
+  {
+    "abbreviation": "SEI",
+    "city": "Seis",
+    "colors": {
+      "primary": "#9EA2A2",
+      "secondary": "#5B2C83"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#9EA2A2",
+        "#5B2C83",
+        "#0033A0"
+      ],
+      "initials": "AAS",
+      "shape": "rectangle"
+    },
+    "id": "clube-ved-016",
+    "initialCash": 3510000,
+    "name": "Associação Atlética Seis",
+    "reputation": 56,
+    "shortName": "Seis",
+    "stadiumCapacity": 19000
+  },
+  {
+    "abbreviation": "ZER",
+    "city": "Zertada",
+    "colors": {
+      "primary": "#004C45",
+      "secondary": "#FFFFFF"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#004C45",
+        "#FFFFFF"
+      ],
+      "initials": "UEZ",
+      "shape": "round"
+    },
+    "id": "clube-ved-017",
+    "initialCash": 520000,
+    "name": "União Esportiva Zertada",
+    "reputation": 25,
+    "shortName": "Zertada",
+    "stadiumCapacity": 9000
+  },
+  {
+    "abbreviation": "ZOT",
+    "city": "Zodtedan",
+    "colors": {
+      "primary": "#1D428A",
+      "secondary": "#006B3F"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#1D428A",
+        "#006B3F",
+        "#C8102E"
+      ],
+      "initials": "ZCR",
+      "shape": "classic"
+    },
+    "id": "clube-ved-018",
+    "initialCash": 3880000,
+    "name": "Zodtedan Clube de Regatas",
+    "reputation": 55,
+    "shortName": "Zodtedan",
+    "stadiumCapacity": 17000
+  },
+  {
+    "abbreviation": "NEM",
+    "city": "Nemvidon",
+    "colors": {
+      "primary": "#FFD100",
+      "secondary": "#C8102E"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#FFD100",
+        "#C8102E",
+        "#00A3E0"
+      ],
+      "initials": "NAC",
+      "shape": "rectangle"
+    },
+    "id": "clube-ved-019",
+    "initialCash": 1460000,
+    "name": "Nemvidon Atlético Clube",
+    "reputation": 36,
+    "shortName": "Nemvidon",
+    "stadiumCapacity": 17500
+  },
+  {
+    "abbreviation": "ZUK",
+    "city": "Zuktiu",
+    "colors": {
+      "primary": "#C8102E",
+      "secondary": "#7A1F3D"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#C8102E",
+        "#7A1F3D"
+      ],
+      "initials": "ZAC",
+      "shape": "rectangle"
+    },
+    "id": "clube-ved-020",
+    "initialCash": 1000000,
+    "name": "Zuktiu Atlético Clube",
+    "reputation": 27,
+    "shortName": "Zuktiu",
+    "stadiumCapacity": 16500
+  },
+  {
+    "abbreviation": "SOM",
+    "city": "Somon",
+    "colors": {
+      "primary": "#7A1F3D",
+      "secondary": "#006B3F"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#7A1F3D",
+        "#006B3F"
+      ],
+      "initials": "UES",
+      "shape": "rectangle"
+    },
+    "id": "clube-ved-021",
+    "initialCash": 2250000,
+    "name": "União Esportiva Somon",
+    "reputation": 42,
+    "shortName": "Somon",
+    "stadiumCapacity": 12500
+  },
+  {
+    "abbreviation": "SUV",
+    "city": "Suvois",
+    "colors": {
+      "primary": "#5B2C83",
+      "secondary": "#0033A0"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#5B2C83",
+        "#0033A0"
+      ],
+      "initials": "SES",
+      "shape": "triangle"
+    },
+    "id": "clube-ved-022",
+    "initialCash": 710000,
+    "name": "Sociedade Esportiva Suvois",
+    "reputation": 26,
+    "shortName": "Suvois",
+    "stadiumCapacity": 7500
+  },
+  {
+    "abbreviation": "FAA",
+    "city": "Faar",
+    "colors": {
+      "primary": "#5B2C83",
+      "secondary": "#8B5A2B"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#5B2C83",
+        "#8B5A2B"
+      ],
+      "initials": "FFR",
+      "shape": "triangle"
+    },
+    "id": "clube-ved-023",
+    "initialCash": 1580000,
+    "name": "Faar Futebol e Regatas",
+    "reputation": 37,
+    "shortName": "Faar",
+    "stadiumCapacity": 10000
+  },
+  {
+    "abbreviation": "HER",
+    "city": "Hergudon",
+    "colors": {
+      "primary": "#0033A0",
+      "secondary": "#1D428A"
+    },
+    "countryId": "ved",
+    "crest": {
+      "colors": [
+        "#0033A0",
+        "#1D428A"
+      ],
+      "initials": "HFC",
+      "shape": "triangle"
+    },
+    "id": "clube-ved-024",
+    "initialCash": 1540000,
+    "name": "Hergudon Futebol Clube",
+    "reputation": 39,
+    "shortName": "Hergudon",
+    "stadiumCapacity": 16000
+  }
+]

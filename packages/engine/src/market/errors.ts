@@ -3,6 +3,7 @@ export const MARKET_ERROR_PARAMS = {
   "market.window_closed": ["round"],
   "market.insufficient_cash": ["needed"],
   "market.squad_full": [],
+  "market.foreign_limit": ["limit"],
   "market.squad_minimum": [],
   "market.player_on_loan": [],
   "market.already_negotiating": [],

@@ -60,10 +60,19 @@ export interface HistoryRow {
   goalsAgainst: number;
 }
 
+/** Artilheiro guardado no histórico (020 R7). */
+export interface HistoryScorer {
+  playerId: string;
+  clubId: string;
+  goals: number;
+}
+
 export interface HistoryDivision {
   level: number;
   championId: string;
   standings: HistoryRow[];
+  /** Os 10 maiores artilheiros da divisão na temporada (020 R7). */
+  topScorers?: HistoryScorer[];
   /** Clubes que saíram desta divisão para a de cima. */
   promoted: string[];
   /** Clubes que saíram desta divisão para a de baixo. */
