@@ -220,14 +220,18 @@ export function formationChange(
   return { type: "formation", formation, assignment };
 }
 
-/** Registros, disciplina, lesões e avisos da rodada terminada aplicados à temporada. */
-export function completeRound(
+/** Resultado de um jogo já registrado, com os avisos de elenco curto dele. */
+export interface RoundResult {
+  record: MatchRecord;
+  warnings: SeasonWarning[];
+}
+
+/** Aplica os registros de uma rodada à temporada: disciplina, lesões, avisos e fases (020 R3). */
+export function applyRoundResults(
   season: Season,
   world: CompletedBank,
-  round: LiveRound,
+  results: readonly RoundResult[],
 ): { ok: true; season: Season } | { ok: false; error: SeasonError } {
-  if (round.round !== season.nextRound) throw new Error("rodada de outra temporada ou já fechada");
-  if (!isRoundFinished(round)) throw new Error("rodada não terminou");
   const next: Season = {
     ...season,
     records: [...season.records],
@@ -236,25 +240,6 @@ export function completeRound(
     ),
     warnings: [...season.warnings],
   };
-  const results: { record: MatchRecord; warnings: SeasonWarning[] }[] = round.matches.map(
-    (match) => {
-      const playerSides: Record<string, Side> = {};
-      for (const player of match.state.input.home.squad) playerSides[player.id] = "home";
-      for (const player of match.state.input.away.squad) playerSides[player.id] = "away";
-      const record = toMatchRecord(
-        match.fixture.round,
-        match.fixture.home,
-        match.fixture.away,
-        matchResult(match.state),
-        playerSides,
-        { home: match.prepared.home.absences, away: match.prepared.away.absences },
-      );
-      const warnings = [match.prepared.home.warning, match.prepared.away.warning].filter(
-        (warning): warning is SeasonWarning => warning !== undefined,
-      );
-      return { record, warnings };
-    },
-  );
   for (const { record, warnings } of results) {
     next.records.push(record);
     next.warnings.push(...warnings);
@@ -264,4 +249,32 @@ export function completeRound(
   next.nextRound += 1;
   // Divisão em fases (019): a fase seguinte começa assim que a anterior termina; sem `stages`, não faz nada.
   return { ok: true, season: advanceStages(next, world) };
+}
+
+/** Registros, disciplina, lesões e avisos da rodada terminada aplicados à temporada. */
+export function completeRound(
+  season: Season,
+  world: CompletedBank,
+  round: LiveRound,
+): { ok: true; season: Season } | { ok: false; error: SeasonError } {
+  if (round.round !== season.nextRound) throw new Error("rodada de outra temporada ou já fechada");
+  if (!isRoundFinished(round)) throw new Error("rodada não terminou");
+  const results: RoundResult[] = round.matches.map((match) => {
+    const playerSides: Record<string, Side> = {};
+    for (const player of match.state.input.home.squad) playerSides[player.id] = "home";
+    for (const player of match.state.input.away.squad) playerSides[player.id] = "away";
+    const record = toMatchRecord(
+      match.fixture.round,
+      match.fixture.home,
+      match.fixture.away,
+      matchResult(match.state),
+      playerSides,
+      { home: match.prepared.home.absences, away: match.prepared.away.absences },
+    );
+    const warnings = [match.prepared.home.warning, match.prepared.away.warning].filter(
+      (warning): warning is SeasonWarning => warning !== undefined,
+    );
+    return { record, warnings };
+  });
+  return applyRoundResults(season, world, results);
 }

@@ -5,7 +5,7 @@ import { ensureContracts } from "../market/contracts";
 import { addFreeAgents, toFreeAgent } from "../market/free-agents";
 import { evolvePlayers, midSeasonRound } from "./evolution";
 import { measureWorld } from "./measure";
-import { regulate } from "./regulator";
+import { regulate, regulatorFor, withRegulator } from "./regulator";
 import { playerRef, retirePlayers } from "./retirement";
 import { balanceSquads } from "./squads";
 import type { PlayerDelta, PlayerRef, SquadChangeNotice } from "./types";
@@ -216,7 +216,12 @@ export const regulateWorldStep: TurnoverStep = {
     const measure = measureWorld(context.world, context.finished, nextSeasonDate(context));
     return {
       ...context,
-      renewal: { ...context.renewal, regulator: regulate(context.renewal.regulator, measure) },
+      renewal: withRegulator(
+        context.renewal,
+        context.world,
+        context.finished,
+        regulate(regulatorFor(context.renewal, context.world, context.finished), measure),
+      ),
     };
   },
 };

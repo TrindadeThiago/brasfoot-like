@@ -1,6 +1,6 @@
 "use client";
 
-import { type MarketRow, searchPlayers } from "@brasfoot-like/engine";
+import { foreignCount, type MarketRow, searchPlayers } from "@brasfoot-like/engine";
 import { marketContextOf, type SaveFile } from "@brasfoot-like/save";
 import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -41,6 +41,15 @@ function Market({ save, game }: { save: SaveFile; game: Game }) {
   const [comparing, setComparing] = useState(false);
   const [target, setTarget] = useState<NegotiationTarget | undefined>();
   const context = useMemo(() => marketContextOf(save), [save]);
+  // Países do banco com competição (020): o filtro e o limite de estrangeiros só aparecem num mundo
+  // de vários países ou com limite declarado.
+  const countries = useMemo(() => {
+    const ids = new Set(save.bank.competitions.map((entry) => entry.countryId));
+    return save.bank.countries.filter((country) => ids.has(country.id));
+  }, [save.bank]);
+  const foreignLimit = save.bank.countries.find(
+    (country) => country.id === save.bank.clubs.find((club) => club.id === save.clubId)?.countryId,
+  )?.rules?.foreignLimit;
   const everyone = useMemo(() => searchPlayers(context), [context]);
   const found = useMemo(
     () => searchPlayers(context, toFilters(form, save.clubId), { key: "strength", dir: "desc" }),
@@ -63,6 +72,14 @@ function Market({ save, game }: { save: SaveFile; game: Game }) {
       <h2 className="screen-title">{t("market.title")}</h2>
       <WindowStatus save={save} />
       <SquadCounter save={save} />
+      {foreignLimit !== undefined ? (
+        <p role="status">
+          {t("market.foreignLimit", {
+            count: foreignCount(save.bank, save.clubId),
+            limit: foreignLimit,
+          })}
+        </p>
+      ) : null}
       {locked ? <p role="status">{t("market.liveLocked")}</p> : null}
       <div className={styles.tabs} role="tablist" aria-label={t("market.tablist")}>
         {TABS.map((name) => (
@@ -82,6 +99,7 @@ function Market({ save, game }: { save: SaveFile; game: Game }) {
       {tab === "search" ? (
         <>
           <MarketFilters
+            countries={countries}
             form={form}
             onChange={(next) => {
               setForm(next);

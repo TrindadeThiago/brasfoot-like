@@ -1,4 +1,5 @@
 import type { CompletedBank } from "../model/types";
+import { squadOf } from "../world/squads";
 import { SEASON_CREDIBILITY_LIMITS } from "./limits";
 import { standings } from "./standings";
 import { topScorers } from "./stats";
@@ -8,8 +9,7 @@ const TOP_N = 16;
 
 /** Força inicial de um clube: média dos 16 jogadores mais fortes (mesmo critério da 001). */
 export function clubStrength(world: CompletedBank, clubId: string): number {
-  const top = world.players
-    .filter((player) => player.clubId === clubId)
+  const top = squadOf(world, clubId)
     .map((player) => player.strength)
     .sort((a, b) => b - a)
     .slice(0, TOP_N);

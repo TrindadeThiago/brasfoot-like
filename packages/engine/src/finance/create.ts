@@ -2,6 +2,8 @@ import { seasonDate } from "../calendar/date";
 import type { LeagueSeason } from "../career/types";
 import { deriveWage } from "../derived/economy";
 import type { CompletedBank } from "../model/types";
+import { rulesCompetitionOf } from "../world/countries";
+import { squadOf } from "../world/squads";
 import { draft, post } from "./ledger";
 import { divisionEconomy, economyRules } from "./rules";
 import type { ClubFinance, EconomyRules, FinanceState } from "./types";
@@ -29,10 +31,7 @@ export function defaultTicketPrice(rules: EconomyRules, level: number, reputatio
 }
 
 function competitionOf(world: CompletedBank, clubId: string): string {
-  const competition = world.competitions.find((entry) =>
-    entry.divisions.some((division) => division.clubIds.includes(clubId)),
-  );
-  return competition?.id ?? world.competitions[0]?.id ?? "";
+  return rulesCompetitionOf(world, clubId).id;
 }
 
 /** Folha anual do clube: 12 × Σ salários mensais × wageFactorPct (R4). */
@@ -44,12 +43,10 @@ export function annualWageBill(
   const club = world.clubs.find((entry) => entry.id === clubId);
   if (!club) throw new Error(`clube inexistente: ${clubId}`);
   const rules = economyRules(world, competitionOf(world, clubId));
-  const monthly = world.players
-    .filter((player) => player.clubId === clubId)
-    .reduce(
-      (sum, player) => sum + (player.contract?.wage ?? deriveWage(player, club, referenceDate)),
-      0,
-    );
+  const monthly = squadOf(world, clubId).reduce(
+    (sum, player) => sum + (player.contract?.wage ?? deriveWage(player, club, referenceDate)),
+    0,
+  );
   return Math.round((12 * monthly * rules.wageFactorPct) / 100);
 }
 

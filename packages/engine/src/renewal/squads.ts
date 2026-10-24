@@ -5,6 +5,7 @@ import { squadLimit } from "../market/squad";
 import { POSITIONS, type Position } from "../model/catalogs";
 import type { CompletedBank, CompletedPlayer } from "../model/types";
 import { createRng } from "../rng/xoshiro";
+import { regulatorFor } from "./regulator";
 import { playerRef } from "./retirement";
 import { SQUAD_RULES } from "./rules";
 import type { PlayerRef, RenewalState } from "./types";
@@ -75,7 +76,15 @@ export function balanceSquads(
     const count = (position: Position) =>
       squad().filter((player) => player.position === position).length;
     const add = (position: Position) => {
-      const youth = createYouth(world, club, position, seq, renewal.regulator, date, rng);
+      const youth = createYouth(
+        world,
+        club,
+        position,
+        seq,
+        regulatorFor(renewal, world, league),
+        date,
+        rng,
+      );
       seq += 1;
       players.push(youth);
       promoted.push(playerRef(youth, date));

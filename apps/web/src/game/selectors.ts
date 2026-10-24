@@ -10,6 +10,7 @@ import {
   fitnessRules,
   type MatchRecord,
   type ModPackage,
+  mainCompetitions,
   nextComposition,
   prizeFor,
   type Season,
@@ -25,6 +26,9 @@ import {
 
 export interface LeagueClub {
   id: string;
+  /** País do clube no banco (020). */
+  countryId: string;
+  countryName: string;
   /** Divisão do clube no banco (nível e nome do mod). */
   divisionLevel: number;
   divisionName: string;
@@ -37,18 +41,26 @@ export interface LeagueClub {
   crest: Crest;
 }
 
-/** Clubes de todas as divisões da primeira competição com as informações da escolha (007). */
+/**
+ * Clubes de todas as divisões da competição principal de cada país, com as informações da escolha
+ * (007, 020): a lista da nova carreira.
+ */
 export function competitionClubs(bank: ModPackage): LeagueClub[] {
   const divisions = new Map<string, { level: number; name: string }>();
-  for (const division of bank.competitions[0]?.divisions ?? []) {
-    for (const clubId of division.clubIds) {
-      divisions.set(clubId, { level: division.level, name: division.name });
+  for (const main of mainCompetitions(bank)) {
+    for (const division of main.divisions) {
+      for (const clubId of division.clubIds) {
+        divisions.set(clubId, { level: division.level, name: division.name });
+      }
     }
   }
+  const countries = new Map(bank.countries.map((country) => [country.id, country.name]));
   return bank.clubs
     .filter((club) => divisions.has(club.id))
     .map((club) => ({
       id: club.id,
+      countryId: club.countryId,
+      countryName: countries.get(club.countryId) ?? club.countryId,
       divisionLevel: divisions.get(club.id)?.level ?? 0,
       divisionName: divisions.get(club.id)?.name ?? "",
       name: club.name,

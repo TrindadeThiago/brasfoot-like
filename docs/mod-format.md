@@ -76,6 +76,16 @@ Lista com ao menos 1 país.
 | `name` | texto(1, 60) | sim | nome |
 | `code` | 3 letras maiúsculas | sim | código do país (único) |
 | `names` | objeto | não | banco de nomes para jogadores gerados: `firstNames` e `surnames`, listas de texto(1, 30) com ao menos 20 itens cada |
+| `rules` | objeto | não | regras próprias do país (abaixo) |
+
+### `rules` do país
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `foreignLimit` | inteiro(0, 25) | máximo de jogadores de nacionalidade diferente da do clube no elenco; ausente = sem limite. Vale para o jogador e para a IA nas contratações (transferência, empréstimo e livre); renovações e jovens revelados nunca são bloqueados, e um clube que ultrapassa o limite não perde ninguém, só deixa de contratar estrangeiros |
+
+O banco de nomes (`names`) é **exigido** em bancos com mais de um país: cada país com competição
+precisa do seu (erro `country.names_missing`). Num banco de um país só ele continua opcional.
 
 ## 5. `competitions.json`
 
@@ -452,6 +462,35 @@ Cada clube deve ter de 16 a 40 jogadores, com ao menos 2 goleiros.
 Cada par aparece uma vez só (em qualquer ordem). Jogos entre rivais são clássicos e pesam mais na
 torcida e na diretoria.
 
+## Vários países
+
+Um banco pode ter quantos países quiser, cada um com a sua pirâmide de competições, as suas regras
+econômicas e o seu banco de nomes — tudo só com dados. Um exemplo pronto com 3 países de estruturas
+diferentes (uma divisão; duas divisões; duas divisões e copa) está em `mods/exemplo-mundo`.
+
+- **Competição principal do país:** a **primeira** competição de `competitions.json` com aquele
+  `countryId`. Ela precisa ser de pontos corridos, grupos ou fases (nunca uma copa de mata-mata, erro
+  `country.main_not_league`). Dela vêm as regras do país: `economy`, `market`, `board`, `fans`,
+  `news` e `fitness` (seção 9). Para dar a um país uma economia diferente, declare a `economy` na
+  competição principal dele: `wageFactorPct`, `fansBase`, `fansPerReputation`, `sponsorship`,
+  `prizes`, `stadium` e `credit` andam juntos; um país que ganha mais e paga mais salários continua
+  equilibrado. As competições secundárias do país (copas e regionais) só têm clubes da principal dele.
+- **Clubes:** um clube só pode estar na competição principal de um país (erro
+  `unique.duplicate_club_in_country`). O `countryId` do clube é o país dele; o `nationalityId` dos
+  jogadores define quem é estrangeiro para o limite `foreignLimit`.
+- **Reputação:** cada clube tem a sua `reputation`, a mesma em qualquer país. Ela define para quais
+  clubes o técnico recebe propostas de emprego (de qualquer país) e o interesse dos jogadores.
+- **Transferências entre países:** a taxa é paga em valor de mercado, sem conversão (o valor do
+  jogador depende só dele e da reputação do clube); o salário segue a escala do país do clube de
+  destino (`wageFactorPct`). A IA contrata de outros países, no máximo `aiMarket.maxInternationalPerClub`
+  vezes por clube e janela (padrão 1).
+- **Calendário:** cada competição tem a sua `schedule`; todos os países jogam na mesma temporada de
+  52 semanas. Para os jogos caírem no mesmo dia, use a mesma agenda.
+- **Banco de nomes:** `names` de cada país gera os jovens e os técnicos do país dos clubes dele.
+- **Escala:** com muitos clubes, os jogos de ligas de outros países que o técnico não acompanha usam
+  uma simulação resumida (resultado, gols, cartões e lesões), estatisticamente equivalente à
+  completa; os do país do técnico usam a completa.
+
 ## 9. Seções opcionais de regras
 
 Todas as regras abaixo ficam dentro da competição e são **opcionais**: campos ausentes usam os
@@ -560,7 +599,11 @@ Fora do jogo, `pnpm validate-bank <pasta|arquivo.zip>` faz a mesma validação n
 | `stages.separation_impossible` | Na fase {stage}, {clubs, plural, one {# clube} other {# clubes}} com {attribute, select, country {o mesmo país} region {a mesma região} other {o mesmo atributo}} ({value}) não cabem em {groups, plural, one {# grupo} other {# grupos}} sem se encontrar. |
 | `stages.pairs_invalid` | A tabela de confrontos da fase {stage} tem uma origem inválida ou fora de lugar: {origin}. Cada classificado precisa aparecer uma vez (A1 = 1º do Grupo A, T1 = 1º da tabela, X1 = primeira vaga extra). |
 | `stages.relegation_exceeds_eliminated` | O nível {level} rebaixa {relegation, plural, one {# clube} other {# clubes}}, mas só {eliminated, plural, one {# clube fica} other {# clubes ficam}} fora da fase seguinte à primeira: o rebaixamento sai de quem não avança. |
-| `competition.club_outside_main` | O clube {clubId} da competição {competitionId} não está na competição principal (a primeira da lista). |
+| `competition.club_outside_main` | O clube {clubId} da competição {competitionId} não está na competição principal do país (a primeira competição dele na lista). |
+| `country.main_not_league` | A primeira competição do país {countryId} ({competitionId}) é uma copa de mata-mata; a competição principal do país precisa ser uma liga, com divisões ou fases. |
+| `country.names_missing` | O país {countryId} não tem banco de nomes; num banco com mais de um país, cada país com competição precisa do seu (campo names). |
+| `country.foreign_limit_exceeded` | O clube {clubId} começa com {count, plural, one {# jogador estrangeiro} other {# jogadores estrangeiros}}, mais que o limite de {limit} do país. |
+| `unique.duplicate_club_in_country` | O clube {clubId} já está na competição principal {otherCompetitionId}; um clube só pode estar na liga de um país. |
 | `division.top_has_promotion` | A divisão mais alta não pode ter vagas de acesso, mas tem {slots}. |
 | `division.bottom_has_relegation` | A divisão mais baixa não pode ter vagas de rebaixamento, mas tem {slots}. |
 | `division.slots_mismatch` | O nível {level} rebaixa {relegated, plural, one {# clube} other {# clubes}}, mas o nível {nextLevel} promove {promoted, plural, one {# clube} other {# clubes}}; os números devem ser iguais. |

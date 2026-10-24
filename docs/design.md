@@ -30,6 +30,7 @@
 - **MVP:** um país fictício com **Série A e Série B**, 20 times cada, com acesso e rebaixamento.
 - País, competição e formato (pontos corridos, mata-mata, grupos) são **dados, não código** — adicionar ligas/países deve ser trabalho de dados.
 - Primeira expansão sugerida: copa nacional em mata-mata.
+- **Vários países (020):** um banco pode ter quantos países quiser; cada um com a sua pirâmide, a sua economia (a da competição principal dele) e o seu banco de nomes. O valor de mercado do jogador é universal, o salário segue a escala do país do clube, a reputação é do clube, e o técnico recebe propostas de qualquer país. Os jogos das ligas de outros países que o técnico não acompanha usam uma simulação resumida, equivalente à completa.
 
 ## 4. Jogadores
 
@@ -149,6 +150,14 @@ por região), classificados por grupo e vagas extras na posição seguinte, clas
 chaveamento pela posição no grupo (ou tabela própria), acesso e rebaixamento pela posição final,
 atributo de região do clube e telas de grupos, classificação geral e chaveamento com a origem das
 vagas. Saves v14. As vagas entre competições ficam para o Marco 8.
+
+**Estado do M8:** vários países no mesmo banco (020): competição principal por país como fonte das
+regras, calendário único, virada de temporada por país (prêmios, evolução, jovens, regulador,
+diretoria), mercado entre países (taxa em valor de mercado, salário na escala de destino, teto de
+contratações da IA e limite opcional de estrangeiros), propostas de emprego de qualquer país com
+troca de país a qualquer momento, simulação resumida para as ligas de outros países, registro
+compacto, histórico por país, escolha de clube por país e divisão, banco de teste de 400 clubes e
+`mods/exemplo-mundo`. Saves v15. As vagas entre competições e as supercopas ficam para a 021.
 
 Os marcos 7 a 9 são pós-lançamento: trazem as copas e o mundo maior do §14 até o mod do
 futebol sul-americano. Os prompts estão em [`speckit-prompts/`](speckit-prompts/README.md)

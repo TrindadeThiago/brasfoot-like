@@ -24,10 +24,21 @@ function useCompetitionClubs(input: unknown): LeagueClub[] {
   }, [input]);
 }
 
-/** Divisões da competição (nível e nome do mod), na ordem de nível. */
+/** Divisões dos clubes (nível e nome do mod), na ordem de nível. */
 function divisionsOf(clubs: readonly LeagueClub[]): { level: number; name: string }[] {
   const levels = new Map(clubs.map((club) => [club.divisionLevel, club.divisionName]));
   return [...levels].sort(([a], [b]) => a - b).map(([level, name]) => ({ level, name }));
+}
+
+/** Países dos clubes, na ordem em que aparecem no banco (020). */
+function countriesOf(clubs: readonly LeagueClub[]): { id: string; name: string }[] {
+  const countries = new Map(clubs.map((club) => [club.countryId, club.countryName]));
+  return [...countries].map(([id, name]) => ({ id, name }));
+}
+
+/** Texto sem acento e em minúsculas, para a busca por nome. */
+function plain(text: string): string {
+  return text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 }
 
 export default function NewCareerPage() {
@@ -43,17 +54,32 @@ export default function NewCareerPage() {
   const mod = installed.find((entry) => entry.id === bankId);
   const bankInput = useMemo(() => (mod ? joinBankFiles(mod.files) : defaultBankInput()), [mod]);
   const allClubs = useCompetitionClubs(bankInput);
-  const divisions = useMemo(() => divisionsOf(allClubs), [allClubs]);
+  const countries = useMemo(() => countriesOf(allClubs), [allClubs]);
+  const manyCountries = countries.length > 1;
+  // "" = todos os países; padrão: o primeiro do banco (020).
+  const [country, setCountry] = useState(countries[0]?.id ?? "");
+  const [query, setQuery] = useState("");
+  const ofCountry = useMemo(
+    () => allClubs.filter((club) => country === "" || club.countryId === country),
+    [allClubs, country],
+  );
+  const divisions = useMemo(() => divisionsOf(ofCountry), [ofCountry]);
   // 0 = todas as divisões; padrão: a principal (US4).
   const [division, setDivision] = useState(divisions[0]?.level ?? 0);
   useEffect(() => {
+    setCountry(countries[0]?.id ?? "");
+  }, [countries]);
+  useEffect(() => {
     setDivision(divisions[0]?.level ?? 0);
-    setClubId(undefined);
   }, [divisions]);
-  const clubs = useMemo(
-    () => allClubs.filter((club) => division === 0 || club.divisionLevel === division),
-    [allClubs, division],
-  );
+  const clubs = useMemo(() => {
+    const needle = plain(query.trim());
+    return ofCountry.filter(
+      (club) =>
+        (division === 0 || club.divisionLevel === division) &&
+        (needle === "" || plain(club.name).includes(needle) || plain(club.city).includes(needle)),
+    );
+  }, [ofCountry, division, query]);
   const [managerName, setManagerName] = useState("");
   const [seed, setSeed] = useState("");
   const [noFiring, setNoFiring] = useState(false);
@@ -73,6 +99,16 @@ export default function NewCareerPage() {
       ),
       sortValue: (club) => club.name,
     },
+    ...(manyCountries
+      ? [
+          {
+            key: "country",
+            header: t("col.country"),
+            render: (club: LeagueClub) => club.countryName,
+            sortValue: (club: LeagueClub) => club.countryName,
+          },
+        ]
+      : []),
     {
       key: "city",
       header: t("col.city"),
@@ -183,24 +219,61 @@ export default function NewCareerPage() {
           </label>
           <Link href="/mods/">{t("nav.mods")}</Link>
           <h2>{t("newCareer.chooseClub")}</h2>
+          {manyCountries ? (
+            <label className={styles.field}>
+              <span>{t("newCareer.country.filter")}</span>
+              <select
+                value={country}
+                onChange={(event) => {
+                  setCountry(event.target.value);
+                  setClubId(undefined);
+                }}
+              >
+                {countries.map((entry) => (
+                  <option key={entry.id} value={entry.id}>
+                    {entry.name}
+                  </option>
+                ))}
+                <option value="">{t("newCareer.country.all")}</option>
+              </select>
+            </label>
+          ) : null}
           <label className={styles.field}>
             <span>{t("newCareer.division.filter")}</span>
             <select value={division} onChange={(event) => setDivision(Number(event.target.value))}>
               {divisions.map((entry) => (
                 <option key={entry.level} value={entry.level}>
-                  {entry.name}
+                  {country === "" && manyCountries
+                    ? t("newCareer.division.level", { level: entry.level })
+                    : entry.name}
                 </option>
               ))}
               <option value={0}>{t("newCareer.division.all")}</option>
             </select>
           </label>
+          {manyCountries ? (
+            <label className={styles.field}>
+              <span>{t("newCareer.search")}</span>
+              <input
+                type="search"
+                value={query}
+                placeholder={t("newCareer.searchPlaceholder")}
+                onChange={(event) => setQuery(event.target.value)}
+              />
+            </label>
+          ) : null}
+          {manyCountries ? (
+            <p role="status" aria-live="polite">
+              {t("newCareer.results", { count: clubs.length })}
+            </p>
+          ) : null}
           <DataTable
-            key={division}
+            key={`${country}:${division}`}
             rows={clubs}
             columns={columns}
             rowKey={(club) => club.id}
             caption={
-              divisionName
+              divisionName && !(country === "" && manyCountries)
                 ? t("newCareer.clubsCaption", { division: divisionName })
                 : t("newCareer.clubsCaptionAll")
             }

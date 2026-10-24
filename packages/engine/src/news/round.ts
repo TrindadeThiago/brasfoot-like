@@ -6,6 +6,7 @@ import type { CupEvent } from "../knockout/events";
 import { knockoutFormat } from "../knockout/rules";
 import { marketValue } from "../market/value";
 import type { KnockoutFormat } from "../model/types";
+import { playerLines } from "../season/record";
 import type { MatchRecord, Season } from "../season/types";
 import { clinched } from "./clinched";
 import { type Fact, matchFacts, matchKey, streakOf } from "./facts";
@@ -24,7 +25,7 @@ function seasonGoals(season: Season, round: number): Map<string, number> {
   const goals = new Map<string, number>();
   for (const record of season.records) {
     if (record.round > round) continue;
-    for (const [playerId, line] of Object.entries(record.players)) {
+    for (const [playerId, line] of Object.entries(playerLines(record))) {
       if (line.goals > 0) goals.set(playerId, (goals.get(playerId) ?? 0) + line.goals);
     }
   }
@@ -99,7 +100,7 @@ function recordCandidates(
       });
     }
   }
-  for (const [playerId, line] of Object.entries(record.players).sort(([a], [b]) =>
+  for (const [playerId, line] of Object.entries(playerLines(record)).sort(([a], [b]) =>
     a < b ? -1 : 1,
   )) {
     if (line.goals <= 0) continue;

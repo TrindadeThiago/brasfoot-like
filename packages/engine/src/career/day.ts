@@ -26,9 +26,11 @@ import type { SeasonError } from "../season/errors";
 import { finishRound, type LiveRound } from "../season/live-round";
 import type { MatchRecord, Season, SeasonStep } from "../season/types";
 import { cupView } from "../stages/cup-view";
+import { isCountryMain, mainCompetitionOf } from "../world/countries";
+import { simulationKindFor } from "../world/leagues";
 import { clubsInRound, syncInjuries } from "./injuries";
 import { leagueRound } from "./league";
-import { completeLeagueRound, startLeagueRound } from "./league-round";
+import { completeLeagueRound, playSummaryLeagueRound, startLeagueRound } from "./league-round";
 import {
   type CareerSeasonState,
   competitionSeason,
@@ -70,11 +72,23 @@ function playsIn(
  */
 function slotSeason(state: CareerSeasonState, slot: CalendarSlot): LeagueSeason {
   const season = competitionSeason(state, slot.competitionId);
-  if (slot.competitionId === state.league.competitionId) return season;
+  const main = countryMain(state, slot.competitionId);
+  if (slot.competitionId === main.competitionId) return season;
   return drawn(
-    syncInjuries(state.league, season, state.world, clubsInRound(season, slot.round)),
+    syncInjuries(main, season, state.world, clubsInRound(season, slot.round)),
     state.world,
   );
+}
+
+/**
+ * Liga principal do país da competição (020 R2): a `league` do técnico ou a de outro país, que fica
+ * em `competitions`. Competição desconhecida ou de país sem liga principal cai na `league`.
+ */
+function countryMain(state: CareerSeasonState, competitionId: string): LeagueSeason {
+  const competition = state.world.competitions.find((entry) => entry.id === competitionId);
+  const main = competition ? mainCompetitionOf(state.world, competition.countryId) : undefined;
+  if (!main || main.id === state.league.competitionId) return state.league;
+  return state.competitions.find((entry) => entry.competitionId === main.id) ?? state.league;
 }
 
 /** Copa: sorteia as fases prontas (idempotente); as demais competições não mudam (018 R4). */
@@ -135,6 +149,19 @@ function withLeague(state: CareerSeasonState, season: LeagueSeason): CareerSeaso
   };
 }
 
+/** Resultado da rodada de uma liga de outro país: a liga em si não muda, só os sistemas. */
+function withForeignSystems(state: CareerSeasonState, result: CareerRoundResult & { ok: true }) {
+  return {
+    ...state,
+    finances: result.finances,
+    world: result.world,
+    ...(result.renewal ? { renewal: result.renewal } : {}),
+    ...(result.market ? { market: result.market } : {}),
+    ...(result.board ? { board: result.board } : {}),
+    ...(result.fans ? { fans: result.fans } : {}),
+  };
+}
+
 function withSystems(state: CareerSeasonState, result: CareerRoundResult & { ok: true }) {
   return {
     ...state,
@@ -172,32 +199,43 @@ export function completeCareerDay(
   const lineupClubs = Object.keys(lineups ?? {});
   let next = state;
   let principalRound: number | undefined;
+  /** Rodadas fechadas hoje das ligas principais dos outros países (020 R6). */
+  const foreignRounds: { competitionId: string; round: number }[] = [];
   const played: MatchRecord[] = [];
   /** Jogos das competições secundárias do dia (a principal tem o caminho próprio). */
   const extra: DayMatch[] = [];
   for (const slot of day.slots) {
     const season = slotSeason(next, slot);
-    let round: LiveRound;
-    if (live && live.competitionId === slot.competitionId) {
-      round = live;
+    let completed: ReturnType<typeof completeLeagueRound>;
+    if (simulationKindFor(next, slot.competitionId) === "summary") {
+      // Liga de outro país: simulação resumida (020), sem rodada ao vivo nem escalação do técnico.
+      completed = playSummaryLeagueRound(season, tiredWorld(state, day.date));
     } else {
-      const own = lineups && playsIn(next, slot, lineupClubs) ? lineups : undefined;
-      const started = startLeagueRound(season, tiredWorld(state, day.date), own);
-      if (!started.ok) return started;
-      round = finishRound(started.round);
+      let round: LiveRound;
+      if (live && live.competitionId === slot.competitionId) {
+        round = live;
+      } else {
+        const own = lineups && playsIn(next, slot, lineupClubs) ? lineups : undefined;
+        const started = startLeagueRound(season, tiredWorld(state, day.date), own);
+        if (!started.ok) return started;
+        round = finishRound(started.round);
+      }
+      completed = completeLeagueRound(season, next.world, round);
     }
-    const completed = completeLeagueRound(season, next.world, round);
     if (!completed.ok) return completed;
     next = withLeague(next, drawn(completed.league, next.world));
-    if (slot.competitionId !== state.league.competitionId) {
-      // As lesões novas e o desconto do jogo voltam para a principal.
+    const main = countryMain(next, slot.competitionId);
+    if (slot.competitionId !== main.competitionId) {
+      // As lesões novas e o desconto do jogo voltam para a principal do país.
       const clubs = clubsInRound(completed.league, slot.round);
-      next = { ...next, league: syncInjuries(completed.league, next.league, next.world, clubs) };
+      next = withLeague(next, syncInjuries(completed.league, main, next.world, clubs));
     }
     const matches = roundMatches(completed.league, slot.round, day.date);
     played.push(...matches.map((match) => match.record));
     if (slot.competitionId === state.league.competitionId) principalRound = slot.round;
-    else extra.push(...matches);
+    else if (isCountryMain(state.world, slot.competitionId)) {
+      foreignRounds.push({ competitionId: slot.competitionId, round: slot.round });
+    } else extra.push(...matches);
   }
   if (principalRound !== undefined) {
     // Consequências da rodada da principal (finanças, evolução, mercado, torcida, diretoria,
@@ -225,10 +263,79 @@ export function completeCareerDay(
     if (knockouts.length > 0)
       next = afterStagedKnockout(next, careerSeed, managerClubId, knockouts);
   }
-  if (extra.length > 0) next = afterExtraMatches(next, careerSeed, managerClubId, extra);
+  for (const { competitionId, round } of foreignRounds) {
+    const league = competitionSeason(next, competitionId);
+    const siblings = next.competitions.filter(
+      (entry) =>
+        entry.competitionId !== competitionId &&
+        countryMain(next, entry.competitionId).competitionId === competitionId,
+    );
+    const systems = systemsOf(next, careerSeed);
+    // Sem clube do técnico nesta liga: a IA decide por todos os clubes dela.
+    const applied = applyRoundSystems(
+      league,
+      next.finances,
+      next.world,
+      round,
+      "",
+      systems.renewal,
+      systems.market,
+      systems.board,
+      systems.fans,
+      undefined,
+      siblings,
+      { foreign: true },
+    );
+    if (!applied.ok) return applied;
+    next = withForeignSystems(next, applied);
+    const knockouts = roundMatches(league, round, day.date).filter(
+      (match) => match.fixture.stage?.kind === "knockout",
+    );
+    if (knockouts.length > 0) next = foreignExtraMatches(next, league, knockouts);
+  }
+  if (extra.length > 0) next = afterAllExtraMatches(next, careerSeed, managerClubId, extra);
   const rules = fitnessRules(next.world, next.league.competitionId);
   const fitness = fitnessAfterMatches(next.fitness, played, day.date, rules);
   return { ok: true, state: { ...next, fitness } };
+}
+
+/**
+ * Jogos de competições secundárias do dia: os do país do técnico seguem o caminho completo; os de
+ * outros países só movimentam o caixa (bilheteria e prêmios), com as regras do país deles (020).
+ */
+function afterAllExtraMatches(
+  state: CareerSeasonState,
+  careerSeed: string,
+  managerClubId: string,
+  matches: readonly DayMatch[],
+): CareerSeasonState {
+  const mainOf = (match: DayMatch) => countryMain(state, match.competitionId);
+  const own = matches.filter((match) => mainOf(match).competitionId === state.league.competitionId);
+  let next = own.length > 0 ? afterExtraMatches(state, careerSeed, managerClubId, own) : state;
+  const groups = new Map<string, DayMatch[]>();
+  for (const match of matches) {
+    const principal = mainOf(match);
+    if (principal.competitionId === state.league.competitionId) continue;
+    groups.set(principal.competitionId, [...(groups.get(principal.competitionId) ?? []), match]);
+  }
+  for (const [principalId, group] of [...groups].sort(([a], [b]) => (a < b ? -1 : 1))) {
+    next = foreignExtraMatches(next, competitionSeason(next, principalId), group);
+  }
+  return next;
+}
+
+/** Bilheteria e prêmios dos jogos de uma liga ou copa de outro país (020). */
+function foreignExtraMatches(
+  state: CareerSeasonState,
+  principal: LeagueSeason,
+  matches: readonly DayMatch[],
+): CareerSeasonState {
+  const gated = applyExtraGates(state.finances, principal, state.world, matches, state.fans);
+  const prizes = cupSources(state).flatMap(({ competitionId, season }) =>
+    cupPrizes(state.world, season, matches).map((prize) => ({ ...prize, competitionId })),
+  );
+  const finances = applyCupPrizes(gated, principal, prizes);
+  return finances === state.finances ? state : { ...state, finances };
 }
 
 /**

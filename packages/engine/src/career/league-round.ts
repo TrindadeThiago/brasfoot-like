@@ -3,6 +3,7 @@ import type { CompletedBank } from "../model/types";
 import { type SeasonError, seasonError } from "../season/errors";
 import { completeRound, finishRound, type LiveRound, startRound } from "../season/live-round";
 import { isSeasonOver } from "../season/season";
+import { playSummaryRound } from "../season/summary-round";
 import type { Season, SeasonStep } from "../season/types";
 import { isLeagueSeasonOver, leagueRound } from "./league";
 import type { LeagueResult, LeagueSeason } from "./types";
@@ -84,6 +85,26 @@ export function completeLeagueRound(
     const completed = completeRound(season, world, { ...round, matches });
     if (!completed.ok) return completed;
     divisions.push(completed.season);
+  }
+  return { ok: true, league: { ...league, divisions } };
+}
+
+/**
+ * Fecha a rodada atual da liga pela simulação resumida (020 R3), sem rodada ao vivo: para as ligas
+ * de outros países que o técnico não acompanha.
+ */
+export function playSummaryLeagueRound(league: LeagueSeason, world: CompletedBank): LeagueResult {
+  if (isLeagueSeasonOver(league)) throw new Error("temporada encerrada");
+  const number = leagueRound(league);
+  const divisions: Season[] = [];
+  for (const season of league.divisions) {
+    if (isSeasonOver(season) || season.nextRound !== number) {
+      divisions.push(season);
+      continue;
+    }
+    const played = playSummaryRound(season, world);
+    if (!played.ok) return played;
+    divisions.push(played.season);
   }
   return { ok: true, league: { ...league, divisions } };
 }

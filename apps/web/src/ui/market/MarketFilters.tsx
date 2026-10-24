@@ -16,6 +16,8 @@ export interface FilterForm {
   maxWage: string;
   until: string;
   text: string;
+  /** País do clube do jogador, em bancos de vários países (020); "" = todos. */
+  country: string;
 }
 
 export const EMPTY_FILTERS: FilterForm = {
@@ -29,6 +31,7 @@ export const EMPTY_FILTERS: FilterForm = {
   maxWage: "",
   until: "",
   text: "",
+  country: "",
 };
 
 function range(min: string, max: string, low: number, high: number): [number, number] | undefined {
@@ -50,6 +53,7 @@ export function toFilters(form: FilterForm, ownClubId: string): PlayerFilters {
     ...(form.maxWage !== "" ? { maxWage: Number(form.maxWage) } : {}),
     ...(form.until !== "" ? { contractUntilMax: Number(form.until) } : {}),
     ...(form.text.trim() !== "" ? { text: form.text } : {}),
+    ...(form.country !== "" ? { countryId: form.country } : {}),
   };
 }
 
@@ -67,9 +71,12 @@ const NUMBER_FIELDS = [
 export function MarketFilters({
   form,
   onChange,
+  countries = [],
 }: {
   form: FilterForm;
   onChange: (form: FilterForm) => void;
+  /** Países do banco; o filtro só aparece com mais de um (020). */
+  countries?: readonly { id: string; name: string }[];
 }) {
   const t = useT();
   return (
@@ -110,6 +117,22 @@ export function MarketFilters({
             ))}
           </select>
         </label>
+        {countries.length > 1 ? (
+          <label className={styles.field}>
+            <span>{t("market.filter.country")}</span>
+            <select
+              value={form.country}
+              onChange={(event) => onChange({ ...form, country: event.target.value })}
+            >
+              <option value="">{t("market.filter.anyCountry")}</option>
+              {countries.map((country) => (
+                <option key={country.id} value={country.id}>
+                  {country.name}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
         {NUMBER_FIELDS.map(([key, text]) => (
           <label key={key} className={styles.field}>
             <span>{t(text)}</span>

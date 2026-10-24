@@ -1,0 +1,394 @@
+[
+  {
+    "clubIds": [
+      "clube-ned-001",
+      "clube-ned-005"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-ned-002",
+      "clube-ned-004"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-ned-002",
+      "clube-ned-012"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-ned-003",
+      "clube-ned-006"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-ned-005",
+      "clube-ned-008"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-ned-006",
+      "clube-ned-007"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-ned-008",
+      "clube-ned-010"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-ned-009",
+      "clube-ned-012"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-puk-001",
+      "clube-puk-005"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-puk-001",
+      "clube-puk-008"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-puk-002",
+      "clube-puk-017"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-puk-002",
+      "clube-puk-018"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-puk-003",
+      "clube-puk-012"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-puk-003",
+      "clube-puk-013"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-puk-004",
+      "clube-puk-007"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-puk-004",
+      "clube-puk-013"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-puk-005",
+      "clube-puk-016"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-puk-006",
+      "clube-puk-009"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-puk-006",
+      "clube-puk-015"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-puk-007",
+      "clube-puk-012"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-puk-008",
+      "clube-puk-016"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-puk-009",
+      "clube-puk-020"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-puk-010",
+      "clube-puk-015"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-puk-010",
+      "clube-puk-020"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-puk-011",
+      "clube-puk-022"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-puk-011",
+      "clube-puk-024"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-puk-014",
+      "clube-puk-017"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-puk-014",
+      "clube-puk-023"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-puk-018",
+      "clube-puk-023"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-puk-019",
+      "clube-puk-021"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-puk-019",
+      "clube-puk-024"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-puk-021",
+      "clube-puk-022"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-ved-001",
+      "clube-ved-006"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-ved-001",
+      "clube-ved-020"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-ved-002",
+      "clube-ved-004"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-ved-002",
+      "clube-ved-013"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-ved-003",
+      "clube-ved-018"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-ved-003",
+      "clube-ved-024"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-ved-004",
+      "clube-ved-015"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-ved-005",
+      "clube-ved-009"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-ved-005",
+      "clube-ved-011"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-ved-006",
+      "clube-ved-016"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-ved-007",
+      "clube-ved-021"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-ved-007",
+      "clube-ved-022"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-ved-008",
+      "clube-ved-009"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-ved-008",
+      "clube-ved-017"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-ved-010",
+      "clube-ved-013"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-ved-010",
+      "clube-ved-015"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-ved-011",
+      "clube-ved-017"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-ved-012",
+      "clube-ved-018"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-ved-012",
+      "clube-ved-024"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-ved-014",
+      "clube-ved-016"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-ved-014",
+      "clube-ved-020"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-ved-019",
+      "clube-ved-022"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-ved-019",
+      "clube-ved-023"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-ved-021",
+      "clube-ved-023"
+    ],
+    "intensity": 2
+  }
+]

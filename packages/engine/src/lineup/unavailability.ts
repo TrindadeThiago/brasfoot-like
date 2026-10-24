@@ -1,5 +1,6 @@
 import type { CompletedBank, CompletedPlayer } from "../model/types";
 import type { PlayerStatus, Season } from "../season/types";
+import { squadOf } from "../world/squads";
 import type { SeasonUnavailability } from "./types";
 
 /** Indisponíveis de um elenco, na ordem do elenco (lesão prevalece sobre suspensão). */
@@ -26,7 +27,7 @@ export function clubUnavailability(
   world: CompletedBank,
   clubId: string,
 ): SeasonUnavailability[] {
-  const squad = world.players.filter((player) => player.clubId === clubId);
+  const squad = squadOf(world, clubId);
   return unavailabilityOf(squad, season.status).sort(
     (a, b) => a.remaining - b.remaining || a.playerId.localeCompare(b.playerId),
   );

@@ -263,8 +263,34 @@ const invokedDirectly =
 
 if (invokedDirectly) {
   const { values } = parseArgs({
-    options: { seed: { type: "string", default: "mundo" }, seasons: { type: "string" } },
+    options: {
+      seed: { type: "string", default: "mundo" },
+      seasons: { type: "string" },
+      scale: { type: "boolean", default: false },
+      countries: { type: "string" },
+      detail: { type: "boolean", default: false },
+      international: { type: "string" },
+      economy: { type: "string" },
+    },
   });
+  if (values.scale) {
+    // Mundo grande (020): vários países, tamanho do save, tempo e memória.
+    const { runSimulateScale } = await import("./simulate-scale");
+    const report = runSimulateScale({
+      seed: values.seed === "mundo" ? "mundo-grande" : (values.seed ?? "mundo-grande"),
+      countries: values.countries ? Number(values.countries) : 10,
+      seasons: values.seasons ? Number(values.seasons) : 30,
+      detail: values.detail === true,
+      ...(values.economy === "uniform" || values.economy === "varied"
+        ? { economy: values.economy }
+        : {}),
+      ...(values.international !== undefined
+        ? { international: Number(values.international) }
+        : {}),
+    });
+    for (const line of report.lines) console.log(line);
+    process.exit(report.exitCode);
+  }
   const output = runSimulateWorld({
     seed: values.seed ?? "mundo",
     ...(values.seasons ? { seasons: Number(values.seasons) } : {}),

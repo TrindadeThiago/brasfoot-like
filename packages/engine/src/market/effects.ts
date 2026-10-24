@@ -1,5 +1,6 @@
 import { draft, post } from "../finance/ledger";
 import type { CompletedBank, CompletedPlayer } from "../model/types";
+import { canSignForeign } from "../world/foreign";
 import { canAddPlayer, canRemovePlayer } from "./squad";
 import type {
   Contract,
@@ -51,6 +52,23 @@ function postFee(
   post(update.finances, { clubId: sellerId, ...base, category: "transfer_sale", amount: fee });
 }
 
+/**
+ * Limite de estrangeiros do país do comprador (020 FR-002a): quem chega com nacionalidade
+ * diferente da do clube só entra se o clube ainda tem vaga de estrangeiro.
+ */
+function foreignProblem(
+  world: CompletedBank,
+  player: Pick<CompletedPlayer, "nationalityId">,
+  buyerId: string,
+): MarketResult<never> | undefined {
+  const buyer = world.clubs.find((club) => club.id === buyerId);
+  if (!buyer || player.nationalityId === buyer.countryId) return undefined;
+  if (canSignForeign(world, buyerId)) return undefined;
+  const limit = world.countries.find((country) => country.id === buyer.countryId)?.rules
+    ?.foreignLimit;
+  return fail("market.foreign_limit", { limit: limit ?? 0 });
+}
+
 /** Valida caixa e elencos antes de mover jogador e dinheiro. */
 function checkTransfer(
   context: MarketContext,
@@ -63,6 +81,8 @@ function checkTransfer(
   }
   if (!canAddPlayer(context.world, buyerId, player.position, context.managerClubId))
     return fail("market.squad_full");
+  const foreign = foreignProblem(context.world, player, buyerId);
+  if (foreign) return foreign;
   if (!canRemovePlayer(context.world, player.clubId, player.id)) {
     return fail("market.squad_minimum");
   }
@@ -150,6 +170,8 @@ export function completeSigning(
   ) {
     return fail("market.squad_full");
   }
+  const foreign = foreignProblem(context.world, input.agent.player, input.clubId);
+  if (foreign) return foreign;
   const update = working(context);
   const player = {
     ...input.agent.player,

@@ -110,6 +110,14 @@ export default function ModsPage() {
                     players: mod.summary.players,
                   })}
                 </p>
+                {mod.summary.countries.length > 1 ? (
+                  <p className={styles.muted}>
+                    {t("mods.countries", {
+                      count: mod.summary.countries.length,
+                      countries: mod.summary.countries.join(", "),
+                    })}
+                  </p>
+                ) : null}
                 <p className={styles.muted}>
                   {t("mods.divisions", {
                     divisions: mod.summary.divisions.map((division) => division.name).join(", "),

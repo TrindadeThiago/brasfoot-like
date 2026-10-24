@@ -1,5 +1,6 @@
 import type { CompletedBank } from "../model/types";
 import { standings } from "../season/standings";
+import { topScorers } from "../season/stats";
 import type { StandingRow } from "../season/types";
 import { type CompositionChange, nextComposition } from "./composition";
 import type { HistoryRow, LeagueSeason, SeasonHistoryEntry } from "./types";
@@ -8,6 +9,9 @@ function historyRow(row: StandingRow): HistoryRow {
   const { position, clubId, points, played, wins, draws, losses, goalsFor, goalsAgainst } = row;
   return { position, clubId, points, played, wins, draws, losses, goalsFor, goalsAgainst };
 }
+
+/** Artilheiros guardados por divisão e temporada (020 R7). */
+const HISTORY_SCORERS = 10;
 
 /** Entrada de histórico de uma temporada encerrada (research.md R8). */
 export function historyEntry(
@@ -24,10 +28,16 @@ export function historyEntry(
       .map((season) => {
         const level = season.divisionLevel;
         const table = finalStandings[level] ?? [];
+        const scorers = topScorers(season, HISTORY_SCORERS).map(({ playerId, clubId, goals }) => ({
+          playerId,
+          clubId,
+          goals,
+        }));
         return {
           level,
           championId: table[0]?.clubId ?? "",
           standings: table.map(historyRow),
+          ...(scorers.length > 0 ? { topScorers: scorers } : {}),
           promoted: [...(moves.promoted[level] ?? [])],
           relegated: [...(moves.relegated[level] ?? [])],
         };

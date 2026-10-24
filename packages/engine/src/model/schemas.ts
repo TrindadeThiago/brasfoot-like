@@ -74,6 +74,8 @@ export const countrySchema = z.object({
   code: pattern(COUNTRY_CODE_PATTERN, "country-code"),
   /** Banco de nomes do país para jogadores gerados (009, research.md R10). */
   names: z.object({ firstNames: z.array(text(1, 30)), surnames: z.array(text(1, 30)) }).optional(),
+  /** Regras próprias do país (020): limite opcional de jogadores estrangeiros por clube. */
+  rules: z.object({ foreignLimit: intInRange(0, 25).optional() }).optional(),
 });
 
 const pointsSchema = z.object({
@@ -309,6 +311,7 @@ export const marketSchema = z.object({
         })
         .partial(),
       keepReports: intInRange(1, 20),
+      maxInternationalPerClub: intInRange(0, 20),
     })
     .partial()
     .optional(),

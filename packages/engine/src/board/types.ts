@@ -198,6 +198,11 @@ export interface BoardContext {
   careerSeed: string;
   /** Humor das torcidas (013): pressão ou apoio na confiança. */
   fans?: FansState;
+  /**
+   * Rodada de uma liga de outro país que não o do técnico (020): só os clubes dela são avaliados;
+   * o técnico entra apenas nas propostas das vagas dessa liga.
+   */
+  foreign?: boolean;
 }
 
 export interface BoardUpdate {

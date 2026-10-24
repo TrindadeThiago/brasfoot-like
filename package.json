@@ -24,12 +24,14 @@
     "sim:world": "pnpm --filter @brasfoot-like/tools sim:world",
     "gen:example-mod": "pnpm --filter @brasfoot-like/tools gen:example-mod",
     "check-release": "pnpm --filter @brasfoot-like/tools check-release",
-    "screenshots": "pnpm --filter @brasfoot-like/tools screenshots"
+    "screenshots": "pnpm --filter @brasfoot-like/tools screenshots",
+    "sim:size": "pnpm --filter @brasfoot-like/tools sim:size",
+    "gen:world-mod": "pnpm --filter @brasfoot-like/tools gen:world-mod"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",
     "typescript": "~6.0.3",
     "vitest": "^5.0.4"
   },
-  "version": "1.4.0"
+  "version": "1.5.0"
 }

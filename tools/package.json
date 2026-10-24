@@ -14,13 +14,16 @@
     "sim:world": "tsx src/simulate-world.ts",
     "gen:example-mod": "tsx src/gen-example-mod.ts",
     "check-release": "tsx src/check-release.ts",
-    "screenshots": "tsx src/screenshots.ts"
+    "screenshots": "tsx src/screenshots.ts",
+    "sim:size": "tsx src/measure-save.ts",
+    "gen:world-mod": "tsx src/gen-world-example-mod.ts"
   },
   "dependencies": {
     "@brasfoot-like/engine": "workspace:*",
     "@brasfoot-like/i18n": "workspace:*",
     "@brasfoot-like/modkit": "workspace:*",
-    "fflate": "^0.8.2"
+    "fflate": "^0.8.2",
+    "@brasfoot-like/save": "workspace:*"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",

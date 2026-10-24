@@ -192,7 +192,7 @@ function countTrait(players: readonly FieldPlayer[], trait: Trait): number {
 }
 
 /** `2a²/(a²+d²)`: 1 com forças iguais, cresce suave sem saturar (research.md R2). */
-function ratio(attack: number, defense: number): number {
+export function ratio(attack: number, defense: number): number {
   const a2 = attack * attack;
   const d2 = defense * defense;
   return a2 + d2 === 0 ? 0 : (2 * a2) / (a2 + d2);

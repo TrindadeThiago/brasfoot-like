@@ -32,6 +32,8 @@ export interface AiMarketRules {
   positionMax: Record<Position, number>;
   /** Resumos de janela guardados. */
   keepReports: number;
+  /** Contratações internacionais da IA por clube e janela (020 R13). */
+  maxInternationalPerClub: number;
 }
 
 export const DEFAULT_AI_MARKET: AiMarketRules = {
@@ -53,6 +55,7 @@ export const DEFAULT_AI_MARKET: AiMarketRules = {
   maxFreeSigningsPerRound: 6,
   positionMax: { GK: 4, FB: 6, CB: 6, DM: 5, MF: 7, FW: 6 },
   keepReports: 4,
+  maxInternationalPerClub: 1,
 };
 
 /** Regras da IA de mercado: `competition.market.aiMarket` com os padrões preenchidos. */

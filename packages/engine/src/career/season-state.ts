@@ -23,6 +23,7 @@ import type { RenewalState } from "../renewal/types";
 import type { SeasonError } from "../season/errors";
 import type { Fixture, MatchRecord, PlayerStatus } from "../season/types";
 import type { FixtureStage } from "../stages/types";
+import { mainCompetitionOf } from "../world/countries";
 import { availabilitySeason } from "./injuries";
 import {
   clubDivision,
@@ -114,6 +115,12 @@ export interface CareerSeasonOptions {
   compositions?: Record<string, Record<number, readonly string[]>>;
   /** Situação inicial dos jogadores por competição (lesões herdadas e cartões). */
   statuses?: Record<string, Record<string, PlayerStatus>>;
+  /**
+   * Liga em foco (020 R2): a principal do país deste clube. Padrão: a primeira competição do banco.
+   * `leagueCompetitionId` vence quando informada (a virada mantém a mesma liga em foco).
+   */
+  focusClubId?: string;
+  leagueCompetitionId?: string;
 }
 
 /** A parte da temporada da carreira que depende só do banco: competições, calendário e condição. */
@@ -126,9 +133,28 @@ export type CareerSeasonResult =
   | ({ ok: true } & CareerSeasonSet)
   | { ok: false; error: SeasonError };
 
+/** Índice da liga em foco entre as temporadas criadas (020 R2). */
+function focusIndex(
+  world: CompletedBank,
+  created: readonly LeagueSeason[],
+  options: Pick<CareerSeasonOptions, "focusClubId" | "leagueCompetitionId">,
+): number {
+  const byId = options.leagueCompetitionId;
+  if (byId !== undefined) {
+    const index = created.findIndex((entry) => entry.competitionId === byId);
+    if (index >= 0) return index;
+  }
+  const club = world.clubs.find((entry) => entry.id === options.focusClubId);
+  const main = club ? mainCompetitionOf(world, club.countryId) : undefined;
+  const index = created.findIndex((entry) => entry.competitionId === main?.id);
+  return index >= 0 ? index : 0;
+}
+
 /**
- * Cria a temporada de todas as competições do banco (017 R4): a principal (a primeira) com a seed
- * de sempre, as secundárias com a seed `${careerSeed}:${competitionId}`, e o calendário por datas.
+ * Cria a temporada de todas as competições do banco (017 R4): a primeira do banco com a seed de
+ * sempre, as demais com a seed `${careerSeed}:${competitionId}`, e o calendário por datas. A liga em
+ * foco (`league`) é a principal do país do clube em foco (020 R2); as outras competições, inclusive
+ * as principais dos demais países, ficam em `competitions`.
  * O banco já foi validado, então um calendário impossível aqui é erro de programação.
  */
 export function createCareerSeason(
@@ -169,8 +195,10 @@ export function createCareerSeason(
     if (!result.ok) return result;
     created.push(result.league);
   }
-  const [league, ...competitions] = created;
+  const focus = focusIndex(world, created, options);
+  const league = created[focus];
   if (!league) throw new Error("banco sem competições");
+  const competitions = created.filter((_, index) => index !== focus);
   const inputs: CalendarCompetition[] = created.map((season) => ({
     competitionId: season.competitionId,
     rounds: leagueTotalRounds(season),

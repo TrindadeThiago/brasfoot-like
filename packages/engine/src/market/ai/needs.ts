@@ -3,6 +3,7 @@ import { annualWageBill } from "../../finance/create";
 import { POSITIONS, type Position } from "../../model/catalogs";
 import type { CompletedPlayer } from "../../model/types";
 import { SQUAD_RULES } from "../../renewal/rules";
+import { squadOf } from "../../world/squads";
 import { attraction } from "../player-response";
 import type { MarketContext } from "../types";
 import { aiMarketRules } from "./rules";
@@ -60,7 +61,7 @@ export function squadUtility(player: CompletedPlayer, date: string): number {
 export function clubNeeds(context: MarketContext, clubId: string): ClubNeeds {
   const rules = aiMarketRules(context.world, context.league.competitionId);
   const date = seasonDate(context.world.manifest.referenceDate, context.league.year);
-  const squad = context.world.players.filter((player) => player.clubId === clubId);
+  const squad = squadOf(context.world, clubId);
   const target =
     rules.targetBase + (rules.targetPerAmbitionPct * attraction(context, clubId)) / 100;
   const positions = {} as Record<Position, PositionNeed>;

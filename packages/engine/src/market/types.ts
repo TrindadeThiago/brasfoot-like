@@ -189,6 +189,8 @@ export interface PlayerFilters {
   scope?: "all" | "clubs" | "free";
   excludeClubId?: string;
   text?: string;
+  /** País do clube do jogador (livres: a nacionalidade), num mundo de vários países (020). */
+  countryId?: string;
 }
 
 /** Linha da busca: só atributos visíveis (nunca `hidden`). */
@@ -200,6 +202,8 @@ export interface MarketRow {
   strength: number;
   traits: Trait[];
   clubId?: string;
+  /** País do clube (livres: nacionalidade); só informado num banco de vários países (020). */
+  countryId?: string;
   value: number;
   wage: number;
   untilYear?: number;

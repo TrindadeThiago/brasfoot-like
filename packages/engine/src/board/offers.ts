@@ -1,4 +1,5 @@
 import { clubDivision } from "../career/league";
+import type { LeagueSeason } from "../career/types";
 import { releaseManagerClub } from "../market/release";
 import type { MarketState } from "../market/types";
 import type { Rng } from "../rng/xoshiro";
@@ -67,8 +68,9 @@ export function considerVacancies(
   const rules = boardRules(context.world, context.league.competitionId);
   const current =
     board.manager.clubId !== null ? clubReputation(context.world, board.manager.clubId) : undefined;
+  const inLeague = new Set(context.league.divisions.flatMap((season) => season.clubIds));
   const vacancies = [...board.vacancies]
-    .filter((vacancy) => !vacancy.considered)
+    .filter((vacancy) => !vacancy.considered && inLeague.has(vacancy.clubId))
     .sort((a, b) => (a.clubId < b.clubId ? -1 : a.clubId > b.clubId ? 1 : 0));
   for (const vacancy of vacancies) {
     vacancy.considered = true;
@@ -113,7 +115,11 @@ export type AcceptResult =
  * ganha um técnico da IA na hora e o mercado dele é liberado.
  */
 export function acceptJobOffer(
-  context: BoardContext & { market: MarketState },
+  context: BoardContext & {
+    market: MarketState;
+    /** Liga do clube da proposta, quando é de outro país (020 R9); padrão: a do técnico. */
+    targetLeague?: LeagueSeason;
+  },
   offerId: string,
   rng: Rng,
 ): AcceptResult {
@@ -124,7 +130,8 @@ export function acceptJobOffer(
   const board = clone(context.board);
   const base = { world: context.world, league: context.league, finances: context.finances };
   const scope = { ...base, careerSeed: context.careerSeed };
-  const at = { season: context.league.number, round: playedRounds(context.league) };
+  const target = context.targetLeague ?? context.league;
+  const at = { season: target.number, round: playedRounds(target) };
   const previous = board.manager.clubId;
   let market = context.market;
   if (previous !== null) {
@@ -154,7 +161,9 @@ export function acceptJobOffer(
   board.clubs[offer.clubId] = {
     clubId: offer.clubId,
     coachId: null,
-    goals: seasonGoals(base, offer.clubId, board.manager.reputation, { midSeason: true }),
+    goals: seasonGoals({ ...base, league: target }, offer.clubId, board.manager.reputation, {
+      midSeason: true,
+    }),
     confidence: rules.neutral,
     hired: at,
     recent: [

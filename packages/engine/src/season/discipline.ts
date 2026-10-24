@@ -1,6 +1,7 @@
 import type { InjurySeverity, Side } from "../match/types";
 import type { CompletedBank } from "../model/types";
 import { createRng } from "../rng/xoshiro";
+import { playerLines } from "./record";
 import {
   DEFAULT_DISCIPLINE_RULES,
   type DisciplineRules,
@@ -67,7 +68,7 @@ export function applyMatchToStatus(
     current.injury = Math.max(0, current.injury - 1);
   }
 
-  for (const [playerId, line] of Object.entries(record.players)) {
+  for (const [playerId, line] of Object.entries(playerLines(record))) {
     if (line.side !== side) continue;
     if (line.red) {
       // Expulsão: os amarelos desta partida não acumulam (FR-016).

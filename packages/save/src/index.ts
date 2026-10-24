@@ -56,5 +56,6 @@ export {
 } from "./market";
 export type { LoadResult, Migration } from "./migrate";
 export { MIGRATIONS, migrateSave } from "./migrate";
+export { SCALE_LIMITS } from "./scale-limits";
 export type { SaveSummary } from "./summary";
 export { divisionNameOf, seasonYearOf, summarize, touch } from "./summary";

@@ -90,8 +90,15 @@ export function boardAfterRound(context: BoardContext, round: number): BoardUpda
   const season = context.league.number;
   const at = { season, round };
   const seed = `${context.careerSeed}:board:${season}:${round}`;
-  const clubIds = Object.keys(board.clubs).sort();
-  const managerClubId = board.manager.clubId;
+  // Só os clubes da liga da rodada (020): o quadro tem os de todos os países.
+  const inLeague = new Set(context.league.divisions.flatMap((season) => season.clubIds));
+  const clubIds = Object.keys(board.clubs)
+    .filter((clubId) => inLeague.has(clubId))
+    .sort();
+  const managerClubId =
+    board.manager.clubId !== null && !inLeague.has(board.manager.clubId)
+      ? undefined
+      : board.manager.clubId;
 
   for (const clubId of clubIds) {
     const club = board.clubs[clubId];
@@ -130,7 +137,9 @@ export function boardAfterRound(context: BoardContext, round: number): BoardUpda
         openVacancy(board, clubId, at);
       }
     }
-    if (managerClubId === null) board.history.seasons.push(seasonRecord(context, board, null));
+    if (managerClubId === null && !context.foreign) {
+      board.history.seasons.push(seasonRecord(context, board, null));
+    }
     considerVacancies(board, scopeOf(context), createRng(`${seed}:offers`));
   } else {
     for (const clubId of clubIds) {
@@ -157,6 +166,7 @@ export function boardAfterRound(context: BoardContext, round: number): BoardUpda
     const waiting = [...board.vacancies]
       .filter(
         (vacancy) =>
+          inLeague.has(vacancy.clubId) &&
           vacancy.offerId === undefined &&
           vacancy.considered &&
           (vacancy.season < season || round - vacancy.round >= rules.vacancyRounds),
