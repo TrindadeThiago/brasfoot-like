@@ -45,6 +45,11 @@
   font-weight: 700;
 }
 
+.origin {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+}
+
 .winner {
   font-weight: 700;
 }

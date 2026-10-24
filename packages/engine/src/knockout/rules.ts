@@ -1,4 +1,5 @@
 import type { CompletedBank, KnockoutFormat, KnockoutPhase } from "../model/types";
+import type { Season } from "../season/types";
 
 /** Padrões dos campos opcionais de uma fase (018 data-model.md). */
 export const DEFAULT_KNOCKOUT = {
@@ -24,9 +25,33 @@ export function totalLegs(format: KnockoutFormat): number {
   return format.phases.reduce((sum, phase) => sum + phase.legs, 0);
 }
 
-/** Números das rodadas (a partir de 1) das pernas de cada fase, em ordem. */
-export function phaseRounds(format: KnockoutFormat): number[][] {
-  let next = 1;
+/** Formato do mata-mata da temporada: o da visão de uma fase (019) ou o da copa da competição. */
+export function cupFormat(
+  world: Pick<CompletedBank, "competitions">,
+  season: Pick<Season, "competitionId" | "cupView">,
+): KnockoutFormat {
+  return season.cupView?.format ?? knockoutFormat(world, season.competitionId);
+}
+
+/**
+ * O jogo do dia é da copa (ou da fase eliminatória, numa visão): mesma competição e, numa visão, a
+ * mesma divisão e a mesma fase da sequência (019).
+ */
+export function cupMatchBelongs(
+  season: Pick<Season, "competitionId" | "divisionLevel" | "cupView">,
+  match: { competitionId: string; divisionLevel: number; fixture: { stage?: { index: number } } },
+): boolean {
+  if (match.competitionId !== season.competitionId) return false;
+  if (!season.cupView) return true;
+  return (
+    match.divisionLevel === season.divisionLevel &&
+    match.fixture.stage?.index === season.cupView.stage
+  );
+}
+
+/** Números das rodadas (a partir de `firstRound`, padrão 1) das pernas de cada fase, em ordem. */
+export function phaseRounds(format: KnockoutFormat, firstRound = 1): number[][] {
+  let next = firstRound;
   return format.phases.map((phase) => {
     const rounds = Array.from({ length: phase.legs }, () => next++);
     return rounds;

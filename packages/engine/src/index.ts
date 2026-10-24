@@ -230,6 +230,7 @@ export { drawPhase } from "./knockout/draw";
 export type { CupHistoryEntry } from "./knockout/history";
 export { cupEntry, cupSeasonOf } from "./knockout/history";
 export {
+  cupFormat,
   DEFAULT_KNOCKOUT,
   knockoutFormat,
   phaseOfRound,
@@ -387,12 +388,17 @@ export type {
   TeamState,
   TeamStats,
 } from "./match/types";
+export type { DrawAttribute, DrawRuleKind, StageType } from "./model/catalogs";
 export {
   CREST_SHAPES,
+  DRAW_ATTRIBUTES,
+  DRAW_RULE_KINDS,
+  FORMAT_TYPES,
   KNOCKOUT_HOME_RULES,
   KNOCKOUT_TIEBREAKERS,
   POSITIONS,
   RESERVED_FORMAT_TYPES,
+  STAGE_TYPES,
   SUPPORTED_FORMAT_VERSIONS,
   TIEBREAKERS,
   TRAITS,
@@ -409,16 +415,23 @@ export type {
   Crest,
   CrestShape,
   Division,
+  DrawRule,
+  GroupDraw,
+  GroupsStage,
   HiddenAttributes,
   KnockoutEntry,
   KnockoutFormat,
   KnockoutPhase,
+  KnockoutStage,
   LeagueFormat,
+  LeagueStage,
   Manifest,
   ModPackage,
   Player,
   Position,
   Rivalry,
+  StageFormat,
+  StagesFormat,
   Tiebreaker,
   Trait,
   ValidatedBank,
@@ -542,6 +555,51 @@ export { DEFAULT_DISCIPLINE_RULES } from "./season/types";
 export type { DataSection } from "./serialize/bank-files";
 export { BANK_FILES, joinBankFiles, splitBankFiles } from "./serialize/bank-files";
 export { toCanonicalJson } from "./serialize/canonical-json";
+export { advanceStages } from "./stages/advance";
+export {
+  groupStandings,
+  groupTables,
+  leagueStageStandings,
+  overallStandings,
+  stageOrigin,
+  stageQualifiers,
+} from "./stages/classification";
+export { createStagedSeason, isStagedSeason, stageOfRound } from "./stages/create";
+export { applyCupView, cupView, overallRanks } from "./stages/cup-view";
+export type {
+  DrawError,
+  DrawMode,
+  DrawResult,
+  GroupDrawClub,
+  GroupsRule,
+} from "./stages/groups-draw";
+export { drawGroups, groupLetter } from "./stages/groups-draw";
+export type { Pair, PairEntry, PairOptions } from "./stages/pairing";
+export { pairByPosition, pairByTable } from "./stages/pairing";
+export { drawWarnings, finalOrder, stagedStandings } from "./stages/ranking";
+export {
+  DEFAULT_STAGES,
+  GROUP_DRAW_TUNING,
+  isStaged,
+  knockoutCounts,
+  seasonStages,
+  stageParticipantCounts,
+  stageQualifierCount,
+  stageRoundRanges,
+  stageRounds,
+  stagesOf,
+} from "./stages/rules";
+export type {
+  DrawRuleRef,
+  DrawWarning,
+  FixtureStage,
+  GroupState,
+  Origin,
+  OverallRow,
+  Qualifier,
+  StageKind,
+  StageState,
+} from "./stages/types";
 export type {
   IssueCode,
   IssueParams,
@@ -559,3 +617,5 @@ export { generateDefaultBank } from "./worldgen/generate";
 export { completeHiddenAttributes } from "./worldgen/hidden";
 export { DISTRIBUTION_LIMITS, REPUTATION_TIERS, tierOf } from "./worldgen/limits";
 export { generateRivalries } from "./worldgen/rivalries";
+export type { StagesBankOptions } from "./worldgen/stages-example";
+export { generateStagesBank, STAGES_REGION_SIZES } from "./worldgen/stages-example";

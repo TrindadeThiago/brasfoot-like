@@ -6,12 +6,19 @@ import type {
   countrySchema,
   crestSchema,
   divisionSchema,
+  drawRuleSchema,
+  groupDrawSchema,
+  groupsStageSchema,
   hiddenAttributesSchema,
   knockoutFormatSchema,
+  knockoutStageSchema,
   leagueFormatSchema,
+  leagueStageSchema,
   manifestSchema,
   playerSchema,
   rivalrySchema,
+  stageFormatSchema,
+  stagesFormatSchema,
 } from "./schemas";
 
 export type { CrestShape, Position, Tiebreaker, Trait } from "./catalogs";
@@ -22,6 +29,13 @@ export type LeagueFormat = z.infer<typeof leagueFormatSchema>;
 export type KnockoutFormat = z.infer<typeof knockoutFormatSchema>;
 export type KnockoutPhase = KnockoutFormat["phases"][number];
 export type KnockoutEntry = NonNullable<KnockoutFormat["entries"]>[number];
+export type LeagueStage = z.infer<typeof leagueStageSchema>;
+export type GroupsStage = z.infer<typeof groupsStageSchema>;
+export type KnockoutStage = z.infer<typeof knockoutStageSchema>;
+export type StageFormat = z.infer<typeof stageFormatSchema>;
+export type StagesFormat = z.infer<typeof stagesFormatSchema>;
+export type GroupDraw = z.infer<typeof groupDrawSchema>;
+export type DrawRule = z.infer<typeof drawRuleSchema>;
 export type CompetitionFormat = z.infer<typeof competitionFormatSchema>;
 export type Division = z.infer<typeof divisionSchema>;
 export type Competition = z.infer<typeof competitionSchema>;

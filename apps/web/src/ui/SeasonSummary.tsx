@@ -38,7 +38,9 @@ export function SeasonSummary({ save, summary }: { save: SaveFile; summary: Seas
               <div>
                 <p className={styles.label}>{label}</p>
                 <p className={styles.name}>{winner?.name}</p>
-                <p>{t("seasonEnd.championPoints", { points: champion.points })}</p>
+                {champion.staged ? null : (
+                  <p>{t("seasonEnd.championPoints", { points: champion.points })}</p>
+                )}
               </div>
             </section>
           );

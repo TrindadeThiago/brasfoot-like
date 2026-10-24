@@ -13,6 +13,7 @@
     "test": "vitest run",
     "gen:default-bank": "pnpm --filter @brasfoot-like/tools gen:default-bank",
     "validate-bank": "pnpm --filter @brasfoot-like/tools validate-bank",
+    "gen:stages-mod": "pnpm --filter @brasfoot-like/tools gen:stages-mod",
     "sim:matches": "pnpm --filter @brasfoot-like/tools sim:matches",
     "sim:season": "pnpm --filter @brasfoot-like/tools sim:season",
     "dev:web": "pnpm --filter @brasfoot-like/web dev",
@@ -30,5 +31,5 @@
     "typescript": "~6.0.3",
     "vitest": "^5.0.4"
   },
-  "version": "1.3.1"
+  "version": "1.4.0"
 }

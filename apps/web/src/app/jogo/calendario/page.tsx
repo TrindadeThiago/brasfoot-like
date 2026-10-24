@@ -20,6 +20,7 @@ import { FormChips } from "../../../ui/FormChips";
 import { DerbyBadge } from "../../../ui/fans/DerbyBadge";
 import { MatchHighlights } from "../../../ui/MatchHighlights";
 import { MatchSummary } from "../../../ui/MatchSummary";
+import { stageLabel } from "../../../ui/stages/label";
 import styles from "./page.module.css";
 
 const ALL = "all";
@@ -74,6 +75,16 @@ export default function CalendarPage() {
             sortValue: (fixture) => fixture.round,
             align: "right",
           },
+          ...(all.some((fixture) => fixture.stage)
+            ? [
+                {
+                  key: "stage",
+                  header: t("col.stage"),
+                  render: (fixture: ClubFixture) => stageLabel(save, fixture) ?? "",
+                  sortValue: (fixture: ClubFixture) => fixture.round,
+                },
+              ]
+            : []),
           {
             key: "opponent",
             header: t("col.opponent"),

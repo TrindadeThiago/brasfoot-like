@@ -18,6 +18,30 @@ describe("CSV de clubes e jogadores (015 US4)", () => {
     expect(result.bank).toEqual(original.bank);
   });
 
+  it("a região do clube (019) vai e volta pelo CSV, e a coluna é opcional", () => {
+    const withRegion = {
+      ...bank,
+      clubs: bank.clubs.map((club, index) => (index === 0 ? { ...club, region: "Norte" } : club)),
+    };
+    const csv = clubsToCsv(withRegion);
+    expect(csv.split(/\r?\n/, 1)[0]).toContain("region");
+    const result = applyCsv(bank, { clubs: csv });
+    if (!result.ok) throw new Error(JSON.stringify(result.errors.slice(0, 3)));
+    expect(result.bank.clubs[0]?.region).toBe("Norte");
+    expect(result.bank.clubs[1]?.region).toBeUndefined();
+    // um CSV antigo, sem a coluna, continua sendo aceito
+    const header = (csv.split(/\r?\n/)[0] ?? "").replace(/^\uFEFF/, "").split(",");
+    const without = csv
+      .replace(/^\uFEFF/, "")
+      .split(/\r?\n/)
+      .filter((line) => line !== "")
+      .map((line) => line.split(",").slice(0, header.indexOf("region")).join(","))
+      .join("\n");
+    const old = applyCsv(bank, { clubs: without });
+    if (!old.ok) throw new Error(JSON.stringify(old.errors.slice(0, 3)));
+    expect(old.bank.clubs[0]?.region).toBeUndefined();
+  });
+
   it("exporta com BOM e vírgula; aceita ponto e vírgula, aspas, sem BOM e CRLF", () => {
     const csv = clubsToCsv(bank);
     expect(csv.startsWith("﻿id,name,")).toBe(true);

@@ -1,5 +1,12 @@
-import type { Competition, ModPackage } from "../../src/model/types";
+import type {
+  Competition,
+  GroupsStage,
+  KnockoutStage,
+  ModPackage,
+  StageFormat,
+} from "../../src/model/types";
 import type { IssueCode, IssueParams, Section } from "../../src/validation/issues";
+import { regionalPackage } from "../fixtures/stages-bank";
 import { at, leagueFormatOf, makeValidBank, removeField, setRaw } from "../helpers/build-bank";
 
 export interface RuleCase {
@@ -82,6 +89,26 @@ const division = (bank: ModPackage, index: number) => at(at(bank.competitions, 0
  * Base: makeValidBank() — clubes clube-1..4 na divisão 1, clube-5..8 na divisão 2, 16 jogadores
  * por clube (índices 0–15 do clube-1, com goleiros nos índices 0 e 1).
  */
+
+/**
+ * Banco regional (019): a divisão de baixo (posição 1) tem 20 clubes em 4 grupos de 5, 2
+ * classificados por grupo, seguidos de mata-mata de 8 clubes. `edit` monta cada variante inválida.
+ */
+function stagedBank(bank: ModPackage, edit: (stages: StageFormat[], lowerClubs: string[]) => void) {
+  Object.assign(bank, JSON.parse(JSON.stringify(regionalPackage())) as ModPackage);
+  const lower = at(at(bank.competitions, 0).divisions, 1);
+  const stages = lower.stages as StageFormat[];
+  edit(stages, lower.clubIds);
+}
+
+const LOWER_STAGE = [0, "divisions", 1, "stages"] as const;
+
+function groupsAt(stages: StageFormat[], index = 0): GroupsStage {
+  const stage = stages[index];
+  if (stage?.type !== "groups") throw new Error("não é fase de grupos");
+  return stage;
+}
+
 export const RULE_CASES: RuleCase[] = [
   {
     code: "schema.required",
@@ -189,13 +216,13 @@ export const RULE_CASES: RuleCase[] = [
   },
   {
     code: "format.unsupported",
-    description: "formato de grupos",
-    mutate: (bank) => setRaw(at(bank.competitions, 0), "format", { type: "groups" }),
+    description: "formato de disputa desconhecido",
+    mutate: (bank) => setRaw(at(bank.competitions, 0), "format", { type: "round-robin" }),
     expect: {
       section: "competitions",
       path: [0, "format", "type"],
       entityId: "liga",
-      params: { type: "groups" },
+      params: { type: "round-robin" },
     },
   },
   {
@@ -476,6 +503,28 @@ export const RULE_CASES: RuleCase[] = [
     },
   },
   {
+    code: "stages.gap_conflict",
+    description: "respiro entre fases numa competição de duas divisões",
+    mutate: (bank) => {
+      const lower = at(at(bank.competitions, 0).divisions, 1);
+      lower.stages = [
+        {
+          type: "league",
+          rounds: 1,
+          points: { win: 3, draw: 1, loss: 0 },
+          tiebreakers: ["wins"],
+          gapWeeks: 1,
+        },
+      ];
+    },
+    expect: {
+      section: "competitions",
+      path: [0, "schedule"],
+      entityId: "liga",
+      params: { competitionId: "liga" },
+    },
+  },
+  {
     code: "knockout.single_division",
     description: "copa com duas divisões",
     mutate: (bank) =>
@@ -709,6 +758,240 @@ export const RULE_CASES: RuleCase[] = [
       path: [0, "crest", "image"],
       entityId: "clube-1",
       params: { field: "crest.image", format: "crest-image", value: "escudo.gif" },
+    },
+  },
+  {
+    code: "stages.group_size_mismatch",
+    description: "20 clubes em grupos de 6",
+    mutate: (bank) =>
+      stagedBank(bank, (stages) => {
+        groupsAt(stages).groupSize = 6;
+      }),
+    expect: {
+      section: "competitions",
+      path: [...LOWER_STAGE, 0, "groupSize"],
+      entityId: "liga-nacional",
+      params: { stage: 1, clubs: 20, groupSize: 6 },
+    },
+  },
+  {
+    code: "stages.group_count",
+    description: "um único grupo",
+    mutate: (bank) =>
+      stagedBank(bank, (stages, clubs) => {
+        clubs.length = 8;
+        groupsAt(stages).groupSize = 8;
+      }),
+    expect: {
+      section: "competitions",
+      path: [...LOWER_STAGE, 0, "groupSize"],
+      entityId: "liga-nacional",
+      params: { stage: 1, groups: 1 },
+    },
+  },
+  {
+    code: "stages.qualify_range",
+    description: "5 classificados por grupo de 5",
+    mutate: (bank) =>
+      stagedBank(bank, (stages) => {
+        groupsAt(stages).qualified = 5;
+      }),
+    expect: {
+      section: "competitions",
+      path: [...LOWER_STAGE, 0, "qualified"],
+      entityId: "liga-nacional",
+      params: { stage: 1, qualified: 5, max: 4 },
+    },
+  },
+  {
+    code: "stages.extra_exceeds_groups",
+    description: "6 vagas extras para 4 grupos",
+    mutate: (bank) =>
+      stagedBank(bank, (stages) => {
+        groupsAt(stages).extra = 6;
+      }),
+    expect: {
+      section: "competitions",
+      path: [...LOWER_STAGE, 0, "extra"],
+      entityId: "liga-nacional",
+      params: { stage: 1, extra: 6, groups: 4 },
+    },
+  },
+  {
+    code: "stages.qualify_mismatch",
+    description: "12 classificados não fecham o mata-mata de 8",
+    mutate: (bank) =>
+      stagedBank(bank, (stages) => {
+        groupsAt(stages).qualified = 3;
+      }),
+    expect: {
+      section: "competitions",
+      path: [...LOWER_STAGE, 0, "qualified"],
+      entityId: "liga-nacional",
+      params: { stage: 1, qualifying: 12, next: 2, nextClubs: 12 },
+    },
+  },
+  {
+    code: "stages.qualified_without_next",
+    description: "última fase que declara classificados",
+    mutate: (bank) =>
+      stagedBank(bank, (stages) => {
+        stages.length = 1;
+      }),
+    expect: {
+      section: "competitions",
+      path: [...LOWER_STAGE, 0, "qualified"],
+      entityId: "liga-nacional",
+      params: { stage: 1 },
+    },
+  },
+  {
+    code: "stages.knockout_count",
+    description: "mata-mata de 20 clubes que não termina em 2",
+    mutate: (bank) =>
+      stagedBank(bank, (stages) => {
+        const knockout = stages[1] as KnockoutStage;
+        stages.splice(0, 2, knockout);
+      }),
+    expect: {
+      section: "competitions",
+      path: [...LOWER_STAGE, 0, "phases", 2],
+      entityId: "liga-nacional",
+      params: { stage: 1, phase: 3, count: 5, delta: -3 },
+    },
+  },
+  {
+    code: "stages.enter_unknown_club",
+    description: "entrada de clube que não está na divisão",
+    mutate: (bank) =>
+      stagedBank(bank, (stages) => {
+        (stages[1] as KnockoutStage).enter = ["clube-inexistente"];
+      }),
+    expect: {
+      section: "competitions",
+      path: [...LOWER_STAGE, 1, "enter", 0],
+      entityId: "liga-nacional",
+      params: { stage: 2, clubId: "clube-inexistente" },
+    },
+  },
+  {
+    code: "stages.enter_first_stage",
+    description: "entrada declarada na primeira fase",
+    mutate: (bank) =>
+      stagedBank(bank, (stages, clubs) => {
+        groupsAt(stages).enter = [clubs[0] as string];
+      }),
+    expect: {
+      section: "competitions",
+      path: [...LOWER_STAGE, 0, "enter", 0],
+      entityId: "liga-nacional",
+      params: { stage: 1, clubId: "clube-021" },
+    },
+  },
+  {
+    code: "stages.enter_duplicate",
+    description: "o mesmo clube nas entradas duas vezes",
+    mutate: (bank) =>
+      stagedBank(bank, (stages, clubs) => {
+        (stages[1] as KnockoutStage).enter = [clubs[0] as string, clubs[0] as string];
+      }),
+    expect: {
+      section: "competitions",
+      path: [...LOWER_STAGE, 1, "enter", 1],
+      entityId: "liga-nacional",
+      params: { stage: 2, clubId: "clube-021" },
+    },
+  },
+  {
+    code: "stages.pots_range",
+    description: "4 potes para grupos de 5",
+    mutate: (bank) =>
+      stagedBank(bank, (stages) => {
+        groupsAt(stages).draw = { pots: 4 };
+      }),
+    expect: {
+      section: "competitions",
+      path: [...LOWER_STAGE, 0, "draw", "pots"],
+      entityId: "liga-nacional",
+      params: { stage: 1, pots: 4, groupSize: 5 },
+    },
+  },
+  {
+    code: "stages.pot_size",
+    description: "pote dos classificados da fase anterior na primeira fase",
+    mutate: (bank) =>
+      stagedBank(bank, (stages) => {
+        groupsAt(stages).draw = { pots: 5, previousStagePot: true };
+      }),
+    expect: {
+      section: "competitions",
+      path: [...LOWER_STAGE, 0, "draw", "previousStagePot"],
+      entityId: "liga-nacional",
+      params: { stage: 1, pot: 5, clubs: 0, groups: 4 },
+    },
+  },
+  {
+    code: "stages.rule_exempt_pot",
+    description: "isenção de um pote que não existe",
+    mutate: (bank) =>
+      stagedBank(bank, (stages) => {
+        groupsAt(stages).draw = {
+          pots: 5,
+          rules: [{ kind: "separate", attribute: "region", exemptPots: [6] }],
+        };
+      }),
+    expect: {
+      section: "competitions",
+      path: [...LOWER_STAGE, 0, "draw", "rules", 0, "exemptPots", 0],
+      entityId: "liga-nacional",
+      params: { stage: 1, pot: 6, pots: 5 },
+    },
+  },
+  {
+    code: "stages.pairs_invalid",
+    description: "tabela de confrontos com um grupo que não existe",
+    mutate: (bank) =>
+      stagedBank(bank, (stages) => {
+        (stages[1] as KnockoutStage).pairs = [
+          ["A1", "E1"],
+          ["B1", "A2"],
+          ["C1", "D2"],
+          ["D1", "C2"],
+        ];
+      }),
+    expect: {
+      section: "competitions",
+      path: [...LOWER_STAGE, 1, "pairs", 0, 1],
+      entityId: "liga-nacional",
+      params: { stage: 2, origin: "E1" },
+    },
+  },
+  {
+    code: "stages.relegation_exceeds_eliminated",
+    description: "rebaixamento maior que os clubes que ficam nos grupos",
+    mutate: (bank) =>
+      stagedBank(bank, () => {
+        at(at(bank.competitions, 0).divisions, 1).relegationSlots = 13;
+      }),
+    expect: {
+      section: "competitions",
+      path: [0, "divisions", 1, "relegationSlots"],
+      entityId: "liga-nacional",
+      params: { level: 2, relegation: 13, eliminated: 12 },
+    },
+  },
+  {
+    code: "stages.separation_impossible",
+    description: "20 clubes do mesmo país em 4 grupos, sem se encontrar",
+    mutate: (bank) =>
+      stagedBank(bank, (stages) => {
+        groupsAt(stages).draw = { rules: [{ kind: "separate", attribute: "country" }] };
+      }),
+    expect: {
+      section: "competitions",
+      path: [...LOWER_STAGE, 0, "draw", "rules", 0],
+      entityId: "liga-nacional",
+      params: { stage: 1, attribute: "country", value: "val", clubs: 20, groups: 4 },
     },
   },
 ];

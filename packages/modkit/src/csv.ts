@@ -27,6 +27,7 @@ export const CLUB_COLUMNS = [
   "crestColor3",
   "crestInitials",
   "crestImage",
+  "region",
 ] as const;
 
 /** Colunas de `players.csv` (docs/mod-format.md §10). */
@@ -50,7 +51,7 @@ export const PLAYER_COLUMNS = [
 ] as const;
 
 const CLUB_REQUIRED = CLUB_COLUMNS.filter(
-  (column) => column !== "crestColor3" && column !== "crestImage",
+  (column) => column !== "crestColor3" && column !== "crestImage" && column !== "region",
 );
 const PLAYER_REQUIRED = PLAYER_COLUMNS.slice(0, 9);
 const CLUB_NUMBERS = new Set(["reputation", "stadiumCapacity", "initialCash"]);
@@ -106,6 +107,7 @@ export function clubsToCsv(bank: Pick<ModPackage, "clubs">): string {
       crestColor3: club.crest.colors[2] ?? "",
       crestInitials: club.crest.initials,
       crestImage: club.crest.image ?? "",
+      region: club.region ?? "",
     })),
   );
 }
@@ -290,6 +292,7 @@ function clubFrom(row: CsvRow): Club {
     reputation: Number(v.reputation),
     stadiumCapacity: Number(v.stadiumCapacity),
     initialCash: Number(v.initialCash),
+    ...(v.region ? { region: v.region } : {}),
   };
 }
 

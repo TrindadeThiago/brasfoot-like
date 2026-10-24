@@ -1,0 +1,34 @@
+{
+  "calendars": {
+    "4x1:freeze-0": "145cbf8a",
+    "4x2:freeze-1": "f9ed8b42",
+    "5x1:freeze-2": "125a0aed",
+    "5x2:freeze-3": "5e926de3",
+    "6x1:freeze-4": "fc07dae0",
+    "6x2:freeze-5": "3e701d5b",
+    "7x1:freeze-6": "6eb7ae8c",
+    "7x2:freeze-7": "b6bd07f7",
+    "8x1:freeze-8": "358e74de",
+    "8x2:freeze-9": "a1b5f777",
+    "9x1:freeze-10": "fb999cab",
+    "9x2:freeze-11": "55829911",
+    "10x1:freeze-12": "95ff782b",
+    "10x2:freeze-13": "182d5d83",
+    "12x1:freeze-14": "f5e26260",
+    "12x2:freeze-15": "f6bde6d2",
+    "15x1:freeze-16": "924211f",
+    "15x2:freeze-17": "773d464b",
+    "16x1:freeze-18": "f76ed722",
+    "16x2:freeze-19": "3390a9b7",
+    "19x1:freeze-20": "678d2bce",
+    "19x2:freeze-21": "a13efb0d",
+    "20x1:freeze-22": "76f07f56",
+    "20x2:freeze-23": "f0fe5d07"
+  },
+  "standings": {
+    "freeze-liga-1:r10": "97223f9e",
+    "freeze-liga-1:fim": "e4fa3a02",
+    "freeze-liga-2:r10": "281b7f06",
+    "freeze-liga-2:fim": "11498611"
+  }
+}

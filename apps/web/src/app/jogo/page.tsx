@@ -32,6 +32,7 @@ import { WindowStatus } from "../../ui/market/WindowStatus";
 import { NewsCard } from "../../ui/news/NewsCard";
 import { RoundResults } from "../../ui/RoundResults";
 import { SquadChangeNotice } from "../../ui/SquadChangeNotice";
+import { stageLabel } from "../../ui/stages/label";
 import styles from "./page.module.css";
 
 type Game = Parameters<Parameters<typeof GameLayout>[0]["children"]>[1];
@@ -211,7 +212,8 @@ export default function HomePage() {
                       </span>
                     ) : null}
                     <span>
-                      {phaseLabel(save, next.competitionId, next.round) ??
+                      {stageLabel(save, next) ??
+                        phaseLabel(save, next.competitionId, next.round) ??
                         t("home.roundLabel", { round: next.round })}
                     </span>
                   </div>

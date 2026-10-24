@@ -16,6 +16,23 @@ describe("banco válido", () => {
   });
 });
 
+describe("formato de disputa", () => {
+  it("groups não é mais reservado: um grupo bem formado é aceito", () => {
+    const bank = makeValidBank();
+    const competition = at(bank.competitions, 0);
+    const clubs = competition.divisions.flatMap((division) => division.clubIds).length;
+    expect(clubs).toBeGreaterThan(0);
+    (competition as { format: unknown }).format = {
+      type: "groups",
+      groupSize: 4,
+      rounds: 1,
+      points: { win: 3, draw: 1, loss: 0 },
+      tiebreakers: ["goal-difference", "draw-lots"],
+    };
+    expect(errorsOf(bank).filter((issue) => issue.code === "format.unsupported")).toEqual([]);
+  });
+});
+
 describe("erros estruturais", () => {
   it("campo obrigatório ausente ⇒ schema.required", () => {
     const bank = makeValidBank();
@@ -119,16 +136,16 @@ describe("erros estruturais", () => {
     ]);
   });
 
-  it("formato de disputa reservado ⇒ format.unsupported sem erros derivados", () => {
+  it("formato de disputa desconhecido ⇒ format.unsupported sem erros derivados", () => {
     const bank = makeValidBank();
-    setRaw(at(bank.competitions, 0), "format", { type: "groups", legs: 2 });
+    setRaw(at(bank.competitions, 0), "format", { type: "round-robin", legs: 2 });
     expect(errorsOf(bank)).toEqual([
       expect.objectContaining({
         code: "format.unsupported",
         section: "competitions",
         path: [0, "format", "type"],
         entityId: "liga",
-        params: { type: "groups" },
+        params: { type: "round-robin" },
       }),
     ]);
   });

@@ -1,6 +1,7 @@
 import type { Bracket } from "../knockout/types";
 import type { FormationId } from "../match/formations";
 import type { InjurySeverity, MatchDecision, MatchEvent, Side, TeamStats } from "../match/types";
+import type { CupViewInfo, FixtureStage, StageState } from "../stages/types";
 
 export interface DisciplineRules {
   yellowsForSuspension: number;
@@ -33,6 +34,8 @@ export interface Fixture {
   tie?: { phase: number; id: string; leg: 1 | 2; legs: 1 | 2 };
   /** Campo neutro (a final da copa, 018). */
   neutral?: boolean;
+  /** Fase e grupo do jogo, numa divisão disputada em fases (019). */
+  stage?: FixtureStage;
 }
 
 export interface Round {
@@ -40,6 +43,8 @@ export interface Round {
   fixtures: Fixture[];
   /** Clube que folga (só com número ímpar de clubes). */
   bye?: string;
+  /** Clubes que folgam quando há grupos de tamanho ímpar (019). */
+  byes?: string[];
 }
 
 export interface PlayerStatus {
@@ -104,6 +109,10 @@ export interface Season {
   warnings: SeasonWarning[];
   /** Chaveamento da copa; só nas competições eliminatórias (018). */
   bracket?: Bracket;
+  /** Fases da divisão, quando ela é disputada em fases (019); ausente em ligas e copas. */
+  stages?: StageState[];
+  /** Só em visões da fase eliminatória (019 R3); transitório, nunca gravado. */
+  cupView?: CupViewInfo;
 }
 
 export type SeasonStep = { rounds: number } | { toEnd: true };

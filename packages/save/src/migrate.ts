@@ -249,6 +249,18 @@ const addCupHistory: Migration = {
   },
 };
 
+/**
+ * v13 → v14: divisões em fases (019). Os campos novos (`Season.stages`, `Fixture.stage`,
+ * `Round.byes`, `club.region`, `division.stages`) são opcionais e só existem em temporadas e bancos
+ * que usam fases; um save antigo continua exatamente como era.
+ */
+const addStages: Migration = {
+  from: 13,
+  migrate(raw) {
+    return { ...(raw as object), formatVersion: 14 };
+  },
+};
+
 /** Migrações reais do formato, em ordem. */
 export const MIGRATIONS: readonly Migration[] = [
   addLineup,
@@ -263,6 +275,7 @@ export const MIGRATIONS: readonly Migration[] = [
   addAssets,
   addCalendar,
   addCupHistory,
+  addStages,
 ];
 
 /** Problemas que tornam a escalação gravada ilegível (os demais o jogo corrige ou avisa). */
@@ -568,6 +581,56 @@ function cupProblem(save: SaveFile): string | undefined {
   return undefined;
 }
 
+/**
+ * Divisões em fases (019): as rodadas das fases cobrem o calendário em ordem; uma fase que não
+ * começou não tem jogos nem clubes; uma que começou tem grupos coerentes e rodadas completas.
+ */
+function stagesProblem(save: SaveFile): string | undefined {
+  for (const league of [save.league, ...save.competitions]) {
+    for (const season of league.divisions) {
+      const stages = season.stages;
+      if (!stages) continue;
+      const label = `${league.competitionId} nível ${season.divisionLevel}`;
+      const rounds = stages.flatMap((stage) => stage.rounds);
+      if (
+        rounds.length !== season.calendar.length ||
+        rounds.some((round, index) => round !== index + 1)
+      ) {
+        return `rodadas das fases não cobrem o calendário: ${label}`;
+      }
+      for (const stage of stages) {
+        const fixtures = (round: number) => season.calendar[round - 1]?.fixtures.length ?? 0;
+        if (!stage.started) {
+          if (stage.clubIds.length > 0 || stage.rounds.some((round) => fixtures(round) > 0)) {
+            return `fase ${stage.index + 1} sem começar já tem clubes ou jogos: ${label}`;
+          }
+          continue;
+        }
+        if (stage.clubIds.some((clubId) => !season.clubIds.includes(clubId))) {
+          return `fase ${stage.index + 1} com clube de fora da divisão: ${label}`;
+        }
+        if (stage.kind === "groups") {
+          const grouped = (stage.groups ?? []).flatMap((group) => group.clubIds).sort();
+          if (grouped.join() !== [...stage.clubIds].sort().join()) {
+            return `grupos da fase ${stage.index + 1} não reúnem os clubes dela: ${label}`;
+          }
+        }
+        if (stage.kind === "knockout") {
+          for (const phase of stage.bracket?.phases ?? []) {
+            if (!phase.drawn) continue;
+            for (const round of phase.rounds) {
+              if (fixtures(round) !== phase.ties.length) {
+                return `fixtures incompletas no mata-mata da fase ${stage.index + 1}: ${label}`;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return undefined;
+}
+
 /** Toda equipe da liga tem torcida (013 data-model.md). */
 function fansProblem(save: SaveFile): string | undefined {
   const missing = save.league.divisions
@@ -636,6 +699,7 @@ export function migrateSave(
     fansProblem(save) ??
     calendarProblem(save) ??
     cupProblem(save) ??
+    stagesProblem(save) ??
     newsProblem(save);
   if (incoherence) return { status: "corrupt", reason: incoherence };
   const season = save.league.divisions.find((entry) => entry.clubIds.includes(save.clubId));

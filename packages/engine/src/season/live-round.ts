@@ -10,6 +10,7 @@ import { maximizeAssignment } from "../match/hungarian";
 import { matchResult } from "../match/result";
 import type { Lineup, MatchChange, MatchState, Side } from "../match/types";
 import type { CompletedBank, CompletedPlayer } from "../model/types";
+import { advanceStages } from "../stages/advance";
 import { applyMatchToStatus } from "./discipline";
 import { type SeasonError, seasonError } from "./errors";
 import { type PreparedFixture, prepareFixture, squadsByClub } from "./fixture";
@@ -222,7 +223,7 @@ export function formationChange(
 /** Registros, disciplina, lesões e avisos da rodada terminada aplicados à temporada. */
 export function completeRound(
   season: Season,
-  _world: CompletedBank,
+  world: CompletedBank,
   round: LiveRound,
 ): { ok: true; season: Season } | { ok: false; error: SeasonError } {
   if (round.round !== season.nextRound) throw new Error("rodada de outra temporada ou já fechada");
@@ -261,5 +262,6 @@ export function completeRound(
     applyMatchToStatus(next.status, record, "away", next.rules, next.seed);
   }
   next.nextRound += 1;
-  return { ok: true, season: next };
+  // Divisão em fases (019): a fase seguinte começa assim que a anterior termina; sem `stages`, não faz nada.
+  return { ok: true, season: advanceStages(next, world) };
 }

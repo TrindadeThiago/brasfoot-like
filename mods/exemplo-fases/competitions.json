@@ -1,0 +1,214 @@
+[
+  {
+    "countryId": "val",
+    "divisions": [
+      {
+        "clubIds": [
+          "clube-001",
+          "clube-002",
+          "clube-003",
+          "clube-004",
+          "clube-005",
+          "clube-006",
+          "clube-007",
+          "clube-008",
+          "clube-009",
+          "clube-010",
+          "clube-011",
+          "clube-012",
+          "clube-013",
+          "clube-014",
+          "clube-015",
+          "clube-016",
+          "clube-017",
+          "clube-018",
+          "clube-019",
+          "clube-020"
+        ],
+        "level": 1,
+        "name": "Série A",
+        "promotionSlots": 0,
+        "relegationSlots": 2
+      },
+      {
+        "clubIds": [
+          "clube-021",
+          "clube-022",
+          "clube-023",
+          "clube-024",
+          "clube-025",
+          "clube-026",
+          "clube-027",
+          "clube-028",
+          "clube-029",
+          "clube-030",
+          "clube-031",
+          "clube-032",
+          "clube-033",
+          "clube-034",
+          "clube-035",
+          "clube-036",
+          "clube-037",
+          "clube-038",
+          "clube-039",
+          "clube-040"
+        ],
+        "level": 2,
+        "name": "Série B",
+        "promotionSlots": 2,
+        "relegationSlots": 0,
+        "stages": [
+          {
+            "draw": {
+              "rules": [
+                {
+                  "attribute": "region",
+                  "kind": "concentrate"
+                }
+              ]
+            },
+            "groupSize": 5,
+            "points": {
+              "draw": 1,
+              "loss": 0,
+              "win": 3
+            },
+            "qualified": 2,
+            "rounds": 1,
+            "tiebreakers": [
+              "wins",
+              "goal-difference",
+              "goals-for",
+              "head-to-head",
+              "draw-lots"
+            ],
+            "type": "groups"
+          },
+          {
+            "phases": [
+              {
+                "home": "overall",
+                "legs": 1,
+                "name": "Quartas de final",
+                "prize": 0,
+                "tiebreakers": [
+                  "extra-time",
+                  "penalties"
+                ]
+              },
+              {
+                "home": "overall",
+                "legs": 1,
+                "name": "Semifinal",
+                "prize": 0,
+                "tiebreakers": [
+                  "extra-time",
+                  "penalties"
+                ]
+              },
+              {
+                "home": "draw",
+                "legs": 1,
+                "name": "Final",
+                "neutral": true,
+                "prize": 0,
+                "tiebreakers": [
+                  "extra-time",
+                  "penalties"
+                ]
+              }
+            ],
+            "type": "knockout"
+          }
+        ]
+      }
+    ],
+    "economy": {
+      "credit": {
+        "interestBp": 30,
+        "perReputation": 30000
+      },
+      "crisisRounds": 10,
+      "divisions": [
+        {
+          "creditBase": 2000000,
+          "fanFactorPct": 100,
+          "level": 1,
+          "prizes": {
+            "first": 2000000,
+            "last": 300000,
+            "title": 1000000
+          },
+          "referencePrice": 12,
+          "sponsorship": {
+            "base": 900000,
+            "perReputation": 0,
+            "wageSharePct": 30
+          }
+        },
+        {
+          "creditBase": 1000000,
+          "fanFactorPct": 70,
+          "level": 2,
+          "prizes": {
+            "first": 900000,
+            "last": 150000,
+            "title": 400000
+          },
+          "referencePrice": 8,
+          "sponsorship": {
+            "base": 400000,
+            "perReputation": 0,
+            "wageSharePct": 60
+          }
+        }
+      ],
+      "fansBase": 16000,
+      "fansPerReputation": 50,
+      "priceElasticityPct": 150,
+      "priceRange": {
+        "max": 200,
+        "min": 5
+      },
+      "stadium": {
+        "maxCapacity": 100000,
+        "options": [
+          {
+            "cost": 1500000,
+            "rounds": 6,
+            "seats": 2000
+          },
+          {
+            "cost": 4000000,
+            "rounds": 12,
+            "seats": 5000
+          },
+          {
+            "cost": 9000000,
+            "rounds": 20,
+            "seats": 10000
+          }
+        ]
+      },
+      "wageFactorPct": 100
+    },
+    "format": {
+      "points": {
+        "draw": 1,
+        "loss": 0,
+        "win": 3
+      },
+      "rounds": 2,
+      "tiebreakers": [
+        "wins",
+        "goal-difference",
+        "goals-for",
+        "head-to-head",
+        "draw-lots"
+      ],
+      "type": "league"
+    },
+    "id": "liga-nacional",
+    "name": "Campeonato Valtoriano"
+  }
+]

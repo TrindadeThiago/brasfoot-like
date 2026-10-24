@@ -13,6 +13,26 @@ import { type Column, DataTable } from "./DataTable";
 import { FormChips } from "./FormChips";
 import styles from "./StandingsTable.module.css";
 
+type Zone =
+  | "promotion"
+  | "relegation"
+  | "qualified"
+  | "extra"
+  | "qualifiedToday"
+  | "extraToday"
+  | "relegationToday";
+
+/** Cor da marca de cada zona. */
+const TONE: Record<Zone, "promotion" | "relegation" | "qualified" | "extra"> = {
+  promotion: "promotion",
+  relegation: "relegation",
+  qualified: "qualified",
+  extra: "extra",
+  qualifiedToday: "qualified",
+  extraToday: "extra",
+  relegationToday: "relegation",
+};
+
 /**
  * Classificação da divisão (padrão: a do jogador), com o clube do jogador destacado e, com
  * `zones`, as posições de acesso e rebaixamento marcadas em texto (FR-006).
@@ -22,15 +42,36 @@ export function StandingsTable({
   caption,
   season = userSeason(save),
   zones,
+  rows: given,
+  qualification,
+  zoneOf: customZone,
+  legend: customLegend,
+  extraColumns = [],
 }: {
   save: SaveFile;
   caption: string;
   season?: Season;
   zones?: DivisionZones;
+  /** Linhas já calculadas (a tabela de um grupo, 019); sem elas, a classificação da divisão. */
+  rows?: readonly StandingRow[];
+  /** Zona de classificação de uma fase de pontos: os `qualified` primeiros e, com `extra`, a posição seguinte. */
+  qualification?: { qualified: number; extra: boolean };
+  /** Zona de cada linha, no lugar das calculadas por `zones` e `qualification` (019). */
+  zoneOf?: (row: StandingRow) => Zone | undefined;
+  /** Texto da legenda, no lugar do calculado. */
+  legend?: string;
+  /** Colunas a mais, depois do clube (por exemplo o grupo, na classificação geral). */
+  extraColumns?: Column<StandingRow>[];
 }) {
   const t = useT();
-  const rows = standings(season, save.bank);
-  const zoneOf = (row: StandingRow): "promotion" | "relegation" | undefined => {
+  const rows = given ?? standings(season, save.bank);
+  const zoneOf = (row: StandingRow): Zone | undefined => {
+    if (customZone) return customZone(row);
+    if (qualification) {
+      if (row.position <= qualification.qualified) return "qualified";
+      if (qualification.extra && row.position === qualification.qualified + 1) return "extra";
+      return undefined;
+    }
     if (!zones) return undefined;
     if (row.position <= zones.promotion) return "promotion";
     if (row.position > rows.length - zones.relegation) return "relegation";
@@ -53,8 +94,12 @@ export function StandingsTable({
           <span className={styles.position}>
             {row.position}
             {zone ? (
-              <span className={`${styles.zone} ${styles[zone]}`}>
-                {t(`standings.zone.${zone}`)}
+              <span className={`${styles.zone} ${styles[TONE[zone]]}`}>
+                {t(
+                  zone === "promotion" || zone === "relegation"
+                    ? `standings.zone.${zone}`
+                    : `stages.zone.${zone}`,
+                )}
               </span>
             ) : null}
           </span>
@@ -75,6 +120,7 @@ export function StandingsTable({
       },
       sortValue: (row) => clubs.get(row.clubId)?.name ?? row.clubId,
     },
+    ...extraColumns,
     number("points", t("col.points")),
     number("played", t("col.played")),
     number("wins", t("col.wins")),
@@ -89,14 +135,20 @@ export function StandingsTable({
     },
     { key: "form", header: t("col.form"), render: (row) => <FormChips form={row.form} /> },
   ];
-  const legend =
-    zones && zones.promotion + zones.relegation > 0
-      ? t("standings.zone.legend", {
-          promotion: zones.promotion,
-          relegation: zones.relegation,
-          both: zones.promotion > 0 && zones.relegation > 0 ? "yes" : "no",
+  const legend = customLegend
+    ? customLegend
+    : qualification
+      ? t("stages.zone.legend", {
+          qualified: qualification.qualified,
+          extra: qualification.extra ? "yes" : "no",
         })
-      : undefined;
+      : zones && zones.promotion + zones.relegation > 0
+        ? t("standings.zone.legend", {
+            promotion: zones.promotion,
+            relegation: zones.relegation,
+            both: zones.promotion > 0 && zones.relegation > 0 ? "yes" : "no",
+          })
+        : undefined;
   return (
     <>
       <DataTable

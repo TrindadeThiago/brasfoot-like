@@ -2,6 +2,7 @@ import { z } from "zod";
 import { parseIsoDate } from "../calendar/date";
 import {
   CREST_SHAPES,
+  DRAW_ATTRIBUTES,
   KNOCKOUT_HOME_RULES,
   KNOCKOUT_TIEBREAKERS,
   POSITIONS,
@@ -19,6 +20,8 @@ const ID_PATTERN = /^[a-z0-9][a-z0-9-]{0,63}$/;
 const COLOR_PATTERN = /^#[0-9a-fA-F]{6}$/;
 const SEMVER_PATTERN = /^\d+\.\d+\.\d+$/;
 const ABBREVIATION_PATTERN = /^[A-Z]{3}$/;
+/** Origem de uma vaga numa tabela de confrontos (019 R7): `A1` (1º do Grupo A), `T3`, `X1`. */
+const ORIGIN_PATTERN = /^([A-Z]\d{1,2}|T\d{1,2}|X\d{1,2})$/;
 const COUNTRY_CODE_PATTERN = /^[A-Z]{3}$/;
 const INITIALS_PATTERN = /^[\p{L}\p{N}]+$/u;
 /** Imagem de escudo dentro do pacote (015): `images/…` em PNG, JPEG ou WebP. */
@@ -73,14 +76,16 @@ export const countrySchema = z.object({
   names: z.object({ firstNames: z.array(text(1, 30)), surnames: z.array(text(1, 30)) }).optional(),
 });
 
+const pointsSchema = z.object({
+  win: intInRange(0, 10),
+  draw: intInRange(0, 10),
+  loss: intInRange(0, 10),
+});
+
 export const leagueFormatSchema = z.object({
   type: z.literal("league"),
   rounds: intInRange(1, 4),
-  points: z.object({
-    win: intInRange(0, 10),
-    draw: intInRange(0, 10),
-    loss: intInRange(0, 10),
-  }),
+  points: pointsSchema,
   tiebreakers: list(z.enum(TIEBREAKERS), 1, TIEBREAKERS.length),
 });
 
@@ -109,9 +114,68 @@ export const knockoutFormatSchema = z.object({
   entries: z.array(knockoutEntrySchema).optional(),
 });
 
+/** Pontos corridos como fase de uma sequência (019 R1): a liga mais quem avança e quem entra. */
+export const leagueStageSchema = leagueFormatSchema.extend({
+  qualified: intInRange(1, 40).optional(),
+  enter: z.array(id).optional(),
+  gapWeeks: intInRange(0, 8).optional(),
+});
+
+/** Regra de sorteio dos grupos (019 R6): separação (obrigatória) ou concentração (preferência). */
+export const drawRuleSchema = z.discriminatedUnion("kind", [
+  z.object({
+    kind: z.literal("separate"),
+    attribute: z.enum(DRAW_ATTRIBUTES),
+    exemptPots: z.array(intInRange(1, 8)).optional(),
+  }),
+  z.object({ kind: z.literal("concentrate"), attribute: z.literal("region") }),
+]);
+
+export const groupDrawSchema = z.object({
+  pots: intInRange(2, 8).optional(),
+  previousStagePot: z.boolean().optional(),
+  rules: list(drawRuleSchema, 0, 8).optional(),
+});
+
+/** Fase de grupos (019): tamanho, turnos, pontuação, classificados e sorteio. */
+export const groupsStageSchema = z.object({
+  type: z.literal("groups"),
+  groupSize: intInRange(3, 8),
+  rounds: z.union([z.literal(1), z.literal(2)]),
+  points: pointsSchema,
+  tiebreakers: list(z.enum(TIEBREAKERS), 1, TIEBREAKERS.length),
+  qualified: intInRange(1, 7).optional(),
+  extra: intInRange(0, 16).optional(),
+  enter: z.array(id).optional(),
+  gapWeeks: intInRange(0, 8).optional(),
+  draw: groupDrawSchema.optional(),
+});
+
+/** Mata-mata como fase de uma sequência: a copa da 018 mais pareamento e entradas (019 R7). */
+export const knockoutStageSchema = knockoutFormatSchema.extend({
+  pairing: z.enum(["position", "draw"]).optional(),
+  pairs: z
+    .array(z.tuple([pattern(ORIGIN_PATTERN, "origin"), pattern(ORIGIN_PATTERN, "origin")]))
+    .optional(),
+  enter: z.array(id).optional(),
+});
+
+export const stageFormatSchema = z.discriminatedUnion("type", [
+  leagueStageSchema,
+  groupsStageSchema,
+  knockoutStageSchema,
+]);
+
+export const stagesFormatSchema = z.object({
+  type: z.literal("stages"),
+  stages: list(stageFormatSchema, 1, 8),
+});
+
 export const competitionFormatSchema = z.discriminatedUnion("type", [
   leagueFormatSchema,
   knockoutFormatSchema,
+  groupsStageSchema,
+  stagesFormatSchema,
 ]);
 
 export const divisionSchema = z.object({
@@ -120,6 +184,8 @@ export const divisionSchema = z.object({
   clubIds: z.array(id),
   promotionSlots: intInRange(0, 40),
   relegationSlots: intInRange(0, 40),
+  /** Fases desta divisão; substituem o formato da competição (019 R1). */
+  stages: list(stageFormatSchema, 1, 8).optional(),
 });
 
 const money = intInRange(0, 10_000_000_000);
@@ -457,6 +523,8 @@ export const clubSchema = z.object({
   reputation: scale,
   stadiumCapacity: intInRange(1000, 150000),
   initialCash: intInRange(-1000000000, 10000000000),
+  /** Região do clube, usada pelas regras de sorteio dos grupos (019). */
+  region: text(1, 40).optional(),
 });
 
 export const hiddenAttributesSchema = z.object({

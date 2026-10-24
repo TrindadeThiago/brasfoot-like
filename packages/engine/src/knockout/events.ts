@@ -1,7 +1,7 @@
 import type { DayMatch } from "../career/season-state";
 import type { CompletedBank } from "../model/types";
 import type { Season } from "../season/types";
-import { knockoutFormat } from "./rules";
+import { cupFormat, cupMatchBelongs } from "./rules";
 import { cupChampion, cupReached, tieState } from "./tie";
 
 /** Fato de copa de um dia: eliminação ou título (fonte de torcida, diretoria e manchetes). */
@@ -33,10 +33,10 @@ export function cupEvents(
   matches: readonly DayMatch[],
 ): CupEvent[] {
   const events: CupEvent[] = [];
-  const phases = knockoutFormat(world, season.competitionId).phases.length;
+  const phases = cupFormat(world, season).phases.length;
   for (const match of matches) {
     const info = match.fixture.tie;
-    if (match.competitionId !== season.competitionId || !info || info.leg !== info.legs) continue;
+    if (!cupMatchBelongs(season, match) || !info || info.leg !== info.legs) continue;
     const state = tieState(season, info.phase, info.id);
     if (!state.decided || !state.winner || !state.loser) continue;
     events.push({
@@ -47,7 +47,8 @@ export function cupEvents(
       opponentId: state.winner,
       tie: info.id,
     });
-    if (info.phase === phases - 1) {
+    // O título da final de uma divisão em fases é o campeonato da divisão, não um título de copa.
+    if (info.phase === phases - 1 && !season.cupView) {
       events.push({
         clubId: state.winner,
         kind: "title",
@@ -67,7 +68,7 @@ export function cupEnd(
   season: Season,
   matches: readonly DayMatch[],
 ): CupEnd | undefined {
-  const phases = knockoutFormat(world, season.competitionId).phases.length;
+  const phases = cupFormat(world, season).phases.length;
   const finalPlayed = matches.some(
     (match) =>
       match.competitionId === season.competitionId && match.fixture.tie?.phase === phases - 1,

@@ -79,7 +79,7 @@ Lista com ao menos 1 país.
 
 ## 5. `competitions.json`
 
-Lista com ao menos 1 competição, em pontos corridos (`league`) ou mata-mata (`knockout`, uma copa). A **primeira** é a
+Lista com ao menos 1 competição, em pontos corridos (`league`), mata-mata (`knockout`, uma copa), fase de grupos (`groups`) ou uma sequência de fases (`stages`). A **primeira** é a
 competição **principal**: dela vêm a economia, o mercado, a diretoria, a torcida, as manchetes, o
 acesso e o rebaixamento que o jogo acompanha e o histórico da carreira. As demais são
 **secundárias**: têm partidas, tabela e estatísticas próprias, e todos os seus clubes precisam estar
@@ -146,7 +146,7 @@ o padrão.
 
 | Campo | Tipo | Descrição |
 |---|---|---|
-| `type` | `"league"` | pontos corridos (`knockout` é a copa, descrita abaixo; `groups` é reservado para o futuro) |
+| `type` | `"league"` | pontos corridos (`knockout` é a copa, `groups` e `stages` são as fases, descritas abaixo) |
 | `rounds` | inteiro(1, 4) | turnos (2 = ida e volta) |
 | `points` | objeto | `win`, `draw`, `loss`, inteiros(0, 10); vitória > empate ≥ derrota |
 | `tiebreakers` | lista | critérios de desempate, sem repetição: `wins`, `goal-difference`, `goals-for`, `head-to-head`, `fewest-red-cards`, `draw-lots` |
@@ -170,7 +170,7 @@ Cada item de `phases`:
 | `name` | texto(1, 40) | nome da fase (por exemplo, "Quartas de final") |
 | `legs` | 1 ou 2 | jogo único ou ida e volta |
 | `tiebreakers` | lista | critérios para decidir um confronto empatado, em ordem: `away-goals` (gols fora, só em ida e volta), `extra-time` (prorrogação de 2 × 15 min) e `penalties`; o último precisa ser `penalties`, para sempre haver um classificado |
-| `home` | texto | quem manda o jogo: `draw` (sorteio), `ranking` (o de maior reputação) ou `division` (o de divisão mais baixa; na mesma divisão, sorteio) |
+| `home` | texto | quem manda o jogo: `draw` (sorteio), `ranking` (o de maior reputação), `division` (o de divisão mais baixa; na mesma divisão, sorteio) ou `overall` (o melhor colocado na classificação geral da fase de pontos anterior; sem ela, vale `ranking`) |
 | `prize` | inteiro(0, 1000000000) | prêmio pago ao **vencedor** de cada confronto da fase, em reais (o campeão recebe o da final) |
 | `neutral` | verdadeiro/falso | campo neutro (só em jogo único); a renda do jogo fica sem mando (padrão falso) |
 | `neutralCapacity` | inteiro(1000, 150000) | capacidade do estádio neutro (só com `neutral`; padrão 40000) |
@@ -211,6 +211,171 @@ Exemplo, uma copa de 8 clubes (quartas, semifinal em ida e volta e final em camp
 }
 ```
 
+### Fases: grupos, pontos corridos e mata-mata em sequência
+
+Uma divisão (ou a competição inteira) pode ser disputada em **fases**, jogadas em ordem: cada
+fase classifica clubes para a seguinte. Há três tipos de fase (`league`, `groups` e `knockout`) e
+três maneiras de declarar:
+
+- `"format": { "type": "groups", … }`: a competição é uma única fase de grupos;
+- `"format": { "type": "stages", "stages": [ … ] }`: a competição é uma sequência de 1 a 8 fases;
+- `"stages": [ … ]` dentro de uma **divisão**: só aquela divisão é disputada em fases, e as demais
+  seguem o `format` da competição (por exemplo, a quarta divisão em grupos regionais seguidos de
+  mata-mata numa liga de pontos corridos). `division.stages` vale no lugar do `format`.
+
+A última fase da sequência não declara classificados: ela define a classificação final da divisão
+(campeão, acesso e rebaixamento). Cada fase seguinte joga com os classificados da anterior mais os
+clubes de `enter`. Respiros entre fases (`gapWeeks`) só cabem em competições de uma divisão.
+
+#### Fase de pontos corridos (`"type": "league"`)
+
+Os campos de `format` (pontos corridos), mais:
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `qualified` | inteiro(1, 40) | quantos primeiros da tabela avançam; ausente só na última fase |
+| `enter` | lista de id | clubes que só entram nesta fase (não valem na primeira) |
+| `gapWeeks` | inteiro(0, 8) | semanas de respiro antes da primeira rodada da fase (padrão 0) |
+
+#### Fase de grupos (`"type": "groups"`)
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `groupSize` | inteiro(3, 8) | clubes por grupo; todos os grupos da fase têm o mesmo tamanho, e o número de clubes precisa ser múltiplo dele (`stages.group_size_mismatch`) com ao menos 2 grupos |
+| `rounds` | 1 ou 2 | turno único ou ida e volta dentro do grupo |
+| `points` | objeto | `win`, `draw`, `loss`, como na liga |
+| `tiebreakers` | lista | critérios de desempate, como na liga; o sorteio pela seed é sempre o último |
+| `qualified` | inteiro(1, 7) | os primeiros de cada grupo que avançam (de 1 até `groupSize` − 1); ausente só na última fase |
+| `extra` | inteiro(0, 16) | vagas extras para os melhores da posição seguinte (`qualified` + 1) de todos os grupos, pela classificação geral; no máximo uma por grupo (padrão 0) |
+| `enter` | lista de id | clubes que só entram nesta fase |
+| `gapWeeks` | inteiro(0, 8) | respiro antes da primeira rodada (padrão 0) |
+| `draw` | objeto | sorteio dos grupos (abaixo); sem ele, o sorteio é simples pela seed |
+
+A **classificação geral** da fase reúne todos os grupos e ordena por pontos e pelos critérios da
+fase, sem o confronto direto (que só vale dentro de um grupo); o último critério é o sorteio pela
+seed. Ela escolhe as vagas extras, define o mando de campo `overall` no mata-mata e ordena quem
+caiu na fase (rebaixamento).
+
+Cada item de `draw`:
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `pots` | inteiro(2, 8) | número de potes; precisa ser igual a `groupSize`. Cada grupo recebe no máximo um clube de cada pote. Os potes saem da reputação, do maior para o menor |
+| `previousStagePot` | verdadeiro/falso | o último pote é formado pelos clubes que chegam classificados da fase anterior (precisa de `pots`; e esse pote tem um clube por grupo) |
+| `rules` | lista (até 8) | regras de sorteio (abaixo) |
+
+Cada regra de `rules` tem um `kind`:
+
+| `kind` | Campos | Efeito |
+|---|---|---|
+| `separate` | `attribute`: `country` ou `region`; `exemptPots`: lista de potes (opcional) | **separação**: nenhum grupo tem dois clubes com o mesmo valor do atributo. Os clubes dos potes isentos não ficam sujeitos à regra (por exemplo, o pote dos classificados da fase preliminar, que pode ter clubes do mesmo país) |
+| `concentrate` | `attribute`: `region` | **concentração** (preferência): os clubes de cada região ficam no menor número de grupos possível, e esses grupos são vizinhos na ordem das letras (A, B, C…). Nunca faz o sorteio falhar |
+
+A separação vence a concentração. Se nenhuma distribuição respeita a separação, a **validação do
+mod** recusa os casos que dá para provar impossíveis pelos dados (`stages.separation_impossible`).
+Numa **carreira** o sorteio nunca trava o jogador: ele conclui violando o mínimo possível e a tela
+da competição avisa quais clubes ficaram juntos. O atributo `region` é opcional e fica no clube
+(seção 6); clubes sem região não entram nas regras por região.
+
+#### Fase de mata-mata (`"type": "knockout"`)
+
+Os campos de `format` (copa) — `phases` e `entries` —, mais:
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `pairing` | `position` ou `draw` | como a primeira fase é montada: `position` (padrão depois de uma fase de pontos) cruza a posição no grupo ou na tabela (o melhor contra o pior, evitando o mesmo grupo); `draw` sorteia |
+| `pairs` | lista de pares | tabela própria da primeira fase; cada item é um par de origens: `A1` (1º do Grupo A), `B2` (2º do Grupo B), `T3` (3º da tabela de pontos corridos) ou `X1` (1ª vaga extra). Todos os classificados precisam aparecer uma vez (`stages.pairs_invalid`) |
+| `enter` | lista de id | clubes que só entram nesta fase |
+
+Numa sequência, o mata-mata pode vir em qualquer posição (por exemplo, uma fase preliminar antes
+dos grupos). Se não for a última fase, a última fase dele pode ter mais de 2 clubes: os vencedores
+dos confrontos dela avançam. Se for a última, termina na final com 2 clubes.
+
+Exemplo 1, a quarta divisão regional de uma liga: 20 clubes em 4 grupos de 5, concentrados por
+região, 2 classificados por grupo e um mata-mata de 8 clubes (no `competitions.json`, dentro da
+divisão de baixo; os 2 finalistas sobem):
+
+```json
+{
+  "level": 2,
+  "name": "Série B",
+  "clubIds": ["c21", "c22", "c23", "c24", "c25", "c26", "c27", "c28", "c29", "c30", "c31", "c32", "c33", "c34", "c35", "c36", "c37", "c38", "c39", "c40"],
+  "promotionSlots": 2,
+  "relegationSlots": 0,
+  "stages": [
+    {
+      "type": "groups", "groupSize": 5, "rounds": 1,
+      "points": { "win": 3, "draw": 1, "loss": 0 },
+      "tiebreakers": ["wins", "goal-difference", "goals-for", "head-to-head", "draw-lots"],
+      "qualified": 2,
+      "draw": { "rules": [ { "kind": "concentrate", "attribute": "region" } ] }
+    },
+    {
+      "type": "knockout",
+      "phases": [
+        { "name": "Quartas de final", "legs": 1, "tiebreakers": ["extra-time", "penalties"], "home": "overall", "prize": 0 },
+        { "name": "Semifinal", "legs": 1, "tiebreakers": ["extra-time", "penalties"], "home": "overall", "prize": 0 },
+        { "name": "Final", "legs": 1, "tiebreakers": ["extra-time", "penalties"], "home": "draw", "neutral": true, "prize": 0 }
+      ]
+    }
+  ]
+}
+```
+
+Exemplo 2, uma competição de uma divisão com 28 clubes de vários países: fase preliminar
+eliminatória de 16 clubes (4 classificados), 4 grupos de 4 com 4 potes — o último, dos
+classificados da preliminar — e separação por país com esse pote isento, e mata-mata de 8 clubes
+(`"c13"` a `"c24"` são os 12 que entram direto nos grupos):
+
+```json
+{
+  "id": "copa-continental",
+  "countryId": "pais-1",
+  "name": "Copa Continental Exemplo",
+  "format": {
+    "type": "stages",
+    "stages": [
+      {
+        "type": "knockout",
+        "phases": [
+          { "name": "Preliminar 1", "legs": 1, "tiebreakers": ["extra-time", "penalties"], "home": "ranking", "prize": 0 },
+          { "name": "Preliminar 2", "legs": 1, "tiebreakers": ["extra-time", "penalties"], "home": "ranking", "prize": 0 }
+        ]
+      },
+      {
+        "type": "groups", "groupSize": 4, "rounds": 1,
+        "points": { "win": 3, "draw": 1, "loss": 0 },
+        "tiebreakers": ["wins", "goal-difference", "goals-for", "draw-lots"],
+        "qualified": 2,
+        "enter": ["c13", "c14", "c15", "c16", "c17", "c18", "c19", "c20", "c21", "c22", "c23", "c24"],
+        "draw": {
+          "pots": 4, "previousStagePot": true,
+          "rules": [ { "kind": "separate", "attribute": "country", "exemptPots": [4] } ]
+        }
+      },
+      {
+        "type": "knockout",
+        "phases": [
+          { "name": "Quartas de final", "legs": 2, "tiebreakers": ["away-goals", "penalties"], "home": "overall", "prize": 0 },
+          { "name": "Semifinal", "legs": 2, "tiebreakers": ["away-goals", "penalties"], "home": "overall", "prize": 0 },
+          { "name": "Final", "legs": 1, "tiebreakers": ["extra-time", "penalties"], "home": "draw", "neutral": true, "prize": 0 }
+        ]
+      }
+    ]
+  },
+  "divisions": [
+    { "level": 1, "name": "Chave", "clubIds": ["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "c11", "c12", "c13", "c14", "c15", "c16", "c17", "c18", "c19", "c20", "c21", "c22", "c23", "c24", "c25", "c26", "c27", "c28"], "promotionSlots": 0, "relegationSlots": 0 }
+  ],
+  "schedule": { "weekday": 3, "startWeek": 1, "everyWeeks": 1 }
+}
+```
+
+Em divisões em fases, a **posição final** de cada clube é: o campeão e o vice saem da final; quem
+caiu em cada fase fica atrás de quem foi mais longe, ordenado pela classificação geral entre os
+que caíram na mesma fase; quem não passou dos grupos fica ordenado pela classificação geral. Essa
+posição é a que valem os prêmios da divisão, as metas da diretoria, a torcida, o acesso e o
+rebaixamento.
+
 ### `divisions`
 
 | Campo | Tipo | Descrição |
@@ -240,6 +405,7 @@ Lista com ao menos 2 clubes.
 | `reputation` | escala | sim | reputação (atrai jogadores, define torcida, patrocínio e expectativa) |
 | `stadiumCapacity` | inteiro(1000, 150000) | sim | capacidade do estádio |
 | `initialCash` | inteiro(−1000000000, 10000000000) | sim | caixa inicial |
+| `region` | texto(1, 40) | não | região do clube, usada pelas regras de sorteio dos grupos (`separate` e `concentrate` por `region`) |
 
 ### `crest` (escudo)
 
@@ -326,7 +492,7 @@ competições e regras continuam em JSON.
 
 ### `clubs.csv`
 
-`id`, `name`, `shortName`, `abbreviation`, `city`, `countryId`, `reputation`, `stadiumCapacity`, `initialCash`, `colorPrimary`, `colorSecondary`, `crestShape`, `crestColor1`, `crestColor2`, `crestColor3`, `crestInitials`, `crestImage`
+`id`, `name`, `shortName`, `abbreviation`, `city`, `countryId`, `reputation`, `stadiumCapacity`, `initialCash`, `colorPrimary`, `colorSecondary`, `crestShape`, `crestColor1`, `crestColor2`, `crestColor3`, `crestInitials`, `crestImage`, `region`
 
 ### `players.csv`
 
@@ -377,6 +543,23 @@ Fora do jogo, `pnpm validate-bank <pasta|arquivo.zip>` faz a mesma validação n
 | `knockout.no_decider` | A fase {phase} da copa precisa terminar com o critério "penalties" para sempre ter um classificado. |
 | `knockout.neutral_two_legs` | A fase {phase} da copa não pode ter campo neutro em ida e volta. |
 | `knockout.single_division` | A copa precisa de uma única divisão, mas tem {divisions}. |
+| `stages.gap_conflict` | A competição {competitionId} declara respiros entre as fases (gapWeeks), mas as datas são uma grade só por competição; só competições de uma divisão podem ter respiros. |
+| `stages.group_size_mismatch` | A fase {stage} tem {clubs, plural, one {# clube} other {# clubes}}, que não formam grupos de {groupSize}: o número de clubes precisa ser múltiplo do tamanho do grupo. |
+| `stages.group_count` | A fase {stage} formaria {groups, plural, one {# grupo} other {# grupos}}, mas uma fase de grupos precisa de pelo menos 2. |
+| `stages.qualify_range` | A fase {stage} classifica {qualified} por grupo (ou da tabela), mas o valor precisa estar entre 1 e {max}; só a última fase pode não declarar classificados. |
+| `stages.extra_exceeds_groups` | A fase {stage} tem {extra, plural, one {# vaga extra} other {# vagas extras}}, mais do que seus {groups, plural, one {# grupo} other {# grupos}}: só há um clube na posição seguinte de cada grupo. |
+| `stages.qualify_mismatch` | A fase {stage} classifica {qualifying, plural, one {# clube} other {# clubes}}; com os que entram, a fase {next} fica com {nextClubs, plural, one {# clube} other {# clubes}}, o que não fecha os grupos ou o chaveamento dela. |
+| `stages.qualified_without_next` | A fase {stage} é a última e não pode declarar classificados (qualified ou extra). |
+| `stages.knockout_count` | A fase {phase} do mata-mata da fase {stage} fica com {count, plural, one {# clube} other {# clubes}} e o chaveamento não fecha. Diferença para fechar: {delta} (positivo = faltam clubes; negativo = sobram). |
+| `stages.enter_unknown_club` | O clube {clubId}, que entra na fase {stage}, não está na divisão. |
+| `stages.enter_first_stage` | O clube {clubId} não pode entrar na fase {stage}: é a primeira, e todo clube que não entra depois já a disputa. |
+| `stages.enter_duplicate` | O clube {clubId} aparece mais de uma vez nas entradas das fases. |
+| `stages.pots_range` | A fase {stage} declara {pots, plural, =0 {potes sem número} one {# pote} other {# potes}}, mas o número de potes precisa ser igual ao tamanho do grupo ({groupSize}), e o pote dos classificados da fase anterior exige o número de potes. |
+| `stages.pot_size` | O pote {pot} da fase {stage} teria {clubs, plural, one {# clube} other {# clubes}}, mas precisa de um por grupo ({groups, plural, one {# grupo} other {# grupos}}). |
+| `stages.rule_exempt_pot` | A regra de sorteio da fase {stage} isenta o pote {pot}, que não existe: a fase tem {pots, plural, =0 {nenhum pote} one {# pote} other {# potes}}. |
+| `stages.separation_impossible` | Na fase {stage}, {clubs, plural, one {# clube} other {# clubes}} com {attribute, select, country {o mesmo país} region {a mesma região} other {o mesmo atributo}} ({value}) não cabem em {groups, plural, one {# grupo} other {# grupos}} sem se encontrar. |
+| `stages.pairs_invalid` | A tabela de confrontos da fase {stage} tem uma origem inválida ou fora de lugar: {origin}. Cada classificado precisa aparecer uma vez (A1 = 1º do Grupo A, T1 = 1º da tabela, X1 = primeira vaga extra). |
+| `stages.relegation_exceeds_eliminated` | O nível {level} rebaixa {relegation, plural, one {# clube} other {# clubes}}, mas só {eliminated, plural, one {# clube fica} other {# clubes ficam}} fora da fase seguinte à primeira: o rebaixamento sai de quem não avança. |
 | `competition.club_outside_main` | O clube {clubId} da competição {competitionId} não está na competição principal (a primeira da lista). |
 | `division.top_has_promotion` | A divisão mais alta não pode ter vagas de acesso, mas tem {slots}. |
 | `division.bottom_has_relegation` | A divisão mais baixa não pode ter vagas de rebaixamento, mas tem {slots}. |

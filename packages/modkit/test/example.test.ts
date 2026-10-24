@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { completeCareerDay } from "@brasfoot-like/engine";
+import { completeCareerDay, generateStagesBank } from "@brasfoot-like/engine";
 import {
   advanceCareerSeason,
   createSave,
@@ -11,7 +11,7 @@ import {
 } from "@brasfoot-like/save";
 import { describe, expect, it } from "vitest";
 import { readModPackage, writeModPackage } from "../src";
-import { DEFAULT_MOD, EXAMPLE_MOD, modBank } from "./fixtures";
+import { DEFAULT_MOD, EXAMPLE_MOD, modBank, STAGES_MOD } from "./fixtures";
 
 const PUBLIC_ZIP = join(import.meta.dirname, "../../../apps/web/public/mods/exemplo.zip");
 
@@ -62,4 +62,45 @@ describe("mod de exemplo (015 US3, critério de aceite 2, SC-003)", () => {
   it("o pacote público é o mesmo gerado a partir de mods/exemplo", () => {
     expect(new Uint8Array(readFileSync(PUBLIC_ZIP))).toEqual(writeModPackage(example));
   });
+});
+
+describe("mod de exemplo das fases (019)", () => {
+  const stages = modBank(STAGES_MOD);
+
+  it("é válido, igual ao que o gerador produz, e a divisão de baixo é em grupos e mata-mata", () => {
+    const result = readModPackage(writeModPackage(stages));
+    if (!result.ok) throw new Error(JSON.stringify(result.errors.slice(0, 3)));
+    expect(result.summary.id).toBe("exemplo-fases");
+    const generated = generateStagesBank({
+      seed: "fases-1",
+      manifest: {
+        id: "exemplo-fases",
+        name: "Fases (exemplo)",
+        author: "brasfoot-like",
+        version: "1.0.0",
+      },
+    });
+    expect(result.bank).toEqual(generated);
+    const lower = stages.competitions[0]?.divisions[1];
+    expect(lower?.stages?.map((stage) => stage.type)).toEqual(["groups", "knockout"]);
+    expect(stages.clubs.some((club) => club.region !== undefined)).toBe(true);
+  });
+
+  it("joga uma temporada inteira", () => {
+    const result = readModPackage(writeModPackage(stages));
+    if (!result.ok) throw new Error("mod inválido");
+    const created = createSave({
+      id: "fases",
+      now: "2026-10-23T00:00:00.000Z",
+      managerName: "Ana",
+      clubId: stages.competitions[0]?.divisions[1]?.clubIds[0] as string,
+      seed: "exemplo-fases",
+      defaultBank: result.bank,
+      noFiring: true,
+    });
+    if (!created.ok) throw new Error(JSON.stringify(created.error));
+    const end = playSeason(created.save);
+    expect(isCareerSeasonOver(end)).toBe(true);
+    expect(advanceCareerSeason(end, "2026-10-24T00:00:00.000Z").ok).toBe(true);
+  }, 300_000);
 });

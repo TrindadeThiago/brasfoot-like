@@ -1,7 +1,8 @@
 import type { DayMatch } from "../career/season-state";
 import type { CompletedBank } from "../model/types";
 import type { Season } from "../season/types";
-import { DEFAULT_KNOCKOUT, knockoutFormat, phaseOf } from "./rules";
+import { seasonStages } from "../stages/rules";
+import { cupFormat, cupMatchBelongs, DEFAULT_KNOCKOUT, knockoutFormat, phaseOf } from "./rules";
 import { tieState } from "./tie";
 
 export interface CupPrize {
@@ -22,10 +23,10 @@ export function cupPrizes(
   matches: readonly DayMatch[],
 ): CupPrize[] {
   const prizes: CupPrize[] = [];
-  const format = knockoutFormat(world, season.competitionId);
+  const format = cupFormat(world, season);
   for (const match of matches) {
     const info = match.fixture.tie;
-    if (match.competitionId !== season.competitionId || !info || info.leg !== info.legs) continue;
+    if (!cupMatchBelongs(season, match) || !info || info.leg !== info.legs) continue;
     const state = tieState(season, info.phase, info.id);
     if (!state.decided || !state.winner) continue;
     prizes.push({
@@ -43,7 +44,12 @@ export function neutralCapacityOf(
   world: Pick<CompletedBank, "competitions">,
   competitionId: string,
   phase: number,
+  where?: { stage: number; divisionLevel: number },
 ): number {
-  const format = knockoutFormat(world, competitionId);
+  // Numa divisão em fases (019) a fase eliminatória é a `stage`-ésima da sequência da divisão.
+  const stage = where
+    ? seasonStages(world, { competitionId, divisionLevel: where.divisionLevel })[where.stage]
+    : undefined;
+  const format = stage?.type === "knockout" ? stage : knockoutFormat(world, competitionId);
   return phaseOf(format, phase).neutralCapacity ?? DEFAULT_KNOCKOUT.neutralCapacity;
 }

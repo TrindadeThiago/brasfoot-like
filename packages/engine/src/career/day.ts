@@ -20,11 +20,12 @@ import { drawReady } from "../knockout/bracket";
 import { type CupEnd, type CupEvent, cupEnd, cupEvents } from "../knockout/events";
 import { cupPrizes } from "../knockout/prizes";
 import type { Lineup } from "../match/types";
-import type { CompletedBank } from "../model/types";
+import type { CompletedBank, KnockoutFormat } from "../model/types";
 import { newsAfterCup, newsAfterExtraMatches } from "../news/round";
 import type { SeasonError } from "../season/errors";
 import { finishRound, type LiveRound } from "../season/live-round";
-import type { MatchRecord, SeasonStep } from "../season/types";
+import type { MatchRecord, Season, SeasonStep } from "../season/types";
+import { cupView } from "../stages/cup-view";
 import { clubsInRound, syncInjuries } from "./injuries";
 import { leagueRound } from "./league";
 import { completeLeagueRound, startLeagueRound } from "./league-round";
@@ -217,6 +218,12 @@ export function completeCareerDay(
     );
     if (!applied.ok) return applied;
     next = withSystems(next, applied);
+    // Fases eliminatórias de divisões em fases da liga principal: prêmios e eliminações (019 R12).
+    const knockouts = roundMatches(next.league, principalRound, day.date).filter(
+      (match) => match.fixture.stage?.kind === "knockout",
+    );
+    if (knockouts.length > 0)
+      next = afterStagedKnockout(next, careerSeed, managerClubId, knockouts);
   }
   if (extra.length > 0) next = afterExtraMatches(next, careerSeed, managerClubId, extra);
   const rules = fitnessRules(next.world, next.league.competitionId);
@@ -316,7 +323,7 @@ function afterExtraMatches(
     };
   }
   if (next.news) {
-    for (const [competitionId, events] of cup.byCompetition) {
+    for (const [competitionId, events, format] of cup.byCompetition) {
       next = {
         ...next,
         news: newsAfterCup(
@@ -330,6 +337,75 @@ function afterExtraMatches(
           events,
           competitionId,
           round,
+          format,
+        ),
+      };
+    }
+  }
+  return next;
+}
+
+/**
+ * Prêmios e eliminações dos confrontos de uma fase eliminatória de divisão em fases da liga
+ * principal (019 R12). A bilheteria, a torcida, a diretoria e as notícias do jogo em si já vieram
+ * do caminho da rodada da liga.
+ */
+function afterStagedKnockout(
+  state: CareerSeasonState,
+  careerSeed: string,
+  managerClubId: string,
+  matches: readonly DayMatch[],
+): CareerSeasonState {
+  const round = Math.max(1, leagueRound(state.league) - 1);
+  const manager = currentManager(state, managerClubId);
+  const finances = withCupPrizes(state, state.finances, matches);
+  let next: CareerSeasonState = finances === state.finances ? state : { ...state, finances };
+  const cup = cupFacts(next, matches);
+  if (next.fans && cup.events.length > 0) {
+    next = {
+      ...next,
+      fans: fansAfterCup(
+        { world: next.world, league: next.league, finances, fans: next.fans },
+        cup.events,
+        round,
+        manager,
+      ),
+    };
+  }
+  if (next.board && cup.events.length > 0) {
+    next = {
+      ...next,
+      board: boardAfterCup(
+        {
+          world: next.world,
+          league: next.league,
+          finances,
+          board: next.board,
+          careerSeed,
+          ...(next.fans ? { fans: next.fans } : {}),
+        },
+        cup.events,
+        undefined,
+        round,
+      ),
+    };
+  }
+  if (next.news) {
+    for (const [competitionId, events, format] of cup.byCompetition) {
+      next = {
+        ...next,
+        news: newsAfterCup(
+          {
+            world: next.world,
+            league: next.league,
+            news: next.news as NonNullable<typeof next.news>,
+            careerSeed,
+            managerClubId: manager,
+          },
+          events,
+          competitionId,
+          round,
+          format,
         ),
       };
     }
@@ -341,20 +417,48 @@ function afterExtraMatches(
 function cupFacts(
   state: CareerSeasonState,
   matches: readonly DayMatch[],
-): { events: CupEvent[]; ends: CupEnd[]; byCompetition: [string, CupEvent[]][] } {
+): {
+  events: CupEvent[];
+  ends: CupEnd[];
+  byCompetition: [string, CupEvent[], KnockoutFormat | undefined][];
+} {
   const events: CupEvent[] = [];
   const ends: CupEnd[] = [];
-  const byCompetition: [string, CupEvent[]][] = [];
-  for (const league of state.competitions) {
-    const season = league.divisions[0];
-    if (!season?.bracket) continue;
+  const byCompetition: [string, CupEvent[], KnockoutFormat | undefined][] = [];
+  for (const { competitionId, season } of cupSources(state)) {
     const own = cupEvents(state.world, season, matches);
     events.push(...own);
-    if (own.length > 0) byCompetition.push([league.competitionId, own]);
-    const end = cupEnd(state.world, season, matches);
+    if (own.length > 0) byCompetition.push([competitionId, own, season.cupView?.format]);
+    // O fim de uma fase eliminatória é o campeonato da divisão: entra no histórico normal.
+    const end = season.cupView ? undefined : cupEnd(state.world, season, matches);
     if (end) ends.push(end);
   }
   return { events, ends, byCompetition };
+}
+
+/**
+ * As temporadas eliminatórias da carreira: as copas (018) e as fases eliminatórias já começadas de
+ * divisões em fases (019), estas como visões da fase.
+ */
+function cupSources(state: CareerSeasonState): { competitionId: string; season: Season }[] {
+  const sources: { competitionId: string; season: Season }[] = [];
+  for (const league of [state.league, ...state.competitions]) {
+    const first = league.divisions[0];
+    if (first?.bracket) {
+      sources.push({ competitionId: league.competitionId, season: first });
+      continue;
+    }
+    for (const division of league.divisions) {
+      for (const stage of division.stages ?? []) {
+        if (!stage.started || stage.kind !== "knockout") continue;
+        sources.push({
+          competitionId: league.competitionId,
+          season: cupView(division, state.world, stage.index),
+        });
+      }
+    }
+  }
+  return sources;
 }
 
 /** Prêmios dos confrontos de copa decididos nos jogos do dia (018 R12). */
@@ -363,14 +467,9 @@ function withCupPrizes(
   finances: FinanceState,
   matches: readonly DayMatch[],
 ): FinanceState {
-  const prizes = state.competitions.flatMap((league) => {
-    const season = league.divisions[0];
-    if (!season?.bracket) return [];
-    return cupPrizes(state.world, season, matches).map((prize) => ({
-      ...prize,
-      competitionId: league.competitionId,
-    }));
-  });
+  const prizes = cupSources(state).flatMap(({ competitionId, season }) =>
+    cupPrizes(state.world, season, matches).map((prize) => ({ ...prize, competitionId })),
+  );
   return applyCupPrizes(finances, state.league, prizes);
 }
 

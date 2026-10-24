@@ -1,5 +1,16 @@
 [
   {
+    "version": "1.4.0",
+    "date": "2026-10-23",
+    "changes": [
+      "Fase de grupos e competições em fases: um mod pode montar uma divisão (ou uma competição inteira) como uma sequência de fases de pontos corridos, grupos e mata-mata, só com dados. Por exemplo, a quarta divisão em grupos regionais seguidos de mata-mata, com acesso para a divisão de cima. O mundo padrão não muda.",
+      "Sorteio dos grupos com potes e regras por competição: clubes do mesmo país ou da mesma região podem ser separados (com potes isentos, como o dos classificados da fase preliminar) e clubes de uma região podem ser concentrados em grupos vizinhos. Se uma separação não couber, o sorteio conclui assim mesmo, nunca trava a carreira, e a tela da competição avisa quais clubes ficaram juntos.",
+      "Telas das fases: uma tabela por grupo com a zona de classificação, a classificação geral da fase (com quem se classificaria e quem cairia se ela acabasse hoje), o chaveamento com a origem de cada vaga (\"1º do Grupo B\") e a navegação por fase. O Início e o calendário mostram a fase do próximo jogo (por exemplo, \"Grupo B, rodada 3\"), e o resumo da temporada traz a posição final de cada clube.",
+      "Acesso e rebaixamento numa divisão em fases usam a posição final: o campeão e o vice saem da final, e quem caiu em cada fase fica atrás de quem foi mais longe.",
+      "O clube ganha uma região opcional, usada pelas regras de sorteio, também na planilha de clubes. O formato dos mods e o mod de exemplo das fases (mods/exemplo-fases) estão documentados. Saves passam para o formato 14; carreiras antigas abrem normalmente."
+    ]
+  },
+  {
     "version": "1.3.1",
     "date": "2026-10-23",
     "changes": [

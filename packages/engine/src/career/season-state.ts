@@ -22,6 +22,7 @@ import type { NewsState } from "../news/types";
 import type { RenewalState } from "../renewal/types";
 import type { SeasonError } from "../season/errors";
 import type { Fixture, MatchRecord, PlayerStatus } from "../season/types";
+import type { FixtureStage } from "../stages/types";
 import { availabilitySeason } from "./injuries";
 import {
   clubDivision,
@@ -193,6 +194,12 @@ export interface ClubFixture {
   round: number;
   home: string;
   away: string;
+  /** Fase e grupo do jogo, numa divisão em fases (019). */
+  stage?: FixtureStage;
+  /** Rodada dentro da fase (a 1ª rodada da fase é 1), numa divisão em fases. */
+  stageRound?: number;
+  /** Confronto e perna, quando o jogo é de uma fase eliminatória de uma divisão em fases. */
+  tie?: NonNullable<Fixture["tie"]>;
   /** Presente quando o jogo já foi disputado. */
   record?: MatchRecord;
 }
@@ -239,6 +246,16 @@ export function clubFixtures(
           round: slot.round,
           home: fixture.home,
           away: fixture.away,
+          ...(fixture.stage
+            ? {
+                stage: fixture.stage,
+                stageRound:
+                  slot.round -
+                  (division.stages?.[fixture.stage.index]?.rounds[0] ?? slot.round) +
+                  1,
+                ...(fixture.tie ? { tie: fixture.tie } : {}),
+              }
+            : {}),
           ...(record ? { record } : {}),
         });
       }
