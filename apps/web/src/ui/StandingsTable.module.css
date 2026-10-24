@@ -16,6 +16,16 @@
   background: var(--color-accent);
 }
 
+.qualified {
+  color: var(--color-bg);
+  background: var(--color-accent);
+}
+
+.extra {
+  color: var(--color-bg);
+  background: var(--color-warning);
+}
+
 .relegation {
   color: var(--color-bg);
   background: var(--color-danger);

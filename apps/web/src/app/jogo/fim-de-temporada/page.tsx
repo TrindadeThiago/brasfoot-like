@@ -15,6 +15,7 @@ import { Evaluation } from "../../../ui/board/Evaluation";
 import { CupResult } from "../../../ui/cup/CupHistory";
 import { OtherCompetitions } from "../../../ui/history/OtherCompetitions";
 import { SeasonSummary } from "../../../ui/SeasonSummary";
+import { FinalPositions } from "../../../ui/stages/FinalPositions";
 import { useShortcuts } from "../../../ui/useShortcuts";
 import styles from "./page.module.css";
 
@@ -46,6 +47,11 @@ function SeasonEnd({ save, game }: { save: SaveFile; game: Game }) {
       <h2 className="screen-title">{t("seasonEnd.title", { year: summary.year })}</h2>
       <Evaluation save={save} />
       <SeasonSummary save={save} summary={summary} />
+      {save.league.divisions
+        .filter((season) => season.stages)
+        .map((season) => (
+          <FinalPositions key={season.divisionLevel} save={save} season={season} />
+        ))}
       <OtherCompetitions
         save={save}
         entries={save.competitions

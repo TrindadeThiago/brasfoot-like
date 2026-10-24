@@ -5,8 +5,15 @@ import { squadsByClub } from "../season/fixture";
 import { preferredFormation } from "../season/lineups";
 import type { DisciplineRules, Fixture, PlayerStatus, Round, Season } from "../season/types";
 import { DEFAULT_DISCIPLINE_RULES } from "../season/types";
-import { type DrawClub, drawPhase } from "./draw";
-import { DEFAULT_KNOCKOUT, knockoutFormat, openingClubs, phaseOf, phaseRounds } from "./rules";
+import { type DrawClub, type DrawnPair, drawPhase } from "./draw";
+import {
+  cupFormat,
+  DEFAULT_KNOCKOUT,
+  knockoutFormat,
+  openingClubs,
+  phaseOf,
+  phaseRounds,
+} from "./rules";
 import { phaseDecided, phaseWinners } from "./tie";
 import type { Bracket, BracketPhase, Tie } from "./types";
 
@@ -71,18 +78,16 @@ export function createCupSeason(
 
 /** Clubes que disputam a fase: os vencedores da anterior mais os que entram nela (R6). */
 export function phaseParticipants(season: Season, world: CompletedBank, phase: number): string[] {
-  const format = knockoutFormat(world, season.competitionId);
+  const format = cupFormat(world, season);
   const entering = format.entries?.find((entry) => entry.phase === phase)?.clubIds ?? [];
   const base = phase === 0 ? openingClubs(format, season.clubIds) : phaseWinners(season, phase - 1);
   return [...new Set([...base, ...(phase === 0 ? [] : entering)])].sort();
 }
 
 /** Nível de divisão de cada clube na competição principal (1 se não estiver nela). */
-function divisionLevels(world: CompletedBank, cupId: string): Map<string, number> {
+export function divisionLevels(world: CompletedBank): Map<string, number> {
   const levels = new Map<string, number>();
-  const main = world.competitions.find(
-    (entry) => entry.id !== cupId && entry.format.type === "league",
-  );
+  const main = world.competitions.find((entry) => entry.format.type === "league");
   for (const division of main?.divisions ?? []) {
     for (const clubId of division.clubIds) levels.set(clubId, division.level);
   }
@@ -92,9 +97,15 @@ function divisionLevels(world: CompletedBank, cupId: string): Map<string, number
 /**
  * Sorteia a fase se ainda não foi sorteada (idempotente): preenche os confrontos e as `fixtures`
  * de cada perna, com o mando da regra da fase e a volta invertida. Exige a fase anterior decidida.
- * Não altera a entrada.
+ * Não altera a entrada. `pairs` (019) substitui o sorteio: a 1ª fase depois de uma fase de pontos
+ * vem do pareamento por posição.
  */
-export function ensurePhaseDrawn(season: Season, world: CompletedBank, phaseIndex: number): Season {
+export function ensurePhaseDrawn(
+  season: Season,
+  world: CompletedBank,
+  phaseIndex: number,
+  pairs?: readonly DrawnPair[],
+): Season {
   const bracket = season.bracket;
   const current = bracket?.phases[phaseIndex];
   if (!bracket || !current) throw new Error(`fase inexistente: ${phaseIndex}`);
@@ -102,25 +113,29 @@ export function ensurePhaseDrawn(season: Season, world: CompletedBank, phaseInde
   if (phaseIndex > 0 && !phaseDecided(season, phaseIndex - 1)) {
     throw new Error(`a fase ${phaseIndex - 1} ainda não terminou`);
   }
-  const format = knockoutFormat(world, season.competitionId);
+  const format = cupFormat(world, season);
   const phase = phaseOf(format, phaseIndex);
-  const levels = divisionLevels(world, season.competitionId);
+  const levels = divisionLevels(world);
+  const ranks = season.cupView?.ranks ?? {};
   const clubs: DrawClub[] = phaseParticipants(season, world, phaseIndex).map((id) => ({
     id,
     reputation: world.clubs.find((club) => club.id === id)?.reputation ?? 0,
     division: levels.get(id) ?? 1,
+    ...(ranks[id] !== undefined ? { rank: ranks[id] } : {}),
   }));
-  const pairs = drawPhase(
-    clubs,
-    {
-      home: phase.home,
-      seeded: phase.seeded ?? DEFAULT_KNOCKOUT.seeded,
-      legs: phase.legs,
-      neutral: phase.neutral ?? DEFAULT_KNOCKOUT.neutral,
-    },
-    `${season.seed}:cup:${season.competitionId}:draw:${phaseIndex}`,
-  );
-  const ties: Tie[] = pairs.map((pair, index) => ({
+  const drawn =
+    pairs ??
+    drawPhase(
+      clubs,
+      {
+        home: phase.home,
+        seeded: phase.seeded ?? DEFAULT_KNOCKOUT.seeded,
+        legs: phase.legs,
+        neutral: phase.neutral ?? DEFAULT_KNOCKOUT.neutral,
+      },
+      `${season.seed}:cup:${season.competitionId}:draw:${phaseIndex}${season.cupView ? `:s${season.cupView.stage}` : ""}`,
+    );
+  const ties: Tie[] = drawn.map((pair, index) => ({
     id: `f${phaseIndex}-${index}`,
     home: pair.home,
     away: pair.away,

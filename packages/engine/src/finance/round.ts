@@ -199,7 +199,14 @@ export function applyExtraGates(
       ...(mood !== undefined ? { mood } : {}),
       ...(neutral && match.fixture.tie
         ? {
-            capacity: neutralCapacityOf(world, match.competitionId, match.fixture.tie.phase),
+            capacity: neutralCapacityOf(
+              world,
+              match.competitionId,
+              match.fixture.tie.phase,
+              match.fixture.stage
+                ? { stage: match.fixture.stage.index, divisionLevel: match.divisionLevel }
+                : undefined,
+            ),
           }
         : {}),
     });

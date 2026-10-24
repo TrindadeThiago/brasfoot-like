@@ -19,7 +19,7 @@ describe("migração v4 → v5 (009 R12, FR-019, SC-008)", () => {
       const v4 = build();
       const result = migrated(v4);
       expect(result.migratedFrom).toBe(4);
-      expect(result.save.formatVersion).toBe(13);
+      expect(result.save.formatVersion).toBe(14);
       expect(result.save.renewal).toEqual(initialRenewal(v4.bank));
       const { renewal: _renewal, formatVersion: _v, ...rest } = withoutMarket(result.save);
       const { formatVersion: _v4, ...restV4 } = v4;
@@ -35,7 +35,7 @@ describe("migração v4 → v5 (009 R12, FR-019, SC-008)", () => {
   it("v1 → v6 em cadeia", () => {
     const result = migrated(saveV1());
     expect(result.migratedFrom).toBe(1);
-    expect(result.save.formatVersion).toBe(13);
+    expect(result.save.formatVersion).toBe(14);
     expect(result.save.renewal.nextPlayerSeq).toBeGreaterThan(1);
   });
 

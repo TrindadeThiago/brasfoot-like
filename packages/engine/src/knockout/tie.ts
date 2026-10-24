@@ -1,7 +1,8 @@
 import type { Decider, Side } from "../match/types";
 import type { CompletedBank } from "../model/types";
 import type { Fixture, MatchRecord, Season } from "../season/types";
-import { knockoutFormat, phaseOf } from "./rules";
+import { cupView } from "../stages/cup-view";
+import { cupFormat, phaseOf } from "./rules";
 import type { TieState } from "./types";
 
 /** O registro da partida de uma fixture, se já foi jogada. */
@@ -123,15 +124,20 @@ export function deciderFor(
 ): Decider | undefined {
   const info = fixture.tie;
   if (!info || info.leg !== info.legs) return undefined;
-  const format = knockoutFormat(world, season.competitionId);
+  // Numa divisão em fases o confronto vive no chaveamento da fase eliminatória (019 R3).
+  const source: Season =
+    fixture.stage && season.stages && !season.cupView
+      ? cupView(season, world, fixture.stage.index)
+      : season;
+  const format = cupFormat(world, source);
   const phase = phaseOf(format, info.phase);
   const before: Decider["before"] = {
     home: { goals: 0, awayGoals: 0 },
     away: { goals: 0, awayGoals: 0 },
   };
-  for (const earlier of legsOf(season, info.phase, info.id)) {
+  for (const earlier of legsOf(source, info.phase, info.id)) {
     if (earlier.round === fixture.round) continue;
-    const record = recordOf(season, earlier);
+    const record = recordOf(source, earlier);
     if (!record) continue;
     // Gols de cada clube na perna anterior, mapeados para o lado que ele ocupa agora.
     for (const side of ["home", "away"] as const) {

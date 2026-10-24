@@ -17,7 +17,7 @@ function twoCompetitionsMod(): Buffer {
     manifest: { id: "duas-competicoes", name: MOD_NAME, author: "testes", version: "1.0.0" },
   });
   const [league] = base.competitions;
-  if (!league) throw new Error("sem competição");
+  if (league?.format.type !== "league") throw new Error("sem competição");
   const bank = {
     ...base,
     competitions: [

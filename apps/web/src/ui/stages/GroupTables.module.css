@@ -1,0 +1,11 @@
+.groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.group {
+  min-width: 0;
+  overflow-x: auto;
+}

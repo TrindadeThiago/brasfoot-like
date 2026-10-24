@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { RESERVED_FORMAT_TYPES, SUPPORTED_FORMAT_VERSIONS } from "../model/catalogs";
+import { FORMAT_TYPES, RESERVED_FORMAT_TYPES, SUPPORTED_FORMAT_VERSIONS } from "../model/catalogs";
 import {
   manifestSchema,
   OPTIONAL_SECTIONS,
@@ -145,10 +145,15 @@ function parseEntity<T>(
   const result = schema.safeParse(raw, { reportInput: true });
   let zodIssues = result.success ? [] : result.error.issues;
 
-  // Formato de disputa reservado para versões futuras: um único erro, sem erros derivados.
+  // Formato de disputa desconhecido ou reservado para versões futuras: um único erro, sem erros
+  // derivados. `groups` e `stages` funcionam desde a 019.
   if (section === "competitions" && isRecord(raw) && isRecord(raw.format)) {
     const type = raw.format.type;
-    if (typeof type === "string" && (RESERVED_FORMAT_TYPES as readonly string[]).includes(type)) {
+    const known = (FORMAT_TYPES as readonly string[]).includes(type as string);
+    if (
+      typeof type === "string" &&
+      (!known || (RESERVED_FORMAT_TYPES as readonly string[]).includes(type))
+    ) {
       issues.push(
         makeIssue(
           "format.unsupported",

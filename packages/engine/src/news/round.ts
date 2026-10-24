@@ -5,6 +5,7 @@ import { clubDivision } from "../career/league";
 import type { CupEvent } from "../knockout/events";
 import { knockoutFormat } from "../knockout/rules";
 import { marketValue } from "../market/value";
+import type { KnockoutFormat } from "../model/types";
 import type { MatchRecord, Season } from "../season/types";
 import { clinched } from "./clinched";
 import { type Fact, matchFacts, matchKey, streakOf } from "./facts";
@@ -374,10 +375,12 @@ export function newsAfterCup(
   events: readonly CupEvent[],
   competitionId: string,
   round: number,
+  /** Formato do mata-mata de uma divisão em fases (019); sem ele, o da copa da competição. */
+  stageFormat?: KnockoutFormat,
 ): NewsState {
   if (events.length === 0) return context.news;
   const rules = newsRules(context.world, context.league.competitionId);
-  const format = knockoutFormat(context.world, competitionId);
+  const format = stageFormat ?? knockoutFormat(context.world, competitionId);
   const mainLevels = new Map<string, number>();
   const main = context.world.competitions.find((entry) => entry.format.type === "league");
   for (const division of main?.divisions ?? []) {

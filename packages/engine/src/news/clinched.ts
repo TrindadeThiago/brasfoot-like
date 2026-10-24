@@ -34,6 +34,8 @@ export function clinched(context: NewsContext, round: number): Fact[] {
   );
   const win = competition?.format.type === "league" ? competition.format.points.win : 3;
   for (const season of context.league.divisions) {
+    // Divisão em fases (019): sem tabela única, "garantido por pontos restantes" não se aplica.
+    if (season.stages) continue;
     const remaining = Math.max(0, season.calendar.length - round);
     const table = standings(season, context.world);
     const size = table.length;

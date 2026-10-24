@@ -1,5 +1,7 @@
 import type { Lineup } from "../match/types";
 import type { CompletedBank, Division } from "../model/types";
+import { createStagedSeason } from "../stages/create";
+import { isStaged } from "../stages/rules";
 import { generateCalendar } from "./calendar";
 import { type SeasonError, seasonError } from "./errors";
 import { squadsByClub } from "./fixture";
@@ -41,7 +43,8 @@ export function createSeason(world: CompletedBank, options: SeasonOptions): Crea
       }),
     };
   }
-  if (competition.format.type !== "league") {
+  const staged = isStaged(competition, division);
+  if (!staged && competition.format.type !== "league") {
     return {
       ok: false,
       error: seasonError("season.unsupported_format", { format: competition.format.type }),
@@ -71,11 +74,22 @@ export function createSeason(world: CompletedBank, options: SeasonOptions): Crea
     }
   }
 
+  if (staged) {
+    return createStagedSeason(world, {
+      competition,
+      division,
+      clubIds,
+      rules,
+      seed: options.seed,
+      ...(options.status ? { status: options.status } : {}),
+    });
+  }
   const squads = squadsByClub(world);
   const formations: Season["formations"] = {};
   for (const clubId of clubIds) {
     formations[clubId] = preferredFormation(squads.get(clubId) ?? []);
   }
+  if (competition.format.type !== "league") throw new Error("formato inesperado");
   return {
     ok: true,
     season: {

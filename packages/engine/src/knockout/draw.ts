@@ -7,6 +7,8 @@ export interface DrawClub {
   reputation: number;
   /** Nível da divisão do clube na competição principal (1 = a mais alta). */
   division: number;
+  /** Posição na classificação geral da fase de pontos anterior (019); ausente numa copa comum. */
+  rank?: number;
 }
 
 export interface DrawRules {
@@ -25,6 +27,13 @@ const byId = (a: DrawClub, b: DrawClub) => (a.id < b.id ? -1 : a.id > b.id ? 1 :
 
 /** Quem joga em casa (a ida, em ida e volta) segundo a regra da fase (018 R7). */
 function hostOf(a: DrawClub, b: DrawClub, rule: KnockoutHomeRule, coin: () => boolean): DrawClub[] {
+  if (rule === "overall") {
+    if (a.rank !== undefined && b.rank !== undefined && a.rank !== b.rank) {
+      return a.rank < b.rank ? [a, b] : [b, a];
+    }
+    // sem classificação geral (copa comum, ou empate): vale a reputação, como `ranking`
+    return hostOf(a, b, "ranking", coin);
+  }
   if (rule === "ranking" && a.reputation !== b.reputation) {
     return a.reputation > b.reputation ? [a, b] : [b, a];
   }

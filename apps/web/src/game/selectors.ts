@@ -130,7 +130,7 @@ export type ManagerSituation = "champion" | "promoted" | "relegated" | "stayed";
 export interface SeasonEndSummary {
   year: number;
   /** Campeão de cada divisão, por nível. */
-  champions: { level: number; clubId: string; points: number }[];
+  champions: { level: number; clubId: string; points: number; staged: boolean }[];
   /** Clubes que trocam de divisão, agrupados por destino. */
   moves: { from: number; to: number; clubs: { clubId: string; position: number }[] }[];
   mine: {
@@ -156,7 +156,12 @@ export function seasonEndSummary(save: SaveFile): SeasonEndSummary {
     tables.get(level)?.find((row) => row.clubId === clubId)?.position ?? 0;
   const champions = save.league.divisions.map((season) => {
     const first = tables.get(season.divisionLevel)?.[0];
-    return { level: season.divisionLevel, clubId: first?.clubId ?? "", points: first?.points ?? 0 };
+    return {
+      level: season.divisionLevel,
+      clubId: first?.clubId ?? "",
+      points: first?.points ?? 0,
+      staged: season.stages !== undefined,
+    };
   });
   const moves: SeasonEndSummary["moves"] = [];
   for (const season of save.league.divisions) {

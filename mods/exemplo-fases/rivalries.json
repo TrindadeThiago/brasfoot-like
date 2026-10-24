@@ -1,0 +1,282 @@
+[
+  {
+    "clubIds": [
+      "clube-001",
+      "clube-017"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-001",
+      "clube-030"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-002",
+      "clube-022"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-002",
+      "clube-028"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-003",
+      "clube-006"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-003",
+      "clube-035"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-004",
+      "clube-005"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-004",
+      "clube-031"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-005",
+      "clube-015"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-006",
+      "clube-040"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-007",
+      "clube-018"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-007",
+      "clube-019"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-008",
+      "clube-011"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-008",
+      "clube-017"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-009",
+      "clube-019"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-009",
+      "clube-021"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-010",
+      "clube-024"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-010",
+      "clube-027"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-011",
+      "clube-030"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-012",
+      "clube-024"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-012",
+      "clube-032"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-013",
+      "clube-015"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-013",
+      "clube-031"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-014",
+      "clube-033"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-014",
+      "clube-038"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-016",
+      "clube-026"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-016",
+      "clube-036"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-018",
+      "clube-021"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-020",
+      "clube-034"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-020",
+      "clube-036"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-022",
+      "clube-029"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-023",
+      "clube-028"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-023",
+      "clube-029"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-025",
+      "clube-035"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-025",
+      "clube-040"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-026",
+      "clube-034"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-027",
+      "clube-032"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-033",
+      "clube-039"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-037",
+      "clube-038"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-037",
+      "clube-039"
+    ],
+    "intensity": 1
+  }
+]

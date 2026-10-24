@@ -1,5 +1,7 @@
-import type { Competition } from "../model/types";
+import type { Competition, Division } from "../model/types";
+import { isStaged, stageRoundRanges, stagesOf } from "../stages/rules";
 import { addDays, diffDays } from "./date";
+import { theoreticalRounds } from "./rounds";
 import { type CompetitionSchedule, roundDates, scheduleOfCompetition } from "./schedule";
 
 /** Calendário da temporada por datas (data-model.md da 017). */
@@ -64,6 +66,8 @@ export interface CalendarCompetition {
   schedule: CompetitionSchedule;
   /** Semanas extras antes de cada rodada (o respiro antes da final da copa). */
   gaps?: readonly number[];
+  /** Respiros declarados numa competição de mais de uma divisão: a grade de datas é uma só (019 R11). */
+  gapConflict?: boolean;
 }
 
 export type CalendarIssue =
@@ -82,29 +86,65 @@ export type CalendarIssue =
       needed: number;
       /** Semanas da temporada. */
       available: number;
-    };
+    }
+  | { code: "stages.gap_conflict"; competitionId: string };
 
-/** Rodadas de uma divisão de `clubCount` clubes em `turns` turnos (como `generateCalendar`). */
-export function theoreticalRounds(clubCount: number, turns: number): number {
-  return turns * (clubCount % 2 === 0 ? clubCount - 1 : clubCount);
+export { theoreticalRounds };
+
+/** Rodadas de uma divisão: as das suas fases (019) ou as da liga. */
+function divisionRounds(competition: Competition, division: Division): number {
+  if (isStaged(competition, division)) {
+    return stageRoundRanges(stagesOf(competition, division), division.clubIds.length).reduce(
+      (sum, range) => sum + range.length,
+      0,
+    );
+  }
+  const { format } = competition;
+  return format.type === "league" ? theoreticalRounds(division.clubIds.length, format.rounds) : 0;
 }
 
-/** Rodadas (datas) de uma competição: as da liga ou uma por perna de cada fase da copa. */
+/** Rodadas (datas) de uma competição: as da liga, as das fases ou uma por perna de cada fase da copa. */
 function roundsOf(competition: Competition): number {
   const { format } = competition;
-  if (format.type === "knockout") {
+  if (format.type === "knockout" && competition.divisions.every((d) => !isStaged(competition, d))) {
     return format.phases.reduce((sum, phase) => sum + phase.legs, 0);
   }
   return Math.max(
     0,
-    ...competition.divisions.map((division) =>
-      theoreticalRounds(division.clubIds.length, format.rounds),
-    ),
+    ...competition.divisions.map((division) => divisionRounds(competition, division)),
   );
 }
 
-/** Respiros da copa: semanas extras antes da primeira rodada de cada fase com `gapWeeks`. */
-export function gapsOf(competition: Competition): { gaps?: number[] } {
+/** Semanas extras antes de cada rodada de uma divisão em fases (019 R11). */
+function stageGaps(competition: Competition, division: Division): number[] {
+  const stages = stagesOf(competition, division);
+  const ranges = stageRoundRanges(stages, division.clubIds.length);
+  const gaps: number[] = [];
+  stages.forEach((stage, index) => {
+    const count = ranges[index]?.length ?? 0;
+    if (stage.type === "knockout") {
+      for (const phase of stage.phases) {
+        gaps.push(phase.gapWeeks ?? 0);
+        for (let leg = 1; leg < phase.legs; leg++) gaps.push(0);
+      }
+      return;
+    }
+    gaps.push(stage.gapWeeks ?? 0);
+    for (let round = 1; round < count; round++) gaps.push(0);
+  });
+  return gaps;
+}
+
+/** Respiros da competição: semanas extras antes da primeira rodada de cada fase com `gapWeeks`. */
+export function gapsOf(competition: Competition): { gaps?: number[]; gapConflict?: true } {
+  const staged = competition.divisions.filter((division) => isStaged(competition, division));
+  if (staged.length > 0) {
+    const arrays = staged.map((division) => stageGaps(competition, division));
+    if (arrays.every((gaps) => gaps.every((gap) => gap === 0))) return {};
+    // As datas são uma grade só por competição: respiros só cabem se há uma divisão.
+    if (competition.divisions.length > 1) return { gapConflict: true };
+    return { gaps: arrays[0] as number[] };
+  }
   const { format } = competition;
   if (format.type !== "knockout" || format.phases.every((phase) => !phase.gapWeeks)) return {};
   const gaps: number[] = [];
@@ -143,6 +183,11 @@ export function buildSeasonCalendar(
 ): { ok: true; calendar: SeasonCalendar } | { ok: false; issues: CalendarIssue[] } {
   const end = addDays(start, SEASON_DAYS - 1);
   const issues: CalendarIssue[] = [];
+  for (const entry of competitions) {
+    if (entry.gapConflict) {
+      issues.push({ code: "stages.gap_conflict", competitionId: entry.competitionId });
+    }
+  }
   const dates = competitions.map((entry) =>
     roundDates(entry.schedule, start, entry.rounds, entry.gaps),
   );

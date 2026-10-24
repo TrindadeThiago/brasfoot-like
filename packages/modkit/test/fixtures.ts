@@ -5,6 +5,7 @@ import { strToU8, zipSync } from "fflate";
 
 export const DEFAULT_MOD = join(import.meta.dirname, "../../../mods/default");
 export const EXAMPLE_MOD = join(import.meta.dirname, "../../../mods/exemplo");
+export const STAGES_MOD = join(import.meta.dirname, "../../../mods/exemplo-fases");
 
 /** Arquivos de um mod em disco, já lidos como JSON. */
 export function modFiles(dir: string = DEFAULT_MOD): Record<string, unknown> {

@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  knockoutFormat,
-  type Season,
-  type Tie,
-  type TieState,
-  tieState,
-} from "@brasfoot-like/engine";
+import { cupFormat, type Season, type Tie, type TieState, tieState } from "@brasfoot-like/engine";
 import type { SaveFile } from "@brasfoot-like/save";
 import { useT } from "../../i18n";
 import { Crest } from "../Crest";
@@ -46,11 +40,13 @@ function TieCard({
   season,
   phaseIndex,
   tie,
+  originOf,
 }: {
   save: SaveFile;
   season: Season;
   phaseIndex: number;
   tie: Tie;
+  originOf?: (clubId: string) => string | undefined;
 }) {
   const t = useT();
   const state = tieState(season, phaseIndex, tie.id);
@@ -64,6 +60,7 @@ function TieCard({
       <div className={`${styles.side} ${won ? styles.winner : ""} ${lost ? styles.loser : ""}`}>
         {club ? <Crest crest={club.crest} label={club.name} size={18} /> : null}
         <span>{club?.shortName ?? clubId}</span>
+        {originOf?.(clubId) ? <span className={styles.origin}>{originOf(clubId)}</span> : null}
         {state.played > 0 ? <span className={styles.goals}>{goals}</span> : null}
         {won ? <span className="visually-hidden">{t("cup.qualified")}</span> : null}
       </div>
@@ -81,9 +78,18 @@ function TieCard({
 }
 
 /** Chaveamento da copa (018 US1): fases em colunas, confrontos com placar e fases ainda sem sorteio. */
-export function Bracket({ save, season }: { save: SaveFile; season: Season }) {
+export function Bracket({
+  save,
+  season,
+  originOf,
+}: {
+  save: SaveFile;
+  season: Season;
+  /** Origem da vaga de cada clube na 1ª fase (a fase de pontos de que vieram, 019). */
+  originOf?: (clubId: string) => string | undefined;
+}) {
   const t = useT();
-  const format = knockoutFormat(save.bank, season.competitionId);
+  const format = cupFormat(save.bank, season);
   return (
     // biome-ignore lint/a11y/noNoninteractiveTabindex: região rolável precisa de foco para o teclado (axe)
     <section aria-label={t("cup.bracket")} className={styles.bracket} tabIndex={0}>
@@ -99,6 +105,7 @@ export function Bracket({ save, season }: { save: SaveFile; season: Season }) {
                   season={season}
                   phaseIndex={phase.index}
                   tie={tie}
+                  {...(phase.index === 0 && originOf ? { originOf } : {})}
                 />
               ))}
             </ol>

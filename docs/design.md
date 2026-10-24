@@ -142,7 +142,13 @@ manchetes, janelas e evolução por datas, calendário do clube e abas por compe
 Mata-mata e copa nacional (018): formato `knockout` descrito só por dados (fases, ida e volta,
 entradas tardias, mando, campo neutro, prêmios), prorrogação e pênaltis na partida, inclusive ao
 vivo, chaveamento, prêmios e bilheteria, reflexo na torcida, diretoria e manchetes, histórico das
-copas. Saves v13. Faltam as fases de grupos.
+copas. Saves v13. Fase de grupos e competições em fases (019): uma divisão (ou a competição) pode
+ser uma sequência de fases de pontos corridos, grupos e mata-mata, só com dados; sorteio dos grupos
+com potes e regras por competição (separação por país ou região, com potes isentos, e concentração
+por região), classificados por grupo e vagas extras na posição seguinte, classificação geral,
+chaveamento pela posição no grupo (ou tabela própria), acesso e rebaixamento pela posição final,
+atributo de região do clube e telas de grupos, classificação geral e chaveamento com a origem das
+vagas. Saves v14. As vagas entre competições ficam para o Marco 8.
 
 Os marcos 7 a 9 são pós-lançamento: trazem as copas e o mundo maior do §14 até o mod do
 futebol sul-americano. Os prompts estão em [`speckit-prompts/`](speckit-prompts/README.md)

@@ -9,6 +9,7 @@
     "validate-bank": "tsx src/validate-bank.ts",
     "sim:matches": "tsx src/simulate-matches.ts",
     "sim:season": "tsx src/simulate-season.ts",
+    "gen:stages-mod": "tsx src/gen-stages-example-mod.ts",
     "sim:economy": "tsx src/simulate-economy.ts",
     "sim:world": "tsx src/simulate-world.ts",
     "gen:example-mod": "tsx src/gen-example-mod.ts",
