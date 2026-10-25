@@ -64,6 +64,16 @@ export interface BoardRules {
   cupOut: number;
   cupTitle: number;
   cupGoal: number;
+  /**
+   * Competição entre países (022): o clube no tercil de cima da reputação dos participantes espera
+   * a semifinal (até `continentalTopPct`%), o do meio a fase eliminatória (até `continentalMidPct`%)
+   * e os demais passar da preliminar; meta cumprida dá `continentalMet` à confiança, perdida tira
+   * `continentalMiss`.
+   */
+  continentalTopPct: number;
+  continentalMidPct: number;
+  continentalMet: number;
+  continentalMiss: number;
 }
 
 export const DEFAULT_BOARD: BoardRules = {
@@ -117,6 +127,10 @@ export const DEFAULT_BOARD: BoardRules = {
   cupOut: 1,
   cupTitle: 8,
   cupGoal: 5,
+  continentalTopPct: 34,
+  continentalMidPct: 67,
+  continentalMet: 5,
+  continentalMiss: 5,
 };
 
 /** Regras da diretoria: `competition.board` com os padrões preenchidos. */

@@ -1,12 +1,20 @@
+import {
+  buildSeasonCalendar,
+  calendarCompetitions,
+  dateOfRound,
+} from "../../src/calendar/season-calendar";
 import type {
   Berth,
   Competition,
+  DropIn,
   GroupsStage,
   KnockoutStage,
   ModPackage,
   StageFormat,
 } from "../../src/model/types";
 import type { IssueCode, IssueParams, Section } from "../../src/validation/issues";
+import { CONTINENTAL_IDS } from "../../src/worldgen/continental";
+import { generateWorldBank } from "../../src/worldgen/world-example";
 import { regionalPackage } from "../fixtures/stages-bank";
 import { at, leagueFormatOf, makeValidBank, removeField, setRaw } from "../helpers/build-bank";
 
@@ -177,6 +185,57 @@ function secondCountry(bank: ModPackage): void {
 }
 
 const division = (bank: ModPackage, index: number) => at(at(bank.competitions, 0).divisions, index);
+
+/** Banco de 5 países com as competições continentais maior e menor ligadas por `dropIns` (022). */
+function compactContinental(): ModPackage {
+  return JSON.parse(
+    JSON.stringify(
+      generateWorldBank({
+        seed: "cases-dropin",
+        countries: 5,
+        divisionsPerCountry: 1,
+        clubsPerDivision: 8,
+        cup: true,
+        continental: "compact",
+      }),
+    ),
+  ) as ModPackage;
+}
+
+const CONTINENTAL_BASE = compactContinental();
+const MINOR_INDEX = CONTINENTAL_BASE.competitions.findIndex(
+  (competition) => competition.id === CONTINENTAL_IDS.minor,
+);
+const MAJOR_INDEX = CONTINENTAL_BASE.competitions.findIndex(
+  (competition) => competition.id === CONTINENTAL_IDS.major,
+);
+const DROP_IN_ID = "terceiros-dos-grupos";
+
+/** Troca o banco pelo de 5 países e deixa `edit` mexer na ligação da competição menor. */
+function withDropIn(bank: ModPackage, edit: (minor: Competition, dropIn: DropIn) => void): void {
+  Object.assign(bank, compactContinental());
+  const minor = bank.competitions[MINOR_INDEX] as Competition;
+  edit(minor, at(at(minor.divisions, 0).dropIns as DropIn[], 0));
+}
+
+const DROP_IN_PATH = [MINOR_INDEX, "divisions", 0, "dropIns", 0];
+
+/** Data da última rodada de grupos da maior, com a menor começando cedo demais (caso de datas). */
+function earlyMinorDate(): string {
+  const bank = compactContinental();
+  const minor = bank.competitions[MINOR_INDEX] as Competition;
+  minor.schedule = { weekday: 4, startWeek: 0, everyWeeks: 1 };
+  const built = buildSeasonCalendar(
+    calendarCompetitions(bank.competitions),
+    bank.manifest.referenceDate,
+  );
+  if (!built.ok) throw new Error("calendário do caso de datas inválido");
+  const major = bank.competitions.find((competition) => competition.id === CONTINENTAL_IDS.major);
+  const stage = major?.format.type === "stages" ? major.format.stages[0] : undefined;
+  if (stage?.type !== "groups") throw new Error("a maior não começa por grupos");
+  // Grupos de 4 em dois turnos: 6 rodadas, as primeiras da competição.
+  return dateOfRound(built.calendar, CONTINENTAL_IDS.major, 6) as string;
+}
 
 /**
  * Um caso por código de problema (exceto `file.*`, produzidos pelo adaptador de disco).
@@ -1345,6 +1404,207 @@ export const RULE_CASES: RuleCase[] = [
       path: [1],
       entityId: "copa-b",
       params: { path: "copa-b → copa → copa-b" },
+    },
+  },
+  {
+    code: "continental.shape",
+    description: "competição sem país com formato de liga",
+    mutate: (bank) => {
+      const extra = cup(bank, ["clube-1", "clube-2", "clube-3", "clube-4"], undefined);
+      delete (extra as { countryId?: string }).countryId;
+    },
+    expect: {
+      section: "competitions",
+      path: [1, "format", "type"],
+      entityId: "copa",
+      params: { competitionId: "copa", reason: "format" },
+    },
+  },
+  {
+    code: "continental.single_country",
+    description: "competição sem país com clubes de um país só",
+    mutate: (bank) => {
+      knockoutCup(bank, (copa) => {
+        delete (copa as { countryId?: string }).countryId;
+      });
+    },
+    expect: {
+      section: "competitions",
+      path: [1, "divisions"],
+      entityId: "copa",
+      params: { competitionId: "copa", countries: 1 },
+    },
+  },
+  {
+    code: "continental.club_without_league",
+    description: "clube de competição sem país que não está na liga de nenhum país",
+    mutate: (bank) => {
+      const source = at(bank.clubs, 0);
+      bank.clubs.push({
+        ...JSON.parse(JSON.stringify(source)),
+        id: "clube-sem-liga",
+        abbreviation: "ZZY",
+      });
+      knockoutCup(bank, (copa) => {
+        delete (copa as { countryId?: string }).countryId;
+        at(copa.divisions, 0).clubIds[7] = "clube-sem-liga";
+      });
+    },
+    expect: {
+      section: "competitions",
+      path: [1, "divisions", 0, "clubIds", 7],
+      entityId: "copa",
+      params: { clubId: "clube-sem-liga", competitionId: "copa" },
+    },
+  },
+  {
+    code: "continental.rules_ignored",
+    description: "regras econômicas numa competição sem país (aviso)",
+    mutate: (bank) => {
+      secondCountry(bank);
+      // Com dois países cada um precisa do banco de nomes.
+      at(bank.countries, 0).names = structuredClone(at(bank.countries, 1).names);
+      knockoutCup(bank, (copa) => {
+        delete (copa as { countryId?: string }).countryId;
+        at(copa.divisions, 0).clubIds = [
+          "clube-1",
+          "clube-2",
+          "clube-3",
+          "clube-4",
+          "clube-9",
+          "clube-10",
+          "clube-11",
+          "clube-12",
+        ];
+        copa.economy = { fansBase: 1000 };
+      });
+    },
+    expect: {
+      section: "competitions",
+      path: [2, "economy"],
+      entityId: "copa",
+      params: { competitionId: "copa", field: "economy" },
+    },
+  },
+  {
+    code: "continental.dropin_self",
+    description: "ligação que vem da própria competição",
+    mutate: (bank) =>
+      withDropIn(bank, (minor, dropIn) => {
+        dropIn.source.competitionId = minor.id;
+      }),
+    expect: {
+      section: "competitions",
+      path: [...DROP_IN_PATH, "source", "competitionId"],
+      entityId: CONTINENTAL_IDS.minor,
+      params: { dropInId: DROP_IN_ID, competitionId: CONTINENTAL_IDS.minor },
+    },
+  },
+  {
+    code: "continental.dropin_unknown",
+    description: "ligação que aponta para uma fase da origem que não existe",
+    mutate: (bank) =>
+      withDropIn(bank, (_minor, dropIn) => {
+        dropIn.source.stage = 7;
+      }),
+    expect: {
+      section: "competitions",
+      path: [...DROP_IN_PATH, "source", "stage"],
+      entityId: CONTINENTAL_IDS.minor,
+      params: { dropInId: DROP_IN_ID, field: "stage" },
+    },
+  },
+  {
+    code: "continental.dropin_first_stage",
+    description: "ligação que entra na primeira fase do destino",
+    mutate: (bank) =>
+      withDropIn(bank, (_minor, dropIn) => {
+        dropIn.entry = { stage: 1 };
+      }),
+    expect: {
+      section: "competitions",
+      path: [...DROP_IN_PATH, "entry", "stage"],
+      entityId: CONTINENTAL_IDS.minor,
+      params: { dropInId: DROP_IN_ID },
+    },
+  },
+  {
+    code: "continental.dropin_count",
+    description: "ligação que pede mais posições do que o grupo tem",
+    mutate: (bank) =>
+      withDropIn(bank, (_minor, dropIn) => {
+        if (dropIn.source.kind !== "position") throw new Error("fonte inesperada");
+        dropIn.source.from = 3;
+        dropIn.source.to = 6;
+      }),
+    expect: {
+      section: "competitions",
+      path: [...DROP_IN_PATH, "source"],
+      entityId: CONTINENTAL_IDS.minor,
+      params: { dropInId: DROP_IN_ID },
+    },
+  },
+  {
+    code: "continental.dropin_qualified",
+    description: "ligação que pega a posição que já classifica na origem",
+    mutate: (bank) =>
+      withDropIn(bank, (_minor, dropIn) => {
+        if (dropIn.source.kind !== "position") throw new Error("fonte inesperada");
+        dropIn.source.from = 2;
+        dropIn.source.to = 2;
+      }),
+    expect: {
+      section: "competitions",
+      path: [...DROP_IN_PATH, "source", "from"],
+      entityId: CONTINENTAL_IDS.minor,
+      params: { dropInId: DROP_IN_ID, qualified: 2 },
+    },
+  },
+  {
+    code: "continental.dropin_before_source",
+    description: "fase de destino que começa antes de a fase de origem terminar",
+    mutate: (bank) =>
+      withDropIn(bank, (minor) => {
+        minor.schedule = { weekday: 4, startWeek: 0, everyWeeks: 1 };
+      }),
+    expect: {
+      section: "competitions",
+      path: [...DROP_IN_PATH, "entry"],
+      entityId: CONTINENTAL_IDS.minor,
+      params: { dropInId: DROP_IN_ID, date: earlyMinorDate() },
+    },
+  },
+  {
+    code: "continental.awards_unknown_stage",
+    description: "prêmio por uma fase que a competição não tem",
+    mutate: (bank) => {
+      Object.assign(bank, compactContinental());
+      const major = bank.competitions[MAJOR_INDEX] as Competition;
+      (major.awards as NonNullable<Competition["awards"]>).stage = [{ stage: 5, amount: 1000 }];
+    },
+    expect: {
+      section: "competitions",
+      path: [MAJOR_INDEX, "awards", "stage", 0, "stage"],
+      entityId: CONTINENTAL_IDS.major,
+      params: { competitionId: CONTINENTAL_IDS.major, stage: 5 },
+    },
+  },
+  {
+    code: "continental.awards_not_increasing",
+    description: "tabela de reputação que diminui com a fase alcançada",
+    mutate: (bank) => {
+      Object.assign(bank, compactContinental());
+      const major = bank.competitions[MAJOR_INDEX] as Competition;
+      (major.awards as NonNullable<Competition["awards"]>).reputation = [
+        { reached: { stage: 2, phase: 3 }, points: 3 },
+        { reached: { stage: 2, phase: 2 }, points: 4 },
+      ];
+    },
+    expect: {
+      section: "competitions",
+      path: [MAJOR_INDEX, "awards", "reputation", 1],
+      entityId: CONTINENTAL_IDS.major,
+      params: { competitionId: CONTINENTAL_IDS.major, index: 1 },
     },
   },
 ];

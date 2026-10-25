@@ -43,6 +43,10 @@ const RELEVANCE: Record<HeadlineType, number> = {
   cupFinal: 60,
   cupChampion: 85,
   qualification: 75,
+  continentalAdvanced: 55,
+  continentalEliminated: 55,
+  continentalChampion: 88,
+  continentalRout: 50,
 };
 
 const VARIANTS = Object.fromEntries(

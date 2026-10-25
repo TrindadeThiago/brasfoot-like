@@ -1,5 +1,6 @@
 import type { TurnoverStep } from "../career/types";
 import { coachReputation, hireCoach } from "./coaches";
+import { withContinentalGoals } from "./continental";
 import { seasonGoals } from "./goals";
 import { expireOffers, guaranteeOffer, pruneOffers } from "./offers";
 import { boardRules } from "./rules";
@@ -56,6 +57,11 @@ export const boardNewSeasonStep: TurnoverStep = {
     delete board.evaluation;
     guaranteeOffer(board, scope);
     pruneOffers(board, league.number);
-    return { ...context, board };
+    // Competição entre países (022): a meta continental da temporada, ao lado da meta de liga.
+    const withGoals = withContinentalGoals(board, context.world, [
+      league,
+      ...(context.competitions ?? []),
+    ]);
+    return { ...context, board: withGoals };
   },
 };

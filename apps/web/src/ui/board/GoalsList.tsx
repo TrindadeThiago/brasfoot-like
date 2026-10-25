@@ -3,6 +3,7 @@
 import { goalProgress, type SeasonGoals } from "@brasfoot-like/engine";
 import { boardContextOf, type SaveFile } from "@brasfoot-like/save";
 import { formatMoney, useT } from "../../i18n";
+import { reachedText } from "../continental/reachedText";
 import { competitionName } from "../qualification/origin-text";
 import styles from "./board.module.css";
 
@@ -50,6 +51,31 @@ export function GoalsList({ save }: { save: SaveFile }) {
           {progress.finance.met ? t("board.goal.met") : t("board.goal.atRisk")}
         </span>
       </li>
+      {goals.continental ? (
+        <li className={styles.goal}>
+          <span className={styles.muted}>{t("board.goal.continental")}</span>
+          <strong>
+            {t("board.goal.continental.text", {
+              competition: competitionName(save, goals.continental.competitionId),
+              target: reachedText(
+                t,
+                save,
+                goals.continental.competitionId,
+                goals.continental.target,
+              ),
+            })}
+          </strong>
+          {goals.continental.result ? (
+            <span className={goals.continental.result === "met" ? styles.met : styles.risk}>
+              {goals.continental.result === "met"
+                ? t("board.goal.met")
+                : t("board.evaluation.missed")}
+            </span>
+          ) : (
+            <span className={styles.muted}>{t("board.goal.continental.pending")}</span>
+          )}
+        </li>
+      ) : null}
       {goals.sport.midSeason ? <li className={styles.muted}>{t("board.goal.midSeason")}</li> : null}
     </ul>
   );

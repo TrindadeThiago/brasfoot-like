@@ -1,4 +1,5 @@
 import { managerClubOf } from "../board/create";
+import type { ContinentalEdition } from "../continental/types";
 import type { QualificationRecord } from "../qualification/types";
 import type { CareerSeasonState } from "./season-state";
 import { seasonTurnover } from "./turnover";
@@ -11,6 +12,8 @@ export interface CareerHistory {
   cupHistory: NonNullable<Extract<TurnoverResult, { ok: true }>["cupHistory"]>;
   /** Classificações entre competições, uma por temporada (021). */
   qualificationHistory?: QualificationRecord[];
+  /** Edições das competições entre países (022). */
+  continentalHistory?: ContinentalEdition[];
 }
 
 export const EMPTY_HISTORY: CareerHistory = { history: [], competitionHistory: [], cupHistory: [] };
@@ -44,6 +47,7 @@ export function startNextSeason(
     competitionHistory: history.competitionHistory,
     cupHistory: history.cupHistory,
     ...(history.qualificationHistory ? { qualificationHistory: history.qualificationHistory } : {}),
+    ...(history.continentalHistory ? { continentalHistory: history.continentalHistory } : {}),
   });
   if (!turned.ok) return turned;
   return {
@@ -71,6 +75,9 @@ export function startNextSeason(
       cupHistory: turned.cupHistory ?? history.cupHistory,
       ...((turned.qualificationHistory ?? history.qualificationHistory)
         ? { qualificationHistory: turned.qualificationHistory ?? history.qualificationHistory }
+        : {}),
+      ...((turned.continentalHistory ?? history.continentalHistory)
+        ? { continentalHistory: turned.continentalHistory ?? history.continentalHistory }
         : {}),
     },
   };

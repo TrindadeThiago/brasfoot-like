@@ -44,7 +44,7 @@ export function baseWorld(): { world: CompletedBank; ids: Ids } {
     ids: {
       league: league.id,
       cup: cup.id,
-      countryId: league.countryId,
+      countryId: league.countryId ?? "",
       top: [...(league.divisions[0]?.clubIds ?? [])],
       second: [...(league.divisions[1]?.clubIds ?? [])],
     },

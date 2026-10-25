@@ -18,6 +18,9 @@
 
 import { boardNewSeasonStep } from "../board/turnover";
 import { seasonDate } from "../calendar/date";
+import { continentalEdition } from "../continental/history";
+import { continentalReputationStep } from "../continental/reputation";
+import { isInternationalCompetition } from "../continental/scope";
 import { fansNewSeasonStep } from "../fans/turnover";
 import {
   aiFinanceReview,
@@ -64,6 +67,7 @@ import type {
 
 export const TURNOVER_STEP_IDS = [
   "record-history",
+  "continental-reputation",
   "fans-new-season",
   "news-new-season",
   "pay-prizes",
@@ -117,6 +121,15 @@ const recordHistory: TurnoverStep = {
     cupHistory: [
       ...(context.cupHistory ?? []),
       ...(context.finishedCompetitions ?? []).flatMap((league) => cupEntry(league) ?? []),
+    ],
+    // Competições entre países (022): uma edição por temporada encerrada.
+    continentalHistory: [
+      ...(context.continentalHistory ?? []),
+      ...(context.finishedCompetitions ?? []).flatMap((league) =>
+        isInternationalCompetition(context.world, league.competitionId)
+          ? (continentalEdition(context.world, league) ?? [])
+          : [],
+      ),
     ],
   }),
 };
@@ -318,6 +331,7 @@ function perCountry(step: TurnoverStep): TurnoverStep {
 /** Etapas padrão, na ordem fixa documentada (FR-017). */
 export const DEFAULT_TURNOVER_STEPS: readonly TurnoverStep[] = [
   recordHistory,
+  continentalReputationStep,
   fansNewSeasonStep,
   newsNewSeasonStep,
   perCountry(payPrizes),
@@ -470,6 +484,7 @@ export function seasonTurnover(
     ...(options.qualificationHistory
       ? { qualificationHistory: [...options.qualificationHistory] }
       : {}),
+    ...(options.continentalHistory ? { continentalHistory: [...options.continentalHistory] } : {}),
   };
   try {
     for (const step of resolved.steps) context = step.run(context);
@@ -507,5 +522,8 @@ export function seasonTurnover(
     ...(context.competitionHistory ? { competitionHistory: context.competitionHistory } : {}),
     ...(context.cupHistory ? { cupHistory: context.cupHistory } : {}),
     ...(context.qualificationHistory ? { qualificationHistory: context.qualificationHistory } : {}),
+    ...(context.continentalHistory && context.continentalHistory.length > 0
+      ? { continentalHistory: context.continentalHistory }
+      : {}),
   };
 }

@@ -64,7 +64,9 @@ export function HomeGames({ save }: { save: SaveFile }) {
         <DataTable
           rows={games}
           columns={columns}
-          rowKey={(gate) => `${gate.season}-${gate.round}`}
+          rowKey={(gate) =>
+            `${gate.season}-${gate.round}-${gate.date ?? ""}-${gate.competitionId ?? ""}`
+          }
           caption={t("finance.games.title")}
         />
       )}

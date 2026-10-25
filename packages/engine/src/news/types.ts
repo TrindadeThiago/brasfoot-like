@@ -28,6 +28,10 @@ export const HEADLINE_TYPES = [
   "cupFinal",
   "cupChampion",
   "qualification",
+  "continentalAdvanced",
+  "continentalEliminated",
+  "continentalChampion",
+  "continentalRout",
 ] as const;
 export type HeadlineType = (typeof HEADLINE_TYPES)[number];
 

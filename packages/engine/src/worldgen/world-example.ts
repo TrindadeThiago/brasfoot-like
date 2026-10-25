@@ -1,6 +1,7 @@
 import type { Competition, Country, ModPackage, Rivalry, ValidatedBank } from "../model/types";
 import { createRng, type Rng } from "../rng/xoshiro";
 import { validateBank } from "../validation/validate";
+import { type ContinentalSize, continentalCompetitions } from "./continental";
 import { generateCup } from "./cup";
 import { generateDefaultBank } from "./generate";
 import defaultNameBank from "./name-banks/default.json" with { type: "json" };
@@ -36,6 +37,13 @@ export interface WorldBankOptions {
    * 2 da de cima na 2ª).
    */
   qualification?: boolean;
+  /**
+   * Competição entre países (022): a taça continental maior, com vagas por país pelas ligas e copas
+   * (`full`: 40 clubes e 10 países ou mais; `compact`: 16 clubes e 4 países ou mais).
+   */
+  continental?: ContinentalSize;
+  /** Com `continental`, inclui a competição menor ligada à maior (padrão: sim). */
+  continentalMinor?: boolean;
   /** Identificação do mod gerado. */
   manifest?: { id: string; name: string; author: string; version: string };
 }
@@ -434,6 +442,27 @@ export function generateWorldBank(options: WorldBankOptions): ValidatedBank {
     competitions.push(...bank.competitions);
     clubs.push(...bank.clubs);
     players.push(...bank.players);
+  }
+
+  if (options.continental) {
+    competitions.push(
+      ...continentalCompetitions(
+        { size: options.continental, countries, competitions, clubs, scales },
+        { minor: options.continentalMinor !== false },
+      ),
+    );
+    // A torcida pesa mais a taça e espera mais de quem a disputa (022 R7).
+    const seen = new Set<string>();
+    for (const competition of competitions) {
+      if (competition.countryId === undefined || seen.has(competition.countryId)) continue;
+      seen.add(competition.countryId);
+      competition.fans = {
+        ...competition.fans,
+        continentalMatchPct: 150,
+        continentalExpectation: 2,
+        continentalTitle: 20,
+      };
+    }
   }
 
   const bank: ModPackage = {

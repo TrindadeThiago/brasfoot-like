@@ -26,6 +26,11 @@ export function originText(
         competition: competitionName(save, origin.from),
         position: origin.position ?? 0,
       });
+    case "dropIn":
+      return t("origin.dropIn", {
+        competition: competitionName(save, origin.from),
+        position: origin.position ?? 0,
+      });
     case "pass": {
       const club = save.bank.clubs.find((entry) => entry.id === origin.fromClubId);
       return t("origin.pass", {

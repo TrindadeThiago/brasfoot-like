@@ -2,6 +2,7 @@ import { coachOf } from "../board/coaches";
 import { divisionExpectations } from "../board/goals";
 import type { BoardState } from "../board/types";
 import { clubDivision } from "../career/league";
+import type { ContinentalFacts } from "../continental/facts";
 import type { CupEvent } from "../knockout/events";
 import { knockoutFormat } from "../knockout/rules";
 import { marketValue } from "../market/value";
@@ -13,7 +14,7 @@ import { type Fact, matchFacts, matchKey, streakOf } from "./facts";
 import { compare as compareHeadlines, rankFeed } from "./feed";
 import { type RecordCandidate, updateRecords } from "./records";
 import { newsRules } from "./rules";
-import type { Headline, HeadlineType, NewsContext, NewsState } from "./types";
+import type { Headline, HeadlineType, HeadlineVars, NewsContext, NewsState } from "./types";
 import { variantOf } from "./variants";
 
 function clone<T>(value: T): T {
@@ -431,6 +432,100 @@ export function newsAfterCup(
       const next = format.phases[event.phase + 1]?.name ?? "";
       add("cupFinal", event, event.opponentId, event.clubId, next);
     }
+  }
+  const headlines = rankFeed(rules, [...existing, ...added]);
+  for (const headline of added) {
+    if (!headline.mine || headlines.some((item) => item.id === headline.id)) continue;
+    const index = headlines.findLastIndex((item) => !item.mine);
+    if (index >= 0) headlines[index] = headline;
+  }
+  headlines.sort(compareHeadlines);
+  news.feed = [
+    ...news.feed.filter((feed) => !(feed.season === season && feed.round === round)),
+    { season, year: context.league.year, round, headlines },
+  ];
+  return news;
+}
+
+/**
+ * Manchetes de uma competição entre países no dia (022 R8): título, avanço de fase e eliminação do
+ * clube do técnico, e goleadas. Só id, tipo e variáveis; o texto vem do i18n. Não altera a entrada.
+ */
+export function newsAfterContinental(
+  context: NewsContext,
+  facts: ContinentalFacts,
+  round: number,
+): NewsState {
+  const total =
+    facts.titles.length + facts.advances.length + facts.eliminations.length + facts.routs.length;
+  if (total === 0) return context.news;
+  const rules = newsRules(context.world, context.league.competitionId);
+  const season = context.league.number;
+  const news = clone(context.news);
+  const entry = news.feed.find((feed) => feed.season === season && feed.round === round);
+  const existing = entry?.headlines ?? [];
+  const mine = context.managerClubId;
+  const added: Headline[] = [];
+  const add = (
+    type: HeadlineType,
+    key: string,
+    clubId: string,
+    opponentId: string | undefined,
+    vars: HeadlineVars,
+  ): void => {
+    const isMine = clubId === mine || opponentId === mine;
+    added.push({
+      id: `${season}-${round}-k${existing.length + added.length}`,
+      type,
+      relevance: rules.relevance[type] + (isMine ? rules.mineBonus : 0),
+      variant: variantOf(rules, context.careerSeed, `${season}:${key}`, type),
+      clubIds: opponentId ? [clubId, opponentId] : [clubId],
+      vars: { club: clubId, ...(opponentId ? { opponent: opponentId } : {}), ...vars },
+      mine: isMine,
+    });
+  };
+  for (const title of facts.titles) {
+    add("continentalChampion", `${title.competitionId}:title`, title.championId, title.runnerUpId, {
+      competition: title.competitionId,
+    });
+  }
+  for (const advance of facts.advances) {
+    // Só o avanço do clube do técnico vira manchete: os demais lotariam o feed.
+    if (advance.clubId !== mine) continue;
+    add(
+      "continentalAdvanced",
+      `${advance.competitionId}:advance:${advance.clubId}:${advance.stage}`,
+      advance.clubId,
+      undefined,
+      {
+        competition: advance.competitionId,
+        phase: advance.phase,
+      },
+    );
+  }
+  for (const out of facts.eliminations) {
+    if (out.clubId !== mine) continue;
+    add(
+      "continentalEliminated",
+      `${out.competitionId}:out:${out.clubId}:${out.stage}`,
+      out.clubId,
+      undefined,
+      {
+        competition: out.competitionId,
+      },
+    );
+  }
+  for (const rout of facts.routs) {
+    add(
+      "continentalRout",
+      `${rout.competitionId}:rout:${rout.winnerId}:${rout.loserId}`,
+      rout.winnerId,
+      rout.loserId,
+      {
+        competition: rout.competitionId,
+        score: rout.score,
+      },
+    );
   }
   const headlines = rankFeed(rules, [...existing, ...added]);
   for (const headline of added) {

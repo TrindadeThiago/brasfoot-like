@@ -1,7 +1,13 @@
+import { boardAfterContinental } from "../board/continental";
 import { managerClubOf } from "../board/create";
 import { boardAfterCup, boardAfterExtraMatches } from "../board/round";
 import type { CalendarSlot } from "../calendar/season-calendar";
-import { fansAfterCup, fansAfterExtraMatches } from "../fans/mood";
+import { competitionAwards } from "../continental/awards";
+import { sealDropIns } from "../continental/dropins";
+import { type ContinentalFacts, continentalFacts } from "../continental/facts";
+import { isInternationalCompetition } from "../continental/scope";
+import type { CompetitionPrize } from "../continental/types";
+import { fansAfterContinentalTitle, fansAfterCup, fansAfterExtraMatches } from "../fans/mood";
 import {
   applyCupPrizes,
   applyExtraGates,
@@ -21,13 +27,15 @@ import { type CupEnd, type CupEvent, cupEnd, cupEvents } from "../knockout/event
 import { cupPrizes } from "../knockout/prizes";
 import type { Lineup } from "../match/types";
 import type { CompletedBank, KnockoutFormat } from "../model/types";
-import { newsAfterCup, newsAfterExtraMatches } from "../news/round";
+import { newsAfterContinental, newsAfterCup, newsAfterExtraMatches } from "../news/round";
+import { newsRules } from "../news/rules";
 import type { SeasonError } from "../season/errors";
 import { finishRound, type LiveRound } from "../season/live-round";
 import type { MatchRecord, Season, SeasonStep } from "../season/types";
+import { advanceStages } from "../stages/advance";
 import { cupView } from "../stages/cup-view";
 import { isCountryMain, mainCompetitionOf } from "../world/countries";
-import { simulationKindFor } from "../world/leagues";
+import { mainLeagueOfClub, simulationKindFor } from "../world/leagues";
 import { clubsInRound, syncInjuries } from "./injuries";
 import { leagueRound } from "./league";
 import { completeLeagueRound, playSummaryLeagueRound, startLeagueRound } from "./league-round";
@@ -67,6 +75,31 @@ function playsIn(
 }
 
 /**
+ * Ligas principais de onde vêm as lesões dos clubes de uma rodada, com os clubes de cada uma (017
+ * R6): a do país da competição; numa competição entre países (022), a do país de cada clube.
+ */
+function injurySources(
+  state: CareerSeasonState,
+  competitionId: string,
+  clubs: ReadonlySet<string>,
+): { main: LeagueSeason; clubs: Set<string> }[] {
+  const competition = state.world.competitions.find((entry) => entry.id === competitionId);
+  if (!competition || competition.countryId !== undefined) {
+    return [{ main: countryMain(state, competitionId), clubs: new Set(clubs) }];
+  }
+  const groups = new Map<string, { main: LeagueSeason; clubs: Set<string> }>();
+  for (const clubId of [...clubs].sort()) {
+    const main = mainLeagueOfClub(state, clubId) ?? state.league;
+    const group = groups.get(main.competitionId) ?? { main, clubs: new Set<string>() };
+    group.clubs.add(clubId);
+    groups.set(main.competitionId, group);
+  }
+  return [...groups.values()].sort((a, b) =>
+    a.main.competitionId < b.main.competitionId ? -1 : 1,
+  );
+}
+
+/**
  * Temporada da competição do slot pronta para a rodada: as secundárias recebem as lesões da
  * principal dos clubes que jogam (017 R6, lesões valem para todas as competições).
  */
@@ -74,10 +107,11 @@ function slotSeason(state: CareerSeasonState, slot: CalendarSlot): LeagueSeason 
   const season = competitionSeason(state, slot.competitionId);
   const main = countryMain(state, slot.competitionId);
   if (slot.competitionId === main.competitionId) return season;
-  return drawn(
-    syncInjuries(main, season, state.world, clubsInRound(season, slot.round)),
-    state.world,
-  );
+  let synced = season;
+  for (const source of injurySources(state, slot.competitionId, clubsInRound(season, slot.round))) {
+    synced = syncInjuries(source.main, synced, state.world, source.clubs);
+  }
+  return drawn(synced, state.world);
 }
 
 /**
@@ -86,7 +120,10 @@ function slotSeason(state: CareerSeasonState, slot: CalendarSlot): LeagueSeason 
  */
 function countryMain(state: CareerSeasonState, competitionId: string): LeagueSeason {
   const competition = state.world.competitions.find((entry) => entry.id === competitionId);
-  const main = competition ? mainCompetitionOf(state.world, competition.countryId) : undefined;
+  const main =
+    competition?.countryId !== undefined
+      ? mainCompetitionOf(state.world, competition.countryId)
+      : undefined;
   if (!main || main.id === state.league.competitionId) return state.league;
   return state.competitions.find((entry) => entry.competitionId === main.id) ?? state.league;
 }
@@ -149,6 +186,26 @@ function withLeague(state: CareerSeasonState, season: LeagueSeason): CareerSeaso
   };
 }
 
+/**
+ * Ligação entre competições (022 R3): sela os clubes que descem de uma competição que acabou de
+ * fechar uma fase e começa a fase de destino, se ela só esperava por eles. Sem ligações, devolve o
+ * mesmo estado.
+ */
+function bridgeDropIns(state: CareerSeasonState): CareerSeasonState {
+  const before = [state.league, ...state.competitions];
+  const bridged = sealDropIns(state.world, before);
+  if (bridged.sealed.length === 0) return state;
+  let next = state;
+  bridged.seasons.forEach((league, index) => {
+    if (league === before[index]) return;
+    next = withLeague(next, {
+      ...league,
+      divisions: league.divisions.map((season) => advanceStages(season, state.world)),
+    });
+  });
+  return next;
+}
+
 /** Resultado da rodada de uma liga de outro país: a liga em si não muda, só os sistemas. */
 function withForeignSystems(state: CareerSeasonState, result: CareerRoundResult & { ok: true }) {
   return {
@@ -204,10 +261,14 @@ export function completeCareerDay(
   const played: MatchRecord[] = [];
   /** Jogos das competições secundárias do dia (a principal tem o caminho próprio). */
   const extra: DayMatch[] = [];
+  /** Prêmios das regras `awards` das competições entre países (022 R4). */
+  const awarded: (CompetitionPrize & { competitionId: string })[] = [];
+  /** Fatos das competições entre países hoje: títulos, avanços, eliminações, goleadas (022 R7, R8). */
+  const continental: ContinentalFacts = { titles: [], advances: [], eliminations: [], routs: [] };
   for (const slot of day.slots) {
     const season = slotSeason(next, slot);
     let completed: ReturnType<typeof completeLeagueRound>;
-    if (simulationKindFor(next, slot.competitionId) === "summary") {
+    if (simulationKindFor(next, slot.competitionId, managerClubId) === "summary") {
       // Liga de outro país: simulação resumida (020), sem rodada ao vivo nem escalação do técnico.
       completed = playSummaryLeagueRound(season, tiredWorld(state, day.date));
     } else {
@@ -226,17 +287,47 @@ export function completeCareerDay(
     next = withLeague(next, drawn(completed.league, next.world));
     const main = countryMain(next, slot.competitionId);
     if (slot.competitionId !== main.competitionId) {
-      // As lesões novas e o desconto do jogo voltam para a principal do país.
+      // As lesões novas e o desconto do jogo voltam para a principal do país de cada clube.
       const clubs = clubsInRound(completed.league, slot.round);
-      next = withLeague(next, syncInjuries(completed.league, main, next.world, clubs));
+      for (const source of injurySources(next, slot.competitionId, clubs)) {
+        const target = competitionSeason(next, source.main.competitionId);
+        next = withLeague(next, syncInjuries(completed.league, target, next.world, source.clubs));
+      }
     }
     const matches = roundMatches(completed.league, slot.round, day.date);
+    awarded.push(
+      ...slotAwards(
+        competitionSeason(state, slot.competitionId),
+        competitionSeason(next, slot.competitionId),
+        next.world,
+        matches,
+        day.date,
+      ),
+    );
+    if (isInternationalCompetition(next.world, slot.competitionId)) {
+      const now = competitionSeason(next, slot.competitionId).divisions[0];
+      const was = competitionSeason(state, slot.competitionId).divisions[0];
+      if (now && was) {
+        const today = continentalFacts(
+          next.world,
+          was,
+          now,
+          matches,
+          newsRules(next.world, next.league.competitionId).routMargin,
+        );
+        continental.titles.push(...today.titles);
+        continental.advances.push(...today.advances);
+        continental.eliminations.push(...today.eliminations);
+        continental.routs.push(...today.routs);
+      }
+    }
     played.push(...matches.map((match) => match.record));
     if (slot.competitionId === state.league.competitionId) principalRound = slot.round;
     else if (isCountryMain(state.world, slot.competitionId)) {
       foreignRounds.push({ competitionId: slot.competitionId, round: slot.round });
     } else extra.push(...matches);
   }
+  next = bridgeDropIns(next);
   if (principalRound !== undefined) {
     // Consequências da rodada da principal (finanças, evolução, mercado, torcida, diretoria,
     // notícias): o mesmo caminho da rodada antiga.
@@ -294,9 +385,90 @@ export function completeCareerDay(
     if (knockouts.length > 0) next = foreignExtraMatches(next, league, knockouts);
   }
   if (extra.length > 0) next = afterAllExtraMatches(next, careerSeed, managerClubId, extra);
+  if (next.news && Object.values(continental).some((list) => list.length > 0)) {
+    next = {
+      ...next,
+      news: newsAfterContinental(
+        {
+          world: next.world,
+          league: next.league,
+          news: next.news,
+          careerSeed,
+          managerClubId: currentManager(next, managerClubId),
+        },
+        continental,
+        Math.max(1, leagueRound(next.league) - 1),
+      ),
+    };
+  }
+  if (next.fans && continental.titles.length > 0) {
+    next = {
+      ...next,
+      fans: fansAfterContinentalTitle(
+        { world: next.world, league: next.league, finances: next.finances, fans: next.fans },
+        continental.titles,
+        Math.max(1, leagueRound(next.league) - 1),
+        currentManager(next, managerClubId),
+      ),
+    };
+  }
+  if (
+    next.board &&
+    extra.some((match) => isInternationalCompetition(next.world, match.competitionId))
+  ) {
+    // Meta continental (022 R6): avaliada quando a campanha de um clube termina.
+    next = {
+      ...next,
+      board: boardAfterContinental(
+        {
+          world: next.world,
+          league: next.league,
+          finances: next.finances,
+          board: next.board,
+          careerSeed,
+        },
+        [next.league, ...next.competitions],
+        Math.max(1, leagueRound(next.league) - 1),
+      ),
+    };
+  }
+  if (awarded.length > 0) {
+    next = { ...next, finances: applyCupPrizes(next.finances, next.league, awarded) };
+  }
   const rules = fitnessRules(next.world, next.league.competitionId);
   const fitness = fitnessAfterMatches(next.fitness, played, day.date, rules);
   return { ok: true, state: { ...next, fitness } };
+}
+
+/**
+ * Liga principal cujas regras valem no jogo (022 R1): a do país da competição; numa competição
+ * entre países, a do país do mandante.
+ */
+function matchMain(state: CareerSeasonState, match: DayMatch): LeagueSeason {
+  const competition = state.world.competitions.find((entry) => entry.id === match.competitionId);
+  if (competition && competition.countryId === undefined) {
+    return mainLeagueOfClub(state, match.fixture.home) ?? state.league;
+  }
+  return countryMain(state, match.competitionId);
+}
+
+/** Prêmios `awards` (022) dos jogos de uma rodada: compara cada divisão antes e depois dela. */
+function slotAwards(
+  before: LeagueSeason,
+  after: LeagueSeason,
+  world: CompletedBank,
+  matches: readonly DayMatch[],
+  date: string,
+): (CompetitionPrize & { competitionId: string })[] {
+  return after.divisions.flatMap((division) => {
+    const prior = before.divisions.find((entry) => entry.divisionLevel === division.divisionLevel);
+    if (!prior) return [];
+    const mine = matches.filter((match) => match.divisionLevel === division.divisionLevel);
+    return competitionAwards(world, prior, division, mine, date).map((prize) => ({
+      ...prize,
+      competitionId: after.competitionId,
+    }));
+  });
 }
 
 /**
@@ -309,9 +481,19 @@ function afterAllExtraMatches(
   managerClubId: string,
   matches: readonly DayMatch[],
 ): CareerSeasonState {
-  const mainOf = (match: DayMatch) => countryMain(state, match.competitionId);
-  const own = matches.filter((match) => mainOf(match).competitionId === state.league.competitionId);
-  let next = own.length > 0 ? afterExtraMatches(state, careerSeed, managerClubId, own) : state;
+  const international = (match: DayMatch) =>
+    state.world.competitions.find((entry) => entry.id === match.competitionId)?.countryId ===
+    undefined;
+  const mainOf = (match: DayMatch) => matchMain(state, match);
+  const ownMain = (match: DayMatch) => mainOf(match).competitionId === state.league.competitionId;
+  // Reações (torcida, diretoria, notícias) e prêmios: jogos do país do técnico e das competições
+  // entre países (022), onde o clube dele joga fora de casa em campo estrangeiro. A bilheteria
+  // vai sempre para o país do mandante, com as regras dele.
+  const reacting = matches.filter((match) => ownMain(match) || international(match));
+  let next =
+    reacting.length > 0
+      ? afterExtraMatches(state, careerSeed, managerClubId, reacting, matches.filter(ownMain))
+      : state;
   const groups = new Map<string, DayMatch[]>();
   for (const match of matches) {
     const principal = mainOf(match);
@@ -319,7 +501,12 @@ function afterAllExtraMatches(
     groups.set(principal.competitionId, [...(groups.get(principal.competitionId) ?? []), match]);
   }
   for (const [principalId, group] of [...groups].sort(([a], [b]) => (a < b ? -1 : 1))) {
-    next = foreignExtraMatches(next, competitionSeason(next, principalId), group);
+    next = foreignExtraMatches(
+      next,
+      competitionSeason(next, principalId),
+      group,
+      group.filter((match) => !international(match)),
+    );
   }
   return next;
 }
@@ -329,10 +516,12 @@ function foreignExtraMatches(
   state: CareerSeasonState,
   principal: LeagueSeason,
   matches: readonly DayMatch[],
+  /** Jogos cujos prêmios saem aqui; os de competições entre países pagam no caminho comum. */
+  prizeMatches: readonly DayMatch[] = matches,
 ): CareerSeasonState {
   const gated = applyExtraGates(state.finances, principal, state.world, matches, state.fans);
   const prizes = cupSources(state).flatMap(({ competitionId, season }) =>
-    cupPrizes(state.world, season, matches).map((prize) => ({ ...prize, competitionId })),
+    cupPrizes(state.world, season, prizeMatches).map((prize) => ({ ...prize, competitionId })),
   );
   const finances = applyCupPrizes(gated, principal, prizes);
   return finances === state.finances ? state : { ...state, finances };
@@ -348,11 +537,13 @@ function afterExtraMatches(
   careerSeed: string,
   managerClubId: string,
   matches: readonly DayMatch[],
+  /** Jogos cuja bilheteria sai pelas regras do país do técnico (o mandante é de lá). */
+  gateMatches: readonly DayMatch[] = matches,
 ): CareerSeasonState {
   const round = Math.max(1, leagueRound(state.league) - 1);
   const manager = currentManager(state, managerClubId);
   // A bilheteria usa o humor de antes do jogo.
-  const gated = applyExtraGates(state.finances, state.league, state.world, matches, state.fans);
+  const gated = applyExtraGates(state.finances, state.league, state.world, gateMatches, state.fans);
   const finances = withCupPrizes(state, gated, matches);
   let next: CareerSeasonState = { ...state, finances };
   if (next.fans) {

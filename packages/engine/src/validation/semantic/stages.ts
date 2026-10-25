@@ -1,5 +1,6 @@
 import type { Club, Competition, Division, KnockoutStage, StageFormat } from "../../model/types";
 import { groupLetter } from "../../stages/groups-draw";
+import { incomingCounts } from "../../stages/incoming";
 import { isStaged, knockoutCounts, stageQualifierCount, stagesOf } from "../../stages/rules";
 import type { SemanticContext } from "../context";
 import { makeIssue, type ValidationIssue } from "../issues";
@@ -127,6 +128,8 @@ function checkDivision(
   division: Division,
   clubsById: ReadonlyMap<string, Club>,
   issues: ValidationIssue[],
+  /** Clubes que chegam a cada fase por ligação entre competições (022). */
+  incoming: readonly number[],
 ): void {
   const stages = stagesOf(competition, division);
   const stagePath = (k: number): Path => {
@@ -280,7 +283,7 @@ function checkDivision(
     if (stage.type !== "knockout" && stage.qualified === undefined) break;
     previousQualifying = qualifying;
     previousParticipants = participants;
-    participants = qualifying + (stages[k + 1]?.enter?.length ?? 0);
+    participants = qualifying + (stages[k + 1]?.enter?.length ?? 0) + (incoming[k + 1] ?? 0);
   }
 }
 
@@ -383,10 +386,12 @@ function checkDraw(
 export function checkStages(context: SemanticContext): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
   const clubsById = new Map(context.clubs.map((item) => [item.value.id, item.value]));
+  const competitions = context.competitions.map((item) => item.value);
   for (const { index, value: competition } of context.competitions) {
     competition.divisions.forEach((division, position) => {
       if (isStaged(competition, division)) {
-        checkDivision(index, competition, position, division, clubsById, issues);
+        const incoming = incomingCounts({ competitions }, competition, division);
+        checkDivision(index, competition, position, division, clubsById, issues, incoming);
       }
     });
   }

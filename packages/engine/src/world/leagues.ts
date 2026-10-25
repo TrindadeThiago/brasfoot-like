@@ -33,14 +33,28 @@ export type SimulationKind = "full" | "summary";
 
 /**
  * Qual simulação joga uma competição (020 FR-014/FR-015): as do país do técnico usam a completa
- * (o jogo dele, a rodada ao vivo e as do mesmo país); as dos outros países, a resumida. Função pura
- * do estado, então ao vivo = direto e salvar/carregar no meio não mudam nada; um banco de um país
- * só usa sempre a completa.
+ * (o jogo dele, a rodada ao vivo e as do mesmo país); as dos outros países, a resumida. Numa
+ * competição entre países (022) vale o clube em foco: completa se ele a disputa, resumida senão.
+ * Função pura do estado, então ao vivo = direto e salvar/carregar no meio não mudam nada; um banco
+ * de um país só usa sempre a completa.
  */
 export function simulationKindFor(
-  state: Pick<CareerSeasonState, "league" | "world">,
+  state: Pick<CareerSeasonState, "league" | "world"> &
+    Partial<Pick<CareerSeasonState, "competitions">>,
   competitionId: string,
+  focusClubId?: string,
 ): SimulationKind {
+  const competition = state.world.competitions.find((entry) => entry.id === competitionId);
+  if (competition && competition.countryId === undefined) {
+    if (focusClubId === undefined) return "summary";
+    const season = [state.league, ...(state.competitions ?? [])].find(
+      (entry) => entry.competitionId === competitionId,
+    );
+    const clubs = season
+      ? season.divisions.flatMap((division) => division.clubIds)
+      : competition.divisions.flatMap((division) => division.clubIds);
+    return clubs.includes(focusClubId) ? "full" : "summary";
+  }
   const country = (id: string) =>
     state.world.competitions.find((entry) => entry.id === id)?.countryId;
   return country(competitionId) === country(state.league.competitionId) ? "full" : "summary";

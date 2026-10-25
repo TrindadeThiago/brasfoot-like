@@ -3,6 +3,7 @@
 import type { ManagerSeasonRecord, Stint } from "@brasfoot-like/engine";
 import { divisionNameOf, type SaveFile } from "@brasfoot-like/save";
 import { useT } from "../../i18n";
+import { reachedText } from "../continental/reachedText";
 import { type Column, DataTable } from "../DataTable";
 import styles from "./board.module.css";
 import { goalTierText } from "./GoalsList";
@@ -61,6 +62,17 @@ export function ManagerHistory({ save }: { save: SaveFile }) {
               goal: goalTierText(t, save, row.goals.sportTier, row.goals.sportCompetitionId),
             })
           : t("career.history.noGoal"),
+    },
+    {
+      key: "continental",
+      header: t("career.history.continental"),
+      render: (row) =>
+        row.continental?.reached
+          ? t("career.history.continentalValue", {
+              reached: reachedText(t, save, row.continental.competitionId, row.continental.reached),
+              result: row.continental.result ?? "pending",
+            })
+          : "",
     },
     {
       key: "achievements",

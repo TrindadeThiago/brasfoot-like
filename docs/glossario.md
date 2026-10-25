@@ -20,6 +20,9 @@ novo, use estes termos; ao traduzir, mantenha a mesma distinção entre eles.
 | **vaga** | a possibilidade de disputar outra competição na temporada seguinte, por posição, título ou campanha numa competição; a tabela mostra as posições que dão vaga e a legenda diz a competição e a fase | lugar, classificação (para a vaga) |
 | **repasse** | a vaga que passa ao próximo da ordem definida quando o clube já está classificado ou não pode usá-la | transferência (que é do mercado) |
 | **supercopa** | a final única entre os campeões de duas competições | — |
+| **competição entre países** | a competição sem país, com clubes de vários países, no formato de mod (`countryId` ausente); no jogo, "competição continental" | competição internacional (soa a seleções) |
+| **continental maior / menor** | as duas competições continentais: a maior leva os melhores clubes; a menor recebe os de fora e quem desce da maior; não confundir com "competição principal do país" (a liga do país) | continental principal / secundária |
+| **ligação** | a regra que leva clubes de uma fase de uma competição a uma fase de outra durante a temporada (`dropIns`) | descida, repescagem |
 | **técnico** | o papel do jogador ("Você é o técnico", "Carreira do técnico") | treinador (só no nome do jogo) |
 | **clube** | a instituição: elenco, finanças, diretoria, torcida, escudo | time, para a instituição |
 | **time** | os jogadores em campo, a equipe que joga ("meu time", "escalar o time", "time sem goleiro") | equipe |

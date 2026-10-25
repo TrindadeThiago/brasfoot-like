@@ -17,6 +17,12 @@ export function OtherCompetitions({
   entries: readonly SeasonHistoryEntry[];
 }) {
   const t = useT();
+  // As competições entre países têm a aba própria "Campeões continentais" (022).
+  entries = entries.filter(
+    (entry) =>
+      save.bank.competitions.find((item) => item.id === entry.competitionId)?.countryId !==
+      undefined,
+  );
   // Num mundo de vários países as tabelas de todos eles seriam centenas: um seletor de país (020).
   const countryOf = (competitionId: string) =>
     save.bank.competitions.find((item) => item.id === competitionId)?.countryId ?? "";

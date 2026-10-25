@@ -10,7 +10,7 @@ describe("migração v8 → v9 (013 R11, FR-019, SC-008)", () => {
     const result = migrateSave(v8);
     if (result.status !== "ok") throw new Error(JSON.stringify(result));
     expect(result.migratedFrom).toBe(8);
-    expect(result.save.formatVersion).toBe(16);
+    expect(result.save.formatVersion).toBe(17);
     expect(
       Object.values(result.save.fans.clubs).every((club) => club.mood === DEFAULT_FANS.neutral),
     ).toBe(true);

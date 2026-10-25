@@ -36,6 +36,15 @@ export interface SeasonGoals {
     /** Competição de destino da meta `qualify` (021). */
     competitionId?: string;
   };
+  /** Meta continental da temporada, para o clube que disputa uma competição entre países (022). */
+  continental?: {
+    competitionId: string;
+    target: { stage: number; phase?: number | undefined };
+    /** Preenchidos quando a campanha do clube termina (eliminação ou título). */
+    reached?: { stage: number; phase?: number | undefined };
+    result?: "met" | "missed";
+    champion?: boolean;
+  };
   finance: { kind: FinanceGoalKind; startCash: number };
 }
 
@@ -56,6 +65,8 @@ export const CONFIDENCE_FACTORS = [
   "cupOut",
   "cupTitle",
   "cupGoal",
+  "continentalMet",
+  "continentalMiss",
 ] as const;
 export type ConfidenceFactor = (typeof CONFIDENCE_FACTORS)[number];
 
@@ -67,7 +78,11 @@ export interface ConfidenceChange {
   factors: { kind: ConfidenceFactor; amount: number }[];
 }
 
+/** Meta continental (022) como o jogador a vê: fase esperada, alcançada e resultado. */
+export type ContinentalProgress = NonNullable<SeasonGoals["continental"]>;
+
 export interface GoalProgress {
+  continental?: ContinentalProgress;
   sport: {
     tier: GoalTierId;
     required: number;
@@ -84,10 +99,11 @@ export interface GoalProgress {
   };
 }
 
-export type Achievement = "title" | "promotion" | "relegation";
+export type Achievement = "title" | "promotion" | "relegation" | "continentalTitle";
 export type BoardDecision = "kept" | "fired" | "wouldFire";
 
 export interface SeasonEvaluation {
+  continental?: ContinentalProgress;
   season: number;
   clubId: string;
   sport: {
@@ -185,6 +201,8 @@ export interface ManagerSeasonRecord {
   achievements: Achievement[];
   reputation: number;
   decision?: BoardDecision;
+  /** Campanha continental da temporada, quando o clube disputou uma competição entre países (022). */
+  continental?: ContinentalProgress;
 }
 
 export interface ManagerHistory {

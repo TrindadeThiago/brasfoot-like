@@ -209,6 +209,30 @@ export const berthSchema = z.object({
   forbid: list(divisionRefSchema, 0, 8).optional(),
 });
 
+/** De onde vêm os clubes de uma ligação entre competições (022 R3). */
+export const dropInSourceSchema = z.discriminatedUnion("kind", [
+  z.object({
+    kind: z.literal("position"),
+    competitionId: id,
+    stage: intInRange(1, 8),
+    from: intInRange(1, 16),
+    to: intInRange(1, 16),
+  }),
+  z.object({
+    kind: z.literal("eliminated"),
+    competitionId: id,
+    stage: intInRange(1, 8),
+    phase: intInRange(1, 8),
+  }),
+]);
+
+/** Clubes de outra competição que entram numa fase desta durante a temporada (022). */
+export const dropInSchema = z.object({
+  id,
+  source: dropInSourceSchema,
+  entry: z.object({ stage: intInRange(1, 8), phase: intInRange(1, 8).optional() }),
+});
+
 export const divisionSchema = z.object({
   level: intInRange(1, 99),
   name: text(1, 60),
@@ -219,9 +243,30 @@ export const divisionSchema = z.object({
   stages: list(stageFormatSchema, 1, 8).optional(),
   /** Vagas vindas de outras competições (021); `clubIds` são os participantes da 1ª temporada. */
   berths: list(berthSchema, 1, 64).optional(),
+  /** Clubes que descem de outra competição durante a temporada (022). */
+  dropIns: list(dropInSchema, 1, 64).optional(),
 });
 
 const money = intInRange(0, 10_000_000_000);
+
+/** Fase (e confronto) a partir da qual um prêmio ou bônus vale (022 R4). */
+const reachedSchema = z.object({ stage: intInRange(1, 8), phase: intInRange(1, 9).optional() });
+
+/** Prêmios e reputação de uma competição entre países (022 R4, R5); tudo opcional. */
+export const awardsSchema = z.object({
+  win: money.optional(),
+  draw: money.optional(),
+  /** Pago uma vez quando o clube começa a fase. */
+  stage: list(z.object({ ...reachedSchema.shape, amount: money }), 0, 32).optional(),
+  title: money.optional(),
+  /** Reputação ganha (ou perdida, se negativa) pela fase mais alta alcançada, do menos ao mais profundo. */
+  reputation: list(
+    z.object({ reached: reachedSchema, points: intInRange(-5, 5) }),
+    0,
+    32,
+  ).optional(),
+  reputationCeiling: intInRange(50, 100).optional(),
+});
 
 /** Regras econômicas de uma divisão (008); campos ausentes usam os padrões do motor. */
 export const divisionEconomySchema = z.object({
@@ -408,6 +453,10 @@ export const boardSchema = z
     cupOut: intInRange(0, 100),
     cupTitle: intInRange(0, 100),
     cupGoal: intInRange(0, 100),
+    continentalTopPct: intInRange(0, 100),
+    continentalMidPct: intInRange(0, 100),
+    continentalMet: intInRange(0, 100),
+    continentalMiss: intInRange(0, 100),
   })
   .partial();
 
@@ -438,6 +487,10 @@ const headlineMap = (max: number) =>
       cupFinal: intInRange(0, max),
       cupChampion: intInRange(0, max),
       qualification: intInRange(0, max),
+      continentalAdvanced: intInRange(0, max),
+      continentalEliminated: intInRange(0, max),
+      continentalChampion: intInRange(0, max),
+      continentalRout: intInRange(0, max),
     })
     .partial();
 
@@ -487,6 +540,9 @@ export const fansSchema = z
     relegationDrop: intInRange(0, 100),
     cupOut: intInRange(0, 100),
     cupTitle: intInRange(0, 100),
+    continentalMatchPct: intInRange(0, 1000),
+    continentalExpectation: intInRange(0, 100),
+    continentalTitle: intInRange(0, 100),
     bands: z.tuple([
       intInRange(0, 100),
       intInRange(0, 100),
@@ -524,7 +580,8 @@ const fitnessSchema = z
 
 export const competitionSchema = z.object({
   id,
-  countryId: id,
+  /** Ausente = competição entre países (022 R1). */
+  countryId: id.optional(),
   name: text(1, 80),
   format: competitionFormatSchema,
   divisions: list(divisionSchema, 1, 99),
@@ -536,6 +593,7 @@ export const competitionSchema = z.object({
   schedule: scheduleSchema.optional(),
   discipline: disciplineSchema.optional(),
   fitness: fitnessSchema.optional(),
+  awards: awardsSchema.optional(),
 });
 
 export const crestSchema = z.object({

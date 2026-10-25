@@ -285,6 +285,18 @@ const addQualification: Migration = {
   },
 };
 
+/**
+ * v16 → v17: competições entre países (022). `competition.countryId` opcional, `awards`,
+ * `division.dropIns` no banco, `incoming` nas fases, `continental` nas metas e `continentalHistory`
+ * são opcionais; um save antigo é um mundo sem competição entre países.
+ */
+const addContinental: Migration = {
+  from: 16,
+  migrate(raw) {
+    return { ...(raw as object), formatVersion: 17 };
+  },
+};
+
 /** Migrações reais do formato, em ordem. */
 export const MIGRATIONS: readonly Migration[] = [
   addLineup,
@@ -302,6 +314,7 @@ export const MIGRATIONS: readonly Migration[] = [
   addStages,
   addWorld,
   addQualification,
+  addContinental,
 ];
 
 /** Problemas que tornam a escalação gravada ilegível (os demais o jogo corrige ou avisa). */

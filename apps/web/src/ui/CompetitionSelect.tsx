@@ -24,11 +24,24 @@ export function CompetitionSelect({
   const router = useRouter();
   const pathname = (usePathname() ?? "/jogo/competicao").replace(/\/+$/, "");
   const competitions = save.bank.competitions;
-  const countries = [...new Set(competitions.map((competition) => competition.countryId))];
-  const current = competitions.find((competition) => competition.id === competitionId)?.countryId;
+  // Competições entre países (022) não têm país: aparecem como abas ao lado das de cada país.
+  const international = competitions.filter((competition) => competition.countryId === undefined);
+  const countries = [
+    ...new Set(
+      competitions.flatMap((competition) =>
+        competition.countryId === undefined ? [] : [competition.countryId],
+      ),
+    ),
+  ];
+  const current =
+    competitions.find((competition) => competition.id === competitionId)?.countryId ??
+    competitions.find((competition) => competition.id === save.league.competitionId)?.countryId;
   const shown =
     countries.length > 1
-      ? competitions.filter((competition) => competition.countryId === current)
+      ? [
+          ...competitions.filter((competition) => competition.countryId === current),
+          ...international,
+        ]
       : competitions;
   const country = (
     <label className={styles.country}>

@@ -160,6 +160,12 @@ troca de país a qualquer momento, simulação resumida para as ligas de outros 
 compacto, histórico por país, escolha de clube por país e divisão, banco de teste de 400 clubes e
 `mods/exemplo-mundo`. Saves v15. As vagas entre competições e as supercopas ficam para a 021.
 
+**M9 (parcial, 022):** competições entre países (continental maior e menor): preliminar, grupos
+separados por país e mata-mata, vagas por país vindas das ligas e copas, ligação durante a
+temporada (terceiros dos grupos descem à menor), prêmios por fase e por vitória, bilheteria,
+reputação com teto, meta da diretoria, torcida, manchetes, histórico de campeões e campanha do
+clube. Saves v17 e `mods/exemplo-continental`.
+
 Os marcos 7 a 9 são pós-lançamento: trazem as copas e o mundo maior do §14 até o mod do
 futebol sul-americano. Os prompts estão em [`speckit-prompts/`](speckit-prompts/README.md)
 (017 a 024).

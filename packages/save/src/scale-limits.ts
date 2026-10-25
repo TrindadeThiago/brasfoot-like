@@ -6,7 +6,8 @@
  */
 export const SCALE_LIMITS = {
   /** Tamanho do save (JSON) no início da temporada 31. */
-  saveStart31Bytes: 12 * 1024 * 1024,
+  /** 12,5 MB: eram 12 MB; as duas competições entre países (022) somam ~3% de jogos e registros. */
+  saveStart31Bytes: 12.5 * 1024 * 1024,
   /** Crescimento médio por temporada entre a 10ª e a 30ª. */
   growthPerSeasonBytes: 250 * 1024,
   /** Save na última rodada de uma temporada (o maior do ano): ~31 a 38 MB medidos, só no fim do ano; no início da temporada são 5 a 11 MB. */

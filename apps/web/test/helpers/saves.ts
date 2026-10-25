@@ -264,3 +264,66 @@ export function playedQualificationSeason(id: string): SaveFile {
   }
   return save;
 }
+
+const continentalBases = new Map<boolean, SaveFile>();
+
+/**
+ * Carreira num mundo de 5 países com liga, copa nacional e as taças continentais compactas (022):
+ * o clube é o primeiro participante da taça maior (ou, com `participant: false`, um que não
+ * disputa nenhuma). O banco é fictício e gerado.
+ */
+export function continentalSave(id: string, participant = true): SaveFile {
+  let base = continentalBases.get(participant);
+  if (!base) {
+    const bank = JSON.parse(
+      JSON.stringify(
+        generateWorldBank({
+          seed: "continental-web",
+          countries: 5,
+          divisionsPerCountry: 1,
+          clubsPerDivision: 8,
+          cup: true,
+          continental: "compact",
+        }),
+      ),
+    ) as ModPackage;
+    const international = bank.competitions.filter((entry) => entry.countryId === undefined);
+    const inside = new Set(
+      international.flatMap((entry) => entry.divisions.flatMap((division) => division.clubIds)),
+    );
+    const major = international[0];
+    const club = participant
+      ? (major?.divisions[0]?.clubIds[0] as string)
+      : (bank.clubs.find((entry) => !inside.has(entry.id))?.id as string);
+    const result = createSave({
+      id: "base-continental",
+      now: "2026-10-25T12:00:00.000Z",
+      managerName: "Ana Souza",
+      clubId: club,
+      seed: "teste-web-continental",
+      defaultBank: bank,
+      noFiring: true,
+    });
+    if (!result.ok) throw new Error(JSON.stringify(result.error));
+    base = result.save;
+    continentalBases.set(participant, base);
+  }
+  return { ...(JSON.parse(JSON.stringify(base)) as SaveFile), id };
+}
+
+/** Joga o dia a dia da carreira continental até o fim da temporada (ainda sem virar). */
+export function playedContinentalSeason(id: string, days?: number, participant = true): SaveFile {
+  let save = continentalSave(id, participant);
+  for (
+    let played = 0;
+    !isCareerSeasonOver(save) && (days === undefined || played < days);
+    played++
+  ) {
+    const result = completeCareerDay(seasonStateOf(save), save.seed, save.clubId, undefined, {
+      [save.clubId]: save.lineup,
+    });
+    if (!result.ok) throw new Error(JSON.stringify(result.error));
+    save = withDayResult(save, result.state);
+  }
+  return save;
+}

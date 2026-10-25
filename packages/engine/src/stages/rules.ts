@@ -122,6 +122,8 @@ function enterOf(stage: StageFormat): number {
 export function stageParticipantCounts(
   stages: readonly StageFormat[],
   divisionClubs: number,
+  /** Clubes que chegam a cada fase por ligação entre competições (022), por índice de fase. */
+  incoming: readonly number[] = [],
 ): number[] {
   const counts: number[] = [];
   const late = stages.slice(1).reduce((sum, stage) => sum + enterOf(stage), 0);
@@ -131,7 +133,11 @@ export function stageParticipantCounts(
       return;
     }
     const previous = stages[index - 1] as StageFormat;
-    counts.push(stageQualifierCount(previous, counts[index - 1] as number) + enterOf(stage));
+    counts.push(
+      stageQualifierCount(previous, counts[index - 1] as number) +
+        enterOf(stage) +
+        (incoming[index] ?? 0),
+    );
   });
   return counts;
 }

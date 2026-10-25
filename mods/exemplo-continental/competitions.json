@@ -1,0 +1,1386 @@
+[
+  {
+    "countryId": "tek",
+    "divisions": [
+      {
+        "clubIds": [
+          "clube-tek-001",
+          "clube-tek-002",
+          "clube-tek-003",
+          "clube-tek-004",
+          "clube-tek-005",
+          "clube-tek-006",
+          "clube-tek-007",
+          "clube-tek-008",
+          "clube-tek-009",
+          "clube-tek-010",
+          "clube-tek-011",
+          "clube-tek-012"
+        ],
+        "level": 1,
+        "name": "Série A",
+        "promotionSlots": 0,
+        "relegationSlots": 0
+      }
+    ],
+    "economy": {
+      "credit": {
+        "interestBp": 30,
+        "perReputation": 22500
+      },
+      "crisisRounds": 10,
+      "divisions": [
+        {
+          "creditBase": 1500000,
+          "fanFactorPct": 100,
+          "level": 1,
+          "prizes": {
+            "first": 1500000,
+            "last": 225000,
+            "title": 750000
+          },
+          "referencePrice": 12,
+          "sponsorship": {
+            "base": 675000,
+            "perReputation": 1,
+            "wageSharePct": 30
+          }
+        }
+      ],
+      "fansBase": 12000,
+      "fansPerReputation": 38,
+      "priceElasticityPct": 150,
+      "priceRange": {
+        "max": 200,
+        "min": 5
+      },
+      "stadium": {
+        "maxCapacity": 75000,
+        "options": [
+          {
+            "cost": 1125000,
+            "rounds": 6,
+            "seats": 1500
+          },
+          {
+            "cost": 3000000,
+            "rounds": 12,
+            "seats": 3800
+          },
+          {
+            "cost": 6750000,
+            "rounds": 20,
+            "seats": 7500
+          }
+        ]
+      },
+      "wageFactorPct": 75
+    },
+    "fans": {
+      "continentalExpectation": 2,
+      "continentalMatchPct": 150,
+      "continentalTitle": 20
+    },
+    "format": {
+      "points": {
+        "draw": 1,
+        "loss": 0,
+        "win": 3
+      },
+      "rounds": 2,
+      "tiebreakers": [
+        "wins",
+        "goal-difference",
+        "goals-for",
+        "head-to-head",
+        "draw-lots"
+      ],
+      "type": "league"
+    },
+    "id": "liga-tek-nacional",
+    "name": "Campeonato Oriental de Tekluária"
+  },
+  {
+    "countryId": "tek",
+    "divisions": [
+      {
+        "clubIds": [
+          "clube-tek-001",
+          "clube-tek-002",
+          "clube-tek-003",
+          "clube-tek-004",
+          "clube-tek-005",
+          "clube-tek-006",
+          "clube-tek-007",
+          "clube-tek-008",
+          "clube-tek-009",
+          "clube-tek-010",
+          "clube-tek-011",
+          "clube-tek-012"
+        ],
+        "level": 1,
+        "name": "Copa de Tekluária",
+        "promotionSlots": 0,
+        "relegationSlots": 0
+      }
+    ],
+    "format": {
+      "entries": [
+        {
+          "clubIds": [
+            "clube-tek-004",
+            "clube-tek-011",
+            "clube-tek-008",
+            "clube-tek-005"
+          ],
+          "phase": 1
+        }
+      ],
+      "phases": [
+        {
+          "home": "division",
+          "legs": 2,
+          "name": "Primeira fase",
+          "prize": 90000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "home": "division",
+          "legs": 2,
+          "name": "Quartas de final",
+          "prize": 150000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "home": "draw",
+          "legs": 2,
+          "name": "Semifinal",
+          "prize": 250000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "gapWeeks": 1,
+          "home": "draw",
+          "legs": 1,
+          "name": "Final",
+          "neutral": true,
+          "prize": 500000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        }
+      ],
+      "type": "knockout"
+    },
+    "id": "copa-tek-nacional",
+    "name": "Copa de Tekluária",
+    "schedule": {
+      "everyWeeks": 2,
+      "startWeek": 1,
+      "weekday": 3
+    }
+  },
+  {
+    "countryId": "zal",
+    "divisions": [
+      {
+        "clubIds": [
+          "clube-zal-001",
+          "clube-zal-002",
+          "clube-zal-003",
+          "clube-zal-004",
+          "clube-zal-005",
+          "clube-zal-006",
+          "clube-zal-007",
+          "clube-zal-008",
+          "clube-zal-009",
+          "clube-zal-010",
+          "clube-zal-011",
+          "clube-zal-012"
+        ],
+        "level": 1,
+        "name": "Série A",
+        "promotionSlots": 0,
+        "relegationSlots": 0
+      }
+    ],
+    "economy": {
+      "credit": {
+        "interestBp": 30,
+        "perReputation": 27500
+      },
+      "crisisRounds": 10,
+      "divisions": [
+        {
+          "creditBase": 1833333,
+          "fanFactorPct": 100,
+          "level": 1,
+          "prizes": {
+            "first": 1833333,
+            "last": 275000,
+            "title": 916667
+          },
+          "referencePrice": 12,
+          "sponsorship": {
+            "base": 825000,
+            "perReputation": 1,
+            "wageSharePct": 30
+          }
+        }
+      ],
+      "fansBase": 14667,
+      "fansPerReputation": 46,
+      "priceElasticityPct": 150,
+      "priceRange": {
+        "max": 200,
+        "min": 5
+      },
+      "stadium": {
+        "maxCapacity": 91667,
+        "options": [
+          {
+            "cost": 1375000,
+            "rounds": 6,
+            "seats": 1800
+          },
+          {
+            "cost": 3666667,
+            "rounds": 12,
+            "seats": 4600
+          },
+          {
+            "cost": 8250000,
+            "rounds": 20,
+            "seats": 9200
+          }
+        ]
+      },
+      "wageFactorPct": 92
+    },
+    "fans": {
+      "continentalExpectation": 2,
+      "continentalMatchPct": 150,
+      "continentalTitle": 20
+    },
+    "format": {
+      "points": {
+        "draw": 1,
+        "loss": 0,
+        "win": 3
+      },
+      "rounds": 2,
+      "tiebreakers": [
+        "wins",
+        "goal-difference",
+        "goals-for",
+        "head-to-head",
+        "draw-lots"
+      ],
+      "type": "league"
+    },
+    "id": "liga-zal-nacional",
+    "name": "Campeonato Oriental de Zalligália"
+  },
+  {
+    "countryId": "zal",
+    "divisions": [
+      {
+        "clubIds": [
+          "clube-zal-001",
+          "clube-zal-002",
+          "clube-zal-003",
+          "clube-zal-004",
+          "clube-zal-005",
+          "clube-zal-006",
+          "clube-zal-007",
+          "clube-zal-008",
+          "clube-zal-009",
+          "clube-zal-010",
+          "clube-zal-011",
+          "clube-zal-012"
+        ],
+        "level": 1,
+        "name": "Copa de Zalligália",
+        "promotionSlots": 0,
+        "relegationSlots": 0
+      }
+    ],
+    "format": {
+      "entries": [
+        {
+          "clubIds": [
+            "clube-zal-008",
+            "clube-zal-012",
+            "clube-zal-003",
+            "clube-zal-002"
+          ],
+          "phase": 1
+        }
+      ],
+      "phases": [
+        {
+          "home": "division",
+          "legs": 2,
+          "name": "Primeira fase",
+          "prize": 90000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "home": "division",
+          "legs": 2,
+          "name": "Quartas de final",
+          "prize": 150000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "home": "draw",
+          "legs": 2,
+          "name": "Semifinal",
+          "prize": 250000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "gapWeeks": 1,
+          "home": "draw",
+          "legs": 1,
+          "name": "Final",
+          "neutral": true,
+          "prize": 500000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        }
+      ],
+      "type": "knockout"
+    },
+    "id": "copa-zal-nacional",
+    "name": "Copa de Zalligália",
+    "schedule": {
+      "everyWeeks": 2,
+      "startWeek": 1,
+      "weekday": 3
+    }
+  },
+  {
+    "countryId": "puk",
+    "divisions": [
+      {
+        "clubIds": [
+          "clube-puk-001",
+          "clube-puk-002",
+          "clube-puk-003",
+          "clube-puk-004",
+          "clube-puk-005",
+          "clube-puk-006",
+          "clube-puk-007",
+          "clube-puk-008",
+          "clube-puk-009",
+          "clube-puk-010",
+          "clube-puk-011",
+          "clube-puk-012"
+        ],
+        "level": 1,
+        "name": "Série A",
+        "promotionSlots": 0,
+        "relegationSlots": 0
+      }
+    ],
+    "economy": {
+      "credit": {
+        "interestBp": 30,
+        "perReputation": 32500
+      },
+      "crisisRounds": 10,
+      "divisions": [
+        {
+          "creditBase": 2166667,
+          "fanFactorPct": 100,
+          "level": 1,
+          "prizes": {
+            "first": 2166667,
+            "last": 325000,
+            "title": 1083333
+          },
+          "referencePrice": 12,
+          "sponsorship": {
+            "base": 975000,
+            "perReputation": 1,
+            "wageSharePct": 30
+          }
+        }
+      ],
+      "fansBase": 17333,
+      "fansPerReputation": 54,
+      "priceElasticityPct": 150,
+      "priceRange": {
+        "max": 200,
+        "min": 5
+      },
+      "stadium": {
+        "maxCapacity": 108333,
+        "options": [
+          {
+            "cost": 1625000,
+            "rounds": 6,
+            "seats": 2200
+          },
+          {
+            "cost": 4333333,
+            "rounds": 12,
+            "seats": 5400
+          },
+          {
+            "cost": 9750000,
+            "rounds": 20,
+            "seats": 10800
+          }
+        ]
+      },
+      "wageFactorPct": 108
+    },
+    "fans": {
+      "continentalExpectation": 2,
+      "continentalMatchPct": 150,
+      "continentalTitle": 20
+    },
+    "format": {
+      "points": {
+        "draw": 1,
+        "loss": 0,
+        "win": 3
+      },
+      "rounds": 2,
+      "tiebreakers": [
+        "wins",
+        "goal-difference",
+        "goals-for",
+        "head-to-head",
+        "draw-lots"
+      ],
+      "type": "league"
+    },
+    "id": "liga-puk-nacional",
+    "name": "Campeonato Unido de Puknolândia"
+  },
+  {
+    "countryId": "puk",
+    "divisions": [
+      {
+        "clubIds": [
+          "clube-puk-001",
+          "clube-puk-002",
+          "clube-puk-003",
+          "clube-puk-004",
+          "clube-puk-005",
+          "clube-puk-006",
+          "clube-puk-007",
+          "clube-puk-008",
+          "clube-puk-009",
+          "clube-puk-010",
+          "clube-puk-011",
+          "clube-puk-012"
+        ],
+        "level": 1,
+        "name": "Copa de Puknolândia",
+        "promotionSlots": 0,
+        "relegationSlots": 0
+      }
+    ],
+    "format": {
+      "entries": [
+        {
+          "clubIds": [
+            "clube-puk-003",
+            "clube-puk-011",
+            "clube-puk-008",
+            "clube-puk-010"
+          ],
+          "phase": 1
+        }
+      ],
+      "phases": [
+        {
+          "home": "division",
+          "legs": 2,
+          "name": "Primeira fase",
+          "prize": 90000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "home": "division",
+          "legs": 2,
+          "name": "Quartas de final",
+          "prize": 150000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "home": "draw",
+          "legs": 2,
+          "name": "Semifinal",
+          "prize": 250000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "gapWeeks": 1,
+          "home": "draw",
+          "legs": 1,
+          "name": "Final",
+          "neutral": true,
+          "prize": 500000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        }
+      ],
+      "type": "knockout"
+    },
+    "id": "copa-puk-nacional",
+    "name": "Copa de Puknolândia",
+    "schedule": {
+      "everyWeeks": 2,
+      "startWeek": 1,
+      "weekday": 3
+    }
+  },
+  {
+    "countryId": "nan",
+    "divisions": [
+      {
+        "clubIds": [
+          "clube-nan-001",
+          "clube-nan-002",
+          "clube-nan-003",
+          "clube-nan-004",
+          "clube-nan-005",
+          "clube-nan-006",
+          "clube-nan-007",
+          "clube-nan-008",
+          "clube-nan-009",
+          "clube-nan-010",
+          "clube-nan-011",
+          "clube-nan-012"
+        ],
+        "level": 1,
+        "name": "Série A",
+        "promotionSlots": 0,
+        "relegationSlots": 0
+      }
+    ],
+    "economy": {
+      "credit": {
+        "interestBp": 30,
+        "perReputation": 37500
+      },
+      "crisisRounds": 10,
+      "divisions": [
+        {
+          "creditBase": 2500000,
+          "fanFactorPct": 100,
+          "level": 1,
+          "prizes": {
+            "first": 2500000,
+            "last": 375000,
+            "title": 1250000
+          },
+          "referencePrice": 12,
+          "sponsorship": {
+            "base": 1125000,
+            "perReputation": 1,
+            "wageSharePct": 30
+          }
+        }
+      ],
+      "fansBase": 20000,
+      "fansPerReputation": 63,
+      "priceElasticityPct": 150,
+      "priceRange": {
+        "max": 200,
+        "min": 5
+      },
+      "stadium": {
+        "maxCapacity": 125000,
+        "options": [
+          {
+            "cost": 1875000,
+            "rounds": 6,
+            "seats": 2500
+          },
+          {
+            "cost": 5000000,
+            "rounds": 12,
+            "seats": 6300
+          },
+          {
+            "cost": 11250000,
+            "rounds": 20,
+            "seats": 12500
+          }
+        ]
+      },
+      "wageFactorPct": 125
+    },
+    "fans": {
+      "continentalExpectation": 2,
+      "continentalMatchPct": 150,
+      "continentalTitle": 20
+    },
+    "format": {
+      "points": {
+        "draw": 1,
+        "loss": 0,
+        "win": 3
+      },
+      "rounds": 2,
+      "tiebreakers": [
+        "wins",
+        "goal-difference",
+        "goals-for",
+        "head-to-head",
+        "draw-lots"
+      ],
+      "type": "league"
+    },
+    "id": "liga-nan-nacional",
+    "name": "Campeonato Unido de Nanfiária"
+  },
+  {
+    "countryId": "nan",
+    "divisions": [
+      {
+        "clubIds": [
+          "clube-nan-001",
+          "clube-nan-002",
+          "clube-nan-003",
+          "clube-nan-004",
+          "clube-nan-005",
+          "clube-nan-006",
+          "clube-nan-007",
+          "clube-nan-008",
+          "clube-nan-009",
+          "clube-nan-010",
+          "clube-nan-011",
+          "clube-nan-012"
+        ],
+        "level": 1,
+        "name": "Copa de Nanfiária",
+        "promotionSlots": 0,
+        "relegationSlots": 0
+      }
+    ],
+    "format": {
+      "entries": [
+        {
+          "clubIds": [
+            "clube-nan-001",
+            "clube-nan-009",
+            "clube-nan-006",
+            "clube-nan-003"
+          ],
+          "phase": 1
+        }
+      ],
+      "phases": [
+        {
+          "home": "division",
+          "legs": 2,
+          "name": "Primeira fase",
+          "prize": 90000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "home": "division",
+          "legs": 2,
+          "name": "Quartas de final",
+          "prize": 150000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "home": "draw",
+          "legs": 2,
+          "name": "Semifinal",
+          "prize": 250000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "gapWeeks": 1,
+          "home": "draw",
+          "legs": 1,
+          "name": "Final",
+          "neutral": true,
+          "prize": 500000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        }
+      ],
+      "type": "knockout"
+    },
+    "id": "copa-nan-nacional",
+    "name": "Copa de Nanfiária",
+    "schedule": {
+      "everyWeeks": 2,
+      "startWeek": 1,
+      "weekday": 3
+    }
+  },
+  {
+    "awards": {
+      "draw": 6000,
+      "reputation": [
+        {
+          "points": -1,
+          "reached": {
+            "stage": 1
+          }
+        },
+        {
+          "points": 0,
+          "reached": {
+            "stage": 2
+          }
+        },
+        {
+          "points": 1,
+          "reached": {
+            "phase": 2,
+            "stage": 2
+          }
+        },
+        {
+          "points": 2,
+          "reached": {
+            "phase": 3,
+            "stage": 2
+          }
+        },
+        {
+          "points": 3,
+          "reached": {
+            "phase": 4,
+            "stage": 2
+          }
+        }
+      ],
+      "reputationCeiling": 95,
+      "stage": [
+        {
+          "amount": 60000,
+          "stage": 1
+        },
+        {
+          "amount": 100000,
+          "stage": 2
+        },
+        {
+          "amount": 160000,
+          "phase": 2,
+          "stage": 2
+        },
+        {
+          "amount": 240000,
+          "phase": 3,
+          "stage": 2
+        }
+      ],
+      "title": 320000,
+      "win": 16000
+    },
+    "divisions": [
+      {
+        "berths": [
+          {
+            "fallback": [
+              {
+                "competitionId": "liga-tek-nacional",
+                "from": 1,
+                "kind": "position",
+                "level": 1,
+                "to": 12
+              }
+            ],
+            "id": "tek-liga-direta",
+            "source": {
+              "competitionId": "liga-tek-nacional",
+              "from": 1,
+              "kind": "position",
+              "level": 1,
+              "to": 3
+            }
+          },
+          {
+            "fallback": [
+              {
+                "competitionId": "liga-tek-nacional",
+                "from": 1,
+                "kind": "position",
+                "level": 1,
+                "to": 12
+              }
+            ],
+            "id": "tek-copa",
+            "source": {
+              "competitionId": "copa-tek-nacional",
+              "kind": "champion"
+            }
+          },
+          {
+            "fallback": [
+              {
+                "competitionId": "liga-zal-nacional",
+                "from": 1,
+                "kind": "position",
+                "level": 1,
+                "to": 12
+              }
+            ],
+            "id": "zal-liga-direta",
+            "source": {
+              "competitionId": "liga-zal-nacional",
+              "from": 1,
+              "kind": "position",
+              "level": 1,
+              "to": 3
+            }
+          },
+          {
+            "fallback": [
+              {
+                "competitionId": "liga-zal-nacional",
+                "from": 1,
+                "kind": "position",
+                "level": 1,
+                "to": 12
+              }
+            ],
+            "id": "zal-copa",
+            "source": {
+              "competitionId": "copa-zal-nacional",
+              "kind": "champion"
+            }
+          },
+          {
+            "fallback": [
+              {
+                "competitionId": "liga-puk-nacional",
+                "from": 1,
+                "kind": "position",
+                "level": 1,
+                "to": 12
+              }
+            ],
+            "id": "puk-liga-direta",
+            "source": {
+              "competitionId": "liga-puk-nacional",
+              "from": 1,
+              "kind": "position",
+              "level": 1,
+              "to": 3
+            }
+          },
+          {
+            "fallback": [
+              {
+                "competitionId": "liga-puk-nacional",
+                "from": 1,
+                "kind": "position",
+                "level": 1,
+                "to": 12
+              }
+            ],
+            "id": "puk-copa",
+            "source": {
+              "competitionId": "copa-puk-nacional",
+              "kind": "champion"
+            }
+          },
+          {
+            "fallback": [
+              {
+                "competitionId": "liga-nan-nacional",
+                "from": 1,
+                "kind": "position",
+                "level": 1,
+                "to": 12
+              }
+            ],
+            "id": "nan-liga-direta",
+            "source": {
+              "competitionId": "liga-nan-nacional",
+              "from": 1,
+              "kind": "position",
+              "level": 1,
+              "to": 2
+            }
+          },
+          {
+            "fallback": [
+              {
+                "competitionId": "liga-nan-nacional",
+                "from": 1,
+                "kind": "position",
+                "level": 1,
+                "to": 12
+              }
+            ],
+            "id": "nan-copa",
+            "source": {
+              "competitionId": "copa-nan-nacional",
+              "kind": "champion"
+            }
+          },
+          {
+            "fallback": [
+              {
+                "competitionId": "liga-nan-nacional",
+                "from": 1,
+                "kind": "position",
+                "level": 1,
+                "to": 12
+              }
+            ],
+            "id": "campeao-anterior",
+            "source": {
+              "competitionId": "continental-maior",
+              "kind": "champion"
+            }
+          }
+        ],
+        "clubIds": [
+          "clube-nan-001",
+          "clube-nan-003",
+          "clube-nan-006",
+          "clube-nan-009",
+          "clube-puk-003",
+          "clube-puk-008",
+          "clube-puk-010",
+          "clube-puk-011",
+          "clube-tek-004",
+          "clube-tek-005",
+          "clube-tek-008",
+          "clube-tek-011",
+          "clube-zal-002",
+          "clube-zal-003",
+          "clube-zal-008",
+          "clube-zal-012"
+        ],
+        "level": 1,
+        "name": "Taça Continental",
+        "promotionSlots": 0,
+        "relegationSlots": 0
+      }
+    ],
+    "format": {
+      "stages": [
+        {
+          "draw": {
+            "pots": 4,
+            "rules": [
+              {
+                "attribute": "country",
+                "kind": "separate"
+              }
+            ]
+          },
+          "groupSize": 4,
+          "points": {
+            "draw": 1,
+            "loss": 0,
+            "win": 3
+          },
+          "qualified": 2,
+          "rounds": 2,
+          "tiebreakers": [
+            "wins",
+            "goal-difference",
+            "goals-for",
+            "head-to-head",
+            "draw-lots"
+          ],
+          "type": "groups"
+        },
+        {
+          "phases": [
+            {
+              "home": "overall",
+              "legs": 2,
+              "name": "Quartas de final",
+              "prize": 0,
+              "tiebreakers": [
+                "away-goals",
+                "extra-time",
+                "penalties"
+              ]
+            },
+            {
+              "home": "overall",
+              "legs": 2,
+              "name": "Semifinal",
+              "prize": 0,
+              "tiebreakers": [
+                "away-goals",
+                "extra-time",
+                "penalties"
+              ]
+            },
+            {
+              "gapWeeks": 1,
+              "home": "draw",
+              "legs": 1,
+              "name": "Final",
+              "neutral": true,
+              "prize": 0,
+              "tiebreakers": [
+                "extra-time",
+                "penalties"
+              ]
+            }
+          ],
+          "type": "knockout"
+        }
+      ],
+      "type": "stages"
+    },
+    "id": "continental-maior",
+    "name": "Taça Continental",
+    "schedule": {
+      "everyWeeks": 1,
+      "startWeek": 2,
+      "weekday": 2
+    }
+  },
+  {
+    "awards": {
+      "draw": 2000,
+      "reputation": [
+        {
+          "points": -1,
+          "reached": {
+            "stage": 1
+          }
+        },
+        {
+          "points": 0,
+          "reached": {
+            "stage": 2
+          }
+        },
+        {
+          "points": 1,
+          "reached": {
+            "phase": 2,
+            "stage": 2
+          }
+        },
+        {
+          "points": 1,
+          "reached": {
+            "phase": 3,
+            "stage": 2
+          }
+        },
+        {
+          "points": 2,
+          "reached": {
+            "phase": 4,
+            "stage": 2
+          }
+        }
+      ],
+      "reputationCeiling": 90,
+      "stage": [
+        {
+          "amount": 40000,
+          "stage": 2
+        },
+        {
+          "amount": 64000,
+          "phase": 2,
+          "stage": 2
+        },
+        {
+          "amount": 96000,
+          "phase": 3,
+          "stage": 2
+        }
+      ],
+      "title": 128000,
+      "win": 6000
+    },
+    "divisions": [
+      {
+        "berths": [
+          {
+            "fallback": [
+              {
+                "competitionId": "liga-zal-nacional",
+                "from": 1,
+                "kind": "position",
+                "level": 1,
+                "to": 12
+              }
+            ],
+            "forbid": [
+              {
+                "competitionId": "continental-maior",
+                "level": 1
+              }
+            ],
+            "id": "zal-liga-menor",
+            "source": {
+              "competitionId": "liga-zal-nacional",
+              "from": 4,
+              "kind": "position",
+              "level": 1,
+              "to": 4
+            }
+          },
+          {
+            "entry": {
+              "stage": 2
+            },
+            "fallback": [
+              {
+                "competitionId": "liga-puk-nacional",
+                "from": 1,
+                "kind": "position",
+                "level": 1,
+                "to": 12
+              }
+            ],
+            "forbid": [
+              {
+                "competitionId": "continental-maior",
+                "level": 1
+              }
+            ],
+            "id": "puk-liga-tardia",
+            "source": {
+              "competitionId": "liga-puk-nacional",
+              "from": 4,
+              "kind": "position",
+              "level": 1,
+              "to": 4
+            }
+          },
+          {
+            "fallback": [
+              {
+                "competitionId": "liga-puk-nacional",
+                "from": 1,
+                "kind": "position",
+                "level": 1,
+                "to": 12
+              }
+            ],
+            "forbid": [
+              {
+                "competitionId": "continental-maior",
+                "level": 1
+              }
+            ],
+            "id": "puk-liga-menor",
+            "source": {
+              "competitionId": "liga-puk-nacional",
+              "from": 5,
+              "kind": "position",
+              "level": 1,
+              "to": 5
+            }
+          },
+          {
+            "entry": {
+              "stage": 2
+            },
+            "fallback": [
+              {
+                "competitionId": "liga-nan-nacional",
+                "from": 1,
+                "kind": "position",
+                "level": 1,
+                "to": 12
+              }
+            ],
+            "forbid": [
+              {
+                "competitionId": "continental-maior",
+                "level": 1
+              }
+            ],
+            "id": "nan-liga-tardia",
+            "source": {
+              "competitionId": "liga-nan-nacional",
+              "from": 4,
+              "kind": "position",
+              "level": 1,
+              "to": 4
+            }
+          },
+          {
+            "fallback": [
+              {
+                "competitionId": "liga-nan-nacional",
+                "from": 1,
+                "kind": "position",
+                "level": 1,
+                "to": 12
+              }
+            ],
+            "forbid": [
+              {
+                "competitionId": "continental-maior",
+                "level": 1
+              }
+            ],
+            "id": "nan-liga-menor",
+            "source": {
+              "competitionId": "liga-nan-nacional",
+              "from": 5,
+              "kind": "position",
+              "level": 1,
+              "to": 6
+            }
+          }
+        ],
+        "clubIds": [
+          "clube-nan-004",
+          "clube-nan-005",
+          "clube-nan-007",
+          "clube-puk-001",
+          "clube-puk-005",
+          "clube-zal-011"
+        ],
+        "dropIns": [
+          {
+            "entry": {
+              "stage": 2
+            },
+            "id": "terceiros-dos-grupos",
+            "source": {
+              "competitionId": "continental-maior",
+              "from": 3,
+              "kind": "position",
+              "stage": 1,
+              "to": 3
+            }
+          }
+        ],
+        "level": 1,
+        "name": "Copa Complementar",
+        "promotionSlots": 0,
+        "relegationSlots": 0
+      }
+    ],
+    "format": {
+      "stages": [
+        {
+          "phases": [
+            {
+              "home": "draw",
+              "legs": 2,
+              "name": "Fase preliminar",
+              "prize": 0,
+              "tiebreakers": [
+                "away-goals",
+                "extra-time",
+                "penalties"
+              ]
+            }
+          ],
+          "type": "knockout"
+        },
+        {
+          "enter": [
+            "clube-nan-004",
+            "clube-puk-005"
+          ],
+          "phases": [
+            {
+              "gapWeeks": 1,
+              "home": "overall",
+              "legs": 2,
+              "name": "Quartas de final",
+              "prize": 0,
+              "tiebreakers": [
+                "away-goals",
+                "extra-time",
+                "penalties"
+              ]
+            },
+            {
+              "home": "overall",
+              "legs": 2,
+              "name": "Semifinal",
+              "prize": 0,
+              "tiebreakers": [
+                "away-goals",
+                "extra-time",
+                "penalties"
+              ]
+            },
+            {
+              "gapWeeks": 1,
+              "home": "draw",
+              "legs": 1,
+              "name": "Final",
+              "neutral": true,
+              "prize": 0,
+              "tiebreakers": [
+                "extra-time",
+                "penalties"
+              ]
+            }
+          ],
+          "type": "knockout"
+        }
+      ],
+      "type": "stages"
+    },
+    "id": "continental-menor",
+    "name": "Copa Complementar",
+    "schedule": {
+      "everyWeeks": 2,
+      "startWeek": 3,
+      "weekday": 4
+    }
+  }
+]

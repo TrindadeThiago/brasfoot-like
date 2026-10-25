@@ -8,6 +8,7 @@ import { useDivision } from "../../../game/useDivision";
 import { useT } from "../../../i18n";
 import { CompetitionSelect } from "../../../ui/CompetitionSelect";
 import { CompetitionTabs } from "../../../ui/CompetitionTabs";
+import { CampaignPanel } from "../../../ui/continental/CampaignPanel";
 import { Bracket } from "../../../ui/cup/Bracket";
 import { DivisionTabs } from "../../../ui/DivisionTabs";
 import { ParticipantOrigins } from "../../../ui/qualification/ParticipantOrigins";
@@ -30,6 +31,7 @@ function Standings({ save }: { save: SaveFile }) {
         <DivisionTabs save={save} level={level} league={league} />
         <StageNav save={save} season={season} competitionId={competitionId} selected={chosen} />
         <StageView save={save} season={season} stageIndex={chosen} />
+        <CampaignPanel save={save} competitionId={competitionId} />
         <ParticipantOrigins save={save} league={league} />
       </>
     );

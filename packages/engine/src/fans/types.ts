@@ -18,6 +18,7 @@ export const MOOD_FACTORS = [
   "seasonStart",
   "cupOut",
   "cupTitle",
+  "continentalTitle",
 ] as const;
 export type MoodFactor = (typeof MOOD_FACTORS)[number];
 
