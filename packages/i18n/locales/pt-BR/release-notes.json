@@ -1,5 +1,16 @@
 [
   {
+    "version": "1.7.0",
+    "date": "2026-10-25",
+    "changes": [
+      "Competições entre países: uma taça continental reúne os melhores clubes de vários países, com fase preliminar, grupos sem dois clubes do mesmo país e mata-mata final, em jogos de meio de semana. As vagas de cada país vêm da liga, da copa nacional e do campeão anterior.",
+      "Duas taças ligadas: quem fica em posições definidas nos grupos da taça maior desce, durante a temporada, para a fase seguinte da taça menor, sem jogos no passado.",
+      "A campanha pesa na carreira: prêmios por vitória, empate, fase alcançada e título (com a origem de cada valor no extrato), bilheteria dos jogos em casa, reputação do clube pela fase alcançada, meta continental da diretoria, torcida mais exigente e manchetes da campanha.",
+      "Telas: a taça aparece como aba ao lado das competições do país, com grupos, chaveamento, a zona que desce para a outra taça e a campanha do seu clube; o histórico ganha os campeões continentais e a campanha do técnico.",
+      "Modders: seção \"Competições entre países\" no documento do formato (competição sem país, prêmios, ligação entre competições e as validações) e o mod de exemplo com continente. Saves antigos abrem normalmente (save v17)."
+    ]
+  },
+  {
     "version": "1.6.0",
     "date": "2026-10-24",
     "changes": [
