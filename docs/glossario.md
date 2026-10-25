@@ -17,6 +17,9 @@ novo, use estes termos; ao traduzir, mantenha a mesma distinção entre eles.
 | **Treinador FC** | nome do jogo (vem de `app.name`; nunca escrito à mão) | "brasfoot" em qualquer texto visível |
 | **país** | o país do banco, com as suas competições, regras econômicas e banco de nomes ("País", "Todos os países") | nação, liga (para o país) |
 | **simulação resumida** | o jogo resolvido sem narração (placar, gols, cartões e lesões), das ligas de outros países; no texto, "resumo" | simulação rápida, automática |
+| **vaga** | a possibilidade de disputar outra competição na temporada seguinte, por posição, título ou campanha numa competição; a tabela mostra as posições que dão vaga e a legenda diz a competição e a fase | lugar, classificação (para a vaga) |
+| **repasse** | a vaga que passa ao próximo da ordem definida quando o clube já está classificado ou não pode usá-la | transferência (que é do mercado) |
+| **supercopa** | a final única entre os campeões de duas competições | — |
 | **técnico** | o papel do jogador ("Você é o técnico", "Carreira do técnico") | treinador (só no nome do jogo) |
 | **clube** | a instituição: elenco, finanças, diretoria, torcida, escudo | time, para a instituição |
 | **time** | os jogadores em campo, a equipe que joga ("meu time", "escalar o time", "time sem goleiro") | equipe |

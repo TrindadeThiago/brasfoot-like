@@ -19,10 +19,6 @@ const STEPS: [string, SaveV11Step][] = [
 ];
 
 describe("migração v14 → v15 (020 R11, FR-021)", () => {
-  it("o formato atual é o 15", () => {
-    expect(SAVE_FORMAT_VERSION).toBe(15);
-  });
-
   it.each(STEPS)(
     "%s: abre igual, como mundo de um país",
     (_label, step) => {
@@ -30,7 +26,7 @@ describe("migração v14 → v15 (020 R11, FR-021)", () => {
       const result = migrateSave(v14);
       if (result.status !== "ok") throw new Error(JSON.stringify(result));
       expect(result.migratedFrom).toBe(14);
-      expect(result.save.formatVersion).toBe(15);
+      expect(result.save.formatVersion).toBe(SAVE_FORMAT_VERSION);
       const { formatVersion: _a, ...rest } = result.save;
       const { formatVersion: _b, ...restV14 } = v14;
       expect(rest).toEqual(restV14);
@@ -63,6 +59,6 @@ describe("migração v14 → v15 (020 R11, FR-021)", () => {
     const result = importSave(bytes);
     if (result.status !== "ok") throw new Error(JSON.stringify(result));
     expect(result.migratedFrom).toBe(14);
-    expect(result.save.formatVersion).toBe(15);
+    expect(result.save.formatVersion).toBe(SAVE_FORMAT_VERSION);
   }, 120_000);
 });

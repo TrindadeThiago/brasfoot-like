@@ -5,6 +5,7 @@ import { checkCalendar } from "./semantic/calendar";
 import { checkCompetitions } from "./semantic/competitions";
 import { checkCountries } from "./semantic/countries";
 import { checkKnockout } from "./semantic/knockout";
+import { checkQualification } from "./semantic/qualification";
 import { checkReferences } from "./semantic/references";
 import { checkRivalries } from "./semantic/rivalries";
 import { checkSquads } from "./semantic/squads";
@@ -23,6 +24,7 @@ const SEMANTIC_RULES: SemanticRule[] = [
   checkCompetitions,
   checkKnockout,
   checkStages,
+  checkQualification,
   checkCalendar,
   checkCountries,
   checkSquads,

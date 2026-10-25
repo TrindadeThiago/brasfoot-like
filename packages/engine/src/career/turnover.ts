@@ -33,7 +33,9 @@ import {
   returnLoansStep,
 } from "../market/turnover";
 import type { CompletedBank } from "../model/types";
-import { newsNewSeasonStep } from "../news/turnover";
+import { newsNewSeasonStep, newsQualificationStep } from "../news/turnover";
+import { applyQualification } from "../qualification/apply";
+import { resolveFinishedSeasons } from "../qualification/finish";
 import {
   balanceSquadsStep,
   evolvePlayersStep,
@@ -75,6 +77,8 @@ export const TURNOVER_STEP_IDS = [
   "balance-squads",
   "age-out-free-agents",
   "promotion-relegation",
+  "resolve-qualification",
+  "news-qualification",
   "advance-year",
   "reset-season-stats",
   "generate-calendars",
@@ -126,6 +130,33 @@ const promotionRelegation: TurnoverStep = {
       composition: nextComposition(context.finished, context.world).composition,
     },
   }),
+};
+
+/**
+ * Vagas entre competições (021 R2): resolve, depois das pirâmides, quem disputa as competições
+ * alimentadas na próxima temporada e grava no mundo vivo. Sem vagas no banco não faz nada.
+ */
+const resolveQualificationStep: TurnoverStep = {
+  id: "resolve-qualification",
+  run: (context) => {
+    const { world } = context;
+    const finished = [context.finished, ...(context.finishedCompetitions ?? [])];
+    const outcome = resolveFinishedSeasons(world, finished, context.finished);
+    if (!outcome) return context;
+    if (!outcome.ok) throw new TurnoverFailure(outcome.error);
+    const result = outcome.result;
+    return {
+      ...context,
+      world: applyQualification(world, result),
+      qualification: result,
+      qualificationHistory: [...(context.qualificationHistory ?? []), result.record],
+      next: {
+        ...context.next,
+        composition:
+          result.compositions[context.finished.competitionId] ?? context.next.composition,
+      },
+    };
+  },
 };
 
 const advanceYear: TurnoverStep = {
@@ -183,7 +214,9 @@ const generateCalendars: TurnoverStep = {
         statuses[league.competitionId] = carry;
         continue;
       }
-      compositions[league.competitionId] = nextComposition(league, context.world).composition;
+      compositions[league.competitionId] =
+        context.qualification?.compositions[league.competitionId] ??
+        nextComposition(league, context.world).composition;
       // Lesões valem para todas as competições; os cartões recomeçam.
       statuses[league.competitionId] = carry;
     }
@@ -196,10 +229,15 @@ const generateCalendars: TurnoverStep = {
       leagueCompetitionId: context.finished.competitionId,
     });
     if (!created.ok) throw new TurnoverFailure(created.error);
+    const origins = context.qualification?.origins ?? {};
+    const withOrigins = (season: LeagueSeason): LeagueSeason => {
+      const own = origins[season.competitionId];
+      return own ? { ...season, origins: own } : season;
+    };
     return {
       ...context,
-      league: created.league,
-      competitions: created.competitions,
+      league: withOrigins(created.league),
+      competitions: created.competitions.map(withOrigins),
       calendar: created.calendar,
     };
   },
@@ -293,6 +331,8 @@ export const DEFAULT_TURNOVER_STEPS: readonly TurnoverStep[] = [
   perCountry(balanceSquadsStep),
   ageOutFreeAgentsStep,
   promotionRelegation,
+  resolveQualificationStep,
+  newsQualificationStep,
   advanceYear,
   resetSeasonStats,
   generateCalendars,
@@ -348,7 +388,16 @@ export function resolveTurnoverSteps(
 }
 
 /** Motivo pelo qual a nova liga viola os invariantes da temporada (data-model.md). */
+function hasBerths(world: CompletedBank, competitionId: string): boolean {
+  return (
+    world.competitions
+      .find((entry) => entry.id === competitionId)
+      ?.divisions.some((division) => (division.berths?.length ?? 0) > 0) ?? false
+  );
+}
+
 function resultProblem(
+  world: CompletedBank,
   finished: LeagueSeason,
   league: LeagueSeason | undefined,
 ): string | undefined {
@@ -356,7 +405,9 @@ function resultProblem(
   if (league.divisions.length !== finished.divisions.length) return "número de divisões mudou";
   const before = finished.divisions.flatMap((season) => season.clubIds).sort();
   const after = league.divisions.flatMap((season) => season.clubIds).sort();
-  if (before.join() !== after.join()) return "os clubes da competição mudaram";
+  if (before.join() !== after.join() && !hasBerths(world, finished.competitionId)) {
+    return "os clubes da competição mudaram";
+  }
   for (const season of finished.divisions) {
     const next = league.divisions.find((entry) => entry.divisionLevel === season.divisionLevel);
     if (!next) return `divisão ${season.divisionLevel} sumiu`;
@@ -416,6 +467,9 @@ export function seasonTurnover(
     ...(options.calendar ? { finishedCalendar: options.calendar } : {}),
     ...(options.competitionHistory ? { competitionHistory: [...options.competitionHistory] } : {}),
     ...(options.cupHistory ? { cupHistory: [...options.cupHistory] } : {}),
+    ...(options.qualificationHistory
+      ? { qualificationHistory: [...options.qualificationHistory] }
+      : {}),
   };
   try {
     for (const step of resolved.steps) context = step.run(context);
@@ -430,7 +484,7 @@ export function seasonTurnover(
     }
     throw error;
   }
-  const problem = resultProblem(league, context.league);
+  const problem = resultProblem(context.world, league, context.league);
   if (problem || !context.league) {
     return {
       ok: false,
@@ -452,5 +506,6 @@ export function seasonTurnover(
     ...(context.calendar ? { calendar: context.calendar } : {}),
     ...(context.competitionHistory ? { competitionHistory: context.competitionHistory } : {}),
     ...(context.cupHistory ? { cupHistory: context.cupHistory } : {}),
+    ...(context.qualificationHistory ? { qualificationHistory: context.qualificationHistory } : {}),
   };
 }

@@ -167,6 +167,8 @@ describe("virada de temporada (R5–R8, FR-010 a FR-016)", () => {
       "balance-squads",
       "age-out-free-agents",
       "promotion-relegation",
+      "resolve-qualification",
+      "news-qualification",
       "advance-year",
       "reset-season-stats",
       "generate-calendars",

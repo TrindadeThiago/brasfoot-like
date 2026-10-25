@@ -3,7 +3,7 @@
 import type { SaveFile } from "@brasfoot-like/save";
 import { useT } from "../../i18n";
 import styles from "./board.module.css";
-import { financeGoalText } from "./GoalsList";
+import { financeGoalText, goalTierText } from "./GoalsList";
 
 /** Avaliação de fim de temporada da diretoria (FR-018), na tela de Fim de temporada. */
 export function Evaluation({ save }: { save: SaveFile }) {
@@ -17,7 +17,7 @@ export function Evaluation({ save }: { save: SaveFile }) {
       <ul className={styles.list}>
         <li>
           {t("board.evaluation.sport", {
-            tier: t(`board.goal.tier.${evaluation.sport.tier}`),
+            tier: goalTierText(t, save, evaluation.sport.tier, evaluation.sport.competitionId),
             required: evaluation.sport.required,
             final: evaluation.sport.final,
           })}{" "}

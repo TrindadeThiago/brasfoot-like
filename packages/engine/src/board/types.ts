@@ -7,6 +7,7 @@ import type { CompletedBank } from "../model/types";
 export const GOAL_TIERS = [
   "title",
   "promotion",
+  "qualify",
   "top4",
   "topHalf",
   "avoidRelegation",
@@ -27,7 +28,14 @@ export interface SeasonGoals {
   season: number;
   /** Rodadas jogadas quando as metas foram definidas. */
   round: number;
-  sport: { tier: GoalTierId; position: number; expectation: number; midSeason?: boolean };
+  sport: {
+    tier: GoalTierId;
+    position: number;
+    expectation: number;
+    midSeason?: boolean;
+    /** Competição de destino da meta `qualify` (021). */
+    competitionId?: string;
+  };
   finance: { kind: FinanceGoalKind; startCash: number };
 }
 
@@ -60,7 +68,13 @@ export interface ConfidenceChange {
 }
 
 export interface GoalProgress {
-  sport: { tier: GoalTierId; required: number; current: number; met: boolean };
+  sport: {
+    tier: GoalTierId;
+    required: number;
+    current: number;
+    met: boolean;
+    competitionId?: string;
+  };
   finance: {
     kind: FinanceGoalKind;
     met: boolean;
@@ -76,7 +90,13 @@ export type BoardDecision = "kept" | "fired" | "wouldFire";
 export interface SeasonEvaluation {
   season: number;
   clubId: string;
-  sport: { tier: GoalTierId; required: number; final: number; met: boolean };
+  sport: {
+    tier: GoalTierId;
+    required: number;
+    final: number;
+    met: boolean;
+    competitionId?: string;
+  };
   finance: { kind: FinanceGoalKind; met: boolean };
   finalConfidence: number;
   decision: BoardDecision;
@@ -156,6 +176,7 @@ export interface ManagerSeasonRecord {
   position?: number;
   goals?: {
     sportTier: GoalTierId;
+    sportCompetitionId?: string;
     sportPosition: number;
     sportMet: boolean;
     financeKind: FinanceGoalKind;

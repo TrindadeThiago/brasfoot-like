@@ -14,6 +14,7 @@ import { CupHistory } from "../../../ui/cup/CupHistory";
 import { type Column, DataTable } from "../../../ui/DataTable";
 import { OtherCompetitions } from "../../../ui/history/OtherCompetitions";
 import { ClubHistory, Records, Scorers, Titles } from "../../../ui/history/WorldHistory";
+import { QualificationSummary } from "../../../ui/qualification/QualificationSummary";
 import styles from "./page.module.css";
 
 type Tab = "seasons" | "titles" | "scorers" | "records" | "clubs" | "cups";
@@ -175,6 +176,11 @@ function HistoryDetail({ save, entry }: { save: SaveFile; entry: SeasonHistoryEn
           />
         );
       })}
+      <QualificationSummary
+        save={save}
+        record={save.qualificationHistory?.find((item) => item.number === entry.number)}
+        title={t("qualification.history", { year: entry.year })}
+      />
     </div>
   );
 }

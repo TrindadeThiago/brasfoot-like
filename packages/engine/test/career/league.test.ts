@@ -114,11 +114,13 @@ describe("temporada da liga (R1, R3, R4)", () => {
       level: 1,
       promotion: 0,
       relegation: 4,
+      berths: [],
     });
     expect(divisionZones(testWorld(), competitionId(), 2)).toEqual({
       level: 2,
       promotion: 4,
       relegation: 0,
+      berths: [],
     });
   });
 });

@@ -228,6 +228,119 @@
     "name": "Campeonato Oriental de Pukaônia"
   },
   {
+    "countryId": "puk",
+    "divisions": [
+      {
+        "berths": [
+          {
+            "fallback": [
+              {
+                "competitionId": "liga-puk-nacional",
+                "from": 1,
+                "kind": "position",
+                "level": 2,
+                "to": 12
+              }
+            ],
+            "id": "base-da-liga",
+            "source": {
+              "competitionId": "liga-puk-nacional",
+              "from": 1,
+              "kind": "position",
+              "level": 2,
+              "to": 4
+            }
+          },
+          {
+            "entry": {
+              "phase": 2
+            },
+            "fallback": [
+              {
+                "competitionId": "liga-puk-nacional",
+                "from": 1,
+                "kind": "position",
+                "level": 1,
+                "to": 12
+              }
+            ],
+            "id": "elite-da-liga",
+            "source": {
+              "competitionId": "liga-puk-nacional",
+              "from": 1,
+              "kind": "position",
+              "level": 1,
+              "to": 2
+            }
+          }
+        ],
+        "clubIds": [
+          "clube-puk-001",
+          "clube-puk-002",
+          "clube-puk-013",
+          "clube-puk-014",
+          "clube-puk-015",
+          "clube-puk-016"
+        ],
+        "level": 1,
+        "name": "Taça",
+        "promotionSlots": 0,
+        "relegationSlots": 0
+      }
+    ],
+    "format": {
+      "entries": [
+        {
+          "clubIds": [
+            "clube-puk-001",
+            "clube-puk-002"
+          ],
+          "phase": 1
+        }
+      ],
+      "phases": [
+        {
+          "home": "ranking",
+          "legs": 1,
+          "name": "Primeira fase",
+          "prize": 20000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "home": "ranking",
+          "legs": 1,
+          "name": "Semifinais",
+          "prize": 40000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "home": "ranking",
+          "legs": 1,
+          "name": "Final",
+          "prize": 80000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        }
+      ],
+      "type": "knockout"
+    },
+    "id": "taca-puk",
+    "name": "Taça dos Classificados de Pukaônia",
+    "schedule": {
+      "everyWeeks": 2,
+      "startWeek": 2,
+      "weekday": 4
+    }
+  },
+  {
     "countryId": "ved",
     "divisions": [
       {
@@ -473,6 +586,199 @@
       "everyWeeks": 2,
       "startWeek": 1,
       "weekday": 3
+    }
+  },
+  {
+    "countryId": "ved",
+    "divisions": [
+      {
+        "berths": [
+          {
+            "fallback": [
+              {
+                "competitionId": "liga-ved-nacional",
+                "kind": "runnerUp"
+              },
+              {
+                "competitionId": "liga-ved-nacional",
+                "from": 1,
+                "kind": "position",
+                "level": 1,
+                "to": 12
+              }
+            ],
+            "id": "campeao-liga",
+            "source": {
+              "competitionId": "liga-ved-nacional",
+              "kind": "champion"
+            }
+          },
+          {
+            "fallback": [
+              {
+                "competitionId": "liga-ved-nacional",
+                "kind": "runnerUp"
+              },
+              {
+                "competitionId": "liga-ved-nacional",
+                "from": 1,
+                "kind": "position",
+                "level": 1,
+                "to": 12
+              }
+            ],
+            "id": "campeao-copa",
+            "source": {
+              "competitionId": "copa-ved-nacional",
+              "kind": "champion"
+            }
+          }
+        ],
+        "clubIds": [
+          "clube-ved-001",
+          "clube-ved-002"
+        ],
+        "level": 1,
+        "name": "Final",
+        "promotionSlots": 0,
+        "relegationSlots": 0
+      }
+    ],
+    "format": {
+      "phases": [
+        {
+          "home": "draw",
+          "legs": 1,
+          "name": "Final",
+          "neutral": true,
+          "prize": 0,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        }
+      ],
+      "type": "knockout"
+    },
+    "id": "supercopa-ved",
+    "name": "Supercopa de Vedelândia",
+    "schedule": {
+      "everyWeeks": 1,
+      "startWeek": 0,
+      "weekday": 6
+    }
+  },
+  {
+    "countryId": "ved",
+    "divisions": [
+      {
+        "berths": [
+          {
+            "fallback": [
+              {
+                "competitionId": "liga-ved-nacional",
+                "from": 1,
+                "kind": "position",
+                "level": 2,
+                "to": 12
+              }
+            ],
+            "id": "base-da-liga",
+            "source": {
+              "competitionId": "liga-ved-nacional",
+              "from": 1,
+              "kind": "position",
+              "level": 2,
+              "to": 4
+            }
+          },
+          {
+            "entry": {
+              "phase": 2
+            },
+            "fallback": [
+              {
+                "competitionId": "liga-ved-nacional",
+                "from": 1,
+                "kind": "position",
+                "level": 1,
+                "to": 12
+              }
+            ],
+            "id": "elite-da-liga",
+            "source": {
+              "competitionId": "liga-ved-nacional",
+              "from": 1,
+              "kind": "position",
+              "level": 1,
+              "to": 2
+            }
+          }
+        ],
+        "clubIds": [
+          "clube-ved-001",
+          "clube-ved-002",
+          "clube-ved-013",
+          "clube-ved-014",
+          "clube-ved-015",
+          "clube-ved-016"
+        ],
+        "level": 1,
+        "name": "Taça",
+        "promotionSlots": 0,
+        "relegationSlots": 0
+      }
+    ],
+    "format": {
+      "entries": [
+        {
+          "clubIds": [
+            "clube-ved-001",
+            "clube-ved-002"
+          ],
+          "phase": 1
+        }
+      ],
+      "phases": [
+        {
+          "home": "ranking",
+          "legs": 1,
+          "name": "Primeira fase",
+          "prize": 20000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "home": "ranking",
+          "legs": 1,
+          "name": "Semifinais",
+          "prize": 40000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        },
+        {
+          "home": "ranking",
+          "legs": 1,
+          "name": "Final",
+          "prize": 80000,
+          "tiebreakers": [
+            "extra-time",
+            "penalties"
+          ]
+        }
+      ],
+      "type": "knockout"
+    },
+    "id": "taca-ved",
+    "name": "Taça dos Classificados de Vedelândia",
+    "schedule": {
+      "everyWeeks": 2,
+      "startWeek": 2,
+      "weekday": 4
     }
   }
 ]

@@ -91,3 +91,52 @@ export const newsNewSeasonStep: TurnoverStep = {
     return { ...context, news };
   },
 };
+
+/** No máximo estas classificações de outros clubes viram manchete por virada (021). */
+const QUALIFICATION_HEADLINES = 8;
+
+/**
+ * Etapa "news-qualification" (021 FR-019), depois de "resolve-qualification": manchetes das vagas
+ * entre competições na rodada 0 da nova temporada — as do clube do jogador e as de campeões.
+ */
+export const newsQualificationStep: TurnoverStep = {
+  id: "news-qualification",
+  run: (context) => {
+    const record = context.qualification?.record;
+    if (!context.news || !record || record.entries.length === 0) return context;
+    const finished = context.finished;
+    const next = finished.number + 1;
+    const managerClubId = context.board?.manager.clubId ?? context.managerClubId ?? "";
+    const championBerth = (entry: (typeof record.entries)[number]) =>
+      context.world.competitions
+        .find((competition) => competition.id === entry.competitionId)
+        ?.divisions.find((division) => division.level === entry.level)
+        ?.berths?.find((berth) => berth.id === entry.berthId)?.source.kind === "champion";
+    const facts: Fact[] = record.entries
+      .filter((entry) => entry.clubId === managerClubId || championBerth(entry))
+      .slice(0, QUALIFICATION_HEADLINES)
+      .map((entry) => ({
+        type: "qualification" as const,
+        clubIds: [entry.clubId],
+        playerIds: [],
+        vars: { club: entry.clubId, competition: entry.competitionId },
+      }));
+    if (facts.length === 0) return context;
+    const headlines = toHeadlines(
+      {
+        world: context.world,
+        league: { ...finished, number: next, year: finished.year + 1 },
+        careerSeed: context.careerSeed,
+        managerClubId,
+      },
+      0,
+      facts,
+    ).map((headline, index) => ({ ...headline, id: `${next}-0-q${index}` }));
+    const feed = context.news.feed.map((round) =>
+      round.season === next && round.round === 0
+        ? { ...round, headlines: [...round.headlines, ...headlines] }
+        : round,
+    );
+    return { ...context, news: { ...context.news, feed } };
+  },
+};

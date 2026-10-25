@@ -11,6 +11,8 @@ import {
   leagueCalendar,
   managerClubOf,
   nextClubFixture,
+  type QualificationRecord,
+  resolveFinishedSeasons,
   type Season,
   type SeasonError,
   seasonDate,
@@ -113,6 +115,20 @@ export function isCareerSeasonOver(save: SaveFile): boolean {
   return isCalendarOver(seasonStateOf(save));
 }
 
+/**
+ * Vagas entre competições que a virada vai resolver (021), calculadas antes dela para a tela de fim
+ * de temporada. Só existe com a temporada encerrada e vagas no banco.
+ */
+export function qualificationPreview(save: SaveFile): QualificationRecord | undefined {
+  if (!isCareerSeasonOver(save)) return undefined;
+  const outcome = resolveFinishedSeasons(
+    save.bank,
+    [save.league, ...save.competitions],
+    save.league,
+  );
+  return outcome?.ok ? outcome.result.record : undefined;
+}
+
 /** Próximo dia de jogos da temporada (de qualquer competição); undefined com ela encerrada. */
 export function currentDayOf(save: SaveFile): CalendarDay | undefined {
   return currentDay(seasonStateOf(save));
@@ -213,6 +229,7 @@ export function advanceCareerSeason(
     calendar: save.calendar,
     competitionHistory: save.competitionHistory,
     cupHistory: save.cupHistory,
+    ...(save.qualificationHistory ? { qualificationHistory: save.qualificationHistory } : {}),
   });
   if (!turned.ok) return turned;
   const next = withAdjustedLineup(
@@ -225,6 +242,9 @@ export function advanceCareerSeason(
       fitness: { players: {} },
       competitionHistory: turned.competitionHistory ?? save.competitionHistory,
       cupHistory: turned.cupHistory ?? save.cupHistory,
+      ...((turned.qualificationHistory ?? save.qualificationHistory)
+        ? { qualificationHistory: turned.qualificationHistory ?? save.qualificationHistory }
+        : {}),
       history: turned.history,
       finances: turned.finances ?? save.finances,
       bank: turned.world,

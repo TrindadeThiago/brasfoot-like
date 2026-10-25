@@ -9,6 +9,8 @@ export const SEASON_ERROR_PARAMS = {
   "season.invalid_lineup": ["clubId", "matchErrorCode"],
   "season.lineup_not_playing": ["clubId", "round"],
   "season.invalid_composition": ["level", "reason"],
+  "qualification.exhausted": ["competitionId", "berthId"],
+  "qualification.source_missing": ["competitionId"],
   "turnover.season_not_over": ["round"],
   "turnover.invalid_steps": ["stepId", "reason"],
   "turnover.invalid_result": ["reason"],

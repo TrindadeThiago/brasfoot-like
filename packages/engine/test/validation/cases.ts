@@ -1,4 +1,5 @@
 import type {
+  Berth,
   Competition,
   GroupsStage,
   KnockoutStage,
@@ -76,6 +77,59 @@ function knockoutCup(bank: ModPackage, edit: (copa: Competition) => void): void 
   edit(copa);
   bank.competitions.push(copa);
 }
+
+/**
+ * Copa de 4 clubes alimentada pela liga (021): os 2 primeiros de cada divisão; o fechamento é a
+ * tabela inteira de cada divisão (4 clubes). `edit` monta cada variante inválida.
+ */
+function fedCup(
+  bank: ModPackage,
+  edit?: (copa: Competition, berths: Berth[]) => void,
+  into: ModPackage["competitions"] = bank.competitions,
+): void {
+  void into;
+  knockoutCup(bank, (copa) => {
+    const phase = (name: string) => ({
+      name,
+      legs: 1 as const,
+      tiebreakers: ["penalties" as const],
+      home: "draw" as const,
+      prize: 0,
+    });
+    const closing = (level: number) =>
+      ({ kind: "position", competitionId: "liga", level, from: 1, to: 4 }) as const;
+    const berths: Berth[] = [
+      {
+        id: "alta",
+        source: { kind: "position", competitionId: "liga", level: 1, from: 1, to: 2 },
+        fallback: [closing(1)],
+      },
+      {
+        id: "baixa",
+        source: { kind: "position", competitionId: "liga", level: 2, from: 1, to: 2 },
+        fallback: [closing(2)],
+      },
+    ];
+    copa.format = { type: "knockout", phases: [phase("Semifinal"), phase("Final")] };
+    copa.divisions = [
+      {
+        level: 1,
+        name: "Chave",
+        clubIds: ["clube-1", "clube-2", "clube-5", "clube-6"],
+        promotionSlots: 0,
+        relegationSlots: 0,
+        berths,
+      },
+    ];
+    edit?.(copa, berths);
+  });
+}
+
+function berthsOf(copa: Competition): Berth[] {
+  return copa.divisions[0]?.berths ?? [];
+}
+
+const BERTHS = [1, "divisions", 0, "berths"] as const;
 
 function knockoutOf(copa: Competition) {
   if (copa.format.type !== "knockout") throw new Error("não é copa");
@@ -1091,6 +1145,206 @@ export const RULE_CASES: RuleCase[] = [
       path: [1, "divisions", 0, "clubIds", 0],
       entityId: "liga-2",
       params: { clubId: "clube-1", otherCompetitionId: "liga" },
+    },
+  },
+  {
+    code: "qualification.duplicate_berth_id",
+    description: "duas vagas com o mesmo id na divisão",
+    mutate: (bank) =>
+      fedCup(bank, (_copa, berths) => {
+        at(berths, 1).id = "alta";
+      }),
+    expect: {
+      section: "competitions",
+      path: [...BERTHS, 1, "id"],
+      entityId: "copa",
+      params: { berthId: "alta" },
+    },
+  },
+  {
+    code: "qualification.unknown_competition",
+    description: "vaga com fonte numa competição que não existe",
+    mutate: (bank) =>
+      fedCup(bank, (_copa, berths) => {
+        at(berths, 0).source = { kind: "champion", competitionId: "nada" };
+      }),
+    expect: {
+      section: "competitions",
+      path: [...BERTHS, 0, "source", "competitionId"],
+      entityId: "copa",
+      params: { berthId: "alta", competitionId: "nada" },
+    },
+  },
+  {
+    code: "qualification.unknown_level",
+    description: "vaga com fonte numa divisão que não existe",
+    mutate: (bank) =>
+      fedCup(bank, (_copa, berths) => {
+        at(berths, 0).source = {
+          kind: "position",
+          competitionId: "liga",
+          level: 9,
+          from: 1,
+          to: 2,
+        };
+      }),
+    expect: {
+      section: "competitions",
+      path: [...BERTHS, 0, "source", "level"],
+      entityId: "copa",
+      params: { berthId: "alta", competitionId: "liga", level: 9 },
+    },
+  },
+  {
+    code: "qualification.unknown_phase",
+    description: "vaga com fase alcançada que a copa não tem",
+    mutate: (bank) =>
+      fedCup(bank, (_copa, berths) => {
+        at(berths, 0).source = { kind: "reached", competitionId: "copa", phase: 4 };
+      }),
+    expect: {
+      section: "competitions",
+      path: [...BERTHS, 0, "source", "phase"],
+      entityId: "copa",
+      params: { berthId: "alta", competitionId: "copa", phase: 4 },
+    },
+  },
+  {
+    code: "qualification.reached_not_cup",
+    description: "fase alcançada numa competição que não é copa",
+    mutate: (bank) =>
+      fedCup(bank, (_copa, berths) => {
+        at(berths, 0).source = { kind: "reached", competitionId: "liga", phase: 1 };
+      }),
+    expect: {
+      section: "competitions",
+      path: [...BERTHS, 0, "source", "competitionId"],
+      entityId: "copa",
+      params: { berthId: "alta", competitionId: "liga" },
+    },
+  },
+  {
+    code: "qualification.range_invalid",
+    description: "faixa de posições maior que a divisão de origem",
+    mutate: (bank) =>
+      fedCup(bank, (_copa, berths) => {
+        at(berths, 0).source = {
+          kind: "position",
+          competitionId: "liga",
+          level: 1,
+          from: 1,
+          to: 9,
+        };
+      }),
+    expect: {
+      section: "competitions",
+      path: [...BERTHS, 0, "source", "to"],
+      entityId: "copa",
+      params: { berthId: "alta", from: 1, to: 9, size: 4 },
+    },
+  },
+  {
+    code: "qualification.count_mismatch",
+    description: "as vagas somam menos clubes que a divisão tem",
+    mutate: (bank) =>
+      fedCup(bank, (copa) => {
+        at(copa.divisions, 0).berths = berthsOf(copa).slice(0, 1);
+      }),
+    expect: {
+      section: "competitions",
+      path: [...BERTHS],
+      entityId: "copa",
+      params: { total: 2, size: 4 },
+    },
+  },
+  {
+    code: "qualification.pyramid_exit_mismatch",
+    description: "a última divisão rebaixa para fora mais clubes do que recebe por vagas",
+    mutate: (bank) => {
+      const bottom = division(bank, 1);
+      bottom.relegationSlots = 1;
+      const closing = {
+        kind: "position",
+        competitionId: "liga",
+        level: 2,
+        from: 1,
+        to: 4,
+      } as const;
+      bottom.berths = ["a", "b"].map((id) => ({
+        id,
+        source: { kind: "champion" as const, competitionId: "liga" },
+        fallback: [closing],
+      }));
+    },
+    expect: {
+      section: "competitions",
+      path: [0, "divisions", 1, "berths"],
+      entityId: "liga",
+      params: { total: 2, relegation: 1, size: 4 },
+    },
+  },
+  {
+    code: "qualification.entry_count_mismatch",
+    description: "vagas de entrada tardia que a copa não declara",
+    mutate: (bank) =>
+      fedCup(bank, (_copa, berths) => {
+        at(berths, 0).entry = { phase: 2 };
+      }),
+    expect: {
+      section: "competitions",
+      path: [...BERTHS],
+      entityId: "copa",
+      params: { phase: 2, berths: 2, entering: 0 },
+    },
+  },
+  {
+    code: "qualification.no_closing",
+    description: "vaga sem repasse que termine numa tabela inteira",
+    mutate: (bank) =>
+      fedCup(bank, (_copa, berths) => {
+        at(berths, 0).fallback = [];
+      }),
+    expect: {
+      section: "competitions",
+      path: [...BERTHS, 0, "fallback"],
+      entityId: "copa",
+      params: { berthId: "alta" },
+    },
+  },
+  {
+    code: "qualification.pool_too_small",
+    description: "fechamento com menos clubes que a divisão de destino",
+    mutate: (bank) =>
+      fedCup(bank, (copa) => {
+        at(copa.divisions, 0).clubIds.push("clube-3");
+      }),
+    expect: {
+      section: "competitions",
+      path: [...BERTHS, 0, "fallback", 0],
+      entityId: "copa",
+      params: { berthId: "alta", clubs: 4, needed: 5 },
+    },
+  },
+  {
+    code: "qualification.cycle",
+    description: "duas competições que exigem a divisão uma da outra",
+    mutate: (bank) => {
+      fedCup(bank, (copa, berths) => {
+        at(berths, 0).require = [{ competitionId: "copa-b", level: 1 }];
+        const other = JSON.parse(JSON.stringify(copa)) as Competition;
+        other.id = "copa-b";
+        at(other.divisions, 0).berths = berthsOf(copa).map((berth) => ({
+          ...berth,
+          require: [{ competitionId: "copa", level: 1 }],
+        }));
+        bank.competitions.push(other);
+      });
+    },
+    expect: {
+      section: "competitions",
+      path: [1],
+      entityId: "copa-b",
+      params: { path: "copa-b → copa → copa-b" },
     },
   },
 ];

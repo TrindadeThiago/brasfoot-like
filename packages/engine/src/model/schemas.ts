@@ -112,7 +112,7 @@ export const knockoutEntrySchema = z.object({
 
 export const knockoutFormatSchema = z.object({
   type: z.literal("knockout"),
-  phases: list(knockoutPhaseSchema, 2, 8),
+  phases: list(knockoutPhaseSchema, 1, 8),
   entries: z.array(knockoutEntrySchema).optional(),
 });
 
@@ -180,6 +180,35 @@ export const competitionFormatSchema = z.discriminatedUnion("type", [
   stagesFormatSchema,
 ]);
 
+/** Divisão (competição, nível) de que um clube precisa, ou não pode, fazer parte (021 R1). */
+export const divisionRefSchema = z.object({ competitionId: id, level: intInRange(1, 99) });
+
+/** De onde vem o clube de uma vaga (021 R1). */
+export const berthSourceSchema = z.discriminatedUnion("kind", [
+  z.object({
+    kind: z.literal("position"),
+    competitionId: id,
+    level: intInRange(1, 99),
+    from: intInRange(1, 40),
+    to: intInRange(1, 40),
+  }),
+  z.object({ kind: z.literal("champion"), competitionId: id }),
+  z.object({ kind: z.literal("runnerUp"), competitionId: id }),
+  z.object({ kind: z.literal("reached"), competitionId: id, phase: intInRange(1, 8) }),
+]);
+
+/** Vaga de uma divisão em outra competição (021): fonte, fase de entrada, repasse e condições. */
+export const berthSchema = z.object({
+  id,
+  source: berthSourceSchema,
+  entry: z
+    .object({ stage: intInRange(1, 8).optional(), phase: intInRange(1, 8).optional() })
+    .optional(),
+  fallback: list(berthSourceSchema, 0, 8).optional(),
+  require: list(divisionRefSchema, 0, 8).optional(),
+  forbid: list(divisionRefSchema, 0, 8).optional(),
+});
+
 export const divisionSchema = z.object({
   level: intInRange(1, 99),
   name: text(1, 60),
@@ -188,6 +217,8 @@ export const divisionSchema = z.object({
   relegationSlots: intInRange(0, 40),
   /** Fases desta divisão; substituem o formato da competição (019 R1). */
   stages: list(stageFormatSchema, 1, 8).optional(),
+  /** Vagas vindas de outras competições (021); `clubIds` são os participantes da 1ª temporada. */
+  berths: list(berthSchema, 1, 64).optional(),
 });
 
 const money = intInRange(0, 10_000_000_000);
@@ -406,6 +437,7 @@ const headlineMap = (max: number) =>
       cupElimination: intInRange(0, max),
       cupFinal: intInRange(0, max),
       cupChampion: intInRange(0, max),
+      qualification: intInRange(0, max),
     })
     .partial();
 

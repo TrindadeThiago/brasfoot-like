@@ -48,6 +48,9 @@ export function seasonRecord(
       ? {
           goals: {
             sportTier: evaluation.sport.tier,
+            ...(evaluation.sport.competitionId
+              ? { sportCompetitionId: evaluation.sport.competitionId }
+              : {}),
             sportPosition: evaluation.sport.required,
             sportMet: evaluation.sport.met,
             financeKind: evaluation.finance.kind,

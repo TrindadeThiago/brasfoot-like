@@ -1,4 +1,5 @@
 import type { CompletedBank } from "../model/types";
+import { berthZones } from "../qualification/zones";
 import { disciplineRules } from "../season/discipline";
 import { seasonError } from "../season/errors";
 import { createSeason, isSeasonOver } from "../season/season";
@@ -143,5 +144,6 @@ export function divisionZones(
     level,
     promotion: division?.promotionSlots ?? 0,
     relegation: division?.relegationSlots ?? 0,
+    berths: berthZones(world, competitionId, level),
   };
 }

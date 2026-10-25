@@ -1,7 +1,7 @@
 "use client";
 
 import { competitionEntry, cupEntry, cupSeasonOf } from "@brasfoot-like/engine";
-import { isCareerSeasonOver, type SaveFile } from "@brasfoot-like/save";
+import { isCareerSeasonOver, qualificationPreview, type SaveFile } from "@brasfoot-like/save";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -14,6 +14,7 @@ import { Button } from "../../../ui/Button";
 import { Evaluation } from "../../../ui/board/Evaluation";
 import { CupResult } from "../../../ui/cup/CupHistory";
 import { OtherCompetitions } from "../../../ui/history/OtherCompetitions";
+import { QualificationSummary } from "../../../ui/qualification/QualificationSummary";
 import { SeasonSummary } from "../../../ui/SeasonSummary";
 import { FinalPositions } from "../../../ui/stages/FinalPositions";
 import { useShortcuts } from "../../../ui/useShortcuts";
@@ -58,6 +59,7 @@ function SeasonEnd({ save, game }: { save: SaveFile; game: Game }) {
           .filter((league) => !cupSeasonOf(league))
           .map((league) => competitionEntry(league, save.bank))}
       />
+      <QualificationSummary save={save} record={qualificationPreview(save)} />
       <CupResult
         save={save}
         entries={save.competitions.flatMap((league) => cupEntry(league) ?? [])}

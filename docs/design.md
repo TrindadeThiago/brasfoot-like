@@ -31,6 +31,7 @@
 - País, competição e formato (pontos corridos, mata-mata, grupos) são **dados, não código** — adicionar ligas/países deve ser trabalho de dados.
 - Primeira expansão sugerida: copa nacional em mata-mata.
 - **Vários países (020):** um banco pode ter quantos países quiser; cada um com a sua pirâmide, a sua economia (a da competição principal dele) e o seu banco de nomes. O valor de mercado do jogador é universal, o salário segue a escala do país do clube, a reputação é do clube, e o técnico recebe propostas de qualquer país. Os jogos das ligas de outros países que o técnico não acompanha usam uma simulação resumida, equivalente à completa.
+- **Classificação entre competições (021):** a divisão de destino declara as suas vagas (`berths`): posição, título, vice ou fase alcançada em outra competição, a fase de entrada, a ordem de repasse e as condições. A resolução acontece na virada, sem sorteio: nenhum clube aparece duas vezes numa competição e nenhuma vaga sobra. A supercopa é um mata-mata de uma fase com vagas de campeão.
 
 ## 4. Jogadores
 

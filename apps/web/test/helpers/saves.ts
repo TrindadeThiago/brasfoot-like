@@ -5,20 +5,26 @@ import mod from "@brasfoot-like/default-mod/mod.json" with { type: "json" };
 import players from "@brasfoot-like/default-mod/players.json" with { type: "json" };
 import rivalries from "@brasfoot-like/default-mod/rivalries.json" with { type: "json" };
 import {
+  completeCareerDay,
   completeCareerRound,
   createBoard,
   finishRound,
+  generateWorldBank,
   isLeagueSeasonOver,
   joinBankFiles,
+  type ModPackage,
   startLeagueRound,
 } from "@brasfoot-like/engine";
 import {
   advanceCareerSeason,
   createSave,
   initialLineup,
+  isCareerSeasonOver,
   managedClubId,
   type SaveFile,
+  seasonStateOf,
   userSeason,
+  withDayResult,
   withRoundResult,
 } from "@brasfoot-like/save";
 
@@ -208,4 +214,53 @@ export function cupSave(id: string, clubIndex = 0): SaveFile {
     cupBase = result.save;
   }
   return { ...(JSON.parse(JSON.stringify(cupBase)) as SaveFile), id };
+}
+
+let qualificationBase: SaveFile | undefined;
+
+/**
+ * Carreira num mundo de 2 países com liga, copa e supercopa por país (021): o clube é o primeiro da
+ * Série A do primeiro país. O banco é fictício e gerado.
+ */
+export function qualificationSave(id: string): SaveFile {
+  if (!qualificationBase) {
+    const bank = JSON.parse(
+      JSON.stringify(
+        generateWorldBank({
+          seed: "vagas-web",
+          countries: 2,
+          divisionsPerCountry: 2,
+          clubsPerDivision: 8,
+          cup: true,
+          qualification: true,
+        }),
+      ),
+    ) as ModPackage;
+    const club = bank.competitions[0]?.divisions[0]?.clubIds[0] as string;
+    const result = createSave({
+      id: "base-vagas",
+      now: "2026-10-24T12:00:00.000Z",
+      managerName: "Ana Souza",
+      clubId: club,
+      seed: "teste-web-vagas",
+      defaultBank: bank,
+      noFiring: true,
+    });
+    if (!result.ok) throw new Error(JSON.stringify(result.error));
+    qualificationBase = result.save;
+  }
+  return { ...(JSON.parse(JSON.stringify(qualificationBase)) as SaveFile), id };
+}
+
+/** Joga o dia a dia até o fim da temporada (ainda sem virar). */
+export function playedQualificationSeason(id: string): SaveFile {
+  let save = qualificationSave(id);
+  while (!isCareerSeasonOver(save)) {
+    const result = completeCareerDay(seasonStateOf(save), save.seed, save.clubId, undefined, {
+      [save.clubId]: save.lineup,
+    });
+    if (!result.ok) throw new Error(JSON.stringify(result.error));
+    save = withDayResult(save, result.state);
+  }
+  return save;
 }

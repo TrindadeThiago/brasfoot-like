@@ -9,6 +9,10 @@ export interface CompositionChange {
   promoted: Record<number, string[]>;
   /** Clubes que saem de cada nível para o de baixo. */
   relegated: Record<number, string[]>;
+  /** Clubes que saem da pirâmide pela última divisão para vagas externas (021 R5). */
+  relegatedOut: string[];
+  /** Clubes que saem da pirâmide pela primeira divisão para vagas externas (021 R5). */
+  promotedOut: string[];
 }
 
 /**
@@ -43,10 +47,26 @@ export function nextComposition(league: LeagueSeason, world: CompletedBank): Com
     relegated[upper] = down > 0 ? upperTable.slice(upperTable.length - down) : [];
     promoted[lower] = (tables.get(lower) ?? []).slice(0, up);
   }
+  // A última divisão só rebaixa para fora da pirâmide quando recebe clubes por vagas (021 R5).
+  const last = levels.at(-1);
+  const lastDivision = last ? slots(last.divisionLevel) : undefined;
+  const lastTable = last ? (tables.get(last.divisionLevel) ?? []) : [];
+  const out = lastDivision?.berths?.length ? (lastDivision.relegationSlots ?? 0) : 0;
+  const relegatedOut = out > 0 ? lastTable.slice(lastTable.length - out) : [];
+  const first = levels[0];
+  const firstDivision = first ? slots(first.divisionLevel) : undefined;
+  const firstTable = first ? (tables.get(first.divisionLevel) ?? []) : [];
+  const up = firstDivision?.berths?.length ? (firstDivision.promotionSlots ?? 0) : 0;
+  const promotedOut = up > 0 ? firstTable.slice(0, up) : [];
   const composition: Record<number, string[]> = {};
   levels.forEach((season, index) => {
     const level = season.divisionLevel;
-    const leaving = new Set([...(promoted[level] ?? []), ...(relegated[level] ?? [])]);
+    const leaving = new Set([
+      ...(promoted[level] ?? []),
+      ...(relegated[level] ?? []),
+      ...(level === last?.divisionLevel ? relegatedOut : []),
+      ...(level === first?.divisionLevel ? promotedOut : []),
+    ]);
     const above = levels[index - 1]?.divisionLevel;
     const below = levels[index + 1]?.divisionLevel;
     composition[level] = [
@@ -55,5 +75,5 @@ export function nextComposition(league: LeagueSeason, world: CompletedBank): Com
       ...(below === undefined ? [] : (promoted[below] ?? [])),
     ].sort();
   });
-  return { composition, promoted, relegated };
+  return { composition, promoted, relegated, relegatedOut, promotedOut };
 }

@@ -3,6 +3,8 @@ import type { SemanticContext } from "../context";
 import { makeIssue, type ValidationIssue } from "../issues";
 
 const MIN_CLUBS = 4;
+/** Final única (supercopa, 021): dois clubes bastam. */
+const MIN_CLUBS_SINGLE_FINAL = 2;
 const MAX_CLUBS = 40;
 
 function checkFormat(index: number, competition: Competition): ValidationIssue[] {
@@ -61,7 +63,7 @@ function checkSlots(index: number, competition: Competition): ValidationIssue[] 
   const byLevel = [...divisions].sort((a, b) => a.division.level - b.division.level);
   const top = byLevel[0];
   const bottom = byLevel[byLevel.length - 1];
-  if (top && top.division.promotionSlots > 0) {
+  if (top && top.division.promotionSlots > 0 && !top.division.berths?.length) {
     issues.push(
       makeIssue(
         "division.top_has_promotion",
@@ -72,7 +74,8 @@ function checkSlots(index: number, competition: Competition): ValidationIssue[] 
       ),
     );
   }
-  if (bottom && bottom.division.relegationSlots > 0) {
+  // A saída para fora da pirâmide é válida quando a divisão recebe clubes por vagas (021 R5).
+  if (bottom && bottom.division.relegationSlots > 0 && !bottom.division.berths?.length) {
     issues.push(
       makeIssue(
         "division.bottom_has_relegation",
@@ -153,13 +156,16 @@ export function checkCompetitions(context: SemanticContext): ValidationIssue[] {
     competition.divisions.forEach((division, position) => {
       const path = [index, "divisions", position];
       const count = division.clubIds.length;
-      if (count < MIN_CLUBS || count > MAX_CLUBS) {
+      const singleFinal =
+        competition.format.type === "knockout" && competition.format.phases.length === 1;
+      const minClubs = singleFinal ? MIN_CLUBS_SINGLE_FINAL : MIN_CLUBS;
+      if (count < minClubs || count > MAX_CLUBS) {
         issues.push(
           makeIssue(
             "division.club_count",
             "competitions",
             [...path, "clubIds"],
-            { count, min: MIN_CLUBS, max: MAX_CLUBS },
+            { count, min: minClubs, max: MAX_CLUBS },
             competition.id,
           ),
         );

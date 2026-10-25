@@ -10,5 +10,7 @@
   "season.invalid_composition": "A composição da divisão de nível {level} é inválida: {reason}.",
   "turnover.season_not_over": "A temporada ainda não terminou: falta disputar a rodada {round}.",
   "turnover.invalid_steps": "A etapa {stepId} da virada de temporada é inválida: {reason}.",
-  "turnover.invalid_result": "A virada de temporada produziu uma temporada inválida: {reason}."
+  "turnover.invalid_result": "A virada de temporada produziu uma temporada inválida: {reason}.",
+  "qualification.exhausted": "A vaga {berthId} da competição {competitionId} ficou sem clube elegível: a ordem de repasse acabou.",
+  "qualification.source_missing": "A competição {competitionId}, fonte de vagas, não tem temporada encerrada."
 }

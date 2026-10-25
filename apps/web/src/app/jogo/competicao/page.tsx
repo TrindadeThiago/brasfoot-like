@@ -10,6 +10,7 @@ import { CompetitionSelect } from "../../../ui/CompetitionSelect";
 import { CompetitionTabs } from "../../../ui/CompetitionTabs";
 import { Bracket } from "../../../ui/cup/Bracket";
 import { DivisionTabs } from "../../../ui/DivisionTabs";
+import { ParticipantOrigins } from "../../../ui/qualification/ParticipantOrigins";
 import { StandingsTable } from "../../../ui/StandingsTable";
 import { StageNav } from "../../../ui/stages/StageNav";
 import { currentStage, StageView } from "../../../ui/stages/StageView";
@@ -29,6 +30,7 @@ function Standings({ save }: { save: SaveFile }) {
         <DivisionTabs save={save} level={level} league={league} />
         <StageNav save={save} season={season} competitionId={competitionId} selected={chosen} />
         <StageView save={save} season={season} stageIndex={chosen} />
+        <ParticipantOrigins save={save} league={league} />
       </>
     );
   }
@@ -38,6 +40,7 @@ function Standings({ save }: { save: SaveFile }) {
         <CompetitionSelect save={save} competitionId={competitionId} />
         <CompetitionTabs careerId={save.id} level={level} competitionId={competitionId} cup />
         <Bracket save={save} season={season} />
+        <ParticipantOrigins save={save} league={league} />
       </>
     );
   }
@@ -57,6 +60,7 @@ function Standings({ save }: { save: SaveFile }) {
           })}
         />
       </div>
+      <ParticipantOrigins save={save} league={league} />
     </>
   );
 }

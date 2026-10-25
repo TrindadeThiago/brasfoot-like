@@ -2,6 +2,7 @@
 // mercado (011), das trocas de técnico da diretoria (012), do humor das torcidas (013) e da
 // variedade de manchetes (014).
 // Uso: pnpm sim:world [--seed <seed>] [--seasons <n>]
+//      pnpm sim:world --scale [--countries <n>] [--seasons <n>] [--qualification]
 import { realpathSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
@@ -271,6 +272,7 @@ if (invokedDirectly) {
       detail: { type: "boolean", default: false },
       international: { type: "string" },
       economy: { type: "string" },
+      qualification: { type: "boolean", default: false },
     },
   });
   if (values.scale) {
@@ -281,6 +283,7 @@ if (invokedDirectly) {
       countries: values.countries ? Number(values.countries) : 10,
       seasons: values.seasons ? Number(values.seasons) : 30,
       detail: values.detail === true,
+      ...(values.qualification ? { qualification: true } : {}),
       ...(values.economy === "uniform" || values.economy === "varied"
         ? { economy: values.economy }
         : {}),

@@ -195,6 +195,20 @@ export function createCareerSeason(
     if (!result.ok) return result;
     created.push(result.league);
   }
+  // Primeira temporada: os participantes das competições com vagas vêm do banco (021 R6).
+  for (const [index, season] of created.entries()) {
+    const competition = world.competitions.find((entry) => entry.id === season.competitionId);
+    if (!competition?.divisions.some((division) => (division.berths?.length ?? 0) > 0)) continue;
+    if (season.origins) continue;
+    created[index] = {
+      ...season,
+      origins: Object.fromEntries(
+        season.divisions.flatMap((division) =>
+          division.clubIds.map((clubId) => [clubId, { kind: "bank" as const }]),
+        ),
+      ),
+    };
+  }
   const focus = focusIndex(world, created, options);
   const league = created[focus];
   if (!league) throw new Error("banco sem competições");

@@ -6,6 +6,12 @@ import type { CupHistoryEntry } from "../knockout/history";
 import type { MarketState } from "../market/types";
 import type { CompletedBank } from "../model/types";
 import type { NewsState } from "../news/types";
+import type {
+  BerthZone,
+  Origin,
+  QualificationRecord,
+  QualificationResult,
+} from "../qualification/types";
 import type { RenewalState } from "../renewal/types";
 import type { Rng } from "../rng/xoshiro";
 import type { SeasonError } from "../season/errors";
@@ -22,6 +28,8 @@ export interface LeagueSeason {
   seed: string;
   /** Uma por divisão da competição, em ordem crescente de nível. */
   divisions: Season[];
+  /** Como cada participante chegou (021 R7); só em competições com vagas. */
+  origins?: Record<string, Origin>;
 }
 
 export interface LeagueSeasonOptions {
@@ -45,6 +53,8 @@ export interface DivisionZones {
   level: number;
   promotion: number;
   relegation: number;
+  /** Faixas que dão vaga em outras competições (021); vazio sem vagas. */
+  berths: BerthZone[];
 }
 
 /** Linha da classificação final guardada no histórico (subconjunto de `StandingRow`). */
@@ -119,6 +129,10 @@ export interface TurnoverContext {
   competitionHistory?: SeasonHistoryEntry[];
   /** Histórico das copas (uma entrada por edição encerrada, 018). */
   cupHistory?: CupHistoryEntry[];
+  /** Classificações entre competições resolvidas, uma por temporada encerrada (021). */
+  qualificationHistory?: QualificationRecord[];
+  /** Resultado da etapa `resolve-qualification` desta virada (021). */
+  qualification?: QualificationResult;
   /** Finanças da carreira (008); ausentes em usos só da liga. */
   finances?: FinanceState;
   /** Clube do jogador: as decisões da IA não o alteram. */
@@ -164,6 +178,7 @@ export interface TurnoverOptions {
   calendar?: SeasonCalendar;
   competitionHistory?: readonly SeasonHistoryEntry[];
   cupHistory?: readonly CupHistoryEntry[];
+  qualificationHistory?: readonly QualificationRecord[];
 }
 
 export type TurnoverResult =
@@ -184,5 +199,6 @@ export type TurnoverResult =
       calendar?: SeasonCalendar;
       competitionHistory?: SeasonHistoryEntry[];
       cupHistory?: CupHistoryEntry[];
+      qualificationHistory?: QualificationRecord[];
     }
   | { ok: false; error: SeasonError };

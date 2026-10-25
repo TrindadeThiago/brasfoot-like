@@ -274,6 +274,17 @@ const addWorld: Migration = {
   },
 };
 
+/**
+ * v15 → v16: classificação entre competições (021). `division.berths` no banco, `origins` nas
+ * temporadas e `qualificationHistory` são opcionais; um save antigo é um mundo sem vagas.
+ */
+const addQualification: Migration = {
+  from: 15,
+  migrate(raw) {
+    return { ...(raw as object), formatVersion: 16 };
+  },
+};
+
 /** Migrações reais do formato, em ordem. */
 export const MIGRATIONS: readonly Migration[] = [
   addLineup,
@@ -290,6 +301,7 @@ export const MIGRATIONS: readonly Migration[] = [
   addCupHistory,
   addStages,
   addWorld,
+  addQualification,
 ];
 
 /** Problemas que tornam a escalação gravada ilegível (os demais o jogo corrige ou avisa). */

@@ -14,6 +14,13 @@ import { standings } from "../season/standings";
 import { boardRules } from "./rules";
 import type { BoardContext, FinanceGoalKind, GoalProgress, GoalTierId, SeasonGoals } from "./types";
 
+/** Nível de meta e a posição que ele exige; `competitionId` só na meta de classificação (021). */
+export interface GoalTier {
+  tier: GoalTierId;
+  position: number;
+  competitionId?: string;
+}
+
 /** Rodadas já jogadas na temporada da liga. */
 export function playedRounds(league: LeagueSeason): number {
   return isLeagueSeasonOver(league) ? leagueTotalRounds(league) : leagueRound(league) - 1;
@@ -27,12 +34,12 @@ export function goalTiersFor(
   world: CompletedBank,
   league: LeagueSeason,
   level: number,
-): { tier: GoalTierId; position: number }[] {
+): GoalTier[] {
   const season = league.divisions.find((entry) => entry.divisionLevel === level);
   const size = season?.clubIds.length ?? 0;
   const zones = divisionZones(world, league.competitionId, level);
   const rules = boardRules(world, league.competitionId);
-  const candidates: { tier: GoalTierId; position: number }[] = [{ tier: "title", position: 1 }];
+  const candidates: GoalTier[] = [{ tier: "title", position: 1 }];
   if (zones.promotion > 0) candidates.push({ tier: "promotion", position: zones.promotion });
   candidates.push({ tier: "top4", position: 4 });
   candidates.push({ tier: "topHalf", position: Math.ceil(size / 2) });
@@ -41,7 +48,17 @@ export function goalTiersFor(
   } else {
     candidates.push({ tier: "avoidBottom", position: size - rules.bottomSlots });
   }
-  const tiers: { tier: GoalTierId; position: number }[] = [];
+  // Vagas em outras competições (021): uma meta "classificar para X" por destino, no lugar que a
+  // posição pede entre os níveis existentes (que seguem na ordem de antes).
+  for (const zone of zones.berths) {
+    const at = candidates.findIndex((entry) => entry.position > zone.to);
+    candidates.splice(at < 0 ? candidates.length : at, 0, {
+      tier: "qualify",
+      position: zone.to,
+      competitionId: zone.competitionId,
+    });
+  }
+  const tiers: GoalTier[] = [];
   for (const candidate of candidates) {
     const last = tiers.at(-1);
     if (candidate.position < 1 || candidate.position > size) continue;
@@ -97,10 +114,7 @@ export function currentPosition(
   return standings(season, context.world).find((row) => row.clubId === clubId)?.position ?? 1;
 }
 
-function tierFor(
-  tiers: readonly { tier: GoalTierId; position: number }[],
-  required: number,
-): { tier: GoalTierId; position: number } {
+function tierFor(tiers: readonly GoalTier[], required: number): GoalTier {
   const found = tiers.find((entry) => entry.position >= required);
   const fallback = tiers.at(-1);
   if (found) return found;
@@ -159,6 +173,7 @@ export function seasonGoals(
       position: chosen.position,
       expectation,
       ...(midSeason ? { midSeason: true } : {}),
+      ...(chosen.competitionId ? { competitionId: chosen.competitionId } : {}),
     },
     finance: financeGoalFor(context, clubId),
   };
@@ -205,6 +220,7 @@ export function goalProgress(
       required: goals.sport.position,
       current,
       met: current <= goals.sport.position,
+      ...(goals.sport.competitionId ? { competitionId: goals.sport.competitionId } : {}),
     },
     finance: {
       kind: goals.finance.kind,

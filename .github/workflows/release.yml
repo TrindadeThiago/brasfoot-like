@@ -101,6 +101,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm sim:world --seasons 30
       - run: pnpm sim:economy --seasons 30
+      # Vagas entre competições (021): participantes por fase e unicidade em 30 temporadas.
+      - run: pnpm sim:world --scale --countries 3 --seasons 30 --qualification
 
   e2e:
     needs: version
