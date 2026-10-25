@@ -42,6 +42,8 @@ export interface StageState {
   warnings?: DrawWarning[];
   /** Só em fases eliminatórias. */
   bracket?: Bracket;
+  /** Clubes que chegam por ligação, selados ao fim da fase de origem (022 R3). */
+  incoming?: { dropInId: string; clubIds: string[] }[];
 }
 
 /**

@@ -60,4 +60,19 @@ describe("fronteira do motor", () => {
     }
     expect(problems).toEqual([]);
   });
+
+  it("as competições entre países (022) não usam PRNG novo nem importam da interface", () => {
+    const dir = join(SRC_DIR, "continental");
+    const problems: string[] = [];
+    for (const file of listTsFiles(dir)) {
+      const source = stripComments(readFileSync(file, "utf8"));
+      if (/\b(createRng|Rng)\b|rng\//.test(source))
+        problems.push(`${relative(SRC_DIR, file)} usa PRNG`);
+      if (/from\s+"(react|next)|apps\/|document\.|window\.|localStorage|fetch\(/.test(source)) {
+        problems.push(`${relative(SRC_DIR, file)} importa da interface ou da plataforma`);
+      }
+    }
+    expect(listTsFiles(dir).length).toBeGreaterThanOrEqual(10);
+    expect(problems).toEqual([]);
+  });
 });

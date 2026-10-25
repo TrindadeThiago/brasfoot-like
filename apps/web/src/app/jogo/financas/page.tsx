@@ -5,6 +5,7 @@ import { GameLayout } from "../../../game/GameLayout";
 import type { useGame } from "../../../game/GameProvider";
 import { formatMoney, formatNumber, useT } from "../../../i18n";
 import { CreditPanel } from "../../../ui/CreditPanel";
+import { PrizeStatement } from "../../../ui/continental/PrizeStatement";
 import { FinanceSummary } from "../../../ui/FinanceSummary";
 import { FinanceHistory, HomeGames } from "../../../ui/FinanceTables";
 import { StadiumPanel } from "../../../ui/StadiumPanel";
@@ -54,6 +55,7 @@ function Finances({ save, game }: { save: SaveFile; game: Game }) {
         <StadiumPanel save={save} disabled={locked} onStart={game.startStadiumWorks} />
       </div>
       <HomeGames save={save} />
+      <PrizeStatement save={save} />
       <FinanceHistory save={save} />
     </div>
   );

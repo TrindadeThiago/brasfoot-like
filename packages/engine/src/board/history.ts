@@ -57,6 +57,7 @@ export function seasonRecord(
             financeMet: evaluation.finance.met,
           },
           decision: evaluation.decision,
+          ...(evaluation.continental ? { continental: evaluation.continental } : {}),
         }
       : {}),
     achievements: evaluation?.achievements ?? [],

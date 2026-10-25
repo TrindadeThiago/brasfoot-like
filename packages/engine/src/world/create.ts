@@ -1,3 +1,4 @@
+import { withContinentalGoals } from "../board/continental";
 import { type CreateBoardManager, createBoard, extendBoard } from "../board/create";
 import type { BoardState } from "../board/types";
 import type { LeagueSeason } from "../career/types";
@@ -47,5 +48,6 @@ export function createWorldSystems(
   }
   let board = createBoard(world, focus, finances, careerSeed, manager);
   for (const league of others) board = extendBoard(board, world, league, finances, careerSeed);
+  board = withContinentalGoals(board, world, [state.league, ...state.competitions]);
   return { finances, fans, board };
 }

@@ -27,7 +27,7 @@ export function withNationalCup<T extends Pick<CompletedBank, "competitions" | "
   const cup = generateCup(
     "copa-nacional",
     defaultNameBank.cupName ?? "Copa Nacional",
-    main.countryId,
+    main.countryId ?? "",
     clubs,
   );
   return { ...world, competitions: [...world.competitions, cup] };

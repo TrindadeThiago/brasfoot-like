@@ -154,6 +154,7 @@ describe("virada de temporada (R5–R8, FR-010 a FR-016)", () => {
   it("as etapas padrão têm ids e ordem estáveis", () => {
     expect(TURNOVER_STEP_IDS).toEqual([
       "record-history",
+      "continental-reputation",
       "fans-new-season",
       "news-new-season",
       "pay-prizes",

@@ -17,7 +17,8 @@ export function mainCompetitions(world: Competitions): Competition[] {
   const seen = new Set<string>();
   const mains: Competition[] = [];
   for (const competition of world.competitions) {
-    if (seen.has(competition.countryId)) continue;
+    // Competição entre países (022) não é a principal de nenhum país.
+    if (competition.countryId === undefined || seen.has(competition.countryId)) continue;
     seen.add(competition.countryId);
     mains.push(competition);
   }
@@ -28,7 +29,8 @@ export function mainCompetitions(world: Competitions): Competition[] {
 export function isCountryMain(world: Competitions, competitionId: string): boolean {
   const competition = world.competitions.find((entry) => entry.id === competitionId);
   return (
-    competition !== undefined && mainCompetitionOf(world, competition.countryId) === competition
+    competition?.countryId !== undefined &&
+    mainCompetitionOf(world, competition.countryId) === competition
   );
 }
 
@@ -38,6 +40,23 @@ export function countryOf(
 ): Country | undefined {
   const club = world.clubs.find((entry) => entry.id === clubId);
   return club ? world.countries.find((country) => country.id === club.countryId) : undefined;
+}
+
+/**
+ * Competição principal cujas regras valem num jogo (022 R1): a do país da competição; numa
+ * competição entre países, a do país do mandante.
+ */
+export function matchRulesCompetition(
+  world: Clubs,
+  competitionId: string,
+  homeClubId: string,
+): Competition {
+  const competition = world.competitions.find((entry) => entry.id === competitionId);
+  const main =
+    competition?.countryId !== undefined
+      ? mainCompetitionOf(world, competition.countryId)
+      : undefined;
+  return main ?? rulesCompetitionOf(world, homeClubId);
 }
 
 /**

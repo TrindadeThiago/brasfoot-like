@@ -89,6 +89,7 @@ export function evaluateSeason(
       ? "wouldFire"
       : "fired";
   const achievements = achievementsOf(context, clubId, final);
+  if (goals.continental?.champion) achievements.push("continentalTitle");
   const reputation = coachReputation(context.board, context.world, clubId);
   const levels = context.league.divisions.map((season) => season.divisionLevel);
   const level = clubDivision(context.league, clubId)?.divisionLevel;
@@ -106,6 +107,7 @@ export function evaluateSeason(
     fired: decision === "fired",
   });
   return {
+    ...(goals.continental ? { continental: goals.continental } : {}),
     season: context.league.number,
     clubId,
     sport: {

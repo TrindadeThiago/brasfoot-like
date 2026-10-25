@@ -1,5 +1,6 @@
 import type { BoardState } from "../board/types";
 import type { SeasonCalendar } from "../calendar/season-calendar";
+import type { ContinentalEdition } from "../continental/types";
 import type { FansState } from "../fans/types";
 import type { FinanceState } from "../finance/types";
 import type { CupHistoryEntry } from "../knockout/history";
@@ -133,6 +134,8 @@ export interface TurnoverContext {
   qualificationHistory?: QualificationRecord[];
   /** Resultado da etapa `resolve-qualification` desta virada (021). */
   qualification?: QualificationResult;
+  /** Edições das competições entre países, uma por temporada encerrada (022). */
+  continentalHistory?: ContinentalEdition[];
   /** Finanças da carreira (008); ausentes em usos só da liga. */
   finances?: FinanceState;
   /** Clube do jogador: as decisões da IA não o alteram. */
@@ -179,6 +182,7 @@ export interface TurnoverOptions {
   competitionHistory?: readonly SeasonHistoryEntry[];
   cupHistory?: readonly CupHistoryEntry[];
   qualificationHistory?: readonly QualificationRecord[];
+  continentalHistory?: readonly ContinentalEdition[];
 }
 
 export type TurnoverResult =
@@ -200,5 +204,6 @@ export type TurnoverResult =
       competitionHistory?: SeasonHistoryEntry[];
       cupHistory?: CupHistoryEntry[];
       qualificationHistory?: QualificationRecord[];
+      continentalHistory?: ContinentalEdition[];
     }
   | { ok: false; error: SeasonError };

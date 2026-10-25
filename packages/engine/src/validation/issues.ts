@@ -82,6 +82,18 @@ export const ISSUE_PARAMS = {
   "qualification.no_closing": ["berthId"],
   "qualification.pool_too_small": ["berthId", "clubs", "needed"],
   "qualification.cycle": ["path"],
+  "continental.shape": ["competitionId", "reason"],
+  "continental.single_country": ["competitionId", "countries"],
+  "continental.club_without_league": ["clubId", "competitionId"],
+  "continental.rules_ignored": ["competitionId", "field"],
+  "continental.dropin_self": ["dropInId", "competitionId"],
+  "continental.dropin_unknown": ["dropInId", "field"],
+  "continental.dropin_first_stage": ["dropInId"],
+  "continental.dropin_count": ["dropInId"],
+  "continental.dropin_qualified": ["dropInId", "qualified"],
+  "continental.dropin_before_source": ["dropInId", "date"],
+  "continental.awards_unknown_stage": ["competitionId", "stage"],
+  "continental.awards_not_increasing": ["competitionId", "index"],
   "division.top_has_promotion": ["slots"],
   "division.bottom_has_relegation": ["slots"],
   "division.slots_mismatch": ["level", "relegated", "nextLevel", "promoted"],
@@ -122,6 +134,7 @@ const WARNING_CODES: ReadonlySet<IssueCode> = new Set<IssueCode>([
   "schema.unknown_field",
   "image.unused",
   "csv.unknown_column",
+  "continental.rules_ignored",
 ]);
 
 export function severityOf(code: IssueCode): Severity {

@@ -87,6 +87,10 @@ export function SubstitutionPanel({ match, side, save, onChange }: PanelProps) {
     .filter(([, state]) => state.subbedOut !== null || state.sentOff)
     .map(([id]) => id);
   const slots = FORMATIONS[team.formation].slots;
+  // Lesionado (ou goleiro expulso) que já saiu da vaga mas ainda espera a troca: ele continua na
+  // lista, na vaga dele, para o técnico escolher o substituto antes de o jogo resolver sozinho.
+  const waiting = new Map(team.pending.map((entry) => [entry.slotId, entry]));
+  const waitingIds = new Set(team.pending.map((entry) => entry.playerId));
   // Reservas na ordem das posições (GOL, LAT, ZAG…), do mais forte ao mais fraco.
   const rank = (id: string) => POSITIONS.indexOf(players.get(id)?.position ?? "MF");
   const benchInOrder = [...team.bench].sort(
@@ -181,6 +185,26 @@ export function SubstitutionPanel({ match, side, save, onChange }: PanelProps) {
           <ul>
             {slots.map((slot) => {
               const id = team.onField[slot.id];
+              const pending = waiting.get(slot.id);
+              if (!id && pending) {
+                return (
+                  <li key={slot.id}>
+                    <button
+                      type="button"
+                      aria-pressed={out === pending.playerId}
+                      className={`${styles.row} ${out === pending.playerId ? styles.selected : ""}`}
+                      onClick={() =>
+                        setOut(out === pending.playerId ? undefined : pending.playerId)
+                      }
+                    >
+                      <span className={styles.position}>{label(`position.${slot.position}`)}</span>
+                      <span className={styles.name}>{name(pending.playerId)}</span>
+                      <Cards state={team.players[pending.playerId]} />
+                      <span className={styles.natural}>{t(`round.pending.${pending.reason}`)}</span>
+                    </button>
+                  </li>
+                );
+              }
               if (!id) return null;
               const player = players.get(id);
               const factor = player ? adequacy(player.position, slot.position) : 1;
@@ -193,7 +217,7 @@ export function SubstitutionPanel({ match, side, save, onChange }: PanelProps) {
                     className={`${styles.row} ${out === id ? styles.selected : ""}`}
                     onClick={() => {
                       if (out === id) setOut(undefined);
-                      else if (out) swapWith(id);
+                      else if (out && !waitingIds.has(out)) swapWith(id);
                       else setOut(id);
                     }}
                   >

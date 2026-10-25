@@ -2,6 +2,8 @@
 
 import type { SaveFile } from "@brasfoot-like/save";
 import { useT } from "../../i18n";
+import { reachedText } from "../continental/reachedText";
+import { competitionName } from "../qualification/origin-text";
 import styles from "./board.module.css";
 import { financeGoalText, goalTierText } from "./GoalsList";
 
@@ -31,6 +33,24 @@ export function Evaluation({ save }: { save: SaveFile }) {
             {evaluation.finance.met ? t("board.evaluation.met") : t("board.evaluation.missed")}
           </span>
         </li>
+        {evaluation.continental ? (
+          <li>
+            {t("board.evaluation.continental", {
+              competition: competitionName(save, evaluation.continental.competitionId),
+              target: reachedText(
+                t,
+                save,
+                evaluation.continental.competitionId,
+                evaluation.continental.target,
+              ),
+            })}{" "}
+            <span className={evaluation.continental.result === "met" ? styles.met : styles.risk}>
+              {evaluation.continental.result === "met"
+                ? t("board.evaluation.met")
+                : t("board.evaluation.missed")}
+            </span>
+          </li>
+        ) : null}
         {evaluation.achievements.map((achievement) => (
           <li key={achievement}>{t(`board.evaluation.achievement.${achievement}`)}</li>
         ))}

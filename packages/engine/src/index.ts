@@ -151,6 +151,40 @@ export type {
   TurnoverResult,
   TurnoverStep,
 } from "./career/types";
+export { clubCampaign } from "./continental/campaign";
+export { sealDropIns } from "./continental/dropins";
+export { continentalEdition } from "./continental/history";
+export {
+  type ContinentalMeasure,
+  type ContinentalSnapshot,
+  measureContinental,
+  snapshotContinental,
+} from "./continental/measure";
+export { CONTINENTAL_LIMITS, CONTINENTAL_TUNING } from "./continental/rules";
+export {
+  internationalCompetitions,
+  isInternational,
+  participantCountries,
+} from "./continental/scope";
+export type {
+  CampaignAward,
+  CampaignMatch,
+  CampaignSpot,
+  CampaignStatus,
+  ClubCampaign,
+  CompetitionPrize,
+  ContinentalEdition,
+  ContinentalWarning,
+  Reached,
+  SealedDropIn,
+} from "./continental/types";
+export {
+  type ContinentalStageView,
+  type ContinentalView,
+  continentalView,
+  dropInZones,
+  type StageStatus,
+} from "./continental/view";
 export { deriveMarketValue, deriveWage } from "./derived/economy";
 export { createFans } from "./fans/create";
 export { idolEvents, idolsOf } from "./fans/idols";
@@ -651,6 +685,7 @@ export {
   isCountryMain,
   mainCompetitionOf,
   mainCompetitions,
+  matchRulesCompetition,
   rulesCompetitionOf,
 } from "./world/countries";
 export { createWorldSystems, worldLeagues } from "./world/create";

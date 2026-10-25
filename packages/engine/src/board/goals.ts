@@ -215,6 +215,7 @@ export function goalProgress(
   const current = currentPosition(context, clubId);
   const club = context.finances.clubs[clubId];
   return {
+    ...(goals.continental ? { continental: goals.continental } : {}),
     sport: {
       tier: goals.sport.tier,
       required: goals.sport.position,

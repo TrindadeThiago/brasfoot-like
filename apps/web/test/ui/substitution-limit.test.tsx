@@ -1,6 +1,7 @@
 import { advanceMatch, type LiveMatch, startLeagueRound } from "@brasfoot-like/engine";
 import { managedClubId } from "@brasfoot-like/save";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { t } from "../../src/i18n";
 import { SubstitutionPanel } from "../../src/ui/SubstitutionPanel";
@@ -47,5 +48,36 @@ describe("energia ao vivo", () => {
     const tired = values.filter((value) => value < 100);
     expect(tired.length).toBeGreaterThan(0);
     expect(new Set(tired).size).toBeGreaterThan(1);
+  });
+});
+
+describe("lesão durante a partida", () => {
+  it("o lesionado continua na lista, na vaga dele, e pode ser trocado por um reserva", async () => {
+    const { save, match, side } = myMatch();
+    const team = match.state.teams[side];
+    const [slotId, injured] = Object.entries(team.onField).find(([, id]) => id !== null) as [
+      string,
+      string,
+    ];
+    // Como o motor deixa a vaga depois da lesão: vazia, com a troca pendente.
+    team.onField[slotId] = null;
+    team.pending.push({ reason: "injury", slotId, playerId: injured });
+    const onChange = vi.fn().mockReturnValue({ ok: true });
+    render(<SubstitutionPanel match={match} side={side} save={save} onChange={onChange} />);
+
+    const name = save.bank.players.find((player) => player.id === injured)?.displayName ?? "";
+    const row = screen.getByRole("button", { name: new RegExp(name) });
+    expect(row.textContent).toContain(t("round.pending.injury"));
+    const user = userEvent.setup();
+    await user.click(row);
+    const reserve = team.bench.find(
+      (id) => !(match.state.input[side].unavailable ?? []).includes(id),
+    );
+    const reserveName =
+      save.bank.players.find((player) => player.id === reserve)?.displayName ?? "";
+    await user.click(
+      screen.getAllByRole("button", { name: new RegExp(reserveName) })[0] as HTMLElement,
+    );
+    expect(onChange).toHaveBeenCalledWith({ type: "substitution", out: injured, in: reserve });
   });
 });

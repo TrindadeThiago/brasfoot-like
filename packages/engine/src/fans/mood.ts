@@ -1,5 +1,6 @@
 import { currentPosition, divisionExpectations, expectationOf } from "../board/goals";
 import { clubDivision } from "../career/league";
+import { internationalCompetitions, isInternational } from "../continental/scope";
 import type { CupEvent } from "../knockout/events";
 import { standings } from "../season/standings";
 import type { MatchRecord } from "../season/types";
@@ -95,6 +96,15 @@ export function tableSnapshot(context: Pick<FansContext, "world" | "league">): T
   return { position, expectation };
 }
 
+/** Posições a mais de expectativa de quem disputa uma competição entre países (022 R7). */
+function continentalBoost(world: FansContext["world"], rules: FansRules, clubId: string): number {
+  if (rules.continentalExpectation === 0) return 0;
+  const plays = internationalCompetitions(world).some((competition) =>
+    competition.divisions.some((division) => division.clubIds.includes(clubId)),
+  );
+  return plays ? rules.continentalExpectation : 0;
+}
+
 export function moodChange(
   context: FansContext,
   clubId: string,
@@ -107,9 +117,13 @@ export function moodChange(
   const played = roundResult(context, clubId, round);
   if (played) factors.push(resultFactor(rules, played));
   if (played && round >= rules.checkFromRound) {
-    const gap =
-      (snapshot?.position.get(clubId) ?? currentPosition(context, clubId)) -
-      (snapshot?.expectation.get(clubId) ?? expectationOf(context, clubId));
+    // Disputar uma competição entre países (022) sobe a expectativa do ano.
+    const expected = Math.max(
+      1,
+      (snapshot?.expectation.get(clubId) ?? expectationOf(context, clubId)) -
+        continentalBoost(context.world, rules, clubId),
+    );
+    const gap = (snapshot?.position.get(clubId) ?? currentPosition(context, clubId)) - expected;
     const target =
       gap > 0
         ? rules.neutral - gap * rules.gapWeight
@@ -174,18 +188,28 @@ export function matchResultFor(
  */
 export function fansAfterExtraMatches(
   context: FansContext,
-  matches: readonly { record: MatchRecord }[],
+  matches: readonly { record: MatchRecord; competitionId?: string }[],
   round: number,
   managerClubId: string,
 ): FansState {
   if (matches.length === 0) return context.fans;
   const rules = fansRules(context.world, context.league.competitionId);
   const next = clone(context.fans);
-  for (const { record } of matches) {
+  for (const { record, competitionId } of matches) {
+    // Jogo de competição entre países (022 R7): pesa `continentalMatchPct`% do de um da liga.
+    const weight =
+      competitionId !== undefined &&
+      isInternational(
+        context.world.competitions.find((entry) => entry.id === competitionId) ?? { countryId: "" },
+      )
+        ? rules.continentalMatchPct
+        : 100;
     for (const clubId of [record.home, record.away]) {
       const club = next.clubs[clubId];
       if (!club) continue;
-      const factor = resultFactor(rules, matchResultFor(context.world, record, clubId));
+      const base = resultFactor(rules, matchResultFor(context.world, record, clubId));
+      const factor =
+        weight === 100 ? base : { ...base, amount: Math.trunc((base.amount * weight) / 100) };
       const value = clamp(club.mood + factor.amount, 0, 100);
       if (clubId === managerClubId) {
         club.recent = [
@@ -233,6 +257,40 @@ export function fansAfterCup(
           delta: value - club.mood,
           value,
           factors: [{ kind, amount }],
+        },
+      ].slice(-rules.keepRecent);
+    }
+    club.mood = value;
+  }
+  return next;
+}
+
+/**
+ * Humor depois do título de uma competição entre países (022 R7): o campeão ganha
+ * `continentalTitle`. Só o clube do técnico guarda o motivo recente. Não altera a entrada.
+ */
+export function fansAfterContinentalTitle(
+  context: FansContext,
+  titles: readonly { championId: string }[],
+  round: number,
+  managerClubId: string,
+): FansState {
+  const rules = fansRules(context.world, context.league.competitionId);
+  if (titles.length === 0 || rules.continentalTitle === 0) return context.fans;
+  const next = clone(context.fans);
+  for (const { championId } of titles) {
+    const club = next.clubs[championId];
+    if (!club) continue;
+    const value = clamp(club.mood + rules.continentalTitle, 0, 100);
+    if (championId === managerClubId) {
+      club.recent = [
+        ...club.recent,
+        {
+          season: context.league.number,
+          round,
+          delta: value - club.mood,
+          value,
+          factors: [{ kind: "continentalTitle" as const, amount: rules.continentalTitle }],
         },
       ].slice(-rules.keepRecent);
     }

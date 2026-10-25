@@ -11,7 +11,14 @@ import {
 } from "@brasfoot-like/save";
 import { describe, expect, it } from "vitest";
 import { readModPackage, writeModPackage } from "../src";
-import { DEFAULT_MOD, EXAMPLE_MOD, modBank, STAGES_MOD, WORLD_MOD } from "./fixtures";
+import {
+  CONTINENTAL_MOD,
+  DEFAULT_MOD,
+  EXAMPLE_MOD,
+  modBank,
+  STAGES_MOD,
+  WORLD_MOD,
+} from "./fixtures";
 
 const PUBLIC_ZIP = join(import.meta.dirname, "../../../apps/web/public/mods/exemplo.zip");
 
@@ -204,4 +211,53 @@ describe("mod de exemplo de vários países (020)", () => {
     expect(supercup?.divisions[0]?.clubIds).toHaveLength(2);
     expect(Object.keys(supercup?.origins ?? {})).toHaveLength(2);
   }, 300_000);
+});
+
+describe("mod de exemplo das competições entre países (022)", () => {
+  const continental = modBank(CONTINENTAL_MOD);
+
+  it("é válido, igual ao que o gerador produz, com a taça maior e a menor ligadas", () => {
+    const result = readModPackage(writeModPackage(continental));
+    if (!result.ok) throw new Error(JSON.stringify(result.errors.slice(0, 3)));
+    expect(result.summary.id).toBe("exemplo-continental");
+    const generated = generateWorldBank({
+      seed: "continental-exemplo-1",
+      countries: 4,
+      divisionsPerCountry: 1,
+      clubsPerDivision: 12,
+      cup: true,
+      continental: "compact",
+      manifest: {
+        id: "exemplo-continental",
+        name: "Continente (exemplo)",
+        author: "brasfoot-like",
+        version: "1.0.0",
+      },
+    });
+    expect(continental.competitions).toEqual(generated.competitions);
+    expect(continental.clubs).toEqual(generated.clubs);
+    const international = continental.competitions.filter((entry) => entry.countryId === undefined);
+    expect(international.map((entry) => entry.id)).toEqual([
+      "continental-maior",
+      "continental-menor",
+    ]);
+    expect(international[1]?.divisions[0]?.dropIns).toHaveLength(1);
+  });
+
+  it("uma carreira joga a temporada inteira com as duas taças e a virada", () => {
+    const major = continental.competitions.find((entry) => entry.id === "continental-maior");
+    const created = createSave({
+      id: "exemplo-continental",
+      now: "2026-10-25T00:00:00.000Z",
+      managerName: "Ana",
+      clubId: major?.divisions[0]?.clubIds[0] ?? "",
+      seed: "exemplo-continental",
+      defaultBank: continental,
+    });
+    if (!created.ok) throw new Error(JSON.stringify(created.error));
+    const end = playSeason(created.save);
+    const turned = advanceCareerSeason(end, "2026-10-25T00:00:00.000Z");
+    if (!turned.ok) throw new Error("virada");
+    expect(turned.save.continentalHistory).toHaveLength(2);
+  }, 180_000);
 });

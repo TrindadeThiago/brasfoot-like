@@ -1,6 +1,6 @@
 "use client";
 
-import { groupTables, type Season, seasonStages } from "@brasfoot-like/engine";
+import { dropInZones, groupTables, type Season, seasonStages } from "@brasfoot-like/engine";
 import type { SaveFile } from "@brasfoot-like/save";
 import { useT } from "../../i18n";
 import { StandingsTable } from "../StandingsTable";
@@ -27,6 +27,8 @@ export function GroupTables({
   const ordered =
     mine > 0 ? [tables[mine], ...tables.filter((_, index) => index !== mine)] : tables;
   const qualified = format.qualified;
+  // Posições que descem para outra competição durante a temporada (022): viram zonas da tabela.
+  const berths = dropInZones(save.bank, season.competitionId, stageIndex);
   return (
     <section aria-label={t("stages.groups")} className={styles.groups}>
       {ordered.map((entry) =>
@@ -36,6 +38,9 @@ export function GroupTables({
               save={save}
               rows={entry.rows}
               caption={t("stages.group", { group: entry.group.id })}
+              {...(berths.length > 0
+                ? { zones: { level: season.divisionLevel, promotion: 0, relegation: 0, berths } }
+                : {})}
               {...(qualified !== undefined
                 ? { qualification: { qualified, extra: (format.extra ?? 0) > 0 } }
                 : {})}

@@ -230,6 +230,7 @@ export function advanceCareerSeason(
     competitionHistory: save.competitionHistory,
     cupHistory: save.cupHistory,
     ...(save.qualificationHistory ? { qualificationHistory: save.qualificationHistory } : {}),
+    ...(save.continentalHistory ? { continentalHistory: save.continentalHistory } : {}),
   });
   if (!turned.ok) return turned;
   const next = withAdjustedLineup(
@@ -244,6 +245,9 @@ export function advanceCareerSeason(
       cupHistory: turned.cupHistory ?? save.cupHistory,
       ...((turned.qualificationHistory ?? save.qualificationHistory)
         ? { qualificationHistory: turned.qualificationHistory ?? save.qualificationHistory }
+        : {}),
+      ...((turned.continentalHistory ?? save.continentalHistory)
+        ? { continentalHistory: turned.continentalHistory ?? save.continentalHistory }
         : {}),
       history: turned.history,
       finances: turned.finances ?? save.finances,

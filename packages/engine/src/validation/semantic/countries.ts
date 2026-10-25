@@ -14,6 +14,8 @@ export function mainCompetitions(
 ): Map<string, ParsedItem<Competition>> {
   const mains = new Map<string, ParsedItem<Competition>>();
   for (const item of context.competitions) {
+    // Competição entre países (022) não é a principal de nenhum país.
+    if (item.value.countryId === undefined) continue;
     if (!mains.has(item.value.countryId)) mains.set(item.value.countryId, item);
   }
   return mains;

@@ -16,7 +16,8 @@
     "check-release": "tsx src/check-release.ts",
     "screenshots": "tsx src/screenshots.ts",
     "sim:size": "tsx src/measure-save.ts",
-    "gen:world-mod": "tsx src/gen-world-example-mod.ts"
+    "gen:world-mod": "tsx src/gen-world-example-mod.ts",
+    "gen:continental-mod": "tsx src/gen-continental-example-mod.ts"
   },
   "dependencies": {
     "@brasfoot-like/engine": "workspace:*",

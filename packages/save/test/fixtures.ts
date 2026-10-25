@@ -514,6 +514,22 @@ export function saveV15(step: SaveV11Step = { rounds: 0 }): SaveV15 {
   return JSON.parse(JSON.stringify(save)) as SaveV15;
 }
 
+/** Save no formato da 021 (versão 16): igual ao atual, que só acrescenta campos opcionais (022). */
+export type SaveV16 = Omit<SaveFile, "formatVersion"> & { formatVersion: 16 };
+
+const v16Cache = new Map<string, SaveV16>();
+
+export function saveV16(step: SaveV11Step = { rounds: 0 }): SaveV16 {
+  const key = JSON.stringify(step);
+  let save = v16Cache.get(key);
+  if (!save) {
+    const { formatVersion: _version, ...rest } = playedCurrentSave(step);
+    save = { ...rest, formatVersion: 16 };
+    v16Cache.set(key, save);
+  }
+  return JSON.parse(JSON.stringify(save)) as SaveV16;
+}
+
 /** Banco padrão com uma copa de 16 clubes (8 de cada divisão), quartas a cada 2 semanas (018). */
 export function bankWithCup(): ModPackage {
   const bank = JSON.parse(JSON.stringify(defaultBank())) as ModPackage;

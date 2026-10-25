@@ -9,6 +9,13 @@ import { startStage, tagStageFixtures } from "./start";
 
 /** Avanço das fases a cada rodada fechada (019 R4). */
 
+/** Ligações que a divisão da temporada espera de outras competições (022). */
+function dropInsOf(world: CompletedBank, season: Season) {
+  return world.competitions
+    .find((entry) => entry.id === season.competitionId)
+    ?.divisions.find((entry) => entry.level === season.divisionLevel)?.dropIns;
+}
+
 /** Todas as rodadas da fase foram jogadas. */
 function stageFinished(season: Season, index: number): boolean {
   const rounds = season.stages?.[index]?.rounds ?? [];
@@ -40,10 +47,25 @@ function step(season: Season, world: CompletedBank): Season {
   }
   const next = stages.findIndex((state) => !state.started);
   if (next <= 0 || !stageFinished(season, next - 1)) return season;
+  // Ligação entre competições (022 R3): a fase espera a lista de quem desce de outra competição.
+  const incoming = stages[next]?.incoming ?? [];
+  const expected = (dropInsOf(world, season) ?? []).filter(
+    (dropIn) => dropIn.entry.stage === next + 1,
+  );
+  if (expected.some((dropIn) => !incoming.some((entry) => entry.dropInId === dropIn.id))) {
+    return season;
+  }
   const formats = seasonStages(world, season);
   const qualified = qualifiersOf(season, world, next - 1);
   const entering = formats[next]?.enter ?? [];
-  return startStage(season, world, next, [...qualified, ...entering], new Set(qualified));
+  const arriving = incoming.flatMap((entry) => entry.clubIds);
+  return startStage(
+    season,
+    world,
+    next,
+    [...qualified, ...entering, ...arriving],
+    new Set(qualified),
+  );
 }
 
 /**

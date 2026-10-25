@@ -3,6 +3,7 @@ import type { SemanticRule } from "./context";
 import { SECTIONS, type ValidationIssue } from "./issues";
 import { checkCalendar } from "./semantic/calendar";
 import { checkCompetitions } from "./semantic/competitions";
+import { checkAwards, checkContinental, checkDropIns } from "./semantic/continental";
 import { checkCountries } from "./semantic/countries";
 import { checkKnockout } from "./semantic/knockout";
 import { checkQualification } from "./semantic/qualification";
@@ -26,6 +27,9 @@ const SEMANTIC_RULES: SemanticRule[] = [
   checkStages,
   checkQualification,
   checkCalendar,
+  checkContinental,
+  checkDropIns,
+  checkAwards,
   checkCountries,
   checkSquads,
   checkRivalries,

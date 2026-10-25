@@ -1,6 +1,7 @@
 import type { Berth, BerthSource, Competition, Division } from "../../model/types";
 import { findCycle } from "../../qualification/order";
 import { berthSize } from "../../qualification/pools";
+import { stagesOf } from "../../stages/rules";
 import type { SemanticContext } from "../context";
 import { type IssueCode, type IssueParams, makeIssue, type ValidationIssue } from "../issues";
 
@@ -38,18 +39,37 @@ export function checkQualification(context: SemanticContext): ValidationIssue[] 
       const report = (code: IssueCode, path: (string | number)[], params: IssueParams) =>
         issues.push(makeIssue(code, "competitions", path, params, competition.id));
 
+      // O fechamento tem de cobrir a divisão inteira; numa competição entre países (022) cada país
+      // fecha com a própria tabela, então basta cobrir as vagas que usam o mesmo fechamento.
+      const closingKey = (berth: Berth) => {
+        const closing = berth.fallback?.at(-1);
+        return closing?.kind === "position" ? `${closing.competitionId}:${closing.level}` : "";
+      };
+      const closingLoad = new Map<string, number>();
+      for (const berth of berths) {
+        closingLoad.set(
+          closingKey(berth),
+          (closingLoad.get(closingKey(berth)) ?? 0) + berthSize(world, berth.source),
+        );
+      }
+      const neededBy = (berth: Berth) =>
+        competition.countryId === undefined
+          ? (closingLoad.get(closingKey(berth)) ?? 0)
+          : division.clubIds.length;
+
       const seen = new Set<string>();
       berths.forEach((berth, k) => {
         if (seen.has(berth.id)) {
           report("qualification.duplicate_berth_id", at("berths", k, "id"), { berthId: berth.id });
         }
         seen.add(berth.id);
-        checkBerth(berth, at("berths", k), report, byId, division.clubIds.length);
+        checkBerth(berth, at("berths", k), report, byId, neededBy(berth));
       });
 
       const total = berths.reduce((sum, berth) => sum + berthSize(world, berth.source), 0);
       checkCounts(competition, division, total, at, report);
       checkEntries(competition, berths, world, at, report);
+      checkStageEntries(competition, division, berths, world, at, report);
     });
   }
   return issues;
@@ -218,6 +238,35 @@ function checkEntries(
         phase,
         berths: berthCount,
         entering: entriesCount,
+      });
+    }
+  }
+}
+
+/**
+ * Entradas por fase numa divisão em fases (022): as vagas que entram direto numa fase (`entry.stage`)
+ * fecham com os clubes `enter` declarados nela, senão a 1ª temporada e as seguintes divergem.
+ */
+function checkStageEntries(
+  competition: Competition,
+  division: Division,
+  berths: readonly Berth[],
+  world: { competitions: Competition[] },
+  at: (...path: (string | number)[]) => (string | number)[],
+  report: Report,
+): void {
+  const stages = stagesOf(competition, division);
+  if (stages.length < 2 || (competition.format.type === "knockout" && !division.stages)) return;
+  for (let stage = 2; stage <= stages.length; stage++) {
+    const entering = berths
+      .filter((berth) => berth.entry?.stage === stage && berth.entry.phase === undefined)
+      .reduce((sum, berth) => sum + berthSize(world, berth.source), 0);
+    const declared = stages[stage - 1]?.enter?.length ?? 0;
+    if (entering !== declared) {
+      report("qualification.entry_count_mismatch", at("berths"), {
+        phase: stage,
+        berths: entering,
+        entering: declared,
       });
     }
   }

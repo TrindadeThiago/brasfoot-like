@@ -565,6 +565,69 @@ diferentes (uma divisão; duas divisões; duas divisões e copa) está em `mods/
   uma simulação resumida (resultado, gols, cartões e lesões), estatisticamente equivalente à
   completa; os do país do técnico usam a completa.
 
+## Competições entre países
+
+Uma competição **sem `countryId`** reúne clubes de vários países, como uma copa continental. Um
+exemplo pronto está em `mods/exemplo-continental` (4 países, a taça maior e a menor ligadas). Tudo é
+dado: nenhuma regra muda no jogo.
+
+- **Forma:** uma divisão só, formato `stages`, `knockout` ou `groups`, nunca a primeira competição do
+  arquivo (erro `continental.shape`). Os clubes têm de estar na liga principal de ao menos 2 países
+  (`continental.single_country`, `continental.club_without_league`). Ela nunca é a principal de um
+  país; as regras econômicas vêm do país de cada clube (a bilheteria, do país do mandante), e
+  `economy`, `market`, `board`, `fans`, `news` e `fitness` declarados nela são ignorados
+  (`continental.rules_ignored`, aviso).
+- **Fases:** preliminar (mata-mata), grupos e mata-mata final em sequência (seção das fases). Use
+  `draw.rules` com `{ "kind": "separate", "attribute": "country" }` para nenhum grupo ter dois clubes
+  do mesmo país, e `pots` com `previousStagePot` para os clubes que vêm da preliminar.
+- **Vagas por país:** `berths` da divisão (seção "Vagas entre competições"), com fonte na liga e na
+  copa de cada país e no campeão da própria competição (`champion` dela mesma, o campeão anterior).
+  `entry: { "stage": 2 }` faz o clube entrar direto na 2ª fase; o `enter` dessa fase tem de ter os
+  mesmos clubes na primeira temporada (`qualification.entry_count_mismatch`).
+- **Datas:** `schedule` no meio da semana (`weekday` 2 a 4) e sem dois jogos do mesmo clube no mesmo
+  dia (`calendar.club_double_booked`).
+- **Prêmios e reputação (`awards`):**
+
+  | Campo | Efeito |
+  |---|---|
+  | `win`, `draw` | valor por vitória e por empate nas fases de pontos |
+  | `stage` | lista de `{ stage, phase?, amount }`: pago uma vez quando o clube alcança a fase (a 1ª fase paga no 1º dia) |
+  | `title` | pago ao campeão, além do `prize` da final (018) |
+  | `reputation` | lista crescente de `{ reached: { stage, phase? }, points }` (1 a 5): a reputação do clube sobe pela fase mais alta alcançada; o campeão vale `phase` = fases + 1 |
+  | `reputationCeiling` | teto da reputação que o bônus alcança (50 a 100; padrão 95) |
+
+  Fases que não existem na competição são erro `continental.awards_unknown_stage`; tabela que não
+  cresce, `continental.awards_not_increasing`.
+- **Ligação entre competições (`dropIns` da divisão de destino):** clubes que **descem durante a
+  temporada** de outra competição (a maior leva os terceiros dos grupos à menor):
+
+  ```json
+  "dropIns": [
+    {
+      "id": "terceiros-dos-grupos",
+      "source": { "kind": "position", "competitionId": "continental-maior", "stage": 1, "from": 3, "to": 3 },
+      "entry": { "stage": 2 }
+    }
+  ]
+  ```
+
+  `kind: "position"` pega posições `from` a `to` **de cada grupo** (ou da tabela) da fase `stage`
+  de origem; `kind: "eliminated"` pega os perdedores da fase `phase` de um mata-mata. A fase de
+  destino precisa ser a 2ª ou posterior (`continental.dropin_first_stage`), de grupos ou mata-mata,
+  e só começa depois de a fase de origem terminar: a agenda de destino tem de cair depois da origem
+  (`continental.dropin_before_source`). Quem já está no destino cede a vaga ao próximo candidato.
+  Os números têm de fechar a fase de destino (`stages.knockout_count` e afins, contando os que
+  chegam por ligação). Outros erros: `continental.dropin_self`, `continental.dropin_unknown`,
+  `continental.dropin_count`, `continental.dropin_qualified`.
+- **Torcida e diretoria:** campos opcionais, planos como os demais, na competição **principal do
+  país**: `fans.continentalMatchPct` (peso do jogo da competição na torcida, % da liga; padrão 100),
+  `fans.continentalExpectation` (posições a mais de expectativa de quem a disputa; padrão 0),
+  `fans.continentalTitle` (humor do título; padrão 0); `board.continentalTopPct` e
+  `board.continentalMidPct` (cortes de reputação entre os participantes para a meta de semifinal e
+  de mata-mata; padrões 34 e 67), `board.continentalMet` e `board.continentalMiss` (confiança por
+  meta cumprida e perdida; padrão 5). Manchetes: `news.relevance.continentalChampion`, `…Advanced`,
+  `…Eliminated` e `…Rout`.
+
 ## 9. Seções opcionais de regras
 
 Todas as regras abaixo ficam dentro da competição e são **opcionais**: campos ausentes usam os
@@ -690,6 +753,18 @@ Fora do jogo, `pnpm validate-bank <pasta|arquivo.zip>` faz a mesma validação n
 | `qualification.no_closing` | A vaga {berthId} não termina o repasse com uma tabela inteira de referência. |
 | `qualification.pool_too_small` | O fechamento da vaga {berthId} tem {clubs} clubes, menos que os {needed} da divisão. |
 | `qualification.cycle` | As vagas formam um ciclo de dependências: {path}. |
+| `continental.shape` | A competição {competitionId} não tem país e por isso precisa ter uma divisão só, formato de copa, grupos ou fases, e não pode ser a primeira competição do arquivo ({reason, select, first {é a primeira} divisions {tem mais de uma divisão} format {o formato é de liga} other {forma inválida}}). |
+| `continental.single_country` | A competição {competitionId} reúne clubes de {countries, plural, =0 {nenhum país} one {# país} other {# países}}; uma competição entre países precisa de clubes de ao menos 2 países. |
+| `continental.club_without_league` | O clube {clubId} da competição {competitionId} não está na liga principal de nenhum país; todo participante precisa jogar a liga do próprio país. |
+| `continental.rules_ignored` | A competição {competitionId} não tem país, então o campo {field} é ignorado; as regras vêm da competição principal do país de cada clube. |
+| `continental.dropin_self` | A ligação {dropInId} vem da própria competição {competitionId}; ela precisa vir de outra competição. |
+| `continental.dropin_unknown` | A ligação {dropInId} aponta para um {field} que não existe ou não serve ao tipo de fonte (posição vem de fase de grupos ou pontos corridos; eliminados vêm de fase de mata-mata). |
+| `continental.dropin_first_stage` | A ligação {dropInId} entra na primeira fase, mas os clubes só chegam durante a temporada; ela precisa entrar a partir da segunda fase. |
+| `continental.dropin_count` | A ligação {dropInId} pede mais posições do que a fase de origem tem em cada grupo ou tabela, ou a fase de origem não fecha os grupos. |
+| `continental.dropin_qualified` | A ligação {dropInId} pega uma posição que já classifica para a fase seguinte da origem (classificam {qualified, plural, one {# por grupo} other {# por grupo}}); escolha posições abaixo delas. |
+| `continental.dropin_before_source` | A fase de destino da ligação {dropInId} começa antes de a fase de origem terminar (em {date}); ajuste a agenda para o destino começar depois. |
+| `continental.awards_unknown_stage` | Os prêmios da competição {competitionId} citam a fase {stage} (ou uma fase do mata-mata dela) que não existe na competição. |
+| `continental.awards_not_increasing` | A tabela de reputação da competição {competitionId} não cresce na entrada {index}: as fases precisam vir em ordem crescente e os pontos não podem diminuir. |
 | `division.top_has_promotion` | A divisão mais alta não pode ter vagas de acesso, mas tem {slots}. |
 | `division.bottom_has_relegation` | A divisão mais baixa não pode ter vagas de rebaixamento, mas tem {slots}. |
 | `division.slots_mismatch` | O nível {level} rebaixa {relegated, plural, one {# clube} other {# clubes}}, mas o nível {nextLevel} promove {promoted, plural, one {# clube} other {# clubes}}; os números devem ser iguais. |

@@ -13,6 +13,8 @@ export function checkCalendar(context: SemanticContext): ValidationIssue[] {
   // A principal é a primeira competição de cada país (020 R1); as demais têm de ter clubes dela.
   const mains = mainCompetitions(context);
   for (const { index, value: competition } of context.competitions) {
+    // Competição entre países (022): os clubes vêm de várias ligas; a forma é de continental.ts.
+    if (competition.countryId === undefined) continue;
     const main = mains.get(competition.countryId);
     if (!main || main.index === index) continue;
     const inMain = new Set(main.value.divisions.flatMap((division) => division.clubIds));

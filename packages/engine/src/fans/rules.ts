@@ -36,6 +36,14 @@ export interface FansRules {
   /** Copa (018): eliminação tira cupOut × (fase + 1); o título dá cupTitle. */
   cupOut: number;
   cupTitle: number;
+  /**
+   * Competição entre países (022): o resultado de um jogo dela pesa `continentalMatchPct`% do de um
+   * jogo da liga; disputá-la sobe a expectativa do ano em `continentalExpectation` posições; o
+   * título dá `continentalTitle` ao humor.
+   */
+  continentalMatchPct: number;
+  continentalExpectation: number;
+  continentalTitle: number;
   /** Limites das faixas: revoltada < [0] ≤ insatisfeita < [1] ≤ neutra ≤ [2] < animada ≤ [3] < eufórica. */
   bands: [number, number, number, number];
 }
@@ -66,6 +74,9 @@ export const DEFAULT_FANS: FansRules = {
   relegationDrop: 10,
   cupOut: 2,
   cupTitle: 15,
+  continentalMatchPct: 100,
+  continentalExpectation: 0,
+  continentalTitle: 0,
   bands: [20, 40, 60, 80],
 };
 

@@ -18,7 +18,9 @@ export type Origin =
       /** Posição final na competição de origem, quando a fonte é uma posição. */
       position?: number;
     }
-  | { kind: "pass"; berthId: string; fromClubId: string; reason: PassReason };
+  | { kind: "pass"; berthId: string; fromClubId: string; reason: PassReason }
+  /** Chegou durante a temporada por ligação entre competições (022 R3). */
+  | { kind: "dropIn"; dropInId: string; from: string; position?: number };
 
 /** Fase de entrada de um clube que não começa na primeira (números a partir de 1). */
 export interface Entry {

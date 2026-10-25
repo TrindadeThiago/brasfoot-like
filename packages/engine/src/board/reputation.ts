@@ -44,6 +44,7 @@ export function reputationDelta(rules: BoardRules, input: ReputationInput): numb
   if (input.financeMet === false) delta -= 1;
   for (const achievement of input.achievements ?? []) {
     if (achievement === "title") delta += rules.titleBonus * (input.topDivision ? 2 : 1);
+    if (achievement === "continentalTitle") delta += rules.titleBonus * 2;
     if (achievement === "promotion") delta += rules.promotionBonus;
     if (achievement === "relegation") delta -= rules.relegationPenalty;
   }

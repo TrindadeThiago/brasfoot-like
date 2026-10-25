@@ -39,6 +39,7 @@ describe("pontos de extensão da virada (US6, FR-017 a FR-019)", () => {
       "record-history",
       "financas",
       "premios",
+      "continental-reputation",
       "fans-new-season",
       "news-new-season",
       "pay-prizes",

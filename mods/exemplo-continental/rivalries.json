@@ -1,0 +1,191 @@
+[
+  {
+    "clubIds": [
+      "clube-tek-001",
+      "clube-tek-009"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-tek-001",
+      "clube-tek-012"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-tek-002",
+      "clube-tek-003"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-tek-003",
+      "clube-tek-008"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-tek-004",
+      "clube-tek-006"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-tek-005",
+      "clube-tek-008"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-tek-009",
+      "clube-tek-010"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-zal-001",
+      "clube-zal-004"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-zal-001",
+      "clube-zal-011"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-zal-003",
+      "clube-zal-008"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-zal-004",
+      "clube-zal-009"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-zal-005",
+      "clube-zal-006"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-zal-005",
+      "clube-zal-010"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-zal-007",
+      "clube-zal-010"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-puk-001",
+      "clube-puk-009"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-puk-002",
+      "clube-puk-004"
+    ],
+    "intensity": 1
+  },
+  {
+    "clubIds": [
+      "clube-puk-003",
+      "clube-puk-007"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-puk-004",
+      "clube-puk-007"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-puk-005",
+      "clube-puk-010"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-puk-005",
+      "clube-puk-012"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-puk-006",
+      "clube-puk-011"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-nan-001",
+      "clube-nan-006"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-nan-001",
+      "clube-nan-007"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-nan-003",
+      "clube-nan-012"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-nan-004",
+      "clube-nan-008"
+    ],
+    "intensity": 2
+  },
+  {
+    "clubIds": [
+      "clube-nan-004",
+      "clube-nan-009"
+    ],
+    "intensity": 3
+  },
+  {
+    "clubIds": [
+      "clube-nan-005",
+      "clube-nan-010"
+    ],
+    "intensity": 3
+  }
+]

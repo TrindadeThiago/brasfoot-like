@@ -10,6 +10,7 @@ import { useT } from "../../../i18n";
 import { screenHref } from "../../../ui/AppHeader";
 import { Button } from "../../../ui/Button";
 import { Crest } from "../../../ui/Crest";
+import { ContinentalHistory } from "../../../ui/continental/ContinentalHistory";
 import { CupHistory } from "../../../ui/cup/CupHistory";
 import { type Column, DataTable } from "../../../ui/DataTable";
 import { OtherCompetitions } from "../../../ui/history/OtherCompetitions";
@@ -17,8 +18,16 @@ import { ClubHistory, Records, Scorers, Titles } from "../../../ui/history/World
 import { QualificationSummary } from "../../../ui/qualification/QualificationSummary";
 import styles from "./page.module.css";
 
-type Tab = "seasons" | "titles" | "scorers" | "records" | "clubs" | "cups";
-const TABS: readonly Tab[] = ["seasons", "titles", "scorers", "records", "clubs", "cups"];
+type Tab = "seasons" | "titles" | "scorers" | "records" | "clubs" | "cups" | "continental";
+const TABS: readonly Tab[] = [
+  "seasons",
+  "titles",
+  "scorers",
+  "records",
+  "clubs",
+  "cups",
+  "continental",
+];
 
 function historyHref(careerId: string, number: number): string {
   return `${screenHref("/jogo/historico", careerId)}&t=${number}`;
@@ -192,7 +201,10 @@ function History({ save }: { save: SaveFile }) {
   const entry = save.history.find((item) => item.number === requested);
   const [tab, setTab] = useState<Tab>("seasons");
   const hasCup = save.bank.competitions.some((item) => item.format.type === "knockout");
-  const tabs = TABS.filter((name) => name !== "cups" || hasCup);
+  const hasInternational = save.bank.competitions.some((item) => item.countryId === undefined);
+  const tabs = TABS.filter(
+    (name) => (name !== "cups" || hasCup) && (name !== "continental" || hasInternational),
+  );
   if (entry) {
     return (
       <div className={styles.layout}>
@@ -223,6 +235,7 @@ function History({ save }: { save: SaveFile }) {
       {tab === "records" ? <Records save={save} /> : null}
       {tab === "clubs" ? <ClubHistory save={save} /> : null}
       {tab === "cups" ? <CupHistory save={save} /> : null}
+      {tab === "continental" ? <ContinentalHistory save={save} /> : null}
       <Link href={`${screenHref("/jogo/carreira", save.id)}&aba=history`}>
         {t("history.managerLink")}
       </Link>

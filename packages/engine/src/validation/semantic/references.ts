@@ -24,7 +24,10 @@ export function checkReferences(context: SemanticContext): ValidationIssue[] {
   };
 
   for (const { index, value } of context.competitions) {
-    country("competitions", index, "countryId", value.countryId, value.id);
+    // Competição entre países (022) não tem país próprio.
+    if (value.countryId !== undefined) {
+      country("competitions", index, "countryId", value.countryId, value.id);
+    }
     value.divisions.forEach((division, divisionIndex) => {
       division.clubIds.forEach((clubId, clubIndex) => {
         if (!existsIn(context, clubId, "clubs")) {

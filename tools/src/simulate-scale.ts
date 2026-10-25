@@ -3,11 +3,15 @@
 // Uso: pnpm sim:world --scale [--countries 10] [--seasons 30] [--seed mundo-grande]
 import { gzipSync } from "node:zlib";
 import {
+  CONTINENTAL_LIMITS,
+  type ContinentalSnapshot,
   completeCareerDay,
   generateWorldBank,
   isCountryMain,
   type ModPackage,
+  measureContinental,
   measureWorld,
+  snapshotContinental,
 } from "@brasfoot-like/engine";
 import {
   advanceCareerSeason,
@@ -48,6 +52,8 @@ export interface SimulateScaleOptions {
    * temporada o número de participantes de cada divisão e a unicidade dos clubes.
    */
   qualification?: boolean;
+  /** Competição entre países (022): a taça continental maior, completa ou compacta. */
+  continental?: "full" | "compact";
 }
 
 const NOW = "2026-10-24T12:00:00.000Z";
@@ -92,6 +98,7 @@ export function runSimulateScale(options: SimulateScaleOptions): ScaleReport {
       clubsPerDivision: 20,
       cup: true,
       ...(options.qualification ? { qualification: true } : {}),
+      ...(options.continental ? { continental: options.continental } : {}),
       ...(options.international !== undefined ? { aiInternational: options.international } : {}),
       ...(options.economy ? { economy: options.economy } : {}),
     }),
@@ -128,7 +135,13 @@ export function runSimulateScale(options: SimulateScaleOptions): ScaleReport {
   const dayTimes: number[] = [];
   const turnoverTimes: number[] = [];
   let exported = 0;
+  /** Estados no início e no fim de cada temporada, para as medidas das competições entre países. */
+  let continentalStart: ReturnType<typeof seasonStateOf> | undefined;
+  const continentalSnapshots = new Map<string, ContinentalSnapshot[]>();
+  let finalReputation: Record<string, number> = {};
+  const international = bank.competitions.filter((entry) => entry.countryId === undefined);
   for (let season = 1; season <= options.seasons; season++) {
+    if (options.continental) continentalStart = seasonStateOf(save);
     const startSize = JSON.stringify(save).length;
     startSizes.push(startSize);
     const seasonDays: number[] = [];
@@ -141,6 +154,19 @@ export function runSimulateScale(options: SimulateScaleOptions): ScaleReport {
     }
     lastSize = JSON.stringify(save).length;
     lastRoundSizes.push(lastSize);
+    if (options.continental && continentalStart) {
+      // Só números por temporada: guardar o estado inteiro de cada uma estourava a memória.
+      const end = seasonStateOf(save);
+      for (const competition of international) {
+        const list = continentalSnapshots.get(competition.id) ?? [];
+        list.push(snapshotContinental(continentalStart, end, competition.id));
+        continentalSnapshots.set(competition.id, list);
+      }
+      finalReputation = Object.fromEntries(
+        end.world.clubs.map((club) => [club.id, club.reputation]),
+      );
+      continentalStart = undefined;
+    }
     const problems: string[] = [];
     if (options.qualification) {
       const state = seasonStateOf(save);
@@ -158,7 +184,11 @@ export function runSimulateScale(options: SimulateScaleOptions): ScaleReport {
         }
         for (const division of league.divisions) {
           const wanted = expected.get(`${league.competitionId}/${division.divisionLevel}`);
-          if (wanted !== undefined && division.clubIds.length !== wanted) {
+          // Quem chegou por ligação durante a temporada (022) não conta entre os da edição.
+          const arrived = Object.values(league.origins ?? {}).filter(
+            (entry) => entry.kind === "dropIn",
+          ).length;
+          if (wanted !== undefined && division.clubIds.length - arrived !== wanted) {
             problems.push(
               `${league.competitionId}/${division.divisionLevel}: ${division.clubIds.length} clubes em vez de ${wanted}`,
             );
@@ -278,6 +308,61 @@ export function runSimulateScale(options: SimulateScaleOptions): ScaleReport {
         `30 temporadas: ${(totalMs / 60000).toFixed(1)} min (≤ ${SCALE_LIMITS.thirtySeasonsMs / 60000})`,
       ],
     );
+  }
+  if (options.continental) {
+    // Equilíbrio das competições entre países (022 SC-001 a SC-003), com os limites declarados.
+    const limits = full ? CONTINENTAL_LIMITS.full : CONTINENTAL_LIMITS.ci;
+    for (const competition of bank.competitions.filter((entry) => entry.countryId === undefined)) {
+      const m = measureContinental(continentalSnapshots.get(competition.id) ?? [], finalReputation);
+      const major =
+        competition === bank.competitions.find((entry) => entry.countryId === undefined);
+      lines.push(
+        "",
+        `${competition.name}: ${m.seasons} edições, ${m.distinctChampions} campeões distintos, maior parcela de títulos ${(100 * m.maxTitleShare).toFixed(0)}%, campeão mais forte em ${(100 * m.championStrongerShare).toFixed(0)}% das edições, Spearman vagas×títulos ${m.slotsTitlesSpearman.toFixed(2)}`,
+        `  assíduos: ${m.assiduous.length}; caixa acima da mediana ${m.assiduousCashAboveMedianWages.toFixed(2)} folhas; fora de crise ${(100 * m.assiduousHealthyShare).toFixed(0)}% (demais ${(100 * m.othersHealthyShare).toFixed(0)}%); maior parcela de prêmios na receita ${(100 * m.maxAwardsShare).toFixed(1)}%; reputação: ${m.reputationBreaches} acima do teto, deslocamento ${m.reputationDrift.toFixed(2)}`,
+      );
+      if (major) {
+        checks.push(
+          [
+            m.championStrongerShare >= limits.minChampionStrongerShare,
+            `${competition.name}: campeão mais forte em ${(100 * m.championStrongerShare).toFixed(0)}% das edições (≥ ${100 * limits.minChampionStrongerShare}%)`,
+          ],
+          [
+            m.distinctChampions >= limits.minDistinctChampions,
+            `${competition.name}: ${m.distinctChampions} campeões distintos (≥ ${limits.minDistinctChampions})`,
+          ],
+          [
+            m.maxTitleShare <= limits.maxTitleShare,
+            `${competition.name}: maior parcela de títulos ${(100 * m.maxTitleShare).toFixed(0)}% (≤ ${100 * limits.maxTitleShare}%)`,
+          ],
+          [
+            m.slotsTitlesSpearman >= limits.minSlotsTitlesSpearman,
+            `${competition.name}: vagas × títulos ${m.slotsTitlesSpearman.toFixed(2)} (≥ ${limits.minSlotsTitlesSpearman})`,
+          ],
+        );
+      }
+      checks.push(
+        [
+          m.assiduousCashAboveMedianWages <= CONTINENTAL_LIMITS.assiduousCashAboveMedianWages,
+          `${competition.name}: caixa dos assíduos ${m.assiduousCashAboveMedianWages.toFixed(2)} folhas acima da mediana (≤ ${CONTINENTAL_LIMITS.assiduousCashAboveMedianWages})`,
+        ],
+        [
+          m.assiduousHealthyShare >= CONTINENTAL_LIMITS.assiduousMinHealthyShare &&
+            m.assiduousHealthyShare >=
+              m.othersHealthyShare - CONTINENTAL_LIMITS.assiduousHealthyBelowOthers,
+          `${competition.name}: assíduos fora de crise ${(100 * m.assiduousHealthyShare).toFixed(0)}% (≥ ${100 * CONTINENTAL_LIMITS.assiduousMinHealthyShare}% e perto dos demais)`,
+        ],
+        [
+          m.maxAwardsShare <= CONTINENTAL_LIMITS.maxAwardsShare,
+          `${competition.name}: prêmios até ${(100 * m.maxAwardsShare).toFixed(1)}% da receita (≤ ${100 * CONTINENTAL_LIMITS.maxAwardsShare}%)`,
+        ],
+        [
+          m.reputationBreaches <= CONTINENTAL_LIMITS.maxReputationBreaches &&
+            Math.abs(m.reputationDrift) <= CONTINENTAL_LIMITS.maxReputationDrift,
+          `${competition.name}: reputação sem passar do teto e com deslocamento ${m.reputationDrift.toFixed(2)} (≤ ${CONTINENTAL_LIMITS.maxReputationDrift})`,
+        ],
+      );
+    }
   }
   lines.push("");
   for (const [passed, text] of checks) {

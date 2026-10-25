@@ -1,5 +1,6 @@
 import type { z } from "zod";
 import type {
+  awardsSchema,
   berthSchema,
   berthSourceSchema,
   clubSchema,
@@ -10,6 +11,8 @@ import type {
   divisionRefSchema,
   divisionSchema,
   drawRuleSchema,
+  dropInSchema,
+  dropInSourceSchema,
   groupDrawSchema,
   groupsStageSchema,
   hiddenAttributesSchema,
@@ -44,6 +47,9 @@ export type Division = z.infer<typeof divisionSchema>;
 export type Berth = z.infer<typeof berthSchema>;
 export type BerthSource = z.infer<typeof berthSourceSchema>;
 export type DivisionRef = z.infer<typeof divisionRefSchema>;
+export type DropIn = z.infer<typeof dropInSchema>;
+export type DropInSource = z.infer<typeof dropInSourceSchema>;
+export type Awards = z.infer<typeof awardsSchema>;
 export type Competition = z.infer<typeof competitionSchema>;
 export type Crest = z.infer<typeof crestSchema>;
 export type Club = z.infer<typeof clubSchema>;
