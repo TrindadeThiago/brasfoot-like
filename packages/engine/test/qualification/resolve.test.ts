@@ -196,3 +196,72 @@ describe("resolveQualification (021 R2, R3)", () => {
     expect(baseWorld().ids.league).toBe(ids.league);
   });
 });
+
+describe("rebaixado e vagas de outras competições (021)", () => {
+  const { world, ids } = superCupWorld();
+  const played = playedOnce(world, "rebaixado-021");
+  const league = allSeasons(played.end).find((entry) => entry.competitionId === ids.league);
+  const relegated =
+    nextComposition(league as NonNullable<typeof league>, played.end.world).relegated[1] ?? [];
+  const last = relegated.at(-1) as string;
+  const lastPosition = standings(
+    (league as NonNullable<typeof league>).divisions[0] as never,
+    played.end.world,
+  ).find((row) => row.clubId === last)?.position as number;
+
+  /** Vagas do rebaixado: a da liga exige a divisão de cima; a de outra competição não exige nada. */
+  function run(otherPath: boolean) {
+    const edited = clone(world) as CompletedBank;
+    const cup = edited.competitions.find((entry) => entry.id === "supercopa-teste");
+    const source = {
+      kind: "position",
+      competitionId: ids.league,
+      level: 1,
+      from: lastPosition,
+      to: lastPosition,
+    } as const;
+    const closing = {
+      kind: "position",
+      competitionId: ids.league,
+      level: 1,
+      from: 1,
+      to: 8,
+    } as const;
+    const berths: Berth[] = [
+      {
+        id: "pela-liga",
+        source,
+        require: [{ competitionId: ids.league, level: 1 }],
+        fallback: [closing],
+      },
+      {
+        id: "por-outra",
+        source: otherPath
+          ? source
+          : { kind: "position", competitionId: ids.league, level: 1, from: 1, to: 1 },
+        fallback: [closing],
+      },
+    ];
+    (cup?.divisions[0] as { berths?: Berth[] }).berths = berths;
+    const outcome = resolveQualification({
+      world: { ...played.end.world, competitions: edited.competitions },
+      finished: allSeasons(played.end),
+      compositions: played.compositions,
+      number: 1,
+      year: 2027,
+    });
+    if (!outcome.ok) throw new Error(JSON.stringify(outcome.error));
+    return outcome.result.record.entries;
+  }
+
+  it("o rebaixado perde a vaga ligada à divisão de cima, mas mantém a conquistada por outra competição", () => {
+    expect(relegated.length).toBeGreaterThan(0);
+    const entries = run(true);
+    const byLeague = entries.find((entry) => entry.berthId === "pela-liga");
+    const byOther = entries.find((entry) => entry.berthId === "por-outra");
+    expect(byLeague?.passedFrom).toEqual({ clubId: last, reason: "require" });
+    expect(byLeague?.clubId).not.toBe(last);
+    expect(byOther?.clubId).toBe(last);
+    expect(byOther?.via).toBe("direct");
+  });
+});

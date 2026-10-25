@@ -187,7 +187,10 @@ a temporada dentro e fora da zona de vaga, e conferir resultado da meta, manchet
   demais vão para o repasse definido.
 - Cadeia de repasse esgotada (nenhum clube elegível): a competição usa um critério de fechamento
   definido nos dados; sem ele, o banco é recusado na validação de que a cadeia sempre fecha.
-- Clube classificado que é rebaixado, extinto ou não existe mais no mundo: a vaga é repassada.
+- Clube classificado que é extinto ou não existe mais no mundo: a vaga é repassada. O rebaixamento só
+  tira as vagas que dependem da divisão dele (condições `require`/`forbid` nos dados); o clube
+  rebaixado mantém a vaga que conquistou em outra competição, como o título da copa.
+- Supercopa nacional em jogo único em campo neutro; recopa continental em ida e volta.
 - Competição sem edição na temporada anterior (primeira temporada do banco): participantes definidos
   no próprio banco.
 - Clube que deve estar em duas competições com datas conflitantes: o conflito de calendário é
