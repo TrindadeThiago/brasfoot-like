@@ -5,12 +5,15 @@ import { seasonTurnover } from "../../src/career/turnover";
 import type { LeagueSeason } from "../../src/career/types";
 import type { Lineup } from "../../src/match/types";
 import type { CompletedBank } from "../../src/model/types";
+import { resolveQualification } from "../../src/qualification/resolve";
 import {
   SEASON_ERROR_CODES,
   type SeasonError,
   type SeasonErrorCode,
 } from "../../src/season/errors";
 import { advanceSeason, createSeason } from "../../src/season/season";
+import { allSeasons } from "../career/qualification-helpers";
+import { playedOnce, superCupWorld } from "../qualification/helpers";
 import { newSeason, serieAOptions, testWorld } from "./helpers/world";
 
 function editedWorld(edit: (world: CompletedBank) => void): CompletedBank {
@@ -69,7 +72,51 @@ function finishedLeague(): LeagueSeason {
   return finished;
 }
 
+/** Vagas editadas da supercopa de teste, resolvidas sobre uma temporada jogada (021). */
+function qualify(
+  edit: (
+    berth: NonNullable<
+      CompletedBank["competitions"][number]["divisions"][number]["berths"]
+    >[number],
+  ) => void,
+) {
+  const { world } = superCupWorld();
+  const played = playedOnce(world, "erros-021");
+  const competitions = JSON.parse(
+    JSON.stringify(played.end.world.competitions),
+  ) as CompletedBank["competitions"];
+  const berth = competitions.find((entry) => entry.id === "supercopa-teste")?.divisions[0]
+    ?.berths?.[0];
+  if (!berth) throw new Error("sem vaga");
+  edit(berth);
+  const result = resolveQualification({
+    world: { ...played.end.world, competitions },
+    finished: allSeasons(played.end),
+    compositions: played.compositions,
+    number: 1,
+    year: 1,
+  });
+  return result.ok ? undefined : result.error;
+}
+
 const CASES: ErrorCase[] = [
+  {
+    code: "qualification.exhausted",
+    run: () =>
+      qualify((berth) => {
+        berth.fallback = [];
+        berth.require = [{ competitionId: "nunca", level: 1 }];
+      }),
+    params: { competitionId: "supercopa-teste", berthId: "campeao-liga" },
+  },
+  {
+    code: "qualification.source_missing",
+    run: () =>
+      qualify((berth) => {
+        berth.source = { kind: "champion", competitionId: "nao-existe" };
+      }),
+    params: { competitionId: "nao-existe" },
+  },
   {
     code: "season.unknown_competition",
     run: () => {
@@ -222,5 +269,6 @@ describe("erros da temporada (FR-023, SC-006)", () => {
       expect(error?.code).toBe(code);
       if (Object.keys(errorCase.params).length > 0) expect(error?.params).toEqual(errorCase.params);
     },
+    120_000,
   );
 });

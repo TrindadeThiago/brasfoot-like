@@ -1,10 +1,13 @@
 import type { z } from "zod";
 import type {
+  berthSchema,
+  berthSourceSchema,
   clubSchema,
   competitionFormatSchema,
   competitionSchema,
   countrySchema,
   crestSchema,
+  divisionRefSchema,
   divisionSchema,
   drawRuleSchema,
   groupDrawSchema,
@@ -38,6 +41,9 @@ export type GroupDraw = z.infer<typeof groupDrawSchema>;
 export type DrawRule = z.infer<typeof drawRuleSchema>;
 export type CompetitionFormat = z.infer<typeof competitionFormatSchema>;
 export type Division = z.infer<typeof divisionSchema>;
+export type Berth = z.infer<typeof berthSchema>;
+export type BerthSource = z.infer<typeof berthSourceSchema>;
+export type DivisionRef = z.infer<typeof divisionRefSchema>;
 export type Competition = z.infer<typeof competitionSchema>;
 export type Crest = z.infer<typeof crestSchema>;
 export type Club = z.infer<typeof clubSchema>;

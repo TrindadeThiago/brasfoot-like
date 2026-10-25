@@ -14,6 +14,7 @@ export {
   dismissSquadNotice,
   isCareerSeasonOver,
   nextFixture,
+  qualificationPreview,
   seasonStateOf,
   userDivisionLevel,
   userSeason,

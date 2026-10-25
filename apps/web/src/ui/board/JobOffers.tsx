@@ -12,6 +12,7 @@ import { useT } from "../../i18n";
 import { Button } from "../Button";
 import { Crest } from "../Crest";
 import styles from "./board.module.css";
+import { goalTierText } from "./GoalsList";
 
 /** Propostas de emprego pendentes, com aceitar/recusar (US4, US6, FR-025). */
 export function JobOffers({
@@ -61,7 +62,14 @@ export function JobOffers({
             ) : null}
             <span>{t("career.offers.reputation", { value: club?.reputation ?? 0 })}</span>
             <span>
-              {t("career.offers.goals", { goal: t(`board.goal.tier.${offer.goals.sport.tier}`) })}
+              {t("career.offers.goals", {
+                goal: goalTierText(
+                  t,
+                  save,
+                  offer.goals.sport.tier,
+                  offer.goals.sport.competitionId,
+                ),
+              })}
             </span>
             <span className={styles.muted}>
               {t("career.offers.expires", {

@@ -118,6 +118,7 @@ describe("mod de exemplo de vários países (020)", () => {
       divisionsPerCountry: 2,
       clubsPerDivision: 12,
       perCountry: [{ divisions: 1 }, { divisions: 2 }, { divisions: 2, cup: true }],
+      qualification: true,
       manifest: {
         id: "exemplo-mundo",
         name: "Mundo (exemplo)",
@@ -136,7 +137,7 @@ describe("mod de exemplo de vários países (020)", () => {
       const own = world.competitions.filter((competition) => competition.countryId === country.id);
       return {
         divisions: own[0]?.divisions.length,
-        cup: own.some((competition) => competition.format.type === "knockout"),
+        cup: own.some((competition) => competition.id.startsWith("copa-")),
       };
     });
     expect(structure).toEqual([
@@ -172,4 +173,35 @@ describe("mod de exemplo de vários países (020)", () => {
     }
     expect(save.league.competitionId).toContain(world.countries[2]?.code.toLowerCase());
   }, 60_000);
+
+  it("traz vagas entre competições e uma carreira joga a temporada e a virada com elas (021)", () => {
+    const fed = world.competitions.filter((competition) =>
+      competition.divisions.some((division) => (division.berths?.length ?? 0) > 0),
+    );
+    // taça nos dois países de duas divisões e supercopa no país com copa
+    expect(fed.map((competition) => competition.id.split("-")[0]).sort()).toEqual([
+      "supercopa",
+      "taca",
+      "taca",
+    ]);
+    const clubId = world.clubs.find((club) => club.countryId === world.countries[2]?.id)?.id ?? "";
+    const created = createSave({
+      id: "mundo-vagas",
+      now: "2026-10-24T12:00:00.000Z",
+      managerName: "Ana",
+      clubId,
+      seed: "mundo-exemplo-vagas",
+      defaultBank: world,
+      noFiring: true,
+    });
+    if (!created.ok) throw new Error(JSON.stringify(created.error));
+    const turned = advanceCareerSeason(playSeason(created.save), "2026-10-25T12:00:00.000Z");
+    if (!turned.ok) throw new Error(JSON.stringify(turned.error));
+    expect(turned.save.qualificationHistory?.[0]?.entries.length).toBeGreaterThan(0);
+    const supercup = turned.save.competitions.find((league) =>
+      league.competitionId.startsWith("supercopa-"),
+    );
+    expect(supercup?.divisions[0]?.clubIds).toHaveLength(2);
+    expect(Object.keys(supercup?.origins ?? {})).toHaveLength(2);
+  }, 300_000);
 });

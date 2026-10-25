@@ -8,7 +8,7 @@ describe("migração v10 → v11 (015 R6, FR-010)", () => {
     const result = migrateSave(v10);
     if (result.status !== "ok") throw new Error(JSON.stringify(result));
     expect(result.migratedFrom).toBe(10);
-    expect(result.save.formatVersion).toBe(15);
+    expect(result.save.formatVersion).toBe(16);
     expect(result.save.assets).toEqual({});
     const {
       formatVersion: _v,

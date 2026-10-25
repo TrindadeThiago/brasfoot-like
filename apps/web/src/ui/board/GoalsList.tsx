@@ -3,12 +3,25 @@
 import { goalProgress, type SeasonGoals } from "@brasfoot-like/engine";
 import { boardContextOf, type SaveFile } from "@brasfoot-like/save";
 import { formatMoney, useT } from "../../i18n";
+import { competitionName } from "../qualification/origin-text";
 import styles from "./board.module.css";
 
 /** Texto da meta financeira (frase completa por tipo). */
 export function financeGoalText(t: ReturnType<typeof useT>, goals: SeasonGoals): string {
   return t(`board.goal.finance.${goals.finance.kind}`, {
     amount: formatMoney(goals.finance.startCash),
+  });
+}
+
+/** Texto do nível da meta esportiva; `qualify` diz para qual competição (021). */
+export function goalTierText(
+  t: ReturnType<typeof useT>,
+  save: Pick<SaveFile, "bank">,
+  tier: string,
+  competitionId?: string,
+): string {
+  return t(`board.goal.tier.${tier}`, {
+    competition: competitionId ? competitionName(save, competitionId) : "",
   });
 }
 
@@ -23,7 +36,7 @@ export function GoalsList({ save }: { save: SaveFile }) {
     <ul className={styles.list}>
       <li className={styles.goal}>
         <span className={styles.muted}>{t("board.goal.sport")}</span>
-        <strong>{t(`board.goal.tier.${goals.sport.tier}`)}</strong>
+        <strong>{goalTierText(t, save, goals.sport.tier, goals.sport.competitionId)}</strong>
         <span>{t("board.goal.position", { position: progress.sport.required })}</span>
         <span>{t("board.goal.current", { position: progress.sport.current })}</span>
         <span className={progress.sport.met ? styles.met : styles.risk}>

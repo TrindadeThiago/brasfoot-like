@@ -1,5 +1,17 @@
 [
   {
+    "version": "1.6.0",
+    "date": "2026-10-24",
+    "changes": [
+      "Classificação entre competições: a posição na liga, o título da copa ou uma boa campanha dão vaga em outra competição na temporada seguinte, tudo descrito no banco. A tabela mostra quais posições dão vaga, com legenda por competição e fase, e a página da competição mostra de onde veio cada participante.",
+      "Repasse de vagas: quando o clube já está classificado por outro caminho, foi rebaixado ou não pode usar a vaga, ela passa ao próximo da ordem definida nos dados, e nenhuma vaga sobra nem é dada duas vezes.",
+      "Supercopa: os campeões de duas competições se enfrentam numa final única no calendário; se o mesmo clube ganha as duas, o repasse completa a vaga.",
+      "Acesso entre competições: o desempenho numa competição pode dar vaga em outra, em qualquer fase, e a pirâmide pode trocar clubes com elas.",
+      "Diretoria, notícias e histórico: a diretoria pode cobrar \"classificar para\" uma competição, as classificações viram manchete e ficam no histórico, e o fim da temporada mostra as vagas conquistadas e as perdidas por repasse.",
+      "Modders: seção \"Vagas entre competições\" no documento do formato, com as validações de contagem, fechamento e ciclos, e o mod de exemplo com mundo agora traz supercopa e taça alimentada pela liga. Saves antigos abrem normalmente (save v16)."
+    ]
+  },
+  {
     "version": "1.5.0",
     "date": "2026-10-24",
     "changes": [

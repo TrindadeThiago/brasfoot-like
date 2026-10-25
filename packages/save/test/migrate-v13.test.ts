@@ -29,7 +29,7 @@ describe("migração v12 → v13 (018 R15, FR-029)", () => {
       const result = migrateSave(v12);
       if (result.status !== "ok") throw new Error(JSON.stringify(result));
       expect(result.migratedFrom).toBe(12);
-      expect(result.save.formatVersion).toBe(15);
+      expect(result.save.formatVersion).toBe(16);
       expect(result.save.cupHistory).toEqual([]);
       const { formatVersion: _v, cupHistory: _c, ...rest } = result.save;
       const { formatVersion: _v12, ...restV12 } = v12;
@@ -63,7 +63,7 @@ describe("migração v12 → v13 (018 R15, FR-029)", () => {
     const result = importSave(bytes);
     if (result.status !== "ok") throw new Error(JSON.stringify(result));
     expect(result.migratedFrom).toBe(12);
-    expect(result.save.formatVersion).toBe(15);
+    expect(result.save.formatVersion).toBe(16);
   }, 120_000);
 });
 

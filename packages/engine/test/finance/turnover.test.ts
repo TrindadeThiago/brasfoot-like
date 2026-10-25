@@ -46,6 +46,8 @@ describe("virada financeira (US3, FR-011, FR-012, FR-025)", () => {
       "balance-squads",
       "age-out-free-agents",
       "promotion-relegation",
+      "resolve-qualification",
+      "news-qualification",
       "advance-year",
       "reset-season-stats",
       "generate-calendars",

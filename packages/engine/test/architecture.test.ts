@@ -46,4 +46,18 @@ describe("fronteira do motor", () => {
     }
     expect(violations).toEqual([]);
   });
+
+  it("a resolução das vagas entre competições (021) não usa PRNG nem importa da interface", () => {
+    const dir = join(SRC_DIR, "qualification");
+    const problems: string[] = [];
+    for (const file of listTsFiles(dir)) {
+      const source = stripComments(readFileSync(file, "utf8"));
+      if (/\b(createRng|Rng)\b|rng\//.test(source))
+        problems.push(`${relative(SRC_DIR, file)} usa PRNG`);
+      if (/from\s+"(react|next)|apps\/|document\.|window\./.test(source)) {
+        problems.push(`${relative(SRC_DIR, file)} importa da interface`);
+      }
+    }
+    expect(problems).toEqual([]);
+  });
 });

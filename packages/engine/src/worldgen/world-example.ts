@@ -30,6 +30,12 @@ export interface WorldBankOptions {
   aiInternational?: number;
   /** Escala econômica: `varied` (padrão, de 0,75 a 1,25) ou `uniform` (todos os países iguais). */
   economy?: "varied" | "uniform";
+  /**
+   * Vagas entre competições (021): uma supercopa por país com copa (campeões da liga e da copa) e,
+   * nos países de duas divisões, uma taça alimentada pela liga (4 da divisão de baixo na 1ª fase e
+   * 2 da de cima na 2ª).
+   */
+  qualification?: boolean;
   /** Identificação do mod gerado. */
   manifest?: { id: string; name: string; author: string; version: string };
 }
@@ -178,6 +184,143 @@ function uniqueAbbreviation(abbreviation: string, used: Set<string>): string {
   throw new Error("siglas esgotadas");
 }
 
+/**
+ * Taça dos classificados do país (021 R5): mata-mata de 6 clubes alimentado pela liga nacional. Os
+ * 4 primeiros da divisão de baixo abrem a taça; os 2 primeiros da divisão de cima entram na 2ª fase.
+ * É o exemplo de acesso entre competições com entrada tardia, só com clubes da pirâmide.
+ */
+function qualifiersCupOf(
+  competitions: readonly Competition[],
+  countryName: string,
+  lower: string,
+): Competition | undefined {
+  const league = competitions.find((competition) => competition.format.type === "league");
+  const top = league?.divisions[0];
+  const bottom = league?.divisions[1];
+  if (!league || !top || !bottom || bottom.clubIds.length < 4 || top.clubIds.length < 2) {
+    return undefined;
+  }
+  const closing = (level: number, size: number) =>
+    ({ kind: "position", competitionId: league.id, level, from: 1, to: size }) as const;
+  const phase = (name: string, prize: number) => ({
+    name,
+    legs: 1 as const,
+    tiebreakers: ["extra-time", "penalties"] as ("extra-time" | "penalties")[],
+    home: "ranking" as const,
+    prize,
+  });
+  const opening = [...bottom.clubIds].sort().slice(0, 4);
+  const entering = [...top.clubIds].sort().slice(0, 2);
+  return {
+    id: `taca-${lower}`,
+    countryId: league.countryId,
+    name: `Taça dos Classificados de ${countryName}`,
+    format: {
+      type: "knockout",
+      phases: [phase("Primeira fase", 20_000), phase("Semifinais", 40_000), phase("Final", 80_000)],
+      entries: [{ phase: 1, clubIds: entering }],
+    },
+    divisions: [
+      {
+        level: 1,
+        name: "Taça",
+        clubIds: [...opening, ...entering].sort(),
+        promotionSlots: 0,
+        relegationSlots: 0,
+        berths: [
+          {
+            id: "base-da-liga",
+            source: {
+              kind: "position",
+              competitionId: league.id,
+              level: bottom.level,
+              from: 1,
+              to: 4,
+            },
+            fallback: [closing(bottom.level, bottom.clubIds.length)],
+          },
+          {
+            id: "elite-da-liga",
+            source: {
+              kind: "position",
+              competitionId: league.id,
+              level: top.level,
+              from: 1,
+              to: 2,
+            },
+            entry: { phase: 2 },
+            fallback: [closing(top.level, top.clubIds.length)],
+          },
+        ],
+      },
+    ],
+    schedule: { weekday: 4, startWeek: 2, everyWeeks: 2 },
+  };
+}
+
+/**
+ * Supercopa do país (021 R4): final única entre o campeão da liga e o da copa. Se o mesmo clube ganha
+ * as duas, o vice da liga ocupa a vaga; o fechamento é a tabela inteira da divisão de cima. Os
+ * participantes da 1ª temporada são os dois primeiros clubes da divisão de cima, por id.
+ */
+function supercupOf(
+  competitions: readonly Competition[],
+  countryName: string,
+  lower: string,
+): Competition | undefined {
+  const league = competitions.find((competition) => competition.format.type === "league");
+  const cup = competitions.find((competition) => competition.format.type === "knockout");
+  const top = league?.divisions[0];
+  if (!league || !cup || !top) return undefined;
+  const closing = {
+    kind: "position",
+    competitionId: league.id,
+    level: 1,
+    from: 1,
+    to: top.clubIds.length,
+  } as const;
+  return {
+    id: `supercopa-${lower}`,
+    countryId: league.countryId,
+    name: `Supercopa de ${countryName}`,
+    format: {
+      type: "knockout",
+      phases: [
+        {
+          name: "Final",
+          legs: 1,
+          tiebreakers: ["extra-time", "penalties"],
+          home: "draw",
+          neutral: true,
+          prize: 0,
+        },
+      ],
+    },
+    divisions: [
+      {
+        level: 1,
+        name: "Final",
+        clubIds: [...top.clubIds].sort().slice(0, 2),
+        promotionSlots: 0,
+        relegationSlots: 0,
+        berths: [
+          {
+            id: "campeao-liga",
+            source: { kind: "champion", competitionId: league.id },
+            fallback: [{ kind: "runnerUp", competitionId: league.id }, closing],
+          },
+          {
+            id: "campeao-copa",
+            source: { kind: "champion", competitionId: cup.id },
+            fallback: [{ kind: "runnerUp", competitionId: league.id }, closing],
+          },
+        ],
+      },
+    ],
+    schedule: { weekday: 6, startWeek: 0, everyWeeks: 1 },
+  };
+}
+
 /** Gera o banco de vários países (020). Mesma seed ⇒ banco idêntico. */
 export function generateWorldBank(options: WorldBankOptions): ValidatedBank {
   const { seed, countries: count, divisionsPerCountry } = options;
@@ -249,6 +392,12 @@ export function generateWorldBank(options: WorldBankOptions): ValidatedBank {
           entry.clubIds = entry.clubIds.filter((id) => kept.has(id)).map(clubId);
         }
       }
+    }
+    if (options.qualification === true) {
+      const supercup = supercupOf(bank.competitions, names.countryName ?? code, lower);
+      if (supercup) bank.competitions.push(supercup);
+      const qualifiers = qualifiersCupOf(bank.competitions, names.countryName ?? code, lower);
+      if (qualifiers) bank.competitions.push(qualifiers);
     }
     scaleEconomy(main, factor);
     if (options.aiInternational !== undefined) {

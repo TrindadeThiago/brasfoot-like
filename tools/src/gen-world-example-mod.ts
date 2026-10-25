@@ -1,6 +1,7 @@
 // Gera o mod de exemplo de vários países (020) em mods/exemplo-mundo: 3 países fictícios de
 // estruturas diferentes (uma divisão; duas divisões; duas divisões e copa nacional), cada um com a
-// sua economia e o seu banco de nomes, e um limite de estrangeiros em um deles.
+// sua economia e o seu banco de nomes, e um limite de estrangeiros em um deles. Os países de duas
+// divisões têm uma taça alimentada pela liga e o de copa tem também a supercopa (021).
 // Uso: pnpm gen:world-mod
 import { join } from "node:path";
 import { generateWorldBank } from "@brasfoot-like/engine";
@@ -16,6 +17,8 @@ export function worldExampleBank() {
     divisionsPerCountry: 2,
     clubsPerDivision: 12,
     perCountry: [{ divisions: 1 }, { divisions: 2 }, { divisions: 2, cup: true }],
+    // Vagas entre competições (021): taça alimentada e, no país com copa, a supercopa.
+    qualification: true,
     manifest: {
       id: "exemplo-mundo",
       name: "Mundo (exemplo)",

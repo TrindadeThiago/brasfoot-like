@@ -170,7 +170,7 @@ fases (`phases`) são jogadas em ordem; cada fase tem as próprias regras.
 | Campo | Tipo | Descrição |
 |---|---|---|
 | `type` | `"knockout"` | copa de mata-mata |
-| `phases` | lista (2 a 8) | fases, da primeira à final |
+| `phases` | lista (1 a 8) | fases, da primeira à final; uma só fase é uma final única (supercopa), com 2 clubes |
 | `entries` | lista | clubes que só entram numa fase posterior (opcional) |
 
 Cada item de `phases`:
@@ -398,6 +398,73 @@ rebaixamento.
 
 Os rebaixados de um nível devem ser tantos quanto os promovidos do nível de baixo.
 
+Campo opcional de cada divisão: `berths` (lista de 1 a 64 vagas), descrito em
+[Vagas entre competições](#vagas-entre-competições).
+
+### Vagas entre competições
+
+Uma divisão pode receber os seus participantes de outras competições, de uma temporada para a
+seguinte: é a lista `berths` da divisão **de destino**. Cada vaga diz de onde vem o clube, em que
+fase ele entra, o que fazer quando ele não puder ocupá-la e quais condições ele precisa cumprir.
+Os `clubIds` da divisão continuam sendo os participantes da **primeira** temporada; da segunda em
+diante os participantes vêm das vagas.
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `id` | id | identificador da vaga, único na divisão |
+| `source` | objeto | de onde vem o clube (veja abaixo) |
+| `entry` | objeto | opcional: `stage` e/ou `phase` (a partir de 1) em que o clube entra, quando não é a primeira |
+| `fallback` | lista | ordem de repasse: fontes tentadas em ordem quando o clube da vaga não pode usá-la; o **último** item é o fechamento e precisa ser uma `position` que cubra a tabela inteira de uma divisão |
+| `require` | lista | opcional: divisões (`competitionId`, `level`) em uma das quais o clube precisa estar na temporada seguinte |
+| `forbid` | lista | opcional: divisões em que o clube **não** pode estar na temporada seguinte (por exemplo, a divisão de onde seria rebaixado) |
+
+Fontes (`source` e itens de `fallback`), sempre sobre a temporada que acabou de terminar:
+
+| `kind` | Campos | Clubes |
+|---|---|---|
+| `position` | `competitionId`, `level`, `from`, `to` | as posições finais de `from` a `to` da divisão |
+| `champion` | `competitionId` | o campeão (primeiro da divisão 1, ou campeão da copa) |
+| `runnerUp` | `competitionId` | o vice-campeão |
+| `reached` | `competitionId`, `phase` | os clubes de uma copa que chegaram à fase (a partir de 1), da mais longe para a menos |
+
+Regras do jogo, todas com dados:
+
+- Um clube ocupa **uma** vaga por competição. Se a fonte oferece um clube que já está na competição,
+  que não existe mais ou que não cumpre `require`/`forbid`, a vaga passa ao próximo item de
+  `fallback`, na ordem em que estão escritos, e assim por diante até o fechamento.
+- As vagas somam os participantes da divisão (competição alimentada, de uma divisão só) ou, numa
+  ponta da pirâmide, as saídas dela: `promotionSlots` da primeira divisão e `relegationSlots` da
+  última passam a valer como saídas para fora da pirâmide quando a divisão recebe clubes por vagas.
+- Competições que leem a composição da temporada seguinte umas das outras (`require`/`forbid`) não
+  podem formar ciclo.
+- Todos os clubes de uma competição secundária continuam precisando estar na principal do país.
+
+Exemplo: supercopa nacional entre o campeão da liga e o da copa. Se o mesmo clube ganha as duas, o
+vice da **liga** ocupa a segunda vaga.
+
+Numa supercopa continental (campeão da copa continental principal contra o da secundária) o mesmo
+clube não pode vencer as duas, porque um clube só disputa uma delas por edição: basta o `fallback`
+de fechamento, que nunca é usado na prática.
+
+```json
+{
+  "level": 1, "name": "Supercopa", "clubIds": ["clube-001", "clube-002"],
+  "promotionSlots": 0, "relegationSlots": 0,
+  "berths": [
+    { "id": "campeao-liga", "source": { "kind": "champion", "competitionId": "liga-nacional" },
+      "fallback": [
+        { "kind": "runnerUp", "competitionId": "liga-nacional" },
+        { "kind": "position", "competitionId": "liga-nacional", "level": 1, "from": 1, "to": 20 }
+      ] },
+    { "id": "campeao-copa", "source": { "kind": "champion", "competitionId": "copa-nacional" },
+      "fallback": [
+        { "kind": "runnerUp", "competitionId": "liga-nacional" },
+        { "kind": "position", "competitionId": "liga-nacional", "level": 1, "from": 1, "to": 20 }
+      ] }
+  ]
+}
+```
+
 ## 6. `clubs.json`
 
 Lista com ao menos 2 clubes.
@@ -604,6 +671,18 @@ Fora do jogo, `pnpm validate-bank <pasta|arquivo.zip>` faz a mesma validação n
 | `country.names_missing` | O país {countryId} não tem banco de nomes; num banco com mais de um país, cada país com competição precisa do seu (campo names). |
 | `country.foreign_limit_exceeded` | O clube {clubId} começa com {count, plural, one {# jogador estrangeiro} other {# jogadores estrangeiros}}, mais que o limite de {limit} do país. |
 | `unique.duplicate_club_in_country` | O clube {clubId} já está na competição principal {otherCompetitionId}; um clube só pode estar na liga de um país. |
+| `qualification.duplicate_berth_id` | A vaga {berthId} aparece mais de uma vez na mesma divisão. |
+| `qualification.unknown_competition` | A vaga {berthId} aponta para a competição {competitionId}, que não existe. |
+| `qualification.unknown_level` | A vaga {berthId} aponta para a divisão {level} da competição {competitionId}, que não existe. |
+| `qualification.unknown_phase` | A vaga {berthId} aponta para a fase {phase} da competição {competitionId}, que não existe. |
+| `qualification.reached_not_cup` | A vaga {berthId} usa a fase alcançada em {competitionId}, que não é uma copa. |
+| `qualification.range_invalid` | A vaga {berthId} pede as posições {from} a {to}, mas a divisão tem {size} clubes. |
+| `qualification.count_mismatch` | As vagas somam {total} clubes, mas a divisão tem {size} participantes. |
+| `qualification.pyramid_exit_mismatch` | As vagas somam {total} clubes, mas a última divisão rebaixa {relegation} para fora da pirâmide ({size} participantes). |
+| `qualification.entry_count_mismatch` | As vagas da fase {phase} somam {berths} clubes, mas a fase recebe {entering} entradas. |
+| `qualification.no_closing` | A vaga {berthId} não termina o repasse com uma tabela inteira de referência. |
+| `qualification.pool_too_small` | O fechamento da vaga {berthId} tem {clubs} clubes, menos que os {needed} da divisão. |
+| `qualification.cycle` | As vagas formam um ciclo de dependências: {path}. |
 | `division.top_has_promotion` | A divisão mais alta não pode ter vagas de acesso, mas tem {slots}. |
 | `division.bottom_has_relegation` | A divisão mais baixa não pode ter vagas de rebaixamento, mas tem {slots}. |
 | `division.slots_mismatch` | O nível {level} rebaixa {relegated, plural, one {# clube} other {# clubes}}, mas o nível {nextLevel} promove {promoted, plural, one {# clube} other {# clubes}}; os números devem ser iguais. |

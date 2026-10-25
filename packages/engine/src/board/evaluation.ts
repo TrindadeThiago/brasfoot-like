@@ -108,7 +108,13 @@ export function evaluateSeason(
   return {
     season: context.league.number,
     clubId,
-    sport: { tier: goals.sport.tier, required: goals.sport.position, final, met: sportMet },
+    sport: {
+      tier: goals.sport.tier,
+      required: goals.sport.position,
+      final,
+      met: sportMet,
+      ...(goals.sport.competitionId ? { competitionId: goals.sport.competitionId } : {}),
+    },
     finance: { kind: goals.finance.kind, met: metFinance },
     finalConfidence,
     decision,

@@ -43,6 +43,11 @@ export interface SimulateScaleOptions {
   international?: number;
   /** Escala econômica dos países: `uniform` deixa todos iguais (diagnóstico). */
   economy?: "varied" | "uniform";
+  /**
+   * Vagas entre competições (021): supercopa e taça alimentada em cada país; confere a cada
+   * temporada o número de participantes de cada divisão e a unicidade dos clubes.
+   */
+  qualification?: boolean;
 }
 
 const NOW = "2026-10-24T12:00:00.000Z";
@@ -86,6 +91,7 @@ export function runSimulateScale(options: SimulateScaleOptions): ScaleReport {
       divisionsPerCountry: 2,
       clubsPerDivision: 20,
       cup: true,
+      ...(options.qualification ? { qualification: true } : {}),
       ...(options.international !== undefined ? { aiInternational: options.international } : {}),
       ...(options.economy ? { economy: options.economy } : {}),
     }),
@@ -107,6 +113,14 @@ export function runSimulateScale(options: SimulateScaleOptions): ScaleReport {
     "",
     "Temp.  dia(ms)  virada(ms)  início(MB)  última rodada(MB)  heap(MB)  problemas",
   ];
+  // Participantes esperados por competição e divisão: os do banco (021 SC-001).
+  const expected = new Map(
+    bank.competitions.flatMap((competition) =>
+      competition.divisions.map(
+        (division) => [`${competition.id}/${division.level}`, division.clubIds.length] as const,
+      ),
+    ),
+  );
   let ok = true;
   let heap = 0;
   const startSizes: number[] = [];
@@ -128,6 +142,30 @@ export function runSimulateScale(options: SimulateScaleOptions): ScaleReport {
     lastSize = JSON.stringify(save).length;
     lastRoundSizes.push(lastSize);
     const problems: string[] = [];
+    if (options.qualification) {
+      const state = seasonStateOf(save);
+      for (const league of [state.league, ...state.competitions]) {
+        const all = league.divisions.flatMap((division) => division.clubIds);
+        if (new Set(all).size !== all.length) {
+          problems.push(`${league.competitionId}: clube repetido`);
+        }
+        // Os participantes da edição são os que a resolução das vagas registrou.
+        if (
+          league.origins &&
+          [...all].sort().join() !== Object.keys(league.origins).sort().join()
+        ) {
+          problems.push(`${league.competitionId}: participantes diferentes das origens`);
+        }
+        for (const division of league.divisions) {
+          const wanted = expected.get(`${league.competitionId}/${division.divisionLevel}`);
+          if (wanted !== undefined && division.clubIds.length !== wanted) {
+            problems.push(
+              `${league.competitionId}/${division.divisionLevel}: ${division.clubIds.length} clubes em vez de ${wanted}`,
+            );
+          }
+        }
+      }
+    }
     if (!options.quiet) {
       const state = seasonStateOf(save);
       const date = `${save.league.year}-12-31`;

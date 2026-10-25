@@ -52,6 +52,8 @@ describe("pontos de extensão da virada (US6, FR-017 a FR-019)", () => {
       "balance-squads",
       "age-out-free-agents",
       "promotion-relegation",
+      "resolve-qualification",
+      "news-qualification",
       "advance-year",
       "reset-season-stats",
       "mercado",

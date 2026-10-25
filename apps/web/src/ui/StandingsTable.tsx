@@ -11,6 +11,7 @@ import { useT } from "../i18n";
 import { Crest } from "./Crest";
 import { type Column, DataTable } from "./DataTable";
 import { FormChips } from "./FormChips";
+import { competitionName } from "./qualification/origin-text";
 import styles from "./StandingsTable.module.css";
 
 type Zone =
@@ -77,6 +78,8 @@ export function StandingsTable({
     if (row.position > rows.length - zones.relegation) return "relegation";
     return undefined;
   };
+  const berthOf = (row: StandingRow) =>
+    zones?.berths.find((zone) => row.position >= zone.from && row.position <= zone.to);
   const clubs = new Map(save.bank.clubs.map((club) => [club.id, club]));
   const number = (key: keyof StandingRow, header: string): Column<StandingRow> => ({
     key,
@@ -90,9 +93,17 @@ export function StandingsTable({
       ...number("position", t("col.position")),
       render: (row) => {
         const zone = zoneOf(row);
+        const berth = berthOf(row);
         return (
           <span className={styles.position}>
             {row.position}
+            {berth ? (
+              <span className={`${styles.zone} ${styles.qualified}`}>
+                {t("standings.zone.berth", {
+                  competition: competitionName(save, berth.competitionId),
+                })}
+              </span>
+            ) : null}
             {zone ? (
               <span className={`${styles.zone} ${styles[TONE[zone]]}`}>
                 {t(
@@ -135,7 +146,18 @@ export function StandingsTable({
     },
     { key: "form", header: t("col.form"), render: (row) => <FormChips form={row.form} /> },
   ];
-  const legend = customLegend
+  const berthLegend = (zones?.berths ?? [])
+    .map((zone) =>
+      t("standings.zone.berthLegend", {
+        count: zone.to - zone.from + 1,
+        from: zone.from,
+        to: zone.to,
+        competition: competitionName(save, zone.competitionId),
+        phase: zone.entry?.phase ? zone.entry.phase : "none",
+      }),
+    )
+    .join(t("standings.zone.berthJoin"));
+  const baseLegend = customLegend
     ? customLegend
     : qualification
       ? t("stages.zone.legend", {
@@ -149,6 +171,9 @@ export function StandingsTable({
             both: zones.promotion > 0 && zones.relegation > 0 ? "yes" : "no",
           })
         : undefined;
+  const legend = [baseLegend, berthLegend || undefined]
+    .filter((part): part is string => part !== undefined)
+    .join(t("standings.zone.berthJoin"));
   return (
     <>
       <DataTable
@@ -158,7 +183,7 @@ export function StandingsTable({
         caption={caption}
         highlight={(row) => row.clubId === save.clubId}
       />
-      {legend ? <p className={styles.legend}>{legend}</p> : null}
+      {legend !== "" ? <p className={styles.legend}>{legend}</p> : null}
     </>
   );
 }

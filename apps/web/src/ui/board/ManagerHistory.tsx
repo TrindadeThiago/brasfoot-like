@@ -5,6 +5,7 @@ import { divisionNameOf, type SaveFile } from "@brasfoot-like/save";
 import { useT } from "../../i18n";
 import { type Column, DataTable } from "../DataTable";
 import styles from "./board.module.css";
+import { goalTierText } from "./GoalsList";
 
 /** Histórico do técnico: passagens e temporadas (US9, FR-034). */
 export function ManagerHistory({ save }: { save: SaveFile }) {
@@ -57,7 +58,7 @@ export function ManagerHistory({ save }: { save: SaveFile }) {
       render: (row) =>
         row.goals
           ? t(row.goals.sportMet ? "career.history.goalMet" : "career.history.goalMissed", {
-              goal: t(`board.goal.tier.${row.goals.sportTier}`),
+              goal: goalTierText(t, save, row.goals.sportTier, row.goals.sportCompetitionId),
             })
           : t("career.history.noGoal"),
     },

@@ -10,13 +10,14 @@ import type {
   LineupChange,
   MarketState,
   NewsState,
+  QualificationRecord,
   RenewalState,
   SeasonCalendar,
   SeasonHistoryEntry,
 } from "@brasfoot-like/engine";
 
 /** Versão atual do formato do save (Princípio VI). */
-export const SAVE_FORMAT_VERSION = 15;
+export const SAVE_FORMAT_VERSION = 16;
 
 export const MANAGER_NAME_MAX = 40;
 
@@ -48,6 +49,8 @@ export interface SaveFile {
   competitionHistory: SeasonHistoryEntry[];
   /** Uma entrada por edição encerrada de cada copa (v13). */
   cupHistory: CupHistoryEntry[];
+  /** Classificações entre competições, uma por temporada encerrada (v16); ausente = nenhuma. */
+  qualificationHistory?: QualificationRecord[];
   /** Finanças de todos os clubes da competição (v4). */
   finances: FinanceState;
   /** Estado da renovação do mundo (v5). `bank` é o mundo vivo da carreira desde a 009. */

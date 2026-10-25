@@ -1,4 +1,5 @@
 import { managerClubOf } from "../board/create";
+import type { QualificationRecord } from "../qualification/types";
 import type { CareerSeasonState } from "./season-state";
 import { seasonTurnover } from "./turnover";
 import type { SeasonHistoryEntry, TurnoverResult } from "./types";
@@ -8,6 +9,8 @@ export interface CareerHistory {
   history: SeasonHistoryEntry[];
   competitionHistory: SeasonHistoryEntry[];
   cupHistory: NonNullable<Extract<TurnoverResult, { ok: true }>["cupHistory"]>;
+  /** Classificações entre competições, uma por temporada (021). */
+  qualificationHistory?: QualificationRecord[];
 }
 
 export const EMPTY_HISTORY: CareerHistory = { history: [], competitionHistory: [], cupHistory: [] };
@@ -40,6 +43,7 @@ export function startNextSeason(
     calendar: end.calendar,
     competitionHistory: history.competitionHistory,
     cupHistory: history.cupHistory,
+    ...(history.qualificationHistory ? { qualificationHistory: history.qualificationHistory } : {}),
   });
   if (!turned.ok) return turned;
   return {
@@ -65,6 +69,9 @@ export function startNextSeason(
       history: turned.history,
       competitionHistory: turned.competitionHistory ?? history.competitionHistory,
       cupHistory: turned.cupHistory ?? history.cupHistory,
+      ...((turned.qualificationHistory ?? history.qualificationHistory)
+        ? { qualificationHistory: turned.qualificationHistory ?? history.qualificationHistory }
+        : {}),
     },
   };
 }

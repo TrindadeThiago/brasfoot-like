@@ -485,6 +485,27 @@ export type {
 } from "./news/types";
 export { CLUB_RECORD_KINDS, HEADLINE_TYPES, LEAGUE_RECORD_KINDS } from "./news/types";
 export { variantOf } from "./news/variants";
+export { applyQualification } from "./qualification/apply";
+export { resolveFinishedSeasons } from "./qualification/finish";
+export { feedableCompetitions, findCycle, resolutionOrder } from "./qualification/order";
+export { berthSize, poolOf } from "./qualification/pools";
+export {
+  clubQualification,
+  participantOrigins,
+  qualificationOutcome,
+} from "./qualification/queries";
+export type { ResolveInput, ResolveOutcome } from "./qualification/resolve";
+export { resolveQualification } from "./qualification/resolve";
+export type {
+  BerthZone,
+  Entry,
+  Origin as QualificationOrigin,
+  PassReason,
+  QualificationEntry,
+  QualificationRecord,
+  QualificationResult,
+} from "./qualification/types";
+export { berthZones } from "./qualification/zones";
 export {
   evolutionDelta,
   evolvePlayers,
