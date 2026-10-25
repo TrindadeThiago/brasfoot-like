@@ -442,6 +442,13 @@ Regras do jogo, todas com dados:
 Exemplo: supercopa nacional entre o campeão da liga e o da copa. Se o mesmo clube ganha as duas, o
 vice da **liga** ocupa a segunda vaga.
 
+A supercopa nacional é uma final em **jogo único em campo neutro** (`legs: 1`, `neutral: true`); uma
+recopa continental é a mesma competição com **ida e volta** (`legs: 2`, sem `neutral`).
+
+O rebaixamento só tira o clube das vagas que declaram `require`/`forbid` sobre a divisão dele. Uma
+vaga conquistada em outra competição (o título da copa, por exemplo) não declara essas condições e
+o clube rebaixado a mantém.
+
 Numa supercopa continental (campeão da copa continental principal contra o da secundária) o mesmo
 clube não pode vencer as duas, porque um clube só disputa uma delas por edição: basta o `fallback`
 de fechamento, que nunca é usado na prática.

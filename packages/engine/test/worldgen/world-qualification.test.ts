@@ -21,6 +21,10 @@ describe("banco de teste com vagas entre competições (021 T026)", () => {
     for (const supercup of supercups) {
       const division = supercup.divisions[0];
       expect(division?.clubIds).toHaveLength(2);
+      // Supercopa nacional: jogo único em campo neutro.
+      expect(supercup.format.type === "knockout" && supercup.format.phases).toEqual([
+        expect.objectContaining({ legs: 1, neutral: true }),
+      ]);
       expect(division?.berths?.map((berth) => berth.id)).toEqual(["campeao-liga", "campeao-copa"]);
       const country = supercup.countryId;
       expect(
