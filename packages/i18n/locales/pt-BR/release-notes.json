@@ -1,5 +1,12 @@
 [
   {
+    "version": "1.7.1",
+    "date": "2026-10-25",
+    "changes": [
+      "Rodada ao vivo: quando um jogador se lesiona (ou o goleiro é expulso), ele continua na lista do painel de substituições, na vaga dele, marcado para troca. Antes ele sumia da lista e o time parecia ter um a menos, sem como substituí-lo."
+    ]
+  },
+  {
     "version": "1.7.0",
     "date": "2026-10-25",
     "changes": [
