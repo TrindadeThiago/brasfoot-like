@@ -628,6 +628,42 @@ dado: nenhuma regra muda no jogo.
   meta cumprida e perdida; padrão 5). Manchetes: `news.relevance.continentalChampion`, `…Advanced`,
   `…Eliminated` e `…Rout`.
 
+## Estaduais (competições regionais)
+
+Um **estadual** é uma competição de um país ligada a uma região, com **duas divisões** e acesso e
+rebaixamento entre elas. Um exemplo pronto está em `mods/exemplo-estadual` (4 estaduais de 12 e 8
+clubes, com clubes nacionais e regionais). Tudo é dado: nenhuma regra muda no jogo.
+
+- **Marca:** o bloco `regional` da competição (`region`, texto de 1 a 40 caracteres) faz dela um
+  estadual. Ela tem `countryId` (`regional.needs_country`) e **nunca é a competição principal do
+  país**, qualquer que seja a ordem no arquivo; as regras econômicas, de mercado, diretoria,
+  torcida e manchetes vêm da principal do país.
+- **Região dos clubes:** `club.region` (o mesmo campo do sorteio de grupos) liga o clube ao estadual
+  de mesma `region`. Num país que declara estaduais, todo clube precisa de região
+  (`regional.club_without_region`), e os clubes de um estadual são do país e da região dele
+  (`regional.club_country`, `regional.club_region`). Países sem estadual não mudam.
+- **Duas divisões:** exatamente duas (`regional.divisions_count`), cada uma em fases: grupos seguidos
+  de mata-mata, com a final em ida e volta (`regional.stages_missing`). Tamanho dos grupos
+  (`groupSize`), classificados (`qualified`, `extra`), mando do jogo único (`home`, por exemplo
+  `"overall"` para o melhor campanha), desempates (`tiebreakers`) e pênaltis são os campos das fases.
+  Não declare `gapWeeks` nas fases: as duas divisões dividem a grade de datas.
+- **Acesso e rebaixamento:** `promotionSlots` da 2ª e `relegationSlots` da 1ª, com os mesmos números
+  (`division.slots_mismatch`). Sobem os finalistas da 2ª (a ordem final do mata-mata) e caem os piores
+  da classificação geral da fase de grupos da 1ª (`stages.relegation_exceeds_eliminated` avisa se são
+  mais do que os eliminados); o número de clubes de cada divisão se mantém.
+- **Vagas nacionais:** `berths` (seção "Vagas entre competições") na copa nacional ou na divisão
+  nacional mais baixa, com fonte `position` do estadual (`level` 1). Quem já está na competição de
+  destino cede a vaga ao próximo colocado.
+- **Datas:** `schedule` do estadual nas primeiras semanas e `startWeek` da liga depois: a final do
+  estadual precisa vir antes da primeira rodada nacional (`calendar.regional_after_national`).
+- **Peso na carreira:** `regional.weight = { "pct": 100, "byReputation": [{ "from": 60, "pct": 40 }] }`.
+  `pct` (0 a 200; padrão 100) é o peso do estadual nas metas da diretoria e na torcida; `byReputation`
+  troca o peso pela faixa de reputação do clube (a última com `from` menor ou igual à reputação),
+  em ordem crescente (`regional.weight_order`). Clubes grandes podem valorizar menos o estadual.
+- **Clubes regionais:** clube que está só em divisões de estadual. Têm elenco e economia menores (dados
+  do próprio clube), evoluem com o mundo e o mercado, e a IA os controla: o jogador só treina clubes
+  de divisão nacional.
+
 ## 9. Seções opcionais de regras
 
 Todas as regras abaixo ficam dentro da competição e são **opcionais**: campos ausentes usam os
@@ -712,6 +748,7 @@ Fora do jogo, `pnpm validate-bank <pasta|arquivo.zip>` faz a mesma validação n
 | `division.club_in_multiple` | O clube {clubId} já está em outra divisão (competição {otherCompetitionId}, nível {otherLevel}). |
 | `calendar.club_double_booked` | As competições {competitionId} e {otherCompetitionId} marcam jogos do clube {clubId} no mesmo dia ({date}). |
 | `calendar.competition_overflow` | A competição {competitionId} precisa de {needed, plural, one {# semana} other {# semanas}} para as suas rodadas, mas a temporada tem {available, plural, one {# semana} other {# semanas}}. |
+| `calendar.regional_after_national` | A competição regional {competitionId} termina em {date}, mas a competição principal do país ({nationalCompetitionId}) começa antes: o estadual precisa acabar, com a final, antes da primeira rodada nacional. |
 | `knockout.phase_count` | A fase {phase} da copa fica com {count, plural, one {# clube} other {# clubes}} e o chaveamento não fecha (cada fase precisa de número par de clubes e a última, de 2). Diferença para fechar: {delta} (positivo = faltam clubes; negativo = sobram). |
 | `knockout.entry_phase` | A entrada na fase {phase} é inválida: a copa tem {phases, plural, one {# fase} other {# fases}} e as entradas só valem da fase 1 até a penúltima. |
 | `knockout.entry_duplicate` | O clube {clubId} aparece em mais de uma entrada da copa. |
@@ -765,6 +802,15 @@ Fora do jogo, `pnpm validate-bank <pasta|arquivo.zip>` faz a mesma validação n
 | `continental.dropin_before_source` | A fase de destino da ligação {dropInId} começa antes de a fase de origem terminar (em {date}); ajuste a agenda para o destino começar depois. |
 | `continental.awards_unknown_stage` | Os prêmios da competição {competitionId} citam a fase {stage} (ou uma fase do mata-mata dela) que não existe na competição. |
 | `continental.awards_not_increasing` | A tabela de reputação da competição {competitionId} não cresce na entrada {index}: as fases precisam vir em ordem crescente e os pontos não podem diminuir. |
+| `regional.needs_country` | O estadual {competitionId} precisa de um país (countryId): ele usa as regras econômicas e de mercado da competição principal desse país. |
+| `regional.divisions_count` | O estadual {competitionId} tem {count, plural, one {# divisão} other {# divisões}}; ele precisa ter exatamente duas. |
+| `regional.stages_missing` | A divisão {level} do estadual {competitionId} não segue o formato esperado ({reason, select, final_legs {a final precisa ser em ida e volta} other {fase de grupos seguida de mata-mata}}). |
+| `regional.club_region` | O clube {clubId} está no estadual {competitionId}, mas a região dele é diferente de "{region}". |
+| `regional.club_country` | O clube {clubId} está no estadual {competitionId}, mas é de outro país. |
+| `regional.club_without_region` | O clube {clubId} é do país {countryId}, que tem estaduais, mas não declara a região (region). |
+| `regional.duplicate_region` | O estadual {competitionId} repete a região "{region}" já usada por {otherCompetitionId} no mesmo país. |
+| `regional.promotion_exceeds_knockout` | O estadual {competitionId} promove {promotion, plural, one {# clube} other {# clubes}}, mas só {clubs, plural, one {# clube chega} other {# clubes chegam}} ao mata-mata da divisão. |
+| `regional.weight_order` | As faixas de reputação do peso do estadual {competitionId} precisam vir em ordem crescente de reputação; a entrada {index} não cresce. |
 | `division.top_has_promotion` | A divisão mais alta não pode ter vagas de acesso, mas tem {slots}. |
 | `division.bottom_has_relegation` | A divisão mais baixa não pode ter vagas de rebaixamento, mas tem {slots}. |
 | `division.slots_mismatch` | O nível {level} rebaixa {relegated, plural, one {# clube} other {# clubes}}, mas o nível {nextLevel} promove {promoted, plural, one {# clube} other {# clubes}}; os números devem ser iguais. |

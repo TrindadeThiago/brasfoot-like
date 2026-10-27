@@ -16,9 +16,18 @@ import { type Column, DataTable } from "../../../ui/DataTable";
 import { OtherCompetitions } from "../../../ui/history/OtherCompetitions";
 import { ClubHistory, Records, Scorers, Titles } from "../../../ui/history/WorldHistory";
 import { QualificationSummary } from "../../../ui/qualification/QualificationSummary";
+import { RegionalHistory } from "../../../ui/regional/RegionalHistory";
 import styles from "./page.module.css";
 
-type Tab = "seasons" | "titles" | "scorers" | "records" | "clubs" | "cups" | "continental";
+type Tab =
+  | "seasons"
+  | "titles"
+  | "scorers"
+  | "records"
+  | "clubs"
+  | "cups"
+  | "continental"
+  | "regional";
 const TABS: readonly Tab[] = [
   "seasons",
   "titles",
@@ -27,6 +36,7 @@ const TABS: readonly Tab[] = [
   "clubs",
   "cups",
   "continental",
+  "regional",
 ];
 
 function historyHref(careerId: string, number: number): string {
@@ -202,8 +212,12 @@ function History({ save }: { save: SaveFile }) {
   const [tab, setTab] = useState<Tab>("seasons");
   const hasCup = save.bank.competitions.some((item) => item.format.type === "knockout");
   const hasInternational = save.bank.competitions.some((item) => item.countryId === undefined);
+  const hasRegional = (save.regionalHistory ?? []).length > 0;
   const tabs = TABS.filter(
-    (name) => (name !== "cups" || hasCup) && (name !== "continental" || hasInternational),
+    (name) =>
+      (name !== "cups" || hasCup) &&
+      (name !== "continental" || hasInternational) &&
+      (name !== "regional" || hasRegional),
   );
   if (entry) {
     return (
@@ -236,6 +250,7 @@ function History({ save }: { save: SaveFile }) {
       {tab === "clubs" ? <ClubHistory save={save} /> : null}
       {tab === "cups" ? <CupHistory save={save} /> : null}
       {tab === "continental" ? <ContinentalHistory save={save} /> : null}
+      {tab === "regional" ? <RegionalHistory save={save} /> : null}
       <Link href={`${screenHref("/jogo/carreira", save.id)}&aba=history`}>
         {t("history.managerLink")}
       </Link>

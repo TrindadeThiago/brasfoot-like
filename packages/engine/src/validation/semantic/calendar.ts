@@ -1,5 +1,10 @@
 import { parseIsoDate } from "../../calendar/date";
-import { buildSeasonCalendar, calendarCompetitions } from "../../calendar/season-calendar";
+import { roundDates } from "../../calendar/schedule";
+import {
+  buildSeasonCalendar,
+  type CalendarCompetition,
+  calendarCompetitions,
+} from "../../calendar/season-calendar";
 import type { SemanticContext } from "../context";
 import { makeIssue, type ValidationIssue } from "../issues";
 import { mainCompetitions } from "./countries";
@@ -15,6 +20,8 @@ export function checkCalendar(context: SemanticContext): ValidationIssue[] {
   for (const { index, value: competition } of context.competitions) {
     // Competição entre países (022): os clubes vêm de várias ligas; a forma é de continental.ts.
     if (competition.countryId === undefined) continue;
+    // Estadual (023): admite clubes regionais, que não estão na principal; a forma é de regional.ts.
+    if (competition.regional !== undefined) continue;
     const main = mains.get(competition.countryId);
     if (!main || main.index === index) continue;
     const inMain = new Set(main.value.divisions.flatMap((division) => division.clubIds));
@@ -36,10 +43,9 @@ export function checkCalendar(context: SemanticContext): ValidationIssue[] {
 
   const start = context.manifest?.referenceDate;
   if (start === undefined || parseIsoDate(start) === null) return issues;
-  const built = buildSeasonCalendar(
-    calendarCompetitions(context.competitions.map((item) => item.value)),
-    start,
-  );
+  const inputs = calendarCompetitions(context.competitions.map((item) => item.value));
+  issues.push(...checkRegionalBeforeNational(context, mains, inputs, start));
+  const built = buildSeasonCalendar(inputs, start);
   if (built.ok) return issues;
   const indexOf = (competitionId: string) =>
     context.competitions.find((item) => item.value.id === competitionId)?.index ?? 0;
@@ -54,6 +60,42 @@ export function checkCalendar(context: SemanticContext): ValidationIssue[] {
         issue.competitionId,
       ),
     );
+  }
+  return issues;
+}
+
+/**
+ * Estadual (023): a última rodada, a final, vem antes da primeira rodada da competição principal do
+ * país. Confere as datas pelas agendas, mesmo que o calendário não feche por outro motivo.
+ */
+function checkRegionalBeforeNational(
+  context: SemanticContext,
+  mains: ReturnType<typeof mainCompetitions>,
+  inputs: readonly CalendarCompetition[],
+  start: string,
+): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const dates = (id: string) => {
+    const input = inputs.find((entry) => entry.competitionId === id);
+    return input ? roundDates(input.schedule, start, input.rounds, input.gaps) : [];
+  };
+  for (const { index, value: competition } of context.competitions) {
+    if (competition.regional === undefined || competition.countryId === undefined) continue;
+    const main = mains.get(competition.countryId);
+    if (!main) continue;
+    const last = dates(competition.id).at(-1);
+    const first = dates(main.value.id)[0];
+    if (last !== undefined && first !== undefined && last >= first) {
+      issues.push(
+        makeIssue(
+          "calendar.regional_after_national",
+          "competitions",
+          [index, "schedule"],
+          { competitionId: competition.id, nationalCompetitionId: main.value.id, date: last },
+          competition.id,
+        ),
+      );
+    }
   }
   return issues;
 }

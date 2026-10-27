@@ -36,9 +36,10 @@ import {
   returnLoansStep,
 } from "../market/turnover";
 import type { CompletedBank } from "../model/types";
-import { newsNewSeasonStep, newsQualificationStep } from "../news/turnover";
+import { newsNewSeasonStep, newsQualificationStep, newsRegionalStep } from "../news/turnover";
 import { applyQualification } from "../qualification/apply";
 import { resolveFinishedSeasons } from "../qualification/finish";
+import { regionalEditions } from "../regional/history";
 import {
   balanceSquadsStep,
   evolvePlayersStep,
@@ -83,6 +84,7 @@ export const TURNOVER_STEP_IDS = [
   "promotion-relegation",
   "resolve-qualification",
   "news-qualification",
+  "news-regional",
   "advance-year",
   "reset-season-stats",
   "generate-calendars",
@@ -115,7 +117,14 @@ const recordHistory: TurnoverStep = {
     competitionHistory: [
       ...(context.competitionHistory ?? []),
       ...(context.finishedCompetitions ?? [])
-        .filter((league) => !cupSeasonOf(league))
+        // Os estaduais (023) guardam só `regionalHistory`, compacto: as tabelas inteiras de 27
+        // estaduais por temporada pesariam no save.
+        .filter(
+          (league) =>
+            !cupSeasonOf(league) &&
+            !context.world.competitions.find((entry) => entry.id === league.competitionId)
+              ?.regional,
+        )
         .map((league) => competitionEntry(league, context.world)),
     ],
     cupHistory: [
@@ -130,6 +139,11 @@ const recordHistory: TurnoverStep = {
           ? (continentalEdition(context.world, league) ?? [])
           : [],
       ),
+    ],
+    // Estaduais (023): uma edição por estadual e temporada encerrada.
+    regionalHistory: [
+      ...(context.regionalHistory ?? []),
+      ...regionalEditions(context.world, context.finishedCompetitions ?? []),
     ],
   }),
 };
@@ -347,6 +361,7 @@ export const DEFAULT_TURNOVER_STEPS: readonly TurnoverStep[] = [
   promotionRelegation,
   resolveQualificationStep,
   newsQualificationStep,
+  newsRegionalStep,
   advanceYear,
   resetSeasonStats,
   generateCalendars,
@@ -485,6 +500,7 @@ export function seasonTurnover(
       ? { qualificationHistory: [...options.qualificationHistory] }
       : {}),
     ...(options.continentalHistory ? { continentalHistory: [...options.continentalHistory] } : {}),
+    ...(options.regionalHistory ? { regionalHistory: [...options.regionalHistory] } : {}),
   };
   try {
     for (const step of resolved.steps) context = step.run(context);
@@ -524,6 +540,9 @@ export function seasonTurnover(
     ...(context.qualificationHistory ? { qualificationHistory: context.qualificationHistory } : {}),
     ...(context.continentalHistory && context.continentalHistory.length > 0
       ? { continentalHistory: context.continentalHistory }
+      : {}),
+    ...(context.regionalHistory && context.regionalHistory.length > 0
+      ? { regionalHistory: context.regionalHistory }
       : {}),
   };
 }

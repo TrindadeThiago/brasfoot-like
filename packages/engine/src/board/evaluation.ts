@@ -108,6 +108,7 @@ export function evaluateSeason(
   });
   return {
     ...(goals.continental ? { continental: goals.continental } : {}),
+    ...(goals.regional ? { regional: goals.regional } : {}),
     season: context.league.number,
     clubId,
     sport: {

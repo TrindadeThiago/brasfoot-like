@@ -5,11 +5,14 @@ type Competitions = Pick<CompletedBank, "competitions">;
 type Clubs = Pick<CompletedBank, "competitions" | "clubs" | "countries">;
 
 /**
- * Competição principal do país (020 R1): a primeira competição do banco com aquele `countryId`.
+ * Competição principal do país (020 R1): a primeira competição do banco com aquele `countryId`
+ * que não é regional (023 R1: o estadual nunca é a principal, qualquer que seja a ordem no banco).
  * Dela vêm as regras do país (economia, mercado, diretoria, torcida, manchetes, condição física).
  */
 export function mainCompetitionOf(world: Competitions, countryId: string): Competition | undefined {
-  return world.competitions.find((competition) => competition.countryId === countryId);
+  return world.competitions.find(
+    (competition) => competition.countryId === countryId && competition.regional === undefined,
+  );
 }
 
 /** As competições principais, uma por país, na ordem do banco. */
@@ -19,6 +22,8 @@ export function mainCompetitions(world: Competitions): Competition[] {
   for (const competition of world.competitions) {
     // Competição entre países (022) não é a principal de nenhum país.
     if (competition.countryId === undefined || seen.has(competition.countryId)) continue;
+    // O estadual (023) não é a principal do país: a liga dele vem depois na lista.
+    if (competition.regional !== undefined) continue;
     seen.add(competition.countryId);
     mains.push(competition);
   }

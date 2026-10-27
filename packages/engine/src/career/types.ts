@@ -13,6 +13,7 @@ import type {
   QualificationRecord,
   QualificationResult,
 } from "../qualification/types";
+import type { RegionalEdition } from "../regional/types";
 import type { RenewalState } from "../renewal/types";
 import type { Rng } from "../rng/xoshiro";
 import type { SeasonError } from "../season/errors";
@@ -136,6 +137,8 @@ export interface TurnoverContext {
   qualification?: QualificationResult;
   /** Edições das competições entre países, uma por temporada encerrada (022). */
   continentalHistory?: ContinentalEdition[];
+  /** Edições dos estaduais, uma por temporada encerrada (023). */
+  regionalHistory?: RegionalEdition[];
   /** Finanças da carreira (008); ausentes em usos só da liga. */
   finances?: FinanceState;
   /** Clube do jogador: as decisões da IA não o alteram. */
@@ -183,6 +186,7 @@ export interface TurnoverOptions {
   cupHistory?: readonly CupHistoryEntry[];
   qualificationHistory?: readonly QualificationRecord[];
   continentalHistory?: readonly ContinentalEdition[];
+  regionalHistory?: readonly RegionalEdition[];
 }
 
 export type TurnoverResult =
@@ -205,5 +209,6 @@ export type TurnoverResult =
       cupHistory?: CupHistoryEntry[];
       qualificationHistory?: QualificationRecord[];
       continentalHistory?: ContinentalEdition[];
+      regionalHistory?: RegionalEdition[];
     }
   | { ok: false; error: SeasonError };

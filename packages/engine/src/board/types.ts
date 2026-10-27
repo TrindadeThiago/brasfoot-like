@@ -45,6 +45,18 @@ export interface SeasonGoals {
     result?: "met" | "missed";
     champion?: boolean;
   };
+  /** Meta do estadual (023), para o clube que o disputa. */
+  regional?: {
+    competitionId: string;
+    level: number;
+    target: { stage: number; phase?: number | undefined };
+    /** Peso do estadual para este clube, em %, na hora de definir a meta (023 R7). */
+    weight: number;
+    /** Preenchidos quando a campanha do clube termina (eliminação ou título). */
+    reached?: { stage: number; phase?: number | undefined };
+    result?: "met" | "missed";
+    champion?: boolean;
+  };
   finance: { kind: FinanceGoalKind; startCash: number };
 }
 
@@ -67,6 +79,8 @@ export const CONFIDENCE_FACTORS = [
   "cupGoal",
   "continentalMet",
   "continentalMiss",
+  "regionalMet",
+  "regionalMiss",
 ] as const;
 export type ConfidenceFactor = (typeof CONFIDENCE_FACTORS)[number];
 
@@ -81,8 +95,12 @@ export interface ConfidenceChange {
 /** Meta continental (022) como o jogador a vê: fase esperada, alcançada e resultado. */
 export type ContinentalProgress = NonNullable<SeasonGoals["continental"]>;
 
+/** Meta do estadual (023) como o jogador a vê: fase esperada, alcançada e resultado. */
+export type RegionalProgress = NonNullable<SeasonGoals["regional"]>;
+
 export interface GoalProgress {
   continental?: ContinentalProgress;
+  regional?: RegionalProgress;
   sport: {
     tier: GoalTierId;
     required: number;
@@ -104,6 +122,7 @@ export type BoardDecision = "kept" | "fired" | "wouldFire";
 
 export interface SeasonEvaluation {
   continental?: ContinentalProgress;
+  regional?: RegionalProgress;
   season: number;
   clubId: string;
   sport: {

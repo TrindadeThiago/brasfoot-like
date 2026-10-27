@@ -76,6 +76,24 @@ export function GoalsList({ save }: { save: SaveFile }) {
           )}
         </li>
       ) : null}
+      {goals.regional ? (
+        <li className={styles.goal}>
+          <span className={styles.muted}>{t("board.goal.regional")}</span>
+          <strong>
+            {t("board.goal.regional.text", {
+              competition: competitionName(save, goals.regional.competitionId),
+              target: reachedText(t, save, goals.regional.competitionId, goals.regional.target),
+            })}
+          </strong>
+          {goals.regional.result ? (
+            <span className={goals.regional.result === "met" ? styles.met : styles.risk}>
+              {goals.regional.result === "met" ? t("board.goal.met") : t("board.evaluation.missed")}
+            </span>
+          ) : (
+            <span className={styles.muted}>{t("board.goal.continental.pending")}</span>
+          )}
+        </li>
+      ) : null}
       {goals.sport.midSeason ? <li className={styles.muted}>{t("board.goal.midSeason")}</li> : null}
     </ul>
   );

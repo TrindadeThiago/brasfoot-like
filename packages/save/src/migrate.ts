@@ -297,6 +297,17 @@ const addContinental: Migration = {
   },
 };
 
+/**
+ * v17 → v18: estaduais (023). `competition.regional` no banco, a meta `regional` e `regionalHistory`
+ * são opcionais; um save antigo é um mundo sem estadual.
+ */
+const addRegional: Migration = {
+  from: 17,
+  migrate(raw) {
+    return { ...(raw as object), formatVersion: 18 };
+  },
+};
+
 /** Migrações reais do formato, em ordem. */
 export const MIGRATIONS: readonly Migration[] = [
   addLineup,
@@ -315,6 +326,7 @@ export const MIGRATIONS: readonly Migration[] = [
   addWorld,
   addQualification,
   addContinental,
+  addRegional,
 ];
 
 /** Problemas que tornam a escalação gravada ilegível (os demais o jogo corrige ou avisa). */

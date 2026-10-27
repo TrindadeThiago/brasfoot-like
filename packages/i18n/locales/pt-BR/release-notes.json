@@ -1,5 +1,17 @@
 [
   {
+    "version": "1.8.0",
+    "date": "2026-10-27",
+    "changes": [
+      "Estaduais: cada região pode ter o seu campeonato, com duas divisões, disputado no começo da temporada, antes da liga nacional. Cada divisão tem fase de grupos, mata-mata em jogo único, com mando do melhor campanha e pênaltis, e final em ida e volta.",
+      "Acesso e rebaixamento: os finalistas da segunda divisão sobem e os piores da fase de grupos da primeira caem, sempre com o mesmo número de clubes em cada divisão. Uma boa campanha na primeira divisão pode dar vaga na copa nacional ou na divisão nacional mais baixa.",
+      "Clubes regionais: clubes que só jogam o estadual, com elenco e economia menores, evoluem com o mundo e o mercado, e o computador cuida deles.",
+      "A campanha pesa na carreira: meta do estadual na diretoria, torcida e manchetes (campeões, acessos e quedas) com peso configurável por competição e por faixa de reputação, para que um clube grande valorize menos o estadual.",
+      "Telas: o estadual da região do seu clube aparece como aba ao lado das competições nacionais, com as duas divisões, grupos, chaveamento e a campanha do clube; o histórico ganha os campeões e os acessos e quedas dos estaduais.",
+      "Modders: seção \"Estaduais\" no documento do formato (bloco `regional`, região dos clubes, acesso e rebaixamento, datas e peso) com as validações novas, e o mod de exemplo com estaduais. Saves antigos abrem normalmente (save v18)."
+    ]
+  },
+  {
     "version": "1.7.1",
     "date": "2026-10-25",
     "changes": [

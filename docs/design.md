@@ -32,6 +32,7 @@
 - Primeira expansão sugerida: copa nacional em mata-mata.
 - **Vários países (020):** um banco pode ter quantos países quiser; cada um com a sua pirâmide, a sua economia (a da competição principal dele) e o seu banco de nomes. O valor de mercado do jogador é universal, o salário segue a escala do país do clube, a reputação é do clube, e o técnico recebe propostas de qualquer país. Os jogos das ligas de outros países que o técnico não acompanha usam uma simulação resumida, equivalente à completa.
 - **Classificação entre competições (021):** a divisão de destino declara as suas vagas (`berths`): posição, título, vice ou fase alcançada em outra competição, a fase de entrada, a ordem de repasse e as condições. A resolução acontece na virada, sem sorteio: nenhum clube aparece duas vezes numa competição e nenhuma vaga sobra. A supercopa é um mata-mata de uma fase com vagas de campeão.
+- **Estaduais (023):** um país pode ter competições regionais, uma por região, cada uma com duas divisões em fases (grupos, mata-mata em jogo único e final em ida e volta) e acesso e rebaixamento entre elas. Reúnem clubes das divisões nacionais e **clubes regionais**, que só jogam o estadual (controlados pela IA). Acontecem no começo da temporada, antes das competições nacionais. O peso na diretoria e na torcida é um dado da competição, com multiplicador por faixa de reputação (clube grande valoriza menos). As vagas para a copa nacional e a divisão nacional mais baixa usam a classificação entre competições (021).
 
 ## 4. Jogadores
 
@@ -165,6 +166,12 @@ separados por país e mata-mata, vagas por país vindas das ligas e copas, liga�
 temporada (terceiros dos grupos descem à menor), prêmios por fase e por vitória, bilheteria,
 reputação com teto, meta da diretoria, torcida, manchetes, histórico de campeões e campanha do
 clube. Saves v17 e `mods/exemplo-continental`.
+
+**M9 (parcial, 023):** estaduais de duas divisões no começo da temporada, antes das nacionais:
+grupos, mata-mata em jogo único com mando do melhor campanha e final em ida e volta, acesso dos
+finalistas e rebaixamento dos piores dos grupos, clubes regionais, vagas nacionais, peso por
+reputação, meta da diretoria, manchetes e histórico de campeões das duas divisões. Saves v18 e
+`mods/exemplo-estadual`.
 
 Os marcos 7 a 9 são pós-lançamento: trazem as copas e o mundo maior do §14 até o mod do
 futebol sul-americano. Os prompts estão em [`speckit-prompts/`](speckit-prompts/README.md)

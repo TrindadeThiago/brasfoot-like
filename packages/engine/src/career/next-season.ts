@@ -1,6 +1,7 @@
 import { managerClubOf } from "../board/create";
 import type { ContinentalEdition } from "../continental/types";
 import type { QualificationRecord } from "../qualification/types";
+import type { RegionalEdition } from "../regional/types";
 import type { CareerSeasonState } from "./season-state";
 import { seasonTurnover } from "./turnover";
 import type { SeasonHistoryEntry, TurnoverResult } from "./types";
@@ -14,6 +15,8 @@ export interface CareerHistory {
   qualificationHistory?: QualificationRecord[];
   /** Edições das competições entre países (022). */
   continentalHistory?: ContinentalEdition[];
+  /** Edições dos estaduais (023). */
+  regionalHistory?: RegionalEdition[];
 }
 
 export const EMPTY_HISTORY: CareerHistory = { history: [], competitionHistory: [], cupHistory: [] };
@@ -48,6 +51,7 @@ export function startNextSeason(
     cupHistory: history.cupHistory,
     ...(history.qualificationHistory ? { qualificationHistory: history.qualificationHistory } : {}),
     ...(history.continentalHistory ? { continentalHistory: history.continentalHistory } : {}),
+    ...(history.regionalHistory ? { regionalHistory: history.regionalHistory } : {}),
   });
   if (!turned.ok) return turned;
   return {
@@ -78,6 +82,9 @@ export function startNextSeason(
         : {}),
       ...((turned.continentalHistory ?? history.continentalHistory)
         ? { continentalHistory: turned.continentalHistory ?? history.continentalHistory }
+        : {}),
+      ...((turned.regionalHistory ?? history.regionalHistory)
+        ? { regionalHistory: turned.regionalHistory ?? history.regionalHistory }
         : {}),
     },
   };

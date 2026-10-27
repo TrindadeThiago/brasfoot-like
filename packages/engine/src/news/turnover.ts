@@ -1,4 +1,5 @@
 import type { TurnoverStep } from "../career/types";
+import { regionalCompetitionOf } from "../regional/scope";
 import { seasonStats, topScorers } from "../season/stats";
 import type { Fact } from "./facts";
 import { accumulate, pruneAllTime } from "./history";
@@ -132,6 +133,71 @@ export const newsQualificationStep: TurnoverStep = {
       0,
       facts,
     ).map((headline, index) => ({ ...headline, id: `${next}-0-q${index}` }));
+    const feed = context.news.feed.map((round) =>
+      round.season === next && round.round === 0
+        ? { ...round, headlines: [...round.headlines, ...headlines] }
+        : round,
+    );
+    return { ...context, news: { ...context.news, feed } };
+  },
+};
+
+/** No máximo estas manchetes do estadual do clube do jogador entram por virada (023 R8). */
+const REGIONAL_HEADLINES = 8;
+
+/**
+ * Etapa "news-regional" (023 FR-012), depois de "news-qualification": campeões das duas divisões do
+ * estadual do clube do jogador e os clubes que subiram e caíram, na rodada 0 da nova temporada.
+ */
+export const newsRegionalStep: TurnoverStep = {
+  id: "news-regional",
+  run: (context) => {
+    const editions = context.regionalHistory ?? [];
+    if (!context.news || editions.length === 0) return context;
+    const finished = context.finished;
+    const managerClubId = context.board?.manager.clubId ?? context.managerClubId ?? "";
+    const own = regionalCompetitionOf(context.world, managerClubId);
+    const edition = editions.find(
+      (item) => item.competitionId === own?.id && item.number === finished.number,
+    );
+    if (!edition) return context;
+    const next = finished.number + 1;
+    const facts: Fact[] = [];
+    for (const division of edition.divisions) {
+      const vars = { competition: edition.competitionId, level: division.level };
+      facts.push({
+        type: "regionalChampion",
+        clubIds: [division.championId, division.runnerUpId],
+        playerIds: [],
+        vars: { club: division.championId, opponent: division.runnerUpId, ...vars },
+      });
+      for (const clubId of division.promotedIds) {
+        facts.push({
+          type: "regionalPromoted",
+          clubIds: [clubId],
+          playerIds: [],
+          vars: { club: clubId, ...vars },
+        });
+      }
+      for (const clubId of division.relegatedIds) {
+        facts.push({
+          type: "regionalRelegated",
+          clubIds: [clubId],
+          playerIds: [],
+          vars: { club: clubId, ...vars },
+        });
+      }
+    }
+    const headlines = toHeadlines(
+      {
+        world: context.world,
+        league: { ...finished, number: next, year: finished.year + 1 },
+        careerSeed: context.careerSeed,
+        managerClubId,
+      },
+      0,
+      facts.slice(0, REGIONAL_HEADLINES),
+    ).map((headline, index) => ({ ...headline, id: `${next}-0-r${index}` }));
     const feed = context.news.feed.map((round) =>
       round.season === next && round.round === 0
         ? { ...round, headlines: [...round.headlines, ...headlines] }

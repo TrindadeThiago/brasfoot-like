@@ -2,6 +2,7 @@ import { currentPosition, divisionExpectations, expectationOf } from "../board/g
 import { clubDivision } from "../career/league";
 import { internationalCompetitions, isInternational } from "../continental/scope";
 import type { CupEvent } from "../knockout/events";
+import { regionalWeightFor } from "../regional/weight";
 import { standings } from "../season/standings";
 import type { MatchRecord } from "../season/types";
 import { idolEvents } from "./idols";
@@ -196,17 +197,24 @@ export function fansAfterExtraMatches(
   const rules = fansRules(context.world, context.league.competitionId);
   const next = clone(context.fans);
   for (const { record, competitionId } of matches) {
-    // Jogo de competição entre países (022 R7): pesa `continentalMatchPct`% do de um da liga.
-    const weight =
-      competitionId !== undefined &&
-      isInternational(
-        context.world.competitions.find((entry) => entry.id === competitionId) ?? { countryId: "" },
-      )
-        ? rules.continentalMatchPct
-        : 100;
+    const competition =
+      competitionId === undefined
+        ? undefined
+        : context.world.competitions.find((entry) => entry.id === competitionId);
     for (const clubId of [record.home, record.away]) {
       const club = next.clubs[clubId];
       if (!club) continue;
+      // Competição entre países (022 R7): pesa `continentalMatchPct`% do jogo da liga. Estadual
+      // (023 R7): pesa o peso dele para o clube (clube grande pode valorizar menos).
+      const reputation = context.world.clubs.find((entry) => entry.id === clubId)?.reputation ?? 0;
+      const weight =
+        competition === undefined
+          ? 100
+          : competition.regional !== undefined
+            ? regionalWeightFor({ reputation }, competition)
+            : isInternational(competition)
+              ? rules.continentalMatchPct
+              : 100;
       const base = resultFactor(rules, matchResultFor(context.world, record, clubId));
       const factor =
         weight === 100 ? base : { ...base, amount: Math.trunc((base.amount * weight) / 100) };

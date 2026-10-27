@@ -22,6 +22,9 @@ novo, use estes termos; ao traduzir, mantenha a mesma distinção entre eles.
 | **supercopa** | a final única entre os campeões de duas competições | — |
 | **competição entre países** | a competição sem país, com clubes de vários países, no formato de mod (`countryId` ausente); no jogo, "competição continental" | competição internacional (soa a seleções) |
 | **continental maior / menor** | as duas competições continentais: a maior leva os melhores clubes; a menor recebe os de fora e quem desce da maior; não confundir com "competição principal do país" (a liga do país) | continental principal / secundária |
+| **estadual** | a competição regional de um país, ligada a uma região (`regional` no formato de mod), com duas divisões em fases; disputada no começo da temporada, antes das competições nacionais | campeonato regional, liga estadual |
+| **clube regional** | o clube que só joga divisões de estadual, sem divisão nacional; é controlado pela IA e o jogador não o escolhe | clube amador, clube pequeno |
+| **região** | o estado do clube (`club.region`), que o liga ao estadual dele; o mesmo campo usado pela regra de sorteio dos grupos | estado do clube, UF |
 | **ligação** | a regra que leva clubes de uma fase de uma competição a uma fase de outra durante a temporada (`dropIns`) | descida, repescagem |
 | **técnico** | o papel do jogador ("Você é o técnico", "Carreira do técnico") | treinador (só no nome do jogo) |
 | **clube** | a instituição: elenco, finanças, diretoria, torcida, escudo | time, para a instituição |

@@ -74,6 +74,16 @@ export interface BoardRules {
   continentalMidPct: number;
   continentalMet: number;
   continentalMiss: number;
+  /**
+   * Estadual (023): o clube no tercil de cima da reputação da divisão espera a final (até
+   * `regionalTopPct`%), o do meio o mata-mata (até `regionalMidPct`%) e os demais passar do grupo;
+   * meta cumprida dá `regionalMet` à confiança, perdida tira `regionalMiss`, ambos × o peso do
+   * estadual para o clube.
+   */
+  regionalTopPct: number;
+  regionalMidPct: number;
+  regionalMet: number;
+  regionalMiss: number;
 }
 
 export const DEFAULT_BOARD: BoardRules = {
@@ -131,6 +141,10 @@ export const DEFAULT_BOARD: BoardRules = {
   continentalMidPct: 67,
   continentalMet: 5,
   continentalMiss: 5,
+  regionalTopPct: 34,
+  regionalMidPct: 67,
+  regionalMet: 4,
+  regionalMiss: 4,
 };
 
 /** Regras da diretoria: `competition.board` com os padrões preenchidos. */

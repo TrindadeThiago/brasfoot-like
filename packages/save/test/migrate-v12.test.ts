@@ -32,7 +32,7 @@ describe("migração v11 → v12 (017 R12, FR-040 a FR-042, critério de aceite 
     "%s: abre na mesma rodada, com o mesmo histórico",
     (_label, step) => {
       const { save, v11 } = migrated(step);
-      expect(save.formatVersion).toBe(17);
+      expect(save.formatVersion).toBe(18);
       const {
         formatVersion: _v,
         competitions: _c,
@@ -102,7 +102,7 @@ describe("migração v11 → v12 (017 R12, FR-040 a FR-042, critério de aceite 
     const result = importSave(bytes);
     if (result.status !== "ok") throw new Error(JSON.stringify(result));
     expect(result.migratedFrom).toBe(11);
-    expect(result.save.formatVersion).toBe(17);
+    expect(result.save.formatVersion).toBe(18);
     expect(calendarNext(seasonStateOf(result.save))).toBe(5);
   }, 120_000);
 

@@ -151,7 +151,7 @@ export type {
   TurnoverResult,
   TurnoverStep,
 } from "./career/types";
-export { clubCampaign } from "./continental/campaign";
+export { clubCampaign, competitionCampaign } from "./continental/campaign";
 export { sealDropIns } from "./continental/dropins";
 export { continentalEdition } from "./continental/history";
 export {
@@ -540,6 +540,16 @@ export type {
   QualificationResult,
 } from "./qualification/types";
 export { berthZones } from "./qualification/zones";
+export { regionalEdition, regionalEditions } from "./regional/history";
+export {
+  isRegional,
+  isRegionalOnly,
+  regionalCompetitionOf,
+  regionalCompetitions,
+  regionalDivisionOf,
+} from "./regional/scope";
+export type { RegionalDivisionResult, RegionalEdition } from "./regional/types";
+export { REGIONAL_DEFAULT_WEIGHT, regionalWeightFor, weighted } from "./regional/weight";
 export {
   evolutionDelta,
   evolvePlayers,
@@ -705,6 +715,7 @@ export type { GenerateOptions } from "./worldgen/generate";
 export { generateDefaultBank } from "./worldgen/generate";
 export { completeHiddenAttributes } from "./worldgen/hidden";
 export { DISTRIBUTION_LIMITS, REPUTATION_TIERS, tierOf } from "./worldgen/limits";
+export { generateRegionalBank, type RegionalBankOptions } from "./worldgen/regional";
 export { generateRivalries } from "./worldgen/rivalries";
 export type { StagesBankOptions } from "./worldgen/stages-example";
 export { generateStagesBank, STAGES_REGION_SIZES } from "./worldgen/stages-example";

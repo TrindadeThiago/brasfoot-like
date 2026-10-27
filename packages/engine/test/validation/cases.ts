@@ -14,6 +14,7 @@ import type {
 } from "../../src/model/types";
 import type { IssueCode, IssueParams, Section } from "../../src/validation/issues";
 import { CONTINENTAL_IDS } from "../../src/worldgen/continental";
+import { generateRegionalBank } from "../../src/worldgen/regional";
 import { generateWorldBank } from "../../src/worldgen/world-example";
 import { regionalPackage } from "../fixtures/stages-bank";
 import { at, leagueFormatOf, makeValidBank, removeField, setRaw } from "../helpers/build-bank";
@@ -187,6 +188,22 @@ function secondCountry(bank: ModPackage): void {
 const division = (bank: ModPackage, index: number) => at(at(bank.competitions, 0).divisions, index);
 
 /** Banco de 5 países com as competições continentais maior e menor ligadas por `dropIns` (022). */
+/** Banco com 2 estaduais (023): o primeiro estadual está no índice 1, o segundo no 2. */
+function regionalBank(): ModPackage {
+  return JSON.parse(JSON.stringify(generateRegionalBank({ seed: "cases-regional", states: 2 })));
+}
+
+const REGIONAL_FIRST = 1;
+const REGIONAL_PROBE = regionalBank();
+const REGIONAL_FIRST_CLUB = (REGIONAL_PROBE.competitions[REGIONAL_FIRST] as Competition)
+  .divisions[0]?.clubIds[0] as string;
+const REGIONAL_FIRST_REGION = (REGIONAL_PROBE.competitions[REGIONAL_FIRST] as Competition).regional
+  ?.region as string;
+const REGIONAL_CLUB_ZERO = REGIONAL_PROBE.clubs[0]?.id as string;
+const REGIONAL_COUNTRY = REGIONAL_PROBE.clubs[0]?.countryId as string;
+// Última rodada do estadual: 7 domingos a partir do primeiro domingo da temporada.
+const REGIONAL_LAST_DATE = "2027-02-14";
+
 function compactContinental(): ModPackage {
   return JSON.parse(
     JSON.stringify(
@@ -1605,6 +1622,180 @@ export const RULE_CASES: RuleCase[] = [
       path: [MAJOR_INDEX, "awards", "reputation", 1],
       entityId: CONTINENTAL_IDS.major,
       params: { competitionId: CONTINENTAL_IDS.major, index: 1 },
+    },
+  },
+  {
+    code: "regional.needs_country",
+    description: "estadual sem país",
+    mutate: (bank) => {
+      Object.assign(bank, regionalBank());
+      delete (bank.competitions[REGIONAL_FIRST] as { countryId?: string }).countryId;
+    },
+    expect: {
+      section: "competitions",
+      path: [REGIONAL_FIRST, "regional"],
+      entityId: "estadual-01",
+      params: { competitionId: "estadual-01" },
+    },
+  },
+  {
+    code: "regional.divisions_count",
+    description: "estadual com uma divisão só",
+    mutate: (bank) => {
+      Object.assign(bank, regionalBank());
+      const competition = bank.competitions[REGIONAL_FIRST] as Competition;
+      competition.divisions = competition.divisions.slice(0, 1);
+    },
+    expect: {
+      section: "competitions",
+      path: [REGIONAL_FIRST, "divisions"],
+      entityId: "estadual-01",
+      params: { competitionId: "estadual-01", count: 1 },
+    },
+  },
+  {
+    code: "regional.stages_missing",
+    description: "divisão do estadual só com a fase de grupos",
+    mutate: (bank) => {
+      Object.assign(bank, regionalBank());
+      const division = (bank.competitions[REGIONAL_FIRST] as Competition).divisions[0];
+      if (division) division.stages = (division.stages ?? []).slice(0, 1);
+    },
+    expect: {
+      section: "competitions",
+      path: [REGIONAL_FIRST, "divisions", 0],
+      entityId: "estadual-01",
+      params: { competitionId: "estadual-01", level: 1, reason: "shape" },
+    },
+  },
+  {
+    code: "regional.club_region",
+    description: "clube do estadual de outra região",
+    mutate: (bank) => {
+      Object.assign(bank, regionalBank());
+      const competition = bank.competitions[REGIONAL_FIRST] as Competition;
+      const club = bank.clubs.find((entry) => entry.id === competition.divisions[0]?.clubIds[0]);
+      if (club) club.region = "Outra";
+    },
+    expect: {
+      section: "competitions",
+      path: [REGIONAL_FIRST, "divisions", 0, "clubIds", 0],
+      entityId: "estadual-01",
+      params: {
+        competitionId: "estadual-01",
+        clubId: REGIONAL_FIRST_CLUB,
+        region: REGIONAL_FIRST_REGION,
+      },
+    },
+  },
+  {
+    code: "regional.club_country",
+    description: "clube do estadual de outro país",
+    mutate: (bank) => {
+      Object.assign(bank, regionalBank());
+      const competition = bank.competitions[REGIONAL_FIRST] as Competition;
+      const club = bank.clubs.find((entry) => entry.id === competition.divisions[0]?.clubIds[0]);
+      if (club) club.countryId = "pais-x";
+    },
+    expect: {
+      section: "competitions",
+      path: [REGIONAL_FIRST, "divisions", 0, "clubIds", 0],
+      entityId: "estadual-01",
+      params: { competitionId: "estadual-01", clubId: REGIONAL_FIRST_CLUB },
+    },
+  },
+  {
+    code: "regional.club_without_region",
+    description: "país com estadual e clube sem região",
+    mutate: (bank) => {
+      Object.assign(bank, regionalBank());
+      delete (bank.clubs[0] as { region?: string }).region;
+    },
+    expect: {
+      section: "clubs",
+      path: [0, "region"],
+      entityId: REGIONAL_CLUB_ZERO,
+      params: { clubId: REGIONAL_CLUB_ZERO, countryId: REGIONAL_COUNTRY },
+    },
+  },
+  {
+    code: "regional.duplicate_region",
+    description: "dois estaduais para a mesma região",
+    mutate: (bank) => {
+      Object.assign(bank, regionalBank());
+      const first = bank.competitions[REGIONAL_FIRST] as Competition;
+      const second = bank.competitions[REGIONAL_FIRST + 1] as Competition;
+      if (first.regional && second.regional) second.regional.region = first.regional.region;
+    },
+    expect: {
+      section: "competitions",
+      path: [REGIONAL_FIRST + 1, "regional", "region"],
+      entityId: "estadual-02",
+      params: {
+        competitionId: "estadual-02",
+        region: REGIONAL_FIRST_REGION,
+        otherCompetitionId: "estadual-01",
+      },
+    },
+  },
+  {
+    code: "regional.promotion_exceeds_knockout",
+    description: "sobem mais clubes do que chegam ao mata-mata da 2ª divisão",
+    mutate: (bank) => {
+      Object.assign(bank, regionalBank());
+      const [first, second] = (bank.competitions[REGIONAL_FIRST] as Competition).divisions;
+      if (first && second) {
+        first.relegationSlots = 5;
+        second.promotionSlots = 5;
+      }
+    },
+    expect: {
+      section: "competitions",
+      path: [REGIONAL_FIRST, "divisions", 1, "promotionSlots"],
+      entityId: "estadual-01",
+      params: { competitionId: "estadual-01", promotion: 5, clubs: 4 },
+    },
+  },
+  {
+    code: "regional.weight_order",
+    description: "peso por reputação que não cresce",
+    mutate: (bank) => {
+      Object.assign(bank, regionalBank());
+      const regional = (bank.competitions[REGIONAL_FIRST] as Competition).regional;
+      if (regional) {
+        regional.weight = {
+          pct: 100,
+          byReputation: [
+            { from: 60, pct: 40 },
+            { from: 40, pct: 80 },
+          ],
+        };
+      }
+    },
+    expect: {
+      section: "competitions",
+      path: [REGIONAL_FIRST, "regional", "weight", "byReputation", 1],
+      entityId: "estadual-01",
+      params: { competitionId: "estadual-01", index: 1 },
+    },
+  },
+  {
+    code: "calendar.regional_after_national",
+    description: "liga nacional que começa antes de o estadual terminar",
+    mutate: (bank) => {
+      Object.assign(bank, regionalBank());
+      const league = bank.competitions[0] as Competition;
+      league.schedule = { ...league.schedule, startWeek: 2 };
+    },
+    expect: {
+      section: "competitions",
+      path: [REGIONAL_FIRST, "schedule"],
+      entityId: "estadual-01",
+      params: {
+        competitionId: "estadual-01",
+        nationalCompetitionId: "liga-nacional",
+        date: REGIONAL_LAST_DATE,
+      },
     },
   },
 ];

@@ -49,6 +49,7 @@ describe("virada financeira (US3, FR-011, FR-012, FR-025)", () => {
       "promotion-relegation",
       "resolve-qualification",
       "news-qualification",
+      "news-regional",
       "advance-year",
       "reset-season-stats",
       "generate-calendars",

@@ -1,5 +1,6 @@
 import { boardAfterContinental } from "../board/continental";
 import { managerClubOf } from "../board/create";
+import { boardAfterRegional } from "../board/regional";
 import { boardAfterCup, boardAfterExtraMatches } from "../board/round";
 import type { CalendarSlot } from "../calendar/season-calendar";
 import { competitionAwards } from "../continental/awards";
@@ -432,6 +433,23 @@ export function completeCareerDay(
       ),
     };
   }
+  if (next.board && extra.some((match) => isRegionalMatch(next.world, match))) {
+    // Meta do estadual (023 R7): avaliada quando a campanha de um clube termina.
+    next = {
+      ...next,
+      board: boardAfterRegional(
+        {
+          world: next.world,
+          league: next.league,
+          finances: next.finances,
+          board: next.board,
+          careerSeed,
+        },
+        [next.league, ...next.competitions],
+        Math.max(1, leagueRound(next.league) - 1),
+      ),
+    };
+  }
   if (awarded.length > 0) {
     next = { ...next, finances: applyCupPrizes(next.finances, next.league, awarded) };
   }
@@ -450,6 +468,13 @@ function matchMain(state: CareerSeasonState, match: DayMatch): LeagueSeason {
     return mainLeagueOfClub(state, match.fixture.home) ?? state.league;
   }
   return countryMain(state, match.competitionId);
+}
+
+/** O jogo é de um estadual (023)? */
+function isRegionalMatch(world: CompletedBank, match: DayMatch): boolean {
+  return (
+    world.competitions.find((entry) => entry.id === match.competitionId)?.regional !== undefined
+  );
 }
 
 /** Prêmios `awards` (022) dos jogos de uma rodada: compara cada divisão antes e depois dela. */
