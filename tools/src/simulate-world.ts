@@ -3,6 +3,7 @@
 // variedade de manchetes (014).
 // Uso: pnpm sim:world [--seed <seed>] [--seasons <n>]
 //      pnpm sim:world --scale [--countries <n>] [--seasons <n>] [--qualification] [--continental]
+//      pnpm sim:world --regional [--states <n>] [--seasons <n>]
 import { realpathSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
@@ -274,10 +275,12 @@ if (invokedDirectly) {
       economy: { type: "string" },
       qualification: { type: "boolean", default: false },
       continental: { type: "boolean", default: false },
+      regional: { type: "boolean", default: false },
+      states: { type: "string" },
     },
   });
   // `--continental` (022) usa o mundo grande, com a competição entre países.
-  if (values.scale || values.continental) {
+  if (values.scale || values.continental || values.regional) {
     // Mundo grande (020): vários países, tamanho do save, tempo e memória.
     const { runSimulateScale } = await import("./simulate-scale");
     const report = runSimulateScale({
@@ -287,6 +290,10 @@ if (invokedDirectly) {
       detail: values.detail === true,
       ...(values.qualification || values.continental ? { qualification: true } : {}),
       ...(values.continental ? { continental: "full" as const } : {}),
+      // Estaduais (023): `--regional [--states n]`, um país com a liga nacional e os estaduais.
+      ...(values.regional
+        ? { regional: { states: values.states ? Number(values.states) : 27 } }
+        : {}),
       ...(values.economy === "uniform" || values.economy === "varied"
         ? { economy: values.economy }
         : {}),

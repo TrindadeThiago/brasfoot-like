@@ -457,6 +457,10 @@ export const boardSchema = z
     continentalMidPct: intInRange(0, 100),
     continentalMet: intInRange(0, 100),
     continentalMiss: intInRange(0, 100),
+    regionalTopPct: intInRange(0, 100),
+    regionalMidPct: intInRange(0, 100),
+    regionalMet: intInRange(0, 100),
+    regionalMiss: intInRange(0, 100),
   })
   .partial();
 
@@ -491,6 +495,9 @@ const headlineMap = (max: number) =>
       continentalEliminated: intInRange(0, max),
       continentalChampion: intInRange(0, max),
       continentalRout: intInRange(0, max),
+      regionalChampion: intInRange(0, max),
+      regionalPromoted: intInRange(0, max),
+      regionalRelegated: intInRange(0, max),
     })
     .partial();
 
@@ -578,6 +585,20 @@ const fitnessSchema = z
   })
   .partial();
 
+/**
+ * Competição regional, o estadual (023 R1, R7): a região dos clubes e o peso na carreira.
+ * `pct` é o peso base (100 = normal); `byReputation` troca o peso pela faixa de reputação do clube.
+ */
+export const regionalSchema = z.object({
+  region: text(1, 40),
+  weight: z
+    .object({
+      pct: intInRange(0, 200).optional(),
+      byReputation: list(z.object({ from: scale, pct: intInRange(0, 200) }), 0, 8).optional(),
+    })
+    .optional(),
+});
+
 export const competitionSchema = z.object({
   id,
   /** Ausente = competição entre países (022 R1). */
@@ -594,6 +615,8 @@ export const competitionSchema = z.object({
   discipline: disciplineSchema.optional(),
   fitness: fitnessSchema.optional(),
   awards: awardsSchema.optional(),
+  /** Estadual (023): ligado a uma região; nunca é a competição principal do país. */
+  regional: regionalSchema.optional(),
 });
 
 export const crestSchema = z.object({

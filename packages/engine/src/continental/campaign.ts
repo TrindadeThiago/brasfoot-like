@@ -73,14 +73,16 @@ function ladder(world: CompletedBank, season: Season): Reached[] {
   return rungs;
 }
 
-export function clubCampaign(
+export function competitionCampaign(
   state: CampaignState,
   competitionId: string,
   clubId: string,
 ): ClubCampaign | undefined {
   const leagues = [state.league, ...state.competitions];
   const league = leagues.find((entry) => entry.competitionId === competitionId);
-  const season = league?.divisions[0];
+  // Competição de várias divisões (estadual, 023): a divisão do clube; senão, a única.
+  const season =
+    league?.divisions.find((entry) => entry.clubIds.includes(clubId)) ?? league?.divisions[0];
   if (!league || !season) return undefined;
   const reached = reachedByClub(state.world, season).get(clubId);
   if (!reached && !season.clubIds.includes(clubId)) return undefined;
@@ -143,3 +145,6 @@ export function clubCampaign(
       : [];
   return { competitionId, clubId, reached: level, status, matches, next, awards, remaining };
 }
+
+/** Nome da 022: a campanha de um clube numa competição entre países. */
+export const clubCampaign = competitionCampaign;

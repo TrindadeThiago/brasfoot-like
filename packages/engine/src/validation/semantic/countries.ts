@@ -16,6 +16,8 @@ export function mainCompetitions(
   for (const item of context.competitions) {
     // Competição entre países (022) não é a principal de nenhum país.
     if (item.value.countryId === undefined) continue;
+    // O estadual (023) também não: a liga do país pode vir depois dele no arquivo.
+    if (item.value.regional !== undefined) continue;
     if (!mains.has(item.value.countryId)) mains.set(item.value.countryId, item);
   }
   return mains;

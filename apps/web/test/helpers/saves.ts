@@ -9,8 +9,10 @@ import {
   completeCareerRound,
   createBoard,
   finishRound,
+  generateRegionalBank,
   generateWorldBank,
   isLeagueSeasonOver,
+  isRegionalOnly,
   joinBankFiles,
   type ModPackage,
   startLeagueRound,
@@ -314,6 +316,50 @@ export function continentalSave(id: string, participant = true): SaveFile {
 /** Joga o dia a dia da carreira continental até o fim da temporada (ainda sem virar). */
 export function playedContinentalSeason(id: string, days?: number, participant = true): SaveFile {
   let save = continentalSave(id, participant);
+  for (
+    let played = 0;
+    !isCareerSeasonOver(save) && (days === undefined || played < days);
+    played++
+  ) {
+    const result = completeCareerDay(seasonStateOf(save), save.seed, save.clubId, undefined, {
+      [save.clubId]: save.lineup,
+    });
+    if (!result.ok) throw new Error(JSON.stringify(result.error));
+    save = withDayResult(save, result.state);
+  }
+  return save;
+}
+
+let regionalBase: SaveFile | undefined;
+
+/**
+ * Carreira num banco com estaduais (023): 3 estados de duas divisões, liga nacional de duas
+ * divisões depois deles; o técnico é de um clube nacional que também joga o estadual da região.
+ */
+export function regionalSave(id: string): SaveFile {
+  if (!regionalBase) {
+    const bank = JSON.parse(
+      JSON.stringify(generateRegionalBank({ seed: "estaduais-web", states: 3 })),
+    ) as ModPackage;
+    const club = bank.clubs.find((entry) => !isRegionalOnly(bank, entry.id));
+    const result = createSave({
+      id: "base-estadual",
+      now: "2026-10-27T12:00:00.000Z",
+      managerName: "Ana Souza",
+      clubId: club?.id as string,
+      seed: "teste-web-estadual",
+      defaultBank: bank,
+      noFiring: true,
+    });
+    if (!result.ok) throw new Error(JSON.stringify(result.error));
+    regionalBase = result.save;
+  }
+  return { ...structuredClone(regionalBase), id };
+}
+
+/** Joga o dia a dia da carreira com estaduais até `days` dias ou o fim da temporada. */
+export function playedRegionalSeason(id: string, days?: number): SaveFile {
+  let save = regionalSave(id);
   for (
     let played = 0;
     !isCareerSeasonOver(save) && (days === undefined || played < days);

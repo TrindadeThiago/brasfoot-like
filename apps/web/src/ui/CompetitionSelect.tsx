@@ -1,6 +1,6 @@
 "use client";
 
-import { mainCompetitionOf } from "@brasfoot-like/engine";
+import { mainCompetitionOf, regionalCompetitionOf } from "@brasfoot-like/engine";
 import type { SaveFile } from "@brasfoot-like/save";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -23,7 +23,14 @@ export function CompetitionSelect({
   const t = useT();
   const router = useRouter();
   const pathname = (usePathname() ?? "/jogo/competicao").replace(/\/+$/, "");
-  const competitions = save.bank.competitions;
+  // Estaduais (023): só o da região do clube do técnico (e o que está aberto) ao lado das nacionais.
+  const ownRegional = regionalCompetitionOf(save.bank, save.clubId)?.id;
+  const competitions = save.bank.competitions.filter(
+    (competition) =>
+      competition.regional === undefined ||
+      competition.id === ownRegional ||
+      competition.id === competitionId,
+  );
   // Competições entre países (022) não têm país: aparecem como abas ao lado das de cada país.
   const international = competitions.filter((competition) => competition.countryId === undefined);
   const countries = [

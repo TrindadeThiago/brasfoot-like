@@ -12,13 +12,14 @@ import type {
   MarketState,
   NewsState,
   QualificationRecord,
+  RegionalEdition,
   RenewalState,
   SeasonCalendar,
   SeasonHistoryEntry,
 } from "@brasfoot-like/engine";
 
 /** Versão atual do formato do save (Princípio VI). */
-export const SAVE_FORMAT_VERSION = 17;
+export const SAVE_FORMAT_VERSION = 18;
 
 export const MANAGER_NAME_MAX = 40;
 
@@ -54,6 +55,8 @@ export interface SaveFile {
   qualificationHistory?: QualificationRecord[];
   /** Edições encerradas das competições entre países (v17); ausente = nenhuma. */
   continentalHistory?: ContinentalEdition[];
+  /** Edições encerradas dos estaduais (v18); ausente = nenhuma. */
+  regionalHistory?: RegionalEdition[];
   /** Finanças de todos os clubes da competição (v4). */
   finances: FinanceState;
   /** Estado da renovação do mundo (v5). `bank` é o mundo vivo da carreira desde a 009. */

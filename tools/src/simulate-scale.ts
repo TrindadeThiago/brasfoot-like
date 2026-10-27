@@ -6,8 +6,10 @@ import {
   CONTINENTAL_LIMITS,
   type ContinentalSnapshot,
   completeCareerDay,
+  generateRegionalBank,
   generateWorldBank,
   isCountryMain,
+  isRegionalOnly,
   type ModPackage,
   measureContinental,
   measureWorld,
@@ -54,6 +56,8 @@ export interface SimulateScaleOptions {
   qualification?: boolean;
   /** Competição entre países (022): a taça continental maior, completa ou compacta. */
   continental?: "full" | "compact";
+  /** Estaduais (023): um país com a liga nacional e `states` estaduais de duas divisões. */
+  regional?: { states: number };
 }
 
 const NOW = "2026-10-24T12:00:00.000Z";
@@ -91,19 +95,25 @@ export interface ScaleReport {
 export function runSimulateScale(options: SimulateScaleOptions): ScaleReport {
   const started = performance.now();
   const bank = structuredClone(
-    generateWorldBank({
-      seed: options.seed,
-      countries: options.countries,
-      divisionsPerCountry: 2,
-      clubsPerDivision: 20,
-      cup: true,
-      ...(options.qualification ? { qualification: true } : {}),
-      ...(options.continental ? { continental: options.continental } : {}),
-      ...(options.international !== undefined ? { aiInternational: options.international } : {}),
-      ...(options.economy ? { economy: options.economy } : {}),
-    }),
+    options.regional
+      ? generateRegionalBank({ seed: options.seed, states: options.regional.states })
+      : generateWorldBank({
+          seed: options.seed,
+          countries: options.countries,
+          divisionsPerCountry: 2,
+          clubsPerDivision: 20,
+          cup: true,
+          ...(options.qualification ? { qualification: true } : {}),
+          ...(options.continental ? { continental: options.continental } : {}),
+          ...(options.international !== undefined
+            ? { aiInternational: options.international }
+            : {}),
+          ...(options.economy ? { economy: options.economy } : {}),
+        }),
   ) as ModPackage;
-  const first = bank.clubs.find((club) => club.countryId === bank.countries[0]?.id);
+  const first = options.regional
+    ? bank.clubs.find((club) => !isRegionalOnly(bank, club.id))
+    : bank.clubs.find((club) => club.countryId === bank.countries[0]?.id);
   const created = createSave({
     id: "escala",
     now: NOW,
@@ -116,7 +126,7 @@ export function runSimulateScale(options: SimulateScaleOptions): ScaleReport {
   if (!created.ok) throw new Error(JSON.stringify(created.error));
   let save = created.save;
   const lines = [
-    `Mundo grande — ${options.countries} países, ${bank.clubs.length} clubes, ${bank.players.length} jogadores, ${options.seasons} temporadas, seed "${options.seed}"`,
+    `${options.regional ? `Mundo com estaduais — ${options.regional.states} estados` : `Mundo grande — ${options.countries} países`}, ${bank.clubs.length} clubes, ${bank.players.length} jogadores, ${options.seasons} temporadas, seed "${options.seed}"`,
     "",
     "Temp.  dia(ms)  virada(ms)  início(MB)  última rodada(MB)  heap(MB)  problemas",
   ];
@@ -168,7 +178,7 @@ export function runSimulateScale(options: SimulateScaleOptions): ScaleReport {
       continentalStart = undefined;
     }
     const problems: string[] = [];
-    if (options.qualification) {
+    if (options.qualification || options.regional) {
       const state = seasonStateOf(save);
       for (const league of [state.league, ...state.competitions]) {
         const all = league.divisions.flatMap((division) => division.clubIds);

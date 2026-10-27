@@ -32,6 +32,9 @@ export const HEADLINE_TYPES = [
   "continentalEliminated",
   "continentalChampion",
   "continentalRout",
+  "regionalChampion",
+  "regionalPromoted",
+  "regionalRelegated",
 ] as const;
 export type HeadlineType = (typeof HEADLINE_TYPES)[number];
 

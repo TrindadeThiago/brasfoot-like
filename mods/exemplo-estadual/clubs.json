@@ -1,0 +1,1934 @@
+[
+  {
+    "abbreviation": "TAZ",
+    "city": "Trevo Azul",
+    "colors": {
+      "primary": "#8B5A2B",
+      "secondary": "#F47920"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#8B5A2B",
+        "#F47920"
+      ],
+      "initials": "AATA",
+      "shape": "classic"
+    },
+    "id": "clube-001",
+    "initialCash": 2040000,
+    "name": "Associação Atlética Trevo Azul",
+    "region": "Kerjemis",
+    "reputation": 44,
+    "shortName": "Trevo Azul",
+    "stadiumCapacity": 17000
+  },
+  {
+    "abbreviation": "AGA",
+    "city": "Arraial das Garças",
+    "colors": {
+      "primary": "#0033A0",
+      "secondary": "#000000"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#0033A0",
+        "#000000",
+        "#1D428A"
+      ],
+      "initials": "UEAG",
+      "shape": "triangle"
+    },
+    "id": "clube-002",
+    "initialCash": 3270000,
+    "name": "União Esportiva Arraial das Garças",
+    "region": "Jergelloan",
+    "reputation": 59,
+    "shortName": "Arraial das Garças",
+    "stadiumCapacity": 16500
+  },
+  {
+    "abbreviation": "BRE",
+    "city": "Brejamar",
+    "colors": {
+      "primary": "#00A3E0",
+      "secondary": "#F47920"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#00A3E0",
+        "#F47920",
+        "#004C45"
+      ],
+      "initials": "BEC",
+      "shape": "rectangle"
+    },
+    "id": "clube-003",
+    "initialCash": 10810000,
+    "name": "Brejamar Esporte Clube",
+    "region": "Vumoan",
+    "reputation": 88,
+    "shortName": "Brejamar",
+    "stadiumCapacity": 46000
+  },
+  {
+    "abbreviation": "CLE",
+    "city": "Cedral do Leste",
+    "colors": {
+      "primary": "#FFD100",
+      "secondary": "#C8102E"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#FFD100",
+        "#C8102E"
+      ],
+      "initials": "CLEC",
+      "shape": "triangle"
+    },
+    "id": "clube-004",
+    "initialCash": 3550000,
+    "name": "Cedral do Leste Esporte Clube",
+    "region": "Lulsilo",
+    "reputation": 61,
+    "shortName": "Cedral do Leste",
+    "stadiumCapacity": 21500
+  },
+  {
+    "abbreviation": "LMI",
+    "city": "Lagoa do Mirante",
+    "colors": {
+      "primary": "#004C45",
+      "secondary": "#8B5A2B"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#004C45",
+        "#8B5A2B",
+        "#1D428A"
+      ],
+      "initials": "ECLM",
+      "shape": "triangle"
+    },
+    "id": "clube-005",
+    "initialCash": 1630000,
+    "name": "Esporte Clube Lagoa do Mirante",
+    "region": "Lulsilo",
+    "reputation": 40,
+    "shortName": "Lagoa do Mirante",
+    "stadiumCapacity": 5000
+  },
+  {
+    "abbreviation": "BAL",
+    "city": "Barreiro Alto",
+    "colors": {
+      "primary": "#C8102E",
+      "secondary": "#1D428A"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#C8102E",
+        "#1D428A"
+      ],
+      "initials": "BAFC",
+      "shape": "classic"
+    },
+    "id": "clube-006",
+    "initialCash": 8610000,
+    "name": "Barreiro Alto Futebol Clube",
+    "region": "Lulsilo",
+    "reputation": 81,
+    "shortName": "Barreiro Alto",
+    "stadiumCapacity": 56500
+  },
+  {
+    "abbreviation": "BES",
+    "city": "Barra Estreita",
+    "colors": {
+      "primary": "#1D428A",
+      "secondary": "#FFD100"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#1D428A",
+        "#FFD100"
+      ],
+      "initials": "ECBE",
+      "shape": "round"
+    },
+    "id": "clube-007",
+    "initialCash": 3160000,
+    "name": "Esporte Clube Barra Estreita",
+    "region": "Lulsilo",
+    "reputation": 53,
+    "shortName": "Barra Estreita",
+    "stadiumCapacity": 14500
+  },
+  {
+    "abbreviation": "CNO",
+    "city": "Carnaubeira Nova",
+    "colors": {
+      "primary": "#FFD100",
+      "secondary": "#7A1F3D"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#FFD100",
+        "#7A1F3D"
+      ],
+      "initials": "ADCN",
+      "shape": "classic"
+    },
+    "id": "clube-008",
+    "initialCash": 10640000,
+    "name": "Associação Desportiva Carnaubeira Nova",
+    "region": "Kerjemis",
+    "reputation": 93,
+    "shortName": "Carnaubeira Nova",
+    "stadiumCapacity": 76000
+  },
+  {
+    "abbreviation": "QNO",
+    "city": "Queimada Nova",
+    "colors": {
+      "primary": "#9EA2A2",
+      "secondary": "#8B5A2B"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#9EA2A2",
+        "#8B5A2B",
+        "#FFFFFF"
+      ],
+      "initials": "QNEC",
+      "shape": "rectangle"
+    },
+    "id": "clube-009",
+    "initialCash": 2420000,
+    "name": "Queimada Nova Esporte Clube",
+    "region": "Jergelloan",
+    "reputation": 49,
+    "shortName": "Queimada Nova",
+    "stadiumCapacity": 15500
+  },
+  {
+    "abbreviation": "TGR",
+    "city": "Taboleiro Grande",
+    "colors": {
+      "primary": "#0033A0",
+      "secondary": "#006B3F"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#0033A0",
+        "#006B3F"
+      ],
+      "initials": "TGAC",
+      "shape": "rectangle"
+    },
+    "id": "clube-010",
+    "initialCash": 5170000,
+    "name": "Taboleiro Grande Atlético Clube",
+    "region": "Vumoan",
+    "reputation": 71,
+    "shortName": "Taboleiro Grande",
+    "stadiumCapacity": 21000
+  },
+  {
+    "abbreviation": "FDO",
+    "city": "Faxinal Dourado",
+    "colors": {
+      "primary": "#000000",
+      "secondary": "#F47920"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#000000",
+        "#F47920"
+      ],
+      "initials": "FDEC",
+      "shape": "classic"
+    },
+    "id": "clube-011",
+    "initialCash": 5830000,
+    "name": "Faxinal Dourado Esporte Clube",
+    "region": "Jergelloan",
+    "reputation": 73,
+    "shortName": "Faxinal Dourado",
+    "stadiumCapacity": 25000
+  },
+  {
+    "abbreviation": "VAC",
+    "city": "Vila das Acácias",
+    "colors": {
+      "primary": "#C8102E",
+      "secondary": "#5B2C83"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#C8102E",
+        "#5B2C83"
+      ],
+      "initials": "VAFR",
+      "shape": "rectangle"
+    },
+    "id": "clube-012",
+    "initialCash": 3790000,
+    "name": "Vila das Acácias Futebol e Regatas",
+    "region": "Lulsilo",
+    "reputation": 65,
+    "shortName": "Vila das Acácias",
+    "stadiumCapacity": 31000
+  },
+  {
+    "abbreviation": "RFU",
+    "city": "Ribeira Funda",
+    "colors": {
+      "primary": "#004C45",
+      "secondary": "#1D428A"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#004C45",
+        "#1D428A",
+        "#006B3F"
+      ],
+      "initials": "CARF",
+      "shape": "rectangle"
+    },
+    "id": "clube-013",
+    "initialCash": 9160000,
+    "name": "Clube Atlético Ribeira Funda",
+    "region": "Vumoan",
+    "reputation": 93,
+    "shortName": "Ribeira Funda",
+    "stadiumCapacity": 77000
+  },
+  {
+    "abbreviation": "LBR",
+    "city": "Lagoa Branca",
+    "colors": {
+      "primary": "#8B5A2B",
+      "secondary": "#0033A0"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#8B5A2B",
+        "#0033A0",
+        "#004C45"
+      ],
+      "initials": "LBAC",
+      "shape": "triangle"
+    },
+    "id": "clube-014",
+    "initialCash": 4390000,
+    "name": "Lagoa Branca Atlético Clube",
+    "region": "Kerjemis",
+    "reputation": 66,
+    "shortName": "Lagoa Branca",
+    "stadiumCapacity": 22000
+  },
+  {
+    "abbreviation": "VPR",
+    "city": "Vila Primavera",
+    "colors": {
+      "primary": "#C8102E",
+      "secondary": "#1D428A"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#C8102E",
+        "#1D428A",
+        "#5B2C83"
+      ],
+      "initials": "AAVP",
+      "shape": "rectangle"
+    },
+    "id": "clube-015",
+    "initialCash": 3920000,
+    "name": "Associação Atlética Vila Primavera",
+    "region": "Kerjemis",
+    "reputation": 61,
+    "shortName": "Vila Primavera",
+    "stadiumCapacity": 32000
+  },
+  {
+    "abbreviation": "TNO",
+    "city": "Tamboril do Norte",
+    "colors": {
+      "primary": "#C8102E",
+      "secondary": "#9EA2A2"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#C8102E",
+        "#9EA2A2"
+      ],
+      "initials": "SETN",
+      "shape": "classic"
+    },
+    "id": "clube-016",
+    "initialCash": 6270000,
+    "name": "Sociedade Esportiva Tamboril do Norte",
+    "region": "Vumoan",
+    "reputation": 71,
+    "shortName": "Tamboril do Norte",
+    "stadiumCapacity": 30000
+  },
+  {
+    "abbreviation": "IVE",
+    "city": "Itanhangá Velho",
+    "colors": {
+      "primary": "#8B5A2B",
+      "secondary": "#5B2C83"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#8B5A2B",
+        "#5B2C83"
+      ],
+      "initials": "UEIV",
+      "shape": "rectangle"
+    },
+    "id": "clube-017",
+    "initialCash": 2240000,
+    "name": "União Esportiva Itanhangá Velho",
+    "region": "Jergelloan",
+    "reputation": 52,
+    "shortName": "Itanhangá Velho",
+    "stadiumCapacity": 15500
+  },
+  {
+    "abbreviation": "AMA",
+    "city": "Água Mansa",
+    "colors": {
+      "primary": "#0033A0",
+      "secondary": "#00A3E0"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#0033A0",
+        "#00A3E0"
+      ],
+      "initials": "ÁMFR",
+      "shape": "rectangle"
+    },
+    "id": "clube-018",
+    "initialCash": 2240000,
+    "name": "Água Mansa Futebol e Regatas",
+    "region": "Kerjemis",
+    "reputation": 46,
+    "shortName": "Água Mansa",
+    "stadiumCapacity": 8000
+  },
+  {
+    "abbreviation": "PBR",
+    "city": "Pontal da Brisa",
+    "colors": {
+      "primary": "#FFD100",
+      "secondary": "#00A3E0"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#FFD100",
+        "#00A3E0",
+        "#C8102E"
+      ],
+      "initials": "CAPB",
+      "shape": "rectangle"
+    },
+    "id": "clube-019",
+    "initialCash": 9140000,
+    "name": "Clube Atlético Pontal da Brisa",
+    "region": "Jergelloan",
+    "reputation": 95,
+    "shortName": "Pontal da Brisa",
+    "stadiumCapacity": 57000
+  },
+  {
+    "abbreviation": "MAR",
+    "city": "Marisol",
+    "colors": {
+      "primary": "#0033A0",
+      "secondary": "#8B5A2B"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#0033A0",
+        "#8B5A2B",
+        "#1D428A"
+      ],
+      "initials": "ECM",
+      "shape": "triangle"
+    },
+    "id": "clube-020",
+    "initialCash": 4950000,
+    "name": "Esporte Clube Marisol",
+    "region": "Lulsilo",
+    "reputation": 71,
+    "shortName": "Marisol",
+    "stadiumCapacity": 21000
+  },
+  {
+    "abbreviation": "VAL",
+    "city": "Vereda Alta",
+    "colors": {
+      "primary": "#1D428A",
+      "secondary": "#0033A0"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#1D428A",
+        "#0033A0"
+      ],
+      "initials": "VACR",
+      "shape": "round"
+    },
+    "id": "clube-021",
+    "initialCash": 790000,
+    "name": "Vereda Alta Clube de Regatas",
+    "region": "Jergelloan",
+    "reputation": 25,
+    "shortName": "Vereda Alta",
+    "stadiumCapacity": 14500
+  },
+  {
+    "abbreviation": "SBO",
+    "city": "Salto Bonito",
+    "colors": {
+      "primary": "#FFFFFF",
+      "secondary": "#004C45"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#FFFFFF",
+        "#004C45"
+      ],
+      "initials": "SBCR",
+      "shape": "classic"
+    },
+    "id": "clube-022",
+    "initialCash": 3150000,
+    "name": "Salto Bonito Clube de Regatas",
+    "region": "Kerjemis",
+    "reputation": 53,
+    "shortName": "Salto Bonito",
+    "stadiumCapacity": 28500
+  },
+  {
+    "abbreviation": "ITA",
+    "city": "Itaquerema",
+    "colors": {
+      "primary": "#006B3F",
+      "secondary": "#00A3E0"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#006B3F",
+        "#00A3E0"
+      ],
+      "initials": "AAI",
+      "shape": "triangle"
+    },
+    "id": "clube-023",
+    "initialCash": 1250000,
+    "name": "Associação Atlética Itaquerema",
+    "region": "Vumoan",
+    "reputation": 33,
+    "shortName": "Itaquerema",
+    "stadiumCapacity": 17000
+  },
+  {
+    "abbreviation": "PSO",
+    "city": "Pedra do Sol",
+    "colors": {
+      "primary": "#F47920",
+      "secondary": "#FFFFFF"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#F47920",
+        "#FFFFFF"
+      ],
+      "initials": "ADPS",
+      "shape": "classic"
+    },
+    "id": "clube-024",
+    "initialCash": 570000,
+    "name": "Associação Desportiva Pedra do Sol",
+    "region": "Jergelloan",
+    "reputation": 26,
+    "shortName": "Pedra do Sol",
+    "stadiumCapacity": 16500
+  },
+  {
+    "abbreviation": "CAJ",
+    "city": "Cajarana",
+    "colors": {
+      "primary": "#C8102E",
+      "secondary": "#8B5A2B"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#C8102E",
+        "#8B5A2B"
+      ],
+      "initials": "CAC",
+      "shape": "rectangle"
+    },
+    "id": "clube-025",
+    "initialCash": 1380000,
+    "name": "Clube Atlético Cajarana",
+    "region": "Lulsilo",
+    "reputation": 34,
+    "shortName": "Cajarana",
+    "stadiumCapacity": 14000
+  },
+  {
+    "abbreviation": "CSU",
+    "city": "Coqueiral do Sul",
+    "colors": {
+      "primary": "#00A3E0",
+      "secondary": "#7A1F3D"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#00A3E0",
+        "#7A1F3D",
+        "#006B3F"
+      ],
+      "initials": "SECS",
+      "shape": "round"
+    },
+    "id": "clube-026",
+    "initialCash": 3250000,
+    "name": "Sociedade Esportiva Coqueiral do Sul",
+    "region": "Lulsilo",
+    "reputation": 58,
+    "shortName": "Coqueiral do Sul",
+    "stadiumCapacity": 17000
+  },
+  {
+    "abbreviation": "RVE",
+    "city": "Recanto Verde",
+    "colors": {
+      "primary": "#C8102E",
+      "secondary": "#FFD100"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#C8102E",
+        "#FFD100"
+      ],
+      "initials": "ADRV",
+      "shape": "round"
+    },
+    "id": "clube-027",
+    "initialCash": 970000,
+    "name": "Associação Desportiva Recanto Verde",
+    "region": "Kerjemis",
+    "reputation": 27,
+    "shortName": "Recanto Verde",
+    "stadiumCapacity": 14500
+  },
+  {
+    "abbreviation": "MAZ",
+    "city": "Morro Azulado",
+    "colors": {
+      "primary": "#FFD100",
+      "secondary": "#FFFFFF"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#FFD100",
+        "#FFFFFF"
+      ],
+      "initials": "MAAC",
+      "shape": "round"
+    },
+    "id": "clube-028",
+    "initialCash": 2530000,
+    "name": "Morro Azulado Atlético Clube",
+    "region": "Kerjemis",
+    "reputation": 48,
+    "shortName": "Morro Azulado",
+    "stadiumCapacity": 32500
+  },
+  {
+    "abbreviation": "PNO",
+    "city": "Piraquara Nova",
+    "colors": {
+      "primary": "#F47920",
+      "secondary": "#006B3F"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#F47920",
+        "#006B3F",
+        "#000000"
+      ],
+      "initials": "CAPN",
+      "shape": "classic"
+    },
+    "id": "clube-029",
+    "initialCash": 1960000,
+    "name": "Clube Atlético Piraquara Nova",
+    "region": "Vumoan",
+    "reputation": 41,
+    "shortName": "Piraquara Nova",
+    "stadiumCapacity": 17000
+  },
+  {
+    "abbreviation": "SCL",
+    "city": "Santa Clareira",
+    "colors": {
+      "primary": "#1D428A",
+      "secondary": "#FFD100"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#1D428A",
+        "#FFD100"
+      ],
+      "initials": "ECSC",
+      "shape": "triangle"
+    },
+    "id": "clube-030",
+    "initialCash": 610000,
+    "name": "Esporte Clube Santa Clareira",
+    "region": "Jergelloan",
+    "reputation": 26,
+    "shortName": "Santa Clareira",
+    "stadiumCapacity": 16000
+  },
+  {
+    "abbreviation": "VEN",
+    "city": "Ventosul",
+    "colors": {
+      "primary": "#C8102E",
+      "secondary": "#8B5A2B"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#C8102E",
+        "#8B5A2B"
+      ],
+      "initials": "AAV",
+      "shape": "triangle"
+    },
+    "id": "clube-031",
+    "initialCash": 3670000,
+    "name": "Associação Atlética Ventosul",
+    "region": "Kerjemis",
+    "reputation": 56,
+    "shortName": "Ventosul",
+    "stadiumCapacity": 24500
+  },
+  {
+    "abbreviation": "TAL",
+    "city": "Taquaruçu Alto",
+    "colors": {
+      "primary": "#C8102E",
+      "secondary": "#0033A0"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#C8102E",
+        "#0033A0"
+      ],
+      "initials": "TAAC",
+      "shape": "round"
+    },
+    "id": "clube-032",
+    "initialCash": 670000,
+    "name": "Taquaruçu Alto Atlético Clube",
+    "region": "Vumoan",
+    "reputation": 25,
+    "shortName": "Taquaruçu Alto",
+    "stadiumCapacity": 15000
+  },
+  {
+    "abbreviation": "SVE",
+    "city": "Serra do Vento",
+    "colors": {
+      "primary": "#006B3F",
+      "secondary": "#5B2C83"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#006B3F",
+        "#5B2C83"
+      ],
+      "initials": "AASV",
+      "shape": "classic"
+    },
+    "id": "clube-033",
+    "initialCash": 1320000,
+    "name": "Associação Atlética Serra do Vento",
+    "region": "Jergelloan",
+    "reputation": 40,
+    "shortName": "Serra do Vento",
+    "stadiumCapacity": 18000
+  },
+  {
+    "abbreviation": "CVE",
+    "city": "Catuípe Velha",
+    "colors": {
+      "primary": "#5B2C83",
+      "secondary": "#006B3F"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#5B2C83",
+        "#006B3F"
+      ],
+      "initials": "CVCR",
+      "shape": "classic"
+    },
+    "id": "clube-034",
+    "initialCash": 2380000,
+    "name": "Catuípe Velha Clube de Regatas",
+    "region": "Kerjemis",
+    "reputation": 43,
+    "shortName": "Catuípe Velha",
+    "stadiumCapacity": 13500
+  },
+  {
+    "abbreviation": "CMA",
+    "city": "Cachoeira Mansa",
+    "colors": {
+      "primary": "#1D428A",
+      "secondary": "#7A1F3D"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#1D428A",
+        "#7A1F3D"
+      ],
+      "initials": "UECM",
+      "shape": "round"
+    },
+    "id": "clube-035",
+    "initialCash": 1970000,
+    "name": "União Esportiva Cachoeira Mansa",
+    "region": "Lulsilo",
+    "reputation": 49,
+    "shortName": "Cachoeira Mansa",
+    "stadiumCapacity": 28500
+  },
+  {
+    "abbreviation": "VJA",
+    "city": "Vale do Jacuípe",
+    "colors": {
+      "primary": "#1D428A",
+      "secondary": "#006B3F"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#1D428A",
+        "#006B3F"
+      ],
+      "initials": "CAVJ",
+      "shape": "round"
+    },
+    "id": "clube-036",
+    "initialCash": 930000,
+    "name": "Clube Atlético Vale do Jacuípe",
+    "region": "Lulsilo",
+    "reputation": 26,
+    "shortName": "Vale do Jacuípe",
+    "stadiumCapacity": 9500
+  },
+  {
+    "abbreviation": "ALE",
+    "city": "Alvorada do Leste",
+    "colors": {
+      "primary": "#8B5A2B",
+      "secondary": "#7A1F3D"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#8B5A2B",
+        "#7A1F3D"
+      ],
+      "initials": "CAAL",
+      "shape": "round"
+    },
+    "id": "clube-037",
+    "initialCash": 1240000,
+    "name": "Clube Atlético Alvorada do Leste",
+    "region": "Vumoan",
+    "reputation": 31,
+    "shortName": "Alvorada do Leste",
+    "stadiumCapacity": 18000
+  },
+  {
+    "abbreviation": "ABO",
+    "city": "Alto Bonito",
+    "colors": {
+      "primary": "#0033A0",
+      "secondary": "#8B5A2B"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#0033A0",
+        "#8B5A2B",
+        "#1D428A"
+      ],
+      "initials": "ABFR",
+      "shape": "triangle"
+    },
+    "id": "clube-038",
+    "initialCash": 1040000,
+    "name": "Alto Bonito Futebol e Regatas",
+    "region": "Vumoan",
+    "reputation": 30,
+    "shortName": "Alto Bonito",
+    "stadiumCapacity": 16000
+  },
+  {
+    "abbreviation": "JUR",
+    "city": "Juruaré",
+    "colors": {
+      "primary": "#7A1F3D",
+      "secondary": "#5B2C83"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#7A1F3D",
+        "#5B2C83"
+      ],
+      "initials": "ECJ",
+      "shape": "round"
+    },
+    "id": "clube-039",
+    "initialCash": 2380000,
+    "name": "Esporte Clube Juruaré",
+    "region": "Vumoan",
+    "reputation": 43,
+    "shortName": "Juruaré",
+    "stadiumCapacity": 17500
+  },
+  {
+    "abbreviation": "PVE",
+    "city": "Pinhal Velho",
+    "colors": {
+      "primary": "#1D428A",
+      "secondary": "#7A1F3D"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#1D428A",
+        "#7A1F3D"
+      ],
+      "initials": "ADPV",
+      "shape": "classic"
+    },
+    "id": "clube-040",
+    "initialCash": 1630000,
+    "name": "Associação Desportiva Pinhal Velho",
+    "region": "Jergelloan",
+    "reputation": 43,
+    "shortName": "Pinhal Velho",
+    "stadiumCapacity": 13000
+  },
+  {
+    "abbreviation": "AAH",
+    "city": "Nekan",
+    "colors": {
+      "primary": "#004C45",
+      "secondary": "#C8102E"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#004C45",
+        "#C8102E"
+      ],
+      "initials": "ECN",
+      "shape": "classic"
+    },
+    "id": "clube-r-0001",
+    "initialCash": 70000,
+    "name": "Esporte Clube Nekan",
+    "region": "Vumoan",
+    "reputation": 34,
+    "shortName": "Nekan",
+    "stadiumCapacity": 5000
+  },
+  {
+    "abbreviation": "AAO",
+    "city": "Ripompanan",
+    "colors": {
+      "primary": "#FFFFFF",
+      "secondary": "#1D428A"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#FFFFFF",
+        "#1D428A"
+      ],
+      "initials": "RAC",
+      "shape": "triangle"
+    },
+    "id": "clube-r-0002",
+    "initialCash": 50000,
+    "name": "Ripompanan Atlético Clube",
+    "region": "Vumoan",
+    "reputation": 26,
+    "shortName": "Ripompanan",
+    "stadiumCapacity": 1500
+  },
+  {
+    "abbreviation": "AAV",
+    "city": "Dujuka",
+    "colors": {
+      "primary": "#F47920",
+      "secondary": "#006B3F"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#F47920",
+        "#006B3F"
+      ],
+      "initials": "DFC",
+      "shape": "rectangle"
+    },
+    "id": "clube-r-0003",
+    "initialCash": 90000,
+    "name": "Dujuka Futebol Clube",
+    "region": "Vumoan",
+    "reputation": 29,
+    "shortName": "Dujuka",
+    "stadiumCapacity": 3000
+  },
+  {
+    "abbreviation": "ABC",
+    "city": "Juszusbedel",
+    "colors": {
+      "primary": "#1D428A",
+      "secondary": "#006B3F"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#1D428A",
+        "#006B3F"
+      ],
+      "initials": "AAJ",
+      "shape": "classic"
+    },
+    "id": "clube-r-0004",
+    "initialCash": 70000,
+    "name": "Associação Atlética Juszusbedel",
+    "region": "Vumoan",
+    "reputation": 25,
+    "shortName": "Juszusbedel",
+    "stadiumCapacity": 3000
+  },
+  {
+    "abbreviation": "ABJ",
+    "city": "Manpoljou",
+    "colors": {
+      "primary": "#9EA2A2",
+      "secondary": "#C8102E"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#9EA2A2",
+        "#C8102E"
+      ],
+      "initials": "MFC",
+      "shape": "classic"
+    },
+    "id": "clube-r-0005",
+    "initialCash": 30000,
+    "name": "Manpoljou Futebol Clube",
+    "region": "Vumoan",
+    "reputation": 16,
+    "shortName": "Manpoljou",
+    "stadiumCapacity": 6000
+  },
+  {
+    "abbreviation": "ABQ",
+    "city": "Jumkuknode",
+    "colors": {
+      "primary": "#8B5A2B",
+      "secondary": "#F47920"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#8B5A2B",
+        "#F47920"
+      ],
+      "initials": "JFC",
+      "shape": "triangle"
+    },
+    "id": "clube-r-0006",
+    "initialCash": 30000,
+    "name": "Jumkuknode Futebol Clube",
+    "region": "Vumoan",
+    "reputation": 18,
+    "shortName": "Jumkuknode",
+    "stadiumCapacity": 5500
+  },
+  {
+    "abbreviation": "ABX",
+    "city": "Naltamruris",
+    "colors": {
+      "primary": "#9EA2A2",
+      "secondary": "#5B2C83"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#9EA2A2",
+        "#5B2C83"
+      ],
+      "initials": "CAN",
+      "shape": "rectangle"
+    },
+    "id": "clube-r-0007",
+    "initialCash": 50000,
+    "name": "Clube Atlético Naltamruris",
+    "region": "Vumoan",
+    "reputation": 27,
+    "shortName": "Naltamruris",
+    "stadiumCapacity": 3000
+  },
+  {
+    "abbreviation": "ACE",
+    "city": "Jira",
+    "colors": {
+      "primary": "#004C45",
+      "secondary": "#5B2C83"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#004C45",
+        "#5B2C83"
+      ],
+      "initials": "CAJ",
+      "shape": "classic"
+    },
+    "id": "clube-r-0008",
+    "initialCash": 40000,
+    "name": "Clube Atlético Jira",
+    "region": "Vumoan",
+    "reputation": 23,
+    "shortName": "Jira",
+    "stadiumCapacity": 2000
+  },
+  {
+    "abbreviation": "ACL",
+    "city": "Permorzali",
+    "colors": {
+      "primary": "#F47920",
+      "secondary": "#004C45"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#F47920",
+        "#004C45"
+      ],
+      "initials": "PFER",
+      "shape": "triangle"
+    },
+    "id": "clube-r-0009",
+    "initialCash": 20000,
+    "name": "Permorzali Futebol e Regatas",
+    "region": "Vumoan",
+    "reputation": 18,
+    "shortName": "Permorzali",
+    "stadiumCapacity": 2500
+  },
+  {
+    "abbreviation": "ACS",
+    "city": "Juron",
+    "colors": {
+      "primary": "#004C45",
+      "secondary": "#000000"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#004C45",
+        "#000000"
+      ],
+      "initials": "AAJ",
+      "shape": "round"
+    },
+    "id": "clube-r-0010",
+    "initialCash": 30000,
+    "name": "Associação Atlética Juron",
+    "region": "Vumoan",
+    "reputation": 21,
+    "shortName": "Juron",
+    "stadiumCapacity": 5000
+  },
+  {
+    "abbreviation": "ACZ",
+    "city": "Lilfaskisis",
+    "colors": {
+      "primary": "#0033A0",
+      "secondary": "#7A1F3D"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#0033A0",
+        "#7A1F3D"
+      ],
+      "initials": "LFER",
+      "shape": "classic"
+    },
+    "id": "clube-r-0011",
+    "initialCash": 30000,
+    "name": "Lilfaskisis Futebol e Regatas",
+    "region": "Lulsilo",
+    "reputation": 23,
+    "shortName": "Lilfaskisis",
+    "stadiumCapacity": 5000
+  },
+  {
+    "abbreviation": "ADG",
+    "city": "Tira",
+    "colors": {
+      "primary": "#F47920",
+      "secondary": "#C8102E"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#F47920",
+        "#C8102E"
+      ],
+      "initials": "CAT",
+      "shape": "rectangle"
+    },
+    "id": "clube-r-0012",
+    "initialCash": 140000,
+    "name": "Clube Atlético Tira",
+    "region": "Lulsilo",
+    "reputation": 36,
+    "shortName": "Tira",
+    "stadiumCapacity": 2000
+  },
+  {
+    "abbreviation": "ADN",
+    "city": "Kini",
+    "colors": {
+      "primary": "#7A1F3D",
+      "secondary": "#8B5A2B"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#7A1F3D",
+        "#8B5A2B"
+      ],
+      "initials": "ECK",
+      "shape": "round"
+    },
+    "id": "clube-r-0013",
+    "initialCash": 80000,
+    "name": "Esporte Clube Kini",
+    "region": "Lulsilo",
+    "reputation": 30,
+    "shortName": "Kini",
+    "stadiumCapacity": 4000
+  },
+  {
+    "abbreviation": "ADU",
+    "city": "Ledsuro",
+    "colors": {
+      "primary": "#006B3F",
+      "secondary": "#5B2C83"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#006B3F",
+        "#5B2C83"
+      ],
+      "initials": "AAL",
+      "shape": "rectangle"
+    },
+    "id": "clube-r-0014",
+    "initialCash": 50000,
+    "name": "Associação Atlética Ledsuro",
+    "region": "Lulsilo",
+    "reputation": 21,
+    "shortName": "Ledsuro",
+    "stadiumCapacity": 4500
+  },
+  {
+    "abbreviation": "AEB",
+    "city": "Boris",
+    "colors": {
+      "primary": "#006B3F",
+      "secondary": "#FFD100"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#006B3F",
+        "#FFD100"
+      ],
+      "initials": "BFC",
+      "shape": "round"
+    },
+    "id": "clube-r-0015",
+    "initialCash": 40000,
+    "name": "Boris Futebol Clube",
+    "region": "Lulsilo",
+    "reputation": 24,
+    "shortName": "Boris",
+    "stadiumCapacity": 5000
+  },
+  {
+    "abbreviation": "AEI",
+    "city": "Disselkekel",
+    "colors": {
+      "primary": "#F47920",
+      "secondary": "#7A1F3D"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#F47920",
+        "#7A1F3D"
+      ],
+      "initials": "AAD",
+      "shape": "triangle"
+    },
+    "id": "clube-r-0016",
+    "initialCash": 100000,
+    "name": "Associação Atlética Disselkekel",
+    "region": "Lulsilo",
+    "reputation": 36,
+    "shortName": "Disselkekel",
+    "stadiumCapacity": 3000
+  },
+  {
+    "abbreviation": "AEP",
+    "city": "Hanzase",
+    "colors": {
+      "primary": "#FFFFFF",
+      "secondary": "#8B5A2B"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#FFFFFF",
+        "#8B5A2B"
+      ],
+      "initials": "ECH",
+      "shape": "round"
+    },
+    "id": "clube-r-0017",
+    "initialCash": 70000,
+    "name": "Esporte Clube Hanzase",
+    "region": "Lulsilo",
+    "reputation": 27,
+    "shortName": "Hanzase",
+    "stadiumCapacity": 5000
+  },
+  {
+    "abbreviation": "AEW",
+    "city": "Palkunnia",
+    "colors": {
+      "primary": "#000000",
+      "secondary": "#C8102E"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#000000",
+        "#C8102E"
+      ],
+      "initials": "PEC",
+      "shape": "triangle"
+    },
+    "id": "clube-r-0018",
+    "initialCash": 70000,
+    "name": "Palkunnia Esporte Clube",
+    "region": "Lulsilo",
+    "reputation": 31,
+    "shortName": "Palkunnia",
+    "stadiumCapacity": 4000
+  },
+  {
+    "abbreviation": "AFD",
+    "city": "Pedraar",
+    "colors": {
+      "primary": "#8B5A2B",
+      "secondary": "#5B2C83"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#8B5A2B",
+        "#5B2C83"
+      ],
+      "initials": "PAC",
+      "shape": "triangle"
+    },
+    "id": "clube-r-0019",
+    "initialCash": 60000,
+    "name": "Pedraar Atlético Clube",
+    "region": "Lulsilo",
+    "reputation": 26,
+    "shortName": "Pedraar",
+    "stadiumCapacity": 3000
+  },
+  {
+    "abbreviation": "AFK",
+    "city": "Zemvuhokel",
+    "colors": {
+      "primary": "#00A3E0",
+      "secondary": "#7A1F3D"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#00A3E0",
+        "#7A1F3D"
+      ],
+      "initials": "ZAC",
+      "shape": "triangle"
+    },
+    "id": "clube-r-0020",
+    "initialCash": 110000,
+    "name": "Zemvuhokel Atlético Clube",
+    "region": "Lulsilo",
+    "reputation": 37,
+    "shortName": "Zemvuhokel",
+    "stadiumCapacity": 5000
+  },
+  {
+    "abbreviation": "AFR",
+    "city": "Birar",
+    "colors": {
+      "primary": "#7A1F3D",
+      "secondary": "#FFD100"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#7A1F3D",
+        "#FFD100"
+      ],
+      "initials": "ADB",
+      "shape": "triangle"
+    },
+    "id": "clube-r-0021",
+    "initialCash": 10000,
+    "name": "Associação Desportiva Birar",
+    "region": "Kerjemis",
+    "reputation": 13,
+    "shortName": "Birar",
+    "stadiumCapacity": 2000
+  },
+  {
+    "abbreviation": "AFY",
+    "city": "Silsufuno",
+    "colors": {
+      "primary": "#5B2C83",
+      "secondary": "#9EA2A2"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#5B2C83",
+        "#9EA2A2"
+      ],
+      "initials": "SFC",
+      "shape": "classic"
+    },
+    "id": "clube-r-0022",
+    "initialCash": 130000,
+    "name": "Silsufuno Futebol Clube",
+    "region": "Kerjemis",
+    "reputation": 35,
+    "shortName": "Silsufuno",
+    "stadiumCapacity": 5500
+  },
+  {
+    "abbreviation": "AGF",
+    "city": "Vono",
+    "colors": {
+      "primary": "#C8102E",
+      "secondary": "#004C45"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#C8102E",
+        "#004C45"
+      ],
+      "initials": "AAV",
+      "shape": "triangle"
+    },
+    "id": "clube-r-0023",
+    "initialCash": 40000,
+    "name": "Associação Atlética Vono",
+    "region": "Kerjemis",
+    "reputation": 22,
+    "shortName": "Vono",
+    "stadiumCapacity": 3000
+  },
+  {
+    "abbreviation": "AGM",
+    "city": "Zau",
+    "colors": {
+      "primary": "#F47920",
+      "secondary": "#006B3F"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#F47920",
+        "#006B3F"
+      ],
+      "initials": "UEZ",
+      "shape": "rectangle"
+    },
+    "id": "clube-r-0024",
+    "initialCash": 40000,
+    "name": "União Esportiva Zau",
+    "region": "Kerjemis",
+    "reputation": 21,
+    "shortName": "Zau",
+    "stadiumCapacity": 5500
+  },
+  {
+    "abbreviation": "AGT",
+    "city": "Sospaku",
+    "colors": {
+      "primary": "#7A1F3D",
+      "secondary": "#00A3E0"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#7A1F3D",
+        "#00A3E0"
+      ],
+      "initials": "SEC",
+      "shape": "classic"
+    },
+    "id": "clube-r-0025",
+    "initialCash": 70000,
+    "name": "Sospaku Esporte Clube",
+    "region": "Kerjemis",
+    "reputation": 32,
+    "shortName": "Sospaku",
+    "stadiumCapacity": 4500
+  },
+  {
+    "abbreviation": "AHA",
+    "city": "Pulrimsesan",
+    "colors": {
+      "primary": "#1D428A",
+      "secondary": "#000000"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#1D428A",
+        "#000000"
+      ],
+      "initials": "PEC",
+      "shape": "triangle"
+    },
+    "id": "clube-r-0026",
+    "initialCash": 150000,
+    "name": "Pulrimsesan Esporte Clube",
+    "region": "Kerjemis",
+    "reputation": 38,
+    "shortName": "Pulrimsesan",
+    "stadiumCapacity": 4500
+  },
+  {
+    "abbreviation": "AHH",
+    "city": "Gomsalpana",
+    "colors": {
+      "primary": "#FFFFFF",
+      "secondary": "#F47920"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#FFFFFF",
+        "#F47920"
+      ],
+      "initials": "GCDR",
+      "shape": "triangle"
+    },
+    "id": "clube-r-0027",
+    "initialCash": 90000,
+    "name": "Gomsalpana Clube de Regatas",
+    "region": "Kerjemis",
+    "reputation": 35,
+    "shortName": "Gomsalpana",
+    "stadiumCapacity": 4500
+  },
+  {
+    "abbreviation": "AHO",
+    "city": "Fesduan",
+    "colors": {
+      "primary": "#7A1F3D",
+      "secondary": "#00A3E0"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#7A1F3D",
+        "#00A3E0"
+      ],
+      "initials": "FEC",
+      "shape": "rectangle"
+    },
+    "id": "clube-r-0028",
+    "initialCash": 70000,
+    "name": "Fesduan Esporte Clube",
+    "region": "Kerjemis",
+    "reputation": 31,
+    "shortName": "Fesduan",
+    "stadiumCapacity": 2500
+  },
+  {
+    "abbreviation": "AHV",
+    "city": "Pulkii",
+    "colors": {
+      "primary": "#FFD100",
+      "secondary": "#000000"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#FFD100",
+        "#000000"
+      ],
+      "initials": "AAP",
+      "shape": "triangle"
+    },
+    "id": "clube-r-0029",
+    "initialCash": 20000,
+    "name": "Associação Atlética Pulkii",
+    "region": "Kerjemis",
+    "reputation": 14,
+    "shortName": "Pulkii",
+    "stadiumCapacity": 1500
+  },
+  {
+    "abbreviation": "AIC",
+    "city": "Zaszalu",
+    "colors": {
+      "primary": "#004C45",
+      "secondary": "#00A3E0"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#004C45",
+        "#00A3E0"
+      ],
+      "initials": "AAZ",
+      "shape": "round"
+    },
+    "id": "clube-r-0030",
+    "initialCash": 20000,
+    "name": "Associação Atlética Zaszalu",
+    "region": "Kerjemis",
+    "reputation": 12,
+    "shortName": "Zaszalu",
+    "stadiumCapacity": 2500
+  },
+  {
+    "abbreviation": "AIJ",
+    "city": "Barjaka",
+    "colors": {
+      "primary": "#00A3E0",
+      "secondary": "#0033A0"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#00A3E0",
+        "#0033A0"
+      ],
+      "initials": "ADB",
+      "shape": "round"
+    },
+    "id": "clube-r-0031",
+    "initialCash": 20000,
+    "name": "Associação Desportiva Barjaka",
+    "region": "Jergelloan",
+    "reputation": 14,
+    "shortName": "Barjaka",
+    "stadiumCapacity": 2000
+  },
+  {
+    "abbreviation": "AIQ",
+    "city": "Losmimel",
+    "colors": {
+      "primary": "#0033A0",
+      "secondary": "#FFD100"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#0033A0",
+        "#FFD100"
+      ],
+      "initials": "LCDR",
+      "shape": "classic"
+    },
+    "id": "clube-r-0032",
+    "initialCash": 10000,
+    "name": "Losmimel Clube de Regatas",
+    "region": "Jergelloan",
+    "reputation": 12,
+    "shortName": "Losmimel",
+    "stadiumCapacity": 2500
+  },
+  {
+    "abbreviation": "AIX",
+    "city": "Nadjise",
+    "colors": {
+      "primary": "#8B5A2B",
+      "secondary": "#C8102E"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#8B5A2B",
+        "#C8102E"
+      ],
+      "initials": "ECN",
+      "shape": "rectangle"
+    },
+    "id": "clube-r-0033",
+    "initialCash": 130000,
+    "name": "Esporte Clube Nadjise",
+    "region": "Jergelloan",
+    "reputation": 34,
+    "shortName": "Nadjise",
+    "stadiumCapacity": 5000
+  },
+  {
+    "abbreviation": "AJE",
+    "city": "Dalnikan",
+    "colors": {
+      "primary": "#FFFFFF",
+      "secondary": "#004C45"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#FFFFFF",
+        "#004C45"
+      ],
+      "initials": "DEC",
+      "shape": "classic"
+    },
+    "id": "clube-r-0034",
+    "initialCash": 40000,
+    "name": "Dalnikan Esporte Clube",
+    "region": "Jergelloan",
+    "reputation": 19,
+    "shortName": "Dalnikan",
+    "stadiumCapacity": 3000
+  },
+  {
+    "abbreviation": "AJL",
+    "city": "Lunpenkoi",
+    "colors": {
+      "primary": "#00A3E0",
+      "secondary": "#F47920"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#00A3E0",
+        "#F47920"
+      ],
+      "initials": "LFC",
+      "shape": "rectangle"
+    },
+    "id": "clube-r-0035",
+    "initialCash": 40000,
+    "name": "Lunpenkoi Futebol Clube",
+    "region": "Jergelloan",
+    "reputation": 20,
+    "shortName": "Lunpenkoi",
+    "stadiumCapacity": 4000
+  },
+  {
+    "abbreviation": "AJS",
+    "city": "Ruspofao",
+    "colors": {
+      "primary": "#FFD100",
+      "secondary": "#8B5A2B"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#FFD100",
+        "#8B5A2B"
+      ],
+      "initials": "AAR",
+      "shape": "rectangle"
+    },
+    "id": "clube-r-0036",
+    "initialCash": 80000,
+    "name": "Associação Atlética Ruspofao",
+    "region": "Jergelloan",
+    "reputation": 27,
+    "shortName": "Ruspofao",
+    "stadiumCapacity": 4500
+  },
+  {
+    "abbreviation": "AJZ",
+    "city": "Tilridar",
+    "colors": {
+      "primary": "#8B5A2B",
+      "secondary": "#006B3F"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#8B5A2B",
+        "#006B3F"
+      ],
+      "initials": "SET",
+      "shape": "round"
+    },
+    "id": "clube-r-0037",
+    "initialCash": 50000,
+    "name": "Sociedade Esportiva Tilridar",
+    "region": "Jergelloan",
+    "reputation": 28,
+    "shortName": "Tilridar",
+    "stadiumCapacity": 2500
+  },
+  {
+    "abbreviation": "AKG",
+    "city": "Josis",
+    "colors": {
+      "primary": "#0033A0",
+      "secondary": "#000000"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#0033A0",
+        "#000000"
+      ],
+      "initials": "JCDR",
+      "shape": "rectangle"
+    },
+    "id": "clube-r-0038",
+    "initialCash": 10000,
+    "name": "Josis Clube de Regatas",
+    "region": "Jergelloan",
+    "reputation": 13,
+    "shortName": "Josis",
+    "stadiumCapacity": 2000
+  },
+  {
+    "abbreviation": "AKN",
+    "city": "Timpadpolu",
+    "colors": {
+      "primary": "#C8102E",
+      "secondary": "#9EA2A2"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#C8102E",
+        "#9EA2A2"
+      ],
+      "initials": "SET",
+      "shape": "triangle"
+    },
+    "id": "clube-r-0039",
+    "initialCash": 70000,
+    "name": "Sociedade Esportiva Timpadpolu",
+    "region": "Jergelloan",
+    "reputation": 28,
+    "shortName": "Timpadpolu",
+    "stadiumCapacity": 3000
+  },
+  {
+    "abbreviation": "AKU",
+    "city": "Tontoninel",
+    "colors": {
+      "primary": "#0033A0",
+      "secondary": "#F47920"
+    },
+    "countryId": "val",
+    "crest": {
+      "colors": [
+        "#0033A0",
+        "#F47920"
+      ],
+      "initials": "UET",
+      "shape": "classic"
+    },
+    "id": "clube-r-0040",
+    "initialCash": 100000,
+    "name": "União Esportiva Tontoninel",
+    "region": "Jergelloan",
+    "reputation": 36,
+    "shortName": "Tontoninel",
+    "stadiumCapacity": 2500
+  }
+]

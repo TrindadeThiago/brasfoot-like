@@ -216,6 +216,7 @@ export function goalProgress(
   const club = context.finances.clubs[clubId];
   return {
     ...(goals.continental ? { continental: goals.continental } : {}),
+    ...(goals.regional ? { regional: goals.regional } : {}),
     sport: {
       tier: goals.sport.tier,
       required: goals.sport.position,

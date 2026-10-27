@@ -1,6 +1,12 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { completeCareerDay, generateStagesBank, generateWorldBank } from "@brasfoot-like/engine";
+import {
+  completeCareerDay,
+  generateRegionalBank,
+  generateStagesBank,
+  generateWorldBank,
+  isRegionalOnly,
+} from "@brasfoot-like/engine";
 import {
   advanceCareerSeason,
   createSave,
@@ -16,6 +22,7 @@ import {
   DEFAULT_MOD,
   EXAMPLE_MOD,
   modBank,
+  REGIONAL_MOD,
   STAGES_MOD,
   WORLD_MOD,
 } from "./fixtures";
@@ -259,5 +266,40 @@ describe("mod de exemplo das competições entre países (022)", () => {
     const turned = advanceCareerSeason(end, "2026-10-25T00:00:00.000Z");
     if (!turned.ok) throw new Error("virada");
     expect(turned.save.continentalHistory).toHaveLength(2);
+  }, 180_000);
+});
+
+describe("mod de exemplo dos estaduais (023)", () => {
+  const regional = modBank(REGIONAL_MOD);
+
+  it("é válido, igual ao que o gerador produz, com quatro estaduais de duas divisões", () => {
+    const result = readModPackage(writeModPackage(regional));
+    if (!result.ok) throw new Error(JSON.stringify(result.errors.slice(0, 3)));
+    const generated = generateRegionalBank({ seed: "estadual-exemplo-1", states: 4 });
+    expect(regional.competitions).toEqual(generated.competitions);
+    expect(regional.clubs).toEqual(generated.clubs);
+    const estaduais = regional.competitions.filter((entry) => entry.regional);
+    expect(estaduais).toHaveLength(4);
+    for (const estadual of estaduais) {
+      expect(estadual.divisions.map((division) => division.clubIds.length)).toEqual([12, 8]);
+    }
+  });
+
+  it("uma carreira joga o estadual e a liga e vira a temporada com a edição registrada", () => {
+    const national = regional.clubs.find((club) => !isRegionalOnly(regional, club.id));
+    const created = createSave({
+      id: "exemplo-estadual",
+      now: "2026-10-27T00:00:00.000Z",
+      managerName: "Ana",
+      clubId: national?.id ?? "",
+      seed: "exemplo-estadual",
+      defaultBank: regional,
+      noFiring: true,
+    });
+    if (!created.ok) throw new Error(JSON.stringify(created.error));
+    const end = playSeason(created.save);
+    const turned = advanceCareerSeason(end, "2026-10-27T00:00:00.000Z");
+    if (!turned.ok) throw new Error("virada");
+    expect(turned.save.regionalHistory).toHaveLength(4);
   }, 180_000);
 });

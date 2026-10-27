@@ -27,12 +27,13 @@
     "screenshots": "pnpm --filter @brasfoot-like/tools screenshots",
     "sim:size": "pnpm --filter @brasfoot-like/tools sim:size",
     "gen:world-mod": "pnpm --filter @brasfoot-like/tools gen:world-mod",
-    "gen:continental-mod": "pnpm --filter @brasfoot-like/tools gen:continental-mod"
+    "gen:continental-mod": "pnpm --filter @brasfoot-like/tools gen:continental-mod",
+    "gen:regional-mod": "pnpm --filter @brasfoot-like/tools gen:regional-mod"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",
     "typescript": "~6.0.3",
     "vitest": "^5.0.4"
   },
-  "version": "1.7.1"
+  "version": "1.8.0"
 }

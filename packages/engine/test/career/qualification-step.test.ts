@@ -10,7 +10,8 @@ describe("etapa resolve-qualification (021 R2)", () => {
     const ids = [...TURNOVER_STEP_IDS];
     expect(ids.indexOf("resolve-qualification")).toBe(ids.indexOf("promotion-relegation") + 1);
     expect(ids.indexOf("news-qualification")).toBe(ids.indexOf("resolve-qualification") + 1);
-    expect(ids.indexOf("advance-year")).toBe(ids.indexOf("news-qualification") + 1);
+    expect(ids.indexOf("news-regional")).toBe(ids.indexOf("news-qualification") + 1);
+    expect(ids.indexOf("advance-year")).toBe(ids.indexOf("news-regional") + 1);
   });
 
   it("a supercopa da temporada seguinte tem os participantes resolvidos e as origens", () => {
