@@ -24,12 +24,14 @@ Um mod é um arquivo `.zip` com estes arquivos na raiz (ou dentro de uma única 
 Todos os arquivos são JSON em UTF-8. Para começar, baixe o mod de exemplo na tela **Mods** do jogo
 (ou use `mods/exemplo` do repositório), altere os arquivos e compacte a pasta.
 
+Um exemplo grande, gerado por ferramenta, está descrito em [`mundo-completo.md`](mundo-completo.md).
+
 ### Limites
 
 | Limite | Valor |
 |---|---|
 | Pacote inteiro (`.zip`) | 20 MB |
-| Cada arquivo JSON | 10 MB |
+| Cada arquivo JSON | 16 MB |
 | Cada imagem | 200 KB |
 | Dimensões de uma imagem | até 512 × 512 pixels |
 | Soma das imagens | 5 MB |

@@ -45,8 +45,9 @@ export function simulationKindFor(
   focusClubId?: string,
 ): SimulationKind {
   const competition = state.world.competitions.find((entry) => entry.id === competitionId);
-  if (competition && competition.countryId === undefined) {
-    if (focusClubId === undefined) return "summary";
+  // Competição entre países (022) ou estadual (024): vale o clube em foco, completa se ele a disputa.
+  if (competition && (competition.countryId === undefined || competition.regional !== undefined)) {
+    if (focusClubId === undefined) return competition.regional !== undefined ? "full" : "summary";
     const season = [state.league, ...(state.competitions ?? [])].find(
       (entry) => entry.competitionId === competitionId,
     );

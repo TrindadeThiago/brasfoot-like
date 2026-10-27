@@ -212,8 +212,12 @@ function awardsFor(size: ContinentalSize): Awards {
  * na ordem de `countries`: os países mais fortes recebem mais vagas. O campeão anterior ocupa uma
  * vaga a mais para o país mais forte quando já se classificou pelo caminho nacional.
  */
-interface ContinentalInput {
+export interface ContinentalInput {
   size: ContinentalSize;
+  /** Ids das competições (024: uma dupla por confederação); padrão `CONTINENTAL_IDS`. */
+  ids?: { major: string; minor: string };
+  /** Nomes das competições; padrão "Taça Continental" e "Copa Complementar". */
+  names?: { major: string; minor: string };
   countries: readonly Country[];
   competitions: readonly Competition[];
   clubs: readonly Club[];
@@ -233,6 +237,8 @@ export function continentalMajor(input: ContinentalInput): Competition {
 }
 
 function buildMajor(input: ContinentalInput): { competition: Competition; plan: MajorPlan } {
+  const ids = input.ids ?? CONTINENTAL_IDS;
+  const names = input.names ?? { major: "Taça Continental", minor: "Copa Complementar" };
   const layout = LAYOUTS[input.size];
   const reputation = new Map(input.clubs.map((club) => [club.id, club.reputation]));
   const strongest = input.scales.reduce(
@@ -243,7 +249,9 @@ function buildMajor(input: ContinentalInput): { competition: Competition; plan: 
   const countries: CountrySlots[] = input.countries.map((country) => {
     const league = input.competitions.find(
       (competition) =>
-        competition.countryId === country.id && competition.format.type !== "knockout",
+        competition.countryId === country.id &&
+        competition.format.type !== "knockout" &&
+        competition.regional === undefined,
     ) as Competition;
     const cup = input.competitions.find(
       (competition) =>
@@ -356,7 +364,7 @@ function buildMajor(input: ContinentalInput): { competition: Competition; plan: 
   const strongestLeague = (countries[strongest] as CountrySlots).league;
   berths.push({
     id: "campeao-anterior",
-    source: { kind: "champion", competitionId: CONTINENTAL_IDS.major },
+    source: { kind: "champion", competitionId: ids.major },
     ...entry,
     fallback: [
       {
@@ -370,13 +378,13 @@ function buildMajor(input: ContinentalInput): { competition: Competition; plan: 
   });
 
   const competition: Competition = {
-    id: CONTINENTAL_IDS.major,
-    name: "Taça Continental",
+    id: ids.major,
+    name: names.major,
     format: { type: "stages", stages: stagesOf(input.size, entering) },
     divisions: [
       {
         level: 1,
-        name: "Taça Continental",
+        name: names.major,
         clubIds: [...clubIds].sort(),
         promotionSlots: 0,
         relegationSlots: 0,
@@ -403,6 +411,8 @@ const MINOR_LAYOUTS: Record<ContinentalSize, { total: number; late: number }> = 
  * 2ª fase, os terceiros colocados dos grupos da maior, que descem durante a temporada (`dropIns`).
  */
 function buildMinor(input: ContinentalInput, plan: MajorPlan): Competition {
+  const ids = input.ids ?? CONTINENTAL_IDS;
+  const names = input.names ?? { major: "Taça Continental", minor: "Copa Complementar" };
   const layout = MINOR_LAYOUTS[input.size];
   const { countries, strongest, weights } = plan;
   // Clubes livres de cada país: os que a competição maior não usa na primeira temporada.
@@ -432,7 +442,7 @@ function buildMinor(input: ContinentalInput, plan: MajorPlan): Competition {
         to: country.league.divisions[0]?.clubIds.length ?? 1,
       },
     ];
-    const forbid = [{ competitionId: CONTINENTAL_IDS.major, level: 1 }];
+    const forbid = [{ competitionId: ids.major, level: 1 }];
     const source = (from: number, to: number) =>
       ({ kind: "position", competitionId: country.league.id, level: 1, from, to }) as const;
     if (second > 0) {
@@ -475,13 +485,13 @@ function buildMinor(input: ContinentalInput, plan: MajorPlan): Competition {
     ...(entering.length > 0 ? { enter: [...entering].sort() } : {}),
   };
   return {
-    id: CONTINENTAL_IDS.minor,
-    name: "Copa Complementar",
+    id: ids.minor,
+    name: names.minor,
     format: { type: "stages", stages: [preliminary, final] },
     divisions: [
       {
         level: 1,
-        name: "Copa Complementar",
+        name: names.minor,
         clubIds: [...clubIds].sort(),
         promotionSlots: 0,
         relegationSlots: 0,
@@ -491,7 +501,7 @@ function buildMinor(input: ContinentalInput, plan: MajorPlan): Competition {
             id: "terceiros-dos-grupos",
             source: {
               kind: "position",
-              competitionId: CONTINENTAL_IDS.major,
+              competitionId: ids.major,
               stage: plan.groupsStage,
               from: 3,
               to: 3,

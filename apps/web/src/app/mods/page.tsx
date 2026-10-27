@@ -76,6 +76,19 @@ export default function ModsPage() {
           {t("mods.example")}
         </a>
       </div>
+      <section aria-label={t("mods.world")} className={styles.card}>
+        <h2>{t("mods.world")}</h2>
+        <p>{t("mods.world.description")}</p>
+        <ul className={styles.list}>
+          {(["reduzido", "medio", "completo"] as const).map((size) => (
+            <li key={size}>
+              <a href={`/mods/mundo-${size}.zip`} download={`mundo-${size}.zip`}>
+                {t(`mods.world.download.${size}`)}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
       <label className={styles.field}>
         <span>{t("mods.load")}</span>
         <input

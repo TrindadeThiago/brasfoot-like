@@ -1,6 +1,8 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { COMPACT_PROFILE, generateFootballWorld } from "@brasfoot-like/engine";
+import { writeModPackage } from "@brasfoot-like/modkit";
 import { afterEach, describe, expect, it } from "vitest";
 import { checkRelease } from "../src/check-release";
 
@@ -17,6 +19,11 @@ function fixture(edit?: (dir: string) => void): string {
     join(dir, "index.html"),
     '<html><head><title>Treinador FC</title><script>localStorage.getItem("brasfoot-like:preferences")</script></head><body>Treinador FC</body></html>',
   );
+  mkdirSync(join(dir, "mods"));
+  const world = writeModPackage(generateFootballWorld(COMPACT_PROFILE, "release"));
+  for (const size of ["reduzido", "medio", "completo"]) {
+    writeFileSync(join(dir, "mods", `mundo-${size}.zip`), world);
+  }
   mkdirSync(join(dir, "screenshots"));
   for (const name of ["a", "b", "c", "d"])
     writeFileSync(join(dir, "screenshots", `${name}.webp`), "");
@@ -33,6 +40,17 @@ afterEach(() => {
 describe("check-release (016)", () => {
   it("passa com o build completo (código interno pode citar o nome do repositório)", () => {
     expect(checkRelease({ ...base, outDir: fixture() })).toEqual([]);
+  });
+
+  it("falha sem o mod mundo completo ou com ele inválido", () => {
+    const missing = fixture((dir) => rmSync(join(dir, "mods", "mundo-completo.zip")));
+    expect(checkRelease({ ...base, outDir: missing })).toEqual([
+      "falta mods/mundo-completo.zip no build",
+    ]);
+    const broken = fixture((dir) =>
+      writeFileSync(join(dir, "mods", "mundo-completo.zip"), "não é um zip"),
+    );
+    expect(checkRelease({ ...base, outDir: broken })[0]).toContain("não passa na validação");
   });
 
   it("falha com tag diferente da versão e sem notas", () => {

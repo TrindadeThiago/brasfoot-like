@@ -1,5 +1,24 @@
 <!--
 Sync Impact Report
+- Versão: 1.1.0 → 1.2.0 (MINOR: ampliação material do Princípio IV)
+- Princípios modificados: IV. Nenhum Conteúdo Protegido (mesmo título)
+  - Antes: nenhum nome, escudo, marca ou imagem real de clube, jogador, competição ou entidade.
+  - Agora: o mesmo para clubes, jogadores, competições e entidades; nomes de lugares (países,
+    estados e cidades) NÃO são conteúdo protegido e PODEM ser os reais.
+- Seções adicionadas/removidas: nenhuma
+- Templates:
+  - ✅ .specify/templates/plan-template.md — gate IV com a ressalva dos lugares
+  - ✅ .specify/templates/tasks-template.md — sem mudança necessária
+  - ✅ .specify/templates/spec-template.md — sem mudança necessária
+  - ✅ docs/design.md §2 — estratégia de modding com a ressalva dos lugares
+  - ⚠ packages/engine/test/fixtures/blocklist.json e seus testes — serão reestruturados na 024 (T011, T012)
+- Motivo: a 024 (mod mundo completo) usa países, estados e cidades reais; clubes, competições e
+  jogadores seguem fictícios.
+- TODOs adiados: nenhum
+-->
+
+<!--
+Sync Impact Report
 - Versão: 1.0.0 → 1.1.0 (MINOR: mudança material na seção "Stack e Restrições Técnicas")
 - Princípios modificados: nenhum
 - Seção alterada: "Stack e Restrições Técnicas"
@@ -86,12 +105,16 @@ o mesmo motor na web e no desktop (Electron).
 
 - Nenhum nome, escudo, marca ou imagem real de clube, jogador, competição ou entidade PODE ser
   distribuído com o jogo ou incluído no repositório.
+- Nomes de lugares (países, estados e cidades) NÃO são conteúdo protegido e PODEM ser os reais;
+  nomes de clubes, competições e jogadores continuam fictícios, mesmo quando contêm o nome de um
+  lugar, desde que o nome inteiro não seja o de um clube ou competição real.
 - O banco padrão é fictício e DEVE usar exatamente o mesmo formato aberto e documentado dos
   mods ("o primeiro mod").
 - Escudos padrão são dados (cores, forma, iniciais) renderizados em SVG.
 - Nomes de competições ficam no mod, nunca nas traduções.
 
-**Razão:** segurança jurídica para publicar; a comunidade fornece nomes reais via mods.
+**Razão:** segurança jurídica para publicar; a comunidade fornece nomes reais via mods. Lugares são
+fatos geográficos, não marcas, e deixá-los reais torna o mundo reconhecível sem risco jurídico.
 
 ### V. Balanceamento Verificável
 
@@ -195,4 +218,4 @@ jogador.
 - Toda spec, plano e revisão de código DEVE verificar conformidade com os princípios;
   exceções são temporárias, justificadas por escrito e acompanhadas de plano de remoção.
 
-**Version**: 1.1.0 | **Ratified**: 2026-10-14 | **Last Amended**: 2026-10-14
+**Version**: 1.2.0 | **Ratified**: 2026-10-14 | **Last Amended**: 2026-10-27

@@ -1,10 +1,17 @@
 "use client";
 
-import { joinBankFiles, validateBank } from "@brasfoot-like/engine";
+import {
+  generateFootballWorld,
+  joinBankFiles,
+  profileOfSize,
+  validateBank,
+  WORLD_SIZES,
+  type WorldSize,
+} from "@brasfoot-like/engine";
 import { MANAGER_NAME_MAX } from "@brasfoot-like/save";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useEffect, useMemo, useState } from "react";
+import { type FormEvent, useDeferredValue, useEffect, useMemo, useState } from "react";
 import { defaultBankInput } from "../../game/default-bank";
 import { useGame } from "../../game/GameProvider";
 import { competitionClubs, type LeagueClub } from "../../game/selectors";
@@ -15,6 +22,16 @@ import { Button } from "../../ui/Button";
 import { Crest } from "../../ui/Crest";
 import { type Column, DataTable } from "../../ui/DataTable";
 import styles from "./page.module.css";
+
+/** Seed do mundo gerado quando o jogador não digita uma (024): o mesmo mundo para todos. */
+const WORLD_SEED = "mundo-completo-1";
+const WORLD_PREFIX = "mundo:";
+
+/** Tamanho de mundo escolhido no seletor de banco, ou nada se é o banco padrão ou um mod. */
+function worldSizeOf(bankId: string): WorldSize | undefined {
+  const size = bankId.startsWith(WORLD_PREFIX) ? bankId.slice(WORLD_PREFIX.length) : "";
+  return (WORLD_SIZES as readonly string[]).includes(size) ? (size as WorldSize) : undefined;
+}
 
 /** Clubes da competição do banco escolhido (padrão ou mod, 015). */
 function useCompetitionClubs(input: unknown): LeagueClub[] {
@@ -36,6 +53,31 @@ function countriesOf(clubs: readonly LeagueClub[]): { id: string; name: string }
   return [...countries].map(([id, name]) => ({ id, name }));
 }
 
+/**
+ * Grupo de cada país (024 US1): o nome da competição continental principal que o reúne com os outros
+ * países da confederação. Sem competições entre países, ninguém tem grupo e a lista fica plana.
+ */
+function groupsOf(bank: {
+  competitions?: readonly {
+    id: string;
+    name: string;
+    countryId?: string;
+    divisions: readonly { clubIds: readonly string[] }[];
+  }[];
+  clubs?: readonly { id: string; countryId: string }[];
+}): Map<string, string> {
+  const countryOfClub = new Map((bank.clubs ?? []).map((club) => [club.id, club.countryId]));
+  const groups = new Map<string, string>();
+  for (const competition of bank.competitions ?? []) {
+    if (competition.countryId !== undefined || !competition.id.endsWith("-maior")) continue;
+    for (const clubId of competition.divisions[0]?.clubIds ?? []) {
+      const country = countryOfClub.get(clubId);
+      if (country !== undefined && !groups.has(country)) groups.set(country, competition.name);
+    }
+  }
+  return groups;
+}
+
 /** Texto sem acento e em minúsculas, para a busca por nome. */
 function plain(text: string): string {
   return text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
@@ -52,10 +94,31 @@ export default function NewCareerPage() {
     void mods.list().then(setInstalled);
   }, [mods]);
   const mod = installed.find((entry) => entry.id === bankId);
-  const bankInput = useMemo(() => (mod ? joinBankFiles(mod.files) : defaultBankInput()), [mod]);
+  const worldSize = worldSizeOf(bankId);
+  const [seed, setSeed] = useState("");
+  // O mundo é gerado aqui, no navegador (024): a seed digitada muda o mundo, sem travar a digitação.
+  const worldSeed = useDeferredValue(seed.trim() || WORLD_SEED);
+  const bankInput = useMemo(
+    () =>
+      worldSize
+        ? generateFootballWorld(profileOfSize(worldSize), worldSeed)
+        : mod
+          ? joinBankFiles(mod.files)
+          : defaultBankInput(),
+    [mod, worldSize, worldSeed],
+  );
   const allClubs = useCompetitionClubs(bankInput);
   const countries = useMemo(() => countriesOf(allClubs), [allClubs]);
   const manyCountries = countries.length > 1;
+  const groups = useMemo(() => groupsOf(bankInput as Parameters<typeof groupsOf>[0]), [bankInput]);
+  const groupNames = useMemo(
+    () => [
+      ...new Set(
+        countries.map((c) => groups.get(c.id)).filter((g): g is string => g !== undefined),
+      ),
+    ],
+    [countries, groups],
+  );
   // "" = todos os países; padrão: o primeiro do banco (020).
   const [country, setCountry] = useState(countries[0]?.id ?? "");
   const [query, setQuery] = useState("");
@@ -81,7 +144,6 @@ export default function NewCareerPage() {
     );
   }, [ofCountry, division, query]);
   const [managerName, setManagerName] = useState("");
-  const [seed, setSeed] = useState("");
   const [noFiring, setNoFiring] = useState(false);
   const [clubId, setClubId] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();
@@ -164,7 +226,7 @@ export default function NewCareerPage() {
       clubId,
       seed,
       noFiring,
-      ...(mod ? { bank: bankInput, assets: mod.images } : {}),
+      ...(mod ? { bank: bankInput, assets: mod.images } : worldSize ? { bank: bankInput } : {}),
     });
     setCreating(false);
     if (!result.ok) {
@@ -210,6 +272,11 @@ export default function NewCareerPage() {
             <span>{t("newCareer.bank")}</span>
             <select value={bankId} onChange={(event) => setBankId(event.target.value)}>
               <option value="">{t("newCareer.defaultBank")}</option>
+              {WORLD_SIZES.map((size) => (
+                <option key={size} value={`${WORLD_PREFIX}${size}`}>
+                  {t(`newCareer.world.${size}`)}
+                </option>
+              ))}
               {installed.map((entry) => (
                 <option key={entry.id} value={entry.id}>
                   {entry.summary.name}
@@ -217,6 +284,9 @@ export default function NewCareerPage() {
               ))}
             </select>
           </label>
+          {worldSize ? (
+            <small className={styles.help}>{t(`newCareer.world.${worldSize}.help`)}</small>
+          ) : null}
           <Link href="/mods/">{t("nav.mods")}</Link>
           <h2>{t("newCareer.chooseClub")}</h2>
           {manyCountries ? (
@@ -229,11 +299,32 @@ export default function NewCareerPage() {
                   setClubId(undefined);
                 }}
               >
-                {countries.map((entry) => (
-                  <option key={entry.id} value={entry.id}>
-                    {entry.name}
-                  </option>
-                ))}
+                {groupNames.length > 1
+                  ? [
+                      ...countries
+                        .filter((entry) => !groups.has(entry.id))
+                        .map((entry) => (
+                          <option key={entry.id} value={entry.id}>
+                            {entry.name}
+                          </option>
+                        )),
+                      ...groupNames.map((group) => (
+                        <optgroup key={group} label={group}>
+                          {countries
+                            .filter((entry) => groups.get(entry.id) === group)
+                            .map((entry) => (
+                              <option key={entry.id} value={entry.id}>
+                                {entry.name}
+                              </option>
+                            ))}
+                        </optgroup>
+                      )),
+                    ]
+                  : countries.map((entry) => (
+                      <option key={entry.id} value={entry.id}>
+                        {entry.name}
+                      </option>
+                    ))}
                 <option value="">{t("newCareer.country.all")}</option>
               </select>
             </label>

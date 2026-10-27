@@ -10,7 +10,7 @@
 - **Diferencial em relação ao Brasfoot:**
   - **Base — UI moderna:** interface limpa, responsiva, atalhos de teclado, filtros e comparação de jogadores.
   - **Identidade — drama e narrativa:** manchetes, diretoria, torcida e rivalidades geram histórias.
-  - **Estratégia — modding de primeira classe:** a comunidade fornece nomes reais; o jogo não distribui nada protegido.
+  - **Estratégia — modding de primeira classe:** a comunidade fornece nomes reais de clubes, jogadores e competições; o jogo não distribui nada protegido (nomes de países, estados e cidades podem ser os reais).
 - **Publicação:** gratuito, sem monetização e sem anúncios. Distribuição via web estática + itch.io (Steam opcional, por visibilidade).
 - **Regra fixa:** nenhum nome, escudo ou marca real embutido no jogo.
 
@@ -166,6 +166,8 @@ separados por país e mata-mata, vagas por país vindas das ligas e copas, liga�
 temporada (terceiros dos grupos descem à menor), prêmios por fase e por vitória, bilheteria,
 reputação com teto, meta da diretoria, torcida, manchetes, histórico de campeões e campanha do
 clube. Saves v17 e `mods/exemplo-continental`.
+
+**M9 (024):** mod **mundo completo**: seis confederações (UEFA, CONMEBOL, CONCACAF, CAF, AFC e OFC), 44 países no perfil padrão, Brasil com 4 divisões e 27 estaduais, competições continentais por confederação, nomes de clubes, competições e jogadores fictícios em países, estados e cidades reais; ferramenta `pnpm gen:football-world`, perfil `compacto` para testes, planilhas (CSV) para nomes reais locais e download na página de Mods. Ver [`mundo-completo.md`](mundo-completo.md).
 
 **M9 (parcial, 023):** estaduais de duas divisões no começo da temporada, antes das nacionais:
 grupos, mata-mata em jogo único com mando do melhor campanha e final em ida e volta, acesso dos
