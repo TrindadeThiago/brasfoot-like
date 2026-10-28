@@ -268,9 +268,14 @@ export default function NewCareerPage() {
               <small>{t("newCareer.seedHelp")}</small>
             </label>
           </details>
-          <label className={styles.field}>
-            <span>{t("newCareer.bank")}</span>
-            <select value={bankId} onChange={(event) => setBankId(event.target.value)}>
+          {/* O rótulo fica fora do select: os nomes dos mundos ("24 países") não entram no texto dele. */}
+          <div className={styles.field}>
+            <label htmlFor="new-career-bank">{t("newCareer.bank")}</label>
+            <select
+              id="new-career-bank"
+              value={bankId}
+              onChange={(event) => setBankId(event.target.value)}
+            >
               <option value="">{t("newCareer.defaultBank")}</option>
               {WORLD_SIZES.map((size) => (
                 <option key={size} value={`${WORLD_PREFIX}${size}`}>
@@ -283,7 +288,7 @@ export default function NewCareerPage() {
                 </option>
               ))}
             </select>
-          </label>
+          </div>
           {worldSize ? (
             <small className={styles.help}>{t(`newCareer.world.${worldSize}.help`)}</small>
           ) : null}
