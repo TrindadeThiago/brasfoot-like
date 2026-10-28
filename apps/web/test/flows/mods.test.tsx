@@ -71,7 +71,7 @@ describe("mods de terceiros (015 US2)", () => {
 
     renderApp("/nova-carreira", store, mods);
     const bank = await screen.findByLabelText(t("newCareer.bank"));
-    await waitFor(() => expect(within(bank).getAllByRole("option")).toHaveLength(2));
+    await waitFor(() => expect(within(bank).getAllByRole("option")).toHaveLength(5));
     await user.selectOptions(bank, "mod-teste");
     await user.type(screen.getByLabelText(t("newCareer.managerName")), "Ana");
     await user.click(await screen.findByText("Clube do Mod"));
@@ -182,7 +182,7 @@ describe("mods de terceiros (015 US2)", () => {
 
     renderApp("/nova-carreira", store, mods);
     const select = await screen.findByLabelText(t("newCareer.bank"));
-    await waitFor(() => expect(within(select).getAllByRole("option")).toHaveLength(2));
+    await waitFor(() => expect(within(select).getAllByRole("option")).toHaveLength(5));
     await user.selectOptions(select, "mod-teste");
     await user.type(screen.getByLabelText(t("newCareer.managerName")), "Ana");
     await user.click(await screen.findByText("Clube do Mod"));

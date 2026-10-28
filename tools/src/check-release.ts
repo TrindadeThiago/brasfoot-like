@@ -5,6 +5,7 @@ import { existsSync, readdirSync, readFileSync, realpathSync, statSync } from "n
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { releaseNotes } from "@brasfoot-like/i18n";
+import { readModPackage } from "@brasfoot-like/modkit";
 import { REPO_ROOT } from "./fs-bank";
 
 export const MIN_SCREENSHOTS = 4;
@@ -52,6 +53,19 @@ export function checkRelease({ version, tag, notes, outDir }: ReleaseInput): str
   if (!existsSync(outDir)) return [...problems, `build não encontrado em ${outDir}`];
   for (const file of REQUIRED) {
     if (!existsSync(join(outDir, file))) problems.push(`falta ${file} no build`);
+  }
+  // Mods mundo reduzido, médio e completo para download (024 R12): gerados no build, precisam
+  // existir e passar na validação.
+  for (const size of ["reduzido", "medio", "completo"]) {
+    const zip = join(outDir, "mods", `mundo-${size}.zip`);
+    if (!existsSync(zip)) {
+      problems.push(`falta mods/mundo-${size}.zip no build`);
+      continue;
+    }
+    const read = readModPackage(new Uint8Array(readFileSync(zip)));
+    if (!read.ok) {
+      problems.push(`mods/mundo-${size}.zip não passa na validação (${read.errors.length} erros)`);
+    }
   }
   // Fonte do badge de versão do README (lido pelo shields.io no site publicado).
   const versionFile = join(outDir, "version.json");

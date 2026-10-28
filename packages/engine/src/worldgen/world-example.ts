@@ -146,7 +146,7 @@ function scaled(value: number, factor: number): number {
  * patrocínio, prêmios e crédito andam juntos, para que o país fique tão equilibrado quanto o
  * mundo padrão (008). O preço do ingresso não muda.
  */
-function scaleEconomy(competition: Competition, factor: number): void {
+export function scaleEconomy(competition: Competition, factor: number): void {
   const economy = competition.economy;
   if (!economy) return;
   economy.wageFactorPct = scaled(economy.wageFactorPct ?? 100, factor);
@@ -271,7 +271,7 @@ function qualifiersCupOf(
  * as duas, o vice da liga ocupa a vaga; o fechamento é a tabela inteira da divisão de cima. Os
  * participantes da 1ª temporada são os dois primeiros clubes da divisão de cima, por id.
  */
-function supercupOf(
+export function supercupOf(
   competitions: readonly Competition[],
   countryName: string,
   lower: string,

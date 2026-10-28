@@ -14,7 +14,11 @@ export interface ModLimits {
 
 export const MOD_LIMITS: ModLimits = {
   package: 20 * 1024 * 1024,
-  json: 10 * 1024 * 1024,
+  /**
+   * 16 MB (eram 10): o `players.json` do mundo completo (024), com ~39 000 jogadores, tem 10,8 MB
+   * descompactado e ~2,5 MB no .zip. O teto novo dá folga de 50% sem mudar o formato.
+   */
+  json: 16 * 1024 * 1024,
   image: 200 * 1024,
   images: 5 * 1024 * 1024,
   dimension: 512,

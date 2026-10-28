@@ -1,5 +1,16 @@
 [
   {
+    "version": "1.9.0",
+    "date": "2026-10-27",
+    "changes": [
+      "Mundo completo: na nova carreira, escolha entre três tamanhos de mundo — reduzido (24 países), médio (44 países) e completo (44 países e os 27 estaduais do Brasil) — gerados na hora dentro do jogo. São as seis confederações do futebol (Europa, América do Sul, América do Norte, Central e Caribe, África, Ásia e Oceania), cada país com a sua pirâmide, copa nacional e a competição continental da confederação; o Brasil tem as Séries A a D.",
+      "Nomes: países, estados e cidades são os reais; clubes, competições e jogadores são fictícios, com bancos de nomes por idioma. Quem quiser nomes reais de clubes e jogadores troca pela planilha (CSV) no próprio computador.",
+      "Economia e vagas proporcionais à força de cada país: os países mais fortes têm clubes e receitas maiores e mais vagas na competição continental.",
+      "Nova carreira: os países aparecem agrupados por confederação e cada tamanho avisa o quanto pesa. A página de Mods oferece o download dos três mundos, para trocar os nomes por planilha.",
+      "Modders: a ferramenta `pnpm gen:football-world` (perfis reduzido, médio e completo) gera o pacote de forma determinística pela seed, com perfil ajustável (países, níveis, força, tamanho do Brasil e dos estaduais), valida antes de terminar e aceita planilhas. O limite por arquivo JSON do pacote passou de 10 para 16 MB."
+    ]
+  },
+  {
     "version": "1.8.0",
     "date": "2026-10-27",
     "changes": [

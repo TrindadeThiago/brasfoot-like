@@ -470,6 +470,14 @@ function matchMain(state: CareerSeasonState, match: DayMatch): LeagueSeason {
   return countryMain(state, match.competitionId);
 }
 
+/** Clubes que disputam a competição na temporada (qualquer divisão). */
+function clubsOf(state: CareerSeasonState, competitionId: string): Set<string> {
+  const league = [state.league, ...state.competitions].find(
+    (entry) => entry.competitionId === competitionId,
+  );
+  return new Set(league?.divisions.flatMap((division) => division.clubIds));
+}
+
 /** O jogo é de um estadual (023)? */
 function isRegionalMatch(world: CompletedBank, match: DayMatch): boolean {
   return (
@@ -514,13 +522,21 @@ function afterAllExtraMatches(
   // Reações (torcida, diretoria, notícias) e prêmios: jogos do país do técnico e das competições
   // entre países (022), onde o clube dele joga fora de casa em campo estrangeiro. A bilheteria
   // vai sempre para o país do mandante, com as regras dele.
-  const reacting = matches.filter((match) => ownMain(match) || international(match));
+  // Estadual de outra região (024): só bilheteria e prêmios, como as ligas de outros países.
+  const otherRegion = (match: DayMatch) =>
+    isRegionalMatch(state.world, match) && !clubsOf(state, match.competitionId).has(managerClubId);
+  const remote = matches.filter(otherRegion);
+  const reacting = matches.filter(
+    (match) => (ownMain(match) || international(match)) && !otherRegion(match),
+  );
   let next =
     reacting.length > 0
       ? afterExtraMatches(state, careerSeed, managerClubId, reacting, matches.filter(ownMain))
       : state;
+  if (remote.length > 0) next = foreignExtraMatches(next, next.league, remote, remote);
   const groups = new Map<string, DayMatch[]>();
   for (const match of matches) {
+    if (otherRegion(match)) continue;
     const principal = mainOf(match);
     if (principal.competitionId === state.league.competitionId) continue;
     groups.set(principal.competitionId, [...(groups.get(principal.competitionId) ?? []), match]);

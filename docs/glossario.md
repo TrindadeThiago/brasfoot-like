@@ -25,6 +25,9 @@ novo, use estes termos; ao traduzir, mantenha a mesma distinção entre eles.
 | **estadual** | a competição regional de um país, ligada a uma região (`regional` no formato de mod), com duas divisões em fases; disputada no começo da temporada, antes das competições nacionais | campeonato regional, liga estadual |
 | **clube regional** | o clube que só joga divisões de estadual, sem divisão nacional; é controlado pela IA e o jogador não o escolhe | clube amador, clube pequeno |
 | **região** | o estado do clube (`club.region`), que o liga ao estadual dele; o mesmo campo usado pela regra de sorteio dos grupos | estado do clube, UF |
+| **confederação** | o grupo continental do futebol (UEFA, CONMEBOL, CONCACAF, CAF, AFC, OFC) com os países e as competições continentais dela; no jogo, "continente" | federação |
+| **perfil do mundo** | o arquivo de dados que descreve confederações, países, níveis e força do mod mundo completo; a ferramenta `gen:football-world` o lê | configuração do mundo |
+| **nível do país** | de 1 a 4, define a pirâmide e o número de clubes de um país no perfil | divisão do país |
 | **ligação** | a regra que leva clubes de uma fase de uma competição a uma fase de outra durante a temporada (`dropIns`) | descida, repescagem |
 | **técnico** | o papel do jogador ("Você é o técnico", "Carreira do técnico") | treinador (só no nome do jogo) |
 | **clube** | a instituição: elenco, finanças, diretoria, torcida, escudo | time, para a instituição |

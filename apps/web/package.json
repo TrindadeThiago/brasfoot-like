@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build && tsx ../../tools/src/manifest.ts && tsx ../../tools/src/precache.ts",
+    "build": "tsx ../../tools/src/gen-football-world-public.ts && next build && tsx ../../tools/src/manifest.ts && tsx ../../tools/src/precache.ts",
     "preview": "tsx ../../tools/src/serve-static.ts out 4173",
     "typecheck": "tsc --noEmit -p .",
     "test:e2e": "playwright test"

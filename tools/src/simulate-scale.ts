@@ -6,6 +6,7 @@ import {
   CONTINENTAL_LIMITS,
   type ContinentalSnapshot,
   completeCareerDay,
+  generateFootballWorld,
   generateRegionalBank,
   generateWorldBank,
   isCountryMain,
@@ -13,7 +14,9 @@ import {
   type ModPackage,
   measureContinental,
   measureWorld,
+  profileOfSize,
   snapshotContinental,
+  type WorldSize,
 } from "@brasfoot-like/engine";
 import {
   advanceCareerSeason,
@@ -58,6 +61,8 @@ export interface SimulateScaleOptions {
   continental?: "full" | "compact";
   /** Estaduais (023): um país com a liga nacional e `states` estaduais de duas divisões. */
   regional?: { states: number };
+  /** Mundo completo (024): o perfil `padrao` ou `compacto`; mede contra `SCALE_LIMITS.fullWorld`. */
+  footballWorld?: { profile: WorldSize };
 }
 
 const NOW = "2026-10-24T12:00:00.000Z";
@@ -95,25 +100,29 @@ export interface ScaleReport {
 export function runSimulateScale(options: SimulateScaleOptions): ScaleReport {
   const started = performance.now();
   const bank = structuredClone(
-    options.regional
-      ? generateRegionalBank({ seed: options.seed, states: options.regional.states })
-      : generateWorldBank({
-          seed: options.seed,
-          countries: options.countries,
-          divisionsPerCountry: 2,
-          clubsPerDivision: 20,
-          cup: true,
-          ...(options.qualification ? { qualification: true } : {}),
-          ...(options.continental ? { continental: options.continental } : {}),
-          ...(options.international !== undefined
-            ? { aiInternational: options.international }
-            : {}),
-          ...(options.economy ? { economy: options.economy } : {}),
-        }),
+    options.footballWorld
+      ? generateFootballWorld(profileOfSize(options.footballWorld.profile), options.seed)
+      : options.regional
+        ? generateRegionalBank({ seed: options.seed, states: options.regional.states })
+        : generateWorldBank({
+            seed: options.seed,
+            countries: options.countries,
+            divisionsPerCountry: 2,
+            clubsPerDivision: 20,
+            cup: true,
+            ...(options.qualification ? { qualification: true } : {}),
+            ...(options.continental ? { continental: options.continental } : {}),
+            ...(options.international !== undefined
+              ? { aiInternational: options.international }
+              : {}),
+            ...(options.economy ? { economy: options.economy } : {}),
+          }),
   ) as ModPackage;
-  const first = options.regional
-    ? bank.clubs.find((club) => !isRegionalOnly(bank, club.id))
-    : bank.clubs.find((club) => club.countryId === bank.countries[0]?.id);
+  const first = options.footballWorld
+    ? bank.clubs.find((club) => club.countryId === "brasil" && !isRegionalOnly(bank, club.id))
+    : options.regional
+      ? bank.clubs.find((club) => !isRegionalOnly(bank, club.id))
+      : bank.clubs.find((club) => club.countryId === bank.countries[0]?.id);
   const created = createSave({
     id: "escala",
     now: NOW,
@@ -126,7 +135,7 @@ export function runSimulateScale(options: SimulateScaleOptions): ScaleReport {
   if (!created.ok) throw new Error(JSON.stringify(created.error));
   let save = created.save;
   const lines = [
-    `${options.regional ? `Mundo com estaduais — ${options.regional.states} estados` : `Mundo grande — ${options.countries} países`}, ${bank.clubs.length} clubes, ${bank.players.length} jogadores, ${options.seasons} temporadas, seed "${options.seed}"`,
+    `${options.footballWorld ? `Mundo completo (${options.footballWorld.profile}) — ${bank.countries.length} países` : options.regional ? `Mundo com estaduais — ${options.regional.states} estados` : `Mundo grande — ${options.countries} países`}, ${bank.clubs.length} clubes, ${bank.players.length} jogadores, ${options.seasons} temporadas, seed "${options.seed}"`,
     "",
     "Temp.  dia(ms)  virada(ms)  início(MB)  última rodada(MB)  heap(MB)  problemas",
   ];
@@ -178,7 +187,7 @@ export function runSimulateScale(options: SimulateScaleOptions): ScaleReport {
       continentalStart = undefined;
     }
     const problems: string[] = [];
-    if (options.qualification || options.regional) {
+    if (options.qualification || options.regional || options.footballWorld) {
       const state = seasonStateOf(save);
       for (const league of [state.league, ...state.competitions]) {
         const all = league.divisions.flatMap((division) => division.clubIds);
@@ -206,7 +215,7 @@ export function runSimulateScale(options: SimulateScaleOptions): ScaleReport {
         }
       }
     }
-    if (!options.quiet) {
+    if (!options.quiet && !options.footballWorld) {
       const state = seasonStateOf(save);
       const date = `${save.league.year}-12-31`;
       for (const league of [state.league, ...state.competitions].filter((entry) =>
@@ -280,42 +289,49 @@ export function runSimulateScale(options: SimulateScaleOptions): ScaleReport {
     growthWindow.length > 1
       ? ((growthWindow.at(-1) ?? 0) - (growthWindow[0] ?? 0)) / (growthWindow.length - 1)
       : 0;
+  const scaleLimits = !options.footballWorld
+    ? SCALE_LIMITS
+    : options.footballWorld.profile === "completo"
+      ? SCALE_LIMITS.fullWorld
+      : options.footballWorld.profile === "medio"
+        ? SCALE_LIMITS.mediumWorld
+        : SCALE_LIMITS;
   const full = options.seasons >= 30;
   const checks: [boolean, string][] = [
     [
-      dayMs <= SCALE_LIMITS.dayMs,
-      `dia de jogos (mediana): ${dayMs.toFixed(0)} ms (≤ ${SCALE_LIMITS.dayMs})`,
+      dayMs <= scaleLimits.dayMs,
+      `dia de jogos (mediana): ${dayMs.toFixed(0)} ms (≤ ${scaleLimits.dayMs})`,
     ],
     [
-      turnoverMs <= SCALE_LIMITS.turnoverMs,
-      `virada (mediana): ${turnoverMs.toFixed(0)} ms (≤ ${SCALE_LIMITS.turnoverMs})`,
+      turnoverMs <= scaleLimits.turnoverMs,
+      `virada (mediana): ${turnoverMs.toFixed(0)} ms (≤ ${scaleLimits.turnoverMs})`,
     ],
     [
-      heap <= SCALE_LIMITS.heapBytes,
-      `pico de heap: ${(heap / MB).toFixed(0)} MB (≤ ${SCALE_LIMITS.heapBytes / MB})`,
+      heap <= scaleLimits.heapBytes,
+      `pico de heap: ${(heap / MB).toFixed(0)} MB (≤ ${scaleLimits.heapBytes / MB})`,
     ],
     [
-      Math.max(0, ...lastRoundSizes) <= SCALE_LIMITS.saveLastRoundBytes,
-      `maior save (última rodada): ${(Math.max(0, ...lastRoundSizes) / MB).toFixed(2)} MB (≤ ${SCALE_LIMITS.saveLastRoundBytes / MB})`,
+      Math.max(0, ...lastRoundSizes) <= scaleLimits.saveLastRoundBytes,
+      `maior save (última rodada): ${(Math.max(0, ...lastRoundSizes) / MB).toFixed(2)} MB (≤ ${scaleLimits.saveLastRoundBytes / MB})`,
     ],
     [
-      exported <= SCALE_LIMITS.exportedBytes,
-      `arquivo exportado: ${(exported / MB).toFixed(2)} MB (≤ ${SCALE_LIMITS.exportedBytes / MB})`,
+      exported <= scaleLimits.exportedBytes,
+      `arquivo exportado: ${(exported / MB).toFixed(2)} MB (≤ ${scaleLimits.exportedBytes / MB})`,
     ],
   ];
   if (full) {
     checks.push(
       [
-        last <= SCALE_LIMITS.saveStart31Bytes,
-        `save no início da temporada 31: ${(last / MB).toFixed(2)} MB (≤ ${SCALE_LIMITS.saveStart31Bytes / MB})`,
+        last <= scaleLimits.saveStart31Bytes,
+        `save no início da temporada 31: ${(last / MB).toFixed(2)} MB (≤ ${scaleLimits.saveStart31Bytes / MB})`,
       ],
       [
-        growth <= SCALE_LIMITS.growthPerSeasonBytes,
-        `crescimento por temporada (10ª–30ª): ${(growth / 1024).toFixed(0)} KB (≤ ${SCALE_LIMITS.growthPerSeasonBytes / 1024})`,
+        growth <= scaleLimits.growthPerSeasonBytes,
+        `crescimento por temporada (10ª–30ª): ${(growth / 1024).toFixed(0)} KB (≤ ${scaleLimits.growthPerSeasonBytes / 1024})`,
       ],
       [
-        totalMs <= SCALE_LIMITS.thirtySeasonsMs,
-        `30 temporadas: ${(totalMs / 60000).toFixed(1)} min (≤ ${SCALE_LIMITS.thirtySeasonsMs / 60000})`,
+        totalMs <= scaleLimits.thirtySeasonsMs,
+        `30 temporadas: ${(totalMs / 60000).toFixed(1)} min (≤ ${scaleLimits.thirtySeasonsMs / 60000})`,
       ],
     );
   }

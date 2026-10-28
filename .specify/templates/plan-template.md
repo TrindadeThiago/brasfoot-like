@@ -45,7 +45,7 @@ Ver `.specify/memory/constitution.md`. Marque cada gate ou justifique em Complex
 - [ ] **I. Motor separado:** lógica de jogo no motor TS puro, sem React/DOM/APIs do navegador
 - [ ] **II. Determinismo:** aleatoriedade só via PRNG com seed no estado; sem `Math.random`/`Date.now` no motor
 - [ ] **III. Dados, não código:** ligas/formatos/banco como dados validados por Zod
-- [ ] **IV. Sem conteúdo protegido:** nenhum nome/escudo/marca real; banco padrão no formato de mod
+- [ ] **IV. Sem conteúdo protegido:** nenhum nome/escudo/marca real de clube, jogador ou competição (países, estados e cidades podem ser reais); banco padrão no formato de mod
 - [ ] **V. Balanceamento verificável:** simulações longas com limites numéricos para sistemas de equilíbrio
 - [ ] **VI. Saves versionados:** mudança de formato vem com migração + teste com fixture
 - [ ] **VII. i18n:** nenhum texto visível fixo; frases completas com plural/gênero

@@ -5,6 +5,7 @@ import type {
   KnockoutPhase,
   ModPackage,
   Player,
+  Rivalry,
   StageFormat,
   ValidatedBank,
 } from "../model/types";
@@ -13,7 +14,7 @@ import { validateBank } from "../validation/validate";
 import type { GeneratedClub } from "./clubs";
 import { generateDefaultBank } from "./generate";
 import defaultNameBank from "./name-banks/default.json" with { type: "json" };
-import { nameBankSchema } from "./name-banks/schema";
+import { type NameBank, nameBankSchema } from "./name-banks/schema";
 import { generateSquad } from "./players";
 import { generateRivalries } from "./rivalries";
 import { GENERATOR_TUNING } from "./tuning";
@@ -103,7 +104,8 @@ function stagesOf(clubs: number): StageFormat[] {
   });
   const phases: KnockoutPhase[] = [];
   if (total >= 8) phases.push(phase("Quartas de final", 1, 8_000));
-  phases.push(phase("Semifinal", 1, 15_000), phase("Final", 2, 30_000));
+  if (total >= 4) phases.push(phase("Semifinal", 1, 15_000));
+  phases.push(phase("Final", 2, 30_000));
   return [
     {
       type: "groups",
@@ -133,6 +135,7 @@ function regionalClub(
   countryId: string,
   region: string,
   abbreviations: Set<string>,
+  idOf: (number: number) => string = (n) => `clube-r-${`${n}`.padStart(4, "0")}`,
 ): GeneratedClub {
   const name =
     rng.float() < 0.5 ? `${rng.pick(prefixes)} ${city}` : `${city} ${rng.pick(suffixes)}`;
@@ -141,7 +144,7 @@ function regionalClub(
   const secondary = rng.pick(palette.filter((color) => color !== primary));
   const reputation = rng.int(12, 38);
   const club: Club = {
-    id: `clube-r-${`${number}`.padStart(4, "0")}`,
+    id: idOf(number),
     name,
     shortName: city,
     abbreviation: abbreviationOf(number * 7, abbreviations),
@@ -186,6 +189,135 @@ function trimSquad(players: Player[]): Player[] {
       kept.add(player.id);
     });
   return players.filter((player) => kept.has(player.id));
+}
+
+/** Um estado do estadual: nome, clubes nacionais dele, cidades e identificação da competição. */
+export interface EstadualState {
+  name: string;
+  /** Clubes das divisões nacionais da região (já com `region` igual ao nome). */
+  nationals: Club[];
+  /** Cidade do clube regional de número `clubNumber` (global, a partir de 1). */
+  cityOf: (clubNumber: number) => string;
+  competitionId: string;
+  competitionName: string;
+}
+
+export interface EstaduaisInput {
+  /** Gerador de nomes e sorteios (as forks por clube e por elenco saem dele). */
+  naming: Rng;
+  countryId: string;
+  referenceDate: string;
+  names: Pick<NameBank, "firstNames" | "surnames" | "clubPrefixes" | "clubSuffixes">;
+  states: EstadualState[];
+  /** Clubes da 1ª e da 2ª divisão de cada estadual (múltiplos de 4). */
+  firstSize: number;
+  secondSize: number;
+  abbreviations: Set<string>;
+  rivalSeed: string;
+  /** Ids dos clubes e dos jogadores regionais (padrão `clube-r-NNNN` e `jogador-r-NNNNNN`). */
+  clubId?: (number: number) => string;
+  playerId?: (number: number) => string;
+}
+
+/**
+ * Monta os estaduais de duas divisões (023, 024 R5): para cada estado, os clubes regionais que
+ * completam as divisões com os nacionais da região, os elencos pequenos, a competição e os clássicos.
+ * A ordem das forks é a de sempre: `generateRegionalBank` produz o mesmo banco de antes.
+ */
+export function buildEstaduais(input: EstaduaisInput): {
+  competitions: Competition[];
+  clubs: Club[];
+  players: Player[];
+  rivalries: Rivalry[];
+} {
+  const { naming, countryId, names, firstSize, secondSize, abbreviations } = input;
+  const clubs: Club[] = [];
+  const players: Player[] = [];
+  const rivalries: Rivalry[] = [];
+  const competitions: Competition[] = [];
+  let clubNumber = 0;
+  let playerNumber = 0;
+  const nextPlayerId = () => {
+    playerNumber += 1;
+    return input.playerId
+      ? input.playerId(playerNumber)
+      : `jogador-r-${`${playerNumber}`.padStart(6, "0")}`;
+  };
+  input.states.forEach((state) => {
+    const nationals = state.nationals;
+    const nationalsInFirst = takeShuffled(naming.fork(`first:${state.name}`), nationals, firstSize);
+    const created: GeneratedClub[] = [];
+    const need = firstSize + secondSize - nationalsInFirst.length;
+    for (let index = 0; index < need; index++) {
+      clubNumber += 1;
+      created.push(
+        regionalClub(
+          naming.fork(`club:${clubNumber}`),
+          clubNumber,
+          state.cityOf(clubNumber),
+          names.clubPrefixes,
+          names.clubSuffixes,
+          countryId,
+          state.name,
+          abbreviations,
+          input.clubId,
+        ),
+      );
+    }
+    for (const generated of created) {
+      clubs.push(generated.club);
+      const squad = generateSquad(
+        naming.fork(`squad:${generated.club.id}`),
+        generated,
+        names as NameBank,
+        input.referenceDate,
+        countryId,
+        nextPlayerId,
+      );
+      players.push(...trimSquad(squad));
+    }
+    const regionalIds = created.map((generated) => generated.club.id).sort();
+    const firstIds = [
+      ...nationalsInFirst.map((club) => club.id),
+      ...regionalIds.slice(0, firstSize - nationalsInFirst.length),
+    ].sort();
+    const secondIds = regionalIds.slice(firstSize - nationalsInFirst.length).sort();
+    const first = stagesOf(firstSize);
+    const second = stagesOf(secondSize);
+    competitions.push({
+      id: state.competitionId,
+      countryId,
+      name: state.competitionName,
+      format: { type: "stages", stages: first },
+      regional: {
+        region: state.name,
+        weight: { pct: 100, byReputation: [{ from: 60, pct: 40 }] },
+      },
+      divisions: [
+        {
+          level: 1,
+          name: "Primeira divisão",
+          clubIds: firstIds,
+          promotionSlots: 0,
+          relegationSlots: 2,
+          stages: first,
+        },
+        {
+          level: 2,
+          name: "Segunda divisão",
+          clubIds: secondIds,
+          promotionSlots: 2,
+          relegationSlots: 0,
+          stages: second,
+        },
+      ],
+      schedule: { weekday: 7, startWeek: 0, everyWeeks: 1 },
+    });
+    // Clássicos do estado: os clubes do estadual, em grupos de 5 (013).
+    const inState = [...nationals, ...created.map((generated) => generated.club)];
+    rivalries.push(...generateRivalries(inState, `${input.rivalSeed}:${state.name}`));
+  });
+  return { competitions, clubs, players, rivalries };
 }
 
 /** Gera o banco com estaduais. Mesma seed ⇒ banco idêntico. */
@@ -238,91 +370,27 @@ export function generateRegionalBank(options: RegionalBankOptions): ValidatedBan
     (nationalByState[state] as Club[]).push(club);
   });
 
-  const abbreviations = new Set(base.clubs.map((club) => club.abbreviation));
-  const regionalClubs: Club[] = [];
-  const regionalPlayers: Player[] = [];
-  const rivalries = [...(base.rivalries ?? [])];
-  const competitions: Competition[] = [];
-  let clubNumber = 0;
-  let playerNumber = 0;
-  const nextPlayerId = () => {
-    playerNumber += 1;
-    return `jogador-r-${`${playerNumber}`.padStart(6, "0")}`;
-  };
-
-  stateNames.forEach((state, stateIndex) => {
-    const nationals = nationalByState[stateIndex] as Club[];
-    const nationalsInFirst = takeShuffled(naming.fork(`first:${state}`), nationals, firstSize);
-    const created: GeneratedClub[] = [];
-    const need = firstSize + secondSize - nationalsInFirst.length;
-    for (let index = 0; index < need; index++) {
-      clubNumber += 1;
-      created.push(
-        regionalClub(
-          naming.fork(`club:${clubNumber}`),
-          clubNumber,
-          cities[clubNumber - 1] as string,
-          names.clubPrefixes,
-          names.clubSuffixes,
-          country.id,
-          state,
-          abbreviations,
-        ),
-      );
-    }
-    for (const generated of created) {
-      regionalClubs.push(generated.club);
-      const squad = generateSquad(
-        naming.fork(`squad:${generated.club.id}`),
-        generated,
-        names,
-        base.manifest.referenceDate,
-        country.id,
-        nextPlayerId,
-      );
-      regionalPlayers.push(...trimSquad(squad));
-    }
-    const regionalIds = created.map((generated) => generated.club.id).sort();
-    const firstIds = [
-      ...nationalsInFirst.map((club) => club.id),
-      ...regionalIds.slice(0, firstSize - nationalsInFirst.length),
-    ].sort();
-    const secondIds = regionalIds.slice(firstSize - nationalsInFirst.length).sort();
-    const first = stagesOf(firstSize);
-    const second = stagesOf(secondSize);
-    competitions.push({
-      id: `estadual-${`${stateIndex + 1}`.padStart(2, "0")}`,
-      countryId: country.id,
-      name: `Campeonato de ${state}`,
-      format: { type: "stages", stages: first },
-      regional: {
-        region: state,
-        weight: { pct: 100, byReputation: [{ from: 60, pct: 40 }] },
-      },
-      divisions: [
-        {
-          level: 1,
-          name: "Primeira divisão",
-          clubIds: firstIds,
-          promotionSlots: 0,
-          relegationSlots: 2,
-          stages: first,
-        },
-        {
-          level: 2,
-          name: "Segunda divisão",
-          clubIds: secondIds,
-          promotionSlots: 2,
-          relegationSlots: 0,
-          stages: second,
-        },
-      ],
-      schedule: { weekday: 7, startWeek: 0, everyWeeks: 1 },
-    });
-    // Clássicos do estado: os clubes do estadual, em grupos de 5 (013).
-    const inState = [...nationals, ...created.map((generated) => generated.club)];
-    rivalries.push(...generateRivalries(inState, `${seed}:${state}`));
+  const built = buildEstaduais({
+    naming,
+    countryId: country.id,
+    referenceDate: base.manifest.referenceDate,
+    names,
+    states: stateNames.map((name, stateIndex) => ({
+      name,
+      nationals: nationalByState[stateIndex] as Club[],
+      cityOf: (clubNumber) => cities[clubNumber - 1] as string,
+      competitionId: `estadual-${`${stateIndex + 1}`.padStart(2, "0")}`,
+      competitionName: `Campeonato de ${name}`,
+    })),
+    firstSize,
+    secondSize,
+    abbreviations: new Set(base.clubs.map((club) => club.abbreviation)),
+    rivalSeed: seed,
   });
+  const regionalClubs = built.clubs;
+  const regionalPlayers = built.players;
+  const rivalries = [...(base.rivalries ?? []), ...built.rivalries];
+  const competitions = built.competitions;
 
   const bank: ModPackage = {
     ...base,

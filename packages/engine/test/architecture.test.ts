@@ -90,4 +90,17 @@ describe("fronteira do motor", () => {
     expect(listTsFiles(dir).length).toBeGreaterThanOrEqual(1);
     expect(problems).toEqual([]);
   });
+
+  it("o mundo completo (024) não usa PRNG fora da seed nem importa da interface", () => {
+    const dir = join(SRC_DIR, "worldgen", "football-world");
+    const problems: string[] = [];
+    for (const file of listTsFiles(dir)) {
+      const source = stripComments(readFileSync(file, "utf8"));
+      if (/from\s+"(react|next)|apps\/|document\.|window\.|localStorage|fetch\(/.test(source)) {
+        problems.push(`${relative(SRC_DIR, file)} importa da interface ou da plataforma`);
+      }
+    }
+    expect(listTsFiles(dir).length).toBeGreaterThanOrEqual(8);
+    expect(problems).toEqual([]);
+  });
 });

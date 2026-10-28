@@ -41,7 +41,7 @@ async function installWorld() {
   expect(await screen.findByText(t("mods.loaded", { name: "Mundo de teste" }))).toBeDefined();
   renderApp("/nova-carreira", store, mods);
   const bank = await screen.findByLabelText(t("newCareer.bank"));
-  await waitFor(() => expect(within(bank).getAllByRole("option")).toHaveLength(2));
+  await waitFor(() => expect(within(bank).getAllByRole("option")).toHaveLength(5));
   await user.selectOptions(bank, "mundo-teste");
   return { user, store, mods };
 }

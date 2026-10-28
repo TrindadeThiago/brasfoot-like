@@ -711,6 +711,29 @@ export {
 } from "./world/leagues";
 export { withDefaultCupLegs, withNationalCup } from "./worldgen/add-cup";
 export { DEFAULT_BANK_SEED } from "./worldgen/default-seed";
+export type {
+  BrazilSpec,
+  Confederation,
+  CountrySpec,
+  ProfileIssue,
+  WorldProfile,
+  WorldSize,
+} from "./worldgen/football-world";
+export {
+  BRAZIL_STATES,
+  COMPACT_PROFILE,
+  DEFAULT_PROFILE,
+  GEO_COUNTRIES,
+  generateFootballWorld,
+  LEAGUE_START_WEEK,
+  MEDIUM_PROFILE,
+  NAME_BANKS,
+  ProfileError,
+  profileOfSize,
+  TIERS,
+  validateProfile,
+  WORLD_SIZES,
+} from "./worldgen/football-world";
 export type { GenerateOptions } from "./worldgen/generate";
 export { generateDefaultBank } from "./worldgen/generate";
 export { completeHiddenAttributes } from "./worldgen/hidden";
