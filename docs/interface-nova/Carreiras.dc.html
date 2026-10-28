@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Carreiras salvas — Treinador FC</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0a0e13}
+a{color:inherit;text-decoration:none}
+a:hover{color:#ffffff}
+</style>
+</helmet>
+<div style="min-height: 980px; background: #0a0e13; color: #eef2f6; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.45; display: flex; flex-direction: column">
+
+  <header style="padding: 16px 48px; display: flex; align-items: center; gap: 16px; border-bottom: 1px solid #1d2733">
+    <a href="Menu.dc.html" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: #b4c0cd; font-weight: 500">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>
+      Voltar
+    </a>
+    <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">Carreiras salvas</h1>
+  </header>
+
+  <main style="width: 100%; max-width: 860px; margin: 0 auto; padding: 40px 48px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px">
+
+    <label style="border: 2px dashed #2e3a47; border-radius: 16px; padding: 20px 24px; color: #98a6b6; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; cursor: pointer">
+      <span>Importar carreira: arraste um arquivo exportado ou escolha no computador</span>
+      <span style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid #2e3a47; background: #121922; color: #eef2f6; font-weight: 500">Escolher arquivo</span>
+      <input type="file" style="position: absolute; left: -9999px">
+    </label>
+
+    <section aria-label="Carreiras" style="display: flex; flex-direction: column; gap: 12px">
+      <sc-for list="{{saves}}" as="s" hint-placeholder-count="2">
+        <article style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 18px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px">
+          <div style="width: 48px; height: 48px; border-radius: 14px; background: #16222c; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: {{accent}}; flex: 0 0 auto">{{s.initials}}</div>
+          <div style="flex: 1 1 260px; min-width: 0">
+            <div style="font-weight: 600">{{s.title}}</div>
+            <div style="color: #b4c0cd">{{s.meta}}</div>
+            <div style="color: #98a6b6; font-size: 12px">{{s.saved}}</div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px">
+            <a href="Main.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 10px; background: {{accent}}; color: #06140c; font-weight: 600">Continuar</a>
+            <button type="button" style="min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; font: inherit; font-weight: 500; cursor: pointer">Exportar</button>
+            <button type="button" style="min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid #5a2e2e; background: #0f151c; color: #ff8a8a; font: inherit; font-weight: 500; cursor: pointer">Apagar</button>
+          </div>
+        </article>
+      </sc-for>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#3ddc84","options":["#3ddc84","#5ec8ff","#ffb454","#c79bff"]}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      accent: this.props.accent ?? '#3ddc84',
+      saves: [
+        { initials: 'UC', title: 'Ana Souza · União Canoas', meta: 'Série A · temporada 2027 · rodada 1', saved: 'Salva em 28/10/2026, 17:41' },
+        { initials: 'EN', title: 'Ana Souza · Estrela do Norte', meta: 'Série A · temporada 2024 · rodada 38', saved: 'Salva em 12/10/2026, 21:05' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

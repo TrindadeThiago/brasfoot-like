@@ -1,0 +1,214 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Calendario.dc.html": {
+      "expand": "fill",
+      "h": 980,
+      "is_interactive": true,
+      "title": "Calendário",
+      "w": 1440,
+      "x": 1520,
+      "y": 1100
+    },
+    "Carreira.dc.html": {
+      "expand": "fill",
+      "h": 980,
+      "is_interactive": true,
+      "title": "Carreira",
+      "w": 1440,
+      "x": 1520,
+      "y": 3820
+    },
+    "Carreiras.dc.html": {
+      "expand": "fill",
+      "h": 980,
+      "title": "Carreiras salvas",
+      "w": 1440,
+      "x": 0,
+      "y": 7640
+    },
+    "Competicao.dc.html": {
+      "expand": "fill",
+      "h": 980,
+      "is_interactive": true,
+      "title": "Competição",
+      "w": 1440,
+      "x": 0,
+      "y": 1100
+    },
+    "Configuracoes.dc.html": {
+      "expand": "fill",
+      "h": 980,
+      "is_interactive": true,
+      "title": "Configurações",
+      "w": 1440,
+      "x": 1520,
+      "y": 4920
+    },
+    "Elenco.dc.html": {
+      "expand": "fill",
+      "h": 980,
+      "is_interactive": true,
+      "title": "Elenco",
+      "w": 1440,
+      "x": 1520,
+      "y": 0
+    },
+    "Escalacao.dc.html": {
+      "expand": "fill",
+      "h": 980,
+      "is_interactive": true,
+      "title": "Escalação",
+      "w": 1440,
+      "x": 3040,
+      "y": 0
+    },
+    "FimTemporada.dc.html": {
+      "expand": "fill",
+      "h": 1500,
+      "title": "Fim de temporada",
+      "w": 1440,
+      "x": 3040,
+      "y": 4920,
+      "is_interactive": true
+    },
+    "Financas.dc.html": {
+      "expand": "fill",
+      "h": 980,
+      "is_interactive": true,
+      "title": "Finanças",
+      "w": 1440,
+      "x": 3040,
+      "y": 1100
+    },
+    "Historico.dc.html": {
+      "expand": "fill",
+      "h": 980,
+      "is_interactive": true,
+      "title": "Histórico",
+      "w": 1440,
+      "x": 0,
+      "y": 3820
+    },
+    "Main.dc.html": {
+      "expand": "fill",
+      "h": 980,
+      "is_interactive": true,
+      "title": "Início",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "Menu.dc.html": {
+      "expand": "fill",
+      "h": 980,
+      "is_interactive": true,
+      "title": "Menu inicial",
+      "w": 1440,
+      "x": 3040,
+      "y": 3820
+    },
+    "Mercado.dc.html": {
+      "expand": "fill",
+      "h": 980,
+      "is_interactive": true,
+      "title": "Mercado",
+      "w": 1440,
+      "x": 0,
+      "y": 2200
+    },
+    "Mods.dc.html": {
+      "expand": "fill",
+      "h": 980,
+      "title": "Mods",
+      "w": 1440,
+      "x": 0,
+      "y": 6540
+    },
+    "NotasVersao.dc.html": {
+      "expand": "fill",
+      "h": 980,
+      "title": "Notas de versão",
+      "w": 1440,
+      "x": 3040,
+      "y": 6540
+    },
+    "Noticias.dc.html": {
+      "expand": "fill",
+      "h": 980,
+      "is_interactive": true,
+      "title": "Notícias",
+      "w": 1440,
+      "x": 1520,
+      "y": 2200
+    },
+    "NovaCarreira.dc.html": {
+      "expand": "fill",
+      "h": 980,
+      "is_interactive": true,
+      "title": "Nova carreira",
+      "w": 1440,
+      "x": 0,
+      "y": 4920
+    },
+    "Rodada.dc.html": {
+      "expand": "fill",
+      "h": 1500,
+      "is_interactive": true,
+      "title": "Rodada ao vivo",
+      "w": 1440,
+      "x": 3040,
+      "y": 2200
+    },
+    "Sobre.dc.html": {
+      "expand": "fill",
+      "h": 980,
+      "title": "Sobre",
+      "w": 1440,
+      "x": 1520,
+      "y": 6540
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-10-28T12:00:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "notes": {
+    "t1": {
+      "kind": "title1",
+      "maxW": 4480,
+      "text": "Treinador FC — telas do jogo",
+      "w": 240,
+      "x": 0,
+      "y": -240
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Elenco.dc.html",
+    "Escalacao.dc.html",
+    "Competicao.dc.html",
+    "Calendario.dc.html",
+    "Financas.dc.html",
+    "Mercado.dc.html",
+    "Noticias.dc.html",
+    "Rodada.dc.html",
+    "Historico.dc.html",
+    "Carreira.dc.html",
+    "Menu.dc.html",
+    "NovaCarreira.dc.html",
+    "Carreiras.dc.html",
+    "Configuracoes.dc.html",
+    "FimTemporada.dc.html",
+    "Mods.dc.html",
+    "Sobre.dc.html",
+    "NotasVersao.dc.html"
+  ],
+  "pages": [],
+  "title": "Treinador FC — Nova Interface"
+}

@@ -96,6 +96,11 @@ a cada push. Para publicar uma versão:
 
 O badge de versão acima lê o `version.json` do site publicado, então muda sozinho a cada release.
 
+As versões 1.0.0 a 1.10.0 (21 a 28 de outubro de 2026) são a **fase beta** do jogo: as tags e os
+Releases delas se chamam `beta-vX.Y.Z`. A numeração é reiniciada no marco 10, que é desenvolvido na
+branch `release/v1.0.0` e publicado de uma vez como o lançamento oficial 1.0.0 (`v1.0.0`). Ver
+[`docs/interface-nova.md`](docs/interface-nova.md), seção 6.
+
 ## Documentação
 
 - [Documento de design](docs/design.md): visão, regras do jogo e roadmap

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Fim de temporada — Treinador FC</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0a0e13}
+a{color:inherit;text-decoration:none}
+a:hover{color:#ffffff}
+</style>
+</helmet>
+<div style="min-height: 1400px; background: radial-gradient(900px 420px at 50% 0%, {{glow}}, transparent 70%), #0a0e13; color: #eef2f6; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.45; display: flex; flex-direction: column">
+
+  <header style="padding: 16px 48px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid #1d2733; flex-wrap: wrap">
+    <a href="Main.dc.html" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: #b4c0cd; font-weight: 500">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>
+      Voltar ao início
+    </a>
+    <div style="color: #98a6b6">União Canoas · Ana Souza</div>
+  </header>
+
+  <main style="width: 100%; max-width: 1040px; margin: 0 auto; padding: 40px 48px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px">
+
+    <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 700; letter-spacing: -0.02em">Temporada 2027 encerrada</h1>
+
+    <!-- Resultado do meu clube -->
+    <section aria-label="Resultado do clube" style="{{heroStyle}}">
+      <div style="{{heroIcon}}">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{iconPath}}"></path></svg>
+      </div>
+      <div style="flex: 1 1 320px; min-width: 0">
+        <div style="color: #98a6b6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em">{{tag}}</div>
+        <p style="margin: 4px 0 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2">{{message}}</p>
+        <div style="color: #b4c0cd; margin-top: 8px">Premiação recebida pelo União Canoas: <strong style="color: #eef2f6">$ 3.200.000</strong>.</div>
+      </div>
+    </section>
+
+    <!-- Campeões -->
+    <section aria-label="Campeões" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px">
+      <sc-for list="{{champions}}" as="c" hint-placeholder-count="2">
+        <div style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 14px">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(255,180,84,0.16); display: flex; align-items: center; justify-content: center; flex: 0 0 auto">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffb454" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"></path></svg>
+          </div>
+          <div style="min-width: 0">
+            <div style="color: #98a6b6; font-size: 12px">Campeão da {{c.division}}</div>
+            <div style="font-weight: 600; font-size: 16px">{{c.club}}</div>
+            <div style="color: #b4c0cd; font-size: 13px">{{c.points}} pontos</div>
+          </div>
+        </div>
+      </sc-for>
+    </section>
+
+    <!-- Acessos e rebaixamentos -->
+    <section aria-label="Acesso e rebaixamento" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px">
+      <div style="background: #121922; border: 1px solid #1d2733; border-top: 3px solid {{accent}}; border-radius: 16px; padding: 18px 20px">
+        <h2 style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Sobem para a Série A</h2>
+        <sc-for list="{{promoted}}" as="m" hint-placeholder-count="3">
+          <div style="{{m.style}}">{{m.line}}</div>
+        </sc-for>
+      </div>
+      <div style="background: #121922; border: 1px solid #1d2733; border-top: 3px solid #ff8a8a; border-radius: 16px; padding: 18px 20px">
+        <h2 style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Descem para a Série B</h2>
+        <sc-for list="{{relegated}}" as="m" hint-placeholder-count="3">
+          <div style="{{m.style}}">{{m.line}}</div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- Classificação final -->
+    <section aria-label="Classificação final da Série A" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; overflow-x: auto">
+      <table style="width: 100%; min-width: 520px; border-collapse: collapse; font-variant-numeric: tabular-nums">
+        <caption style="text-align: left; padding: 16px 20px 4px; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Classificação final da Série A</caption>
+        <thead>
+          <tr style="color: #98a6b6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em">
+            <th scope="col" style="text-align: left; padding: 12px 20px; font-weight: 500; width: 64px">Pos.</th>
+            <th scope="col" style="text-align: left; padding: 12px 8px; font-weight: 500">Clube</th>
+            <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">J</th>
+            <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">SG</th>
+            <th scope="col" style="text-align: right; padding: 12px 20px; font-weight: 500">P</th>
+          </tr>
+        </thead>
+        <tbody>
+          <sc-for list="{{table}}" as="r" hint-placeholder-count="10">
+            <tr style="{{r.row}}">
+              <td style="padding: 9px 20px; font-weight: 600"><span style="{{r.zone}}">{{r.pos}}</span></td>
+              <td style="padding: 9px 8px; font-weight: 500">{{r.club}}</td>
+              <td style="padding: 9px 8px; text-align: right; color: #b4c0cd">38</td>
+              <td style="padding: 9px 8px; text-align: right; color: #b4c0cd">{{r.sg}}</td>
+              <td style="padding: 9px 20px; text-align: right; font-weight: 600">{{r.pts}}</td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Ações -->
+    <section aria-label="Próximos passos" style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px">
+      <button type="button" disabled="{{isBusy}}" style="{{nextStyle}}">{{nextLabel}}</button>
+      <a href="Historico.dc.html" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 22px; border-radius: 12px; border: 1px solid #2e3a47; background: #121922; font-weight: 500">Ver o histórico</a>
+      <sc-if value="{{failed}}" hint-placeholder-val="{{ false }}">
+        <p role="alert" style="margin: 0; color: #ff8a8a; font-weight: 500">Não foi possível começar a próxima temporada.</p>
+      </sc-if>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#3ddc84","options":["#3ddc84","#5ec8ff","#ffb454","#c79bff"]},"result":{"editor":"enum","default":"acesso","options":["campeão","acesso","rebaixamento","permanência"],"section":"Estado da tela"},"state":{"editor":"enum","default":"normal","options":["normal","preparando","falha"],"section":"Estado da tela"}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#3ddc84';
+    const result = this.props.result ?? 'acesso';
+    const state = this.props.state ?? 'normal';
+    const club = 'União Canoas';
+
+    const look = {
+      'campeão': { tag: 'Campeão', color: '#ffb454', bg: 'rgba(255,180,84,0.12)', glow: 'rgba(255,180,84,0.12)', icon: 'M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3', pos: 1, div: 'Série A', msg: 'O ' + club + ' é campeão da Série A!' },
+      acesso: { tag: 'Acesso', color: accent, bg: 'rgba(61,220,132,0.10)', glow: 'rgba(61,220,132,0.12)', icon: 'M12 19V5M5 12l7-7 7 7', pos: 2, div: 'Série A', msg: 'Acesso! O ' + club + ' terminou em 2º lugar e vai disputar a Série A.' },
+      rebaixamento: { tag: 'Rebaixamento', color: '#ff8a8a', bg: 'rgba(255,138,138,0.10)', glow: 'rgba(255,138,138,0.10)', icon: 'M12 5v14M5 12l7 7 7-7', pos: 19, div: 'Série B', msg: 'Rebaixamento. O ' + club + ' terminou em 19º lugar e vai disputar a Série B.' },
+      'permanência': { tag: 'Permanência', color: '#5ec8ff', bg: 'rgba(94,200,255,0.10)', glow: 'rgba(94,200,255,0.10)', icon: 'M5 12h14', pos: 11, div: 'Série A', msg: 'O ' + club + ' terminou em 11º lugar e segue na Série A.' },
+    }[result];
+
+    const names = ['Estrela do Norte', 'Atlético Marítimo', 'Porto Oeste', 'União Planalto', 'Sporting Vale', 'Ferroviário', 'Náutico do Sul', 'Guarani Alto', 'Bagé Unidos', 'Guarulhos Unidos', 'Maringá Operário', 'Sorocaba EC', 'Paranaguá EC', 'Divinópolis Unidos', 'Nova Friburgo SC', 'Angra Atlético', 'Comercial FC', 'Varginha Unidos', 'Sapucaia', 'Gravataí'];
+    const top = names.slice();
+    if (result === 'campeão') top.splice(0, 0, club);
+    if (result === 'permanência') top.splice(10, 0, club);
+    if (result === 'rebaixamento') top.splice(18, 0, club);
+    const list = top.slice(0, 20);
+    const table = list.map((n, i) => {
+      const mine = n === club;
+      const zone = i >= list.length - 3 ? 'box-shadow:inset 3px 0 0 #ff8a8a;padding-left:10px;' : i < 4 ? 'box-shadow:inset 3px 0 0 ' + accent + ';padding-left:10px;' : 'padding-left:13px;';
+      const sg = 30 - i * 3;
+      return { pos: i + 1, club: n, sg: (sg > 0 ? '+' : '') + sg, pts: 89 - i * 3, zone, row: 'border-top:1px solid #1d2733;' + (mine ? 'background:#16222c;' : '') };
+    });
+    const line = (p, c, mine) => ({ line: p + 'º ' + c, style: 'padding:8px 0;border-top:1px solid #1d2733;font-weight:' + (mine ? 600 : 500) + ';' + (mine ? 'color:' + accent + ';' : '') });
+    const promoted = [line(1, 'Vila Nova Atlético', false), line(2, result === 'acesso' ? club : 'Cruzeiro do Sul', result === 'acesso'), line(3, 'Esporte Clube Itajaí', false)];
+    const relegated = [line(18, 'Varginha Unidos', false), line(19, result === 'rebaixamento' ? club : 'Sapucaia', result === 'rebaixamento'), line(20, 'Gravataí', false)];
+    const champions = [
+      { division: 'Série A', club: result === 'campeão' ? club : 'Estrela do Norte', points: 89 },
+      { division: 'Série B', club: 'Vila Nova Atlético', points: 81 },
+    ];
+
+    const busy = state === 'preparando';
+    return {
+      accent, glow: look.glow, tag: look.tag, message: look.msg, iconPath: look.icon,
+      heroStyle: 'background:' + look.bg + ';border:1px solid ' + look.color + ';border-radius:20px;padding:28px;display:flex;flex-wrap:wrap;align-items:center;gap:24px;',
+      heroIcon: 'width:80px;height:80px;border-radius:50%;border:2px solid ' + look.color + ';color:' + look.color + ';display:flex;align-items:center;justify-content:center;flex:0 0 auto;',
+      champions, promoted, relegated, table,
+      isBusy: busy, failed: state === 'falha',
+      nextLabel: busy ? 'Preparando a temporada…' : 'Próxima temporada',
+      nextStyle: 'min-height:52px;padding:0 28px;border-radius:12px;border:0;font:inherit;font-weight:600;font-size:16px;' + (busy ? 'background:#1d2733;color:#98a6b6;cursor:default;' : 'background:' + accent + ';color:#06140c;cursor:pointer;'),
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -43,3 +43,24 @@ ficam na constituição e entram no `/speckit-plan`.
 | M9 — Futebol sul-americano | [022](marco9/prompt022.md) | Competições continentais | 019, 021 |
 | | [023](marco9/prompt023.md) | Estaduais | 019, 021 |
 | | [024](marco9/prompt024.md) | Mod do futebol sul-americano | 022, 023 |
+| M10 — Nova interface | [025](marco10/prompt025.md) | Fundação visual e estrutura do jogo | 016 |
+| | [026](marco10/prompt026.md) | Telas do clube: Início, Elenco e Escalação | 025 |
+| | [027](marco10/prompt027.md) | Competição, calendário e histórico | 025 |
+| | [028](marco10/prompt028.md) | Mercado e finanças | 025 |
+| | [029](marco10/prompt029.md) | Carreira, diretoria e notícias | 025 |
+| | [030](marco10/prompt030.md) | Rodada ao vivo e fim de temporada | 025, 026 |
+| | [031](marco10/prompt031.md) | Telas de entrada e configuração | 025 |
+| | [032](marco10/prompt032.md) | Telas estreitas, acessibilidade e fechamento do marco | 026 a 031 |
+
+O marco 10 é uma refatoração só visual: não muda motor, regras nem saves. As decisões de design que
+os prompts 025 a 032 compartilham estão em [`../interface-nova.md`](../interface-nova.md). Cada
+feature que muda o que o jogador vê termina com a nota de versão e a subida de versão no mesmo PR,
+**exceto no marco 10**, que segue o fluxo abaixo.
+
+**Fluxo do marco 10.** O marco é desenvolvido na branch `release/v1.0.0`, cortada da `main` depois do
+PR de documentação. Cada feature (025 a 031) sai de uma branch própria dessa branch e volta para ela
+por um PR com `release/v1.0.0` como base; esses merges não publicam nada, porque o release só
+dispara na `main`, que fica congelada durante o marco. A versão do jogo vai para **1.0.0 já na 025**
+(as versões 1.0.0 a 1.10.0 viram a fase beta, com tags `beta-vX.Y.Z`) e as features só enriquecem a
+nota única do 1.0.0. A 032 fecha o marco e o lançamento é um PR de `release/v1.0.0` para a `main`,
+com merge commit. Detalhes em [`../interface-nova.md`](../interface-nova.md), seção 6.

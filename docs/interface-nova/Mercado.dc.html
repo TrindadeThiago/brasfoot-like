@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Mercado — Treinador FC</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0a0e13}
+a{color:inherit;text-decoration:none}
+a:hover{color:#ffffff}
+</style>
+</helmet>
+<div style="min-height: 980px; background: #0a0e13; color: #eef2f6; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.45; display: flex; flex-wrap: wrap">
+
+  <nav aria-label="Telas do jogo" style="flex: 1 1 232px; max-width: 100%; min-width: 0; background: #0f151c; border-right: 1px solid #1d2733; padding: 24px 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px">
+    <div style="display: flex; align-items: center; gap: 12px; padding: 0 8px">
+      <div style="width: 36px; height: 36px; border-radius: 10px; background: {{accent}}; color: #06140c; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px">T</div>
+      <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 17px; letter-spacing: -0.01em">Treinador FC</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <sc-for list="{{nav}}" as="n" hint-placeholder-count="10">
+        <a href="{{n.href}}" style="{{n.style}}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"></path></svg>
+          <span style="flex: 1 1 auto">{{n.label}}</span>
+          <sc-if value="{{n.badge}}" hint-placeholder-val="{{ false }}">
+            <span style="background: #ffb454; color: #1a1103; border-radius: 99px; font-size: 11px; font-weight: 600; padding: 1px 7px">{{n.badge}}</span>
+          </sc-if>
+        </a>
+      </sc-for>
+    </div>
+    <div style="margin-top: auto; border-top: 1px solid #1d2733; padding-top: 12px; display: flex; flex-direction: column; gap: 2px">
+      <a href="Menu.dc.html" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: 10px; color: #98a6b6; font-weight: 500">Menu inicial</a>
+      <a href="Configuracoes.dc.html" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: 10px; color: #98a6b6; font-weight: 500">Configurações</a>
+      <a href="#" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: 10px; color: #98a6b6; font-weight: 500">Atalhos de teclado</a>
+    </div>
+  </nav>
+
+  <main style="flex: 999 1 640px; min-width: 0; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px">
+
+    <header style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px; justify-content: space-between">
+      <div>
+        <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600; letter-spacing: -0.02em">Mercado de transferências</h1>
+        <div style="color: {{accent}}; font-weight: 500">Janela aberta até 21 de março de 2027 (faltam 4 rodadas)</div>
+      </div>
+      <div style="background: #121922; border: 1px solid #1d2733; border-radius: 12px; padding: 10px 16px">
+        <div style="color: #98a6b6; font-size: 12px">Saldo</div>
+        <div style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">$ 23.291.951</div>
+      </div>
+    </header>
+
+    <div role="tablist" aria-label="Seções do mercado" style="display: flex; flex-wrap: wrap; gap: 8px">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+        <button type="button" role="tab" onClick="{{t.pick}}" style="{{t.style}}">{{t.label}}</button>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{isSearch}}" hint-placeholder-val="{{ true }}">
+      <section aria-label="Filtros" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 16px 20px; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px">
+          <sc-for list="{{filters}}" as="f" hint-placeholder-count="10">
+            <label style="display: flex; flex-direction: column; gap: 4px; color: #98a6b6; font-size: 12px">
+              {{f.label}}
+              <input type="text" placeholder="{{f.ph}}" style="min-height: 40px; border-radius: 8px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; padding: 0 10px; font: inherit; min-width: 0">
+            </label>
+          </sc-for>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; justify-content: space-between">
+          <span style="color: #b4c0cd">998 jogadores encontrados</span>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap">
+            <button type="button" style="min-height: 40px; padding: 0 14px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; font: inherit; font-weight: 500; cursor: pointer">Limpar filtros</button>
+            <button type="button" style="{{compareStyle}}">Comparar selecionados ({{selectedCount}})</button>
+          </div>
+        </div>
+        <div style="color: #98a6b6; font-size: 13px">Selecione de 2 a 4 jogadores para comparar.</div>
+      </section>
+
+      <section aria-label="Jogadores do mercado" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; overflow-x: auto">
+        <table style="width: 100%; min-width: 960px; border-collapse: collapse; font-variant-numeric: tabular-nums">
+          <thead>
+            <tr style="color: #98a6b6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em">
+              <th scope="col" style="text-align: left; padding: 12px 16px; font-weight: 500; width: 40px"><span style="position: absolute; left: -9999px">Comparar</span></th>
+              <th scope="col" style="text-align: left; padding: 12px 8px; font-weight: 500">Jogador</th>
+              <th scope="col" style="text-align: left; padding: 12px 8px; font-weight: 500">Pos</th>
+              <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">Idade</th>
+              <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">Força</th>
+              <th scope="col" style="text-align: left; padding: 12px 16px; font-weight: 500">Clube</th>
+              <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">Valor</th>
+              <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">Salário/mês</th>
+              <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">Contrato até</th>
+              <th scope="col" style="text-align: right; padding: 12px 16px; font-weight: 500">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <sc-for list="{{players}}" as="p" hint-placeholder-count="8">
+              <tr style="{{p.row}}">
+                <td style="padding: 8px 16px"><input type="checkbox" aria-label="{{p.aria}}" checked="{{p.checked}}" onChange="{{p.toggle}}" style="width: 20px; height: 20px; accent-color: #3ddc84"></td>
+                <td style="padding: 8px; font-weight: 500">{{p.name}}</td>
+                <td style="padding: 8px"><span style="{{p.posStyle}}">{{p.pos}}</span></td>
+                <td style="padding: 8px; text-align: right; color: #b4c0cd">{{p.age}}</td>
+                <td style="padding: 8px; text-align: right; font-weight: 600">{{p.str}}</td>
+                <td style="padding: 8px 16px; color: #b4c0cd">{{p.club}}</td>
+                <td style="padding: 8px; text-align: right">{{p.value}}</td>
+                <td style="padding: 8px; text-align: right; color: #b4c0cd">{{p.wage}}</td>
+                <td style="padding: 8px; text-align: right; color: #b4c0cd">{{p.until}}</td>
+                <td style="padding: 8px 16px">
+                  <div style="display: flex; gap: 6px; justify-content: flex-end">
+                    <button type="button" style="min-height: 36px; padding: 0 12px; border-radius: 8px; border: 0; background: {{accent}}; color: #06140c; font: inherit; font-weight: 600; cursor: pointer">{{p.primary}}</button>
+                    <sc-if value="{{p.canLoan}}" hint-placeholder-val="{{ true }}">
+                      <button type="button" style="min-height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; font: inherit; font-weight: 500; cursor: pointer">Pedir empréstimo</button>
+                    </sc-if>
+                  </div>
+                </td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+        <div style="padding: 14px; text-align: center; border-top: 1px solid #1d2733">
+          <button type="button" style="min-height: 44px; padding: 0 20px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; font: inherit; font-weight: 500; cursor: pointer">Mostrar mais</button>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{isOther}}" hint-placeholder-val="{{ false }}">
+      <section aria-label="{{tab}}" style="display: flex; flex-direction: column; gap: 12px">
+        <sc-for list="{{rows}}" as="r" hint-placeholder-count="3">
+          <article style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 16px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px">
+            <div style="flex: 1 1 280px; min-width: 0">
+              <div style="font-weight: 600">{{r.title}}</div>
+              <div style="color: #98a6b6; font-size: 13px">{{r.meta}}</div>
+              <div style="{{r.stage}}">{{r.status}}</div>
+            </div>
+            <button type="button" style="min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; font: inherit; font-weight: 500; cursor: pointer">{{r.secondary}}</button>
+            <sc-if value="{{r.primary}}" hint-placeholder-val="{{ false }}">
+              <button type="button" style="min-height: 44px; padding: 0 18px; border-radius: 10px; border: 0; background: {{accent}}; color: #06140c; font: inherit; font-weight: 600; cursor: pointer">{{r.primary}}</button>
+            </sc-if>
+          </article>
+        </sc-for>
+      </section>
+    </sc-if>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#3ddc84","options":["#3ddc84","#5ec8ff","#ffb454","#c79bff"]}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#3ddc84';
+    const tab = (this.state && this.state.tab) || 'Buscar';
+    const selected = (this.state && this.state.selected) || [];
+    const base = 'display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;border-radius:10px;box-sizing:border-box;';
+    const items = [
+      ['Início', 'Main.dc.html', 'M3 11l9-8 9 8M5 10v10h14V10'],
+      ['Elenco', 'Elenco.dc.html', 'M16 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 20v-2a4 4 0 0 0-3-3.9M16 2.1a4 4 0 0 1 0 7.8'],
+      ['Escalação', 'Escalacao.dc.html', 'M3 5h18v14H3zM12 5v14M3 12h18'],
+      ['Competição', 'Competicao.dc.html', 'M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3'],
+      ['Calendário', 'Calendario.dc.html', 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4'],
+      ['Finanças', 'Financas.dc.html', 'M3 17l6-6 4 4 8-8M15 7h6v6'],
+      ['Histórico', 'Historico.dc.html', 'M12 8v4l3 2M3 12a9 9 0 1 0 3-6.7M3 4v5h5'],
+      ['Mercado', 'Mercado.dc.html', 'M4 7h16l-1.5 12h-13zM9 7a3 3 0 0 1 6 0', true, '2'],
+      ['Carreira', 'Carreira.dc.html', 'M4 21v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8'],
+      ['Notícias', 'Noticias.dc.html', 'M4 5h13v14H6a2 2 0 0 1-2-2zM17 9h3v8a2 2 0 0 1-2 2M8 9h5M8 13h5'],
+    ];
+    const nav = items.map((it) => ({
+      label: it[0], href: it[1], icon: it[2], badge: it[4] || '',
+      style: base + (it[3] ? 'background:#16222c;color:' + accent + ';font-weight:600;' : 'color:#b4c0cd;font-weight:500;'),
+    }));
+    const tabs = ['Buscar', 'Negociações', 'Propostas recebidas', 'Contratos'].map((name) => ({
+      label: name,
+      pick: () => this.setState({ tab: name }),
+      style: 'min-height:44px;padding:0 16px;border-radius:10px;font:inherit;font-weight:500;cursor:pointer;' +
+        (tab === name ? 'background:' + accent + ';color:#06140c;border:1px solid ' + accent + ';' : 'background:#121922;color:#eef2f6;border:1px solid #2e3a47;'),
+    }));
+    const filters = [
+      ['Mostrar', 'Todos'], ['Posição', 'Todas'], ['Força mínima', ''], ['Força máxima', ''], ['Idade mínima', ''], ['Idade máxima', ''],
+      ['Valor máximo', ''], ['Salário máximo', ''], ['Contrato termina até', ''], ['País', 'Todos os países'], ['Nome', ''],
+    ].map((f) => ({ label: f[0], ph: f[1] }));
+    const colors = { GOL: '#ffb454', ZAG: '#5ec8ff', LAT: '#5ec8ff', VOL: accent, MEI: accent, ATA: '#ff8a8a' };
+    const data = [
+      ['Juan Molina', 'MEI', 27, 91, 'Bagé', '$ 17.250.000', '$ 96.000', 2029],
+      ['Yongxu Wei', 'ZAG', 29, 88, 'Shenyang', '$ 14.912.000', '$ 88.500', 2028],
+      ['Dmitri Kos', 'ATA', 24, 87, 'Moscou', '$ 13.600.000', '$ 82.000', 2030],
+      ['Lucas Ferraz', 'GOL', 31, 84, 'Livre', 'Livre', '$ 70.000', '—', true],
+      ['Ivan Sokol', 'LAT', 26, 83, 'Praga', '$ 9.800.000', '$ 64.000', 2029],
+      ['Noa Levy', 'VOL', 23, 82, 'Haifa', '$ 8.700.000', '$ 58.000', 2031],
+      ['Tomás Ruiz', 'ATA', 22, 81, 'Córdoba', '$ 8.100.000', '$ 55.000', 2030],
+      ['Haruto Sato', 'MEI', 28, 80, 'Osaka', '$ 7.400.000', '$ 52.000', 2028],
+    ];
+    const players = data.map((d, i) => {
+      const on = selected.indexOf(i) >= 0;
+      return {
+        name: d[0], pos: d[1], age: d[2], str: d[3], club: d[4], value: d[5], wage: d[6], until: d[7],
+        aria: 'Selecionar ' + d[0] + ' para comparar', checked: on,
+        toggle: () => this.setState({ selected: on ? selected.filter((x) => x !== i) : selected.concat([i]).slice(-4) }),
+        row: 'border-top:1px solid #1d2733;' + (on ? 'background:#16222c;' : ''),
+        posStyle: 'display:inline-block;min-width:38px;text-align:center;border-radius:6px;padding:2px 6px;font-size:12px;font-weight:600;background:#16222c;color:' + colors[d[1]] + ';',
+        primary: d[8] ? 'Contratar' : 'Fazer oferta',
+        canLoan: !d[8],
+      };
+    });
+    const stage = 'margin-top:4px;font-size:13px;font-weight:600;color:';
+    const other = {
+      Negociações: [
+        { title: 'Juan Molina · MEI · 91', meta: 'Bagé · oferta de $ 15.000.000', status: 'Aguardando resposta do clube', stage: stage + '#ffb454', secondary: 'Cancelar negociação' },
+        { title: 'Ivan Sokol · LAT · 83', meta: 'Praga · oferta de $ 9.000.000', status: 'O clube fez uma contraproposta', stage: stage + '#5ec8ff', secondary: 'Cancelar negociação', primary: 'Propor contrato' },
+      ],
+      'Propostas recebidas': [
+        { title: 'Eduardo Sá · PE · 77', meta: 'Atlético Marítimo oferece $ 1.900.000', status: 'Expira nesta rodada', stage: stage + '#ffb454', secondary: 'Recusar', primary: 'Aceitar' },
+        { title: 'Otávio Campos · MEI · 71', meta: 'Porto Oeste oferece $ 3.000.000 e pede empréstimo', status: 'Vale por mais 2 rodadas', stage: stage + '#98a6b6', secondary: 'Recusar', primary: 'Aceitar' },
+      ],
+      Contratos: [
+        { title: 'Xavier Amaral · LAT · 72', meta: 'Contrato até 2027 · $ 48.000 por mês', status: 'Último ano de contrato', stage: stage + '#ffb454', secondary: 'Rescindir', primary: 'Renovar' },
+        { title: 'Yuri Barbosa · MEI · 61', meta: 'Contrato até 2027 · $ 40.000 por mês', status: 'Último ano de contrato', stage: stage + '#ffb454', secondary: 'Rescindir', primary: 'Renovar' },
+      ],
+    };
+    return {
+      accent, nav, tabs, tab, filters, players,
+      isSearch: tab === 'Buscar', isOther: tab !== 'Buscar', rows: other[tab] || [],
+      selectedCount: selected.length,
+      compareStyle: 'min-height:40px;padding:0 14px;border-radius:10px;font:inherit;font-weight:600;border:1px solid ' + (selected.length >= 2 ? accent : '#2e3a47') + ';background:' + (selected.length >= 2 ? accent : '#0f151c') + ';color:' + (selected.length >= 2 ? '#06140c' : '#98a6b6') + ';cursor:pointer;',
+    };
+  }
+}
+</script>
+</body>
+</html>

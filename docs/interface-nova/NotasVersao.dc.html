@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Notas de versão — Treinador FC</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0a0e13}
+a{color:inherit;text-decoration:none}
+a:hover{color:#ffffff}
+</style>
+</helmet>
+<div style="min-height: 980px; background: #0a0e13; color: #eef2f6; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.45; display: flex; flex-direction: column">
+
+  <header style="padding: 16px 48px; display: flex; align-items: center; gap: 16px; border-bottom: 1px solid #1d2733">
+    <a href="Menu.dc.html" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: #b4c0cd; font-weight: 500">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>
+      Voltar
+    </a>
+    <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">Notas de versão</h1>
+  </header>
+
+  <main style="width: 100%; max-width: 760px; margin: 0 auto; padding: 40px 48px; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px">
+    <sc-for list="{{releases}}" as="r" hint-placeholder-count="5">
+      <details open="{{r.open}}" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 4px 22px">
+        <summary style="cursor: pointer; min-height: 56px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+          <span style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">{{r.version}}</span>
+          <span style="{{r.badge}}">{{r.tag}}</span>
+          <span style="color: #98a6b6; font-size: 13px">{{r.date}}</span>
+        </summary>
+        <ul style="margin: 0 0 16px; padding-left: 20px; color: #b4c0cd; display: flex; flex-direction: column; gap: 6px">
+          <sc-for list="{{r.items}}" as="i" hint-placeholder-count="3">
+            <li>{{i.text}}</li>
+          </sc-for>
+        </ul>
+      </details>
+    </sc-for>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#3ddc84","options":["#3ddc84","#5ec8ff","#ffb454","#c79bff"]}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#3ddc84';
+    const badge = (on) => 'border-radius:6px;padding:2px 8px;font-size:11px;font-weight:600;' + (on ? 'background:rgba(61,220,132,0.16);color:' + accent + ';' : 'display:none;');
+    const data = [
+      ['1.10.0', 'Atual', true, '28 de outubro de 2026', ['Mundo padrão novo: o jogo agora começa no mundo das cinco confederações do futebol, com 15 países.', 'Os mundos médio e completo foram descartados: travavam nas rodadas da liga. O mundo padrão roda leve em qualquer computador.', 'Mercado: a tela abre e responde bem mais rápido, com a lista de jogadores montada uma vez e filtros que só filtram em cima dela.']],
+      ['1.9.0', '', false, '27 de outubro de 2026', ['Mundo completo: na nova carreira, escolha entre três tamanhos de mundo.', 'Nomes: países, estados e cidades são os reais; clubes, competições e jogadores são fictícios, com bancos de nomes por idioma.', 'Economia e vagas proporcionais à força de cada país.']],
+      ['1.8.0', '', false, '27 de outubro de 2026', ['Estaduais: cada região pode ter o seu campeonato, com duas divisões, disputado no começo da temporada.', 'Acesso e rebaixamento entre as divisões, sempre com o mesmo número de clubes em cada uma.', 'Clubes regionais: só jogam o estadual e o computador cuida deles.']],
+      ['1.7.1', '', false, '25 de outubro de 2026', ['Rodada ao vivo: quando um jogador se lesiona, ele continua na lista do painel de substituições, na vaga dele, marcado para troca.']],
+      ['1.7.0', '', false, '25 de outubro de 2026', ['Competições entre países: uma taça continental reúne os melhores clubes de vários países.', 'Duas taças ligadas: quem fica em posições definidas nos grupos da taça maior desce para a fase seguinte da taça menor.', 'A campanha pesa na carreira: prêmios por vitória, empate, fase alcançada e título.']],
+    ];
+    const releases = data.map((d, i) => ({
+      version: d[0], tag: 'Atual', badge: badge(d[2]), date: d[3], open: i === 0 ? true : false,
+      items: d[4].map((text) => ({ text })),
+    }));
+    return { accent, releases };
+  }
+}
+</script>
+</body>
+</html>
