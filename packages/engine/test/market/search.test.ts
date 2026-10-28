@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { addFreeAgents, toFreeAgent } from "../../src/market/free-agents";
-import { comparePlayers, searchPlayers } from "../../src/market/search";
+import { comparePlayers, filterRows, marketRows, searchPlayers } from "../../src/market/search";
 import { MANAGER, marketContext } from "./helpers";
 
 const base = marketContext();
@@ -86,5 +86,36 @@ describe("busca no mercado (FR-008, US1)", () => {
     const result = comparePlayers(context, ids.slice(0, 3));
     expect(result.ok && result.value.map((row) => row.playerId)).toEqual(ids.slice(0, 3));
     expect(comparePlayers(context, ["inexistente", ids[0] ?? ""]).ok).toBe(false);
+  });
+});
+
+describe("lista montada uma vez e filtrada em cima (024)", () => {
+  const rows = marketRows(context);
+  const sort = { key: "strength", dir: "desc" } as const;
+
+  it("marketRows traz todos os jogadores e os livres, sem filtro", () => {
+    expect(rows).toHaveLength(context.world.players.length + 3);
+    expect(rows.filter((row) => row.free)).toHaveLength(3);
+  });
+
+  it("filterRows dá o mesmo resultado de searchPlayers, para escopo, posição, texto e valores", () => {
+    const cases = [
+      {},
+      { scope: "free" as const },
+      { scope: "clubs" as const },
+      { positions: ["FW" as const], strength: [40, 99] as [number, number] },
+      { text: "  A  " },
+      { maxValue: 500_000, maxWage: 50_000, age: [18, 30] as [number, number] },
+      { excludeClubId: MANAGER },
+    ];
+    for (const filters of cases) {
+      expect(filterRows(rows, filters, sort)).toEqual(searchPlayers(context, filters, sort));
+    }
+  });
+
+  it("filtrar não altera a lista montada", () => {
+    const before = rows.map((row) => row.playerId);
+    filterRows(rows, { text: "a" }, { key: "age", dir: "asc" });
+    expect(rows.map((row) => row.playerId)).toEqual(before);
   });
 });

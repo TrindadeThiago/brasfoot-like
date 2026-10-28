@@ -53,3 +53,32 @@ test("estadual: aba, duas divisões e fase de grupos (023)", async ({ page }) =>
   const groups = page.getByRole("region", { name: t("stages.groups") });
   await expect(groups.getByRole("table").first()).toBeVisible();
 });
+
+// Os jogos do estadual entram em "Últimos resultados" da Início, antes de a liga começar.
+test("estadual: o resultado aparece em últimos resultados na Início", async ({ page }) => {
+  test.setTimeout(180_000);
+  await skipTips(page);
+  await page.goto("/mods/");
+  await page.getByLabel(t("mods.load")).setInputFiles({
+    name: "estaduais.zip",
+    mimeType: "application/zip",
+    buffer: regionalMod(),
+  });
+  await expect(page.getByText(t("mods.loaded", { name: MOD_NAME }))).toBeVisible();
+  await page.goto("/nova-carreira/");
+  await page.getByLabel(t("newCareer.bank")).selectOption({ label: MOD_NAME });
+  await page.getByLabel(t("newCareer.managerName")).fill("Ana Souza");
+  await page.getByText(t("newCareer.advanced")).click();
+  await page.getByLabel(t("newCareer.seed")).fill(E2E_SEED);
+  await page.getByRole("checkbox", { name: t("newCareer.noFiring") }).check();
+  await page.locator("table tbody tr").first().click();
+  await page.getByRole("button", { name: t("newCareer.confirm") }).click();
+
+  const results = page.getByRole("region", { name: t("home.lastResults") });
+  await expect(results.getByText(t("home.noResults"))).toBeVisible();
+  const button = page.getByRole("button", { name: t("home.simulate") });
+  await button.click();
+  await expect(button).toBeEnabled();
+  await expect(results.getByText(t("home.noResults"))).toHaveCount(0);
+  await expect(results.getByText(/^Campeonato de /)).toBeVisible();
+});

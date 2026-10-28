@@ -1,6 +1,6 @@
 import { seasonDate } from "../calendar/date";
 import { deriveMarketValue } from "../derived/economy";
-import type { CompletedBank, CompletedPlayer } from "../model/types";
+import type { Club, CompletedBank, CompletedPlayer } from "../model/types";
 import { marketRules } from "./rules";
 import type { MarketRules } from "./types";
 
@@ -13,6 +13,23 @@ export function contractValuePct(untilYear: number, year: number, rules: MarketR
 }
 
 /**
+ * Valor de mercado já com o clube dono, as regras e a data resolvidos: serve a quem calcula o valor de
+ * milhares de jogadores (a busca do mercado), sem procurar o clube e montar as regras a cada um.
+ */
+export function marketValueFor(
+  player: CompletedPlayer,
+  owner: Club | undefined,
+  rules: MarketRules,
+  date: string,
+  year: number,
+): number {
+  if (!owner) return 0;
+  const base = deriveMarketValue(player, owner, date);
+  const pct = player.contract ? contractValuePct(player.contract.untilYear, year, rules) : 100;
+  return Math.max(1000, Math.round((base * pct) / 100 / 1000) * 1000);
+}
+
+/**
  * Valor de mercado de um jogador com clube: valor derivado (reputação do clube dono do contrato)
  * × fator do contrato. Emprestado vale pelo clube de origem. Múltiplo de 1.000.
  */
@@ -22,7 +39,5 @@ export function marketValue(player: CompletedPlayer, world: CompletedBank, year:
   if (!club) return 0;
   const competition = world.competitions[0];
   const rules = marketRules(world, competition?.id ?? "");
-  const base = deriveMarketValue(player, club, seasonDate(world.manifest.referenceDate, year));
-  const pct = player.contract ? contractValuePct(player.contract.untilYear, year, rules) : 100;
-  return Math.max(1000, Math.round((base * pct) / 100 / 1000) * 1000);
+  return marketValueFor(player, club, rules, seasonDate(world.manifest.referenceDate, year), year);
 }

@@ -16,8 +16,11 @@ import type {
  * nacional (021) e da taça anterior. Só dados: nada aqui é regra do motor.
  */
 
-/** Tamanhos: `full` (40 clubes, 10 países) e `compact` (16 clubes, 4 países ou mais). */
-export type ContinentalSize = "full" | "compact";
+/**
+ * Tamanhos: `full` (40 clubes, 8 países ou mais), `compact` (16 clubes, 4 países ou mais) e `mini`
+ * (12 clubes em 4 grupos de 3, a partir de 3 países).
+ */
+export type ContinentalSize = "full" | "compact" | "mini";
 
 export const CONTINENTAL_IDS = { major: "continental-maior", minor: "continental-menor" } as const;
 
@@ -33,6 +36,7 @@ interface Layout {
 const LAYOUTS: Record<ContinentalSize, Layout> = {
   full: { total: 40, direct: 24, groups: 8 },
   compact: { total: 16, direct: 16, groups: 4 },
+  mini: { total: 12, direct: 12, groups: 4 },
 };
 
 const POINTS = { win: 3, draw: 1, loss: 0 };
@@ -119,15 +123,16 @@ function stagesOf(size: ContinentalSize, direct: string[]): StageFormat[] {
     pots: 4,
     rules: [{ kind: "separate", attribute: "country" }],
   } as const;
-  if (size === "compact") {
+  if (size !== "full") {
+    const groupSize = size === "mini" ? 3 : 4;
     const groups: GroupsStage = {
       type: "groups",
-      groupSize: 4,
+      groupSize,
       rounds: 2,
       points: POINTS,
       tiebreakers: TIEBREAKERS,
       qualified: 2,
-      draw: { ...draw, rules: [...draw.rules] },
+      draw: { ...draw, pots: groupSize, rules: [...draw.rules] },
     };
     const knockout: KnockoutStage = {
       type: "knockout",
@@ -404,6 +409,7 @@ function buildMajor(input: ContinentalInput): { competition: Competition; plan: 
 const MINOR_LAYOUTS: Record<ContinentalSize, { total: number; late: number }> = {
   full: { total: 16, late: 0 },
   compact: { total: 6, late: 2 },
+  mini: { total: 6, late: 2 },
 };
 
 /**

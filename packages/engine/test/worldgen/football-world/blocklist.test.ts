@@ -1,10 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { generateFootballWorld } from "../../../src/worldgen/football-world";
-import { COMPACT_PROFILE } from "../../../src/worldgen/football-world/profiles/compact";
-import {
-  DEFAULT_PROFILE,
-  MEDIUM_PROFILE,
-} from "../../../src/worldgen/football-world/profiles/default";
+import { DEFAULT_PROFILE } from "../../../src/worldgen/football-world/profiles/default";
 import { clubNameProblems, competitionNameProblems, isRealPlayer } from "../../helpers/blocklist";
 
 describe("verificador de nomes (024 R13)", () => {
@@ -30,13 +26,11 @@ describe("verificador de nomes (024 R13)", () => {
 
 describe("nenhum nome real nos clubes, competições e jogadores gerados (024 FR-010, SC-008)", () => {
   const worlds = [
-    ["reduzido", COMPACT_PROFILE, "a"],
-    ["reduzido", COMPACT_PROFILE, "b"],
-    ["medio", MEDIUM_PROFILE, "mundo-completo-1"],
-    ["medio", MEDIUM_PROFILE, "outra"],
-    ["completo", DEFAULT_PROFILE, "mundo-completo-1"],
-    ["completo", DEFAULT_PROFILE, "c"],
-    ["completo", DEFAULT_PROFILE, "d"],
+    ["padrão", DEFAULT_PROFILE, "a"],
+    ["padrão", DEFAULT_PROFILE, "b"],
+    ["padrão", DEFAULT_PROFILE, "mundo-padrao-1"],
+    ["padrão", DEFAULT_PROFILE, "c"],
+    ["padrão", DEFAULT_PROFILE, "d"],
   ] as const;
   it.each(worlds)("perfil %s, seed %s", (_label, profile, seed) => {
     const bank = generateFootballWorld(profile, seed);

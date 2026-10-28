@@ -1,5 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { joinBankFiles, type ModPackage } from "@brasfoot-like/engine";
+import { writeModPackage } from "@brasfoot-like/modkit";
 import { expect, type Page } from "@playwright/test";
 
 const UI: Record<string, string> = JSON.parse(
@@ -36,6 +38,43 @@ export async function skipTips(page: Page): Promise<void> {
  */
 export const E2E_SEED = "e2e";
 
+const CLASSIC_NAME = "Mundo clássico (e2e)";
+
+/**
+ * O mundo clássico (um país, Série A e B de 20 clubes) era o padrão do jogo até a 1.10. Os testes que
+ * dependem de uma liga de 20 clubes o instalam como mod (como um jogador faria) e o escolhem na nova
+ * carreira; o mundo padrão atual tem os seus próprios testes.
+ */
+function classicZip(): Buffer {
+  const dir = join(import.meta.dirname, "../../../mods/default");
+  const file = (name: string) => JSON.parse(readFileSync(join(dir, name), "utf8"));
+  const bank = joinBankFiles({
+    "mod.json": { ...file("mod.json"), id: "classico", name: CLASSIC_NAME },
+    "countries.json": file("countries.json"),
+    "competitions.json": file("competitions.json"),
+    "clubs.json": file("clubs.json"),
+    "players.json": file("players.json"),
+    "rivalries.json": file("rivalries.json"),
+  }) as ModPackage;
+  return Buffer.from(writeModPackage(bank));
+}
+
+/** Instala o mundo clássico na página de mods e volta à abertura. */
+export async function installClassicWorld(page: Page): Promise<void> {
+  await page.goto("/mods/");
+  const list = page.getByRole("region", { name: t("mods.list") });
+  if ((await list.getByText(CLASSIC_NAME).count()) > 0) return;
+  await page
+    .getByLabel(t("mods.load"))
+    .setInputFiles({ name: "classico.zip", mimeType: "application/zip", buffer: classicZip() });
+  await expect(list.getByText(CLASSIC_NAME)).toBeVisible();
+}
+
+/** Escolhe o mundo clássico no seletor de mundo da nova carreira. */
+export async function selectClassicWorld(page: Page): Promise<void> {
+  await page.getByLabel(t("newCareer.bank")).selectOption({ label: CLASSIC_NAME });
+}
+
 /**
  * Cria uma carreira pela interface e devolve o nome do clube escolhido (linha `row` da tabela da
  * divisão `division`). A seed é fixa (`E2E_SEED`) para o teste jogar sempre a mesma carreira.
@@ -48,8 +87,10 @@ export async function createCareer(
   options: { noFiring?: boolean; seed?: string } = {},
 ): Promise<string> {
   await skipTips(page);
+  await installClassicWorld(page);
   await page.goto("/");
   await page.getByRole("link", { name: t("opening.newCareer") }).click();
+  await selectClassicWorld(page);
   await page.getByLabel(t("newCareer.managerName")).fill(manager);
   await page.getByText(t("newCareer.advanced")).click();
   await page.getByLabel(t("newCareer.seed")).fill(options.seed ?? E2E_SEED);

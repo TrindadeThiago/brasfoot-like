@@ -1,18 +1,11 @@
 "use client";
 
-import {
-  generateFootballWorld,
-  joinBankFiles,
-  profileOfSize,
-  validateBank,
-  WORLD_SIZES,
-  type WorldSize,
-} from "@brasfoot-like/engine";
+import { joinBankFiles, validateBank } from "@brasfoot-like/engine";
 import { MANAGER_NAME_MAX } from "@brasfoot-like/save";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useDeferredValue, useEffect, useMemo, useState } from "react";
-import { defaultBankInput } from "../../game/default-bank";
+import { DEFAULT_WORLD_SEED, defaultBankInput } from "../../game/default-bank";
 import { useGame } from "../../game/GameProvider";
 import { competitionClubs, type LeagueClub } from "../../game/selectors";
 import { formatNumber, useT } from "../../i18n";
@@ -22,16 +15,6 @@ import { Button } from "../../ui/Button";
 import { Crest } from "../../ui/Crest";
 import { type Column, DataTable } from "../../ui/DataTable";
 import styles from "./page.module.css";
-
-/** Seed do mundo gerado quando o jogador não digita uma (024): o mesmo mundo para todos. */
-const WORLD_SEED = "mundo-completo-1";
-const WORLD_PREFIX = "mundo:";
-
-/** Tamanho de mundo escolhido no seletor de banco, ou nada se é o banco padrão ou um mod. */
-function worldSizeOf(bankId: string): WorldSize | undefined {
-  const size = bankId.startsWith(WORLD_PREFIX) ? bankId.slice(WORLD_PREFIX.length) : "";
-  return (WORLD_SIZES as readonly string[]).includes(size) ? (size as WorldSize) : undefined;
-}
 
 /** Clubes da competição do banco escolhido (padrão ou mod, 015). */
 function useCompetitionClubs(input: unknown): LeagueClub[] {
@@ -94,21 +77,24 @@ export default function NewCareerPage() {
     void mods.list().then(setInstalled);
   }, [mods]);
   const mod = installed.find((entry) => entry.id === bankId);
-  const worldSize = worldSizeOf(bankId);
   const [seed, setSeed] = useState("");
-  // O mundo é gerado aqui, no navegador (024): a seed digitada muda o mundo, sem travar a digitação.
-  const worldSeed = useDeferredValue(seed.trim() || WORLD_SEED);
+  // O mundo padrão é gerado aqui, no navegador (024): a seed digitada o muda, sem travar a digitação.
+  const worldSeed = useDeferredValue(seed.trim() || DEFAULT_WORLD_SEED);
   const bankInput = useMemo(
-    () =>
-      worldSize
-        ? generateFootballWorld(profileOfSize(worldSize), worldSeed)
-        : mod
-          ? joinBankFiles(mod.files)
-          : defaultBankInput(),
-    [mod, worldSize, worldSeed],
+    () => (mod ? joinBankFiles(mod.files) : defaultBankInput(worldSeed)),
+    [mod, worldSeed],
   );
   const allClubs = useCompetitionClubs(bankInput);
-  const countries = useMemo(() => countriesOf(allClubs), [allClubs]);
+  // Na ordem dos países do banco (no mundo padrão, o Brasil primeiro), não na dos clubes por id.
+  const countries = useMemo(() => {
+    const order = new Map(
+      ((bankInput as { countries?: { id: string }[] }).countries ?? []).map((c, i) => [c.id, i]),
+    );
+    return countriesOf(allClubs).sort(
+      (a, b) =>
+        (order.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (order.get(b.id) ?? Number.MAX_SAFE_INTEGER),
+    );
+  }, [allClubs, bankInput]);
   const manyCountries = countries.length > 1;
   const groups = useMemo(() => groupsOf(bankInput as Parameters<typeof groupsOf>[0]), [bankInput]);
   const groupNames = useMemo(
@@ -226,7 +212,8 @@ export default function NewCareerPage() {
       clubId,
       seed,
       noFiring,
-      ...(mod ? { bank: bankInput, assets: mod.images } : worldSize ? { bank: bankInput } : {}),
+      bank: bankInput,
+      ...(mod ? { assets: mod.images } : {}),
     });
     setCreating(false);
     if (!result.ok) {
@@ -277,11 +264,6 @@ export default function NewCareerPage() {
               onChange={(event) => setBankId(event.target.value)}
             >
               <option value="">{t("newCareer.defaultBank")}</option>
-              {WORLD_SIZES.map((size) => (
-                <option key={size} value={`${WORLD_PREFIX}${size}`}>
-                  {t(`newCareer.world.${size}`)}
-                </option>
-              ))}
               {installed.map((entry) => (
                 <option key={entry.id} value={entry.id}>
                   {entry.summary.name}
@@ -289,9 +271,7 @@ export default function NewCareerPage() {
               ))}
             </select>
           </div>
-          {worldSize ? (
-            <small className={styles.help}>{t(`newCareer.world.${worldSize}.help`)}</small>
-          ) : null}
+          {mod ? null : <small className={styles.help}>{t("newCareer.defaultBank.help")}</small>}
           <Link href="/mods/">{t("nav.mods")}</Link>
           <h2>{t("newCareer.chooseClub")}</h2>
           {manyCountries ? (

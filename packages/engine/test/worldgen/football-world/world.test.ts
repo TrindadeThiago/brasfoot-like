@@ -1,19 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { COMPACT_PROFILE, generateFootballWorld } from "../../../src/worldgen/football-world";
+import { DEFAULT_PROFILE, generateFootballWorld } from "../../../src/worldgen/football-world";
 
 describe("mundo compacto (024 US6)", () => {
-  const bank = generateFootballWorld(COMPACT_PROFILE, "mundo");
+  const bank = generateFootballWorld(DEFAULT_PROFILE, "mundo");
 
-  it("valida sem erros nem avisos e tem as seis confederações", () => {
-    expect(bank.countries).toHaveLength(24);
+  it("valida sem erros nem avisos e tem as cinco confederações", () => {
+    expect(bank.countries).toHaveLength(15);
     const majors = bank.competitions.filter((c) => c.id.endsWith("-maior"));
     expect(majors.map((c) => c.id)).toEqual([
-      "continental-uefa-maior",
       "continental-conmebol-maior",
+      "continental-uefa-maior",
       "continental-concacaf-maior",
       "continental-caf-maior",
       "continental-afc-maior",
-      "continental-ofc-maior",
     ]);
   });
 

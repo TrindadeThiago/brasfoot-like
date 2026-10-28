@@ -1,5 +1,18 @@
 [
   {
+    "version": "1.10.0",
+    "date": "2026-10-28",
+    "changes": [
+      "Mundo padrão novo: o jogo agora começa no mundo das cinco confederações do futebol (sem a Oceania), com 15 países (Brasil, Argentina, Inglaterra, Espanha, Japão e outros), ligas de 20 clubes, o Brasil em quatro divisões e cinco estaduais de duas divisões, e uma competição continental por confederação. Países, estados e cidades são reais; clubes e jogadores são fictícios. A seed em \"avançado\" muda o mundo.",
+      "Os mundos médio e completo (até 44 países e 1 650 clubes) foram descartados: travavam nas rodadas da liga. O mundo padrão roda leve em qualquer computador.",
+      "Mercado: a tela abre e responde bem mais rápido. A lista de jogadores é montada uma vez e os filtros e a busca por nome só filtram em cima dela, em vez de refazer tudo a cada tecla.",
+      "Nova carreira: os países aparecem agrupados por confederação. A página de Mods oferece o download do mundo padrão, para trocar os nomes pela planilha (CSV).",
+      "Início: \"Últimos resultados\" agora mostra os jogos de todas as competições (estadual, copa e continental), não só os da liga.",
+      "Carreiras em andamento continuam no mundo que já tinham.",
+      "Modders: a ferramenta `pnpm gen:football-world` gera o pacote de forma determinística pela seed, com perfil ajustável (países, níveis, força, tamanho do Brasil e dos estaduais), valida antes de terminar e aceita planilhas. O limite por arquivo JSON do pacote passou de 10 para 16 MB."
+    ]
+  },
+  {
     "version": "1.9.0",
     "date": "2026-10-27",
     "changes": [

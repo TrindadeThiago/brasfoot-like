@@ -35,6 +35,8 @@ export interface Confederation {
   name: string;
   /** Se há competição continental secundária, ligada à principal. */
   minor: boolean;
+  /** Se a confederação tem competição continental (padrão: sim). */
+  continental?: boolean;
   countries: CountrySpec[];
 }
 
@@ -97,11 +99,11 @@ export function validateProfile(profile: WorldProfile): ProfileIssue[] {
       issue("profile.duplicate_confederation", base, { id: confederation.id });
     }
     confederations.add(confederation.id);
-    if (confederation.countries.length < 4) {
+    if (confederation.countries.length < 3) {
       issue("profile.few_countries", `${base}.countries`, {
         confederation: confederation.id,
         count: confederation.countries.length,
-        min: 4,
+        min: 3,
       });
     }
     confederation.countries.forEach((spec, k) => {

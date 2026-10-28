@@ -8,6 +8,7 @@ import { t } from "../../src/i18n";
 import { createIndexedDbStore } from "../../src/storage/indexeddb";
 import { createModStore } from "../../src/storage/mods";
 import { freshStore, renderApp } from "../helpers/app";
+import { renderClassicNewCareer } from "../helpers/classic";
 import { memoryRouter } from "../helpers/router";
 
 vi.setConfig({ testTimeout: 90000 });
@@ -41,7 +42,7 @@ async function installWorld() {
   expect(await screen.findByText(t("mods.loaded", { name: "Mundo de teste" }))).toBeDefined();
   renderApp("/nova-carreira", store, mods);
   const bank = await screen.findByLabelText(t("newCareer.bank"));
-  await waitFor(() => expect(within(bank).getAllByRole("option")).toHaveLength(5));
+  await waitFor(() => expect(within(bank).getAllByRole("option")).toHaveLength(2));
   await user.selectOptions(bank, "mundo-teste");
   return { user, store, mods };
 }
@@ -108,7 +109,7 @@ describe("nova carreira num mundo de vários países (020 US1)", () => {
 
 describe("nova carreira no mundo padrão (020 FR-020)", () => {
   it("sem filtro de país, sem coluna de país e sem contagem", async () => {
-    renderApp("/nova-carreira", freshStore());
+    await renderClassicNewCareer();
     expect(screen.queryByLabelText(t("newCareer.country.filter"))).toBeNull();
     expect(screen.queryByLabelText(t("newCareer.search"))).toBeNull();
     expect(screen.queryByRole("columnheader", { name: new RegExp(t("col.country")) })).toBeNull();

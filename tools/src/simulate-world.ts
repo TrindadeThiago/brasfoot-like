@@ -4,7 +4,7 @@
 // Uso: pnpm sim:world [--seed <seed>] [--seasons <n>]
 //      pnpm sim:world --scale [--countries <n>] [--seasons <n>] [--qualification] [--continental]
 //      pnpm sim:world --regional [--states <n>] [--seasons <n>]
-//      pnpm sim:world --football-world [--profile reduzido|medio|completo] [--seasons <n>]
+//      pnpm sim:world --football-world [--seasons <n>]
 import { realpathSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
@@ -278,7 +278,6 @@ if (invokedDirectly) {
       continental: { type: "boolean", default: false },
       regional: { type: "boolean", default: false },
       "football-world": { type: "boolean", default: false },
-      profile: { type: "string" },
       states: { type: "string" },
     },
   });
@@ -294,18 +293,7 @@ if (invokedDirectly) {
       ...(values.qualification || values.continental ? { qualification: true } : {}),
       ...(values.continental ? { continental: "full" as const } : {}),
       // Mundo completo (024): `--football-world [--profile reduzido|medio|completo]`.
-      ...(values["football-world"]
-        ? {
-            footballWorld: {
-              profile:
-                values.profile === "reduzido" || values.profile === "compacto"
-                  ? ("reduzido" as const)
-                  : values.profile === "medio"
-                    ? ("medio" as const)
-                    : ("completo" as const),
-            },
-          }
-        : {}),
+      ...(values["football-world"] ? { footballWorld: {} } : {}),
       // Estaduais (023): `--regional [--states n]`, um país com a liga nacional e os estaduais.
       ...(values.regional
         ? { regional: { states: values.states ? Number(values.states) : 27 } }

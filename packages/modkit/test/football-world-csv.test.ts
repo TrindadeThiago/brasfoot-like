@@ -1,6 +1,6 @@
 import {
-  COMPACT_PROFILE,
   completeCareerDay,
+  DEFAULT_PROFILE,
   generateFootballWorld,
   isRegionalOnly,
 } from "@brasfoot-like/engine";
@@ -17,7 +17,7 @@ import { applyCsv, clubsToCsv, playersToCsv, readModPackage, writeModPackage } f
 
 // 024 (T050): exportar → editar → importar → carreira, no mundo compacto.
 describe("ciclo de planilhas no mundo compacto (024 US3)", () => {
-  const bank = generateFootballWorld(COMPACT_PROFILE, "planilha");
+  const bank = generateFootballWorld(DEFAULT_PROFILE, "planilha");
 
   it("exporta, troca nomes, importa e o pacote continua válido", () => {
     const clubs = clubsToCsv(bank).replace(bank.clubs[0]?.name ?? "", "Meu Clube");

@@ -1142,7 +1142,18 @@
     "name": "Ilhas Salomão",
     "code": "SLB",
     "language": "en",
-    "cities": ["Honiara", "Gizo", "Auki", "Kirakira", "Buala", "Tulagi", "Munda", "Lata"]
+    "cities": [
+      "Honiara",
+      "Gizo",
+      "Auki",
+      "Kirakira",
+      "Buala",
+      "Tulagi",
+      "Munda",
+      "Lata",
+      "Noro",
+      "Taro"
+    ]
   },
   {
     "id": "brasil",

@@ -342,7 +342,7 @@ export {
 export { attraction, exigency, respondToContract, wageDemand } from "./market/player-response";
 export { releaseManagerClub } from "./market/release";
 export { DEFAULT_MARKET, marketRules } from "./market/rules";
-export { comparePlayers, searchPlayers } from "./market/search";
+export { comparePlayers, filterRows, marketRows, searchPlayers } from "./market/search";
 export {
   canAddPlayer,
   canRemovePlayer,
@@ -717,22 +717,17 @@ export type {
   CountrySpec,
   ProfileIssue,
   WorldProfile,
-  WorldSize,
 } from "./worldgen/football-world";
 export {
   BRAZIL_STATES,
-  COMPACT_PROFILE,
   DEFAULT_PROFILE,
   GEO_COUNTRIES,
   generateFootballWorld,
   LEAGUE_START_WEEK,
-  MEDIUM_PROFILE,
   NAME_BANKS,
   ProfileError,
-  profileOfSize,
   TIERS,
   validateProfile,
-  WORLD_SIZES,
 } from "./worldgen/football-world";
 export type { GenerateOptions } from "./worldgen/generate";
 export { generateDefaultBank } from "./worldgen/generate";

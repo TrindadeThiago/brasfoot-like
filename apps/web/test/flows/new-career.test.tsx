@@ -2,7 +2,8 @@ import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { t } from "../../src/i18n";
-import { freshStore, renderApp } from "../helpers/app";
+import { freshStore } from "../helpers/app";
+import { renderClassicNewCareer } from "../helpers/classic";
 import { memoryRouter } from "../helpers/router";
 
 function clubRows() {
@@ -13,8 +14,8 @@ function clubRows() {
 }
 
 describe("nova carreira (US1)", () => {
-  it("lista os 20 clubes da Série A com as informações básicas", () => {
-    renderApp("/nova-carreira", freshStore());
+  it("lista os 20 clubes da Série A com as informações básicas", async () => {
+    await renderClassicNewCareer();
     const rows = clubRows();
     expect(rows).toHaveLength(20);
     expect(within(rows[0] as HTMLElement).getByRole("img")).toBeDefined();
@@ -31,7 +32,7 @@ describe("nova carreira (US1)", () => {
 
   it("ordena por força", async () => {
     const user = userEvent.setup();
-    renderApp("/nova-carreira", freshStore());
+    await renderClassicNewCareer();
     await user.click(screen.getByRole("button", { name: new RegExp(t("col.strength")) }));
     await user.click(screen.getByRole("button", { name: new RegExp(t("col.strength")) }));
     const strengths = clubRows().map((row) =>
@@ -42,7 +43,7 @@ describe("nova carreira (US1)", () => {
 
   it("bloqueia nome vazio", async () => {
     const user = userEvent.setup();
-    renderApp("/nova-carreira", freshStore());
+    await renderClassicNewCareer();
     await user.click(clubRows()[0] as HTMLElement);
     await user.click(screen.getByRole("button", { name: t("newCareer.confirm") }));
     expect(await screen.findByRole("alert")).toBeDefined();
@@ -51,7 +52,7 @@ describe("nova carreira (US1)", () => {
 
   it("cria a carreira e mostra a tela inicial do clube", async () => {
     const user = userEvent.setup();
-    renderApp("/nova-carreira", freshStore());
+    await renderClassicNewCareer();
     await user.type(screen.getByLabelText(t("newCareer.managerName")), "Ana Souza");
     const row = clubRows()[3] as HTMLElement;
     const clubName = within(row).getByRole("img").getAttribute("aria-label") ?? "";
@@ -69,7 +70,7 @@ describe("nova carreira (US1)", () => {
 
   it("o filtro alcança os 40 clubes das duas divisões (US4)", async () => {
     const user = userEvent.setup();
-    renderApp("/nova-carreira", freshStore());
+    await renderClassicNewCareer();
     expect(clubRows()).toHaveLength(20);
     const filter = screen.getByLabelText(t("newCareer.division.filter"));
     await user.selectOptions(filter, "Série B");
@@ -90,7 +91,7 @@ describe("nova carreira (US1)", () => {
 
   it("carreira com clube da Série B joga a Série B (US4)", async () => {
     const user = userEvent.setup();
-    renderApp("/nova-carreira", freshStore());
+    await renderClassicNewCareer();
     await user.type(screen.getByLabelText(t("newCareer.managerName")), "Bia");
     await user.selectOptions(screen.getByLabelText(t("newCareer.division.filter")), "Série B");
     const table = screen.getByRole("table", {
@@ -114,7 +115,7 @@ describe("nova carreira (US1)", () => {
   it("opção sem demissão: desmarcada por padrão e gravada na carreira (012 US7)", async () => {
     const user = userEvent.setup();
     const store = freshStore();
-    renderApp("/nova-carreira", store);
+    await renderClassicNewCareer(store);
     const option = screen.getByRole("checkbox", { name: t("newCareer.noFiring") });
     expect((option as HTMLInputElement).checked).toBe(false);
     expect(screen.getByText(t("newCareer.noFiringHelp"))).toBeDefined();

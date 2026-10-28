@@ -27,7 +27,7 @@
 
 ## 3. Mundo do jogo
 
-- **MVP:** um país fictício com **Série A e Série B**, 20 times cada, com acesso e rebaixamento.
+- **MVP:** um país fictício com **Série A e Série B**, 20 times cada, com acesso e rebaixamento. Desde a 1.10 o mundo padrão do jogo é o das cinco confederações (024); o país único segue como o banco de testes e como base dos mods de exemplo.
 - País, competição e formato (pontos corridos, mata-mata, grupos) são **dados, não código** — adicionar ligas/países deve ser trabalho de dados.
 - Primeira expansão sugerida: copa nacional em mata-mata.
 - **Vários países (020):** um banco pode ter quantos países quiser; cada um com a sua pirâmide, a sua economia (a da competição principal dele) e o seu banco de nomes. O valor de mercado do jogador é universal, o salário segue a escala do país do clube, a reputação é do clube, e o técnico recebe propostas de qualquer país. Os jogos das ligas de outros países que o técnico não acompanha usam uma simulação resumida, equivalente à completa.
@@ -167,7 +167,7 @@ temporada (terceiros dos grupos descem à menor), prêmios por fase e por vitór
 reputação com teto, meta da diretoria, torcida, manchetes, histórico de campeões e campanha do
 clube. Saves v17 e `mods/exemplo-continental`.
 
-**M9 (024):** mod **mundo completo**: seis confederações (UEFA, CONMEBOL, CONCACAF, CAF, AFC e OFC), 44 países no perfil padrão, Brasil com 4 divisões e 27 estaduais, competições continentais por confederação, nomes de clubes, competições e jogadores fictícios em países, estados e cidades reais; ferramenta `pnpm gen:football-world`, perfil `compacto` para testes, planilhas (CSV) para nomes reais locais e download na página de Mods. Ver [`mundo-completo.md`](mundo-completo.md).
+**M9 (024):** **mundo padrão** novo: cinco confederações (CONMEBOL, UEFA, CONCACAF, CAF e AFC, sem Oceania), 15 países, 440 clubes (ligas de 20), Brasil com 4 divisões e 5 estaduais de duas divisões de 16, competições continentais por confederação, nomes de clubes, competições e jogadores fictícios em países, estados e cidades reais; gerado na hora no navegador. Ferramenta `pnpm gen:football-world`, planilhas (CSV) para nomes reais locais e download na página de Mods. Mundos maiores (até 44 países e 1 650 clubes) foram testados e descartados por pesar demais. Ver [`mundo-completo.md`](mundo-completo.md).
 
 **M9 (parcial, 023):** estaduais de duas divisões no começo da temporada, antes das nacionais:
 grupos, mata-mata em jogo único com mando do melhor campanha e final em ida e volta, acesso dos
