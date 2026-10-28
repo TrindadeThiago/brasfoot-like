@@ -8,6 +8,7 @@ import {
   managedClubId,
   nextFixture,
   type SaveFile,
+  seasonStateOf,
   userDivisionLevel,
   userSeason,
 } from "@brasfoot-like/save";
@@ -125,7 +126,7 @@ export default function HomePage() {
           ? save.bank.competitions.find((entry) => entry.id === next.competitionId)
           : undefined;
         const position = clubPosition(userSeason(save), save.bank, save.clubId);
-        const results = lastResults(userSeason(save), save.clubId, 5);
+        const results = lastResults(seasonStateOf(save), save.clubId, 5);
         const lastRound = game.state.lastRound;
         const play = async (mode: "live" | "direct") => {
           const outcome = await game.playRound(mode);
@@ -279,9 +280,16 @@ export default function HomePage() {
                   <ul className={styles.results}>
                     {results.map((result) => {
                       const other = clubs.get(result.opponentId);
+                      const league = result.competitionId === userSeason(save).competitionId;
                       return (
-                        <li key={result.round}>
-                          <span>{t("home.roundLabel", { round: result.round })}</span>
+                        <li key={`${result.competitionId}-${result.round}-${result.opponentId}`}>
+                          <span>
+                            {league
+                              ? t("home.roundLabel", { round: result.round })
+                              : save.bank.competitions.find(
+                                  (entry) => entry.id === result.competitionId,
+                                )?.name}
+                          </span>
                           {other ? (
                             <Crest crest={other.crest} label={other.name} size={18} />
                           ) : null}

@@ -12,7 +12,7 @@ dist/
 # Next.js e Playwright
 .next/
 apps/web/out/
-apps/web/public/mods/mundo-*.zip
+apps/web/public/mods/mundo-padrao.zip
 test-results/
 playwright-report/
 

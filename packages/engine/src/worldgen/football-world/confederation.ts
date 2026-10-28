@@ -7,9 +7,9 @@ function shortName(confederation: Confederation): string {
   return confederation.name.replace(/^Confederação /, "");
 }
 
-/** Competição grande (40 clubes) com 8 países ou mais; senão a compacta (16 clubes, 4 países ou mais). */
+/** Competição grande (40 clubes) com 8 países ou mais; com 4 a 7 a compacta (16); com 3 a mini (12). */
 export function continentalSize(countries: number): ContinentalSize {
-  return countries >= 8 ? "full" : "compact";
+  return countries >= 8 ? "full" : countries >= 4 ? "compact" : "mini";
 }
 
 /**

@@ -1,7 +1,9 @@
 import {
+  type CareerSeasonState,
   type CompletedBank,
   type Crest,
   clubDivision,
+  clubFixtures,
   clubStrength,
   competitionSeason,
   economyRules,
@@ -113,12 +115,24 @@ export function matchResult(record: MatchRecord, clubId: string): FormResult {
   return decision.winner === (record.home === clubId ? "home" : "away") ? "W" : "L";
 }
 
-/** Últimos `count` resultados do clube, do mais antigo para o mais recente. */
-export function lastResults(season: Season, clubId: string, count = 5): ClubResult[] {
-  return season.records
-    .filter((record) => record.home === clubId || record.away === clubId)
+/** Resultado de um jogo do clube, com a competição em que foi disputado. */
+export interface RecentResult extends ClubResult {
+  competitionId: string;
+}
+
+/**
+ * Últimos `count` resultados do clube em qualquer competição (liga, estadual, copa, continental), do
+ * mais antigo para o mais recente.
+ */
+export function lastResults(state: CareerSeasonState, clubId: string, count = 5): RecentResult[] {
+  return clubFixtures(state, clubId)
+    .filter((fixture) => fixture.record !== undefined)
+    .sort((a, b) => a.day - b.day)
     .slice(-count)
-    .map((record) => asClubResult(record, clubId));
+    .map((fixture) => ({
+      ...asClubResult(fixture.record as MatchRecord, clubId),
+      competitionId: fixture.competitionId,
+    }));
 }
 
 /** Resultado do clube numa rodada, se já disputada. */

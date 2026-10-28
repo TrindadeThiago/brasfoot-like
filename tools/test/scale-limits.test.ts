@@ -6,19 +6,13 @@ describe("SCALE_LIMITS (020 R12)", () => {
     expect(Object.keys(SCALE_LIMITS).sort()).toEqual([
       "dayMs",
       "exportedBytes",
-      "fullWorld",
       "growthPerSeasonBytes",
       "heapBytes",
-      "mediumWorld",
       "saveLastRoundBytes",
       "saveStart31Bytes",
       "thirtySeasonsMs",
       "turnoverMs",
     ]);
-    for (const value of Object.values(SCALE_LIMITS)) {
-      for (const number of typeof value === "number" ? [value] : Object.values(value)) {
-        expect(number).toBeGreaterThan(0);
-      }
-    }
+    for (const value of Object.values(SCALE_LIMITS)) expect(value).toBeGreaterThan(0);
   });
 });

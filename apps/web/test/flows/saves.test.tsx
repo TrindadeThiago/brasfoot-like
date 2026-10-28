@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import { t } from "../../src/i18n";
 import { createIndexedDbStore, type SaveStore } from "../../src/storage/indexeddb";
 import { renderApp } from "../helpers/app";
+import { classicMods, selectClassic } from "../helpers/classic";
 import { memoryRouter } from "../helpers/router";
 import { careerSave } from "../helpers/saves";
 
@@ -18,6 +19,7 @@ function store(): { name: string; store: SaveStore } {
 async function createCareer(managerName: string, clubRow: number) {
   const user = userEvent.setup();
   await user.click(screen.getByRole("link", { name: t("opening.newCareer") }));
+  await selectClassic(user);
   await user.type(screen.getByLabelText(t("newCareer.managerName")), managerName);
   const table = screen.getByRole("table", {
     name: t("newCareer.clubsCaption", { division: "Série A" }),
@@ -36,10 +38,11 @@ async function createCareer(managerName: string, clubRow: number) {
 describe("saves (US2)", () => {
   it("criar, recarregar e continuar do mesmo ponto (SC-002)", async () => {
     const { store: saves } = store();
-    const first = renderApp("/", saves);
+    const mods = await classicMods();
+    const first = renderApp("/", saves, mods);
     const club = await createCareer("Ana Souza", 2);
     first.unmount();
-    renderApp("/", saves);
+    renderApp("/", saves, mods);
     const user = userEvent.setup();
     await user.click(await screen.findByRole("link", { name: new RegExp(t("opening.continue")) }));
     expect(await screen.findByRole("heading", { name: club })).toBeDefined();

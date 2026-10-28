@@ -1,6 +1,6 @@
 import {
-  COMPACT_PROFILE,
   completeCareerDay,
+  DEFAULT_PROFILE,
   generateFootballWorld,
   type ModPackage,
 } from "@brasfoot-like/engine";
@@ -23,7 +23,7 @@ const median = (values: number[]) =>
 
 describe("tamanho e tempo no mundo compacto (024 US4)", () => {
   const bank = structuredClone(
-    generateFootballWorld(COMPACT_PROFILE, "escala-mundo"),
+    generateFootballWorld(DEFAULT_PROFILE, "escala-mundo"),
   ) as ModPackage;
   const brazilian = bank.clubs.find((club) => club.countryId === "brasil");
   const created = createSave({

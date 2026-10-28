@@ -1,4 +1,4 @@
-import { COMPACT_PROFILE, generateFootballWorld, type ModPackage } from "@brasfoot-like/engine";
+import { DEFAULT_PROFILE, generateFootballWorld, type ModPackage } from "@brasfoot-like/engine";
 import { describe, expect, it } from "vitest";
 import { advanceCareerSeason, createSave, isCareerSeasonOver, type SaveFile } from "../src";
 import { playDay } from "./fixtures";
@@ -6,7 +6,7 @@ import { playDay } from "./fixtures";
 // 024 (T038): a virada no mundo compacto mantém o tamanho das divisões e das competições, e aplica
 // acesso, rebaixamento e vagas em todos os países.
 const NOW = "2026-10-27T00:00:00.000Z";
-const bank = structuredClone(generateFootballWorld(COMPACT_PROFILE, "virada-mundo")) as ModPackage;
+const bank = structuredClone(generateFootballWorld(DEFAULT_PROFILE, "virada-mundo")) as ModPackage;
 
 function sizes(save: SaveFile): Record<string, number[]> {
   const result: Record<string, number[]> = {};
@@ -51,7 +51,7 @@ describe("virada no mundo compacto (024 US1)", () => {
     const all = brazilAfter.flat();
     expect(new Set(all).size).toBe(all.length);
     // Edições registradas: estaduais e continental.
-    expect(save.regionalHistory?.length).toBe(8);
-    expect(save.continentalHistory?.length).toBeGreaterThanOrEqual(12);
+    expect(save.regionalHistory?.length).toBe(10);
+    expect(save.continentalHistory?.length).toBeGreaterThanOrEqual(10);
   }, 1_800_000);
 });

@@ -6,6 +6,7 @@ import {
   CONTINENTAL_LIMITS,
   type ContinentalSnapshot,
   completeCareerDay,
+  DEFAULT_PROFILE,
   generateFootballWorld,
   generateRegionalBank,
   generateWorldBank,
@@ -14,9 +15,7 @@ import {
   type ModPackage,
   measureContinental,
   measureWorld,
-  profileOfSize,
   snapshotContinental,
-  type WorldSize,
 } from "@brasfoot-like/engine";
 import {
   advanceCareerSeason,
@@ -62,7 +61,7 @@ export interface SimulateScaleOptions {
   /** Estaduais (023): um país com a liga nacional e `states` estaduais de duas divisões. */
   regional?: { states: number };
   /** Mundo completo (024): o perfil `padrao` ou `compacto`; mede contra `SCALE_LIMITS.fullWorld`. */
-  footballWorld?: { profile: WorldSize };
+  footballWorld?: Record<string, never>;
 }
 
 const NOW = "2026-10-24T12:00:00.000Z";
@@ -101,7 +100,7 @@ export function runSimulateScale(options: SimulateScaleOptions): ScaleReport {
   const started = performance.now();
   const bank = structuredClone(
     options.footballWorld
-      ? generateFootballWorld(profileOfSize(options.footballWorld.profile), options.seed)
+      ? generateFootballWorld(DEFAULT_PROFILE, options.seed)
       : options.regional
         ? generateRegionalBank({ seed: options.seed, states: options.regional.states })
         : generateWorldBank({
@@ -135,7 +134,7 @@ export function runSimulateScale(options: SimulateScaleOptions): ScaleReport {
   if (!created.ok) throw new Error(JSON.stringify(created.error));
   let save = created.save;
   const lines = [
-    `${options.footballWorld ? `Mundo completo (${options.footballWorld.profile}) — ${bank.countries.length} países` : options.regional ? `Mundo com estaduais — ${options.regional.states} estados` : `Mundo grande — ${options.countries} países`}, ${bank.clubs.length} clubes, ${bank.players.length} jogadores, ${options.seasons} temporadas, seed "${options.seed}"`,
+    `${options.footballWorld ? `Mundo padrão — ${bank.countries.length} países` : options.regional ? `Mundo com estaduais — ${options.regional.states} estados` : `Mundo grande — ${options.countries} países`}, ${bank.clubs.length} clubes, ${bank.players.length} jogadores, ${options.seasons} temporadas, seed "${options.seed}"`,
     "",
     "Temp.  dia(ms)  virada(ms)  início(MB)  última rodada(MB)  heap(MB)  problemas",
   ];
@@ -289,13 +288,7 @@ export function runSimulateScale(options: SimulateScaleOptions): ScaleReport {
     growthWindow.length > 1
       ? ((growthWindow.at(-1) ?? 0) - (growthWindow[0] ?? 0)) / (growthWindow.length - 1)
       : 0;
-  const scaleLimits = !options.footballWorld
-    ? SCALE_LIMITS
-    : options.footballWorld.profile === "completo"
-      ? SCALE_LIMITS.fullWorld
-      : options.footballWorld.profile === "medio"
-        ? SCALE_LIMITS.mediumWorld
-        : SCALE_LIMITS;
+  const scaleLimits = SCALE_LIMITS;
   const full = options.seasons >= 30;
   const checks: [boolean, string][] = [
     [

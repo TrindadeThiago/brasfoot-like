@@ -11,7 +11,7 @@ describe("ferramenta gen:football-world (024 US2)", () => {
     expect(a.hash).toBe(b.hash);
     const read = a.zip ? readModPackage(a.zip) : undefined;
     expect(read?.ok).toBe(true);
-    expect(a.lines.join("\n")).toContain("6 confederações");
+    expect(a.lines.join("\n")).toContain("5 confederações");
   });
 
   it("outra seed muda o pacote e continua válido", () => {

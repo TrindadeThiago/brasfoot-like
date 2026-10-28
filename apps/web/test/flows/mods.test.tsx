@@ -19,7 +19,8 @@ const modsStore = () => createModStore(`mods-teste-${counter++}`);
 function testMod(): ModPackage {
   const bank = structuredClone(defaultBankInput()) as ModPackage;
   bank.manifest = { ...bank.manifest, id: "mod-teste", name: "Mod de teste", author: "Teste" };
-  const club = bank.clubs[0];
+  const first = bank.countries[0]?.id;
+  const club = bank.clubs.find((c) => c.countryId === first);
   if (club) club.name = "Clube do Mod";
   return bank;
 }
@@ -71,7 +72,7 @@ describe("mods de terceiros (015 US2)", () => {
 
     renderApp("/nova-carreira", store, mods);
     const bank = await screen.findByLabelText(t("newCareer.bank"));
-    await waitFor(() => expect(within(bank).getAllByRole("option")).toHaveLength(5));
+    await waitFor(() => expect(within(bank).getAllByRole("option")).toHaveLength(2));
     await user.selectOptions(bank, "mod-teste");
     await user.type(screen.getByLabelText(t("newCareer.managerName")), "Ana");
     await user.click(await screen.findByText("Clube do Mod"));
@@ -172,7 +173,8 @@ describe("mods de terceiros (015 US2)", () => {
     const store = freshStore();
     const mods = modsStore();
     const bank = testMod();
-    const club = bank.clubs[0];
+    const first = bank.countries[0]?.id;
+    const club = bank.clubs.find((c) => c.countryId === first);
     if (club) club.crest = { ...club.crest, image: "images/clube.png" };
     const png = toDataUri("png", tinyPng());
     renderApp("/mods", store, mods);
@@ -182,7 +184,7 @@ describe("mods de terceiros (015 US2)", () => {
 
     renderApp("/nova-carreira", store, mods);
     const select = await screen.findByLabelText(t("newCareer.bank"));
-    await waitFor(() => expect(within(select).getAllByRole("option")).toHaveLength(5));
+    await waitFor(() => expect(within(select).getAllByRole("option")).toHaveLength(2));
     await user.selectOptions(select, "mod-teste");
     await user.type(screen.getByLabelText(t("newCareer.managerName")), "Ana");
     await user.click(await screen.findByText("Clube do Mod"));

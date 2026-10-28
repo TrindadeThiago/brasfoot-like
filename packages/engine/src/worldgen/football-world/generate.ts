@@ -69,6 +69,7 @@ export function generateFootballWorld(profile: WorldProfile, seed: string): Vali
       players.push(...item.players);
       rivalries.push(...item.rivalries);
     }
+    if (confederation.continental === false) continue;
     continental.push(
       ...buildConfederation({
         confederation,

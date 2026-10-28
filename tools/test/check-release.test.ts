@@ -1,7 +1,7 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { COMPACT_PROFILE, generateFootballWorld } from "@brasfoot-like/engine";
+import { DEFAULT_PROFILE, generateFootballWorld } from "@brasfoot-like/engine";
 import { writeModPackage } from "@brasfoot-like/modkit";
 import { afterEach, describe, expect, it } from "vitest";
 import { checkRelease } from "../src/check-release";
@@ -20,10 +20,8 @@ function fixture(edit?: (dir: string) => void): string {
     '<html><head><title>Treinador FC</title><script>localStorage.getItem("brasfoot-like:preferences")</script></head><body>Treinador FC</body></html>',
   );
   mkdirSync(join(dir, "mods"));
-  const world = writeModPackage(generateFootballWorld(COMPACT_PROFILE, "release"));
-  for (const size of ["reduzido", "medio", "completo"]) {
-    writeFileSync(join(dir, "mods", `mundo-${size}.zip`), world);
-  }
+  const world = writeModPackage(generateFootballWorld(DEFAULT_PROFILE, "release"));
+  writeFileSync(join(dir, "mods", "mundo-padrao.zip"), world);
   mkdirSync(join(dir, "screenshots"));
   for (const name of ["a", "b", "c", "d"])
     writeFileSync(join(dir, "screenshots", `${name}.webp`), "");
@@ -42,13 +40,13 @@ describe("check-release (016)", () => {
     expect(checkRelease({ ...base, outDir: fixture() })).toEqual([]);
   });
 
-  it("falha sem o mod mundo completo ou com ele inválido", () => {
-    const missing = fixture((dir) => rmSync(join(dir, "mods", "mundo-completo.zip")));
+  it("falha sem o mundo padrão ou com ele inválido", () => {
+    const missing = fixture((dir) => rmSync(join(dir, "mods", "mundo-padrao.zip")));
     expect(checkRelease({ ...base, outDir: missing })).toEqual([
-      "falta mods/mundo-completo.zip no build",
+      "falta mods/mundo-padrao.zip no build",
     ]);
     const broken = fixture((dir) =>
-      writeFileSync(join(dir, "mods", "mundo-completo.zip"), "não é um zip"),
+      writeFileSync(join(dir, "mods", "mundo-padrao.zip"), "não é um zip"),
     );
     expect(checkRelease({ ...base, outDir: broken })[0]).toContain("não passa na validação");
   });

@@ -1,5 +1,11 @@
 # Quickstart: validar o mod mundo completo
 
+> **Revisão (1.10.0)**: os mundos médio e completo foram descartados — a rodada da liga ficava pesada demais
+> (travamentos) com dezenas de milhares de jogadores. O **mundo padrão** passou a ser o reduzido (24 países
+> nas seis confederações, Brasil em quatro divisões com estaduais), gerado dentro do jogo e também
+> disponível para baixar (`mundo-padrao.zip`); o antigo país fictício único saiu da lista de nova carreira.
+> Onde este documento fala em três tamanhos, vale só o reduzido.
+
 Guia de validação ponta a ponta. Os comandos usam os scripts do monorepo.
 
 ## Pré-requisitos

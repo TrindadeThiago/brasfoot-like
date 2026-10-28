@@ -1,5 +1,11 @@
 # Medidas do mundo completo (024)
 
+> **Revisão (1.10.0)**: os mundos médio e completo foram descartados — a rodada da liga ficava pesada demais
+> (travamentos) com dezenas de milhares de jogadores. O **mundo padrão** passou a ser o reduzido (24 países
+> nas seis confederações, Brasil em quatro divisões com estaduais), gerado dentro do jogo e também
+> disponível para baixar (`mundo-padrao.zip`); o antigo país fictício único saiu da lista de nova carreira.
+> Onde este documento fala em três tamanhos, vale só o reduzido.
+
 Medidas em 2026-10-27 na máquina de desenvolvimento (WSL2). A linha de base do mundo de 400 clubes da 020
 (T003) é a da primeira medição desta sessão: dia mediano de 268 ms, virada de 3 630 ms, maior save de
 37 MB, pico de heap de 539 MB; `pnpm sim:world --scale` reproduz.

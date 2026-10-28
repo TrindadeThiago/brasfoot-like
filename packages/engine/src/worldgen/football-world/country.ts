@@ -226,6 +226,10 @@ export function countryEconomy(
   if (rounds < 38 && holder.economy) {
     holder.economy.wageFactorPct = Math.max(20, Math.round((wage * rounds) / 38));
   }
+  // País de uma divisão só: sem a receita de quem sobe da divisão de baixo, a folha é um pouco menor.
+  if (divisions === 1 && holder.economy) {
+    holder.economy.wageFactorPct = Math.round(((holder.economy.wageFactorPct ?? wage) * 75) / 100);
+  }
   return holder.economy as NonNullable<Competition["economy"]>;
 }
 

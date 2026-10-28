@@ -1,6 +1,6 @@
 "use client";
 
-import { foreignCount, type MarketRow, searchPlayers } from "@brasfoot-like/engine";
+import { filterRows, foreignCount, type MarketRow, marketRows } from "@brasfoot-like/engine";
 import { marketContextOf, type SaveFile } from "@brasfoot-like/save";
 import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -50,10 +50,12 @@ function Market({ save, game }: { save: SaveFile; game: Game }) {
   const foreignLimit = save.bank.countries.find(
     (country) => country.id === save.bank.clubs.find((club) => club.id === save.clubId)?.countryId,
   )?.rules?.foreignLimit;
-  const everyone = useMemo(() => searchPlayers(context), [context]);
+  // A lista inteira é montada uma vez por mudança do save; filtrar e ordenar parte dela (024: com
+  // 39 000 jogadores, refazê-la a cada tecla era o que deixava a tela lenta).
+  const everyone = useMemo(() => marketRows(context), [context]);
   const found = useMemo(
-    () => searchPlayers(context, toFilters(form, save.clubId), { key: "strength", dir: "desc" }),
-    [context, form, save.clubId],
+    () => filterRows(everyone, toFilters(form, save.clubId), { key: "strength", dir: "desc" }),
+    [everyone, form, save.clubId],
   );
   const [limit, setLimit] = useState(PAGE_SIZE);
   const rows = found.slice(0, limit);

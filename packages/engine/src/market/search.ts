@@ -1,28 +1,50 @@
 import { ageOn, seasonDate } from "../calendar/date";
 import { deriveWage } from "../derived/economy";
-import type { CompletedPlayer } from "../model/types";
+import type { Club, CompletedPlayer } from "../model/types";
+import { marketRules } from "./rules";
 import type { FreeAgent, MarketContext, MarketResult, MarketRow, PlayerFilters } from "./types";
 import { fail } from "./types";
-import { marketValue } from "./value";
+import { marketValueFor } from "./value";
 
 /** Só um banco de vários países mostra o país nas linhas (020): os demais ficam como eram. */
 function manyCountries(context: MarketContext): boolean {
   return new Set(context.world.competitions.map((entry) => entry.countryId)).size > 1;
 }
 
-function rowOf(context: MarketContext, player: CompletedPlayer, date: string): MarketRow {
+/** O que as linhas precisam do mundo, resolvido uma vez (a lista tem dezenas de milhares de jogadores). */
+interface RowKit {
+  date: string;
+  year: number;
+  many: boolean;
+  clubs: ReadonlyMap<string, Club>;
+  rules: ReturnType<typeof marketRules>;
+}
+
+function kitOf(context: MarketContext): RowKit {
+  const { world } = context;
   const year = context.league.year;
-  const country = context.world.clubs.find((club) => club.id === player.clubId)?.countryId;
   return {
-    ...(country !== undefined && manyCountries(context) ? { countryId: country } : {}),
+    date: seasonDate(world.manifest.referenceDate, year),
+    year,
+    many: manyCountries(context),
+    clubs: new Map(world.clubs.map((club) => [club.id, club])),
+    rules: marketRules(world, world.competitions[0]?.id ?? ""),
+  };
+}
+
+function rowOf(kit: RowKit, player: CompletedPlayer): MarketRow {
+  const country = kit.clubs.get(player.clubId)?.countryId;
+  const owner = kit.clubs.get(player.contract?.loan?.fromClubId ?? player.clubId);
+  return {
+    ...(country !== undefined && kit.many ? { countryId: country } : {}),
     playerId: player.id,
     displayName: player.displayName,
     position: player.position,
-    age: ageOn(player.birthDate, date),
+    age: ageOn(player.birthDate, kit.date),
     strength: player.strength,
     traits: player.traits,
     clubId: player.clubId,
-    value: marketValue(player, context.world, year),
+    value: marketValueFor(player, owner, kit.rules, kit.date, kit.year),
     wage: player.contract?.wage ?? 0,
     ...(player.contract ? { untilYear: player.contract.untilYear } : {}),
     onLoan: player.contract?.loan !== undefined,
@@ -30,18 +52,18 @@ function rowOf(context: MarketContext, player: CompletedPlayer, date: string): M
   };
 }
 
-function freeRow(context: MarketContext, agent: FreeAgent, date: string): MarketRow {
+function freeRow(kit: RowKit, agent: FreeAgent): MarketRow {
   const { player } = agent;
-  const club = context.world.clubs.find((entry) => entry.id === agent.lastClubId);
+  const club = kit.clubs.get(agent.lastClubId);
   const wage = club
-    ? deriveWage({ ...player, clubId: agent.lastClubId } as CompletedPlayer, club, date)
+    ? deriveWage({ ...player, clubId: agent.lastClubId } as CompletedPlayer, club, kit.date)
     : 0;
   return {
-    ...(manyCountries(context) ? { countryId: player.nationalityId } : {}),
+    ...(kit.many ? { countryId: player.nationalityId } : {}),
     playerId: player.id,
     displayName: player.displayName,
     position: player.position,
-    age: ageOn(player.birthDate, date),
+    age: ageOn(player.birthDate, kit.date),
     strength: player.strength,
     traits: player.traits,
     value: 0,
@@ -55,7 +77,9 @@ function within(value: number, range?: [number, number]): boolean {
   return !range || (value >= range[0] && value <= range[1]);
 }
 
-function matches(row: MarketRow, filters: PlayerFilters): boolean {
+function matches(row: MarketRow, filters: PlayerFilters, needle: string): boolean {
+  if (filters.scope === "free" && !row.free) return false;
+  if (filters.scope === "clubs" && row.free) return false;
   if (
     filters.positions &&
     filters.positions.length > 0 &&
@@ -70,10 +94,41 @@ function matches(row: MarketRow, filters: PlayerFilters): boolean {
   }
   if (filters.excludeClubId !== undefined && row.clubId === filters.excludeClubId) return false;
   if (filters.countryId !== undefined && row.countryId !== filters.countryId) return false;
-  if (filters.text) {
-    if (!row.displayName.toLowerCase().includes(filters.text.trim().toLowerCase())) return false;
-  }
+  if (needle && !row.displayName.toLowerCase().includes(needle)) return false;
   return true;
+}
+
+/**
+ * Todas as linhas do mercado, sem filtro nem ordem: jogadores de todos os clubes e livres, só com
+ * atributos visíveis. A tela guarda o resultado e filtra em cima dele, sem refazer a lista a cada
+ * tecla (024: com 39 000 jogadores, montá-la leva uma fração de segundo).
+ */
+export function marketRows(context: MarketContext): MarketRow[] {
+  const kit = kitOf(context);
+  const rows: MarketRow[] = [];
+  for (const player of context.world.players) rows.push(rowOf(kit, player));
+  for (const agent of context.market.freeAgents) rows.push(freeRow(kit, agent));
+  return rows;
+}
+
+/** Filtra e ordena linhas já montadas por `marketRows`. Ordenação estável (desempate por id). */
+export function filterRows(
+  rows: readonly MarketRow[],
+  filters: PlayerFilters = {},
+  sort?: { key: keyof MarketRow; dir: "asc" | "desc" },
+): MarketRow[] {
+  const needle = filters.text ? filters.text.trim().toLowerCase() : "";
+  const found = rows.filter((row) => matches(row, filters, needle));
+  const key = sort?.key ?? "playerId";
+  const sign = sort?.dir === "desc" ? -1 : 1;
+  return found.sort((a, b) => {
+    const left = a[key];
+    const right = b[key];
+    let order = 0;
+    if (typeof left === "number" && typeof right === "number") order = left - right;
+    else order = String(left ?? "").localeCompare(String(right ?? ""), "pt-BR");
+    return sign * order || (a.playerId < b.playerId ? -1 : a.playerId > b.playerId ? 1 : 0);
+  });
 }
 
 /**
@@ -85,26 +140,7 @@ export function searchPlayers(
   filters: PlayerFilters = {},
   sort?: { key: keyof MarketRow; dir: "asc" | "desc" },
 ): MarketRow[] {
-  const date = seasonDate(context.world.manifest.referenceDate, context.league.year);
-  const scope = filters.scope ?? "all";
-  const rows: MarketRow[] = [];
-  if (scope !== "free") {
-    for (const player of context.world.players) rows.push(rowOf(context, player, date));
-  }
-  if (scope !== "clubs") {
-    for (const agent of context.market.freeAgents) rows.push(freeRow(context, agent, date));
-  }
-  const found = rows.filter((row) => matches(row, filters));
-  const key = sort?.key ?? "playerId";
-  const sign = sort?.dir === "desc" ? -1 : 1;
-  return found.sort((a, b) => {
-    const left = a[key];
-    const right = b[key];
-    let order = 0;
-    if (typeof left === "number" && typeof right === "number") order = left - right;
-    else order = String(left ?? "").localeCompare(String(right ?? ""), "pt-BR");
-    return sign * order || (a.playerId < b.playerId ? -1 : a.playerId > b.playerId ? 1 : 0);
-  });
+  return filterRows(marketRows(context), filters, sort);
 }
 
 /** Comparação lado a lado de 2 a 4 jogadores (US1). */

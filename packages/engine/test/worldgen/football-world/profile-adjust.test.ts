@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
-  COMPACT_PROFILE,
+  DEFAULT_PROFILE,
   generateFootballWorld,
   ProfileError,
   type WorldProfile,
@@ -8,8 +8,10 @@ import {
 
 describe("ajustar a estrutura pelo perfil (024 FR-013)", () => {
   it("outro número de clubes por divisão num país muda a pirâmide dele e continua válido", () => {
-    const profile = structuredClone(COMPACT_PROFILE) as WorldProfile;
-    const spec = profile.confederations[0]?.countries[0];
+    const profile = structuredClone(DEFAULT_PROFILE) as WorldProfile;
+    const spec = profile.confederations
+      .flatMap((c) => c.countries)
+      .find((country) => country.geoId === "inglaterra");
     if (spec) {
       spec.divisions = 2;
       spec.clubsPerDivision = 10;
@@ -20,7 +22,7 @@ describe("ajustar a estrutura pelo perfil (024 FR-013)", () => {
   });
 
   it("perfil com país inexistente diz o que não fecha", () => {
-    const profile = structuredClone(COMPACT_PROFILE) as WorldProfile;
+    const profile = structuredClone(DEFAULT_PROFILE) as WorldProfile;
     profile.confederations[0]?.countries.push({ geoId: "atlantida", tier: 3, strength: 1 });
     expect(() => generateFootballWorld(profile, "x")).toThrow(ProfileError);
     try {
@@ -33,12 +35,12 @@ describe("ajustar a estrutura pelo perfil (024 FR-013)", () => {
   });
 
   it("trocar a lista de países de uma confederação muda o mundo", () => {
-    const profile = structuredClone(COMPACT_PROFILE) as WorldProfile;
-    const ofc = profile.confederations.find((c) => c.id === "ofc");
+    const profile = structuredClone(DEFAULT_PROFILE) as WorldProfile;
+    const ofc = profile.confederations.find((c) => c.id === "afc");
     if (ofc) ofc.countries = ofc.countries.slice().reverse();
     const bank = generateFootballWorld(profile, "ordem");
     expect(bank.countries.map((c) => c.id)).not.toEqual(
-      generateFootballWorld(COMPACT_PROFILE, "ordem").countries.map((c) => c.id),
+      generateFootballWorld(DEFAULT_PROFILE, "ordem").countries.map((c) => c.id),
     );
   });
 });

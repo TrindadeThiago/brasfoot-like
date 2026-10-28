@@ -1,5 +1,5 @@
 import {
-  COMPACT_PROFILE,
+  DEFAULT_PROFILE,
   generateFootballWorld,
   isRegionalOnly,
   type ModPackage,
@@ -12,7 +12,7 @@ import { playDay } from "./fixtures";
 // 024 (T036, T037): carreira no mundo compacto, de ponta a ponta no pacote de save.
 const NOW = "2026-10-27T00:00:00.000Z";
 const bank = structuredClone(
-  generateFootballWorld(COMPACT_PROFILE, "carreira-mundo"),
+  generateFootballWorld(DEFAULT_PROFILE, "carreira-mundo"),
 ) as ModPackage;
 
 function career(clubId: string): SaveFile {

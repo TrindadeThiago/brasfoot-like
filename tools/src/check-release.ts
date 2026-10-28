@@ -54,17 +54,14 @@ export function checkRelease({ version, tag, notes, outDir }: ReleaseInput): str
   for (const file of REQUIRED) {
     if (!existsSync(join(outDir, file))) problems.push(`falta ${file} no build`);
   }
-  // Mods mundo reduzido, médio e completo para download (024 R12): gerados no build, precisam
-  // existir e passar na validação.
-  for (const size of ["reduzido", "medio", "completo"]) {
-    const zip = join(outDir, "mods", `mundo-${size}.zip`);
-    if (!existsSync(zip)) {
-      problems.push(`falta mods/mundo-${size}.zip no build`);
-      continue;
-    }
-    const read = readModPackage(new Uint8Array(readFileSync(zip)));
+  // Mundo padrão para download (024 R12): gerado no build, precisa existir e passar na validação.
+  const worldZip = join(outDir, "mods", "mundo-padrao.zip");
+  if (!existsSync(worldZip)) {
+    problems.push("falta mods/mundo-padrao.zip no build");
+  } else {
+    const read = readModPackage(new Uint8Array(readFileSync(worldZip)));
     if (!read.ok) {
-      problems.push(`mods/mundo-${size}.zip não passa na validação (${read.errors.length} erros)`);
+      problems.push(`mods/mundo-padrao.zip não passa na validação (${read.errors.length} erros)`);
     }
   }
   // Fonte do badge de versão do README (lido pelo shields.io no site publicado).
