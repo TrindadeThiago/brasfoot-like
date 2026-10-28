@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Finanças — Treinador FC</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0a0e13}
+a{color:inherit;text-decoration:none}
+a:hover{color:#ffffff}
+</style>
+</helmet>
+<div style="min-height: 980px; background: #0a0e13; color: #eef2f6; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.45; display: flex; flex-wrap: wrap">
+
+  <nav aria-label="Telas do jogo" style="flex: 1 1 232px; max-width: 100%; min-width: 0; background: #0f151c; border-right: 1px solid #1d2733; padding: 24px 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px">
+    <div style="display: flex; align-items: center; gap: 12px; padding: 0 8px">
+      <div style="width: 36px; height: 36px; border-radius: 10px; background: {{accent}}; color: #06140c; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px">T</div>
+      <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 17px; letter-spacing: -0.01em">Treinador FC</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <sc-for list="{{nav}}" as="n" hint-placeholder-count="10">
+        <a href="{{n.href}}" style="{{n.style}}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"></path></svg>
+          <span style="flex: 1 1 auto">{{n.label}}</span>
+          <sc-if value="{{n.badge}}" hint-placeholder-val="{{ false }}">
+            <span style="background: #ffb454; color: #1a1103; border-radius: 99px; font-size: 11px; font-weight: 600; padding: 1px 7px">{{n.badge}}</span>
+          </sc-if>
+        </a>
+      </sc-for>
+    </div>
+    <div style="margin-top: auto; border-top: 1px solid #1d2733; padding-top: 12px; display: flex; flex-direction: column; gap: 2px">
+      <a href="Menu.dc.html" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: 10px; color: #98a6b6; font-weight: 500">Menu inicial</a>
+      <a href="Configuracoes.dc.html" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: 10px; color: #98a6b6; font-weight: 500">Configurações</a>
+      <a href="#" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: 10px; color: #98a6b6; font-weight: 500">Atalhos de teclado</a>
+    </div>
+  </nav>
+
+  <main style="flex: 999 1 640px; min-width: 0; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px">
+
+    <header>
+      <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600; letter-spacing: -0.02em">Finanças</h1>
+      <div style="color: #98a6b6">Caixa, ingresso, estádio e crédito do clube</div>
+    </header>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 16px">
+      <sc-for list="{{kpis}}" as="k" hint-placeholder-count="3">
+        <div style="flex: 1 1 220px; background: #121922; border: 1px solid #1d2733; border-radius: 14px; padding: 16px">
+          <div style="color: #98a6b6; font-size: 12px">{{k.label}}</div>
+          <div style="font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 600">{{k.value}}</div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: stretch">
+      <section aria-label="Temporada 2027" style="flex: 1 1 360px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px; box-sizing: border-box">
+        <h2 style="margin: 0 0 4px; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Temporada 2027</h2>
+        <div style="color: #98a6b6; font-size: 13px; margin-bottom: 12px">Saldo no início da temporada: $ 16.240.000</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 24px">
+          <div style="flex: 1 1 160px">
+            <h3 style="margin: 0 0 4px; font-size: 13px; color: #98a6b6; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600">Receitas</h3>
+            <sc-for list="{{income}}" as="r" hint-placeholder-count="4">
+              <div style="display: flex; justify-content: space-between; gap: 8px; min-height: 36px; align-items: center; border-top: 1px solid #1d2733"><span style="color: #b4c0cd">{{r.label}}</span><span style="font-weight: 600; font-variant-numeric: tabular-nums">{{r.value}}</span></div>
+            </sc-for>
+            <div style="display: flex; justify-content: space-between; min-height: 40px; align-items: center; border-top: 1px solid #2e3a47; font-weight: 600"><span>Total</span><span style="color: {{accent}}">$ 7.051.951</span></div>
+          </div>
+          <div style="flex: 1 1 160px">
+            <h3 style="margin: 0 0 4px; font-size: 13px; color: #98a6b6; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600">Despesas</h3>
+            <sc-for list="{{expenses}}" as="r" hint-placeholder-count="4">
+              <div style="display: flex; justify-content: space-between; gap: 8px; min-height: 36px; align-items: center; border-top: 1px solid #1d2733"><span style="color: #b4c0cd">{{r.label}}</span><span style="font-weight: 600; font-variant-numeric: tabular-nums">{{r.value}}</span></div>
+            </sc-for>
+            <div style="display: flex; justify-content: space-between; min-height: 40px; align-items: center; border-top: 1px solid #2e3a47; font-weight: 600"><span>Total</span><span>$ 0</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section aria-label="Ingresso" style="flex: 1 1 300px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px">
+        <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Ingresso</h2>
+        <div style="color: #b4c0cd">Preço atual: $ 14</div>
+        <label style="display: flex; flex-direction: column; gap: 6px; color: #98a6b6; font-size: 13px">
+          Preço do ingresso (5 a 200)
+          <input type="text" value="14" style="min-height: 44px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; padding: 0 12px; font: inherit; max-width: 160px">
+        </label>
+        <button type="button" style="align-self: flex-start; min-height: 44px; padding: 0 18px; border-radius: 10px; border: 0; background: {{accent}}; color: #06140c; font: inherit; font-weight: 600; cursor: pointer">Aplicar preço</button>
+        <div style="color: #98a6b6; font-size: 13px">Próximo jogo em casa: público estimado de 27.413 (60% do estádio), renda de $ 383.782.</div>
+      </section>
+
+      <section aria-label="Crédito bancário" style="flex: 1 1 300px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px">
+        <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Crédito bancário</h2>
+        <div style="color: #b4c0cd">Limite: $ 8.082.000 · disponível: $ 8.082.000</div>
+        <div style="color: #98a6b6; font-size: 13px">Juros de 0,3% por rodada · custo atual de $ 0 por rodada</div>
+        <label style="display: flex; flex-direction: column; gap: 6px; color: #98a6b6; font-size: 13px">
+          Valor
+          <input type="text" style="min-height: 44px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; padding: 0 12px; font: inherit; max-width: 200px">
+        </label>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px">
+          <button type="button" style="min-height: 44px; padding: 0 16px; border-radius: 10px; border: 0; background: {{accent}}; color: #06140c; font: inherit; font-weight: 600; cursor: pointer">Tomar empréstimo</button>
+          <button type="button" disabled style="min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #6c7a89; font: inherit; font-weight: 500">Amortizar</button>
+          <button type="button" disabled style="min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #6c7a89; font: inherit; font-weight: 500">Quitar dívida</button>
+        </div>
+      </section>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+      <section aria-label="Estádio" style="flex: 1 1 360px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px; box-sizing: border-box">
+        <h2 style="margin: 0 0 4px; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Estádio</h2>
+        <div style="color: #98a6b6; margin-bottom: 8px">46.000 lugares</div>
+        <sc-for list="{{works}}" as="w" hint-placeholder-count="3">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid #1d2733">
+            <div><div style="font-weight: 600">{{w.seats}}</div><div style="color: #98a6b6; font-size: 13px">{{w.meta}}</div></div>
+            <button type="button" style="min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; font: inherit; font-weight: 500; cursor: pointer">Contratar obra</button>
+          </div>
+        </sc-for>
+      </section>
+      <section aria-label="Jogos em casa" style="flex: 2 1 460px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; overflow-x: auto">
+        <table style="width: 100%; min-width: 520px; border-collapse: collapse; font-variant-numeric: tabular-nums">
+          <caption style="text-align: left; padding: 16px 20px 4px; color: #98a6b6; font-size: 13px">Jogos em casa</caption>
+          <thead><tr style="color: #98a6b6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em"><th scope="col" style="text-align: right; padding: 12px 16px; font-weight: 500">Rodada</th><th scope="col" style="text-align: left; padding: 12px 16px; font-weight: 500">Adversário</th><th scope="col" style="text-align: right; padding: 12px 16px; font-weight: 500">Público</th><th scope="col" style="text-align: right; padding: 12px 16px; font-weight: 500">Ocupação</th><th scope="col" style="text-align: right; padding: 12px 16px; font-weight: 500">Ingresso</th><th scope="col" style="text-align: right; padding: 12px 16px; font-weight: 500">Renda</th></tr></thead>
+          <tbody>
+            <tr style="border-top: 1px solid #1d2733"><td style="padding: 12px 16px; text-align: right">3</td><td style="padding: 12px 16px">Rio Grande</td><td style="padding: 12px 16px; text-align: right">25.002</td><td style="padding: 12px 16px; text-align: right">54%</td><td style="padding: 12px 16px; text-align: right">$ 14</td><td style="padding: 12px 16px; text-align: right; font-weight: 600">$ 350.028</td></tr>
+          </tbody>
+        </table>
+        <div style="padding: 14px 20px; border-top: 1px solid #1d2733; color: #98a6b6; font-size: 13px">Prêmios da temporada: 24 de janeiro de 2027 · Campeonato Estadual do Rio Grande do Sul · $ 8.000</div>
+      </section>
+    </div>
+
+    <section aria-label="Histórico financeiro" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px">
+      <h2 style="margin: 0 0 4px; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Histórico financeiro</h2>
+      <div style="color: #98a6b6">Nenhuma temporada encerrada ainda.</div>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#3ddc84","options":["#3ddc84","#5ec8ff","#ffb454","#c79bff"]}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#3ddc84';
+    const base = 'display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;border-radius:10px;box-sizing:border-box;';
+    const items = [
+      ['Início', 'Main.dc.html', 'M3 11l9-8 9 8M5 10v10h14V10'],
+      ['Elenco', 'Elenco.dc.html', 'M16 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 20v-2a4 4 0 0 0-3-3.9M16 2.1a4 4 0 0 1 0 7.8'],
+      ['Escalação', 'Escalacao.dc.html', 'M3 5h18v14H3zM12 5v14M3 12h18'],
+      ['Competição', 'Competicao.dc.html', 'M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3'],
+      ['Calendário', 'Calendario.dc.html', 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4'],
+      ['Finanças', 'Financas.dc.html', 'M3 17l6-6 4 4 8-8M15 7h6v6', true],
+      ['Histórico', 'Historico.dc.html', 'M12 8v4l3 2M3 12a9 9 0 1 0 3-6.7M3 4v5h5'],
+      ['Mercado', 'Mercado.dc.html', 'M4 7h16l-1.5 12h-13zM9 7a3 3 0 0 1 6 0'],
+      ['Carreira', 'Carreira.dc.html', 'M4 21v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8'],
+      ['Notícias', 'Noticias.dc.html', 'M4 5h13v14H6a2 2 0 0 1-2-2zM17 9h3v8a2 2 0 0 1-2 2M8 9h5M8 13h5'],
+    ];
+    const nav = items.map((it) => ({
+      label: it[0], href: it[1], icon: it[2], badge: it[4] || '',
+      style: base + (it[3] ? 'background:#16222c;color:' + accent + ';font-weight:600;' : 'color:#b4c0cd;font-weight:500;'),
+    }));
+    return {
+      accent, nav,
+      kpis: [{ label: 'Saldo', value: '$ 23.291.951' }, { label: 'Dívida', value: '$ 0' }, { label: 'Estádio', value: '46.000 lugares' }],
+      income: [{ label: 'Bilheteria', value: '$ 350.028' }, { label: 'Patrocínio', value: '$ 6.693.923' }, { label: 'Premiação', value: '$ 8.000' }, { label: 'Vendas de jogadores', value: '$ 0' }],
+      expenses: [{ label: 'Salários e rescisões', value: '$ 0' }, { label: 'Juros e amortização', value: '$ 0' }, { label: 'Obras', value: '$ 0' }, { label: 'Compras de jogadores', value: '$ 0' }],
+      works: [
+        { seats: '+3.600 lugares', meta: '$ 2.700.000 · 6 rodadas' },
+        { seats: '+9.000 lugares', meta: '$ 7.200.000 · 12 rodadas' },
+        { seats: '+18.000 lugares', meta: '$ 16.200.000 · 20 rodadas' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

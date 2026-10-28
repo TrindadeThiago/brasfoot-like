@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Menu inicial — Treinador FC</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0a0e13}
+a{color:inherit;text-decoration:none}
+a:hover{color:#ffffff}
+</style>
+</helmet>
+<div style="min-height: 980px; background: radial-gradient(900px 500px at 70% 0%, rgba(61,220,132,0.10), transparent 70%), #0a0e13; color: #eef2f6; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.45; display: flex; flex-direction: column">
+
+  <main style="flex: 1 1 auto; width: 100%; max-width: 1100px; margin: 0 auto; padding: 64px 48px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 56px; align-items: center">
+
+    <section style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+      <div style="width: 56px; height: 56px; border-radius: 16px; background: {{accent}}; color: #06140c; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 26px">T</div>
+      <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 64px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.02">Treinador FC</h1>
+      <p style="margin: 0; max-width: 44ch; color: #b4c0cd; font-size: 18px">Gerenciamento de futebol: escolha um clube, monte o time, jogue as rodadas e construa uma carreira de muitas temporadas.</p>
+    </section>
+
+    <section aria-label="Menu" style="flex: 1 1 340px; max-width: 420px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+      <a href="NovaCarreira.dc.html" style="display: flex; align-items: center; justify-content: space-between; min-height: 60px; padding: 0 22px; border-radius: 14px; background: {{accent}}; color: #06140c; font-weight: 600; font-size: 17px">
+        Nova carreira
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+      </a>
+      <a href="Carreiras.dc.html" style="display: flex; align-items: center; justify-content: space-between; min-height: 60px; padding: 0 22px; border-radius: 14px; border: 1px solid #2e3a47; background: #121922; font-weight: 600; font-size: 17px">
+        Carreiras salvas
+        <span style="color: #98a6b6; font-size: 13px; font-weight: 500">3</span>
+      </a>
+      <a href="Mods.dc.html" style="display: flex; align-items: center; justify-content: space-between; min-height: 60px; padding: 0 22px; border-radius: 14px; border: 1px solid #2e3a47; background: #121922; font-weight: 600; font-size: 17px">
+        Mods
+        <span style="color: #98a6b6; font-size: 13px; font-weight: 500">2 carregados</span>
+      </a>
+      <nav aria-label="Mais" style="display: flex; flex-wrap: wrap; gap: 4px 18px; margin-top: 8px">
+        <a href="Configuracoes.dc.html" style="color: {{accent}}; min-height: 44px; display: inline-flex; align-items: center; font-weight: 500">Configurações</a>
+        <a href="Sobre.dc.html" style="color: {{accent}}; min-height: 44px; display: inline-flex; align-items: center; font-weight: 500">Sobre o jogo</a>
+        <a href="#" style="color: {{accent}}; min-height: 44px; display: inline-flex; align-items: center; font-weight: 500">Atalhos</a>
+        <a href="NotasVersao.dc.html" style="color: #98a6b6; min-height: 44px; display: inline-flex; align-items: center">Treinador FC · versão 1.10.0</a>
+      </nav>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#3ddc84","options":["#3ddc84","#5ec8ff","#ffb454","#c79bff"]}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { accent: this.props.accent ?? '#3ddc84' };
+  }
+}
+</script>
+</body>
+</html>

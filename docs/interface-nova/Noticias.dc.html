@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Notícias — Treinador FC</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0a0e13}
+a{color:inherit;text-decoration:none}
+a:hover{color:#ffffff}
+</style>
+</helmet>
+<div style="min-height: 980px; background: #0a0e13; color: #eef2f6; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.45; display: flex; flex-wrap: wrap">
+
+  <nav aria-label="Telas do jogo" style="flex: 1 1 232px; max-width: 100%; min-width: 0; background: #0f151c; border-right: 1px solid #1d2733; padding: 24px 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px">
+    <div style="display: flex; align-items: center; gap: 12px; padding: 0 8px">
+      <div style="width: 36px; height: 36px; border-radius: 10px; background: {{accent}}; color: #06140c; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px">T</div>
+      <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 17px; letter-spacing: -0.01em">Treinador FC</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <sc-for list="{{nav}}" as="n" hint-placeholder-count="10">
+        <a href="{{n.href}}" style="{{n.style}}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"></path></svg>
+          <span style="flex: 1 1 auto">{{n.label}}</span>
+        </a>
+      </sc-for>
+    </div>
+    <div style="margin-top: auto; border-top: 1px solid #1d2733; padding-top: 12px; display: flex; flex-direction: column; gap: 2px">
+      <a href="Menu.dc.html" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: 10px; color: #98a6b6; font-weight: 500">Menu inicial</a>
+      <a href="Configuracoes.dc.html" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: 10px; color: #98a6b6; font-weight: 500">Configurações</a>
+      <a href="#" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: 10px; color: #98a6b6; font-weight: 500">Atalhos de teclado</a>
+    </div>
+  </nav>
+
+  <main style="flex: 999 1 640px; min-width: 0; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px">
+
+    <header style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px; justify-content: space-between">
+      <div>
+        <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600; letter-spacing: -0.02em">Notícias</h1>
+        <div style="color: #98a6b6">Manchetes de cada rodada</div>
+      </div>
+      <label style="display: flex; flex-direction: column; gap: 4px; color: #98a6b6; font-size: 12px">
+        Rodada
+        <select style="min-height: 44px; border-radius: 10px; border: 1px solid #2e3a47; background: #121922; color: #eef2f6; padding: 0 12px; font: inherit; min-width: 240px"><option>Temporada 2027 · Rodada 1</option><option>Temporada 2026 · Rodada 38</option><option>Temporada 2026 · Rodada 37</option></select>
+      </label>
+    </header>
+
+    <section aria-label="Temporada 2027 · Rodada 1" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 8px 20px 12px">
+      <h2 style="margin: 12px 0 8px; font-size: 13px; color: #98a6b6; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600">Temporada 2027 · Rodada 1</h2>
+      <sc-for list="{{items}}" as="h" hint-placeholder-count="8">
+        <div style="{{h.row}}">
+          <div style="flex: 1 1 auto; min-width: 0">
+            <div style="color: #98a6b6; font-size: 12px">{{h.comp}}</div>
+            <div style="{{h.title}}">{{h.text}}</div>
+          </div>
+          <sc-if value="{{h.mine}}" hint-placeholder-val="{{ false }}">
+            <span style="flex: 0 0 auto; border-radius: 6px; padding: 2px 8px; font-size: 11px; font-weight: 600; background: rgba(61,220,132,0.16); color: {{accent}}">Seu clube</span>
+          </sc-if>
+        </div>
+      </sc-for>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#3ddc84","options":["#3ddc84","#5ec8ff","#ffb454","#c79bff"]}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#3ddc84';
+    const base = 'display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;border-radius:10px;box-sizing:border-box;';
+    const items0 = [
+      ['Início', 'Main.dc.html', 'M3 11l9-8 9 8M5 10v10h14V10'],
+      ['Elenco', 'Elenco.dc.html', 'M16 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 20v-2a4 4 0 0 0-3-3.9M16 2.1a4 4 0 0 1 0 7.8'],
+      ['Escalação', 'Escalacao.dc.html', 'M3 5h18v14H3zM12 5v14M3 12h18'],
+      ['Competição', 'Competicao.dc.html', 'M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3'],
+      ['Calendário', 'Calendario.dc.html', 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4'],
+      ['Finanças', 'Financas.dc.html', 'M3 17l6-6 4 4 8-8M15 7h6v6'],
+      ['Histórico', 'Historico.dc.html', 'M12 8v4l3 2M3 12a9 9 0 1 0 3-6.7M3 4v5h5'],
+      ['Mercado', 'Mercado.dc.html', 'M4 7h16l-1.5 12h-13zM9 7a3 3 0 0 1 6 0'],
+      ['Carreira', 'Carreira.dc.html', 'M4 21v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8'],
+      ['Notícias', 'Noticias.dc.html', 'M4 5h13v14H6a2 2 0 0 1-2-2zM17 9h3v8a2 2 0 0 1-2 2M8 9h5M8 13h5', true],
+    ];
+    const nav = items0.map((it) => ({
+      label: it[0], href: it[1], icon: it[2],
+      style: base + (it[3] ? 'background:#16222c;color:' + accent + ';font-weight:600;' : 'color:#b4c0cd;font-weight:500;'),
+    }));
+    const data = [
+      ['Copa Nacional do Brasil', 'Zebra na copa: Varginha Unidos elimina União Canoas na fase "Fase de 32".', true],
+      ['Copa Nacional do Brasil', 'União Canoas está fora da copa: parou em Varginha Unidos na fase "Fase de 32".', true],
+      ['Supercopa de Brasil', 'Título da copa: Belo Horizonte Independente bate o Associação Angra dos Reis e levanta a taça.'],
+      ['Copa Nacional do Brasil', 'Ninguém esperava: Novo Hamburgo Recreativo derruba São José dos Campos Futebol Clube e avança na copa.'],
+      ['Copa Nacional do Brasil', 'Surpresa na copa: Unidos Guarulhos cai diante do Divinópolis Independente na fase "Fase de 32".'],
+      ['Campeonato Estadual do Rio Grande do Sul', 'Surpresa na copa: Viamão Associação Esportiva cai diante do Unidos Sapucaia na fase "Quartas de final".'],
+      ['Campeonato Estadual do Rio Grande do Sul', 'Vitória de União Canoas: 1 a 0 sobre Esporte Clube Viamão.', true],
+      ['Copa Nacional do Brasil', 'União Canoas sai de campo derrotado por Varginha Unidos: 1 a 0.', true],
+    ];
+    const items = data.map((d, i) => ({
+      comp: d[0], text: d[1], mine: !!d[2],
+      title: 'font-weight:' + (d[2] ? 600 : 500) + ';',
+      row: 'display:flex;align-items:center;gap:12px;padding:12px 0 12px ' + (d[2] ? '12px' : '15px') + ';' + (i ? 'border-top:1px solid #1d2733;' : '') + (d[2] ? 'box-shadow:inset 3px 0 0 ' + accent + ';' : ''),
+    }));
+    return { accent, nav, items };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Início — Treinador FC</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0a0e13}
+a{color:inherit;text-decoration:none}
+a:hover{color:#ffffff}
+</style>
+</helmet>
+<div style="min-height: 980px; background: #0a0e13; color: #eef2f6; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.45; display: flex; flex-wrap: wrap">
+
+  <!-- Barra lateral -->
+  <nav aria-label="Telas do jogo" style="flex: 1 1 232px; max-width: 100%; min-width: 0; background: #0f151c; border-right: 1px solid #1d2733; padding: 24px 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px">
+    <div style="display: flex; align-items: center; gap: 12px; padding: 0 8px">
+      <div style="width: 36px; height: 36px; border-radius: 10px; background: {{accent}}; color: #06140c; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px">T</div>
+      <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 17px; letter-spacing: -0.01em">Treinador FC</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <sc-for list="{{nav}}" as="n" hint-placeholder-count="8">
+        <a href="{{n.href}}" style="{{n.style}}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"></path></svg>
+          <span style="flex: 1 1 auto">{{n.label}}</span>
+          <sc-if value="{{n.badge}}" hint-placeholder-val="{{ false }}">
+            <span style="background: #ffb454; color: #1a1103; border-radius: 99px; font-size: 11px; font-weight: 600; padding: 1px 7px">{{n.badge}}</span>
+          </sc-if>
+        </a>
+      </sc-for>
+    </div>
+    <div style="border: 1px solid #1d2733; border-radius: 12px; padding: 12px; background: #121922; display: flex; flex-direction: column; gap: 4px">
+      <div style="color: #98a6b6; font-size: 12px">Temporada 2026</div>
+      <div style="font-weight: 600">Rodada 14 de 38</div>
+      <div style="height: 6px; border-radius: 99px; background: #1d2733; overflow: hidden"><div style="width: 37%; height: 100%; background: {{accent}}"></div></div>
+    </div>
+    <div style="margin-top: auto; border-top: 1px solid #1d2733; padding-top: 12px; display: flex; flex-direction: column; gap: 2px">
+      <a href="Menu.dc.html" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: 10px; color: #98a6b6; font-weight: 500">Menu inicial</a>
+      <a href="Configuracoes.dc.html" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: 10px; color: #98a6b6; font-weight: 500">Configurações</a>
+      <a href="#" style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: 10px; color: #98a6b6; font-weight: 500">Atalhos de teclado</a>
+    </div>
+  </nav>
+
+  <!-- Conteúdo -->
+  <main style="flex: 999 1 640px; min-width: 0; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px">
+
+    <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; justify-content: space-between">
+      <div style="display: flex; align-items: center; gap: 16px">
+        <div style="width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(160deg, #1f6b46, #12331f); border: 1px solid #2c8a5c; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px">UC</div>
+        <div>
+          <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600; letter-spacing: -0.02em">União Canoas</h1>
+          <div style="color: #98a6b6">Série A · 14º lugar · Temporada 2027</div>
+        </div>
+      </div>
+      <div style="color: {{accent}}; font-weight: 500">Janela aberta até 21 de março de 2027 (faltam 4 rodadas)</div>
+    </header>
+
+    <section aria-label="Avisos" style="display: flex; flex-wrap: wrap; gap: 16px">
+      <div style="flex: 1 1 320px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-left: 4px solid {{accent}}; border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 4px">
+        <div style="color: {{accent}}; font-weight: 600">Mercado</div>
+        <div>4 contratos terminam esta temporada</div>
+        <a href="Mercado.dc.html" style="color: {{accent}}; font-weight: 500; min-height: 36px; display: inline-flex; align-items: center">Abrir o mercado</a>
+      </div>
+      <div style="flex: 1 1 320px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-left: 4px solid #ffb454; border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 4px">
+        <div style="color: #ffb454; font-weight: 600">Escalação ajustada</div>
+        <div style="color: #b4c0cd; font-size: 13px">André Almeida (lesionado) saiu; Yuri Barbosa entrou como MEI.</div>
+        <div style="display: flex; gap: 12px; align-items: center">
+          <a href="Escalacao.dc.html" style="color: {{accent}}; font-weight: 500; min-height: 36px; display: inline-flex; align-items: center">Ver escalação</a>
+          <button type="button" style="min-height: 36px; padding: 0 14px; border-radius: 8px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; font: inherit; font-weight: 500; cursor: pointer">Dispensar</button>
+        </div>
+      </div>
+    </section>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: stretch">
+
+      <!-- Próxima partida -->
+      <section aria-label="Próxima partida" style="flex: 2 1 460px; min-width: 0; background: linear-gradient(180deg, #14202b, #101820); border: 1px solid #1d2733; border-radius: 16px; padding: 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px">
+        <div style="display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+          <span style="color: #98a6b6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em">Próxima partida · Rodada 5</span>
+          <span style="color: #98a6b6; font-size: 12px">Fora de casa · Campeonato Estadual</span>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-around; gap: 16px; flex-wrap: wrap">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 120px">
+            <div style="width: 64px; height: 64px; border-radius: 18px; background: linear-gradient(160deg, #1f6b46, #12331f); border: 1px solid #2c8a5c; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px">UC</div>
+            <div style="font-weight: 600">União Canoas</div>
+            <div style="display: flex; gap: 4px">
+              <sc-for list="{{formHome}}" as="f" hint-placeholder-count="5">
+                <span style="{{f.style}}">{{f.l}}</span>
+              </sc-for>
+            </div>
+          </div>
+          <div style="font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 600; color: #98a6b6">×</div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 120px">
+            <div style="width: 64px; height: 64px; border-radius: 18px; background: linear-gradient(160deg, #7a3a1c, #3a1d0e); border: 1px solid #a8522a; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px">CAB</div>
+            <div style="font-weight: 600">Clube Atlético Bagé</div>
+            <div style="display: flex; gap: 4px">
+              <sc-for list="{{formAway}}" as="f" hint-placeholder-count="5">
+                <span style="{{f.style}}">{{f.l}}</span>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px">
+          <div style="background: #0f151c; border-radius: 12px; padding: 12px">
+            <div style="color: #98a6b6; font-size: 12px">Força do time</div>
+            <div style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600">78 <span style="color: #98a6b6; font-size: 13px; font-weight: 500">vs 74</span></div>
+          </div>
+          <div style="background: #0f151c; border-radius: 12px; padding: 12px">
+            <div style="color: #98a6b6; font-size: 12px">Condição média</div>
+            <div style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600">91%</div>
+          </div>
+          <div style="background: #0f151c; border-radius: 12px; padding: 12px">
+            <div style="color: #98a6b6; font-size: 12px">Desfalques</div>
+            <div style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600; color: #ffb454">2</div>
+          </div>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px">
+          <a href="Rodada.dc.html" style="flex: 1 1 180px; display: inline-flex; align-items: center; justify-content: center; min-height: 48px; border-radius: 10px; background: {{accent}}; color: #06140c; font-weight: 600">Jogar rodada</a>
+          <button type="button" style="flex: 1 1 180px; min-height: 48px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; font: inherit; font-weight: 500; cursor: pointer">Simular direto</button>
+        </div>
+      </section>
+
+      <!-- Posição e resultados -->
+      <section aria-label="Posição e últimos resultados" style="flex: 1 1 320px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; justify-content: space-between; align-items: baseline">
+          <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Posição na tabela</h2>
+          <a href="Competicao.dc.html" style="color: {{accent}}; font-size: 13px">Ver tabela</a>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 12px">
+          <span style="font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 700; letter-spacing: -0.02em">14º lugar</span>
+          <span style="color: #98a6b6">Saldo: $ 23.291.951</span>
+        </div>
+        <h3 style="margin: 4px 0 0; font-size: 13px; color: #98a6b6; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600">Últimos resultados</h3>
+        <div style="display: flex; flex-direction: column">
+          <sc-for list="{{table}}" as="r" hint-placeholder-count="5">
+            <div style="{{r.style}}">
+              <span style="flex: 1 1 auto; min-width: 0; font-weight: 500">{{r.name}}</span>
+              <span style="color: #98a6b6; font-size: 13px">{{r.where}}</span>
+              <span style="width: 44px; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums">{{r.score}}</span>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: stretch">
+
+      <!-- Torcida e diretoria -->
+      <section aria-label="Torcida e diretoria" style="flex: 1 1 320px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px">
+        <div>
+          <h2 style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Torcida</h2>
+          <div style="display: flex; align-items: center; gap: 12px">
+            <span style="font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700">44</span><span style="color: #ffb454; font-weight: 600">Neutra</span>
+            <div style="flex: 1 1 auto; height: 6px; border-radius: 99px; background: #1d2733; overflow: hidden"><div style="width: 44%; height: 100%; background: #ffb454"></div></div>
+            <span style="color: #ff8a8a; font-size: 13px">Em queda</span>
+          </div>
+        </div>
+        <div style="border-top: 1px solid #1d2733; padding-top: 14px">
+          <h2 style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Diretoria</h2>
+          <div style="display: flex; align-items: center; gap: 12px">
+            <span style="font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700">61</span>
+            <div style="flex: 1 1 auto; height: 6px; border-radius: 99px; background: #1d2733; overflow: hidden"><div style="width: 61%; height: 100%; background: {{accent}}"></div></div>
+            <span style="color: #ff8a8a; font-size: 13px">Em queda</span>
+          </div>
+          <div style="margin-top: 10px; color: #b4c0cd; font-size: 13px">Meta esportiva: evitar o rebaixamento · <span style="color: {{accent}}; font-weight: 600">Cumprindo</span></div>
+          <div style="color: #b4c0cd; font-size: 13px">Meta do estadual: final · Em andamento</div>
+          <a href="Carreira.dc.html" style="color: {{accent}}; font-weight: 500; min-height: 36px; display: inline-flex; align-items: center">Carreira</a>
+        </div>
+      </section>
+
+      <!-- Notícias -->
+      <section aria-label="Notícias" style="flex: 2 1 460px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; justify-content: space-between; align-items: baseline">
+          <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Manchetes</h2>
+          <a href="#" style="color: {{accent}}; font-size: 13px">Todas as notícias</a>
+        </div>
+        <div style="display: flex; flex-direction: column">
+          <sc-for list="{{news}}" as="h" hint-placeholder-count="3">
+            <div style="display: flex; gap: 14px; padding: 12px 0; border-top: 1px solid #1d2733">
+              <span style="{{h.tag}}">{{h.kind}}</span>
+              <div style="min-width: 0">
+                <div style="font-weight: 500">{{h.title}}</div>
+                <div style="color: #98a6b6; font-size: 13px">{{h.meta}}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#3ddc84","options":["#3ddc84","#5ec8ff","#ffb454","#c79bff"]}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#3ddc84';
+    const base = 'display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;border-radius:10px;box-sizing:border-box;';
+    const items = [
+      ['Início', 'Main.dc.html', 'M3 11l9-8 9 8M5 10v10h14V10', true],
+      ['Elenco', 'Elenco.dc.html', 'M16 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 20v-2a4 4 0 0 0-3-3.9M16 2.1a4 4 0 0 1 0 7.8'],
+      ['Escalação', 'Escalacao.dc.html', 'M3 5h18v14H3zM12 5v14M3 12h18'],
+      ['Competição', 'Competicao.dc.html', 'M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3'],
+      ['Calendário', 'Calendario.dc.html', 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4'],
+      ['Finanças', 'Financas.dc.html', 'M3 17l6-6 4 4 8-8M15 7h6v6'],
+      ['Histórico', 'Historico.dc.html', 'M12 8v4l3 2M3 12a9 9 0 1 0 3-6.7M3 4v5h5'],
+      ['Mercado', 'Mercado.dc.html', 'M4 7h16l-1.5 12h-13zM9 7a3 3 0 0 1 6 0'],
+      ['Carreira', 'Carreira.dc.html', 'M4 21v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8'],
+      ['Notícias', 'Noticias.dc.html', 'M4 5h13v14H6a2 2 0 0 1-2-2zM17 9h3v8a2 2 0 0 1-2 2M8 9h5M8 13h5', false, '3'],
+    ];
+    const nav = items.map((it) => ({
+      label: it[0], href: it[1], icon: it[2], badge: it[4] || '',
+      style: base + (it[3] ? 'background:#16222c;color:' + accent + ';font-weight:600;' : 'color:#b4c0cd;font-weight:500;'),
+    }));
+    const chip = (l) => ({
+      l,
+      style: 'width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;' +
+        (l === 'V' ? 'background:rgba(61,220,132,0.16);color:#3ddc84;' : l === 'E' ? 'background:#1d2733;color:#b4c0cd;' : 'background:rgba(255,138,138,0.16);color:#ff8a8a;'),
+    });
+    const row = (name, where, score, res) => ({
+      name, where, score,
+      style: 'display:flex;align-items:center;gap:10px;min-height:40px;border-top:1px solid #1d2733;color:' + (res === 'V' ? '#3ddc84' : res === 'D' ? '#ff8a8a' : '#b4c0cd') + ';',
+    });
+    const tag = (c) => 'flex:0 0 auto;align-self:flex-start;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:600;' + c;
+    return {
+      accent, nav,
+      formHome: ['V', 'V', 'E', 'V', 'D'].map(chip),
+      formAway: ['D', 'E', 'V', 'D', 'E'].map(chip),
+      table: [row('Viamão', 'Fora', '1 × 0', 'V'), row('Bagé', 'Fora', '1 × 2', 'D'), row('Rio Grande', 'Casa', '2 × 0', 'V'), row('Porto Alegre', 'Fora', '1 × 0', 'V'), row('Varginha', 'Fora', '0 × 1', 'D')],
+      news: [
+        { kind: 'Diretoria', tag: tag('background:rgba(61,220,132,0.16);color:#3ddc84;'), title: 'Diretoria aprova reforço no ataque para a janela de transferências', meta: 'Confiança da diretoria: 82%' },
+        { kind: 'Torcida', tag: tag('background:rgba(94,200,255,0.16);color:#5ec8ff;'), title: 'Torcida lota o estádio e espera vitória sobre o rival do litoral', meta: 'Ingressos esgotados' },
+        { kind: 'Lesão', tag: tag('background:rgba(255,180,84,0.18);color:#ffb454;'), title: 'Zagueiro titular sente a coxa e vira dúvida para a rodada', meta: 'Fora por 2 semanas' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

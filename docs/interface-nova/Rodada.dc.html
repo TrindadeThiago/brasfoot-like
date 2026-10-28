@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Rodada ao vivo — Treinador FC</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0a0e13}
+a{color:inherit;text-decoration:none}
+a:hover{color:#ffffff}
+</style>
+</helmet>
+<div style="min-height: 1240px; background: #0a0e13; color: #eef2f6; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.45; display: flex; flex-direction: column">
+
+  <!-- Barra de controle -->
+  <header style="background: #0f151c; border-bottom: 1px solid #1d2733; padding: 10px 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; justify-content: space-between">
+    <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap">
+      <button type="button" onClick="{{openLeave}}" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0; border: 0; background: transparent; font: inherit; color: #b4c0cd; font-weight: 500; cursor: pointer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>
+        Sair
+      </button>
+      <div>
+        <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 600">Rodada 5</h1>
+        <div style="color: #98a6b6; font-size: 12px">Campeonato Estadual do Rio Grande do Sul — 31 de janeiro de 2027</div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+      <div role="group" aria-label="Velocidade" style="display: flex; gap: 2px; background: #121922; border: 1px solid #2e3a47; border-radius: 12px; padding: 3px">
+        <sc-for list="{{speeds}}" as="s" hint-placeholder-count="3">
+          <button type="button" onClick="{{s.pick}}" aria-pressed="{{s.on}}" style="{{s.style}}">{{s.label}}</button>
+        </sc-for>
+      </div>
+      <sc-if value="{{showControls}}" hint-placeholder-val="{{ true }}">
+        <button type="button" onClick="{{togglePause}}" style="{{pauseStyle}}">{{pauseLabel}}</button>
+        <button type="button" style="min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid #2e3a47; background: #121922; color: #eef2f6; font: inherit; font-weight: 500; cursor: pointer">Terminar agora</button>
+      </sc-if>
+      <label style="display: flex; align-items: center; gap: 8px; min-height: 44px; color: #b4c0cd; font-size: 13px; max-width: 220px; line-height: 1.25"><input type="checkbox" checked style="width: 20px; height: 20px; accent-color: #3ddc84; flex: 0 0 auto">Pausar quando meu time tiver lesão ou expulsão</label>
+    </div>
+  </header>
+  <div role="progressbar" aria-label="Andamento da partida" aria-valuemin="0" aria-valuemax="90" aria-valuenow="{{minute}}" style="height: 5px; background: #1d2733; position: relative">
+    <div style="width: {{progress}}%; height: 100%; background: {{accent}}"></div>
+    <div style="position: absolute; left: 50%; top: 0; width: 2px; height: 100%; background: #0a0e13"></div>
+  </div>
+
+  <main style="flex: 1 1 auto; width: 100%; max-width: 1360px; margin: 0 auto; padding: 24px 32px 40px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+    <!-- Coluna principal -->
+    <div style="flex: 2 1 620px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+
+      <!-- Placar do meu jogo -->
+      <section aria-label="Meu jogo" style="background: linear-gradient(180deg, #14202b, #101820); border: 1px solid #1d2733; border-radius: 20px; padding: 24px 28px; display: flex; flex-direction: column; gap: 18px">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: center">
+          <span style="color: #98a6b6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em">Meu jogo</span>
+          <span style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-variant-numeric: tabular-nums"><span style="{{liveDot}}"></span>{{phaseLabel}}</span>
+          <span style="border-radius: 6px; padding: 2px 8px; font-size: 11px; font-weight: 600; background: rgba(255,180,84,0.18); color: #ffb454">Clássico</span>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap">
+          <div style="flex: 1 1 200px; display: flex; align-items: center; justify-content: flex-end; gap: 16px">
+            <div style="text-align: right"><div style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600">Clube Atlético Bagé</div><div style="color: #98a6b6; font-size: 13px">Casa · 2º do Grupo D</div></div>
+            <div style="width: 60px; height: 60px; border-radius: 16px; background: linear-gradient(160deg, #7a1c2a, #3a0e16); border: 1px solid #a8303f; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px">CAB</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 14px; font-family: 'Space Grotesk', sans-serif; font-size: 64px; font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; line-height: 1"><span>{{homeScore}}</span><span style="color: #98a6b6; font-size: 36px">×</span><span style="color: {{accent}}">{{awayScore}}</span></div>
+          <div style="flex: 1 1 200px; display: flex; align-items: center; gap: 16px">
+            <div style="width: 60px; height: 60px; border-radius: 16px; background: linear-gradient(160deg, #0f3d8a, #081a3a); border: 1px solid #2a63c4; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px">UC</div>
+            <div>
+              <div style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600">União Canoas</div>
+              <div style="color: #98a6b6; font-size: 13px">Fora · 2º do Grupo C</div>
+              <sc-if value="{{sentOffText}}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top: 4px; display: inline-flex; align-items: center; gap: 6px; border-radius: 6px; padding: 1px 8px; font-size: 12px; font-weight: 600; background: rgba(255,138,138,0.16); color: #ff8a8a"><span style="width: 8px; height: 11px; border-radius: 2px; background: #ff5a5a"></span>{{sentOffText}}</div>
+              </sc-if>
+            </div>
+          </div>
+        </div>
+        <sc-if value="{{penSummary}}" hint-placeholder-val="{{ false }}">
+          <div style="text-align: center; color: #b4c0cd; font-weight: 500">{{penSummary}}</div>
+        </sc-if>
+
+        <!-- Linha do tempo -->
+        <div>
+          <div style="position: relative; height: 34px">
+            <div style="position: absolute; left: 0; right: 0; top: 15px; height: 4px; border-radius: 99px; background: #1d2733"></div>
+            <div style="position: absolute; left: 0; top: 15px; height: 4px; border-radius: 99px; background: {{accent}}; width: {{progress}}%"></div>
+            <div style="position: absolute; left: 50%; top: 9px; width: 2px; height: 16px; background: #2e3a47"></div>
+            <sc-for list="{{marks}}" as="m" hint-placeholder-count="4">
+              <span title="{{m.title}}" style="{{m.style}}"></span>
+            </sc-for>
+          </div>
+          <div style="display: flex; justify-content: space-between; color: #98a6b6; font-size: 11px; font-variant-numeric: tabular-nums"><span>0'</span><span>45'</span><span>90'</span></div>
+        </div>
+      </section>
+
+      <sc-if value="{{isHalf}}" hint-placeholder-val="{{ false }}">
+        <div role="status" style="background: rgba(255,180,84,0.12); border: 1px solid rgba(255,180,84,0.4); border-radius: 14px; padding: 12px 18px; color: #ffd8a3; font-weight: 500">Intervalo. A partida está parada: faça as substituições e retome quando quiser.</div>
+      </sc-if>
+      <sc-if value="{{isEnd}}" hint-placeholder-val="{{ false }}">
+        <section aria-label="Fim da rodada" style="background: rgba(61,220,132,0.10); border: 1px solid rgba(61,220,132,0.35); border-radius: 16px; padding: 18px 22px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px">
+          <div><div style="font-weight: 600; font-size: 16px">{{endText}}</div><div style="color: #b4c0cd; font-size: 13px">Os resultados estão salvos na classificação.</div></div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap">
+            <a href="Competicao.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 10px; background: {{accent}}; color: #06140c; font-weight: 600">Ver classificação</a>
+            <a href="Main.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid #2e3a47; background: #121922; font-weight: 500">Voltar ao início</a>
+          </div>
+        </section>
+      </sc-if>
+
+      <!-- Pênaltis -->
+      <sc-if value="{{isPen}}" hint-placeholder-val="{{ false }}">
+        <section aria-label="Pênaltis" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 18px 22px; display: flex; flex-direction: column; gap: 14px">
+          <div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Pênaltis</h2><span style="color: #98a6b6; font-size: 12px">Prorrogação terminou em 1 × 1</span></div>
+          <sc-for list="{{shootout}}" as="t" hint-placeholder-count="2">
+            <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap">
+              <span style="width: 150px; font-weight: 500">{{t.team}}</span>
+              <div style="display: flex; gap: 8px">
+                <sc-for list="{{t.kicks}}" as="k" hint-placeholder-count="5">
+                  <span aria-label="{{k.label}}" role="img" style="{{k.style}}">{{k.mark}}</span>
+                </sc-for>
+              </div>
+              <span style="margin-left: auto; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums">{{t.total}}</span>
+            </div>
+          </sc-for>
+        </section>
+      </sc-if>
+
+      <!-- Estatísticas -->
+      <section aria-label="Estatísticas do jogo" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 18px 22px; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Estatísticas do jogo</h2><span style="color: #98a6b6; font-size: 12px">Bagé · Canoas</span></div>
+        <sc-for list="{{stats}}" as="s" hint-placeholder-count="6">
+          <div style="display: grid; grid-template-columns: 56px 1fr 56px; align-items: center; gap: 12px">
+            <span style="font-weight: 600; font-variant-numeric: tabular-nums">{{s.a}}</span>
+            <div>
+              <div style="text-align: center; color: #98a6b6; font-size: 12px; margin-bottom: 4px">{{s.label}}</div>
+              <div style="display: flex; height: 6px; border-radius: 99px; overflow: hidden; background: #1d2733; gap: 2px"><div style="{{s.barA}}"></div><div style="{{s.barB}}"></div></div>
+            </div>
+            <span style="font-weight: 600; text-align: right; font-variant-numeric: tabular-nums">{{s.b}}</span>
+          </div>
+        </sc-for>
+      </section>
+
+      <!-- Lances do meu jogo -->
+      <section aria-label="Lances do meu jogo" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 18px 22px">
+        <h2 style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Lances do meu jogo</h2>
+        <sc-for list="{{feed}}" as="e" hint-placeholder-count="6">
+          <div style="display: flex; align-items: flex-start; gap: 14px; padding: 11px 0; border-top: 1px solid #1d2733">
+            <span style="width: 36px; flex: 0 0 auto; color: #98a6b6; font-variant-numeric: tabular-nums; font-weight: 600">{{e.min}}'</span>
+            <span style="{{e.chip}}">{{e.kind}}</span>
+            <span style="min-width: 0; {{e.weight}}">{{e.text}}</span>
+          </div>
+        </sc-for>
+      </section>
+
+      <!-- Outros jogos -->
+      <section aria-label="Outros jogos" style="display: flex; flex-direction: column; gap: 12px">
+        <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Outros jogos</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 12px">
+          <sc-for list="{{others}}" as="m" hint-placeholder-count="6">
+            <div style="{{m.card}}">
+              <div style="display: flex; justify-content: space-between; color: #98a6b6; font-size: 12px"><span>{{m.tag}}</span><span style="font-variant-numeric: tabular-nums">{{m.min}}</span></div>
+              <div style="display: flex; align-items: center; gap: 10px">
+                <span style="flex: 1 1 0; text-align: right; font-weight: 500">{{m.home}}</span>
+                <span style="{{m.score}}">{{m.goals}}</span>
+                <span style="flex: 1 1 0; font-weight: 500">{{m.away}}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+    </div>
+
+    <!-- Coluna lateral: meu time -->
+    <aside aria-label="Meu time" style="flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+
+      <section style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
+          <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Meu time</h2>
+          <span style="{{subsStyle}}">Substituições: {{subs}}/5</span>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap">
+          <label style="flex: 1 1 120px; display: flex; flex-direction: column; gap: 4px; color: #98a6b6; font-size: 12px">Esquema
+            <select style="min-height: 44px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; padding: 0 10px; font: inherit"><option>4-4-2</option><option>4-3-3</option><option>3-5-2</option></select>
+          </label>
+          <label style="flex: 1 1 120px; display: flex; flex-direction: column; gap: 4px; color: #98a6b6; font-size: 12px">Postura
+            <select style="min-height: 44px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; padding: 0 10px; font: inherit"><option>Equilibrada</option><option>Defensiva</option><option>Ofensiva</option></select>
+          </label>
+        </div>
+
+        <sc-if value="{{pending}}" hint-placeholder-val="{{ true }}">
+          <div role="alert" style="background: rgba(255,138,138,0.12); border: 1px solid rgba(255,138,138,0.45); border-radius: 12px; padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff8a8a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: 0 0 auto; margin-top: 2px"><path d="M12 3l10 18H2zM12 10v5M12 18h.01"></path></svg>
+            <div><div style="font-weight: 600; color: #ffb0b0">{{pendingTitle}}</div><div style="color: #e4c4c4; font-size: 13px">{{pendingText}}</div></div>
+          </div>
+        </sc-if>
+        <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+          <div role="status" style="background: rgba(61,220,132,0.12); border: 1px solid rgba(61,220,132,0.35); border-radius: 12px; padding: 10px 14px; color: {{accent}}; font-weight: 500">{{toast}}</div>
+        </sc-if>
+        <sc-if value="{{hint}}" hint-placeholder-val="{{ false }}">
+          <div style="color: #98a6b6; font-size: 13px">{{hint}}</div>
+        </sc-if>
+      </section>
+
+      <section aria-label="Em campo" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 14px 8px 8px">
+        <h3 style="margin: 0 12px 6px; font-size: 12px; color: #98a6b6; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600">Em campo</h3>
+        <sc-for list="{{field}}" as="p" hint-placeholder-count="11">
+          <button type="button" onClick="{{p.pick}}" aria-pressed="{{p.on}}" aria-disabled="{{p.locked}}" style="{{p.style}}">
+            <span style="{{p.pos}}">{{p.p}}</span>
+            <span style="flex: 1 1 auto; text-align: left; font-weight: 500; min-width: 0">{{p.n}}</span>
+            <sc-if value="{{p.yellow}}" hint-placeholder-val="{{ false }}"><span title="Cartão amarelo" style="width: 10px; height: 14px; border-radius: 2px; background: #ffcc4d; flex: 0 0 auto"></span></sc-if>
+            <sc-if value="{{p.injured}}" hint-placeholder-val="{{ false }}"><span style="font-size: 11px; font-weight: 600; color: #ff8a8a">Lesionado</span></sc-if>
+            <sc-if value="{{p.red}}" hint-placeholder-val="{{ false }}"><span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #ff8a8a"><span style="width: 10px; height: 14px; border-radius: 2px; background: #ff5a5a"></span>Expulso</span></sc-if>
+            <span style="width: 40px; text-align: right; font-size: 12px; font-variant-numeric: tabular-nums; color: {{p.condColor}}">{{p.c}}%</span>
+          </button>
+        </sc-for>
+      </section>
+
+      <section aria-label="Reservas disponíveis" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 14px 8px 8px">
+        <h3 style="margin: 0 12px 6px; font-size: 12px; color: #98a6b6; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600">Reservas disponíveis</h3>
+        <sc-for list="{{bench}}" as="b" hint-placeholder-count="5">
+          <button type="button" onClick="{{b.pick}}" style="{{b.style}}">
+            <span style="{{b.pos}}">{{b.p}}</span>
+            <span style="flex: 1 1 auto; text-align: left; font-weight: 500">{{b.n}}</span>
+            <span style="font-size: 12px; color: #98a6b6; font-variant-numeric: tabular-nums">{{b.c}}%</span>
+            <span style="width: 28px; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums">{{b.f}}</span>
+          </button>
+        </sc-for>
+        <sc-if value="{{hasGone}}" hint-placeholder-val="{{ false }}">
+          <h3 style="margin: 12px 12px 6px; font-size: 12px; color: #98a6b6; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600">Já saíram</h3>
+          <sc-for list="{{gone}}" as="g" hint-placeholder-count="1">
+            <div style="display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 12px; color: #98a6b6"><span style="{{g.pos}}">{{g.p}}</span><span style="flex: 1 1 auto">{{g.n}}</span></div>
+          </sc-for>
+        </sc-if>
+      </section>
+
+      <section aria-label="Lances da rodada" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 14px 20px">
+        <h3 style="margin: 0 0 6px; font-size: 12px; color: #98a6b6; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600">Lances da rodada</h3>
+        <sc-for list="{{roundFeed}}" as="e" hint-placeholder-count="5">
+          <div style="display: flex; gap: 10px; padding: 8px 0; border-top: 1px solid #1d2733; font-size: 13px"><span style="width: 30px; flex: 0 0 auto; color: #98a6b6; font-variant-numeric: tabular-nums">{{e.min}}'</span><span style="color: #b4c0cd; min-width: 0">{{e.text}}</span></div>
+        </sc-for>
+      </section>
+    </aside>
+  </main>
+
+  <!-- Confirmação ao sair -->
+  <sc-if value="{{confirmOpen}}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 10">
+      <div role="dialog" aria-modal="true" aria-labelledby="leave-title" style="width: 100%; max-width: 440px; background: #121922; border: 1px solid #2e3a47; border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 24px 60px rgba(0,0,0,0.5)">
+        <h2 id="leave-title" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">Sair da rodada?</h2>
+        <div style="color: #b4c0cd">A rodada em andamento será perdida. Sair mesmo assim?</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end">
+          <a href="Main.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid #5a2e2e; background: #0f151c; color: #ff8a8a; font-weight: 500">Sair</a>
+          <button type="button" onClick="{{closeLeave}}" style="min-height: 44px; padding: 0 20px; border-radius: 10px; border: 0; background: {{accent}}; color: #06140c; font: inherit; font-weight: 600; cursor: pointer">Continuar jogando</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#3ddc84&quot;,&quot;options&quot;:[&quot;#3ddc84&quot;,&quot;#5ec8ff&quot;,&quot;#ffb454&quot;,&quot;#c79bff&quot;]},&quot;phase&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;fim de jogo&quot;,&quot;options&quot;:[&quot;primeiro tempo&quot;,&quot;intervalo&quot;,&quot;segundo tempo&quot;,&quot;fim de jogo&quot;],&quot;section&quot;:&quot;Estado da partida&quot;},&quot;occurrence&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;expulsão de jogador de linha&quot;,&quot;options&quot;:[&quot;lesão&quot;,&quot;expulsão de jogador de linha&quot;,&quot;goleiro expulso&quot;,&quot;pênaltis&quot;],&quot;section&quot;:&quot;Estado da partida&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#3ddc84';
+    const occ = this.props.occurrence ?? 'lesão';
+    const isPen = occ === 'pênaltis';
+    const phase = isPen ? 'fim de jogo' : (this.props.phase ?? 'primeiro tempo');
+    const raw = this.state || {};
+    const S = raw.key === occ ? raw : {};
+    const paused = !!raw.paused;
+    const speed = raw.speed || 'Normal';
+    const save = (obj) => this.setState({ key: occ, field: undefined, bench: undefined, gone: undefined, subs: undefined, sel: undefined, toast: undefined, ...obj });
+
+    const lineRed = occ === 'expulsão de jogador de linha';
+    const gkRed = occ === 'goleiro expulso';
+    const initialField = [
+      { n: 'Renan Ramos', p: 'GOL', c: 96, red: gkRed }, { n: 'Xavier Amaral', p: 'LAT', c: 88 },
+      { n: 'Fernando Pacheco', p: 'ZAG', c: 52, injured: occ === 'lesão' }, { n: 'Nicolas Santos', p: 'ZAG', c: 84 },
+      { n: 'Mateus Toledo', p: 'LAT', c: 90, yellow: true }, { n: 'Kléber Pacheco', p: 'VOL', c: 79, red: lineRed },
+      { n: 'Júlio Vieira', p: 'MEI', c: 82 }, { n: 'Orlando Moura', p: 'MEI', c: 85 }, { n: 'Yuri Barbosa', p: 'MEI', c: 77 },
+      { n: 'Ademir Damasceno', p: 'ATA', c: 86 }, { n: 'Leandro Macedo', p: 'ATA', c: 91 },
+    ];
+    const initialBench = [
+      { n: 'Hugo Batista', p: 'GOL', c: 100, f: 67 }, { n: 'Wilson Ibrahim', p: 'ZAG', c: 100, f: 66 }, { n: 'Valdir Rodrigues', p: 'ZAG', c: 100, f: 57 },
+      { n: 'João Amaral', p: 'VOL', c: 100, f: 63 }, { n: 'Renan Leal', p: 'ATA', c: 100, f: 56 },
+    ];
+    const field = S.field || initialField;
+    const bench = S.bench || initialBench;
+    const gone = S.gone || [];
+    const subs = S.subs === undefined ? 1 : S.subs;
+    const pendIdx = field.findIndex((p) => p.injured || (p.red && p.p === 'GOL'));
+    const pending = pendIdx >= 0;
+    const sel = S.sel === undefined ? pendIdx : S.sel;
+    const hasSel = sel !== null && sel >= 0;
+    const canSub = subs < 5;
+    const sentOff = field.filter((p) => p.red).length + gone.filter((p) => p.red).length;
+
+    const base = 'display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;border-radius:10px;box-sizing:border-box;';
+    const posColor = { GOL: '#ffb454', ZAG: '#5ec8ff', LAT: '#5ec8ff', VOL: accent, MEI: accent, ATA: '#ff8a8a' };
+    const posStyle = (p) => 'min-width:38px;text-align:center;border-radius:6px;padding:2px 6px;font-size:12px;font-weight:600;background:#16222c;color:' + posColor[p] + ';';
+
+    const speeds = ['Lenta', 'Normal', 'Rápida'].map((label) => ({
+      label, on: speed === label ? 'true' : 'false',
+      pick: () => this.setState({ speed: label }),
+      style: 'min-height:38px;padding:0 14px;border-radius:9px;border:0;font:inherit;font-weight:500;cursor:pointer;' + (speed === label ? 'background:' + accent + ';color:#06140c;' : 'background:transparent;color:#b4c0cd;'),
+    }));
+
+    const fieldItems = field.map((p, i) => {
+      const locked = !!p.red && p.p !== 'GOL';
+      return {
+        n: p.n, p: p.p, c: p.c, injured: !!p.injured, yellow: !!p.yellow, red: !!p.red, locked: locked ? 'true' : 'false',
+        on: sel === i ? 'true' : 'false',
+        condColor: p.c < 70 ? '#ffb454' : '#98a6b6',
+        pos: posStyle(p.p),
+        pick: () => {
+          if (locked) return;
+          if (hasSel && sel !== i) {
+            const a = field[sel];
+            if (a.injured || a.red || p.injured || p.red) return;
+            const nf = field.slice();
+            nf[sel] = { ...a, p: p.p };
+            nf[i] = { ...p, p: a.p };
+            save({ ...S, field: nf, sel: null, toast: a.n + ' e ' + p.n + ' trocaram de posição.' });
+            return;
+          }
+          save({ ...S, sel: sel === i ? null : i, toast: '' });
+        },
+        style: 'width:100%;display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;border-radius:10px;font:inherit;color:inherit;border:1px solid ' + (sel === i ? accent : 'transparent') + ';cursor:' + (locked ? 'default' : 'pointer') + ';opacity:' + (locked ? 0.7 : 1) + ';background:' + (sel === i ? '#16222c' : p.injured || (p.red && p.p === 'GOL') ? 'rgba(255,138,138,0.08)' : 'transparent') + ';',
+      };
+    });
+
+    const benchItems = bench.map((b, bi) => {
+      const enabled = hasSel && canSub;
+      return {
+        n: b.n, p: b.p, c: b.c, f: b.f, pos: posStyle(b.p),
+        pick: () => {
+          if (!enabled) return;
+          const out = field[sel];
+          const nf = field.slice();
+          nf[sel] = { n: b.n, p: out.p, c: b.c };
+          save({ ...S, field: nf, bench: bench.filter((_, k) => k !== bi), gone: gone.concat([out]), subs: subs + 1, sel: null, toast: b.n + ' entrou no lugar de ' + out.n + '.' });
+        },
+        style: 'width:100%;display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;border-radius:10px;font:inherit;color:inherit;border:1px solid transparent;background:' + (enabled ? '#0f151c' : 'transparent') + ';cursor:' + (enabled ? 'pointer' : 'default') + ';opacity:' + (enabled ? 1 : 0.55) + ';',
+      };
+    });
+
+    const minuteByPhase = { 'primeiro tempo': 28, intervalo: 45, 'segundo tempo': 63, 'fim de jogo': isPen ? 120 : 90 };
+    const minute = minuteByPhase[phase];
+    const shown = Math.min(minute, 90);
+    const hasGoal = minute >= 61 && !isPen;
+    const awayScore = isPen ? 1 : hasGoal || phase === 'fim de jogo' ? 1 : 0;
+    const homeScore = isPen ? 1 : 0;
+    const isHalf = phase === 'intervalo';
+    const isEnd = phase === 'fim de jogo';
+    const phaseLabel = isPen ? 'Pênaltis' : isHalf ? 'Intervalo' : isEnd ? 'Fim' : minute + "'";
+
+    const mark = (min, color, title) => ({ title, style: 'position:absolute;left:calc(' + (min / 90) * 100 + '% - 7px);top:10px;width:14px;height:14px;border-radius:50%;background:' + color + ';border:2px solid #101820;' });
+    const marks = [mark(9, '#ffcc4d', "9' Cartão amarelo para Mateus Toledo")];
+    if (occ === 'lesão') marks.push(mark(22, '#ff8a8a', "22' Lesão de Fernando Pacheco"));
+    if (lineRed) marks.push(mark(24, '#ff5a5a', "24' Expulsão de Kléber Pacheco"));
+    if (gkRed) marks.push(mark(26, '#ff5a5a', "26' Expulsão do goleiro Renan Ramos"));
+    if (hasGoal || isPen) marks.push(mark(61, accent, "61' Gol de União Canoas"));
+    if (isPen) marks.push(mark(88, '#5ec8ff', "88' Gol do Bagé"));
+
+    const chip = (c) => 'flex:0 0 auto;min-width:68px;text-align:center;border-radius:6px;padding:1px 8px;font-size:11px;font-weight:600;' + c;
+    const gold = 'background:rgba(61,220,132,0.16);color:' + accent + ';';
+    const yel = 'background:rgba(255,204,77,0.16);color:#ffcc4d;';
+    const red = 'background:rgba(255,138,138,0.16);color:#ff8a8a;';
+    const neu = 'background:#1d2733;color:#b4c0cd;';
+    let feed = [];
+    if (occ === 'lesão') feed.push({ min: 22, kind: 'Lesão', chip: chip(red), text: 'Fernando Pacheco sente a coxa e pede para sair.' });
+    if (lineRed) feed.push({ min: 24, kind: 'Vermelho', chip: chip(red), weight: 'font-weight:600;', text: 'Expulso! Kléber Pacheco recebe o segundo amarelo. O União Canoas fica com 10.' });
+    if (gkRed) feed.push({ min: 26, kind: 'Vermelho', chip: chip(red), weight: 'font-weight:600;', text: 'Goleiro expulso! Renan Ramos derruba o atacante fora da área. Escolha o substituto.' });
+    feed.push({ min: 14, kind: 'Chance', chip: chip(neu), text: 'Ademir Damasceno finaliza de fora da área e a bola passa perto.' });
+    feed.push({ min: 9, kind: 'Cartão', chip: chip(yel), text: 'Cartão amarelo para Mateus Toledo, em falta na entrada da área.' });
+    feed.push({ min: 1, kind: 'Início', chip: chip(neu), text: 'Bola rolando entre Bagé e Canoas.' });
+    feed = feed.filter((e) => e.min <= shown);
+    if (hasGoal || isPen) feed.unshift({ min: 61, kind: 'Gol', chip: chip(gold), weight: 'font-weight:600;', text: 'Gol do União Canoas! Leandro Macedo abre o placar.' });
+    if (isPen) feed.unshift({ min: 88, kind: 'Gol', chip: chip('background:rgba(94,200,255,0.16);color:#5ec8ff;'), weight: 'font-weight:600;', text: 'Gol do Bagé! Empate no fim do tempo normal.' });
+    if (isHalf) feed.unshift({ min: 45, kind: 'Intervalo', chip: chip(neu), text: 'Fim do primeiro tempo.' });
+    if (isPen) { feed.unshift({ min: 120, kind: 'Pênaltis', chip: chip(gold), weight: 'font-weight:600;', text: 'União Canoas vence nos pênaltis por 4 a 3.' }); }
+    else if (isEnd) feed.unshift({ min: 90, kind: 'Fim', chip: chip(neu), text: 'Apita o árbitro: União Canoas vence por 1 a 0.' });
+    feed = feed.map((e) => ({ weight: '', ...e }));
+
+    const sc = (a, b, label, fmt) => {
+      const t = a + b || 1;
+      return { a: fmt ? a + '%' : a, b: fmt ? b + '%' : b, label, barA: 'height:100%;background:#5ec8ff;width:' + Math.round((a / t) * 100) + '%;', barB: 'height:100%;background:' + accent + ';width:' + Math.round((b / t) * 100) + '%;' };
+    };
+    const stats = [sc(7, 5, 'Finalizações'), sc(2, 3, 'No alvo'), sc(55, 45, 'Posse', true), sc(1, 2, 'Amarelos'), sc(0, sentOff, 'Vermelhos'), isPen ? sc(3, 4, 'Pênaltis (convertidos/total)') : sc(0, 0, 'Pênaltis (convertidos/total)')];
+
+    const kick = (r) => ({ label: r === 'g' ? 'Convertido' : 'Perdido', mark: r === 'g' ? '✓' : '✕', style: 'width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;' + (r === 'g' ? 'background:rgba(61,220,132,0.16);color:' + accent + ';border:1px solid ' + accent + ';' : 'background:rgba(255,138,138,0.12);color:#ff8a8a;border:1px solid #ff8a8a;') });
+    const shootout = [
+      { team: 'Clube Atlético Bagé', kicks: ['g', 'g', 'm', 'g', 'm'].map(kick), total: 3 },
+      { team: 'União Canoas', kicks: ['g', 'g', 'g', 'm', 'g'].map(kick), total: 4 },
+    ];
+
+    const card = 'background:#121922;border:1px solid #1d2733;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;';
+    const scoreStyle = (flash) => 'font-family:Space Grotesk,sans-serif;font-size:20px;font-weight:600;border-radius:8px;padding:2px 12px;font-variant-numeric:tabular-nums;background:' + (flash ? accent : '#0f151c') + ';color:' + (flash ? '#06140c' : '#eef2f6') + ';';
+    const om = [
+      ['Sapucaia', '1 – 0', 'Bagé Unidos', 'Estadual', true], ['Viamão', '0 – 0', 'Rio Grande', 'Estadual'], ['Porto Alegre', '2 – 1', 'Gravataí', 'Estadual'],
+      ['Estrela do Norte', '3 – 0', 'Comercial FC', 'Série B'], ['Atlético Marítimo', '1 – 1', 'Porto Oeste', 'Série B'], ['Guarani Alto', '0 – 2', 'Náutico do Sul', 'Série B'],
+    ];
+    const others = om.map((d) => ({ home: d[0], goals: d[1], away: d[2], tag: d[3], min: isEnd ? 'Fim' : minute + "'", card, score: scoreStyle(!!d[4] && !isEnd) }));
+
+    const roundFeed = [
+      { min: 61, text: 'Gol do União Canoas! Leandro Macedo abre o placar.' }, { min: 52, text: 'Gol do Sapucaia contra o Bagé Unidos.' },
+      { min: 44, text: 'Porto Alegre amplia: 2 a 1 sobre o Gravataí.' }, { min: 22, text: occ === 'lesão' ? 'Lesão no meu time: Fernando Pacheco.' : 'Expulsão no meu time.' }, { min: 1, text: 'Bola rolando entre Bagé e Canoas.' },
+    ].filter((e) => e.min <= shown && (e.min !== 61 || hasGoal || isPen));
+
+    const pendingTitle = gkRed && pending ? 'Goleiro expulso: escolha o substituto' : 'Lesionado: escolha o substituto';
+    const pendingText = pending ? field[pendIdx].n + (gkRed ? ' foi expulso. Escolha um reserva abaixo.' : ' saiu de campo. Escolha um reserva abaixo.') : '';
+    const selName = hasSel && field[sel] ? field[sel].n : '';
+
+    return {
+      accent, minute: shown, progress: Math.round((shown / 90) * 100), speeds, field: fieldItems, bench: benchItems,
+      gone: gone.map((g) => ({ n: g.n, p: g.p, pos: posStyle(g.p) })), hasGone: gone.length > 0,
+      subs, subsStyle: 'border-radius:99px;padding:3px 12px;font-size:12px;font-weight:600;' + (canSub ? 'background:#16222c;color:#b4c0cd;' : 'background:rgba(255,138,138,0.16);color:#ff8a8a;'),
+      pending, pendingTitle, pendingText, toast: S.toast || '',
+      hint: hasSel && !pending ? 'Escolha um reserva para entrar no lugar de ' + selName + ', ou outro jogador em campo para trocar de posição com ele.' : '',
+      homeScore, awayScore, phaseLabel, isHalf, isEnd, isPen, marks, feed, stats, others, roundFeed, shootout,
+      sentOffText: sentOff ? (sentOff === 1 ? '1 expulso' : sentOff + ' expulsos') : '',
+      penSummary: isPen ? 'Prorrogação: 1 × 1 · Pênaltis: Bagé 3 – 4 União Canoas' : '',
+      endText: isPen ? 'Fim da rodada 5. União Canoas venceu nos pênaltis por 4 a 3 (1 a 1 no tempo jogado).' : 'Fim da rodada 5. União Canoas venceu por 1 a 0.',
+      showControls: !isEnd,
+      pauseLabel: paused || isHalf ? 'Retomar' : 'Pausar',
+      pauseStyle: 'min-height:44px;padding:0 22px;border-radius:10px;border:0;font:inherit;font-weight:600;cursor:pointer;background:' + (paused || isHalf ? accent : '#eef2f6') + ';color:#06140c;',
+      togglePause: () => this.setState({ paused: !paused }),
+      liveDot: 'width:9px;height:9px;border-radius:50%;background:' + (isEnd ? '#98a6b6' : paused || isHalf ? '#ffb454' : '#ff5a5a') + ';' + (isEnd || paused || isHalf ? '' : 'box-shadow:0 0 0 4px rgba(255,90,90,0.25);'),
+      confirmOpen: !!raw.confirm,
+      openLeave: () => this.setState({ confirm: true }),
+      closeLeave: () => this.setState({ confirm: false }),
+    };
+  }
+}
+</script>
+</body>
+</html>

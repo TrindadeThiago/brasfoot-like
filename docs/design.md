@@ -131,12 +131,15 @@ Desenvolvimento via Spec-Driven Development com Spec Kit. Os prompts de `/specki
 | **M7 — Copas** | Calendário por datas com várias competições, mata-mata (copa nacional no mundo padrão), fase de grupos e competições em fases. | Jogo uma temporada com liga e copa nacional no mesmo calendário, e a copa termina com um campeão. |
 | **M8 — Mundo** | Vários países, simulação resumida para escala, vagas entre competições e supercopas. | Um mundo com 10 países roda 30 temporadas dentro das metas de tamanho e tempo, e as vagas entre competições se renovam sozinhas. |
 | **M9 — Futebol sul-americano** | Competições continentais, estaduais e o gerador do mod sul-americano (nomes fictícios). | Uma carreira no mod passa por estadual, campeonato nacional, copa nacional e competição continental na mesma temporada. |
+| **M10 — Nova interface** | Refatoração visual: tokens e tema claro e escuro, barra lateral, componentes compartilhados, todas as telas refeitas (clube, competição, mercado, carreira, rodada ao vivo, entrada e configuração) e adaptação a telas menores. Sem mudança de motor, regras ou saves. | Jogo uma temporada inteira com a interface nova, nos dois temas, sem perder nenhuma função da anterior e sem regressão de desempenho. É desenvolvido na branch `release/v1.0.0` e vai ao ar inteiro como o **lançamento oficial 1.0.0** (032); a numeração é reiniciada na 025. |
 
 **Estado do M6:** export/import de carreiras e formato de mod (015); dicas de primeiro acesso,
 Configurações (tema claro/escuro), ajuda de atalhos em todas as telas, revisão de
-acessibilidade, versão e notas, aviso de atualização e publicação na Vercel (016). Versão
-1.0.0 publicada em https://treinador-fc.vercel.app. Falta o teste de usabilidade com quem
-nunca viu o jogo (`specs/016-polimento-publicacao/usability.md`).
+acessibilidade, versão e notas, aviso de atualização e publicação na Vercel (016). Primeira
+publicação em https://treinador-fc.vercel.app, em 2026-10-21. As versões 1.0.0 a 1.10.0 (de 21 a 28
+de outubro de 2026) passaram a ser chamadas de **fase beta**: o lançamento oficial 1.0.0 é o fim do
+marco 10 (ver [`interface-nova.md`](interface-nova.md), seção 6). Falta o teste de usabilidade com
+quem nunca viu o jogo (`specs/016-polimento-publicacao/usability.md`).
 
 **Estado do M7:** calendário por datas e várias competições na mesma temporada (017): agenda de
 cada competição como dado (`schedule`), avanço até o próximo jogo do clube de qualquer competição,
@@ -178,6 +181,10 @@ reputação, meta da diretoria, manchetes e histórico de campeões das duas div
 Os marcos 7 a 9 são pós-lançamento: trazem as copas e o mundo maior do §14 até o mod do
 futebol sul-americano. Os prompts estão em [`speckit-prompts/`](speckit-prompts/README.md)
 (017 a 024).
+
+O marco 10 é a refatoração visual da interface (025 a 032), sem mudança de regras. Direção visual,
+estrutura das telas, requisitos de paridade, a branch de release e a numeração de versões (reinício
+com a 1.0.0 na 025 e lançamento oficial só no fim) em [`interface-nova.md`](interface-nova.md).
 
 ## 14. Pós-lançamento
 
