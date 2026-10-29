@@ -108,7 +108,7 @@
   "calendar.caption": "Jogos do {club}",
   "calendar.home": "Casa",
   "calendar.away": "Fora",
-  "calendar.showRound": "Ver todos os jogos da rodada {round}",
+  "calendar.showRound": "Ver jogos da rodada {round}",
   "calendar.showRoundShort": "Ver jogos",
   "calendar.roundMatches": "Jogos da rodada {round}",
   "calendar.notPlayed": "a disputar",

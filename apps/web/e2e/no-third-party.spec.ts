@@ -21,7 +21,7 @@ test("nenhuma requisição sai para outra origem ao criar carreira e jogar uma r
   // A rodada é tela de foco (025): sem barra lateral, volta-se ao Início.
   await page.getByRole("link", { name: t("nav.home"), exact: true }).click();
   for (const screen of ["nav.competition", "nav.market", "nav.career"]) {
-    await page.getByRole("link", { name: t(screen) }).click();
+    await page.getByRole("link", { name: t(screen), exact: true }).click();
   }
   await page.goto("/sobre/");
   await page.goto("/configuracoes/");

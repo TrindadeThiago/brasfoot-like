@@ -123,11 +123,7 @@ test("Tab percorre a barra lateral na ordem das telas e chega ao rodapé (025)",
     "nav.settings",
   ];
   for (const key of keys) {
-    await tabTo(
-      page,
-      page.getByRole("link", { name: new RegExp(`^${t(key)}`) }).first(),
-      key,
-    );
+    await tabTo(page, page.getByRole("link", { name: new RegExp(`^${t(key)}`) }).first(), key);
   }
   await tabTo(page, page.getByRole("button", { name: t("nav.help") }), "atalhos");
 });
