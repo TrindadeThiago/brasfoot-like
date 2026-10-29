@@ -122,6 +122,20 @@ for (const theme of ["dark", "light"] as const) {
       }
     }
 
+    // Carreira (cinco abas) e Notícias: sem rolagem horizontal da página nem texto cortado (029).
+    for (const width of [1440, 1280, 1024]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`/jogo/carreira/?c=${career}`);
+      for (const key of ["board", "fans", "offers", "history", "coaches"]) {
+        await page.getByRole("tab", { name: new RegExp(`^${t(`career.tab.${key}`)}`) }).click();
+        await expectNoHorizontalScroll(page, `carreira/${key} @${width}`);
+        await expectNoClippedText(page, `carreira/${key} @${width}`);
+      }
+      await page.goto(`/jogo/noticias/?c=${career}`);
+      await expectNoHorizontalScroll(page, `notícias @${width}`);
+      await expectNoClippedText(page, `notícias @${width}`);
+    }
+
     // Abaixo de 768 px a barra empilha acima do conteúdo, sem perder nenhuma tela.
     await page.setViewportSize({ width: 600, height: 900 });
     await page.goto(`/jogo/elenco/?c=${career}`);

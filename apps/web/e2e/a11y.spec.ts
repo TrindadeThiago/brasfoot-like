@@ -102,6 +102,19 @@ for (const theme of ["dark", "light"] as const) {
       problems.push(...(await scan(page, `/jogo/financas/ (${key})`)));
     }
 
+    // Carreira: cada aba; Notícias: com filtro (029).
+    await page.goto(`/jogo/carreira/?c=${career}`);
+    for (const key of ["board", "fans", "offers", "history", "coaches"]) {
+      await page.getByRole("tab", { name: new RegExp(`^${t(`career.tab.${key}`)}`) }).click();
+      problems.push(...(await scan(page, `/jogo/carreira/ (${key})`)));
+    }
+    await page.goto(`/jogo/noticias/?c=${career}`);
+    const mineOnly = page.getByRole("button", { name: t("news.filter.mine") });
+    if (await mineOnly.count()) {
+      await mineOnly.click();
+      problems.push(...(await scan(page, "/jogo/noticias/ (do meu clube)")));
+    }
+
     // Ajuda de atalhos aberta.
     await page.keyboard.press("?");
     await expect(page.getByRole("dialog", { name: t("help.title") })).toBeVisible();

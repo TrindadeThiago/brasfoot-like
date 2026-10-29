@@ -82,6 +82,17 @@
   font-size: var(--text-sm);
 }
 
+.noticeBody {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.noticeBody p {
+  margin: 0;
+}
+
 .notice {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -155,4 +166,26 @@
   min-width: 80px;
   height: 10px;
   accent-color: var(--color-accent);
+}
+
+/* Diretoria (029): cartões com título, e as mudanças por rodada num quadro que rola sozinho. */
+.heading {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-md);
+  color: var(--color-muted);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.scroller {
+  max-height: 9rem;
+  overflow-y: auto;
+}
+
+.scroller:focus-visible {
+  outline: 3px solid var(--focus-color);
+  outline-offset: 2px;
 }

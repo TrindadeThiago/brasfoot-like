@@ -236,7 +236,11 @@ describe("mercado e propostas entre países (020 US2)", () => {
         t("career.offers.country", { country: save.bank.countries[2]?.name ?? "" }),
       ),
     ).toBeDefined();
-    await user.click(within(card).getByRole("button", { name: t("career.offers.accept") }));
+    // O aviso de mudança de país (029) vem antes das ações.
+    const warning = within(card).getByRole("region", { name: t("career.offers.abroadTitle") });
+    const accept = within(card).getByRole("button", { name: t("career.offers.accept") });
+    expect(warning.compareDocumentPosition(accept) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    await user.click(accept);
     await waitFor(async () => {
       const [summary] = await store.listSummaries();
       const loaded = await store.load(summary?.id ?? "");

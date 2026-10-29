@@ -26,6 +26,7 @@ import { LineupNotice } from "../../ui/LineupNotice";
 import { MarketNotice, marketNoticeCounts } from "../../ui/MarketNotice";
 import { WindowStatus } from "../../ui/market/WindowStatus";
 import { NextMatchCard } from "../../ui/NextMatchCard";
+import { Notice } from "../../ui/Notice";
 import { NewsCard } from "../../ui/news/NewsCard";
 import { RoundResults } from "../../ui/RoundResults";
 import { SectionLabel } from "../../ui/SectionLabel";
@@ -161,12 +162,14 @@ export default function HomePage() {
                   <BoardNotice save={save} onDismiss={game.dismissBoardNotice} />
                 ) : null}
                 {offers > 0 ? (
-                  <p role="status" className={styles.offers}>
-                    {t("career.offers.notice", { count: offers })}{" "}
-                    <Link href={`${screenHref("/jogo/carreira", save.id)}&aba=offers`}>
-                      {t("career.offers.open")}
-                    </Link>
-                  </p>
+                  <Notice role="status" tone="info" title={t("career.offers.title")}>
+                    <p>
+                      {t("career.offers.notice", { count: offers })}{" "}
+                      <Link href={`${screenHref("/jogo/carreira", save.id)}&aba=offers`}>
+                        {t("career.offers.open")}
+                      </Link>
+                    </p>
+                  </Notice>
                 ) : null}
                 {save.finances.clubs[save.clubId]?.inCrisis ? (
                   <p role="alert" className={styles.crisis}>

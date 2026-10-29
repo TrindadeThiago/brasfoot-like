@@ -29,4 +29,11 @@ test("torcida: cartão na Início, clássicos no calendário e rivais na Carreir
   await expect(page).toHaveURL(/\/jogo\/carreira\//);
   await page.getByRole("tab", { name: t("career.tab.fans") }).click();
   await expect(page.getByRole("table", { name: t("fans.rivals.title") })).toBeVisible();
+  // A faixa e a tendência vêm em texto (029).
+  const fans = page.getByRole("region", { name: t("fans.title") });
+  await expect(fans.getByRole("meter")).toHaveAttribute(
+    "aria-valuetext",
+    /Revoltada|Insatisfeita|Neutra|Animada|Eufórica/,
+  );
+  await expect(fans.getByText(/Em alta|Em queda|Estável/)).toBeVisible();
 });
