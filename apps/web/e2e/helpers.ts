@@ -129,7 +129,16 @@ export async function simulateSeason(page: Page): Promise<void> {
     if (/fim-de-temporada/.test(page.url())) return;
     const button = page.getByRole("button", { name: t("home.simulate") });
     // Fora da Início não há botão: um respiro basta para a simulação do dia terminar.
-    if ((await button.count()) > 0) await expect(button).toBeEnabled();
-    else await page.waitForTimeout(250);
+    // O botão some se a simulação do dia leva ao fim da temporada: isso também encerra a espera.
+    if ((await button.count()) > 0) {
+      await expect
+        .poll(
+          async () =>
+            /fim-de-temporada/.test(page.url()) ||
+            (await button.isEnabled({ timeout: 500 }).catch(() => false)),
+          { timeout: 30_000 },
+        )
+        .toBe(true);
+    } else await page.waitForTimeout(250);
   }
 }
