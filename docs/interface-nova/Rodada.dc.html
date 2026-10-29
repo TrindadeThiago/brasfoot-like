@@ -157,17 +157,21 @@ a:hover{color:#ffffff}
       <!-- Outros jogos -->
       <section aria-label="Outros jogos" style="display: flex; flex-direction: column; gap: 12px">
         <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Outros jogos</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 12px">
-          <sc-for list="{{others}}" as="m" hint-placeholder-count="6">
-            <div style="{{m.card}}">
-              <div style="display: flex; justify-content: space-between; color: #98a6b6; font-size: 12px"><span>{{m.tag}}</span><span style="font-variant-numeric: tabular-nums">{{m.min}}</span></div>
-              <div style="display: flex; align-items: center; gap: 10px">
-                <span style="flex: 1 1 0; text-align: right; font-weight: 500">{{m.home}}</span>
-                <span style="{{m.score}}">{{m.goals}}</span>
-                <span style="flex: 1 1 0; font-weight: 500">{{m.away}}</span>
-              </div>
+        <div style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; overflow-x: auto">
+          <div style="min-width: 640px">
+            <div style="display: grid; grid-template-columns: minmax(150px, 190px) 56px minmax(0, 1fr) 76px minmax(0, 1fr); gap: 12px; padding: 10px 18px; color: #98a6b6; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600">
+              <span>Competição</span><span>Min</span><span style="text-align: right">Casa</span><span style="text-align: center">Placar</span><span>Fora</span>
             </div>
-          </sc-for>
+            <sc-for list="{{others}}" as="m" hint-placeholder-count="6">
+              <div style="display: grid; grid-template-columns: minmax(150px, 190px) 56px minmax(0, 1fr) 76px minmax(0, 1fr); gap: 12px; align-items: center; padding: 10px 18px; border-top: 1px solid #1d2733">
+                <span style="display: flex; align-items: center; gap: 8px; color: #b4c0cd; font-size: 12px; line-height: 1.25"><span style="{{m.dot}}"></span>{{m.comp}}</span>
+                <span style="color: #98a6b6; font-size: 13px; font-variant-numeric: tabular-nums">{{m.min}}</span>
+                <span style="display: flex; align-items: center; justify-content: flex-end; gap: 10px; min-width: 0"><span style="font-weight: 500; text-align: right; min-width: 0">{{m.home}}</span><span style="{{m.hStyle}}" aria-hidden="true">{{m.hIni}}</span></span>
+                <span style="{{m.score}}">{{m.goals}}</span>
+                <span style="display: flex; align-items: center; gap: 10px; min-width: 0"><span style="{{m.aStyle}}" aria-hidden="true">{{m.aIni}}</span><span style="font-weight: 500; min-width: 0">{{m.away}}</span></span>
+              </div>
+            </sc-for>
+          </div>
         </div>
       </section>
     </div>
@@ -234,13 +238,6 @@ a:hover{color:#ffffff}
           </sc-for>
         </sc-if>
       </section>
-
-      <section aria-label="Lances da rodada" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 14px 20px">
-        <h3 style="margin: 0 0 6px; font-size: 12px; color: #98a6b6; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600">Lances da rodada</h3>
-        <sc-for list="{{roundFeed}}" as="e" hint-placeholder-count="5">
-          <div style="display: flex; gap: 10px; padding: 8px 0; border-top: 1px solid #1d2733; font-size: 13px"><span style="width: 30px; flex: 0 0 auto; color: #98a6b6; font-variant-numeric: tabular-nums">{{e.min}}'</span><span style="color: #b4c0cd; min-width: 0">{{e.text}}</span></div>
-        </sc-for>
-      </section>
     </aside>
   </main>
 
@@ -259,7 +256,7 @@ a:hover{color:#ffffff}
   </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#3ddc84&quot;,&quot;options&quot;:[&quot;#3ddc84&quot;,&quot;#5ec8ff&quot;,&quot;#ffb454&quot;,&quot;#c79bff&quot;]},&quot;phase&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;fim de jogo&quot;,&quot;options&quot;:[&quot;primeiro tempo&quot;,&quot;intervalo&quot;,&quot;segundo tempo&quot;,&quot;fim de jogo&quot;],&quot;section&quot;:&quot;Estado da partida&quot;},&quot;occurrence&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;expulsão de jogador de linha&quot;,&quot;options&quot;:[&quot;lesão&quot;,&quot;expulsão de jogador de linha&quot;,&quot;goleiro expulso&quot;,&quot;pênaltis&quot;],&quot;section&quot;:&quot;Estado da partida&quot;}}">
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#3ddc84","options":["#3ddc84","#5ec8ff","#ffb454","#c79bff"]},"phase":{"editor":"enum","default":"primeiro tempo","options":["primeiro tempo","intervalo","segundo tempo","fim de jogo"],"section":"Estado da partida"},"occurrence":{"editor":"enum","default":"lesão","options":["lesão","expulsão de jogador de linha","goleiro expulso","pênaltis"],"section":"Estado da partida"}}'>
 class Component extends DCLogic {
   renderVals() {
     const accent = this.props.accent ?? '#3ddc84';
@@ -395,18 +392,26 @@ class Component extends DCLogic {
       { team: 'União Canoas', kicks: ['g', 'g', 'g', 'm', 'g'].map(kick), total: 4 },
     ];
 
-    const card = 'background:#121922;border:1px solid #1d2733;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;';
+    const crest = (name) => {
+      let h = 0;
+      for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) % 360;
+      const ini = name.split(' ').filter((s) => /^[A-ZÀ-Ú]/.test(s)).map((s) => s[0]).slice(0, 2).join('') || name.slice(0, 2).toUpperCase();
+      return { ini, style: 'width:30px;height:30px;border-radius:9px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-family:Space Grotesk,sans-serif;font-size:11px;font-weight:700;color:#fff;background:linear-gradient(160deg,hsl(' + h + ',55%,38%),hsl(' + h + ',60%,22%));border:1px solid hsl(' + h + ',50%,45%);' };
+    };
+    const compColor = { 'Campeonato Estadual do Rio Grande do Sul': '#5ec8ff', 'Série B': '#c79bff' };
     const scoreStyle = (flash) => 'font-family:Space Grotesk,sans-serif;font-size:20px;font-weight:600;border-radius:8px;padding:2px 12px;font-variant-numeric:tabular-nums;background:' + (flash ? accent : '#0f151c') + ';color:' + (flash ? '#06140c' : '#eef2f6') + ';';
     const om = [
-      ['Sapucaia', '1 – 0', 'Bagé Unidos', 'Estadual', true], ['Viamão', '0 – 0', 'Rio Grande', 'Estadual'], ['Porto Alegre', '2 – 1', 'Gravataí', 'Estadual'],
+      ['Sapucaia', '1 – 0', 'Bagé Unidos', 'Campeonato Estadual do Rio Grande do Sul', true], ['Viamão', '0 – 0', 'Rio Grande', 'Campeonato Estadual do Rio Grande do Sul'], ['Porto Alegre', '2 – 1', 'Gravataí', 'Campeonato Estadual do Rio Grande do Sul'],
       ['Estrela do Norte', '3 – 0', 'Comercial FC', 'Série B'], ['Atlético Marítimo', '1 – 1', 'Porto Oeste', 'Série B'], ['Guarani Alto', '0 – 2', 'Náutico do Sul', 'Série B'],
     ];
-    const others = om.map((d) => ({ home: d[0], goals: d[1], away: d[2], tag: d[3], min: isEnd ? 'Fim' : minute + "'", card, score: scoreStyle(!!d[4] && !isEnd) }));
-
-    const roundFeed = [
-      { min: 61, text: 'Gol do União Canoas! Leandro Macedo abre o placar.' }, { min: 52, text: 'Gol do Sapucaia contra o Bagé Unidos.' },
-      { min: 44, text: 'Porto Alegre amplia: 2 a 1 sobre o Gravataí.' }, { min: 22, text: occ === 'lesão' ? 'Lesão no meu time: Fernando Pacheco.' : 'Expulsão no meu time.' }, { min: 1, text: 'Bola rolando entre Bagé e Canoas.' },
-    ].filter((e) => e.min <= shown && (e.min !== 61 || hasGoal || isPen));
+    const others = om.map((d) => {
+      const h = crest(d[0]);
+      const a = crest(d[2]);
+      return {
+        home: d[0], away: d[2], goals: d[1], comp: d[3], dot: 'width:10px;height:10px;border-radius:3px;flex:0 0 auto;background:' + compColor[d[3]] + ';',
+        min: isEnd ? 'Fim' : isHalf ? 'Int.' : minute + "'", hIni: h.ini, hStyle: h.style, aIni: a.ini, aStyle: a.style, score: scoreStyle(!!d[4] && !isEnd) + 'text-align:center;',
+      };
+    });
 
     const pendingTitle = gkRed && pending ? 'Goleiro expulso: escolha o substituto' : 'Lesionado: escolha o substituto';
     const pendingText = pending ? field[pendIdx].n + (gkRed ? ' foi expulso. Escolha um reserva abaixo.' : ' saiu de campo. Escolha um reserva abaixo.') : '';
@@ -418,7 +423,7 @@ class Component extends DCLogic {
       subs, subsStyle: 'border-radius:99px;padding:3px 12px;font-size:12px;font-weight:600;' + (canSub ? 'background:#16222c;color:#b4c0cd;' : 'background:rgba(255,138,138,0.16);color:#ff8a8a;'),
       pending, pendingTitle, pendingText, toast: S.toast || '',
       hint: hasSel && !pending ? 'Escolha um reserva para entrar no lugar de ' + selName + ', ou outro jogador em campo para trocar de posição com ele.' : '',
-      homeScore, awayScore, phaseLabel, isHalf, isEnd, isPen, marks, feed, stats, others, roundFeed, shootout,
+      homeScore, awayScore, phaseLabel, isHalf, isEnd, isPen, marks, feed, stats, others, shootout,
       sentOffText: sentOff ? (sentOff === 1 ? '1 expulso' : sentOff + ' expulsos') : '',
       penSummary: isPen ? 'Prorrogação: 1 × 1 · Pênaltis: Bagé 3 – 4 União Canoas' : '',
       endText: isPen ? 'Fim da rodada 5. União Canoas venceu nos pênaltis por 4 a 3 (1 a 1 no tempo jogado).' : 'Fim da rodada 5. União Canoas venceu por 1 a 0.',
