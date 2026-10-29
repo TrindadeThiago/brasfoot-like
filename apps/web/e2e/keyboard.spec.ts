@@ -127,3 +127,29 @@ test("Tab percorre a barra lateral na ordem das telas e chega ao rodapé (025)",
   }
   await tabTo(page, page.getByRole("button", { name: t("nav.help") }), "atalhos");
 });
+
+// 026 US4: no Elenco, Enter no nome abre o modal, Esc fecha e o foco volta ao nome; as ações abrem
+// o diálogo por cima e Esc fecha só ele.
+test("Elenco: Enter no nome abre o modal do jogador e o foco volta ao fechar (026)", async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  await createCareer(page, "Ana Souza", 1);
+  await page.keyboard.press("2");
+  await expect(page).toHaveURL(/\/jogo\/elenco\//);
+  const name = page.getByRole("button", { name: /^Detalhes de / }).first();
+  await tabTo(page, name, "nome do jogador");
+  await page.keyboard.press("Enter");
+  const modal = page.getByRole("dialog");
+  await expect(modal).toBeVisible();
+  const sell = modal.getByRole("button", { name: /^Vender / });
+  await tabTo(page, sell, "vender");
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("dialog")).toHaveCount(2);
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog")).toHaveCount(1);
+  await expect(sell).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(name).toBeFocused();
+});

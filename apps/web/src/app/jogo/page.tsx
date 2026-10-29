@@ -2,38 +2,35 @@
 
 import { pendingOffers } from "@brasfoot-like/engine";
 import {
-  divisionNameOf,
   isCareerSeasonOver,
   isEmployed,
   managedClubId,
   nextFixture,
   type SaveFile,
   seasonStateOf,
-  userDivisionLevel,
   userSeason,
 } from "@brasfoot-like/save";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { GameLayout } from "../../game/GameLayout";
 import { clubPosition, lastResults } from "../../game/selectors";
-import { formatDate, formatMoney, formatWeekday, useT } from "../../i18n";
+import { formatMoney, useT } from "../../i18n";
 import { Button } from "../../ui/Button";
 import { BoardCard } from "../../ui/board/BoardCard";
 import { BoardNotice } from "../../ui/board/BoardNotice";
 import { JobOffers } from "../../ui/board/JobOffers";
 import { Crest } from "../../ui/Crest";
-import { phaseLabel } from "../../ui/cup/phase";
 import { FormChips } from "../../ui/FormChips";
-import { DerbyBadge } from "../../ui/fans/DerbyBadge";
 import { FansCard } from "../../ui/fans/FansCard";
 import { LineupNotice } from "../../ui/LineupNotice";
 import { MarketNotice, marketNoticeCounts } from "../../ui/MarketNotice";
 import { WindowStatus } from "../../ui/market/WindowStatus";
+import { NextMatchCard } from "../../ui/NextMatchCard";
 import { NewsCard } from "../../ui/news/NewsCard";
 import { RoundResults } from "../../ui/RoundResults";
+import { SectionLabel } from "../../ui/SectionLabel";
 import { SquadChangeNotice } from "../../ui/SquadChangeNotice";
 import { screenHref } from "../../ui/shell/screens";
-import { stageLabel } from "../../ui/stages/label";
 import styles from "./page.module.css";
 
 type Game = Parameters<Parameters<typeof GameLayout>[0]["children"]>[1];
@@ -118,11 +115,11 @@ export default function HomePage() {
     <GameLayout>
       {(save, game) => {
         const clubs = new Map(save.bank.clubs.map((club) => [club.id, club]));
-        const over = isCareerSeasonOver(save);
+        const _over = isCareerSeasonOver(save);
         const next = nextFixture(save);
         const isHome = next?.home === save.clubId;
-        const opponent = next ? clubs.get(isHome ? next.away : next.home) : undefined;
-        const competition = next
+        const _opponent = next ? clubs.get(isHome ? next.away : next.home) : undefined;
+        const _competition = next
           ? save.bank.competitions.find((entry) => entry.id === next.competitionId)
           : undefined;
         const position = clubPosition(userSeason(save), save.bank, save.clubId);
@@ -135,132 +132,60 @@ export default function HomePage() {
         };
         if (!isEmployed(save)) return <Unemployed save={save} game={game} play={play} />;
         const offers = pendingOffers(save.board).length;
+        const market = marketNoticeCounts(save);
+        const hasNotices =
+          save.board.notice !== undefined ||
+          offers > 0 ||
+          save.finances.clubs[save.clubId]?.inCrisis === true ||
+          save.renewal.squadNotice !== undefined ||
+          market.offers + market.expiring > 0 ||
+          market.report ||
+          (save.lineupNotice?.length ?? 0) > 0;
         return (
           <div className={styles.grid}>
-            {save.board.notice ? (
-              <div className={styles.wide}>
-                <BoardNotice save={save} onDismiss={game.dismissBoardNotice} />
-              </div>
-            ) : null}
-            {offers > 0 ? (
-              <p role="status" className={`${styles.wide} ${styles.offers}`}>
-                {t("career.offers.notice", { count: offers })}{" "}
-                <Link href={`${screenHref("/jogo/carreira", save.id)}&aba=offers`}>
-                  {t("career.offers.open")}
-                </Link>
-              </p>
-            ) : null}
-            {save.finances.clubs[save.clubId]?.inCrisis ? (
-              <p role="alert" className={`${styles.wide} ${styles.crisis}`}>
-                {t("home.crisis", {
-                  rounds: save.finances.clubs[save.clubId]?.negativeRounds ?? 0,
-                })}
-              </p>
-            ) : null}
-            {save.renewal.squadNotice ? (
-              <div className={styles.wide}>
-                <SquadChangeNotice save={save} onDismiss={game.dismissSquadNotice} />
-              </div>
-            ) : null}
+            <div className={styles.wide}>
+              <NextMatchCard
+                save={save}
+                game={game}
+                form={results.map((result) => result.result)}
+                play={play}
+              />
+            </div>
             <div className={styles.wide}>
               <WindowStatus save={save} />
             </div>
-            {marketNoticeCounts(save).offers + marketNoticeCounts(save).expiring > 0 ||
-            marketNoticeCounts(save).report ? (
-              <div className={styles.wide}>
-                <MarketNotice save={save} onDismissReport={game.dismissWindowReport} />
+            {hasNotices ? (
+              <div className={`${styles.wide} ${styles.notices}`}>
+                <SectionLabel>{t("home.beforeMatch")}</SectionLabel>
+                {save.board.notice ? (
+                  <BoardNotice save={save} onDismiss={game.dismissBoardNotice} />
+                ) : null}
+                {offers > 0 ? (
+                  <p role="status" className={styles.offers}>
+                    {t("career.offers.notice", { count: offers })}{" "}
+                    <Link href={`${screenHref("/jogo/carreira", save.id)}&aba=offers`}>
+                      {t("career.offers.open")}
+                    </Link>
+                  </p>
+                ) : null}
+                {save.finances.clubs[save.clubId]?.inCrisis ? (
+                  <p role="alert" className={styles.crisis}>
+                    {t("home.crisis", {
+                      rounds: save.finances.clubs[save.clubId]?.negativeRounds ?? 0,
+                    })}
+                  </p>
+                ) : null}
+                {save.renewal.squadNotice ? (
+                  <SquadChangeNotice save={save} onDismiss={game.dismissSquadNotice} />
+                ) : null}
+                {market.offers + market.expiring > 0 || market.report ? (
+                  <MarketNotice save={save} onDismissReport={game.dismissWindowReport} />
+                ) : null}
+                {save.lineupNotice && save.lineupNotice.length > 0 ? (
+                  <LineupNotice save={save} onDismiss={game.dismissLineupNotice} />
+                ) : null}
               </div>
             ) : null}
-            {save.lineupNotice && save.lineupNotice.length > 0 ? (
-              <div className={styles.wide}>
-                <LineupNotice save={save} onDismiss={game.dismissLineupNotice} />
-              </div>
-            ) : null}
-            <section aria-label={t("home.nextMatch")} className={styles.card}>
-              <h2>{t("home.nextMatch")}</h2>
-              {over ? (
-                <p>
-                  {t("home.seasonOver", {
-                    position,
-                    division: divisionNameOf(save, userDivisionLevel(save)),
-                  })}
-                </p>
-              ) : next && opponent ? (
-                <div className={styles.next}>
-                  <Crest crest={opponent.crest} label={opponent.name} size={56} />
-                  <div>
-                    <strong>
-                      {opponent.name}
-                      <DerbyBadge
-                        rivalries={save.bank.rivalries}
-                        home={save.clubId}
-                        away={opponent.id}
-                      />
-                    </strong>
-                    <span>
-                      {t("home.matchWhen", {
-                        weekday: formatWeekday(next.date),
-                        date: formatDate(next.date),
-                      })}
-                    </span>
-                    <span>{isHome ? t("home.homeGame") : t("home.awayGame")}</span>
-                    <span>{t("home.competition", { competition: competition?.name ?? "" })}</span>
-                    {(competition?.divisions.length ?? 0) > 1 ? (
-                      <span>
-                        {t("home.division", {
-                          division: divisionNameOf(save, userDivisionLevel(save)),
-                        })}
-                      </span>
-                    ) : null}
-                    <span>
-                      {stageLabel(save, next) ??
-                        phaseLabel(save, next.competitionId, next.round) ??
-                        t("home.roundLabel", { round: next.round })}
-                    </span>
-                  </div>
-                </div>
-              ) : !over ? (
-                <p>{t("home.noMoreMatches")}</p>
-              ) : null}
-              <div className={styles.actions} data-tip-anchor="play">
-                {next || over ? (
-                  <>
-                    <Button
-                      variant="primary"
-                      disabled={over || game.state.simulating}
-                      onClick={() => void play("live")}
-                    >
-                      {t("home.playLive")}
-                    </Button>
-                    <Button
-                      disabled={over || game.state.simulating}
-                      onClick={() => void play("direct")}
-                    >
-                      {t("home.simulate")}
-                    </Button>
-                  </>
-                ) : (
-                  <Button
-                    variant="primary"
-                    disabled={game.state.simulating}
-                    onClick={() => void play("direct")}
-                  >
-                    {t("home.advanceToEnd")}
-                  </Button>
-                )}
-                {game.state.simulating ? <p role="status">{t("home.simulating")}</p> : null}
-              </div>
-              {over ? (
-                <div className={styles.actions}>
-                  <Link href={screenHref("/jogo/fim-de-temporada", save.id)}>
-                    {t("home.seasonEndLink")}
-                  </Link>
-                  <Button variant="primary" onClick={() => void game.advanceToNextSeason()}>
-                    {t("home.nextSeason")}
-                  </Button>
-                </div>
-              ) : null}
-            </section>
             <section aria-label={t("home.position")} className={styles.card}>
               <h2>{t("home.position")}</h2>
               <p className={styles.position}>{t("home.positionValue", { position })}</p>
@@ -270,7 +195,10 @@ export default function HomePage() {
                 })}
               </p>
             </section>
-            <section aria-label={t("home.lastResults")} className={styles.card}>
+            <section
+              aria-label={t("home.lastResults")}
+              className={`${styles.card} ${styles.span2}`}
+            >
               <h2>{t("home.lastResults")}</h2>
               {results.length === 0 ? (
                 <p>{t("home.noResults")}</p>
@@ -306,13 +234,13 @@ export default function HomePage() {
               )}
             </section>
             <div className={styles.wide}>
-              <NewsCard save={save} />
-            </div>
-            <div className={styles.wide}>
               <FansCard save={save} clubId={save.clubId} />
             </div>
             <div className={styles.wide}>
               <BoardCard save={save} />
+            </div>
+            <div className={styles.wide}>
+              <NewsCard save={save} />
             </div>
             {lastRound && lastRound.length > 0 ? (
               <div className={styles.wide}>

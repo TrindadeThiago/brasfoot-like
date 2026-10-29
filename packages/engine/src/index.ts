@@ -342,7 +342,13 @@ export {
 export { attraction, exigency, respondToContract, wageDemand } from "./market/player-response";
 export { releaseManagerClub } from "./market/release";
 export { DEFAULT_MARKET, marketRules } from "./market/rules";
-export { comparePlayers, filterRows, marketRows, searchPlayers } from "./market/search";
+export {
+  comparePlayers,
+  filterRows,
+  marketRowOf,
+  marketRows,
+  searchPlayers,
+} from "./market/search";
 export {
   canAddPlayer,
   canRemovePlayer,

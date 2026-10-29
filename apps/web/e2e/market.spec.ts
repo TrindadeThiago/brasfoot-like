@@ -41,7 +41,7 @@ test("mercado: busca, comparação, compra com contrato, elenco, janela fechada 
 
   // O reforço aparece no Elenco com contrato.
   await page.keyboard.press("2");
-  await expect(page.getByRole("cell", { name, exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: t("lineup.detailsOf", { name }) })).toBeVisible();
 
   // Depois de quatro rodadas a janela fecha e a oferta é bloqueada.
   for (let round = 1; round <= 4; round++) await page.keyboard.press("d");
