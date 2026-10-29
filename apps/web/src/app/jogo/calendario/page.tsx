@@ -15,6 +15,7 @@ import { formatMonthTitle, useT } from "../../../i18n";
 import { Button } from "../../../ui/Button";
 import { DayPanel } from "../../../ui/calendar/DayPanel";
 import { MonthGrid } from "../../../ui/calendar/MonthGrid";
+import { MonthLegend } from "../../../ui/calendar/MonthLegend";
 import { MonthStrip } from "../../../ui/calendar/MonthStrip";
 import { Dialog } from "../../../ui/Dialog";
 import { EmptyState } from "../../../ui/EmptyState";
@@ -121,21 +122,24 @@ function Calendar({ save }: { save: SaveFile }) {
         <MonthStrip months={allMonths} current={monthKey} onChoose={setMonth} />
         {view ? (
           <div className={styles.board}>
-            <MonthGrid
-              month={view}
-              clubId={save.clubId}
-              clubs={clubs}
-              rivalries={save.bank.rivalries}
-              competitionIndex={competitionIndex}
-              competitionName={nameOf}
-              selected={selected}
-              focusKey={focusKey}
-              onSelect={(date) => {
-                setSelected(date);
-                setFocusKey(undefined);
-              }}
-              onMonth={goMonth}
-            />
+            <div className={styles.gridColumn}>
+              <MonthGrid
+                month={view}
+                clubId={save.clubId}
+                clubs={clubs}
+                rivalries={save.bank.rivalries}
+                competitionIndex={competitionIndex}
+                competitionName={nameOf}
+                selected={selected}
+                focusKey={focusKey}
+                onSelect={(date) => {
+                  setSelected(date);
+                  setFocusKey(undefined);
+                }}
+                onMonth={goMonth}
+              />
+              <MonthLegend competitions={competitionIds.map((id) => ({ id, name: nameOf(id) }))} />
+            </div>
             <DayPanel
               save={save}
               date={selected}

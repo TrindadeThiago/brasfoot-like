@@ -102,4 +102,17 @@ describe("calendário mensal (027)", () => {
       expect(await screen.findByText(t("calendar.noGames"))).toBeDefined();
     }
   });
+
+  it("a legenda abaixo da grade explica resultados, competições e o próximo jogo", async () => {
+    const { store } = await storedCareer(4);
+    renderApp("/jogo/calendario?c=tela", store);
+    await grid();
+    const legend = screen.getByRole("region", { name: t("calendar.legend") });
+    for (const text of [t("result.win"), t("result.draw"), t("result.loss")]) {
+      expect(within(legend).getByText(text)).toBeDefined();
+    }
+    expect(within(legend).getByText(t("calendar.nextGame"))).toBeDefined();
+    // Cada competição do calendário aparece pelo nome (cor nunca é o único sinal).
+    expect(within(legend).getAllByRole("listitem").length).toBeGreaterThanOrEqual(5);
+  });
 });

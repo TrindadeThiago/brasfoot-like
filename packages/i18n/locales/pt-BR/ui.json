@@ -1290,5 +1290,6 @@
   "history.empty.cups": "Nenhuma copa disputada ainda. Os campeões das copas aparecem depois da primeira temporada encerrada.",
   "history.empty.continental": "Nenhuma taça continental disputada ainda. Os campeões aparecem depois da primeira temporada encerrada.",
   "cup.myTie": "Seu confronto",
-  "cup.myPath": "Seu caminho"
+  "cup.myPath": "Seu caminho",
+  "calendar.legend": "Legenda"
 }

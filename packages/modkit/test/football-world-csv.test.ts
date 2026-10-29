@@ -5,7 +5,6 @@ import {
   isRegionalOnly,
 } from "@brasfoot-like/engine";
 import {
-  advanceCareerSeason,
   createSave,
   isCareerSeasonOver,
   type SaveFile,

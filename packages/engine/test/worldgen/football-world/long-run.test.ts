@@ -25,7 +25,7 @@ interface Stats {
   crisisShare: number[];
 }
 
-const strengthOf = new Map(
+const _strengthOf = new Map(
   PROFILE.confederations.flatMap((c) => c.countries.map((s) => [s.geoId, s.strength] as const)),
 );
 

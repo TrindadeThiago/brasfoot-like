@@ -86,3 +86,10 @@
   align-items: center;
   gap: var(--space-2);
 }
+
+.gridColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
