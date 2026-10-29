@@ -8,12 +8,13 @@ import { GameLayout } from "../../../../game/GameLayout";
 import { useDivision } from "../../../../game/useDivision";
 import { useT } from "../../../../i18n";
 import { Button } from "../../../../ui/Button";
-import { CompetitionSelect } from "../../../../ui/CompetitionSelect";
+import { CompetitionHeader } from "../../../../ui/CompetitionHeader";
 import { CompetitionTabs } from "../../../../ui/CompetitionTabs";
 import { Crest } from "../../../../ui/Crest";
 import { phaseLabel } from "../../../../ui/cup/phase";
 import { Dialog } from "../../../../ui/Dialog";
 import { DivisionTabs } from "../../../../ui/DivisionTabs";
+import { EmptyState } from "../../../../ui/EmptyState";
 import { MatchSummary } from "../../../../ui/MatchSummary";
 import styles from "./page.module.css";
 
@@ -54,6 +55,7 @@ function Results({ save, season, initial }: { save: SaveFile; season: Season; in
       </div>
       <section aria-label={caption}>
         <h2>{caption}</h2>
+        {fixtures.length === 0 ? <EmptyState title={t("competition.empty.noGames")} /> : null}
         <ul className={styles.list}>
           {fixtures.map((fixture) => {
             const record = records.find((entry) => entry.home === fixture.home);
@@ -126,7 +128,7 @@ function ResultsScreen({ save }: { save: SaveFile }) {
   const requested = Number(params?.get("r"));
   return (
     <>
-      <CompetitionSelect save={save} competitionId={competitionId} />
+      <CompetitionHeader save={save} competitionId={competitionId} />
       <CompetitionTabs
         careerId={save.id}
         level={level}

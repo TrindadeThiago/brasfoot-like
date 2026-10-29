@@ -104,7 +104,7 @@ describe("modal do jogador (026)", () => {
       ...save,
       bank: {
         ...save.bank,
-        players: save.bank.players.map((entry, index, all) => {
+        players: save.bank.players.map((entry, _index, all) => {
           const first = all.find((p) => p.clubId === save.clubId && p.position === "MF");
           return entry.id === first?.id && entry.contract
             ? {

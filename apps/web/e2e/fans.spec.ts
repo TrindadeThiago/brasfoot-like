@@ -14,7 +14,16 @@ test("torcida: cartão na Início, clássicos no calendário e rivais na Carreir
   const menu = page.getByRole("navigation", { name: t("nav.menu") });
   await menu.getByRole("link", { name: t("nav.calendar") }).click();
   await expect(page).toHaveURL(/\/jogo\/calendario\//);
-  await expect(page.getByRole("img", { name: /^Clássico/ }).first()).toBeVisible();
+  // O calendário é mensal (027): procura o clássico mês a mês.
+  const months = page.getByRole("navigation", { name: t("calendar.months") }).getByRole("button");
+  const total = await months.count();
+  let found = false;
+  for (let index = 0; index < total && !found; index++) {
+    await months.nth(index).click();
+    // O clássico está no texto do dia (leitor de tela) e no painel do dia (027).
+    found = (await page.locator(".visually-hidden", { hasText: "(Clássico)" }).count()) > 0;
+  }
+  expect(found).toBe(true);
 
   await menu.getByRole("link", { name: t("nav.career") }).click();
   await expect(page).toHaveURL(/\/jogo\/carreira\//);

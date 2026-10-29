@@ -5,7 +5,17 @@ import { createCareer, simulateSeason, t } from "./helpers";
 // 768 px, sem rolagem horizontal da página. A 600 px a barra lateral empilha acima do conteúdo.
 const WIDTHS = [1440, 1280, 1024, 768];
 // 026: as três telas do dia a dia, validadas também contra texto cortado e botões fora da janela.
-const DAILY = ["/jogo/", "/jogo/elenco/", "/jogo/escalacao/"];
+const DAILY = [
+  "/jogo/",
+  "/jogo/elenco/",
+  "/jogo/escalacao/",
+  // 027: as telas de acompanhamento também não cortam texto.
+  "/jogo/competicao/",
+  "/jogo/competicao/resultados/",
+  "/jogo/competicao/artilharia/",
+  "/jogo/calendario/",
+  "/jogo/historico/",
+];
 const OUTSIDE = [
   "/",
   "/nova-carreira/",
@@ -42,6 +52,8 @@ async function expectNoClippedText(page: Page, label: string): Promise<void> {
     [...document.querySelectorAll<HTMLElement>("main *, header *")]
       .filter((element) => {
         const style = getComputedStyle(element);
+        // O texto só-leitor-de-tela (`visually-hidden`) é cortado de propósito.
+        if (element.classList.contains("visually-hidden")) return false;
         return (
           style.overflowX === "hidden" &&
           style.textOverflow !== "ellipsis" &&

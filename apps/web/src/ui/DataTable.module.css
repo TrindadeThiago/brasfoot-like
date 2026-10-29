@@ -53,3 +53,12 @@
 .table td {
   vertical-align: middle;
 }
+
+/* Primeira coluna fixa: fica à vista enquanto o resto rola no quadro (027). */
+.stickyFirst th:first-child,
+.stickyFirst td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--color-surface);
+}

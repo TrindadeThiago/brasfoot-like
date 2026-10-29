@@ -153,3 +153,28 @@ test("Elenco: Enter no nome abre o modal do jogador e o foco volta ao fechar (02
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(name).toBeFocused();
 });
+
+// 027 US5: cartões de competição por teclado e grade do calendário com setas.
+test("Competição: Tab chega aos cartões; Calendário: setas movem entre os dias (027)", async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  await createCareer(page, "Ana Souza", 1);
+  await page.keyboard.press("4");
+  await expect(page).toHaveURL(/\/jogo\/competicao\//);
+  await expect(page.getByRole("tab", { name: t("competition.mine") })).toBeVisible();
+  await page.keyboard.press("5");
+  await expect(page).toHaveURL(/\/jogo\/calendario\//);
+  const grid = page.getByRole("table", { name: /^Calendário de / });
+  await expect(grid).toBeVisible();
+  const day = grid.locator('button[tabindex="0"]');
+  await day.focus();
+  const before = await day.getAttribute("data-date");
+  await page.keyboard.press("ArrowRight");
+  const after = await page.evaluate(() => document.activeElement?.getAttribute("data-date"));
+  expect(after).toBeTruthy();
+  expect(after).not.toBe(before);
+  await expectFocusVisible(page, "dia do calendário");
+  await page.keyboard.press("PageDown");
+  await expect(page.getByRole("heading", { level: 2 }).first()).toBeVisible();
+});

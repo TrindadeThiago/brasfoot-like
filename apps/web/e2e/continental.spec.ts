@@ -54,6 +54,8 @@ test("taça continental: aba, grupos, temporada inteira, chaveamento e históric
   const groups = page.getByRole("region", { name: t("stages.groups") });
   await expect(groups.getByRole("table")).toHaveCount(4);
   await expect(page.getByText(/vaga em Copa Complementar/).first()).toBeVisible();
+  // A Copa Complementar é de outro grupo de clubes: fica em "Demais competições" (027).
+  await page.getByRole("tab", { name: t("competition.others") }).click();
   await expect(tabs.getByRole("link", { name: "Copa Complementar" })).toBeVisible();
 
   // Joga a temporada inteira (liga, copa nacional e taças) até o resumo.

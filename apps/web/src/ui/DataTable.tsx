@@ -27,6 +27,8 @@ interface DataTableProps<Row> {
   onSortChange?: (sort: SortState) => void;
   onRowClick?: (row: Row) => void;
   selected?: (row: Row) => boolean;
+  /** Fixa a primeira coluna ao rolar na horizontal, para tabelas largas (027). */
+  stickyFirst?: boolean;
 }
 
 /** Tabela com ordenação por coluna (clique ou teclado) e linha destacada. */
@@ -40,6 +42,7 @@ export function DataTable<Row>({
   onSortChange,
   onRowClick,
   selected,
+  stickyFirst = false,
 }: DataTableProps<Row>) {
   const [sort, setSort] = useState<SortState | undefined>(initialSort);
 
@@ -73,7 +76,7 @@ export function DataTable<Row>({
 
   return (
     <div className={styles.scroll}>
-      <table className={styles.table}>
+      <table className={stickyFirst ? `${styles.table} ${styles.stickyFirst}` : styles.table}>
         <caption>{caption}</caption>
         <thead>
           <tr>

@@ -11,6 +11,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
 import { t } from "../../src/i18n";
 import { renderApp } from "../helpers/app";
+import { eachFixture, monthGrid } from "../helpers/calendar";
 import { storedCareer } from "../helpers/career";
 import { loadSaved } from "../helpers/live";
 import { memoryRouter } from "../helpers/router";
@@ -113,8 +114,12 @@ describe("telas da copa depois de jogada (018 US6)", () => {
     const { store } = await storedCareer(1, () => played);
     memoryRouter.url = "/jogo/calendario?c=copa";
     renderApp(memoryRouter.url, store);
-    const table = await screen.findByRole("table");
-    expect(phaseNames.some((name) => (table.textContent ?? "").includes(name))).toBe(true);
+    await monthGrid();
+    let found = false;
+    await eachFixture(userEvent.setup({ delay: null }), ({ item }) => {
+      if (phaseNames.some((name) => (item.textContent ?? "").includes(name))) found = true;
+    });
+    expect(found).toBe(true);
     cleanup();
   });
 

@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import { Badge } from "../../src/ui/Badge";
 import { Button } from "../../src/ui/Button";
 import { Card } from "../../src/ui/Card";
+import { DataTable } from "../../src/ui/DataTable";
 import { EmptyState } from "../../src/ui/EmptyState";
 import { Field } from "../../src/ui/Field";
 import { Meter } from "../../src/ui/Meter";
@@ -101,5 +102,26 @@ describe("componentes-base (025)", () => {
     expect(screen.getByRole("tabpanel").textContent).toBe("painel A");
     await user.keyboard("{End}");
     expect(screen.getByRole("tab", { name: "C" }).getAttribute("aria-selected")).toBe("true");
+  });
+
+  it("tabela com primeira coluna fixa marca a tabela (027)", () => {
+    const columns = [
+      { key: "a", header: "A", render: (row: { a: string }) => row.a },
+      { key: "b", header: "B", render: (row: { a: string }) => row.a },
+    ];
+    const { rerender } = render(
+      <DataTable rows={[{ a: "x" }]} columns={columns} rowKey={(row) => row.a} caption="t" />,
+    );
+    const plain = screen.getByRole("table").className;
+    rerender(
+      <DataTable
+        rows={[{ a: "x" }]}
+        columns={columns}
+        rowKey={(row) => row.a}
+        caption="t"
+        stickyFirst
+      />,
+    );
+    expect(screen.getByRole("table").className).not.toBe(plain);
   });
 });
