@@ -13,6 +13,7 @@ import type { MarketActionResult, useGame } from "../../game/GameProvider";
 import { formatMoney, label, useT } from "../../i18n";
 import { Button } from "../Button";
 import { Dialog } from "../Dialog";
+import { Field } from "../Field";
 import { MoneyInput } from "../MoneyInput";
 import styles from "./market.module.css";
 
@@ -59,6 +60,7 @@ export function NegotiationBody({
   negotiation,
   row,
   disabled,
+  error,
   onResult,
 }: {
   save: SaveFile;
@@ -66,6 +68,8 @@ export function NegotiationBody({
   negotiation: Negotiation;
   row: Pick<MarketRow, "displayName" | "wage" | "age">;
   disabled: boolean;
+  /** Erro da última ação, ligado ao campo de salário da proposta de contrato (028). */
+  error?: string | undefined;
   onResult: (result: MarketActionResult, kind: NegotiationKind) => void;
 }) {
   const t = useT();
@@ -131,19 +135,24 @@ export function NegotiationBody({
               );
             }}
           >
-            <label className={styles.field}>
-              <span>{t("market.form.wage")}</span>
-              <MoneyInput value={wage} onValueChange={setWage} />
-            </label>
-            <label className={styles.field}>
-              <span>{t("market.form.years")}</span>
-              <input
-                type="number"
-                inputMode="numeric"
-                value={years}
-                onChange={(event) => setYears(event.target.value)}
-              />
-            </label>
+            <Field
+              label={t("market.form.wage")}
+              error={error}
+              hint={t("market.form.wageRef", { wage: formatMoney(row.wage) })}
+            >
+              {(props) => <MoneyInput {...props} value={wage} onValueChange={setWage} />}
+            </Field>
+            <Field label={t("market.form.years")}>
+              {(props) => (
+                <input
+                  {...props}
+                  type="number"
+                  inputMode="numeric"
+                  value={years}
+                  onChange={(event) => setYears(event.target.value)}
+                />
+              )}
+            </Field>
             <Button type="submit" variant="primary" disabled={disabled}>
               {t("market.action.propose")}
             </Button>
@@ -245,7 +254,7 @@ export function NegotiationDialog({
           {feedback}
         </p>
       ) : null}
-      {error ? (
+      {error && (finished || (negotiation && negotiation.stage !== "contract")) ? (
         <p role="alert" className={styles.error}>
           {error}
         </p>
@@ -257,6 +266,7 @@ export function NegotiationDialog({
           negotiation={negotiation}
           row={row}
           disabled={disabled}
+          error={error}
           onResult={handle}
         />
       ) : kind === "free" || kind === "renew" ? (
@@ -281,10 +291,12 @@ export function NegotiationDialog({
             }
           }}
         >
-          <label className={styles.field}>
-            <span>{t(kind === "loan" ? "market.form.loanFee" : "market.form.fee")}</span>
-            <MoneyInput value={feeValue} onValueChange={setFee} />
-          </label>
+          <Field
+            label={t(kind === "loan" ? "market.form.loanFee" : "market.form.fee")}
+            error={error}
+          >
+            {(props) => <MoneyInput {...props} value={feeValue} onValueChange={setFee} />}
+          </Field>
           <Button type="submit" variant="primary" disabled={disabled}>
             {t(kind === "loan" ? "market.action.loan" : "market.action.offer")}
           </Button>

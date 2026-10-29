@@ -3,27 +3,30 @@
 import type { MarketRow } from "@brasfoot-like/engine";
 import type { SaveFile } from "@brasfoot-like/save";
 import { formatMoney, label, useT } from "../../i18n";
-import { Button } from "../Button";
 import { type Column, DataTable } from "../DataTable";
+import { COMPARE_LIMIT } from "./CompareTray";
 import styles from "./market.module.css";
 
-export type RowAction = "buy" | "loan" | "free";
+/** Linhas por página da busca. */
+export const MARKET_PAGE_SIZE = 50;
 
-/** Tabela de resultados da busca, com seleção para comparar e ações por linha (US1, US2, US7). */
+/**
+ * Tabela de resultados da busca (028), paginada: sem coluna de ações. A linha inteira abre o modal do
+ * jogador, o nome é um botão para o teclado e a caixa ao lado do nome marca para a comparação.
+ */
 export function MarketTable({
   save,
   rows,
   selected,
-  disabled,
   onToggle,
-  onAction,
+  onOpen,
 }: {
   save: SaveFile;
   rows: readonly MarketRow[];
+  /** Jogadores marcados para a comparação. */
   selected: ReadonlySet<string>;
-  disabled: boolean;
   onToggle: (playerId: string) => void;
-  onAction: (row: MarketRow, action: RowAction) => void;
+  onOpen: (row: MarketRow) => void;
 }) {
   const t = useT();
   const clubName = (clubId?: string) =>
@@ -32,21 +35,35 @@ export function MarketTable({
     save.bank.countries.find((country) => country.id === countryId)?.code ?? "";
   const columns: Column<MarketRow>[] = [
     {
-      key: "compare",
-      header: t("market.col.compare"),
-      render: (row) => (
-        <input
-          type="checkbox"
-          aria-label={t("market.compare.select", { name: row.displayName })}
-          checked={selected.has(row.playerId)}
-          onChange={() => onToggle(row.playerId)}
-        />
-      ),
-    },
-    {
       key: "name",
       header: t("col.player"),
-      render: (row) => row.displayName,
+      render: (row) => (
+        <span className={styles.nameCell}>
+          <input
+            type="checkbox"
+            aria-label={t("market.compare.select", { name: row.displayName })}
+            checked={selected.has(row.playerId)}
+            disabled={!selected.has(row.playerId) && selected.size >= COMPARE_LIMIT}
+            onChange={() => onToggle(row.playerId)}
+            // A linha inteira abre o modal (clique, Enter e Espaço): a caixa não deve disparar isso.
+            onClick={(event) => event.stopPropagation()}
+            onKeyDown={(event) => event.stopPropagation()}
+          />
+          <button
+            type="button"
+            className={styles.nameButton}
+            aria-haspopup="dialog"
+            aria-label={t("lineup.detailsOf", { name: row.displayName })}
+            onClick={(event) => {
+              // O clique da linha também abre o modal: sem isto abriria duas vezes.
+              event.stopPropagation();
+              onOpen(row);
+            }}
+          >
+            {row.displayName}
+          </button>
+        </span>
+      ),
       sortValue: (row) => row.displayName,
     },
     {
@@ -119,31 +136,6 @@ export function MarketTable({
       sortValue: (row) => row.untilYear ?? 0,
       align: "right",
     },
-    {
-      key: "actions",
-      header: t("market.col.actions"),
-      render: (row) => {
-        if (row.clubId === save.clubId) return t("market.ownClub");
-        if (row.free) {
-          return (
-            <Button disabled={disabled} onClick={() => onAction(row, "free")}>
-              {t("market.action.sign")}
-            </Button>
-          );
-        }
-        if (row.onLoan) return t("market.onLoan");
-        return (
-          <span className={styles.actions}>
-            <Button disabled={disabled} onClick={() => onAction(row, "buy")}>
-              {t("market.action.offer")}
-            </Button>
-            <Button disabled={disabled} onClick={() => onAction(row, "loan")}>
-              {t("market.action.loan")}
-            </Button>
-          </span>
-        );
-      },
-    },
   ];
   return (
     <DataTable
@@ -152,6 +144,9 @@ export function MarketTable({
       rowKey={(row) => row.playerId}
       caption={t("market.resultsCaption")}
       initialSort={{ column: "strength", direction: "descending" }}
+      onRowClick={onOpen}
+      pageSize={MARKET_PAGE_SIZE}
+      stickyFirst
     />
   );
 }

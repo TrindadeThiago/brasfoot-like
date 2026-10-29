@@ -52,7 +52,7 @@ export function CreditPanel({
           perRound: formatMoney(line.interestPerRound),
         })}
       </p>
-      <div className={styles.row}>
+      <div className={`${styles.row} ${styles.rowHint}`}>
         <label className={styles.field}>
           <span>{t("finance.credit.amount")}</span>
           <MoneyInput
@@ -73,6 +73,7 @@ export function CreditPanel({
           {t("finance.credit.settle")}
         </Button>
       </div>
+      {debt === 0 ? <p className={styles.muted}>{t("finance.credit.noDebt")}</p> : null}
       {error ? (
         <p role="alert" className={styles.error}>
           {error}

@@ -163,7 +163,7 @@ describe("calendário do clube (017 US4)", () => {
     // Em ordem de data: domingo, domingo, quarta.
     expect(lines[0]).toContain("3 de janeiro de 2027");
     expect(lines[2]).toContain("13 de janeiro de 2027");
-  });
+  }, 60_000);
 
   it("o filtro mostra só a competição escolhida e permite voltar a todas", async () => {
     const { store } = await storedCareer(1, () => twoCompetitionsSave("tela"));

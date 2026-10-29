@@ -30,6 +30,10 @@ export function Dialog({
 }: DialogProps) {
   const ref = useRef<HTMLDivElement>(null);
   const titleId = useId();
+  // `onClose` costuma ser uma função nova a cada render da tela: guardá-la numa ref evita refazer o
+  // efeito (e perder o elemento a que o foco volta) quando a tela se atualiza com o diálogo aberto.
+  const closeRef = useRef(onClose);
+  closeRef.current = onClose;
 
   useEffect(() => {
     if (!open) return;
@@ -47,7 +51,7 @@ export function Dialog({
       if (OPEN.at(-1) !== self) return;
       if (event.key === "Escape") {
         event.preventDefault();
-        onClose();
+        closeRef.current();
       } else if (event.key === "Tab") {
         const items = focusables();
         const first = items[0];
@@ -68,7 +72,7 @@ export function Dialog({
       OPEN.splice(OPEN.indexOf(self), 1);
       previous?.focus();
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open) return null;
   return (

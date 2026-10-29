@@ -16,28 +16,38 @@ test("mercado: busca, comparação, compra com contrato, elenco, janela fechada 
   await page.getByLabel(t("market.filter.strengthMax")).fill("48");
   const table = page.getByRole("table", { name: t("market.resultsCaption") });
   await expect(table.locator("tbody tr").first()).toBeVisible();
-  const boxes = table.getByRole("checkbox");
-  await boxes.nth(0).check();
-  await boxes.nth(1).check();
-  await boxes.nth(2).check();
-  await page.getByRole("button", { name: /Comparar selecionados/ }).click();
-  await expect(page.getByRole("region", { name: t("market.compare.title") })).toBeVisible();
-  await page
-    .getByRole("region", { name: t("market.compare.title") })
-    .getByRole("button")
-    .click();
+  const names = table.getByRole("button", { name: /^Detalhes de / });
+  for (const index of [0, 1, 2]) {
+    await names.nth(index).click();
+    const modal = page.getByRole("dialog");
+    await modal.getByRole("button", { name: t("market.modal.addCompare") }).click();
+    await modal.getByRole("button", { name: t("common.close") }).click();
+  }
+  const tray = page.getByRole("region", { name: t("market.tray.label") });
+  await tray.getByRole("button", { name: /Comparar selecionados/ }).click();
+  const compare = page.getByRole("dialog", { name: t("market.compare.title") });
+  await expect(compare).toBeVisible();
+  await compare.getByRole("button", { name: t("common.close") }).click();
 
   // Compra: oferta alta o bastante para o clube aceitar, depois o contrato.
-  const row = table.locator("tbody tr").first();
-  const name = (await row.getByRole("cell").nth(1).textContent()) ?? "";
-  await row.getByRole("button", { name: t("market.action.offer") }).click();
-  const dialog = page.getByRole("dialog");
+  const first = names.first();
+  const name = ((await first.getAttribute("aria-label")) ?? "").replace(/^Detalhes de /, "");
+  await first.click();
+  await page
+    .getByRole("dialog", { name })
+    .getByRole("button", { name: t("market.action.offer") })
+    .click();
+  const dialog = page.getByRole("dialog", { name: t("market.dialog.buy", { name }) });
   await dialog.getByLabel(t("market.form.fee")).fill("3000000");
   await dialog.getByRole("button", { name: t("market.action.offer") }).click();
   await dialog.getByLabel(t("market.form.wage")).fill("900000");
   await dialog.getByRole("button", { name: t("market.action.propose") }).click();
   await expect(dialog.getByText(t("market.feedback.signed"))).toBeVisible();
   await dialog.getByRole("button", { name: t("common.close") }).click();
+  await page
+    .getByRole("dialog", { name })
+    .getByRole("button", { name: t("common.close") })
+    .click();
 
   // O reforço aparece no Elenco com contrato.
   await page.keyboard.press("2");
@@ -47,18 +57,25 @@ test("mercado: busca, comparação, compra com contrato, elenco, janela fechada 
   for (let round = 1; round <= 4; round++) await page.keyboard.press("d");
   await page.keyboard.press("m");
   await expect(page.getByText(/Janela fechada/)).toBeVisible();
-  const closedRow = page
+  const closedFirst = page
     .getByRole("table", { name: t("market.resultsCaption") })
-    .locator("tbody tr")
+    .getByRole("button", { name: /^Detalhes de / })
     .first();
-  await closedRow.getByRole("button", { name: t("market.action.offer") }).click();
+  const closedName = ((await closedFirst.getAttribute("aria-label")) ?? "").replace(
+    /^Detalhes de /,
+    "",
+  );
+  await closedFirst.click();
   await page
-    .getByRole("dialog")
+    .getByRole("dialog", { name: closedName })
     .getByRole("button", { name: t("market.action.offer") })
     .click();
-  await expect(page.getByRole("dialog").getByRole("alert")).toContainText(/janela/i);
+  const closed = page.getByRole("dialog", { name: t("market.dialog.buy", { name: closedName }) });
+  await closed.getByRole("button", { name: t("market.action.offer") }).click();
+  await expect(closed.getByRole("alert")).toContainText(/janela/i);
+  await closed.getByRole("button", { name: t("common.close") }).click();
   await page
-    .getByRole("dialog")
+    .getByRole("dialog", { name: closedName })
     .getByRole("button", { name: t("common.close") })
     .click();
 

@@ -82,6 +82,10 @@ describe("o peso da campanha continental na carreira (022 US2)", () => {
     const { store } = await storedCareer(1, () => played);
     memoryRouter.url = "/jogo/financas?c=peso";
     renderApp(memoryRouter.url, store);
+    // Os prêmios da temporada ficam na aba Histórico das Finanças (028).
+    await userEvent
+      .setup({ delay: null })
+      .click(await screen.findByRole("tab", { name: t("finance.tab.history") }));
     const table = await screen.findByRole("table", { name: t("finance.prizes.title") });
     expect(within(table).getAllByText(cup.name).length).toBeGreaterThan(0);
     cleanup();

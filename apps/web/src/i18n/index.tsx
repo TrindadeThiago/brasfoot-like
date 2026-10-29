@@ -69,6 +69,13 @@ export function formatMonthTitle(monthKey: string): string {
   }).format(new Date(`${monthKey}-01T00:00:00Z`));
 }
 
+/** Mês abreviado de `AAAA-MM` ("jan"), sem fuso (028). */
+export function formatMonthShort(monthKey: string): string {
+  return new Intl.DateTimeFormat(locale, { month: "short", timeZone: "UTC" })
+    .format(new Date(`${monthKey}-01T00:00:00Z`))
+    .replace(".", "");
+}
+
 /** Dia da semana abreviado de uma data `AAAA-MM-DD` ("dom"), sem fuso (027). */
 export function formatWeekdayShort(isoDate: string): string {
   return new Intl.DateTimeFormat(locale, { weekday: "short", timeZone: "UTC" })

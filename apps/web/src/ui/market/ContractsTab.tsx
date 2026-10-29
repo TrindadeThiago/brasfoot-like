@@ -13,11 +13,14 @@ export function ContractsTab({
   rows,
   disabled,
   onRenew,
+  onOpen,
 }: {
   save: SaveFile;
   rows: readonly MarketRow[];
   disabled: boolean;
   onRenew: (row: MarketRow) => void;
+  /** Abre os detalhes do jogador, para decidir se vale renovar. */
+  onOpen: (row: MarketRow) => void;
 }) {
   const t = useT();
   const year = save.league.year;
@@ -31,7 +34,20 @@ export function ContractsTab({
     {
       key: "name",
       header: t("col.player"),
-      render: (row) => row.displayName,
+      render: (row) => (
+        <button
+          type="button"
+          className={styles.nameButton}
+          aria-haspopup="dialog"
+          aria-label={t("lineup.detailsOf", { name: row.displayName })}
+          onClick={(event) => {
+            event.stopPropagation();
+            onOpen(row);
+          }}
+        >
+          {row.displayName}
+        </button>
+      ),
       sortValue: (row) => row.displayName,
     },
     {
@@ -87,7 +103,14 @@ export function ContractsTab({
         row.onLoan ? (
           t("market.contracts.loanFrom", { club: clubName(loanOrigin(row)) })
         ) : (
-          <Button disabled={disabled} onClick={() => onRenew(row)}>
+          <Button
+            disabled={disabled}
+            onClick={(event) => {
+              event.stopPropagation();
+              onRenew(row);
+            }}
+            onKeyDown={(event) => event.stopPropagation()}
+          >
             {t("market.action.renew")}
           </Button>
         ),
@@ -102,6 +125,7 @@ export function ContractsTab({
         rowKey={(row) => row.playerId}
         caption={t("market.contracts.caption")}
         initialSort={{ column: "until", direction: "ascending" }}
+        onRowClick={onOpen}
       />
     </div>
   );

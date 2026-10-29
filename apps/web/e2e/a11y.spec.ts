@@ -78,6 +78,30 @@ for (const theme of ["dark", "light"] as const) {
     problems.push(...(await scan(page, "/jogo/elenco/ (modal)")));
     await page.keyboard.press("Escape");
 
+    // Mercado: modal do jogador com o diálogo de oferta por cima, bandeja e comparação (028).
+    await page.goto(`/jogo/mercado/?c=${career}`);
+    const marketName = page.getByRole("button", { name: /^Detalhes de / }).first();
+    await marketName.click();
+    await page
+      .getByRole("dialog")
+      .getByRole("button", { name: t("market.modal.addCompare") })
+      .click();
+    problems.push(...(await scan(page, "/jogo/mercado/ (modal)")));
+    await page
+      .getByRole("dialog")
+      .getByRole("button", { name: t("market.action.offer") })
+      .click();
+    problems.push(...(await scan(page, "/jogo/mercado/ (oferta)")));
+    await page.keyboard.press("Escape");
+    await page.keyboard.press("Escape");
+
+    // Finanças: cada aba, com os gráficos (028).
+    await page.goto(`/jogo/financas/?c=${career}`);
+    for (const key of ["overview", "flow", "gate", "stadium", "credit", "history"]) {
+      await page.getByRole("tab", { name: t(`finance.tab.${key}`) }).click();
+      problems.push(...(await scan(page, `/jogo/financas/ (${key})`)));
+    }
+
     // Ajuda de atalhos aberta.
     await page.keyboard.press("?");
     await expect(page.getByRole("dialog", { name: t("help.title") })).toBeVisible();

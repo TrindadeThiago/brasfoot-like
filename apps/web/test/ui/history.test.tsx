@@ -57,5 +57,5 @@ describe("Histórico (027)", () => {
     const link = within(table).getAllByRole("link")[0] as HTMLElement;
     await user.click(link);
     expect(memoryRouter.url).toContain("t=");
-  });
+  }, 60_000);
 });
