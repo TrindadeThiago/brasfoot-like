@@ -1,4 +1,4 @@
-import { generateWorldBank, type ModPackage } from "@brasfoot-like/engine";
+import { generateWorldBank, type ModPackage, mainCompetitionOf } from "@brasfoot-like/engine";
 import { writeModPackage } from "@brasfoot-like/modkit";
 import { createSave, migrateSave, type SaveFile } from "@brasfoot-like/save";
 import { screen, waitFor, within } from "@testing-library/react";
@@ -141,12 +141,13 @@ describe("consulta às ligas de outros países (020 US1)", () => {
     const user = userEvent.setup();
     const { store, save } = await worldSave();
     renderApp("/jogo/competicao?c=mundo", store);
+    // Os países de fora ficam em "Demais competições" (027): o seletor filtra os cartões.
+    await user.click(await screen.findByRole("tab", { name: t("competition.others") }));
     const country = await screen.findByLabelText(t("competition.country"));
     const [first] = save.bank.countries;
-    const second = save.bank.countries[1];
-    expect((country as HTMLSelectElement).value).toBe(second?.id);
-    // A liga do técnico é a do segundo país; escolher o primeiro mostra a liga de lá.
+    const league = mainCompetitionOf(save.bank, first?.id ?? "");
     await user.selectOptions(country, first?.name ?? "");
+    await user.click(await screen.findByRole("link", { name: league?.name ?? "" }));
     await waitFor(() =>
       expect(memoryRouter.url).toContain(`comp=liga-${first?.code.toLowerCase()}`),
     );

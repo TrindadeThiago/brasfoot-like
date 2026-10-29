@@ -1,6 +1,6 @@
 import { generateDefaultBank } from "@brasfoot-like/engine";
 import { writeModPackage } from "@brasfoot-like/modkit";
-import { expect, test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 import { createCareer, skipTips, t } from "./helpers";
 
 const MOD_NAME = "Duas competições (teste)";
@@ -41,6 +41,15 @@ function twoCompetitionsMod(): Buffer {
     ],
   };
   return Buffer.from(writeModPackage(bank));
+}
+
+/** Total de jogos da temporada: a soma das contagens da faixa de meses do calendário (027). */
+async function seasonGames(page: Page): Promise<number> {
+  const texts = await page
+    .getByRole("navigation", { name: t("calendar.months") })
+    .getByRole("button")
+    .allInnerTexts();
+  return texts.reduce((sum, text) => sum + Number(/(\d+) jogo/.exec(text)?.[1] ?? 0), 0);
 }
 
 test("duas competições: avançar alterna domingo e quarta, calendário filtra, abas e condição (017)", async ({
@@ -84,12 +93,12 @@ test("duas competições: avançar alterna domingo e quarta, calendário filtra,
   // Calendário do clube: as duas competições por data, com filtro.
   await menu.getByRole("link", { name: t("nav.calendar") }).click();
   await expect(page).toHaveURL(/\/jogo\/calendario\//);
-  const rows = page.locator("tbody tr");
-  await expect(rows).toHaveCount(38 + 19);
+  // A temporada vem em meses (027): a soma das contagens da faixa de meses é o total de jogos.
+  await expect.poll(() => seasonGames(page)).toBe(38 + 19);
   await page.getByLabel(t("calendar.filter")).selectOption({ label: TOURNAMENT });
-  await expect(rows).toHaveCount(19);
+  await expect.poll(() => seasonGames(page)).toBe(19);
   await page.getByLabel(t("calendar.filter")).selectOption({ label: t("calendar.all") });
-  await expect(rows).toHaveCount(38 + 19);
+  await expect.poll(() => seasonGames(page)).toBe(38 + 19);
 
   // Abas por competição na tabela.
   await menu.getByRole("link", { name: t("nav.competition") }).click();
@@ -121,5 +130,5 @@ test("banco padrão: liga e copa, seletor de competição e calendário só com 
   await expect(page.getByRole("navigation", { name: t("competition.select") })).toBeVisible();
   await menu.getByRole("link", { name: t("nav.calendar") }).click();
   await expect(page.getByLabel(t("calendar.filter"))).toHaveCount(0);
-  await expect(page.locator("tbody tr")).toHaveCount(38);
+  await expect.poll(() => seasonGames(page)).toBe(38);
 });

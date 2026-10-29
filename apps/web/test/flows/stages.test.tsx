@@ -1,10 +1,12 @@
 import { clubDivision, finalOrder, type Season } from "@brasfoot-like/engine";
 import { divisionNameOf, type SaveFile } from "@brasfoot-like/save";
 import { cleanup, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
 import { t } from "../../src/i18n";
 import { stageLabel } from "../../src/ui/stages/label";
 import { renderApp } from "../helpers/app";
+import { eachFixture, monthGrid } from "../helpers/calendar";
 import { memoryRouter } from "../helpers/router";
 import {
   playToSeasonEnd,
@@ -167,17 +169,19 @@ describe("telas completas das fases (019 US6)", () => {
     cleanup();
   });
 
-  it("o calendário tem a coluna Fase com o grupo e a rodada de cada jogo", async () => {
+  it("o calendário mostra a fase com o grupo e a rodada de cada jogo", async () => {
     const { store } = await storedStages(0);
     memoryRouter.url = "/jogo/calendario?c=fases";
     renderApp(memoryRouter.url, store);
-    expect(
-      await screen.findByRole("columnheader", { name: new RegExp(t("col.stage")) }),
-    ).toBeTruthy();
-    const cells = await screen.findAllByText(/^Grupo [A-D], rodada \d$/);
-    expect(cells).toHaveLength(4);
+    await monthGrid();
+    const phases: string[] = [];
+    await eachFixture(userEvent.setup({ delay: null }), ({ item }) => {
+      const match = /Fase: (Grupo [A-D], rodada \d)/.exec(item.textContent ?? "");
+      if (match?.[1]) phases.push(match[1]);
+    });
+    expect(phases).toHaveLength(4);
     cleanup();
-  });
+  }, 60_000);
 
   it("o rótulo de um jogo eliminatório é o nome da fase, com a perna se for ida e volta", () => {
     const save = stagesSave("rotulo");

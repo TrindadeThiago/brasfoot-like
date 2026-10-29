@@ -18,6 +18,8 @@ const GAME = [
   "/jogo/elenco/",
   "/jogo/escalacao/",
   "/jogo/competicao/",
+  "/jogo/competicao/resultados/",
+  "/jogo/competicao/artilharia/",
   "/jogo/calendario/",
   "/jogo/financas/",
   "/jogo/historico/",

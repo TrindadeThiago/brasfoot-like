@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { t } from "../../src/i18n";
 import { renderApp } from "../helpers/app";
+import { eachFixture, monthGrid } from "../helpers/calendar";
 import { storedCareer } from "../helpers/career";
 import { memoryRouter } from "../helpers/router";
 import { continentalSave, playedContinentalSeason } from "../helpers/saves";
@@ -51,8 +52,12 @@ describe("taça continental ao lado das competições nacionais (022 US1)", () =
     const { store } = await storedCareer(1, () => save);
     memoryRouter.url = "/jogo/calendario?c=calendario";
     renderApp(memoryRouter.url, store);
-    const table = await screen.findByRole("table");
-    expect((table.textContent ?? "").includes(cup.name)).toBe(true);
+    await monthGrid();
+    let found = false;
+    await eachFixture(userEvent.setup({ delay: null }), ({ item }) => {
+      if ((item.textContent ?? "").includes(cup.name)) found = true;
+    });
+    expect(found).toBe(true);
     cleanup();
   });
 

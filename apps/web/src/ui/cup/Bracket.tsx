@@ -3,6 +3,7 @@
 import { cupFormat, type Season, type Tie, type TieState, tieState } from "@brasfoot-like/engine";
 import type { SaveFile } from "@brasfoot-like/save";
 import { useT } from "../../i18n";
+import { Badge } from "../Badge";
 import { Crest } from "../Crest";
 import styles from "./Bracket.module.css";
 
@@ -72,6 +73,9 @@ function TieCard({
     >
       {side(tie.home, state.goals.home)}
       {side(tie.away, state.goals.away)}
+      {tie.home === save.clubId || tie.away === save.clubId ? (
+        <span className={styles.mineLabel}>{t("cup.myTie")}</span>
+      ) : null}
       {note ? <span className={styles.note}>{note}</span> : null}
     </li>
   );
@@ -90,12 +94,21 @@ export function Bracket({
 }) {
   const t = useT();
   const format = cupFormat(save.bank, season);
+  // As fases em que o clube do jogador tem confronto: o caminho dele até a final (027).
+  const path = new Set(
+    (season.bracket?.phases ?? [])
+      .filter((phase) =>
+        phase.ties.some((tie) => tie.home === save.clubId || tie.away === save.clubId),
+      )
+      .map((phase) => phase.index),
+  );
   return (
     // biome-ignore lint/a11y/noNoninteractiveTabindex: região rolável precisa de foco para o teclado (axe)
     <section aria-label={t("cup.bracket")} className={styles.bracket} tabIndex={0}>
       {(season.bracket?.phases ?? []).map((phase) => (
         <div key={phase.index} className={styles.phase}>
           <h3>{format.phases[phase.index]?.name}</h3>
+          {path.has(phase.index) ? <Badge tone="accent">{t("cup.myPath")}</Badge> : null}
           {phase.drawn ? (
             <ol>
               {phase.ties.map((tie) => (
