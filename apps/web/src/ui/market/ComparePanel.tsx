@@ -4,6 +4,7 @@ import type { MarketRow } from "@brasfoot-like/engine";
 import type { SaveFile } from "@brasfoot-like/save";
 import { formatMoney, label, useT } from "../../i18n";
 import { Button } from "../Button";
+import { Dialog } from "../Dialog";
 import styles from "./market.module.css";
 
 /** Comparação lado a lado de 2 a 4 jogadores (US1), só com atributos visíveis. */
@@ -38,8 +39,13 @@ export function ComparePanel({
     [t("market.col.until"), (row) => String(row.untilYear ?? "—")],
   ];
   return (
-    <section className={styles.card} aria-label={t("market.compare.title")}>
-      <h2>{t("market.compare.title")}</h2>
+    <Dialog
+      dismissOnBackdrop
+      open
+      title={t("market.compare.title")}
+      onClose={onClose}
+      actions={<Button onClick={onClose}>{t("common.close")}</Button>}
+    >
       <table className={styles.compare} aria-label={t("market.compare.title")}>
         <thead>
           <tr>
@@ -62,9 +68,6 @@ export function ComparePanel({
           ))}
         </tbody>
       </table>
-      <div className={styles.actions}>
-        <Button onClick={onClose}>{t("common.close")}</Button>
-      </div>
-    </section>
+    </Dialog>
   );
 }

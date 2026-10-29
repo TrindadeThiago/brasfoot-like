@@ -178,3 +178,38 @@ test("Competição: Tab chega aos cartões; Calendário: setas movem entre os di
   await page.keyboard.press("PageDown");
   await expect(page.getByRole("heading", { level: 2 }).first()).toBeVisible();
 });
+
+// 028 US5: abas do Mercado e das Finanças por setas, e o foco volta ao fechar modal e diálogo.
+test("Mercado e Finanças: setas nas abas e foco devolvido ao fechar (028)", async ({ page }) => {
+  test.setTimeout(120_000);
+  await createCareer(page, "Ana Souza", 1);
+  await page.keyboard.press("m");
+  await expect(page).toHaveURL(/mercado/);
+  const search = page.getByRole("tab", { name: new RegExp(`^${t("market.tab.search")}`) });
+  await search.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(
+    page.getByRole("tab", { name: new RegExp(`^${t("market.tab.negotiations")}`) }),
+  ).toBeFocused();
+  await page.keyboard.press("Home");
+  await expect(search).toBeFocused();
+  const name = page.getByRole("button", { name: /^Detalhes de / }).first();
+  await name.focus();
+  await page.keyboard.press("Enter");
+  const modal = page.getByRole("dialog");
+  await modal.getByRole("button", { name: t("market.action.offer") }).focus();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("dialog")).toHaveCount(2);
+  await page.keyboard.press("Escape");
+  await expect(modal.getByRole("button", { name: t("market.action.offer") })).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(name).toBeFocused();
+
+  await page.keyboard.press("6");
+  await expect(page).toHaveURL(/financas/);
+  const overview = page.getByRole("tab", { name: t("finance.tab.overview") });
+  await overview.focus();
+  await page.keyboard.press("End");
+  await expect(page.getByRole("tab", { name: t("finance.tab.history") })).toBeFocused();
+  await expectFocusVisible(page, "aba de finanças");
+});

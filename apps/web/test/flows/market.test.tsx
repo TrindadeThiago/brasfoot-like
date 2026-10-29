@@ -7,6 +7,7 @@ import { formatMoney, t } from "../../src/i18n";
 import { renderApp } from "../helpers/app";
 import { storedCareer } from "../helpers/career";
 import { loadSaved } from "../helpers/live";
+import { marketTab, openPlayer, startAction } from "../helpers/market";
 
 // A tela do mercado lista ~1.000 jogadores; sob carga os fluxos passam de 5 s.
 vi.setConfig({ testTimeout: 30000 });
@@ -31,9 +32,9 @@ describe("mercado — busca e comparação (US1)", () => {
       "row",
     );
     const total = searchPlayers(marketContextOf(save), { excludeClubId: save.clubId }).length;
-    expect(count.length).toBe(Math.min(100, total));
+    expect(count.length).toBe(Math.min(50, total));
     expect(screen.getByText(t("market.results", { count: total }))).toBeDefined();
-    expect(screen.getByRole("button", { name: t("market.showMore") })).toBeDefined();
+    expect(screen.getByRole("navigation", { name: t("pager.label") })).toBeDefined();
   });
 
   it("filtra por posição e por livres", async () => {
@@ -62,17 +63,16 @@ describe("mercado — busca e comparação (US1)", () => {
       screen.getByLabelText(t("market.filter.strengthMax")),
       String(picks[2]?.strength ?? 0),
     );
-    const open = screen.getByRole("button", { name: /Comparar selecionados/ });
-    expect((open as HTMLButtonElement).disabled).toBe(true);
     for (const pick of picks) {
-      await user.click(
-        screen.getByRole("checkbox", {
-          name: t("market.compare.select", { name: pick.displayName }),
-        }),
-      );
+      const modal = await openPlayer(user, pick.displayName);
+      await user.click(within(modal).getByRole("button", { name: t("market.modal.addCompare") }));
+      await user.click(within(modal).getByRole("button", { name: t("common.close") }));
     }
-    await user.click(screen.getByRole("button", { name: /Comparar selecionados/ }));
-    const panel = await screen.findByRole("region", { name: t("market.compare.title") });
+    // A bandeja acima da tabela mostra quem está na comparação.
+    const tray = screen.getByRole("region", { name: t("market.tray.label") });
+    for (const pick of picks) expect(within(tray).getByText(pick.displayName)).toBeDefined();
+    await user.click(within(tray).getByRole("button", { name: /Comparar selecionados/ }));
+    const panel = await screen.findByRole("dialog", { name: t("market.compare.title") });
     for (const pick of picks) {
       expect(within(panel).getByRole("columnheader", { name: pick.displayName })).toBeDefined();
     }
@@ -92,11 +92,7 @@ describe("mercado — compra completa (US2, US3)", () => {
     const target = cheapRows(save)[0];
     if (!target) throw new Error("sem alvo");
     await user.type(screen.getByLabelText(t("market.filter.text")), target.displayName);
-    const row = (await screen.findByRole("cell", { name: target.displayName })).closest(
-      "tr",
-    ) as HTMLElement;
-    await user.click(within(row).getByRole("button", { name: t("market.action.offer") }));
-    const dialog = await screen.findByRole("dialog");
+    const dialog = await startAction(user, target.displayName, "offer");
     const fee = within(dialog).getByLabelText(t("market.form.fee"));
     await user.clear(fee);
     await user.type(
@@ -130,11 +126,7 @@ describe("mercado — compra completa (US2, US3)", () => {
     const target = cheapRows(save)[0];
     if (!target) throw new Error("sem alvo");
     await user.type(screen.getByLabelText(t("market.filter.text")), target.displayName);
-    const row = (await screen.findByRole("cell", { name: target.displayName })).closest(
-      "tr",
-    ) as HTMLElement;
-    await user.click(within(row).getByRole("button", { name: t("market.action.offer") }));
-    const dialog = await screen.findByRole("dialog");
+    const dialog = await startAction(user, target.displayName, "offer");
     await user.click(within(dialog).getByRole("button", { name: t("market.action.offer") }));
     expect(await within(dialog).findByRole("alert")).toBeDefined();
     expect(within(dialog).getByRole("alert").textContent).toMatch(/janela/i);
@@ -169,7 +161,7 @@ describe("mercado — contratos e renovação (US6)", () => {
     const { store, save } = await storedCareer(1);
     renderApp("/jogo/mercado?c=tela", store);
     await screen.findByRole("table", { name: t("market.resultsCaption") });
-    await user.click(screen.getByRole("tab", { name: t("market.tab.contracts") }));
+    await user.click(marketTab("market.tab.contracts"));
     const table = await screen.findByRole("table", { name: t("market.contracts.caption") });
     const headers = within(table)
       .getAllByRole("columnheader")
@@ -193,7 +185,7 @@ describe("mercado — contratos e renovação (US6)", () => {
     const { store, save } = await storedCareer(1);
     renderApp("/jogo/mercado?c=tela", store);
     await screen.findByRole("table", { name: t("market.resultsCaption") });
-    await user.click(screen.getByRole("tab", { name: t("market.tab.contracts") }));
+    await user.click(marketTab("market.tab.contracts"));
     const table = await screen.findByRole("table", { name: t("market.contracts.caption") });
     const body = within(table).getAllByRole("rowgroup")[1] as HTMLElement;
     const first = within(body).getAllByRole("row")[0] as HTMLElement;
@@ -306,11 +298,7 @@ describe("mercado — empréstimos e livres (US5, US7)", () => {
     const target = cheapRows(save)[0];
     if (!target) throw new Error("sem alvo");
     await user.type(screen.getByLabelText(t("market.filter.text")), target.displayName);
-    const row = (await screen.findByRole("cell", { name: target.displayName })).closest(
-      "tr",
-    ) as HTMLElement;
-    await user.click(within(row).getByRole("button", { name: t("market.action.loan") }));
-    const dialog = await screen.findByRole("dialog");
+    const dialog = await startAction(user, target.displayName, "loan");
     await user.click(within(dialog).getByRole("button", { name: t("market.action.loan") }));
     expect(await within(dialog).findByText(t("market.feedback.loanDone"))).toBeDefined();
     await waitFor(async () => {
@@ -347,11 +335,7 @@ describe("mercado — empréstimos e livres (US5, US7)", () => {
     await screen.findByRole("table", { name: t("market.resultsCaption") });
     expect(screen.getAllByText(/Janela fechada/)[0]).toBeDefined();
     await user.selectOptions(screen.getByLabelText(t("market.filter.scope")), "free");
-    const row = (await screen.findByRole("cell", { name: agent.player.displayName })).closest(
-      "tr",
-    ) as HTMLElement;
-    await user.click(within(row).getByRole("button", { name: t("market.action.sign") }));
-    const dialog = await screen.findByRole("dialog");
+    const dialog = await startAction(user, agent.player.displayName, "sign");
     await user.click(within(dialog).getByRole("button", { name: t("market.action.start") }));
     const wage = await within(dialog).findByLabelText(t("market.form.wage"));
     await user.clear(wage);

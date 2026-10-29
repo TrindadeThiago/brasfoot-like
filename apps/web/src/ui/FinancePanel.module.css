@@ -24,6 +24,11 @@
   align-items: end;
 }
 
+/* O campo de valor reserva uma linha de dica embaixo (MoneyInput): os botões sobem o mesmo tanto. */
+.rowHint > button {
+  margin-bottom: calc(12px * 1.2 + 2px);
+}
+
 .field {
   display: flex;
   flex-direction: column;

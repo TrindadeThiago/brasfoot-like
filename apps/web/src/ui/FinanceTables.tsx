@@ -3,22 +3,34 @@
 import type { FinanceSeasonSummary, GateRecord } from "@brasfoot-like/engine";
 import { LEDGER_CATEGORIES } from "@brasfoot-like/engine";
 import type { SaveFile } from "@brasfoot-like/save";
-import { formatMoney, formatNumber, useT } from "../i18n";
+import { attendanceSeries } from "../game/finance-series";
+import { formatDate, formatMoney, formatNumber, useT } from "../i18n";
 import { type Column, DataTable } from "./DataTable";
 import styles from "./FinancePanel.module.css";
+import { gateInfoOf } from "./finance/gate-info";
 
 /** Jogos em casa da temporada atual: público, ocupação, preço e renda (FR-010, FR-024). */
 export function HomeGames({ save }: { save: SaveFile }) {
   const t = useT();
   const clubs = new Map(save.bank.clubs.map((club) => [club.id, club]));
-  const games = save.finances.gates.filter((gate) => gate.clubId === save.clubId);
+  const games = attendanceSeries(save);
+  const info = gateInfoOf(save);
   const money = (value: number) => formatMoney(value);
   const columns: Column<GateRecord>[] = [
     {
-      key: "round",
-      header: t("finance.games.round"),
-      render: (gate) => gate.round,
-      align: "right",
+      key: "date",
+      header: t("finance.games.date"),
+      render: (gate) => (gate.date ? formatDate(gate.date) : "—"),
+    },
+    {
+      key: "competition",
+      header: t("finance.games.competition"),
+      render: (gate) => info(gate).competition,
+    },
+    {
+      key: "phase",
+      header: t("finance.games.phase"),
+      render: (gate) => info(gate).phase || "—",
     },
     {
       key: "opponent",

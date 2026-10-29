@@ -111,6 +111,17 @@ for (const theme of ["dark", "light"] as const) {
       );
     }
 
+    // Finanças: cada aba (com gráficos) sem rolagem horizontal da página nem texto cortado (028).
+    for (const width of [1440, 1280, 1024]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`/jogo/financas/?c=${career}`);
+      for (const key of ["overview", "flow", "gate", "stadium", "credit", "history"]) {
+        await page.getByRole("tab", { name: t(`finance.tab.${key}`) }).click();
+        await expectNoHorizontalScroll(page, `finanças/${key} @${width}`);
+        await expectNoClippedText(page, `finanças/${key} @${width}`);
+      }
+    }
+
     // Abaixo de 768 px a barra empilha acima do conteúdo, sem perder nenhuma tela.
     await page.setViewportSize({ width: 600, height: 900 });
     await page.goto(`/jogo/elenco/?c=${career}`);

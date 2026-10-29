@@ -52,7 +52,15 @@ export function StadiumPanel({
             });
             return (
               <li key={option.seats}>
-                <span>{label}</span>
+                <span>
+                  {label}
+                  <span className={styles.muted}>
+                    {" · "}
+                    {t("finance.stadium.after", {
+                      seats: formatNumber(club.capacity + option.seats),
+                    })}
+                  </span>
+                </span>
                 {tooExpensive ? (
                   <span className={styles.muted}>{t("finance.stadium.cantAfford")}</span>
                 ) : null}
