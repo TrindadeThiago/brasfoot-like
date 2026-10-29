@@ -16,7 +16,7 @@ a{color:inherit;text-decoration:none}
 a:hover{color:#ffffff}
 </style>
 </helmet>
-<div style="min-height: 1400px; background: radial-gradient(900px 420px at 50% 0%, {{glow}}, transparent 70%), #0a0e13; color: #eef2f6; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.45; display: flex; flex-direction: column">
+<div style="min-height: 2400px; background: radial-gradient(900px 420px at 50% 0%, {{glow}}, transparent 70%), #0a0e13; color: #eef2f6; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.45; display: flex; flex-direction: column">
 
   <header style="padding: 16px 48px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid #1d2733; flex-wrap: wrap">
     <a href="Main.dc.html" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: #b4c0cd; font-weight: 500">
@@ -26,88 +26,166 @@ a:hover{color:#ffffff}
     <div style="color: #98a6b6">União Canoas · Ana Souza</div>
   </header>
 
-  <main style="width: 100%; max-width: 1040px; margin: 0 auto; padding: 40px 48px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px">
+  <main style="width: 100%; max-width: 1120px; margin: 0 auto; padding: 40px 48px 56px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
 
-    <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 700; letter-spacing: -0.02em">Temporada 2027 encerrada</h1>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+      <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 700; letter-spacing: -0.02em">Temporada 2027 encerrada</h1>
+      <button type="button" disabled="{{isBusy}}" style="{{nextStyleTop}}">{{nextLabel}}</button>
+    </div>
+
+    <sc-if value="{{failed}}" hint-placeholder-val="{{ false }}">
+      <p role="alert" style="margin: 0; background: rgba(255,138,138,0.12); border: 1px solid rgba(255,138,138,0.45); border-radius: 12px; padding: 12px 16px; color: #ffb0b0; font-weight: 500">Não foi possível começar a próxima temporada.</p>
+    </sc-if>
 
     <!-- Resultado do meu clube -->
     <section aria-label="Resultado do clube" style="{{heroStyle}}">
-      <div style="{{heroIcon}}">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{iconPath}}"></path></svg>
-      </div>
-      <div style="flex: 1 1 320px; min-width: 0">
-        <div style="color: #98a6b6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em">{{tag}}</div>
-        <p style="margin: 4px 0 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2">{{message}}</p>
-        <div style="color: #b4c0cd; margin-top: 8px">Premiação recebida pelo União Canoas: <strong style="color: #eef2f6">$ 3.200.000</strong>.</div>
-      </div>
-    </section>
-
-    <!-- Campeões -->
-    <section aria-label="Campeões" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px">
-      <sc-for list="{{champions}}" as="c" hint-placeholder-count="2">
-        <div style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; gap: 14px">
-          <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(255,180,84,0.16); display: flex; align-items: center; justify-content: center; flex: 0 0 auto">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffb454" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"></path></svg>
-          </div>
-          <div style="min-width: 0">
-            <div style="color: #98a6b6; font-size: 12px">Campeão da {{c.division}}</div>
-            <div style="font-weight: 600; font-size: 16px">{{c.club}}</div>
-            <div style="color: #b4c0cd; font-size: 13px">{{c.points}} pontos</div>
-          </div>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 24px">
+        <div style="{{heroIcon}}">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{iconPath}}"></path></svg>
         </div>
-      </sc-for>
-    </section>
-
-    <!-- Acessos e rebaixamentos -->
-    <section aria-label="Acesso e rebaixamento" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px">
-      <div style="background: #121922; border: 1px solid #1d2733; border-top: 3px solid {{accent}}; border-radius: 16px; padding: 18px 20px">
-        <h2 style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Sobem para a Série A</h2>
-        <sc-for list="{{promoted}}" as="m" hint-placeholder-count="3">
-          <div style="{{m.style}}">{{m.line}}</div>
+        <div style="flex: 1 1 320px; min-width: 0">
+          <div style="color: #98a6b6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em">{{tag}}</div>
+          <p style="margin: 4px 0 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2">{{message}}</p>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px">
+        <sc-for list="{{stats}}" as="s" hint-placeholder-count="5">
+          <div style="background: rgba(10,14,19,0.55); border-radius: 12px; padding: 12px 14px">
+            <div style="color: #98a6b6; font-size: 12px">{{s.label}}</div>
+            <div style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums">{{s.value}}</div>
+          </div>
         </sc-for>
       </div>
-      <div style="background: #121922; border: 1px solid #1d2733; border-top: 3px solid #ff8a8a; border-radius: 16px; padding: 18px 20px">
-        <h2 style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Descem para a Série B</h2>
-        <sc-for list="{{relegated}}" as="m" hint-placeholder-count="3">
-          <div style="{{m.style}}">{{m.line}}</div>
+    </section>
+
+    <!-- Como foi a temporada -->
+    <section aria-labelledby="sum-title" style="display: flex; flex-direction: column; gap: 14px">
+      <h2 id="sum-title" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 600; letter-spacing: -0.01em">Como foi a sua temporada</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: stretch">
+
+        <section aria-label="Campanha por competição" style="flex: 3 1 460px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; overflow-x: auto">
+          <table style="width: 100%; min-width: 460px; border-collapse: collapse">
+            <caption style="text-align: left; padding: 18px 22px 6px; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Campanha por competição</caption>
+            <thead><tr style="color: #98a6b6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em"><th scope="col" style="text-align: left; padding: 10px 22px; font-weight: 500">Competição</th><th scope="col" style="text-align: left; padding: 10px 12px; font-weight: 500">Resultado</th><th scope="col" style="text-align: right; padding: 10px 22px; font-weight: 500">Premiação</th></tr></thead>
+            <tbody>
+              <sc-for list="{{campaign}}" as="c" hint-placeholder-count="4">
+                <tr style="border-top: 1px solid #1d2733">
+                  <td style="padding: 12px 22px; font-weight: 500">{{c.comp}}</td>
+                  <td style="padding: 12px"><span style="{{c.chip}}">{{c.result}}</span></td>
+                  <td style="padding: 12px 22px; text-align: right; font-variant-numeric: tabular-nums">{{c.prize}}</td>
+                </tr>
+              </sc-for>
+              <tr style="border-top: 1px solid #2e3a47"><td style="padding: 14px 22px; font-weight: 600" colspan="2">Premiação recebida pelo União Canoas</td><td style="padding: 14px 22px; text-align: right; font-weight: 700; color: {{accent}}; font-variant-numeric: tabular-nums">{{prizeTotal}}</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section aria-label="Avaliação da diretoria" style="flex: 2 1 340px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 18px 22px; display: flex; flex-direction: column; gap: 14px">
+          <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Avaliação da diretoria — 2027</h3>
+          <div style="display: flex; flex-direction: column">
+            <sc-for list="{{goals}}" as="g" hint-placeholder-count="3">
+              <div style="display: flex; gap: 12px; padding: 10px 0; border-top: 1px solid #1d2733">
+                <span style="{{g.icon}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{g.path}}"></path></svg></span>
+                <div style="min-width: 0"><div style="font-weight: 500">{{g.title}}</div><div style="color: #98a6b6; font-size: 13px">{{g.detail}}</div><div style="{{g.status}}">{{g.label}}</div></div>
+              </div>
+            </sc-for>
+          </div>
+          <div>
+            <div style="display: flex; justify-content: space-between; color: #98a6b6; font-size: 12px; margin-bottom: 4px"><span>Confiança final</span><span style="color: #eef2f6; font-weight: 600">{{trust}}</span></div>
+            <div style="height: 8px; border-radius: 99px; background: #1d2733; overflow: hidden"><div style="{{trustBar}}"></div></div>
+          </div>
+          <div style="color: #b4c0cd">A diretoria decidiu mantê-lo no cargo.</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+            <span style="color: #98a6b6; font-size: 13px">Reputação: <strong style="color: #eef2f6">{{repBefore}} → {{repAfter}}</strong></span>
+            <sc-if value="{{achievement}}" hint-placeholder-val="{{ false }}"><span style="{{achStyle}}">{{achievement}}</span></sc-if>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- Campeões das ligas nacionais -->
+    <section aria-labelledby="champ-title" style="display: flex; flex-direction: column; gap: 14px">
+      <div>
+        <h2 id="champ-title" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 600; letter-spacing: -0.01em">Campeões das ligas nacionais</h2>
+        <div style="color: #98a6b6">As divisões do campeonato nacional do Brasil, de cima para baixo.</div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px">
+        <sc-for list="{{champions}}" as="c" hint-placeholder-count="4">
+          <div style="{{c.card}}">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
+              <span style="color: #98a6b6; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em">{{c.division}}</span>
+              <sc-if value="{{c.mine}}" hint-placeholder-val="{{ false }}"><span style="border-radius: 6px; padding: 2px 8px; font-size: 11px; font-weight: 600; background: rgba(61,220,132,0.16); color: {{accent}}">Sua divisão</span></sc-if>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px">
+              <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(255,180,84,0.16); display: flex; align-items: center; justify-content: center; flex: 0 0 auto">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffb454" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"></path></svg>
+              </div>
+              <div style="min-width: 0"><div style="font-weight: 600; font-size: 16px; line-height: 1.25">{{c.club}}</div><div style="color: #b4c0cd; font-size: 13px">{{c.points}} pontos</div></div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- Acesso e rebaixamento -->
+    <section aria-labelledby="move-title" style="display: flex; flex-direction: column; gap: 14px">
+      <h2 id="move-title" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 600; letter-spacing: -0.01em">Acesso e rebaixamento</h2>
+      <div style="display: flex; flex-direction: column; gap: 16px">
+        <sc-for list="{{boundaries}}" as="b" hint-placeholder-count="3">
+          <section aria-label="{{b.title}}" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 18px 22px; display: flex; flex-direction: column; gap: 14px">
+            <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">{{b.title}}</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px">
+              <div style="border-top: 3px solid {{accent}}; padding-top: 10px">
+                <div style="display: flex; align-items: center; gap: 8px; font-weight: 600; margin-bottom: 4px">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{accent}}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"></path></svg>{{b.upTitle}}
+                </div>
+                <sc-for list="{{b.up}}" as="m" hint-placeholder-count="3"><div style="{{m.style}}">{{m.line}}</div></sc-for>
+              </div>
+              <div style="border-top: 3px solid #ff8a8a; padding-top: 10px">
+                <div style="display: flex; align-items: center; gap: 8px; font-weight: 600; margin-bottom: 4px">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff8a8a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"></path></svg>{{b.downTitle}}
+                </div>
+                <sc-for list="{{b.down}}" as="m" hint-placeholder-count="3"><div style="{{m.style}}">{{m.line}}</div></sc-for>
+              </div>
+            </div>
+          </section>
         </sc-for>
       </div>
     </section>
 
     <!-- Classificação final -->
-    <section aria-label="Classificação final da Série A" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; overflow-x: auto">
-      <table style="width: 100%; min-width: 520px; border-collapse: collapse; font-variant-numeric: tabular-nums">
-        <caption style="text-align: left; padding: 16px 20px 4px; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Classificação final da Série A</caption>
-        <thead>
-          <tr style="color: #98a6b6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em">
-            <th scope="col" style="text-align: left; padding: 12px 20px; font-weight: 500; width: 64px">Pos.</th>
-            <th scope="col" style="text-align: left; padding: 12px 8px; font-weight: 500">Clube</th>
-            <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">J</th>
-            <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">SG</th>
-            <th scope="col" style="text-align: right; padding: 12px 20px; font-weight: 500">P</th>
-          </tr>
-        </thead>
-        <tbody>
-          <sc-for list="{{table}}" as="r" hint-placeholder-count="10">
-            <tr style="{{r.row}}">
-              <td style="padding: 9px 20px; font-weight: 600"><span style="{{r.zone}}">{{r.pos}}</span></td>
-              <td style="padding: 9px 8px; font-weight: 500">{{r.club}}</td>
-              <td style="padding: 9px 8px; text-align: right; color: #b4c0cd">38</td>
-              <td style="padding: 9px 8px; text-align: right; color: #b4c0cd">{{r.sg}}</td>
-              <td style="padding: 9px 20px; text-align: right; font-weight: 600">{{r.pts}}</td>
+    <details style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; overflow: hidden">
+      <summary style="cursor: pointer; min-height: 56px; display: flex; align-items: center; padding: 0 22px; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Classificação final da {{division}}</summary>
+      <div style="overflow-x: auto">
+        <table style="width: 100%; min-width: 520px; border-collapse: collapse; font-variant-numeric: tabular-nums">
+          <thead>
+            <tr style="color: #98a6b6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em">
+              <th scope="col" style="text-align: left; padding: 12px 22px; font-weight: 500; width: 64px">Pos.</th>
+              <th scope="col" style="text-align: left; padding: 12px 8px; font-weight: 500">Clube</th>
+              <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">J</th>
+              <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">SG</th>
+              <th scope="col" style="text-align: right; padding: 12px 22px; font-weight: 500">P</th>
             </tr>
-          </sc-for>
-        </tbody>
-      </table>
-    </section>
+          </thead>
+          <tbody>
+            <sc-for list="{{table}}" as="r" hint-placeholder-count="10">
+              <tr style="{{r.row}}">
+                <td style="padding: 9px 22px; font-weight: 600"><span style="{{r.zone}}">{{r.pos}}</span></td>
+                <td style="padding: 9px 8px; font-weight: 500">{{r.club}}</td>
+                <td style="padding: 9px 8px; text-align: right; color: #b4c0cd">38</td>
+                <td style="padding: 9px 8px; text-align: right; color: #b4c0cd">{{r.sg}}</td>
+                <td style="padding: 9px 22px; text-align: right; font-weight: 600">{{r.pts}}</td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+    </details>
 
     <!-- Ações -->
     <section aria-label="Próximos passos" style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px">
       <button type="button" disabled="{{isBusy}}" style="{{nextStyle}}">{{nextLabel}}</button>
       <a href="Historico.dc.html" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 22px; border-radius: 12px; border: 1px solid #2e3a47; background: #121922; font-weight: 500">Ver o histórico</a>
-      <sc-if value="{{failed}}" hint-placeholder-val="{{ false }}">
-        <p role="alert" style="margin: 0; color: #ff8a8a; font-weight: 500">Não foi possível começar a próxima temporada.</p>
-      </sc-if>
     </section>
   </main>
 </div>
@@ -119,42 +197,109 @@ class Component extends DCLogic {
     const result = this.props.result ?? 'acesso';
     const state = this.props.state ?? 'normal';
     const club = 'União Canoas';
+    const fmt = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    const money = (n) => (n ? '$ ' + fmt(n) : '$ 0');
 
-    const look = {
-      'campeão': { tag: 'Campeão', color: '#ffb454', bg: 'rgba(255,180,84,0.12)', glow: 'rgba(255,180,84,0.12)', icon: 'M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3', pos: 1, div: 'Série A', msg: 'O ' + club + ' é campeão da Série A!' },
-      acesso: { tag: 'Acesso', color: accent, bg: 'rgba(61,220,132,0.10)', glow: 'rgba(61,220,132,0.12)', icon: 'M12 19V5M5 12l7-7 7 7', pos: 2, div: 'Série A', msg: 'Acesso! O ' + club + ' terminou em 2º lugar e vai disputar a Série A.' },
-      rebaixamento: { tag: 'Rebaixamento', color: '#ff8a8a', bg: 'rgba(255,138,138,0.10)', glow: 'rgba(255,138,138,0.10)', icon: 'M12 5v14M5 12l7 7 7-7', pos: 19, div: 'Série B', msg: 'Rebaixamento. O ' + club + ' terminou em 19º lugar e vai disputar a Série B.' },
-      'permanência': { tag: 'Permanência', color: '#5ec8ff', bg: 'rgba(94,200,255,0.10)', glow: 'rgba(94,200,255,0.10)', icon: 'M5 12h14', pos: 11, div: 'Série A', msg: 'O ' + club + ' terminou em 11º lugar e segue na Série A.' },
-    }[result];
+    // ---------- cenário ----------
+    const CFG = {
+      'campeão': { tag: 'Campeão', color: '#ffb454', glow: 'rgba(255,180,84,0.12)', icon: 'M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3', div: 'Série A', pos: 1, pts: 89, v: 27, e: 8, d: 3, gp: 70, gc: 32, msg: 'O ' + club + ' é campeão da Série A!',
+        res: 'Campeão', resKind: 'gold', prize: 3200000, sport: ['Ser campeão', 1], trust: 82, rep: [30, 36], ach: 'Título', copa: ['Quartas de final', 300000], cont: 'Vaga conquistada para 2028' },
+      acesso: { tag: 'Acesso', color: accent, glow: 'rgba(61,220,132,0.12)', icon: 'M12 19V5M5 12l7-7 7 7', div: 'Série B', pos: 2, pts: 78, v: 23, e: 9, d: 6, gp: 62, gc: 38, msg: 'Acesso! O ' + club + ' terminou em 2º lugar e vai disputar a Série A.',
+        res: '2º lugar · Acesso', resKind: 'good', prize: 1100000, sport: ['Conquistar o acesso', 2], trust: 74, rep: [30, 33], ach: 'Acesso', copa: ['Eliminado na Fase de 32', 0], cont: '' },
+      rebaixamento: { tag: 'Rebaixamento', color: '#ff8a8a', glow: 'rgba(255,138,138,0.10)', icon: 'M12 5v14M5 12l7 7 7-7', div: 'Série A', pos: 19, pts: 31, v: 8, e: 7, d: 23, gp: 29, gc: 51, msg: 'Rebaixamento. O ' + club + ' terminou em 19º lugar e vai disputar a Série B.',
+        res: '19º lugar · Rebaixamento', resKind: 'bad', prize: 150000, sport: ['Evitar o rebaixamento', 16], trust: 38, rep: [30, 27], ach: 'Rebaixamento', copa: ['Eliminado na Fase de 32', 0], cont: '' },
+      'permanência': { tag: 'Permanência', color: '#5ec8ff', glow: 'rgba(94,200,255,0.10)', icon: 'M5 12h14', div: 'Série A', pos: 11, pts: 47, v: 12, e: 11, d: 15, gp: 41, gc: 44, msg: 'O ' + club + ' terminou em 11º lugar e segue na Série A.',
+        res: '11º lugar', resKind: 'neutral', prize: 600000, sport: ['Terminar na primeira metade da tabela', 10], trust: 55, rep: [30, 31], ach: '', copa: ['Eliminado na Fase de 32', 0], cont: '' },
+    };
+    const c = CFG[result];
+    const sg = c.gp - c.gc;
 
-    const names = ['Estrela do Norte', 'Atlético Marítimo', 'Porto Oeste', 'União Planalto', 'Sporting Vale', 'Ferroviário', 'Náutico do Sul', 'Guarani Alto', 'Bagé Unidos', 'Guarulhos Unidos', 'Maringá Operário', 'Sorocaba EC', 'Paranaguá EC', 'Divinópolis Unidos', 'Nova Friburgo SC', 'Angra Atlético', 'Comercial FC', 'Varginha Unidos', 'Sapucaia', 'Gravataí'];
-    const top = names.slice();
-    if (result === 'campeão') top.splice(0, 0, club);
-    if (result === 'permanência') top.splice(10, 0, club);
-    if (result === 'rebaixamento') top.splice(18, 0, club);
-    const list = top.slice(0, 20);
-    const table = list.map((n, i) => {
-      const mine = n === club;
-      const zone = i >= list.length - 3 ? 'box-shadow:inset 3px 0 0 #ff8a8a;padding-left:10px;' : i < 4 ? 'box-shadow:inset 3px 0 0 ' + accent + ';padding-left:10px;' : 'padding-left:13px;';
-      const sg = 30 - i * 3;
-      return { pos: i + 1, club: n, sg: (sg > 0 ? '+' : '') + sg, pts: 89 - i * 3, zone, row: 'border-top:1px solid #1d2733;' + (mine ? 'background:#16222c;' : '') };
-    });
-    const line = (p, c, mine) => ({ line: p + 'º ' + c, style: 'padding:8px 0;border-top:1px solid #1d2733;font-weight:' + (mine ? 600 : 500) + ';' + (mine ? 'color:' + accent + ';' : '') });
-    const promoted = [line(1, 'Vila Nova Atlético', false), line(2, result === 'acesso' ? club : 'Cruzeiro do Sul', result === 'acesso'), line(3, 'Esporte Clube Itajaí', false)];
-    const relegated = [line(18, 'Varginha Unidos', false), line(19, result === 'rebaixamento' ? club : 'Sapucaia', result === 'rebaixamento'), line(20, 'Gravataí', false)];
-    const champions = [
-      { division: 'Série A', club: result === 'campeão' ? club : 'Estrela do Norte', points: 89 },
-      { division: 'Série B', club: 'Vila Nova Atlético', points: 81 },
+    const chipBase = 'display:inline-block;border-radius:99px;padding:2px 10px;font-size:12px;font-weight:600;';
+    const chips = {
+      gold: chipBase + 'background:rgba(255,180,84,0.18);color:#ffb454;',
+      good: chipBase + 'background:rgba(61,220,132,0.16);color:' + accent + ';',
+      bad: chipBase + 'background:rgba(255,138,138,0.16);color:#ff8a8a;',
+      neutral: chipBase + 'background:#1d2733;color:#b4c0cd;',
+      info: chipBase + 'background:rgba(94,200,255,0.16);color:#5ec8ff;',
+    };
+
+    const stats = [
+      { label: 'Posição final', value: c.pos + 'º' }, { label: 'Pontos', value: String(c.pts) },
+      { label: 'Vitórias · empates · derrotas', value: c.v + ' · ' + c.e + ' · ' + c.d }, { label: 'Gols pró e contra', value: c.gp + ' · ' + c.gc },
+      { label: 'Saldo de gols', value: (sg > 0 ? '+' : sg < 0 ? '−' : '') + Math.abs(sg) },
     ];
+
+    // ---------- campanha por competição ----------
+    const rows = [
+      { comp: 'Campeonato Nacional · ' + c.div, result: c.res, kind: c.resKind, prize: c.prize },
+      { comp: 'Campeonato Estadual do Rio Grande do Sul', result: 'Semifinal', kind: 'neutral', prize: 24000 },
+      { comp: 'Copa Nacional do Brasil', result: c.copa[0], kind: c.copa[1] ? 'info' : 'bad', prize: c.copa[1] },
+    ];
+    if (c.cont) rows.push({ comp: 'Taça Continental da América do Sul', result: c.cont, kind: 'info', prize: 0 });
+    const campaign = rows.map((r) => ({ comp: r.comp, result: r.result, chip: chips[r.kind], prize: money(r.prize) }));
+    const prizeTotal = money(rows.reduce((s, r) => s + r.prize, 0));
+
+    // ---------- diretoria ----------
+    const sportMet = c.pos <= c.sport[1];
+    const goalIcon = (ok) => 'width:22px;height:22px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;margin-top:1px;' + (ok ? 'background:rgba(61,220,132,0.18);color:' + accent + ';' : 'background:rgba(255,138,138,0.16);color:#ff8a8a;');
+    const goalStatus = (ok) => 'margin-top:2px;font-size:12px;font-weight:600;color:' + (ok ? accent : '#ff8a8a') + ';';
+    const mkGoal = (title, detail, ok) => ({ title, detail, label: ok ? 'Cumprida' : 'Não cumprida', icon: goalIcon(ok), status: goalStatus(ok), path: ok ? 'M5 12l5 5L20 7' : 'M6 6l12 12M18 6L6 18' });
+    const goals = [
+      mkGoal(c.sport[0], 'Exigia ' + c.sport[1] + 'º, terminou em ' + c.pos + 'º', sportMet),
+      mkGoal('Não entrar em crise financeira', 'O caixa ficou positivo a temporada inteira', true),
+      mkGoal('Final no Campeonato Estadual do Rio Grande do Sul', 'Parou na semifinal', false),
+    ];
+    const achStyle = 'border-radius:6px;padding:2px 8px;font-size:12px;font-weight:600;' + (result === 'rebaixamento' ? 'background:rgba(255,138,138,0.16);color:#ff8a8a;' : result === 'campeão' ? 'background:rgba(255,180,84,0.18);color:#ffb454;' : 'background:rgba(61,220,132,0.16);color:' + accent + ';');
+
+    // ---------- campeões ----------
+    const divisions = [
+      ['Série A', result === 'campeão' ? club : 'Estrela do Norte', 89], ['Série B', 'Vila Nova Atlético', 81],
+      ['Série C', 'Esporte Clube Itajaí', 76], ['Série D', 'Cruzeiro do Sul', 69],
+    ];
+    const champions = divisions.map((d) => {
+      const mine = d[0] === c.div;
+      return { division: d[0], club: d[1], points: d[2], mine, card: 'border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:12px;background:' + (mine ? '#16222c' : '#121922') + ';border:1px solid ' + (mine ? accent : '#1d2733') + ';' };
+    });
+
+    // ---------- acesso e rebaixamento ----------
+    const line = (p, name, mine) => ({ line: p + 'º ' + name, style: 'padding:8px 0;border-top:1px solid #1d2733;font-weight:' + (mine ? 600 : 500) + ';' + (mine ? 'color:' + accent + ';' : '') });
+    const boundaries = [
+      { title: 'Série A e Série B', upTitle: 'Sobem para a Série A', downTitle: 'Descem para a Série B',
+        up: [line(1, 'Vila Nova Atlético', false), line(2, result === 'acesso' ? club : 'Juventus do Vale', result === 'acesso'), line(3, 'Itatiba Atlético', false)],
+        down: [line(18, 'Varginha Unidos', false), line(19, result === 'rebaixamento' ? club : 'Sapucaia', result === 'rebaixamento'), line(20, 'Gravataí', false)] },
+      { title: 'Série B e Série C', upTitle: 'Sobem para a Série B', downTitle: 'Descem para a Série C',
+        up: [line(1, 'Esporte Clube Itajaí', false), line(2, 'Barra Mansa FC', false), line(3, 'Metropolitano AC', false)],
+        down: [line(18, 'Operário do Vale', false), line(19, 'Rio Branco Atlético', false), line(20, 'Comercial do Norte', false)] },
+      { title: 'Série C e Série D', upTitle: 'Sobem para a Série C', downTitle: 'Descem para a Série D',
+        up: [line(1, 'Cruzeiro do Sul', false), line(2, 'Tupi do Interior', false), line(3, 'Real Cerrado', false)],
+        down: [line(18, 'Olaria do Sul', false), line(19, 'Vale do Rio FC', false), line(20, 'Estrela do Oeste', false)] },
+    ];
+
+    // ---------- classificação final da minha divisão ----------
+    const baseA = ['Estrela do Norte', 'Atlético Marítimo', 'Porto Oeste', 'União Planalto', 'Sporting Vale', 'Ferroviário', 'Náutico do Sul', 'Guarani Alto', 'Bagé Unidos', 'Guarulhos Unidos', 'Maringá Operário', 'Sorocaba EC', 'Paranaguá EC', 'Divinópolis Unidos', 'Nova Friburgo SC', 'Angra Atlético', 'Comercial FC', 'Varginha Unidos', 'Sapucaia', 'Gravataí'];
+    const baseB = ['Vila Nova Atlético', 'Juventus do Vale', 'Itatiba Atlético', 'Costa Azul FC', 'Serra Verde', 'Atlético do Planalto', 'Operário Central', 'Porto Seguro EC', 'Cidade Alta', 'União Fluminense', 'Rio Doce FC', 'Esporte do Vale', 'Lagoa Atlético', 'Santa Rita FC', 'Pampa Unidos', 'Nova Era', 'Operário do Vale', 'Rio Branco Atlético', 'Comercial do Norte', 'Ferrovia do Sul'];
+    const base = c.div === 'Série B' ? baseB.filter((n) => n !== 'Juventus do Vale').slice(0, 19) : baseA.slice(0, 19);
+    const list = base.slice();
+    list.splice(c.pos - 1, 0, club);
+    const table = list.slice(0, 20).map((n, i) => {
+      const mine = n === club;
+      const pts = mine ? c.pts : 89 - i * 3;
+      const sgi = mine ? sg : 30 - i * 3;
+      const zone = i >= 17 ? 'box-shadow:inset 3px 0 0 #ff8a8a;padding-left:10px;' : i < 3 ? 'box-shadow:inset 3px 0 0 ' + accent + ';padding-left:10px;' : 'padding-left:13px;';
+      return { pos: i + 1, club: n, sg: (sgi > 0 ? '+' : sgi < 0 ? '−' : '') + Math.abs(sgi), pts, zone, row: 'border-top:1px solid #1d2733;' + (mine ? 'background:#16222c;' : '') };
+    });
 
     const busy = state === 'preparando';
     return {
-      accent, glow: look.glow, tag: look.tag, message: look.msg, iconPath: look.icon,
-      heroStyle: 'background:' + look.bg + ';border:1px solid ' + look.color + ';border-radius:20px;padding:28px;display:flex;flex-wrap:wrap;align-items:center;gap:24px;',
-      heroIcon: 'width:80px;height:80px;border-radius:50%;border:2px solid ' + look.color + ';color:' + look.color + ';display:flex;align-items:center;justify-content:center;flex:0 0 auto;',
-      champions, promoted, relegated, table,
+      accent, glow: c.glow, tag: c.tag, message: c.msg, iconPath: c.icon, stats, division: c.div,
+      heroStyle: 'background:' + c.glow + ';border:1px solid ' + c.color + ';border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:22px;',
+      heroIcon: 'width:80px;height:80px;border-radius:50%;border:2px solid ' + c.color + ';color:' + c.color + ';display:flex;align-items:center;justify-content:center;flex:0 0 auto;',
+      campaign, prizeTotal, goals, trust: c.trust, trustBar: 'height:100%;width:' + c.trust + '%;background:' + (c.trust < 50 ? '#ffb454' : accent) + ';',
+      repBefore: c.rep[0], repAfter: c.rep[1], achievement: c.ach, achStyle,
+      champions, boundaries, table,
       isBusy: busy, failed: state === 'falha',
       nextLabel: busy ? 'Preparando a temporada…' : 'Próxima temporada',
+      nextStyleTop: 'min-height:44px;padding:0 22px;border-radius:10px;border:0;font:inherit;font-weight:600;' + (busy ? 'background:#1d2733;color:#98a6b6;cursor:default;' : 'background:' + accent + ';color:#06140c;cursor:pointer;'),
       nextStyle: 'min-height:52px;padding:0 28px;border-radius:12px;border:0;font:inherit;font-weight:600;font-size:16px;' + (busy ? 'background:#1d2733;color:#98a6b6;cursor:default;' : 'background:' + accent + ';color:#06140c;cursor:pointer;'),
     };
   }

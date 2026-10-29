@@ -64,17 +64,17 @@ Carreiras salvas, Mods), mais Configurações, Sobre, Atalhos e a versão.
 | Mockup | Rota | O que muda | Prompt |
 |---|---|---|---|
 | Início | `/jogo` | Cartão do próximo jogo em destaque com as ações de jogar, avisos acionáveis, posição e resultados, torcida e diretoria com barras | 026 |
-| Elenco | `/jogo/elenco` | Tabela com rolagem própria, filtros por setor e condição, ações por linha | 026 |
+| Elenco | `/jogo/elenco` | Tabela com rolagem própria e filtros; clicar na linha abre o modal do jogador, com Renovar, Vender e Rescindir | 026 |
 | Escalação | `/jogo/escalacao` | Campo e reservas, "Fora da relação", condição visível | 026 |
-| Competição | `/jogo/competicao` | Abas por competição, classificação, resultados, artilharia, chaveamento e campanha | 027 |
-| Calendário | `/jogo/calendario` | Lista por competição com resumo e ver jogos | 027 |
+| Competição | `/jogo/competicao` | Abas "Minhas competições" e "Demais competições", cartões por competição, classificação, resultados, artilharia, chaveamento e campanha | 027 |
+| Calendário | `/jogo/calendario` | Calendário mensal (um mês por página), dias de jogo destacados, painel do jogo e lista do mês | 027 |
 | Histórico | `/jogo/historico` | Sete abas e estado vazio | 027 |
-| Mercado | `/jogo/mercado` | Abas, filtros, comparação, tabela de jogadores | 028 |
-| Finanças | `/jogo/financas` | Resumo, ingresso, estádio, crédito e jogos em casa | 028 |
+| Mercado | `/jogo/mercado` | Abas, filtros, tabela de jogadores com linha clicável e modal com oferta, empréstimo, contratação e comparação | 028 |
+| Finanças | `/jogo/financas` | Abas por contexto (visão geral, receitas e despesas, bilheteria, estádio, crédito, histórico) com gráficos | 028 |
 | Carreira | `/jogo/carreira` | Abas Diretoria, Torcida, Propostas, Histórico e Técnicos | 029 |
-| Notícias | `/jogo/noticias` | Manchetes por rodada, com o seu clube marcado | 029 |
-| Rodada ao vivo | `/jogo/rodada` | Placar em destaque, linha do tempo, estatísticas, painel Meu time | 030 |
-| Fim de temporada | `/jogo/fim-de-temporada` | Resultado do clube em destaque, campeões, quem sobe e desce, classificação final, premiação | 030 |
+| Notícias | `/jogo/noticias` | Manchetes em cartões, agrupadas em "Do seu clube" e por competição, com painel de filtros | 029 |
+| Rodada ao vivo | `/jogo/rodada` | Placar em destaque, linha do tempo, estatísticas, painel Meu time e outros jogos em lista com escudos | 030 |
+| Fim de temporada | `/jogo/fim-de-temporada` | Resultado e resumo da temporada, campeões das ligas nacionais, acesso e rebaixamento, classificação final recolhida e Próxima temporada no topo | 030 |
 | Menu inicial | `/` | Abertura e ações | 031 |
 | Nova carreira | `/nova-carreira` | Formulário e escolha de clube em duas colunas, botão fixo | 031 |
 | Carreiras salvas | `/carreiras` | Lista com Continuar, Exportar e Apagar | 031 |
@@ -99,17 +99,21 @@ dos prompts.
 - **Rodada ao vivo:** esquema e postura durante o jogo, limite de substituições, troca de posição,
   aviso de lesão e de goleiro expulso, cartões, pênaltis, intervalo, pausa automática e
   confirmação ao sair.
-- **Elenco:** situação, escalação, evolução, contrato e as ações Detalhes, Vender e Rescindir.
+- **Elenco:** situação, escalação, evolução e contrato na tabela; os detalhes e as ações Vender e Rescindir (e agora Renovar) no modal do jogador.
 - **Nova carreira:** "Sem demissão", seed, país, divisão, busca e a tabela de clubes com os
   atributos.
 - **Dicas de primeiro acesso, ajuda de atalhos e aviso de atualização** (016), em todas as telas.
 
-**Itens do mockup que o jogo não tem e que não viram função neste marco:** gráfico de saldo por
-mês nas Finanças; ativar e desativar mods (o jogo carrega e remove); "Continuar carreira" no menu;
-blocos de atalhos e de apagar dados dentro de Configurações; categorias, destaque e filtros nas
-Notícias; a reputação do clube no cabeçalho do Início; as estatísticas da campanha (vitórias,
-empates, derrotas e saldo de gols) e o melhor jogador no Fim de temporada, que o jogo não mostra;
-valores em R$ (o jogo usa a moeda do país).
+**Itens do mockup que o jogo não tem e que não viram função neste marco:** ativar e desativar mods
+(o jogo carrega e remove); "Continuar carreira" no menu; blocos de atalhos e de apagar dados dentro
+de Configurações; categorias de notícia por tipo; a reputação do clube no cabeçalho do Início; o
+melhor jogador no Fim de temporada; valores em R$ (o jogo usa a moeda do país).
+
+**Itens pedidos nos mockups que dependem de dados do jogo (o plano de cada feature confirma e, se
+não houver dado confiável, o item não entra):** os gráficos das Finanças (extrato com data ou rodada
+de cada lançamento, categorias de origem e de destino); no Fim de temporada, a campanha por
+competição com a premiação de cada uma e as vitórias, empates e derrotas; "Minhas competições"
+(critério de participação e vagas em disputa); título curto separado do texto das manchetes.
 
 **Dados de exemplo.** Os mockups usam clubes e jogadores inventados e a mesma moeda `$`; a
 interface real mostra os dados do banco em uso.

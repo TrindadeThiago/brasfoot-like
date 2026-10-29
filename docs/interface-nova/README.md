@@ -28,7 +28,8 @@ estrutura estão em estilos diretos nos arquivos.
 
 Algumas telas têm **ajustes** no painel do canvas, que mudam o que o mockup mostra: a cor de
 destaque (todas), o estado ou a ocorrência da rodada ao vivo, o resultado e o estado do fim de
-temporada, e o estado do histórico (com ou sem dados).
+temporada, o estado do histórico (com ou sem dados) e o momento dos dados das finanças (início,
+meio da temporada, com histórico ou em crise).
 
 ## Como usar nos prompts
 

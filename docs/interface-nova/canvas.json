@@ -4,7 +4,7 @@
   "boards": {
     "Calendario.dc.html": {
       "expand": "fill",
-      "h": 980,
+      "h": 1300,
       "is_interactive": true,
       "title": "Calendário",
       "w": 1440,
@@ -18,7 +18,7 @@
       "title": "Carreira",
       "w": 1440,
       "x": 1520,
-      "y": 3820
+      "y": 4340
     },
     "Carreiras.dc.html": {
       "expand": "fill",
@@ -26,11 +26,11 @@
       "title": "Carreiras salvas",
       "w": 1440,
       "x": 0,
-      "y": 7640
+      "y": 9060
     },
     "Competicao.dc.html": {
       "expand": "fill",
-      "h": 980,
+      "h": 1500,
       "is_interactive": true,
       "title": "Competição",
       "w": 1440,
@@ -44,7 +44,7 @@
       "title": "Configurações",
       "w": 1440,
       "x": 1520,
-      "y": 4920
+      "y": 5440
     },
     "Elenco.dc.html": {
       "expand": "fill",
@@ -66,16 +66,16 @@
     },
     "FimTemporada.dc.html": {
       "expand": "fill",
-      "h": 1500,
+      "h": 2400,
       "title": "Fim de temporada",
       "w": 1440,
       "x": 3040,
-      "y": 4920,
+      "y": 5440,
       "is_interactive": true
     },
     "Financas.dc.html": {
       "expand": "fill",
-      "h": 980,
+      "h": 1500,
       "is_interactive": true,
       "title": "Finanças",
       "w": 1440,
@@ -89,7 +89,7 @@
       "title": "Histórico",
       "w": 1440,
       "x": 0,
-      "y": 3820
+      "y": 4340
     },
     "Main.dc.html": {
       "expand": "fill",
@@ -107,16 +107,16 @@
       "title": "Menu inicial",
       "w": 1440,
       "x": 3040,
-      "y": 3820
+      "y": 4340
     },
     "Mercado.dc.html": {
       "expand": "fill",
-      "h": 980,
+      "h": 1300,
       "is_interactive": true,
       "title": "Mercado",
       "w": 1440,
       "x": 0,
-      "y": 2200
+      "y": 2720
     },
     "Mods.dc.html": {
       "expand": "fill",
@@ -124,7 +124,7 @@
       "title": "Mods",
       "w": 1440,
       "x": 0,
-      "y": 6540
+      "y": 7960
     },
     "NotasVersao.dc.html": {
       "expand": "fill",
@@ -132,16 +132,16 @@
       "title": "Notas de versão",
       "w": 1440,
       "x": 3040,
-      "y": 6540
+      "y": 7960
     },
     "Noticias.dc.html": {
       "expand": "fill",
-      "h": 980,
+      "h": 1300,
       "is_interactive": true,
       "title": "Notícias",
       "w": 1440,
       "x": 1520,
-      "y": 2200
+      "y": 2720
     },
     "NovaCarreira.dc.html": {
       "expand": "fill",
@@ -150,7 +150,7 @@
       "title": "Nova carreira",
       "w": 1440,
       "x": 0,
-      "y": 4920
+      "y": 5440
     },
     "Rodada.dc.html": {
       "expand": "fill",
@@ -159,7 +159,7 @@
       "title": "Rodada ao vivo",
       "w": 1440,
       "x": 3040,
-      "y": 2200
+      "y": 2720
     },
     "Sobre.dc.html": {
       "expand": "fill",
@@ -167,7 +167,7 @@
       "title": "Sobre",
       "w": 1440,
       "x": 1520,
-      "y": 6540
+      "y": 7960
     }
   },
   "createdOnFiles": {

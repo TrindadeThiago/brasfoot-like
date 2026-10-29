@@ -46,7 +46,7 @@ a:hover{color:#ffffff}
     <header style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px; justify-content: space-between">
       <div>
         <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600; letter-spacing: -0.02em">Elenco</h1>
-        <div style="color: #98a6b6">Elenco: 23/40 jogadores</div>
+        <div style="color: #98a6b6">Elenco: {{count}}/40 jogadores · clique em um jogador para ver os detalhes</div>
       </div>
       <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end">
         <div role="group" aria-label="Setor" style="display: flex; flex-wrap: wrap; gap: 6px">
@@ -62,6 +62,10 @@ a:hover{color:#ffffff}
       </div>
     </header>
 
+    <sc-if value="{{notice}}" hint-placeholder-val="{{ false }}">
+      <div role="status" style="background: rgba(61,220,132,0.12); border: 1px solid rgba(61,220,132,0.35); border-radius: 12px; padding: 12px 16px; color: {{accent}}; font-weight: 500">{{notice}}</div>
+    </sc-if>
+
     <div style="display: flex; flex-wrap: wrap; gap: 16px">
       <sc-for list="{{kpis}}" as="k" hint-placeholder-count="4">
         <div style="flex: 1 1 160px; background: #121922; border: 1px solid #1d2733; border-radius: 14px; padding: 16px">
@@ -72,7 +76,7 @@ a:hover{color:#ffffff}
     </div>
 
     <section aria-label="Jogadores do União Canoas" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; overflow-x: auto">
-      <table style="width: 100%; min-width: 1120px; border-collapse: collapse; font-variant-numeric: tabular-nums">
+      <table style="width: 100%; min-width: 960px; border-collapse: collapse; font-variant-numeric: tabular-nums">
         <thead>
           <tr style="color: #98a6b6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em">
             <th scope="col" style="text-align: left; padding: 14px 16px; font-weight: 500">Jogador</th>
@@ -84,18 +88,17 @@ a:hover{color:#ffffff}
             <th scope="col" style="text-align: left; padding: 14px 8px; font-weight: 500">Na escalação</th>
             <th scope="col" style="text-align: left; padding: 14px 16px; font-weight: 500; width: 120px">Condição</th>
             <th scope="col" style="text-align: right; padding: 14px 8px; font-weight: 500">Evolução</th>
-            <th scope="col" style="text-align: right; padding: 14px 8px; font-weight: 500">Contrato até</th>
-            <th scope="col" style="text-align: right; padding: 14px 16px; font-weight: 500">Ações</th>
+            <th scope="col" style="text-align: right; padding: 14px 20px 14px 8px; font-weight: 500">Contrato até</th>
           </tr>
         </thead>
         <tbody>
           <sc-for list="{{rows}}" as="p" hint-placeholder-count="8">
-            <tr style="border-top: 1px solid #1d2733">
-              <td style="padding: 8px 16px; font-weight: 500">
-                <span style="display: inline-flex; align-items: center; gap: 10px">
-                  <span style="width: 32px; height: 32px; border-radius: 50%; background: #1d2733; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #b4c0cd">{{p.initials}}</span>
+            <tr onClick="{{p.open}}" style="border-top: 1px solid #1d2733; cursor: pointer">
+              <td style="padding: 4px 16px">
+                <button type="button" onClick="{{p.open}}" aria-haspopup="dialog" style="display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; font-weight: 500; cursor: pointer; text-align: left">
+                  <span style="width: 32px; height: 32px; border-radius: 50%; background: #1d2733; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #b4c0cd; flex: 0 0 auto">{{p.initials}}</span>
                   {{p.name}}
-                </span>
+                </button>
               </td>
               <td style="padding: 8px"><span style="{{p.posStyle}}">{{p.pos}}</span></td>
               <td style="padding: 8px; text-align: right; color: #b4c0cd">{{p.age}}</td>
@@ -109,27 +112,152 @@ a:hover{color:#ffffff}
                 <div style="display: flex; align-items: center; gap: 10px"><span style="width: 38px; color: #b4c0cd">{{p.fit}}%</span><div style="flex: 1 1 auto; height: 6px; border-radius: 99px; background: #1d2733; overflow: hidden"><div style="{{p.fitBar}}"></div></div></div>
               </td>
               <td style="padding: 8px; text-align: right; color: #98a6b6">{{p.trend}}</td>
-              <td style="padding: 8px; text-align: right; color: #b4c0cd">{{p.until}}</td>
-              <td style="padding: 8px 16px">
-                <div style="display: flex; gap: 6px; justify-content: flex-end">
-                  <button type="button" style="min-height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; font: inherit; font-weight: 500; cursor: pointer">Detalhes</button>
-                  <button type="button" style="min-height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; font: inherit; font-weight: 500; cursor: pointer">Vender</button>
-                  <button type="button" style="min-height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #5a2e2e; background: #0f151c; color: #ff8a8a; font: inherit; font-weight: 500; cursor: pointer">Rescindir</button>
-                </div>
+              <td style="padding: 8px 20px 8px 8px; text-align: right; color: #b4c0cd">
+                <span style="display: inline-flex; align-items: center; gap: 10px">{{p.until}}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6c7a89" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></span>
               </td>
             </tr>
           </sc-for>
         </tbody>
       </table>
+      <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 28px; text-align: center; color: #98a6b6; border-top: 1px solid #1d2733">Nenhum jogador com esses filtros.</div>
+      </sc-if>
     </section>
   </main>
+
+  <!-- Modal do jogador -->
+  <sc-if value="{{modalOpen}}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; background: rgba(0,0,0,0.62); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 20">
+
+      <sc-if value="{{isDetails}}" hint-placeholder-val="{{ false }}">
+        <div role="dialog" aria-modal="true" aria-labelledby="pl-title" style="width: 100%; max-width: 720px; max-height: calc(100vh - 32px); overflow-y: auto; background: #121922; border: 1px solid #2e3a47; border-radius: 20px; box-shadow: 0 24px 60px rgba(0,0,0,0.5); display: flex; flex-direction: column">
+          <div style="padding: 22px 24px 18px; display: flex; align-items: flex-start; gap: 16px; border-bottom: 1px solid #1d2733">
+            <div style="width: 56px; height: 56px; border-radius: 50%; background: #1d2733; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: #b4c0cd; flex: 0 0 auto">{{pl.initials}}</div>
+            <div style="flex: 1 1 auto; min-width: 0">
+              <h2 id="pl-title" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 600; letter-spacing: -0.01em">{{pl.name}}</h2>
+              <div style="color: #98a6b6; margin-top: 2px">{{pl.subtitle}}</div>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px">
+                <span style="{{pl.posStyle}}">{{pl.pos}}</span>
+                <span style="border-radius: 6px; padding: 2px 8px; font-size: 12px; font-weight: 600; background: #1d2733; color: #b4c0cd">{{pl.lineup}}</span>
+                <sc-if value="{{pl.injured}}" hint-placeholder-val="{{ false }}"><span style="border-radius: 6px; padding: 2px 8px; font-size: 12px; font-weight: 600; background: rgba(255,138,138,0.16); color: #ff8a8a">{{pl.status}}</span></sc-if>
+                <sc-if value="{{pl.lastYear}}" hint-placeholder-val="{{ false }}"><span style="border-radius: 6px; padding: 2px 8px; font-size: 12px; font-weight: 600; background: rgba(255,180,84,0.18); color: #ffb454">Último ano de contrato</span></sc-if>
+              </div>
+            </div>
+            <button type="button" onClick="{{close}}" aria-label="Fechar" style="width: 44px; height: 44px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #b4c0cd; cursor: pointer; display: flex; align-items: center; justify-content: center; flex: 0 0 auto">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+            </button>
+          </div>
+
+          <div style="padding: 20px 24px; display: flex; flex-direction: column; gap: 20px">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px">
+              <div style="background: #0f151c; border-radius: 14px; padding: 14px 16px">
+                <div style="display: flex; justify-content: space-between; color: #98a6b6; font-size: 12px"><span>Força</span><span style="color: #eef2f6; font-weight: 600; font-size: 14px">{{pl.ovr}}</span></div>
+                <div style="margin-top: 8px; height: 8px; border-radius: 99px; background: #1d2733; overflow: hidden"><div style="{{pl.ovrBar}}"></div></div>
+              </div>
+              <div style="background: #0f151c; border-radius: 14px; padding: 14px 16px">
+                <div style="display: flex; justify-content: space-between; color: #98a6b6; font-size: 12px"><span>Condição</span><span style="color: #eef2f6; font-weight: 600; font-size: 14px">{{pl.fit}}%</span></div>
+                <div style="margin-top: 8px; height: 8px; border-radius: 99px; background: #1d2733; overflow: hidden"><div style="{{pl.fitBar}}"></div></div>
+              </div>
+            </div>
+
+            <dl style="margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px 24px">
+              <sc-for list="{{facts}}" as="f" hint-placeholder-count="8">
+                <div><dt style="color: #98a6b6; font-size: 12px">{{f.label}}</dt><dd style="margin: 2px 0 0; font-weight: 500">{{f.value}}</dd></div>
+              </sc-for>
+            </dl>
+
+            <div>
+              <h3 style="margin: 0 0 10px; font-size: 12px; color: #98a6b6; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600">Na temporada</h3>
+              <sc-if value="{{pl.played}}" hint-placeholder-val="{{ true }}">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px">
+                  <sc-for list="{{season}}" as="s" hint-placeholder-count="8">
+                    <div style="background: #0f151c; border-radius: 12px; padding: 10px 12px"><div style="color: #98a6b6; font-size: 11px">{{s.label}}</div><div style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">{{s.value}}</div></div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{pl.notPlayed}}" hint-placeholder-val="{{ false }}">
+                <div style="color: #98a6b6">Ainda não jogou nesta temporada.</div>
+              </sc-if>
+            </div>
+          </div>
+
+          <div style="padding: 16px 24px; border-top: 1px solid #1d2733; display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center">
+            <div style="display: flex; flex-wrap: wrap; gap: 8px">
+              <button type="button" onClick="{{toRenew}}" style="min-height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid {{accent}}; background: transparent; color: {{accent}}; font: inherit; font-weight: 600; cursor: pointer">Renovar</button>
+              <button type="button" onClick="{{toSell}}" style="min-height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; font: inherit; font-weight: 500; cursor: pointer">Vender</button>
+              <button type="button" onClick="{{toTerminate}}" style="min-height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid #5a2e2e; background: #0f151c; color: #ff8a8a; font: inherit; font-weight: 500; cursor: pointer">Rescindir</button>
+            </div>
+            <button type="button" onClick="{{close}}" style="min-height: 44px; padding: 0 22px; border-radius: 10px; border: 0; background: {{accent}}; color: #06140c; font: inherit; font-weight: 600; cursor: pointer">Fechar</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{isSell}}" hint-placeholder-val="{{ false }}">
+        <div role="alertdialog" aria-modal="true" aria-labelledby="sell-title" style="width: 100%; max-width: 460px; background: #121922; border: 1px solid #2e3a47; border-radius: 20px; box-shadow: 0 24px 60px rgba(0,0,0,0.5); padding: 24px; display: flex; flex-direction: column; gap: 14px">
+          <h2 id="sell-title" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600">Vender {{pl.name}}</h2>
+          <div>O {{pl.buyer}} paga <strong>{{pl.fee}}</strong> agora pelo jogador.</div>
+          <div style="color: #98a6b6; font-size: 13px">É uma venda imediata: o preço é menor que o valor de mercado ({{pl.value}}). Para negociar mais caro, espere uma proposta de outro clube.</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end">
+            <button type="button" onClick="{{backToDetails}}" style="min-height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; font: inherit; font-weight: 500; cursor: pointer">Cancelar</button>
+            <button type="button" onClick="{{confirmSell}}" style="min-height: 44px; padding: 0 20px; border-radius: 10px; border: 0; background: {{accent}}; color: #06140c; font: inherit; font-weight: 600; cursor: pointer">Vender agora</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{isTerminate}}" hint-placeholder-val="{{ false }}">
+        <div role="alertdialog" aria-modal="true" aria-labelledby="term-title" style="width: 100%; max-width: 460px; background: #121922; border: 1px solid #2e3a47; border-radius: 20px; box-shadow: 0 24px 60px rgba(0,0,0,0.5); padding: 24px; display: flex; flex-direction: column; gap: 14px">
+          <h2 id="term-title" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600">Rescindir contrato de {{pl.name}}</h2>
+          <div>Multa de <strong>{{pl.penalty}}</strong> ({{pl.months}} de contrato restantes).</div>
+          <div style="color: #98a6b6; font-size: 13px">O jogador sai do elenco e fica livre no mercado. Você deixa de pagar o salário de {{pl.wage}} por mês.</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end">
+            <button type="button" onClick="{{backToDetails}}" style="min-height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; font: inherit; font-weight: 500; cursor: pointer">Cancelar</button>
+            <button type="button" onClick="{{confirmTerminate}}" style="min-height: 44px; padding: 0 20px; border-radius: 10px; border: 0; background: #ff8a8a; color: #2a0b0b; font: inherit; font-weight: 600; cursor: pointer">Rescindir</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{isRenew}}" hint-placeholder-val="{{ false }}">
+        <div role="dialog" aria-modal="true" aria-labelledby="renew-title" style="width: 100%; max-width: 480px; background: #121922; border: 1px solid #2e3a47; border-radius: 20px; box-shadow: 0 24px 60px rgba(0,0,0,0.5); padding: 24px; display: flex; flex-direction: column; gap: 16px">
+          <div>
+            <h2 id="renew-title" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600">Renovar {{pl.name}}</h2>
+            <div style="color: #98a6b6; margin-top: 4px">{{pl.pos}} · {{pl.subtitle}} · força {{pl.ovr}} · União Canoas</div>
+          </div>
+          <div style="background: #0f151c; border-radius: 12px; padding: 12px 14px; display: flex; flex-wrap: wrap; gap: 6px 24px">
+            <span style="color: #98a6b6">Valor de mercado: <strong style="color: #eef2f6">{{pl.value}}</strong></span>
+            <span style="color: #98a6b6">Salário atual: <strong style="color: #eef2f6">{{pl.wage}}</strong> por mês</span>
+            <span style="color: #98a6b6">Contrato até: <strong style="color: #eef2f6">{{pl.year}}</strong></span>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px">
+            <label style="flex: 1 1 200px; display: flex; flex-direction: column; gap: 6px; color: #98a6b6; font-size: 13px">
+              Salário mensal
+              <input type="text" inputmode="numeric" value="{{renewWageValue}}" onChange="{{setRenewWage}}" aria-describedby="renew-msg" style="min-height: 48px; border-radius: 10px; border: 1px solid {{renewBorder}}; background: #0f151c; color: #eef2f6; padding: 0 12px; font: inherit; font-size: 15px; font-variant-numeric: tabular-nums">
+            </label>
+            <label style="flex: 1 1 160px; display: flex; flex-direction: column; gap: 6px; color: #98a6b6; font-size: 13px">
+              Duração (temporadas)
+              <select value="{{renewYears}}" onChange="{{setRenewYears}}" style="min-height: 48px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; padding: 0 12px; font: inherit; font-size: 15px"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select>
+            </label>
+          </div>
+          <div id="renew-msg" role="status" style="min-height: 20px; font-size: 13px; font-weight: 500; color: #ffb454">{{renewError}}</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end">
+            <button type="button" onClick="{{backToDetails}}" style="min-height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; font: inherit; font-weight: 500; cursor: pointer">Cancelar</button>
+            <button type="button" onClick="{{proposeRenew}}" style="min-height: 44px; padding: 0 20px; border-radius: 10px; border: 0; background: {{accent}}; color: #06140c; font: inherit; font-weight: 600; cursor: pointer">Propor contrato</button>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#3ddc84","options":["#3ddc84","#5ec8ff","#ffb454","#c79bff"]}}'>
 class Component extends DCLogic {
   renderVals() {
     const accent = this.props.accent ?? '#3ddc84';
-    const sector = (this.state && this.state.sector) || 'Todos';
+    const st = this.state || {};
+    const sector = st.sector || 'Todos';
+    const gone = st.gone || [];
+    const sel = st.sel || null;
+    const view = st.view || 'details';
+    const renewed = st.renewed || {};
     const base = 'display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;border-radius:10px;box-sizing:border-box;';
     const items = [
       ['Início', 'Main.dc.html', 'M3 11l9-8 9 8M5 10v10h14V10'],
@@ -156,39 +284,106 @@ class Component extends DCLogic {
     }));
     const groupOf = { GOL: 'Goleiros', ZAG: 'Defensores', LAT: 'Defensores', VOL: 'Meio-campistas', MEI: 'Meio-campistas', ATA: 'Atacantes' };
     const colors = { Goleiros: '#ffb454', Defensores: '#5ec8ff', 'Meio-campistas': accent, Atacantes: '#ff8a8a' };
+    const money = (n) => '$ ' + String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    // nome, pos, idade, força, nacionalidade, características, situação, escalação, condição, contrato, salário, valor, comprador,
+    // [jogos, minutos, gols, assistências, amarelos, vermelhos, suspensão, lesão], evolução
     const data = [
-      ['Renan Ramos', 'GOL', 31, 75, 'Muralha', '', 'Titular (GOL)', 71, 2028],
-      ['Hugo Batista', 'GOL', 26, 67, '', '', 'Reserva', 100, 2030],
-      ['Xavier Amaral', 'LAT', 30, 72, '', '', 'Titular (LAT)', 71, '2027 · Último ano'],
-      ['Mateus Toledo', 'LAT', 24, 74, 'Cobrador de falta', '', 'Titular (LAT)', 71, 2030],
-      ['Fernando Pacheco', 'ZAG', 27, 74, 'Muralha', '', 'Titular (ZAG)', 71, 2030],
-      ['Kléber Pacheco', 'VOL', 26, 66, 'Cabeceio', '', 'Titular (VOL)', 71, 2029],
-      ['Júlio Vieira', 'MEI', 29, 72, '', '', 'Titular (MEI)', 71, 2028],
-      ['André Almeida', 'MEI', 30, 77, 'Armador', 'Lesionado (12 jogos)', 'Fora', 100, '2027 · Último ano'],
-      ['Ademir Damasceno', 'ATA', 19, 66, 'Cobrador de falta', '', 'Titular (ATA)', 71, 2031],
-      ['Isaque Holanda', 'ATA', 25, 66, 'Cobrador de falta, Artilheiro', 'Lesionado (1 jogo)', 'Fora', 78, 2030],
+      ['Renan Ramos', 'GOL', 31, 75, 'Brasil', 'Muralha', '', 'Titular (GOL)', 71, 2028, 85000, 2400000, 'Sapucaia', [4, 360, 0, 0, 0, 0, 0, 0], '='],
+      ['Hugo Batista', 'GOL', 26, 67, 'Brasil', '', '', 'Reserva', 100, 2030, 42000, 1100000, 'Viamão', [0, 0, 0, 0, 0, 0, 0, 0], '='],
+      ['Xavier Amaral', 'LAT', 30, 72, 'Brasil', '', '', 'Titular (LAT)', 71, 2027, 58000, 1500000, 'Rio Grande', [4, 355, 0, 1, 1, 0, 0, 0], '−1'],
+      ['Mateus Toledo', 'LAT', 24, 74, 'Brasil', 'Cobrador de falta', '', 'Titular (LAT)', 71, 2030, 66000, 2900000, 'Porto Alegre', [4, 360, 1, 2, 1, 0, 0, 0], '+2'],
+      ['Fernando Pacheco', 'ZAG', 27, 74, 'Brasil', 'Muralha', '', 'Titular (ZAG)', 71, 2030, 70000, 2700000, 'Bagé', [4, 360, 0, 0, 0, 0, 0, 0], '='],
+      ['Kléber Pacheco', 'VOL', 26, 66, 'Brasil', 'Cabeceio', '', 'Titular (VOL)', 71, 2029, 44000, 1200000, 'Gravataí', [3, 270, 0, 0, 2, 0, 0, 0], '+1'],
+      ['Júlio Vieira', 'MEI', 29, 72, 'Brasil', '', '', 'Titular (MEI)', 71, 2028, 61000, 1900000, 'Sapucaia', [4, 340, 1, 1, 0, 0, 0, 0], '='],
+      ['André Almeida', 'MEI', 30, 77, 'Uruguai', 'Armador', 'Lesionado (12 jogos)', 'Fora', 100, 2027, 98000, 3100000, 'Viamão', [2, 150, 0, 2, 0, 0, 0, 12], '−2'],
+      ['Ademir Damasceno', 'ATA', 19, 66, 'Brasil', 'Cobrador de falta', '', 'Titular (ATA)', 71, 2031, 31000, 1600000, 'Rio Grande', [4, 280, 2, 0, 0, 0, 0, 0], '+3'],
+      ['Isaque Holanda', 'ATA', 25, 66, 'Argentina', 'Cobrador de falta, Artilheiro', 'Lesionado (1 jogo)', 'Fora', 78, 2030, 52000, 1400000, 'Porto Alegre', [3, 240, 2, 0, 1, 0, 0, 1], '='],
     ];
-    const rows = data
-      .filter((d) => sector === 'Todos' || groupOf[d[1]] === sector)
-      .map((d) => {
-        const inj = !!d[5];
-        return {
-          name: d[0], initials: d[0].split(' ').map((s) => s[0]).slice(0, 2).join(''), pos: d[1], age: d[2], ovr: d[3], traits: d[4] || '—',
-          status: d[5] || 'Disponível', lineup: d[6], fit: d[7], until: d[8], trend: '=',
-          posStyle: 'display:inline-block;min-width:38px;text-align:center;border-radius:6px;padding:2px 6px;font-size:12px;font-weight:600;background:#16222c;color:' + colors[groupOf[d[1]]] + ';',
-          statusStyle: 'font-size:13px;font-weight:' + (inj ? 600 : 400) + ';color:' + (inj ? '#ff8a8a' : '#b4c0cd') + ';',
-          ovrBar: 'height:100%;width:' + d[3] + '%;background:' + accent + ';',
-          fitBar: 'height:100%;width:' + d[7] + '%;background:' + (d[7] < 80 ? '#ffb454' : accent) + ';',
-        };
-      });
+    const mk = (d) => {
+      const year = renewed[d[0]] ? renewed[d[0]].year : d[9];
+      const wage = renewed[d[0]] ? renewed[d[0]].wage : d[10];
+      const lastYear = year === 2027;
+      const months = (year - 2027) * 12 + 10;
+      return {
+        name: d[0], initials: d[0].split(' ').map((s) => s[0]).slice(0, 2).join(''), pos: d[1], age: d[2], ovr: d[3], nat: d[4], traits: d[5] || '—',
+        status: d[6] || 'Disponível', injured: !!d[6], lineup: d[7], fit: d[8], year, wage, value: d[11], buyer: d[12], stats: d[13], evo: d[14],
+        lastYear, months, group: groupOf[d[1]],
+      };
+    };
+    const all = data.map(mk).filter((p) => gone.indexOf(p.name) < 0);
+    const visible = all.filter((p) => sector === 'Todos' || p.group === sector);
+
+    const posStyle = (p) => 'display:inline-block;min-width:38px;text-align:center;border-radius:6px;padding:2px 6px;font-size:12px;font-weight:600;background:#16222c;color:' + colors[p.group] + ';';
+    const ovrBar = (p) => 'height:100%;width:' + p.ovr + '%;background:' + accent + ';';
+    const fitBar = (p) => 'height:100%;width:' + p.fit + '%;background:' + (p.fit < 80 ? '#ffb454' : accent) + ';';
+    const openFor = (p) => () => this.setState({ sel: p.name, view: 'details' });
+
+    const rows = visible.map((p) => ({
+      name: p.name, initials: p.initials, pos: p.pos, age: p.age, ovr: p.ovr, traits: p.traits, status: p.status, lineup: p.lineup, fit: p.fit, trend: p.evo,
+      until: p.lastYear ? p.year + ' · Último ano' : p.year,
+      posStyle: posStyle(p),
+      statusStyle: 'font-size:13px;font-weight:' + (p.injured ? 600 : 400) + ';color:' + (p.injured ? '#ff8a8a' : '#b4c0cd') + ';',
+      ovrBar: ovrBar(p), fitBar: fitBar(p),
+      open: openFor(p),
+    }));
+
+    const cur = sel ? all.find((p) => p.name === sel) : null;
+    const pl = cur || {};
+    const plView = cur ? {
+      name: cur.name, initials: cur.initials, pos: cur.pos, ovr: cur.ovr, fit: cur.fit, lineup: cur.lineup, status: cur.status, injured: cur.injured, lastYear: cur.lastYear,
+      subtitle: cur.age + ' anos · ' + cur.nat, posStyle: posStyle(cur), ovrBar: 'height:100%;width:' + cur.ovr + '%;background:' + accent + ';', fitBar: fitBar(cur),
+      played: cur.stats[0] > 0, notPlayed: cur.stats[0] === 0,
+      buyer: cur.buyer, value: money(cur.value), fee: money(cur.value * 0.8), wage: money(cur.wage),
+      months: cur.months + (cur.months === 1 ? ' mês' : ' meses'), penalty: money(cur.wage * cur.months * 0.5), year: cur.year,
+    } : {};
+    const facts = cur ? [
+      { label: 'Posição', value: cur.pos },
+      { label: 'Idade', value: cur.age + ' anos' },
+      { label: 'Nacionalidade', value: cur.nat },
+      { label: 'Características', value: cur.traits },
+      { label: 'Contrato até', value: String(cur.year) },
+      { label: 'Salário por mês', value: money(cur.wage) },
+      { label: 'Valor de mercado', value: money(cur.value) },
+      { label: 'Última evolução', value: cur.evo === '=' ? 'Sem mudança' : cur.evo },
+    ] : [];
+    const seasonLabels = ['Jogos', 'Minutos', 'Gols', 'Assistências', 'Amarelos', 'Vermelhos', 'Jogos de suspensão', 'Jogos fora por lesão'];
+    const season = cur ? seasonLabels.map((label, i) => ({ label, value: cur.stats[i] })) : [];
+
+    const close = () => this.setState({ sel: null, view: 'details' });
     const kpi = 'font-family:Space Grotesk,sans-serif;font-size:26px;font-weight:600;';
     return {
-      accent, nav, sectors, rows,
+      accent, nav, sectors, rows, count: all.length, empty: visible.length === 0, notice: st.notice || '',
       clear: () => this.setState({ sector: 'Todos' }),
       kpis: [
         { label: 'Força média dos titulares', value: '70,2', style: kpi }, { label: 'Condição média', value: '71%', style: kpi + 'color:#ffb454;' },
-        { label: 'Lesionados', value: '2', style: kpi + 'color:#ff8a8a;' }, { label: 'Contratos no último ano', value: '4', style: kpi },
+        { label: 'Lesionados', value: String(all.filter((p) => p.injured).length), style: kpi + 'color:#ff8a8a;' },
+        { label: 'Contratos no último ano', value: String(all.filter((p) => p.lastYear).length), style: kpi },
       ],
+      modalOpen: !!cur, isDetails: !!cur && view === 'details', isSell: !!cur && view === 'sell', isTerminate: !!cur && view === 'terminate', isRenew: !!cur && view === 'renew',
+      renewWageValue: st.renewWage !== undefined ? st.renewWage : (cur ? String(cur.wage) : ''), renewYears: st.renewYears || '2', renewError: st.renewError || '',
+      renewBorder: st.renewError ? '#ffb454' : '#2e3a47',
+      pl: plView, facts, season,
+      close,
+      toSell: () => this.setState({ view: 'sell' }),
+      toTerminate: () => this.setState({ view: 'terminate' }),
+      backToDetails: () => this.setState({ view: 'details', renewError: '' }),
+      toRenew: () => this.setState({ view: 'renew', renewWage: undefined, renewYears: '2', renewError: '' }),
+      setRenewWage: (e) => this.setState({ renewWage: e.target.value, renewError: '' }),
+      setRenewYears: (e) => this.setState({ renewYears: e.target.value }),
+      proposeRenew: () => {
+        const offered = parseInt(String(st.renewWage !== undefined ? st.renewWage : cur.wage).replace(/\D/g, ''), 10) || 0;
+        const years = parseInt(st.renewYears || '2', 10);
+        const asked = Math.round(cur.wage * 1.15);
+        if (offered < asked) {
+          this.setState({ renewError: 'O jogador pediu um salário maior: ' + money(asked) + ' por mês.' });
+          return;
+        }
+        const until = Math.max(cur.year, 2027) + years;
+        this.setState({ sel: null, view: 'details', renewError: '', renewWage: undefined, renewed: { ...renewed, [cur.name]: { year: until, wage: offered } }, notice: 'Contrato de ' + cur.name + ' renovado até ' + until + ', com salário de ' + money(offered) + ' por mês.' });
+      },
+      confirmSell: () => this.setState({ sel: null, view: 'details', gone: gone.concat([cur.name]), notice: cur.name + ' foi vendido ao ' + cur.buyer + ' por ' + money(cur.value * 0.8) + '.' }),
+      confirmTerminate: () => this.setState({ sel: null, view: 'details', gone: gone.concat([cur.name]), notice: 'Contrato de ' + cur.name + ' rescindido (multa de ' + money(cur.wage * cur.months * 0.5) + ').' }),
     };
   }
 }

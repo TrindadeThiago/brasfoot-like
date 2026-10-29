@@ -16,7 +16,7 @@ a{color:inherit;text-decoration:none}
 a:hover{color:#ffffff}
 </style>
 </helmet>
-<div style="min-height: 980px; background: #0a0e13; color: #eef2f6; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.45; display: flex; flex-wrap: wrap">
+<div style="min-height: 1100px; background: #0a0e13; color: #eef2f6; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.45; display: flex; flex-wrap: wrap">
 
   <nav aria-label="Telas do jogo" style="flex: 1 1 232px; max-width: 100%; min-width: 0; background: #0f151c; border-right: 1px solid #1d2733; padding: 24px 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px">
     <div style="display: flex; align-items: center; gap: 12px; padding: 0 8px">
@@ -43,142 +43,203 @@ a:hover{color:#ffffff}
 
   <main style="flex: 999 1 640px; min-width: 0; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px">
 
-    <header style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px; justify-content: space-between">
-      <div>
-        <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600; letter-spacing: -0.02em">{{compName}}</h1>
-        <div style="color: #98a6b6">Temporada 2027 · Brasil</div>
-      </div>
-      <label style="display: flex; flex-direction: column; gap: 4px; color: #98a6b6; font-size: 12px">
-        País
-        <select style="min-height: 44px; border-radius: 10px; border: 1px solid #2e3a47; background: #121922; color: #eef2f6; padding: 0 12px; font: inherit; min-width: 180px"><option>Brasil</option><option>Argentina</option><option>Inglaterra</option></select>
-      </label>
+    <header>
+      <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600; letter-spacing: -0.02em">Competições</h1>
+      <div style="color: #98a6b6">Temporada 2027 · União Canoas</div>
     </header>
 
-    <div role="tablist" aria-label="Competições" style="display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid #1d2733">
-      <sc-for list="{{comps}}" as="c" hint-placeholder-count="6">
-        <button type="button" role="tab" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button>
+    <!-- Abas principais -->
+    <div role="tablist" aria-label="Grupos de competições" style="display: flex; gap: 4px; border-bottom: 1px solid #1d2733">
+      <sc-for list="{{views}}" as="v" hint-placeholder-count="2">
+        <button type="button" role="tab" aria-selected="{{v.on}}" onClick="{{v.pick}}" style="{{v.style}}">
+          {{v.label}}
+          <span style="{{v.count}}">{{v.n}}</span>
+        </button>
       </sc-for>
     </div>
 
-    <sc-if value="{{isLeague}}" hint-placeholder-val="{{ true }}">
-      <div role="tablist" aria-label="Seções da competição" style="display: flex; flex-wrap: wrap; gap: 8px">
-        <sc-for list="{{subs}}" as="s" hint-placeholder-count="3">
-          <button type="button" role="tab" onClick="{{s.pick}}" style="{{s.style}}">{{s.label}}</button>
-        </sc-for>
-      </div>
-
-      <sc-if value="{{showTable}}" hint-placeholder-val="{{ true }}">
-        <div style="display: flex; gap: 8px; flex-wrap: wrap">
-          <span style="border-radius: 8px; padding: 6px 12px; background: #16222c; color: {{accent}}; font-weight: 600">Primeira divisão (seu clube)</span>
-          <span style="border-radius: 8px; padding: 6px 12px; color: #98a6b6; font-weight: 500">Segunda divisão</span>
-        </div>
-        <section aria-label="Classificação da Série A" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; overflow-x: auto">
-          <table style="width: 100%; min-width: 760px; border-collapse: collapse; font-variant-numeric: tabular-nums">
-            <thead>
-              <tr style="color: #98a6b6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em">
-                <th scope="col" style="text-align: left; padding: 12px 16px; font-weight: 500; width: 56px">Pos.</th>
-                <th scope="col" style="text-align: left; padding: 12px 8px; font-weight: 500">Clube</th>
-                <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">P</th>
-                <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">J</th>
-                <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">V</th>
-                <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">E</th>
-                <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">D</th>
-                <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">GP</th>
-                <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">GC</th>
-                <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">SG</th>
-                <th scope="col" style="text-align: left; padding: 12px 16px; font-weight: 500">Últimos</th>
-              </tr>
-            </thead>
-            <tbody>
-              <sc-for list="{{rows}}" as="r" hint-placeholder-count="10">
-                <tr style="{{r.rowStyle}}">
-                  <td style="padding: 10px 16px; font-weight: 600"><span style="{{r.zone}}">{{r.pos}}</span></td>
-                  <td style="padding: 10px 8px; font-weight: 500">{{r.name}}</td>
-                  <td style="padding: 10px 8px; text-align: right; font-weight: 600">{{r.pts}}</td>
-                  <td style="padding: 10px 8px; text-align: right; color: #b4c0cd">{{r.j}}</td>
-                  <td style="padding: 10px 8px; text-align: right; color: #b4c0cd">{{r.v}}</td>
-                  <td style="padding: 10px 8px; text-align: right; color: #b4c0cd">{{r.e}}</td>
-                  <td style="padding: 10px 8px; text-align: right; color: #b4c0cd">{{r.d}}</td>
-                  <td style="padding: 10px 8px; text-align: right; color: #b4c0cd">{{r.gp}}</td>
-                  <td style="padding: 10px 8px; text-align: right; color: #b4c0cd">{{r.gc}}</td>
-                  <td style="padding: 10px 8px; text-align: right; color: #b4c0cd">{{r.sg}}</td>
-                  <td style="padding: 10px 16px">
-                    <div style="display: flex; gap: 4px">
-                      <sc-for list="{{r.form}}" as="f" hint-placeholder-count="5">
-                        <span style="{{f.style}}">{{f.l}}</span>
-                      </sc-for>
-                    </div>
-                  </td>
-                </tr>
-              </sc-for>
-            </tbody>
-          </table>
-        </section>
-        <div style="display: flex; flex-wrap: wrap; gap: 20px; color: #98a6b6; font-size: 13px">
-          <span><span style="display: inline-block; width: 10px; height: 10px; border-radius: 3px; background: {{accent}}; margin-right: 6px"></span>Acesso à competição continental</span>
-          <span><span style="display: inline-block; width: 10px; height: 10px; border-radius: 3px; background: #ff8a8a; margin-right: 6px"></span>Rebaixamento</span>
-        </div>
-      </sc-if>
-
-      <sc-if value="{{showResults}}" hint-placeholder-val="{{ false }}">
-        <section aria-label="Resultados" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px">
-          <sc-for list="{{results}}" as="m" hint-placeholder-count="6">
-            <div style="background: #121922; border: 1px solid #1d2733; border-radius: 14px; padding: 16px; display: flex; align-items: center; gap: 12px">
-              <span style="flex: 1 1 0; text-align: right; font-weight: 500">{{m.home}}</span>
-              <span style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600; background: #0f151c; border-radius: 8px; padding: 2px 12px">{{m.score}}</span>
-              <span style="flex: 1 1 0; font-weight: 500">{{m.away}}</span>
-            </div>
-          </sc-for>
-        </section>
-      </sc-if>
-
-      <sc-if value="{{showScorers}}" hint-placeholder-val="{{ false }}">
-        <section aria-label="Artilharia" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 8px 20px">
-          <sc-for list="{{scorers}}" as="s" hint-placeholder-count="6">
-            <div style="display: flex; align-items: center; gap: 14px; min-height: 52px; border-top: 1px solid #1d2733">
-              <span style="width: 22px; color: #98a6b6">{{s.pos}}</span>
-              <span style="flex: 1 1 auto; font-weight: 500">{{s.name}}<span style="color: #98a6b6; font-weight: 400"> · {{s.club}}</span></span>
-              <div style="width: 140px; height: 6px; border-radius: 99px; background: #1d2733; overflow: hidden"><div style="{{s.bar}}"></div></div>
-              <span style="width: 44px; text-align: right; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">{{s.goals}}</span>
-            </div>
-          </sc-for>
-        </section>
-      </sc-if>
+    <sc-if value="{{isMine}}" hint-placeholder-val="{{ true }}">
+      <div style="color: #98a6b6; max-width: 70ch">As competições em que o seu clube joga ou vai jogar nesta temporada, inclusive as de que já saiu. As outras ficam em "Demais competições".</div>
     </sc-if>
 
-    <sc-if value="{{isCup}}" hint-placeholder-val="{{ false }}">
-      <div style="display: flex; gap: 8px; flex-wrap: wrap">
-        <span style="border-radius: 99px; padding: 6px 14px; background: #1d2733; color: #b4c0cd">1ª fase: Grupos</span>
-        <span style="border-radius: 99px; padding: 6px 14px; background: rgba(61,220,132,0.16); color: {{accent}}; font-weight: 600">2ª fase: Mata-mata</span>
+    <sc-if value="{{isOthers}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px; justify-content: space-between">
+        <label style="display: flex; flex-direction: column; gap: 4px; color: #98a6b6; font-size: 12px">
+          País
+          <select value="{{country}}" onChange="{{setCountry}}" style="min-height: 44px; border-radius: 10px; border: 1px solid #2e3a47; background: #121922; color: #eef2f6; padding: 0 12px; font: inherit; min-width: 220px">
+            <option value="Todos">Todos os países</option><option value="Brasil">Brasil</option><option value="Argentina">Argentina</option><option value="Continentais">Competições continentais</option>
+          </select>
+        </label>
+        <span style="color: #98a6b6">{{otherCount}}</span>
       </div>
-      <section aria-label="Chaveamento" style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
-        <sc-for list="{{rounds}}" as="r" hint-placeholder-count="3">
-          <div style="flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
-            <h2 style="margin: 0; font-size: 13px; color: #98a6b6; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600">{{r.name}}</h2>
-            <sc-for list="{{r.ties}}" as="t" hint-placeholder-count="2">
-              <div style="{{t.card}}">
-                <div style="display: flex; justify-content: space-between; gap: 8px"><span style="{{t.aStyle}}">{{t.a}}</span><span style="font-weight: 600">{{t.sa}}</span></div>
-                <div style="display: flex; justify-content: space-between; gap: 8px"><span style="{{t.bStyle}}">{{t.b}}</span><span style="font-weight: 600">{{t.sb}}</span></div>
-              </div>
+    </sc-if>
+
+    <!-- Cartões das competições -->
+    <section aria-label="Lista de competições" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px">
+      <sc-for list="{{cards}}" as="c" hint-placeholder-count="4">
+        <button type="button" onClick="{{c.pick}}" aria-pressed="{{c.on}}" style="{{c.style}}">
+          <span style="font-weight: 600; line-height: 1.25">{{c.name}}</span>
+          <span style="color: #98a6b6; font-size: 12px">{{c.meta}}</span>
+          <span style="{{c.chip}}">{{c.status}}</span>
+        </button>
+      </sc-for>
+    </section>
+
+    <sc-if value="{{noResults}}" hint-placeholder-val="{{ false }}">
+      <div style="background: #121922; border: 1px dashed #2e3a47; border-radius: 16px; padding: 32px; text-align: center; color: #98a6b6">Nenhuma competição para este filtro.</div>
+    </sc-if>
+
+    <!-- Competição escolhida -->
+    <sc-if value="{{hasSel}}" hint-placeholder-val="{{ true }}">
+      <section aria-label="Competição escolhida" style="display: flex; flex-direction: column; gap: 18px; border-top: 1px solid #1d2733; padding-top: 22px">
+
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 12px">
+          <div>
+            <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 600; letter-spacing: -0.01em">{{sel.name}}</h2>
+            <div style="color: #98a6b6">{{sel.meta}}</div>
+          </div>
+          <span style="{{sel.chip}}">{{sel.status}}</span>
+        </div>
+
+        <sc-if value="{{sel.notMine}}" hint-placeholder-val="{{ false }}">
+          <div role="note" style="background: #121922; border: 1px solid #1d2733; border-left: 4px solid #5ec8ff; border-radius: 12px; padding: 12px 16px; color: #b4c0cd">Seu clube não participa desta competição.<sc-if value="{{sel.hint}}" hint-placeholder-val="{{ false }}"><span> {{sel.hint}}</span></sc-if></div>
+        </sc-if>
+
+        <!-- Pontos corridos -->
+        <sc-if value="{{sel.isLeague}}" hint-placeholder-val="{{ true }}">
+          <div role="tablist" aria-label="Seções da competição" style="display: flex; flex-wrap: wrap; gap: 8px">
+            <sc-for list="{{subs}}" as="s" hint-placeholder-count="3">
+              <button type="button" role="tab" aria-selected="{{s.on}}" onClick="{{s.pick}}" style="{{s.style}}">{{s.label}}</button>
             </sc-for>
           </div>
-        </sc-for>
-      </section>
-      <section aria-label="Campanha" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
-        <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 600">Campanha do União Canoas</h2>
-        <div><strong>Em disputa</strong> · Fase atual: Semifinal</div>
-        <div style="color: #b4c0cd">Próximo jogo: 31 de janeiro de 2027, fora contra Clube Atlético Bagé (Semifinal, jogo 1).</div>
-        <div style="color: #b4c0cd">Ainda pode alcançar: Final, Campeão. Prêmios recebidos: $ 8.000 em 1 pagamento.</div>
-        <div style="overflow-x: auto">
-          <table style="width: 100%; min-width: 520px; border-collapse: collapse">
-            <thead><tr style="color: #98a6b6; font-size: 12px; text-transform: uppercase"><th scope="col" style="text-align: left; padding: 8px 0; font-weight: 500">Data</th><th scope="col" style="text-align: left; padding: 8px 8px; font-weight: 500">Fase</th><th scope="col" style="text-align: left; padding: 8px 8px; font-weight: 500">Adversário</th><th scope="col" style="text-align: right; padding: 8px 0; font-weight: 500">Placar</th></tr></thead>
-            <tbody>
-              <sc-for list="{{campaign}}" as="g" hint-placeholder-count="4">
-                <tr style="border-top: 1px solid #1d2733"><td style="padding: 10px 0">{{g.date}}</td><td style="padding: 10px 8px; color: #b4c0cd">{{g.phase}}</td><td style="padding: 10px 8px">{{g.opp}}</td><td style="padding: 10px 0; text-align: right; font-weight: 600">{{g.score}}</td></tr>
+
+          <sc-if value="{{showTable}}" hint-placeholder-val="{{ true }}">
+            <section aria-label="Classificação" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; overflow-x: auto">
+              <table style="width: 100%; min-width: 760px; border-collapse: collapse; font-variant-numeric: tabular-nums">
+                <thead>
+                  <tr style="color: #98a6b6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em">
+                    <th scope="col" style="text-align: left; padding: 12px 16px; font-weight: 500; width: 56px">Pos.</th>
+                    <th scope="col" style="text-align: left; padding: 12px 8px; font-weight: 500">Clube</th>
+                    <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">P</th>
+                    <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">J</th>
+                    <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">V</th>
+                    <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">E</th>
+                    <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">D</th>
+                    <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">GP</th>
+                    <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">GC</th>
+                    <th scope="col" style="text-align: right; padding: 12px 8px; font-weight: 500">SG</th>
+                    <th scope="col" style="text-align: left; padding: 12px 16px; font-weight: 500">Últimos</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <sc-for list="{{rows}}" as="r" hint-placeholder-count="10">
+                    <tr style="{{r.rowStyle}}">
+                      <td style="padding: 10px 16px; font-weight: 600"><span style="{{r.zone}}">{{r.pos}}</span></td>
+                      <td style="padding: 10px 8px; font-weight: 500">{{r.name}}</td>
+                      <td style="padding: 10px 8px; text-align: right; font-weight: 600">{{r.pts}}</td>
+                      <td style="padding: 10px 8px; text-align: right; color: #b4c0cd">{{r.j}}</td>
+                      <td style="padding: 10px 8px; text-align: right; color: #b4c0cd">{{r.v}}</td>
+                      <td style="padding: 10px 8px; text-align: right; color: #b4c0cd">{{r.e}}</td>
+                      <td style="padding: 10px 8px; text-align: right; color: #b4c0cd">{{r.d}}</td>
+                      <td style="padding: 10px 8px; text-align: right; color: #b4c0cd">{{r.gp}}</td>
+                      <td style="padding: 10px 8px; text-align: right; color: #b4c0cd">{{r.gc}}</td>
+                      <td style="padding: 10px 8px; text-align: right; color: #b4c0cd">{{r.sg}}</td>
+                      <td style="padding: 10px 16px">
+                        <div style="display: flex; gap: 4px">
+                          <sc-for list="{{r.form}}" as="f" hint-placeholder-count="5">
+                            <span style="{{f.style}}">{{f.l}}</span>
+                          </sc-for>
+                        </div>
+                      </td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </section>
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; color: #98a6b6; font-size: 13px">
+              <span><span style="display: inline-block; width: 10px; height: 10px; border-radius: 3px; background: {{accent}}; margin-right: 6px"></span>Vaga na competição continental</span>
+              <span><span style="display: inline-block; width: 10px; height: 10px; border-radius: 3px; background: #ff8a8a; margin-right: 6px"></span>Rebaixamento</span>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{showResults}}" hint-placeholder-val="{{ false }}">
+            <section aria-label="Resultados" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px">
+              <sc-for list="{{results}}" as="m" hint-placeholder-count="6">
+                <div style="background: #121922; border: 1px solid #1d2733; border-radius: 14px; padding: 16px; display: flex; align-items: center; gap: 12px">
+                  <span style="flex: 1 1 0; text-align: right; font-weight: 500">{{m.home}}</span>
+                  <span style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600; background: #0f151c; border-radius: 8px; padding: 2px 12px">{{m.score}}</span>
+                  <span style="flex: 1 1 0; font-weight: 500">{{m.away}}</span>
+                </div>
               </sc-for>
-            </tbody>
-          </table>
-        </div>
+            </section>
+          </sc-if>
+
+          <sc-if value="{{showScorers}}" hint-placeholder-val="{{ false }}">
+            <section aria-label="Artilharia" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 8px 20px">
+              <sc-for list="{{scorers}}" as="s" hint-placeholder-count="5">
+                <div style="display: flex; align-items: center; gap: 14px; min-height: 52px; border-top: 1px solid #1d2733">
+                  <span style="width: 22px; color: #98a6b6">{{s.pos}}</span>
+                  <span style="flex: 1 1 auto; font-weight: 500">{{s.name}}<span style="color: #98a6b6; font-weight: 400"> · {{s.club}}</span></span>
+                  <div style="width: 140px; height: 6px; border-radius: 99px; background: #1d2733; overflow: hidden"><div style="{{s.bar}}"></div></div>
+                  <span style="width: 44px; text-align: right; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">{{s.goals}}</span>
+                </div>
+              </sc-for>
+            </section>
+          </sc-if>
+        </sc-if>
+
+        <!-- Mata-mata -->
+        <sc-if value="{{sel.isCup}}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{sel.phases}}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; gap: 8px; flex-wrap: wrap">
+              <span style="border-radius: 99px; padding: 6px 14px; background: #1d2733; color: #b4c0cd">1ª fase: Grupos</span>
+              <span style="border-radius: 99px; padding: 6px 14px; background: rgba(61,220,132,0.16); color: {{accent}}; font-weight: 600">2ª fase: Mata-mata</span>
+            </div>
+          </sc-if>
+          <section aria-label="Chaveamento" style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+            <sc-for list="{{rounds}}" as="r" hint-placeholder-count="3">
+              <div style="flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+                <h3 style="margin: 0; font-size: 13px; color: #98a6b6; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600">{{r.name}}</h3>
+                <sc-for list="{{r.ties}}" as="t" hint-placeholder-count="2">
+                  <div style="{{t.card}}">
+                    <div style="display: flex; justify-content: space-between; gap: 8px"><span style="{{t.aStyle}}">{{t.a}}</span><span style="font-weight: 600">{{t.sa}}</span></div>
+                    <div style="display: flex; justify-content: space-between; gap: 8px"><span style="{{t.bStyle}}">{{t.b}}</span><span style="font-weight: 600">{{t.sb}}</span></div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-for>
+          </section>
+          <sc-if value="{{sel.campaign}}" hint-placeholder-val="{{ false }}">
+            <section aria-label="Campanha" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+              <h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 600">Campanha do União Canoas</h3>
+              <sc-for list="{{campLines}}" as="l" hint-placeholder-count="3">
+                <div style="color: #b4c0cd">{{l.text}}</div>
+              </sc-for>
+              <div style="overflow-x: auto">
+                <table style="width: 100%; min-width: 520px; border-collapse: collapse">
+                  <thead><tr style="color: #98a6b6; font-size: 12px; text-transform: uppercase"><th scope="col" style="text-align: left; padding: 8px 0; font-weight: 500">Data</th><th scope="col" style="text-align: left; padding: 8px 8px; font-weight: 500">Fase</th><th scope="col" style="text-align: left; padding: 8px 8px; font-weight: 500">Adversário</th><th scope="col" style="text-align: right; padding: 8px 0; font-weight: 500">Placar</th></tr></thead>
+                  <tbody>
+                    <sc-for list="{{campaign}}" as="g" hint-placeholder-count="4">
+                      <tr style="border-top: 1px solid #1d2733"><td style="padding: 10px 0">{{g.date}}</td><td style="padding: 10px 8px; color: #b4c0cd">{{g.phase}}</td><td style="padding: 10px 8px">{{g.opp}}</td><td style="padding: 10px 0; text-align: right; font-weight: 600">{{g.score}}</td></tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </sc-if>
+        </sc-if>
+
+        <!-- Ainda não começou -->
+        <sc-if value="{{sel.isFuture}}" hint-placeholder-val="{{ false }}">
+          <section aria-label="Informações da competição" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px 24px; max-width: 720px">
+            <h3 style="margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Ainda não começou</h3>
+            <dl style="margin: 0">
+              <sc-for list="{{info}}" as="i" hint-placeholder-count="4">
+                <div style="display: flex; flex-wrap: wrap; gap: 4px 24px; padding: 10px 0; border-top: 1px solid #1d2733"><dt style="width: 150px; color: #98a6b6">{{i.label}}</dt><dd style="margin: 0; flex: 1 1 260px; font-weight: 500">{{i.value}}</dd></div>
+              </sc-for>
+            </dl>
+          </section>
+        </sc-if>
       </section>
     </sc-if>
   </main>
@@ -188,8 +249,10 @@ a:hover{color:#ffffff}
 class Component extends DCLogic {
   renderVals() {
     const accent = this.props.accent ?? '#3ddc84';
-    const comp = (this.state && this.state.comp) || 'Campeonato Nacional do Brasil';
-    const sub = (this.state && this.state.sub) || 'Classificação';
+    const st = this.state || {};
+    const view = st.view || 'mine';
+    const country = st.country || 'Todos';
+    const sub = st.sub || 'Classificação';
     const base = 'display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;border-radius:10px;box-sizing:border-box;';
     const items = [
       ['Início', 'Main.dc.html', 'M3 11l9-8 9 8M5 10v10h14V10'],
@@ -207,61 +270,125 @@ class Component extends DCLogic {
       label: it[0], href: it[1], icon: it[2], badge: it[4] || '',
       style: base + (it[3] ? 'background:#16222c;color:' + accent + ';font-weight:600;' : 'color:#b4c0cd;font-weight:500;'),
     }));
-    const compNames = ['Campeonato Nacional do Brasil', 'Copa Nacional do Brasil', 'Supercopa de Brasil', 'Campeonato Estadual do Rio Grande do Sul', 'Taça Continental da América do Sul', 'Taça Continental Europeia'];
-    const comps = compNames.map((name) => ({
-      label: name,
-      pick: () => this.setState({ comp: name }),
-      style: 'flex:0 0 auto;min-height:48px;padding:0 16px;border:0;background:transparent;font:inherit;font-weight:600;cursor:pointer;color:' + (comp === name ? '#eef2f6' : '#98a6b6') + ';border-bottom:3px solid ' + (comp === name ? accent : 'transparent') + ';',
+
+    // ---------- dados ----------
+    const BR = ['Estrela do Norte', 'Atlético Marítimo', 'União Canoas', 'Porto Oeste', 'União Planalto', 'Sporting Vale', 'Ferroviário', 'Náutico do Sul', 'Guarani Alto', 'Comercial FC'];
+    const AR = ['Club Atlético Rosarino', 'Deportivo Andino', 'Sporting Pampeano', 'Unión Cordobesa', 'Atlético del Plata', 'Juventud Patagónica', 'Atlético Norteño', 'Defensores del Sur', 'Costera FC', 'Obreros Mendocinos'];
+    const tie = (a, b, sa, sb, mine) => ({ a, b, sa, sb, mine: !!mine });
+    const comps = [
+      { id: 'nac-br', mine: true, name: 'Campeonato Nacional do Brasil', meta: 'Brasil · Série A · 38 rodadas', status: 'Em disputa · rodada 14', sk: 'live', kind: 'league', teams: BR, me: 'União Canoas', scorers: [['Rafael Nunes', 'União Canoas', 13], ['Heitor Dias', 'Estrela do Norte', 11], ['Cauã Reis', 'Atlético Marítimo', 9], ['Miguel Prata', 'Porto Oeste', 8], ['Joel Borges', 'União Planalto', 7]] },
+      { id: 'est-rs', mine: true, name: 'Campeonato Estadual do Rio Grande do Sul', meta: 'Brasil · 1ª divisão do estadual', status: 'Semifinal', sk: 'live', kind: 'cup', phases: true,
+        rounds: [{ name: 'Quartas de final', ties: [tie('Sapucaia', 'Viamão', 3, 2), tie('Bagé', 'Porto Alegre', 3, 0), tie('Porto Alegre', 'Canoas', 0, 1, true), tie('Bagé', 'Canoas', 1, 0)] }, { name: 'Semifinal', ties: [tie('Bagé', 'Canoas', '', '', true), tie('Sapucaia', 'Bagé', '', '')] }, { name: 'Final', ties: [tie('A definir', 'A definir', '', '')] }],
+        camp: ['Em disputa · Fase atual: Semifinal', 'Próximo jogo: 31 de janeiro de 2027, fora contra Clube Atlético Bagé (Semifinal, jogo 1).', 'Ainda pode alcançar: Final, Campeão. Prêmios recebidos: $ 8.000 em 1 pagamento.'],
+        games: [['3 de janeiro de 2027', 'Fase de grupos, rodada 1', 'Esporte Clube Viamão', '0 × 1'], ['10 de janeiro de 2027', 'Fase de grupos, rodada 2', 'Clube Atlético Bagé', '2 × 1'], ['17 de janeiro de 2027', 'Fase de grupos, rodada 3', 'Rio Grande Atlético Clube', '2 × 0'], ['24 de janeiro de 2027', 'Quartas de final, jogo 1', 'Porto Alegre Sport Clube', '0 × 1']] },
+      { id: 'copa-br', mine: true, name: 'Copa Nacional do Brasil', meta: 'Brasil · mata-mata', status: 'Eliminado na Fase de 32', sk: 'out', kind: 'cup',
+        rounds: [{ name: 'Fase de 32', ties: [tie('Varginha Unidos', 'União Canoas', 1, 0, true), tie('Novo Hamburgo Recreativo', 'São José dos Campos FC', 2, 1), tie('Divinópolis Independente', 'Unidos Guarulhos', 1, 0)] }, { name: 'Fase de 16', ties: [tie('Varginha Unidos', 'Novo Hamburgo Recreativo', '', ''), tie('Divinópolis Independente', 'A definir', '', '')] }, { name: 'Final', ties: [tie('A definir', 'A definir', '', '')] }],
+        camp: ['Eliminado · Parou na Fase de 32', 'Prêmios recebidos: $ 0.'], games: [['27 de janeiro de 2027', 'Fase de 32', 'Varginha Unidos', '0 × 1']] },
+      { id: 'cont-sa', mine: true, name: 'Taça Continental da América do Sul', meta: 'América do Sul · competição continental', status: 'Começa em agosto', sk: 'soon', kind: 'future',
+        info: [['Início', '9 de agosto de 2027'], ['Vaga do seu clube', 'Vaga pelo 2º lugar no Campeonato Nacional do Brasil de 2026'], ['Fase de entrada', 'Fase de grupos'], ['Formato', '32 clubes, grupos separados por país e mata-mata final'], ['Sorteio', 'Em julho de 2027']] },
+      { id: 'super-br', mine: false, name: 'Supercopa de Brasil', meta: 'Brasil · jogo único', status: 'Encerrada', sk: 'done', kind: 'cup', hint: 'É disputada pelo campeão da liga e pelo campeão da copa nacional.',
+        rounds: [{ name: 'Final', ties: [tie('Belo Horizonte Independente', 'Angra dos Reis AC', 2, 1)] }] },
+      { id: 'est-sp', mine: false, name: 'Campeonato Estadual de São Paulo', meta: 'Brasil · 1ª divisão do estadual', status: 'Quartas de final', sk: 'live', kind: 'cup', phases: true,
+        rounds: [{ name: 'Quartas de final', ties: [tie('Campinas FC', 'Sorocaba EC', 2, 0), tie('Santista Atlético', 'Ribeirão Operário', 1, 1), tie('Taubaté Unidos', 'Bauru AC', '', ''), tie('Jundiaí SC', 'Marília FC', '', '')] }, { name: 'Semifinal', ties: [tie('A definir', 'A definir', '', ''), tie('A definir', 'A definir', '', '')] }, { name: 'Final', ties: [tie('A definir', 'A definir', '', '')] }] },
+      { id: 'nac-ar', mine: false, name: 'Campeonato Nacional da Argentina', meta: 'Argentina · Primeira divisão · 30 rodadas', status: 'Em disputa · rodada 14', sk: 'live', kind: 'league', teams: AR, me: '', scorers: [['Tomás Ferreyra', 'Club Atlético Rosarino', 12], ['Nicolás Paredes', 'Deportivo Andino', 10], ['Matías Soria', 'Sporting Pampeano', 9], ['Lucas Benítez', 'Unión Cordobesa', 8], ['Franco Ledesma', 'Atlético del Plata', 7]] },
+      { id: 'copa-ar', mine: false, name: 'Copa Nacional da Argentina', meta: 'Argentina · mata-mata', status: 'Oitavas de final', sk: 'live', kind: 'cup',
+        rounds: [{ name: 'Oitavas de final', ties: [tie('Club Atlético Rosarino', 'Costera FC', 2, 1), tie('Deportivo Andino', 'Obreros Mendocinos', 0, 0), tie('Sporting Pampeano', 'Atlético Norteño', '', ''), tie('Unión Cordobesa', 'Defensores del Sur', '', '')] }, { name: 'Quartas de final', ties: [tie('A definir', 'A definir', '', ''), tie('A definir', 'A definir', '', '')] }, { name: 'Final', ties: [tie('A definir', 'A definir', '', '')] }] },
+      { id: 'cont-eu', mine: false, name: 'Taça Continental Europeia', meta: 'Europa · competição continental', status: 'Começa em setembro', sk: 'soon', kind: 'future',
+        info: [['Início', '14 de setembro de 2027'], ['Vagas', 'Distribuídas entre os países europeus pelas ligas e copas nacionais'], ['Formato', 'Fase preliminar, grupos e mata-mata final']] },
+      { id: 'cont-af', mine: false, name: 'Taça Continental Africana', meta: 'África · competição continental', status: 'Começa em agosto', sk: 'soon', kind: 'future',
+        info: [['Início', '2 de agosto de 2027'], ['Formato', 'Fase preliminar, grupos e mata-mata final']] },
+      { id: 'cont-as', mine: false, name: 'Taça Continental Asiática', meta: 'Ásia · competição continental', status: 'Começa em agosto', sk: 'soon', kind: 'future',
+        info: [['Início', '16 de agosto de 2027'], ['Formato', 'Fase preliminar, grupos e mata-mata final']] },
+    ];
+    const countryOf = (c) => (c.meta.indexOf('Brasil') === 0 ? 'Brasil' : c.meta.indexOf('Argentina') === 0 ? 'Argentina' : 'Continentais');
+    const mine = comps.filter((c) => c.mine);
+    const othersAll = comps.filter((c) => !c.mine);
+    const others = othersAll.filter((c) => country === 'Todos' || countryOf(c) === country);
+    const list = view === 'mine' ? mine : others;
+    const selId = view === 'mine' ? st.mineSel : st.otherSel;
+    const cur = list.find((c) => c.id === selId) || list[0] || null;
+
+    // ---------- apresentação ----------
+    const chipBase = 'align-self:flex-start;border-radius:99px;padding:2px 10px;font-size:12px;font-weight:600;';
+    const chips = {
+      live: chipBase + 'background:rgba(61,220,132,0.16);color:' + accent + ';',
+      out: chipBase + 'background:rgba(255,138,138,0.14);color:#ff8a8a;',
+      soon: chipBase + 'background:rgba(94,200,255,0.16);color:#5ec8ff;',
+      done: chipBase + 'background:#1d2733;color:#b4c0cd;',
+    };
+    const views = [
+      { id: 'mine', label: 'Minhas competições', n: mine.length },
+      { id: 'others', label: 'Demais competições', n: othersAll.length },
+    ].map((v) => ({
+      label: v.label, n: v.n, on: view === v.id ? 'true' : 'false',
+      pick: () => this.setState({ view: v.id }),
+      style: 'display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 18px;border:0;background:transparent;font:inherit;font-weight:600;cursor:pointer;color:' + (view === v.id ? '#eef2f6' : '#98a6b6') + ';border-bottom:3px solid ' + (view === v.id ? accent : 'transparent') + ';margin-bottom:-1px;',
+      count: 'border-radius:99px;padding:0 8px;font-size:12px;font-weight:600;min-width:20px;text-align:center;background:' + (view === v.id ? 'rgba(61,220,132,0.16)' : '#1d2733') + ';color:' + (view === v.id ? accent : '#b4c0cd') + ';',
     }));
+    const cards = list.map((c) => {
+      const on = cur && cur.id === c.id;
+      return {
+        name: c.name, meta: c.meta, status: c.status, chip: chips[c.sk], on: on ? 'true' : 'false',
+        pick: () => this.setState(view === 'mine' ? { mineSel: c.id } : { otherSel: c.id }),
+        style: 'text-align:left;display:flex;flex-direction:column;gap:6px;padding:14px 16px;border-radius:14px;font:inherit;color:inherit;cursor:pointer;background:' + (on ? '#16222c' : '#121922') + ';border:1px solid ' + (on ? accent : '#1d2733') + ';',
+      };
+    });
+
     const subs = ['Classificação', 'Resultados', 'Artilharia'].map((name) => ({
-      label: name,
+      label: name, on: sub === name ? 'true' : 'false',
       pick: () => this.setState({ sub: name }),
       style: 'min-height:44px;padding:0 16px;border-radius:10px;font:inherit;font-weight:500;cursor:pointer;' +
         (sub === name ? 'background:' + accent + ';color:#06140c;border:1px solid ' + accent + ';' : 'background:#121922;color:#eef2f6;border:1px solid #2e3a47;'),
     }));
+
     const chip = (l) => ({
       l,
       style: 'width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;' +
         (l === 'V' ? 'background:rgba(61,220,132,0.16);color:#3ddc84;' : l === 'E' ? 'background:#1d2733;color:#b4c0cd;' : 'background:rgba(255,138,138,0.16);color:#ff8a8a;'),
     });
-    const data = [
-      ['Estrela do Norte', 32, 14, 10, 2, 2, 28, 11, '+17', 'VVEVV'], ['Atlético Marítimo', 29, 14, 9, 2, 3, 24, 12, '+12', 'VDVVE'],
-      ['União Canoas', 27, 14, 8, 3, 3, 22, 13, '+9', 'VVEVD', true], ['Porto Oeste', 25, 14, 7, 4, 3, 19, 13, '+6', 'DEVDE'],
-      ['União Planalto', 24, 14, 7, 3, 4, 20, 16, '+4', 'EVVDV'], ['Sporting Vale', 22, 14, 6, 4, 4, 18, 16, '+2', 'VEDVE'],
-      ['Ferroviário', 20, 14, 5, 5, 4, 15, 15, '0', 'EEVDE'], ['Náutico do Sul', 16, 14, 4, 4, 6, 14, 19, '-5', 'DVDED'],
-      ['Guarani Alto', 12, 14, 3, 3, 8, 11, 22, '-11', 'DDEDV'], ['Comercial FC', 9, 14, 2, 3, 9, 8, 26, '-18', 'DDDED'],
-    ];
-    const rows = data.map((d, i) => ({
-      pos: i + 1, name: d[0], pts: d[1], j: d[2], v: d[3], e: d[4], d: d[5], gp: d[6], gc: d[7], sg: d[8],
-      form: d[9].split('').map(chip),
-      zone: (i < 4 ? 'box-shadow:inset 3px 0 0 ' + accent : i >= data.length - 2 ? 'box-shadow:inset 3px 0 0 #ff8a8a' : '') + ';padding-left:10px;',
-      rowStyle: 'border-top:1px solid #1d2733;' + (d[10] ? 'background:#16222c;' : ''),
-    }));
-    const results = [['Estrela do Norte', '3 – 0', 'Comercial FC'], ['Atlético Marítimo', '2 – 2', 'Porto Oeste'], ['União Canoas', '1 – 0', 'Ferroviário'], ['União Planalto', '0 – 1', 'Sporting Vale'], ['Guarani Alto', '1 – 3', 'Náutico do Sul'], ['Nova Aurora', '2 – 1', 'Vila Rubra']].map((r) => ({ home: r[0], score: r[1], away: r[2] }));
-    const sc = [['Rafael Nunes', 'União Canoas', 13], ['Heitor Dias', 'Estrela do Norte', 11], ['Cauã Reis', 'Atlético Marítimo', 9], ['Miguel Prata', 'Porto Oeste', 8], ['Joel Borges', 'União Planalto', 7]];
-    const scorers = sc.map((s, i) => ({ pos: i + 1, name: s[0], club: s[1], goals: s[2], bar: 'height:100%;width:' + Math.round((s[2] / 13) * 100) + '%;background:' + accent + ';' }));
-    const tie = (a, b, sa, sb, mine) => ({
-      a, b, sa, sb,
-      card: 'background:#121922;border:1px solid ' + (mine ? accent : '#1d2733') + ';border-radius:12px;padding:10px 14px;display:flex;flex-direction:column;gap:6px;',
-      aStyle: 'font-weight:' + (sa !== '' && sa > sb ? 600 : 500) + ';color:' + (sa !== '' && sa < sb ? '#98a6b6' : '#eef2f6') + ';',
-      bStyle: 'font-weight:' + (sb !== '' && sb > sa ? 600 : 500) + ';color:' + (sb !== '' && sb < sa ? '#98a6b6' : '#eef2f6') + ';',
+    const forms = ['VVEVV', 'VDVVE', 'VVEVD', 'DEVDE', 'EVVDV', 'VEDVE', 'EEVDE', 'DVDED', 'DDEDV', 'DDDED'];
+    const rows = [];
+    const results = [];
+    const scorers = [];
+    if (cur && cur.kind === 'league') {
+      cur.teams.forEach((name, i) => {
+        const pts = 32 - i * 2.4 | 0;
+        const v = Math.max(2, 10 - i), e = 2 + (i % 3), d = 14 - v - e;
+        const zone = (i < 4 ? 'box-shadow:inset 3px 0 0 ' + accent : i >= cur.teams.length - 2 ? 'box-shadow:inset 3px 0 0 #ff8a8a' : '') + ';padding-left:10px;';
+        rows.push({ pos: i + 1, name, pts, j: 14, v, e, d: Math.max(d, 0), gp: 28 - i * 2, gc: 11 + i * 1.5 | 0, sg: (17 - i * 3 > 0 ? '+' : '') + (17 - i * 3), form: forms[i].split('').map(chip), zone, rowStyle: 'border-top:1px solid #1d2733;' + (name === cur.me ? 'background:#16222c;' : '') });
+      });
+      for (let i = 0; i + 1 < cur.teams.length; i += 2) {
+        results.push({ home: cur.teams[i], away: cur.teams[i + 1], score: [3, 2, 1, 0, 1][i / 2 % 5] + ' – ' + [0, 2, 0, 1, 1][i / 2 % 5] });
+      }
+      const top = cur.scorers[0][2] || 1;
+      cur.scorers.forEach((s, i) => scorers.push({ pos: i + 1, name: s[0], club: s[1], goals: s[2], bar: 'height:100%;width:' + Math.round((s[2] / top) * 100) + '%;background:' + accent + ';' }));
+    }
+
+    const mkTie = (t) => ({
+      a: t.a, b: t.b, sa: t.sa, sb: t.sb,
+      card: 'background:#121922;border:1px solid ' + (t.mine ? accent : '#1d2733') + ';border-radius:12px;padding:10px 14px;display:flex;flex-direction:column;gap:6px;',
+      aStyle: 'font-weight:' + (t.sa !== '' && t.sa > t.sb ? 600 : 500) + ';color:' + (t.sa !== '' && t.sa < t.sb ? '#98a6b6' : '#eef2f6') + ';',
+      bStyle: 'font-weight:' + (t.sb !== '' && t.sb > t.sa ? 600 : 500) + ';color:' + (t.sb !== '' && t.sb < t.sa ? '#98a6b6' : '#eef2f6') + ';',
     });
-    const rounds = [
-      { name: 'Quartas de final', ties: [tie('Sapucaia', 'Viamão', 3, 2), tie('Bagé', 'Porto Alegre', 3, 0), tie('Porto Alegre', 'Canoas', 0, 1, true), tie('Bagé', 'Canoas', 1, 0)] },
-      { name: 'Semifinal', ties: [tie('Bagé', 'Canoas', '', '', true), tie('Sapucaia', 'Bagé', '', '')] },
-      { name: 'Final', ties: [tie('A definir', 'A definir', '', '')] },
-    ];
-    const campaign = [
-      { date: '3 de janeiro de 2027', phase: 'Fase de grupos, rodada 1', opp: 'Esporte Clube Viamão', score: '0 × 1' },
-      { date: '10 de janeiro de 2027', phase: 'Fase de grupos, rodada 2', opp: 'Clube Atlético Bagé', score: '2 × 1' },
-      { date: '17 de janeiro de 2027', phase: 'Fase de grupos, rodada 3', opp: 'Rio Grande Atlético Clube', score: '2 × 0' },
-      { date: '24 de janeiro de 2027', phase: 'Quartas de final, jogo 1', opp: 'Porto Alegre Sport Clube', score: '0 × 1' },
-    ];
-    const isLeague = comp === 'Campeonato Nacional do Brasil';
+    const rounds = cur && cur.rounds ? cur.rounds.map((r) => ({ name: r.name, ties: r.ties.map(mkTie) })) : [];
+
+    const sel = cur ? {
+      name: cur.name, meta: cur.meta, status: cur.status, chip: chips[cur.sk],
+      notMine: !cur.mine, hint: cur.hint || '',
+      isLeague: cur.kind === 'league', isCup: cur.kind === 'cup', isFuture: cur.kind === 'future',
+      phases: !!cur.phases, campaign: !!(cur.mine && cur.kind === 'cup'),
+    } : {};
+
     return {
-      accent, nav, comps, subs, rows, results, scorers, rounds, campaign, compName: comp,
-      isLeague, isCup: !isLeague,
-      showTable: isLeague && sub === 'Classificação', showResults: isLeague && sub === 'Resultados', showScorers: isLeague && sub === 'Artilharia',
+      accent, nav, views, cards, subs, rows, results, scorers, rounds, sel,
+      isMine: view === 'mine', isOthers: view === 'others',
+      hasSel: !!cur, noResults: list.length === 0,
+      country, setCountry: (e) => this.setState({ country: e.target.value, otherSel: undefined }),
+      otherCount: others.length === 1 ? '1 competição' : others.length + ' competições',
+      showTable: sub === 'Classificação', showResults: sub === 'Resultados', showScorers: sub === 'Artilharia',
+      campLines: cur && cur.camp ? cur.camp.map((text) => ({ text })) : [],
+      campaign: cur && cur.games ? cur.games.map((g) => ({ date: g[0], phase: g[1], opp: g[2], score: g[3] })) : [],
+      info: cur && cur.info ? cur.info.map((i) => ({ label: i[0], value: i[1] })) : [],
     };
   }
 }

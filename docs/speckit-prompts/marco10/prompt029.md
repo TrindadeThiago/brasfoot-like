@@ -22,12 +22,13 @@ Escopo:
 - Propostas: clube, divisão e posição, reputação, país, metas esperadas, validade, aviso de mudança de país e as ações Aceitar e Recusar; contador de propostas pendentes na barra lateral.
 - Histórico do técnico: passagens por clube (período e saída) e temporadas (divisão, posição, meta, conquistas, decisão da diretoria, reputação, campanha continental).
 - Técnicos: tabela dos técnicos da divisão com reputação e confiança, o jogador identificado e as vagas.
-- Notícias: seleção da temporada e rodada, manchetes com o nome da competição e destaque para as que envolvem o clube do jogador.
+- Notícias: seleção da temporada e rodada, com setas de rodada anterior e próxima; **cada manchete em um cartão** (competição, rodada, título e texto), separado dos demais; seção "Do seu clube" e uma seção por competição, cada uma com contagem; painel com o resumo da rodada, o filtro Todas e Do meu clube e a lista de competições com contagem, para filtrar com um clique.
 - Avisos que o jogo já dá em outras telas (demissão, nova contratação, propostas) com o mesmo componente de aviso.
 
 Requisitos:
 - Paridade funcional (docs/interface-nova.md §5): nenhum dado, ação ou aviso some.
-- As categorias, o destaque e os filtros de notícias dos mockups não são requisito: o jogo não classifica manchetes por tipo.
+- As categorias de notícia por tipo não são requisito: o jogo não classifica manchetes por tipo. O agrupamento é só por competição e por "seu clube".
+- O título curto e o texto de cada manchete precisam ser dados separados; se o jogo só guarda a frase inteira, o plano decide entre separar a mensagem na origem ou exibir a frase como título.
 - Estados vazios desenhados: sem propostas, sem metas ainda, sem notícias, clube desempregado (012).
 - Cor nunca é o único sinal de tendência e de situação das metas.
 - Textos, plural e formatos pelo i18n.

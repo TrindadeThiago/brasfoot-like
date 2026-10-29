@@ -16,7 +16,7 @@ a{color:inherit;text-decoration:none}
 a:hover{color:#ffffff}
 </style>
 </helmet>
-<div style="min-height: 980px; background: #0a0e13; color: #eef2f6; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.45; display: flex; flex-wrap: wrap">
+<div style="min-height: 1300px; background: #0a0e13; color: #eef2f6; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.45; display: flex; flex-wrap: wrap">
 
   <nav aria-label="Telas do jogo" style="flex: 1 1 232px; max-width: 100%; min-width: 0; background: #0f151c; border-right: 1px solid #1d2733; padding: 24px 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px">
     <div style="display: flex; align-items: center; gap: 12px; padding: 0 8px">
@@ -41,105 +41,322 @@ a:hover{color:#ffffff}
     </div>
   </nav>
 
-  <main style="flex: 999 1 640px; min-width: 0; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px">
+  <main style="flex: 999 1 640px; min-width: 0; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px">
 
     <header>
       <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600; letter-spacing: -0.02em">Finanças</h1>
-      <div style="color: #98a6b6">Caixa, ingresso, estádio e crédito do clube</div>
+      <div style="color: #98a6b6">Temporada 2027 · caixa, receitas, ingresso, estádio e crédito do clube</div>
     </header>
 
+    <sc-if value="{{crisis}}" hint-placeholder-val="{{ false }}">
+      <div role="alert" style="background: rgba(255,138,138,0.12); border: 1px solid rgba(255,138,138,0.45); border-radius: 12px; padding: 12px 16px; color: #ffb0b0; font-weight: 500">Crise financeira: o caixa está negativo há 2 rodadas.</div>
+    </sc-if>
+
+    <!-- Resumo fixo -->
     <div style="display: flex; flex-wrap: wrap; gap: 16px">
-      <sc-for list="{{kpis}}" as="k" hint-placeholder-count="3">
-        <div style="flex: 1 1 220px; background: #121922; border: 1px solid #1d2733; border-radius: 14px; padding: 16px">
+      <sc-for list="{{kpis}}" as="k" hint-placeholder-count="4">
+        <div style="flex: 1 1 200px; background: #121922; border: 1px solid #1d2733; border-radius: 14px; padding: 16px">
           <div style="color: #98a6b6; font-size: 12px">{{k.label}}</div>
-          <div style="font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 600">{{k.value}}</div>
+          <div style="{{k.style}}">{{k.value}}</div>
+          <div style="color: #98a6b6; font-size: 12px; margin-top: 2px">{{k.note}}</div>
         </div>
       </sc-for>
     </div>
 
-    <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: stretch">
-      <section aria-label="Temporada 2027" style="flex: 1 1 360px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px; box-sizing: border-box">
-        <h2 style="margin: 0 0 4px; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Temporada 2027</h2>
-        <div style="color: #98a6b6; font-size: 13px; margin-bottom: 12px">Saldo no início da temporada: $ 16.240.000</div>
-        <div style="display: flex; flex-wrap: wrap; gap: 24px">
-          <div style="flex: 1 1 160px">
-            <h3 style="margin: 0 0 4px; font-size: 13px; color: #98a6b6; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600">Receitas</h3>
-            <sc-for list="{{income}}" as="r" hint-placeholder-count="4">
-              <div style="display: flex; justify-content: space-between; gap: 8px; min-height: 36px; align-items: center; border-top: 1px solid #1d2733"><span style="color: #b4c0cd">{{r.label}}</span><span style="font-weight: 600; font-variant-numeric: tabular-nums">{{r.value}}</span></div>
-            </sc-for>
-            <div style="display: flex; justify-content: space-between; min-height: 40px; align-items: center; border-top: 1px solid #2e3a47; font-weight: 600"><span>Total</span><span style="color: {{accent}}">$ 7.051.951</span></div>
-          </div>
-          <div style="flex: 1 1 160px">
-            <h3 style="margin: 0 0 4px; font-size: 13px; color: #98a6b6; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600">Despesas</h3>
-            <sc-for list="{{expenses}}" as="r" hint-placeholder-count="4">
-              <div style="display: flex; justify-content: space-between; gap: 8px; min-height: 36px; align-items: center; border-top: 1px solid #1d2733"><span style="color: #b4c0cd">{{r.label}}</span><span style="font-weight: 600; font-variant-numeric: tabular-nums">{{r.value}}</span></div>
-            </sc-for>
-            <div style="display: flex; justify-content: space-between; min-height: 40px; align-items: center; border-top: 1px solid #2e3a47; font-weight: 600"><span>Total</span><span>$ 0</span></div>
-          </div>
-        </div>
-      </section>
-
-      <section aria-label="Ingresso" style="flex: 1 1 300px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px">
-        <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Ingresso</h2>
-        <div style="color: #b4c0cd">Preço atual: $ 14</div>
-        <label style="display: flex; flex-direction: column; gap: 6px; color: #98a6b6; font-size: 13px">
-          Preço do ingresso (5 a 200)
-          <input type="text" value="14" style="min-height: 44px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; padding: 0 12px; font: inherit; max-width: 160px">
-        </label>
-        <button type="button" style="align-self: flex-start; min-height: 44px; padding: 0 18px; border-radius: 10px; border: 0; background: {{accent}}; color: #06140c; font: inherit; font-weight: 600; cursor: pointer">Aplicar preço</button>
-        <div style="color: #98a6b6; font-size: 13px">Próximo jogo em casa: público estimado de 27.413 (60% do estádio), renda de $ 383.782.</div>
-      </section>
-
-      <section aria-label="Crédito bancário" style="flex: 1 1 300px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px">
-        <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Crédito bancário</h2>
-        <div style="color: #b4c0cd">Limite: $ 8.082.000 · disponível: $ 8.082.000</div>
-        <div style="color: #98a6b6; font-size: 13px">Juros de 0,3% por rodada · custo atual de $ 0 por rodada</div>
-        <label style="display: flex; flex-direction: column; gap: 6px; color: #98a6b6; font-size: 13px">
-          Valor
-          <input type="text" style="min-height: 44px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; padding: 0 12px; font: inherit; max-width: 200px">
-        </label>
-        <div style="display: flex; flex-wrap: wrap; gap: 8px">
-          <button type="button" style="min-height: 44px; padding: 0 16px; border-radius: 10px; border: 0; background: {{accent}}; color: #06140c; font: inherit; font-weight: 600; cursor: pointer">Tomar empréstimo</button>
-          <button type="button" disabled style="min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #6c7a89; font: inherit; font-weight: 500">Amortizar</button>
-          <button type="button" disabled style="min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #6c7a89; font: inherit; font-weight: 500">Quitar dívida</button>
-        </div>
-      </section>
+    <!-- Abas -->
+    <div role="tablist" aria-label="Contextos das finanças" style="display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid #1d2733">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="6">
+        <button type="button" role="tab" aria-selected="{{t.on}}" onClick="{{t.pick}}" style="{{t.style}}">{{t.label}}</button>
+      </sc-for>
     </div>
 
-    <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
-      <section aria-label="Estádio" style="flex: 1 1 360px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px; box-sizing: border-box">
-        <h2 style="margin: 0 0 4px; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Estádio</h2>
-        <div style="color: #98a6b6; margin-bottom: 8px">46.000 lugares</div>
-        <sc-for list="{{works}}" as="w" hint-placeholder-count="3">
-          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid #1d2733">
-            <div><div style="font-weight: 600">{{w.seats}}</div><div style="color: #98a6b6; font-size: 13px">{{w.meta}}</div></div>
-            <button type="button" style="min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; font: inherit; font-weight: 500; cursor: pointer">Contratar obra</button>
+    <!-- ===================== Visão geral ===================== -->
+    <sc-if value="{{t1}}" hint-placeholder-val="{{ true }}">
+      <section aria-label="Saldo ao longo da temporada" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline">
+          <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Saldo ao longo da temporada</h2>
+          <span style="color: #98a6b6; font-size: 13px">Saldo no início da temporada: {{startBalance}}</span>
+        </div>
+        <svg viewBox="0 0 720 260" role="img" aria-label="{{bal.aria}}" style="width: 100%; height: auto; display: block">
+          <defs><linearGradient id="gArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{{accent}}" stop-opacity="0.32"></stop><stop offset="1" stop-color="{{accent}}" stop-opacity="0"></stop></linearGradient></defs>
+          <sc-for list="{{bal.grid}}" as="g" hint-placeholder-count="5">
+            <line x1="64" x2="704" y1="{{g.y}}" y2="{{g.y}}" stroke="{{g.stroke}}" stroke-width="1"></line>
+            <text x="56" y="{{g.ty}}" text-anchor="end" font-size="11" fill="#98a6b6">{{g.label}}</text>
+          </sc-for>
+          <sc-for list="{{bal.xs}}" as="x" hint-placeholder-count="12">
+            <text x="{{x.x}}" y="250" text-anchor="middle" font-size="11" fill="#98a6b6">{{x.label}}</text>
+          </sc-for>
+          <path d="{{bal.area}}" fill="url(#gArea)"></path>
+          <path d="{{bal.line}}" fill="none" stroke="{{accent}}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path>
+          <sc-for list="{{bal.dots}}" as="d" hint-placeholder-count="6">
+            <circle cx="{{d.cx}}" cy="{{d.cy}}" r="4.5" fill="#0a0e13" stroke="{{accent}}" stroke-width="2"><title>{{d.title}}</title></circle>
+          </sc-for>
+          <text x="{{bal.lastX}}" y="{{bal.lastY}}" text-anchor="{{bal.lastAnchor}}" font-size="12" font-weight="600" fill="#eef2f6">{{bal.lastLabel}}</text>
+        </svg>
+      </section>
+
+      <section aria-label="Receitas e despesas por mês" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline">
+          <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Receitas e despesas por mês</h2>
+          <div style="display: flex; gap: 16px; color: #b4c0cd; font-size: 13px">
+            <span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 3px; background: {{accent}}"></span>Receitas</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #ff8a8a"></span>Despesas</span>
           </div>
+        </div>
+        <svg viewBox="0 0 720 260" role="img" aria-label="{{flow.aria}}" style="width: 100%; height: auto; display: block">
+          <sc-for list="{{flow.grid}}" as="g" hint-placeholder-count="5">
+            <line x1="64" x2="704" y1="{{g.y}}" y2="{{g.y}}" stroke="#1d2733" stroke-width="1"></line>
+            <text x="56" y="{{g.ty}}" text-anchor="end" font-size="11" fill="#98a6b6">{{g.label}}</text>
+          </sc-for>
+          <sc-for list="{{flow.xs}}" as="x" hint-placeholder-count="11">
+            <text x="{{x.x}}" y="250" text-anchor="middle" font-size="11" fill="#98a6b6">{{x.label}}</text>
+          </sc-for>
+          <sc-for list="{{flow.rects}}" as="r" hint-placeholder-count="10">
+            <rect x="{{r.x}}" y="{{r.y}}" width="{{r.w}}" height="{{r.h}}" rx="3" fill="{{r.fill}}"><title>{{r.title}}</title></rect>
+          </sc-for>
+        </svg>
+      </section>
+    </sc-if>
+
+    <!-- ===================== Receitas e despesas ===================== -->
+    <sc-if value="{{t2}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: stretch">
+        <section aria-label="Receitas por origem" style="flex: 1 1 380px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Receitas</h2>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px">
+            <svg viewBox="0 0 160 160" role="img" aria-label="{{recDonut.aria}}" style="width: 170px; height: 170px; flex: 0 0 auto">
+              <circle cx="80" cy="80" r="60" fill="none" stroke="#1d2733" stroke-width="22"></circle>
+              <sc-for list="{{recDonut.segs}}" as="s" hint-placeholder-count="4">
+                <circle cx="80" cy="80" r="60" fill="none" stroke="{{s.color}}" stroke-width="22" stroke-dasharray="{{s.dash}}" stroke-dashoffset="{{s.off}}" transform="rotate(-90 80 80)"></circle>
+              </sc-for>
+              <text x="80" y="76" text-anchor="middle" font-size="11" fill="#98a6b6">Total</text>
+              <text x="80" y="95" text-anchor="middle" font-size="16" font-weight="700" fill="#eef2f6">{{recDonut.center}}</text>
+            </svg>
+            <div style="flex: 1 1 200px; min-width: 0">
+              <sc-for list="{{recDonut.rows}}" as="r" hint-placeholder-count="5">
+                <div style="display: flex; align-items: center; gap: 10px; min-height: 36px; border-top: 1px solid #1d2733"><span style="{{r.swatch}}"></span><span style="flex: 1 1 auto; color: #b4c0cd">{{r.label}}</span><span style="font-weight: 600; font-variant-numeric: tabular-nums">{{r.value}}</span><span style="width: 44px; text-align: right; color: #98a6b6; font-size: 12px">{{r.pct}}</span></div>
+              </sc-for>
+            </div>
+          </div>
+        </section>
+
+        <section aria-label="Despesas por destino" style="flex: 1 1 380px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Despesas</h2>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px">
+            <svg viewBox="0 0 160 160" role="img" aria-label="{{desDonut.aria}}" style="width: 170px; height: 170px; flex: 0 0 auto">
+              <circle cx="80" cy="80" r="60" fill="none" stroke="#1d2733" stroke-width="22"></circle>
+              <sc-for list="{{desDonut.segs}}" as="s" hint-placeholder-count="4">
+                <circle cx="80" cy="80" r="60" fill="none" stroke="{{s.color}}" stroke-width="22" stroke-dasharray="{{s.dash}}" stroke-dashoffset="{{s.off}}" transform="rotate(-90 80 80)"></circle>
+              </sc-for>
+              <text x="80" y="76" text-anchor="middle" font-size="11" fill="#98a6b6">Total</text>
+              <text x="80" y="95" text-anchor="middle" font-size="16" font-weight="700" fill="#eef2f6">{{desDonut.center}}</text>
+            </svg>
+            <div style="flex: 1 1 200px; min-width: 0">
+              <sc-for list="{{desDonut.rows}}" as="r" hint-placeholder-count="5">
+                <div style="display: flex; align-items: center; gap: 10px; min-height: 36px; border-top: 1px solid #1d2733"><span style="{{r.swatch}}"></span><span style="flex: 1 1 auto; color: #b4c0cd">{{r.label}}</span><span style="font-weight: 600; font-variant-numeric: tabular-nums">{{r.value}}</span><span style="width: 44px; text-align: right; color: #98a6b6; font-size: 12px">{{r.pct}}</span></div>
+              </sc-for>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section aria-label="Resumo da temporada" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px 22px; display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between">
+        <sc-for list="{{summary}}" as="s" hint-placeholder-count="4">
+          <div><div style="color: #98a6b6; font-size: 12px">{{s.label}}</div><div style="{{s.style}}">{{s.value}}</div></div>
         </sc-for>
       </section>
-      <section aria-label="Jogos em casa" style="flex: 2 1 460px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; overflow-x: auto">
-        <table style="width: 100%; min-width: 520px; border-collapse: collapse; font-variant-numeric: tabular-nums">
+    </sc-if>
+
+    <!-- ===================== Bilheteria ===================== -->
+    <sc-if value="{{t3}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: stretch">
+        <section aria-label="Ingresso" style="flex: 1 1 300px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px">
+          <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Ingresso</h2>
+          <div style="color: #b4c0cd">Preço atual: {{priceNow}}</div>
+          <label style="display: flex; flex-direction: column; gap: 6px; color: #98a6b6; font-size: 13px">
+            Preço do ingresso (5 a 200)
+            <input type="text" inputmode="numeric" value="{{priceInput}}" onChange="{{setPrice}}" style="min-height: 44px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; padding: 0 12px; font: inherit; max-width: 160px">
+          </label>
+          <button type="button" onClick="{{applyPrice}}" style="align-self: flex-start; min-height: 44px; padding: 0 18px; border-radius: 10px; border: 0; background: {{accent}}; color: #06140c; font: inherit; font-weight: 600; cursor: pointer">Aplicar preço</button>
+          <sc-if value="{{priceApplied}}" hint-placeholder-val="{{ false }}"><div role="status" style="color: {{accent}}; font-weight: 500">Preço do ingresso atualizado.</div></sc-if>
+          <div style="background: #0f151c; border-radius: 12px; padding: 12px 14px; color: #b4c0cd">Próximo jogo em casa: público estimado de <strong style="color: #eef2f6">{{estAttendance}}</strong> ({{estOccupancy}}% do estádio), renda de <strong style="color: #eef2f6">{{estRevenue}}</strong>.</div>
+        </section>
+
+        <section aria-label="Público por jogo em casa" style="flex: 2 1 460px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px">
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline">
+            <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Público por jogo em casa</h2>
+            <span style="color: #98a6b6; font-size: 13px">Linha tracejada: capacidade do estádio</span>
+          </div>
+          <svg viewBox="0 0 720 260" role="img" aria-label="{{att.aria}}" style="width: 100%; height: auto; display: block">
+            <sc-for list="{{att.grid}}" as="g" hint-placeholder-count="5">
+              <line x1="64" x2="704" y1="{{g.y}}" y2="{{g.y}}" stroke="#1d2733" stroke-width="1"></line>
+              <text x="56" y="{{g.ty}}" text-anchor="end" font-size="11" fill="#98a6b6">{{g.label}}</text>
+            </sc-for>
+            <sc-for list="{{att.xs}}" as="x" hint-placeholder-count="6">
+              <text x="{{x.x}}" y="250" text-anchor="middle" font-size="11" fill="#98a6b6">{{x.label}}</text>
+            </sc-for>
+            <sc-for list="{{att.rects}}" as="r" hint-placeholder-count="6">
+              <rect x="{{r.x}}" y="{{r.y}}" width="{{r.w}}" height="{{r.h}}" rx="4" fill="{{r.fill}}"><title>{{r.title}}</title></rect>
+            </sc-for>
+            <sc-for list="{{att.tops}}" as="t" hint-placeholder-count="6">
+              <text x="{{t.x}}" y="{{t.y}}" text-anchor="middle" font-size="11" font-weight="600" fill="#eef2f6">{{t.text}}</text>
+            </sc-for>
+            <line x1="64" x2="704" y1="{{att.limitY}}" y2="{{att.limitY}}" stroke="#ffb454" stroke-width="1.5" stroke-dasharray="6 5"></line>
+          </svg>
+        </section>
+      </div>
+
+      <section aria-label="Jogos em casa" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; overflow-x: auto">
+        <table style="width: 100%; min-width: 620px; border-collapse: collapse; font-variant-numeric: tabular-nums">
           <caption style="text-align: left; padding: 16px 20px 4px; color: #98a6b6; font-size: 13px">Jogos em casa</caption>
-          <thead><tr style="color: #98a6b6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em"><th scope="col" style="text-align: right; padding: 12px 16px; font-weight: 500">Rodada</th><th scope="col" style="text-align: left; padding: 12px 16px; font-weight: 500">Adversário</th><th scope="col" style="text-align: right; padding: 12px 16px; font-weight: 500">Público</th><th scope="col" style="text-align: right; padding: 12px 16px; font-weight: 500">Ocupação</th><th scope="col" style="text-align: right; padding: 12px 16px; font-weight: 500">Ingresso</th><th scope="col" style="text-align: right; padding: 12px 16px; font-weight: 500">Renda</th></tr></thead>
+          <thead><tr style="color: #98a6b6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em"><th scope="col" style="text-align: left; padding: 12px 20px; font-weight: 500">Data</th><th scope="col" style="text-align: left; padding: 12px 16px; font-weight: 500">Adversário</th><th scope="col" style="text-align: right; padding: 12px 16px; font-weight: 500">Público</th><th scope="col" style="text-align: right; padding: 12px 16px; font-weight: 500">Ocupação</th><th scope="col" style="text-align: right; padding: 12px 16px; font-weight: 500">Ingresso</th><th scope="col" style="text-align: right; padding: 12px 20px; font-weight: 500">Renda</th></tr></thead>
           <tbody>
-            <tr style="border-top: 1px solid #1d2733"><td style="padding: 12px 16px; text-align: right">3</td><td style="padding: 12px 16px">Rio Grande</td><td style="padding: 12px 16px; text-align: right">25.002</td><td style="padding: 12px 16px; text-align: right">54%</td><td style="padding: 12px 16px; text-align: right">$ 14</td><td style="padding: 12px 16px; text-align: right; font-weight: 600">$ 350.028</td></tr>
+            <sc-for list="{{games}}" as="g" hint-placeholder-count="5">
+              <tr style="border-top: 1px solid #1d2733"><td style="padding: 12px 20px">{{g.date}}</td><td style="padding: 12px 16px">{{g.opp}}</td><td style="padding: 12px 16px; text-align: right">{{g.att}}</td><td style="padding: 12px 16px; text-align: right">{{g.occ}}</td><td style="padding: 12px 16px; text-align: right">{{g.price}}</td><td style="padding: 12px 20px; text-align: right; font-weight: 600">{{g.rev}}</td></tr>
+            </sc-for>
           </tbody>
         </table>
-        <div style="padding: 14px 20px; border-top: 1px solid #1d2733; color: #98a6b6; font-size: 13px">Prêmios da temporada: 24 de janeiro de 2027 · Campeonato Estadual do Rio Grande do Sul · $ 8.000</div>
       </section>
-    </div>
+    </sc-if>
 
-    <section aria-label="Histórico financeiro" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px">
-      <h2 style="margin: 0 0 4px; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Histórico financeiro</h2>
-      <div style="color: #98a6b6">Nenhuma temporada encerrada ainda.</div>
-    </section>
+    <!-- ===================== Estádio ===================== -->
+    <sc-if value="{{t4}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: stretch">
+        <section aria-label="Obras do estádio" style="flex: 1 1 420px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 10px">
+          <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Estádio</h2>
+          <div style="color: #98a6b6">46.000 lugares · ocupação média de {{avgOcc}}</div>
+          <sc-if value="{{hasWork}}" hint-placeholder-val="{{ false }}">
+            <div role="status" style="background: rgba(94,200,255,0.10); border: 1px solid rgba(94,200,255,0.4); border-radius: 12px; padding: 12px 14px; color: #bfe8ff; font-weight: 500">Obra em andamento: +3.600 lugares, faltam 3 rodadas.</div>
+            <div style="height: 8px; border-radius: 99px; background: #1d2733; overflow: hidden"><div style="width: 50%; height: 100%; background: #5ec8ff"></div></div>
+          </sc-if>
+          <sc-for list="{{works}}" as="w" hint-placeholder-count="3">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid #1d2733">
+              <div><div style="font-weight: 600">+{{w.seats}} lugares</div><div style="color: #98a6b6; font-size: 13px">{{w.cost}} · {{w.rounds}} rodadas</div><sc-if value="{{w.noCash}}" hint-placeholder-val="{{ false }}"><div style="color: #ffb454; font-size: 12px; font-weight: 600">Caixa insuficiente</div></sc-if></div>
+              <button type="button" disabled="{{w.disabled}}" style="{{w.btn}}">Contratar obra</button>
+            </div>
+          </sc-for>
+        </section>
+
+        <section aria-label="Capacidade do estádio" style="flex: 1 1 380px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Capacidade após cada obra</h2>
+          <sc-for list="{{capBars}}" as="b" hint-placeholder-count="4">
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px"><span style="color: #b4c0cd">{{b.label}}</span><span style="font-weight: 600; font-variant-numeric: tabular-nums">{{b.value}}</span></div>
+              <div style="height: 12px; border-radius: 99px; background: #1d2733; overflow: hidden"><div style="{{b.bar}}"></div></div>
+            </div>
+          </sc-for>
+          <div style="color: #98a6b6; font-size: 13px">Mais lugares só rendem se o público encher: hoje a ocupação média é de {{avgOcc}}.</div>
+        </section>
+      </div>
+    </sc-if>
+
+    <!-- ===================== Crédito ===================== -->
+    <sc-if value="{{t5}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: stretch">
+        <section aria-label="Crédito bancário" style="flex: 1 1 340px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px">
+          <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Crédito bancário</h2>
+          <div style="color: #b4c0cd">Limite: {{limit}} · disponível: <strong style="color: #eef2f6">{{available}}</strong></div>
+          <div>
+            <div style="display: flex; justify-content: space-between; color: #98a6b6; font-size: 12px; margin-bottom: 4px"><span>Limite em uso</span><span>{{usedPct}}</span></div>
+            <div style="height: 12px; border-radius: 99px; background: #1d2733; overflow: hidden"><div style="{{usedBar}}"></div></div>
+          </div>
+          <div style="color: #98a6b6; font-size: 13px">Juros de 0,3% por rodada · custo atual de {{perRound}} por rodada</div>
+          <label style="display: flex; flex-direction: column; gap: 6px; color: #98a6b6; font-size: 13px">
+            Valor
+            <input type="text" inputmode="numeric" style="min-height: 44px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; padding: 0 12px; font: inherit; max-width: 200px">
+          </label>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px">
+            <button type="button" style="min-height: 44px; padding: 0 16px; border-radius: 10px; border: 0; background: {{accent}}; color: #06140c; font: inherit; font-weight: 600; cursor: pointer">Tomar empréstimo</button>
+            <button type="button" disabled="{{noDebt}}" style="{{debtBtn}}">Amortizar</button>
+            <button type="button" disabled="{{noDebt}}" style="{{debtBtn}}">Quitar dívida</button>
+          </div>
+        </section>
+
+        <section aria-label="Dívida ao longo da temporada" style="flex: 2 1 460px; min-width: 0; background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px">
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline">
+            <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Dívida ao longo da temporada</h2>
+            <span style="color: #98a6b6; font-size: 13px">Linha tracejada: limite de crédito</span>
+          </div>
+          <svg viewBox="0 0 720 260" role="img" aria-label="{{debt.aria}}" style="width: 100%; height: auto; display: block">
+            <sc-for list="{{debt.grid}}" as="g" hint-placeholder-count="5">
+              <line x1="64" x2="704" y1="{{g.y}}" y2="{{g.y}}" stroke="#1d2733" stroke-width="1"></line>
+              <text x="56" y="{{g.ty}}" text-anchor="end" font-size="11" fill="#98a6b6">{{g.label}}</text>
+            </sc-for>
+            <sc-for list="{{debt.xs}}" as="x" hint-placeholder-count="11">
+              <text x="{{x.x}}" y="250" text-anchor="middle" font-size="11" fill="#98a6b6">{{x.label}}</text>
+            </sc-for>
+            <sc-for list="{{debt.rects}}" as="r" hint-placeholder-count="5">
+              <rect x="{{r.x}}" y="{{r.y}}" width="{{r.w}}" height="{{r.h}}" rx="4" fill="{{r.fill}}"><title>{{r.title}}</title></rect>
+            </sc-for>
+            <line x1="64" x2="704" y1="{{debt.limitY}}" y2="{{debt.limitY}}" stroke="#ffb454" stroke-width="1.5" stroke-dasharray="6 5"></line>
+          </svg>
+        </section>
+      </div>
+    </sc-if>
+
+    <!-- ===================== Histórico ===================== -->
+    <sc-if value="{{t6}}" hint-placeholder-val="{{ false }}">
+      <section aria-label="Prêmios da temporada" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; overflow-x: auto">
+        <table style="width: 100%; min-width: 520px; border-collapse: collapse; font-variant-numeric: tabular-nums">
+          <caption style="text-align: left; padding: 16px 20px 4px; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">Prêmios da temporada</caption>
+          <thead><tr style="color: #98a6b6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em"><th scope="col" style="text-align: left; padding: 12px 20px; font-weight: 500">Data</th><th scope="col" style="text-align: left; padding: 12px 16px; font-weight: 500">Competição</th><th scope="col" style="text-align: right; padding: 12px 20px; font-weight: 500">Valor</th></tr></thead>
+          <tbody>
+            <tr style="border-top: 1px solid #1d2733"><td style="padding: 12px 20px">24 de janeiro de 2027</td><td style="padding: 12px 16px">Campeonato Estadual do Rio Grande do Sul</td><td style="padding: 12px 20px; text-align: right; font-weight: 600">$ 8.000</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section aria-label="Histórico financeiro" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px">
+        <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Histórico financeiro</h2>
+        <sc-if value="{{noHistory}}" hint-placeholder-val="{{ false }}">
+          <div style="color: #98a6b6">Nenhuma temporada encerrada ainda.</div>
+        </sc-if>
+        <sc-if value="{{hasHistory}}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-wrap: wrap; gap: 16px; color: #b4c0cd; font-size: 13px">
+            <span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 3px; background: {{accent}}"></span>Saldo final de cada temporada</span>
+          </div>
+          <svg viewBox="0 0 720 260" role="img" aria-label="{{hist.aria}}" style="width: 100%; height: auto; display: block">
+            <sc-for list="{{hist.grid}}" as="g" hint-placeholder-count="5">
+              <line x1="64" x2="704" y1="{{g.y}}" y2="{{g.y}}" stroke="#1d2733" stroke-width="1"></line>
+              <text x="56" y="{{g.ty}}" text-anchor="end" font-size="11" fill="#98a6b6">{{g.label}}</text>
+            </sc-for>
+            <sc-for list="{{hist.xs}}" as="x" hint-placeholder-count="4">
+              <text x="{{x.x}}" y="250" text-anchor="middle" font-size="11" fill="#98a6b6">{{x.label}}</text>
+            </sc-for>
+            <sc-for list="{{hist.rects}}" as="r" hint-placeholder-count="4">
+              <rect x="{{r.x}}" y="{{r.y}}" width="{{r.w}}" height="{{r.h}}" rx="5" fill="{{r.fill}}"><title>{{r.title}}</title></rect>
+            </sc-for>
+            <sc-for list="{{hist.tops}}" as="t" hint-placeholder-count="4">
+              <text x="{{t.x}}" y="{{t.y}}" text-anchor="middle" font-size="11" font-weight="600" fill="#eef2f6">{{t.text}}</text>
+            </sc-for>
+          </svg>
+          <div style="overflow-x: auto">
+            <table style="width: 100%; min-width: 560px; border-collapse: collapse; font-variant-numeric: tabular-nums">
+              <thead><tr style="color: #98a6b6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em"><th scope="col" style="text-align: left; padding: 10px 0; font-weight: 500">Temporada</th><th scope="col" style="text-align: right; padding: 10px 12px; font-weight: 500">Saldo inicial</th><th scope="col" style="text-align: right; padding: 10px 12px; font-weight: 500">Receitas</th><th scope="col" style="text-align: right; padding: 10px 12px; font-weight: 500">Despesas</th><th scope="col" style="text-align: right; padding: 10px 0; font-weight: 500">Saldo final</th></tr></thead>
+              <tbody>
+                <sc-for list="{{histRows}}" as="h" hint-placeholder-count="4">
+                  <tr style="border-top: 1px solid #1d2733"><td style="padding: 10px 0; font-weight: 600">{{h.year}}</td><td style="padding: 10px 12px; text-align: right; color: #b4c0cd">{{h.start}}</td><td style="padding: 10px 12px; text-align: right; color: #b4c0cd">{{h.rev}}</td><td style="padding: 10px 12px; text-align: right; color: #b4c0cd">{{h.exp}}</td><td style="padding: 10px 0; text-align: right; font-weight: 600">{{h.end}}</td></tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <h3 style="margin: 0 0 6px; font-size: 12px; color: #98a6b6; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600">Crises financeiras</h3>
+            <div style="color: #b4c0cd">De 2024, rodada 12, a 2024, rodada 15.</div>
+          </div>
+        </sc-if>
+      </section>
+    </sc-if>
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#3ddc84","options":["#3ddc84","#5ec8ff","#ffb454","#c79bff"]}}'>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#3ddc84","options":["#3ddc84","#5ec8ff","#ffb454","#c79bff"]},"moment":{"editor":"enum","default":"meio da temporada","options":["início da temporada","meio da temporada","com histórico","em crise"],"section":"Estado dos dados"}}'>
 class Component extends DCLogic {
   renderVals() {
     const accent = this.props.accent ?? '#3ddc84';
+    const moment = this.props.moment ?? 'meio da temporada';
+    const st = this.state || {};
+    const tab = st.tab || 'Visão geral';
     const base = 'display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;border-radius:10px;box-sizing:border-box;';
     const items = [
       ['Início', 'Main.dc.html', 'M3 11l9-8 9 8M5 10v10h14V10'],
@@ -157,16 +374,211 @@ class Component extends DCLogic {
       label: it[0], href: it[1], icon: it[2], badge: it[4] || '',
       style: base + (it[3] ? 'background:#16222c;color:' + accent + ';font-weight:600;' : 'color:#b4c0cd;font-weight:500;'),
     }));
+
+    // ---------- utilidades ----------
+    const fmt = (n) => String(Math.round(Math.abs(n))).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    const money = (n) => (n < 0 ? '− ' : '') + '$ ' + fmt(n);
+    const mi = (n) => (n < 0 ? '−' : '') + (Math.abs(n) / 1e6).toFixed(1).replace('.', ',') + ' mi';
+    const pct = (a, b) => (b ? Math.round((a / b) * 100) : 0) + '%';
+    const MONTHS = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov'];
+    const niceTicks = (min, max, n) => {
+      const span = (max - min) || 1;
+      const raw = span / n;
+      const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+      const norm = raw / mag;
+      const step = (norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 5 ? 5 : 10) * mag;
+      const lo = Math.floor(min / step) * step;
+      const hi = Math.ceil(max / step) * step;
+      const out = [];
+      for (let v = lo; v <= hi + 1e-6; v += step) out.push(v);
+      return out;
+    };
+    const W = 720, H = 260, L = 64, R = 16, T = 16, B = 32, IW = W - L - R, IH = H - T - B;
+
+    // ---------- dados da temporada ----------
+    const nm = moment === 'início da temporada' ? 1 : 5;
+    const crisis = moment === 'em crise';
+    const START = 16240000;
+    const games = [
+      ['17/01', 'Rio Grande Atlético Clube', 0, 25002, 14],
+      ['28/02', 'Associação Angra dos Reis', 1, 29300, 14],
+      ['14/03', 'União Paranaguá', 2, 27100, 14],
+      ['28/03', 'Divinópolis Unidos', 2, 26500, 14],
+      ['11/04', 'Canoas Futebol Clube', 3, 28200, 14],
+      ['25/04', 'Unidos Belo Horizonte', 3, 27800, 16],
+      ['09/05', 'Clube Esportivo Sorocaba', 4, 28900, 16],
+      ['23/05', 'Nacional Maringá', 4, 30400, 16],
+    ].filter((g) => g[2] < nm);
+    const rec = { bil: [0, 0, 0, 0, 0], pat: [6693923, 0, 0, 0, 0], pre: [8000, 0, 0, 0, 0], emp: [0, 0, 1500000, 0, 0], ven: [0, 0, 900000, 0, 0] };
+    games.forEach((g) => { rec.bil[g[2]] += g[3] * g[4]; });
+    const des = { sal: [0, 1640000, 1640000, 1640000, 1640000], jur: [0, 0, 0, 18000, 24000], amo: [0, 0, 0, 0, 0], obr: [0, 0, 0, 2700000, 0], com: [0, 0, 1200000, 0, crisis ? 21500000 : 0] };
+    const sumM = (o, i) => Object.keys(o).reduce((s, k) => s + o[k][i], 0);
+    const recM = [], desM = [], balM = [];
+    let run = START;
+    for (let i = 0; i < nm; i++) { recM.push(sumM(rec, i)); desM.push(sumM(des, i)); run += recM[i] - desM[i]; balM.push(run); }
+    const balance = run;
+    const totRec = recM.reduce((a, b) => a + b, 0);
+    const totDes = desM.reduce((a, b) => a + b, 0);
+    const debtM = [0, 0, 1500000, 1500000, 1500000].slice(0, nm);
+    const debt = debtM[nm - 1];
+    const LIMIT = 8082000;
+    const hasWork = nm >= 4;
+
+    const tabs = ['Visão geral', 'Receitas e despesas', 'Bilheteria', 'Estádio', 'Crédito', 'Histórico'].map((label) => ({
+      label, on: tab === label ? 'true' : 'false',
+      pick: () => this.setState({ tab: label }),
+      style: 'flex:0 0 auto;min-height:48px;padding:0 16px;border:0;background:transparent;font:inherit;font-weight:600;cursor:pointer;margin-bottom:-1px;color:' + (tab === label ? '#eef2f6' : '#98a6b6') + ';border-bottom:3px solid ' + (tab === label ? accent : 'transparent') + ';',
+    }));
+
+    const kpiV = 'font-family:Space Grotesk,sans-serif;font-size:26px;font-weight:600;';
+    const net = balance - START;
+    const kpis = [
+      { label: 'Saldo', value: money(balance), note: 'Saldo no início: ' + money(START), style: kpiV + (balance < 0 ? 'color:#ff8a8a;' : '') },
+      { label: 'Resultado da temporada', value: (net > 0 ? '+ ' : '') + money(net), note: 'Receitas menos despesas', style: kpiV + 'color:' + (net >= 0 ? accent : '#ff8a8a') + ';' },
+      { label: 'Dívida', value: money(debt), note: 'Limite: ' + money(LIMIT), style: kpiV },
+      { label: 'Estádio', value: '46.000 lugares', note: 'Ocupação média: ' + (games.length ? pct(games.reduce((s, g) => s + g[3], 0) / games.length, 46000) : '—'), style: kpiV },
+    ];
+
+    // ---------- gráfico de saldo (linha) ----------
+    const series = [START].concat(balM);
+    const vmin = Math.min.apply(null, series.concat(crisis ? [0] : []));
+    const vmax = Math.max.apply(null, series);
+    const pad = (vmax - vmin) * 0.08 || 1;
+    const ticks = niceTicks(vmin - pad, vmax + pad, 4);
+    const lo = ticks[0], hi = ticks[ticks.length - 1];
+    const yAt = (v) => T + IH * (1 - (v - lo) / (hi - lo));
+    const xAt = (i) => L + IW * (i / 11);
+    const xsAll = ['Início'].concat(MONTHS).map((label, i) => ({ x: xAt(i), label }));
+    const pts = series.map((v, i) => [xAt(i), yAt(v)]);
+    const line = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+    const area = line + ' L' + pts[pts.length - 1][0].toFixed(1) + ' ' + (T + IH) + ' L' + pts[0][0].toFixed(1) + ' ' + (T + IH) + ' Z';
+    const lastP = pts[pts.length - 1];
+    const bal = {
+      grid: ticks.map((v) => ({ y: yAt(v), ty: yAt(v) + 4, label: mi(v), stroke: v === 0 ? '#5a6a7a' : '#1d2733' })),
+      xs: xsAll, line, area,
+      dots: pts.map((p, i) => ({ cx: p[0], cy: p[1], title: (i === 0 ? 'Início da temporada' : MONTHS[i - 1]) + ': ' + money(series[i]) })),
+      lastX: Math.min(lastP[0], W - 60), lastY: lastP[1] - 12, lastAnchor: lastP[0] > W - 80 ? 'end' : 'middle', lastLabel: money(balance),
+      aria: 'Gráfico de linha do saldo: começa em ' + money(START) + ' e termina em ' + money(balance) + (nm > 1 ? ' após ' + nm + ' meses.' : ' no primeiro mês.'),
+    };
+
+    // ---------- gráfico de barras ----------
+    const barChart = (labels, seriesList, domainMax, tickFmt, slots, limit, fillFn) => {
+      const tk = niceTicks(0, domainMax, 4);
+      const mx = tk[tk.length - 1];
+      const slotW = IW / slots;
+      const groupW = slotW * (seriesList.length > 1 ? 0.7 : 0.5);
+      const bw = groupW / seriesList.length;
+      const rects = [];
+      const tops = [];
+      seriesList.forEach((s, si) => s.values.forEach((v, i) => {
+        if (v === null || v === undefined) return;
+        const h = IH * (v / mx);
+        const x = L + slotW * i + (slotW - groupW) / 2 + bw * si;
+        rects.push({ x: x + 1, y: T + IH - h, w: Math.max(bw - 2, 1), h, fill: fillFn ? fillFn(v, i) : s.fill, title: s.name + ' · ' + labels[i] + ': ' + s.fmt(v) });
+        if (s.top) tops.push({ x: x + bw / 2, y: T + IH - h - 6, text: s.top(v, i) });
+      }));
+      return {
+        grid: tk.map((v) => ({ y: T + IH * (1 - v / mx), ty: T + IH * (1 - v / mx) + 4, label: tickFmt(v) })),
+        xs: labels.map((label, i) => ({ x: L + slotW * (i + 0.5), label })),
+        rects, tops, limitY: limit === undefined ? -10 : T + IH * (1 - limit / mx),
+      };
+    };
+
+    const flowRaw = barChart(MONTHS, [
+      { name: 'Receitas', fill: accent, values: recM.concat(new Array(11 - nm).fill(null)), fmt: money },
+      { name: 'Despesas', fill: '#ff8a8a', values: desM.concat(new Array(11 - nm).fill(null)), fmt: money },
+    ], Math.max.apply(null, recM.concat(desM)), mi, 11);
+    const flow = Object.assign(flowRaw, { aria: 'Gráfico de barras de receitas e despesas por mês. Receitas totais: ' + money(totRec) + '. Despesas totais: ' + money(totDes) + '.' });
+
+    const attLabels = games.map((g) => g[0]);
+    const attRaw = barChart(attLabels, [{ name: 'Público', fill: accent, values: games.map((g) => g[3]), fmt: (v) => fmt(v) + ' pessoas', top: (v) => pct(v, 46000) }], 46000, (v) => fmt(v), Math.max(attLabels.length, 4), 46000);
+    const att = Object.assign(attRaw, { aria: 'Gráfico de barras do público em cada jogo em casa, de ' + (games.length ? fmt(Math.min.apply(null, games.map((g) => g[3]))) : '0') + ' a ' + (games.length ? fmt(Math.max.apply(null, games.map((g) => g[3]))) : '0') + ' pessoas, com capacidade de 46.000.' });
+
+    const debtRaw = barChart(MONTHS, [{ name: 'Dívida', fill: '#c79bff', values: debtM.concat(new Array(11 - nm).fill(null)), fmt: money }], LIMIT, mi, 11, LIMIT);
+    const debtChart = Object.assign(debtRaw, { aria: 'Gráfico de barras da dívida por mês. Dívida atual: ' + money(debt) + ' de um limite de ' + money(LIMIT) + '.' });
+
+    // ---------- rosca ----------
+    const donut = (entries, centerValue) => {
+      const total = entries.reduce((s, e) => s + e.value, 0);
+      const C = 2 * Math.PI * 60;
+      let acc = 0;
+      const live = entries.filter((e) => e.value > 0);
+      const segs = live.map((e) => {
+        const len = (e.value / (total || 1)) * C;
+        const seg = { color: e.color, dash: Math.max(len - 1.5, 0).toFixed(1) + ' ' + (C - Math.max(len - 1.5, 0)).toFixed(1), off: (-acc).toFixed(1) };
+        acc += len;
+        return seg;
+      });
+      return {
+        segs, center: mi(centerValue),
+        rows: entries.map((e) => ({ label: e.label, value: money(e.value), pct: pct(e.value, total), swatch: 'width:12px;height:12px;border-radius:4px;flex:0 0 auto;background:' + e.color + ';' })),
+        aria: 'Gráfico de rosca. ' + entries.filter((e) => e.value > 0).map((e) => e.label + ' ' + pct(e.value, total)).join(', ') + '.',
+      };
+    };
+    const rt = (k) => rec[k].slice(0, nm).reduce((a, b) => a + b, 0);
+    const dt = (k) => des[k].slice(0, nm).reduce((a, b) => a + b, 0);
+    const recDonut = donut([
+      { label: 'Bilheteria', value: rt('bil'), color: accent }, { label: 'Patrocínio', value: rt('pat'), color: '#5ec8ff' },
+      { label: 'Premiação', value: rt('pre'), color: '#ffb454' }, { label: 'Empréstimos recebidos', value: rt('emp'), color: '#c79bff' },
+      { label: 'Vendas de jogadores', value: rt('ven'), color: '#ff8fb1' },
+    ], totRec);
+    const desDonut = donut([
+      { label: 'Salários e rescisões', value: dt('sal'), color: '#ff8a8a' }, { label: 'Juros', value: dt('jur'), color: '#ffb454' },
+      { label: 'Amortização', value: dt('amo'), color: '#5ec8ff' }, { label: 'Obras', value: dt('obr'), color: '#c79bff' },
+      { label: 'Compras de jogadores', value: dt('com'), color: '#98a6b6' },
+    ], totDes);
+    const sv = 'font-family:Space Grotesk,sans-serif;font-size:22px;font-weight:600;';
+    const summary = [
+      { label: 'Saldo no início da temporada', value: money(START), style: sv }, { label: 'Receitas', value: money(totRec), style: sv + 'color:' + accent + ';' },
+      { label: 'Despesas', value: money(totDes), style: sv + 'color:#ff8a8a;' }, { label: 'Saldo atual', value: money(balance), style: sv + (balance < 0 ? 'color:#ff8a8a;' : '') },
+    ];
+
+    // ---------- ingresso ----------
+    const priceNow = st.priceApplied || (nm >= 6 ? 16 : nm >= 2 ? 16 : 14);
+    const priceInput = st.priceInput !== undefined ? st.priceInput : String(priceNow);
+    const typed = parseInt(String(priceInput).replace(/\D/g, ''), 10) || priceNow;
+    const occ = Math.max(0.18, Math.min(0.95, 0.62 - (typed - 14) * 0.012));
+    const estAtt = Math.round((46000 * occ) / 100) * 100;
+    const gamesTable = games.map((g) => ({ date: g[0] + '/2027', opp: g[1], att: fmt(g[3]), occ: pct(g[3], 46000), price: money(g[4]), rev: money(g[3] * g[4]) }));
+    const avg = games.length ? games.reduce((s, g) => s + g[3], 0) / games.length : 0;
+
+    // ---------- estádio ----------
+    const opts = [[3600, 2700000, 6], [9000, 7200000, 12], [18000, 16200000, 20]];
+    const works = opts.map((o) => {
+      const noCash = !hasWork && balance < o[1];
+      const dis = hasWork || noCash;
+      return { seats: fmt(o[0]), cost: money(o[1]), rounds: o[2], noCash, disabled: dis,
+        btn: 'min-height:44px;padding:0 16px;border-radius:10px;border:1px solid #2e3a47;background:#0f151c;font:inherit;font-weight:500;' + (dis ? 'color:#6c7a89;cursor:default;' : 'color:#eef2f6;cursor:pointer;') };
+    });
+    const capBars = [['Hoje', 46000], ['+3.600 lugares', 49600], ['+9.000 lugares', 55000], ['+18.000 lugares', 64000]].map((c) => ({
+      label: c[0], value: fmt(c[1]), bar: 'height:100%;border-radius:99px;width:' + Math.round((c[1] / 64000) * 100) + '%;background:' + (c[1] === 46000 ? '#98a6b6' : accent) + ';',
+    }));
+
+    // ---------- crédito ----------
+    const usedFrac = debt / LIMIT;
+
+    // ---------- histórico ----------
+    const withHist = moment === 'com histórico';
+    const seasons = [[2023, 8000000, 16100000, 14300000], [2024, 9800000, 18200000, 15900000], [2025, 12100000, 19800000, 16500000], [2026, 15400000, 21300000, 20460000]]
+      .map((s) => ({ year: s[0], start: s[1], rev: s[2], exp: s[3], end: s[1] + s[2] - s[3] }));
+    const histRows = seasons.map((s) => ({ year: s.year, start: money(s.start), rev: money(s.rev), exp: money(s.exp), end: money(s.end) }));
+    const histRaw = barChart(seasons.map((s) => String(s.year)), [{ name: 'Saldo final', fill: accent, values: seasons.map((s) => s.end), fmt: money, top: (v) => mi(v) }], Math.max.apply(null, seasons.map((s) => s.end)), mi, 4);
+    const hist = Object.assign(histRaw, { aria: 'Gráfico de barras do saldo final por temporada, de ' + mi(seasons[0].end) + ' em 2023 a ' + mi(seasons[3].end) + ' em 2026.' });
+
     return {
-      accent, nav,
-      kpis: [{ label: 'Saldo', value: '$ 23.291.951' }, { label: 'Dívida', value: '$ 0' }, { label: 'Estádio', value: '46.000 lugares' }],
-      income: [{ label: 'Bilheteria', value: '$ 350.028' }, { label: 'Patrocínio', value: '$ 6.693.923' }, { label: 'Premiação', value: '$ 8.000' }, { label: 'Vendas de jogadores', value: '$ 0' }],
-      expenses: [{ label: 'Salários e rescisões', value: '$ 0' }, { label: 'Juros e amortização', value: '$ 0' }, { label: 'Obras', value: '$ 0' }, { label: 'Compras de jogadores', value: '$ 0' }],
-      works: [
-        { seats: '+3.600 lugares', meta: '$ 2.700.000 · 6 rodadas' },
-        { seats: '+9.000 lugares', meta: '$ 7.200.000 · 12 rodadas' },
-        { seats: '+18.000 lugares', meta: '$ 16.200.000 · 20 rodadas' },
-      ],
+      accent, nav, tabs, kpis, crisis,
+      t1: tab === 'Visão geral', t2: tab === 'Receitas e despesas', t3: tab === 'Bilheteria', t4: tab === 'Estádio', t5: tab === 'Crédito', t6: tab === 'Histórico',
+      startBalance: money(START), bal, flow, recDonut, desDonut, summary,
+      priceNow: money(priceNow), priceInput, priceApplied: !!st.applied,
+      setPrice: (e) => this.setState({ priceInput: e.target.value, applied: false }),
+      applyPrice: () => this.setState({ priceApplied: Math.max(5, Math.min(200, typed)), priceInput: String(Math.max(5, Math.min(200, typed))), applied: true }),
+      estAttendance: fmt(estAtt), estOccupancy: Math.round(occ * 100), estRevenue: money(estAtt * typed),
+      att, games: gamesTable, avgOcc: games.length ? pct(avg, 46000) : '—',
+      hasWork, works, capBars,
+      limit: money(LIMIT), available: money(LIMIT - debt), usedPct: Math.round(usedFrac * 100) + '%', perRound: money(debt * 0.003),
+      usedBar: 'height:100%;border-radius:99px;width:' + Math.round(usedFrac * 100) + '%;background:#c79bff;',
+      noDebt: debt === 0, debtBtn: 'min-height:44px;padding:0 16px;border-radius:10px;border:1px solid #2e3a47;background:#0f151c;font:inherit;font-weight:500;' + (debt === 0 ? 'color:#6c7a89;cursor:default;' : 'color:#eef2f6;cursor:pointer;'),
+      debt: debtChart, hist, histRows, hasHistory: withHist, noHistory: !withHist,
     };
   }
 }

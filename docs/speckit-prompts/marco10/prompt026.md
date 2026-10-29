@@ -11,12 +11,12 @@ Objetivo: as telas que o jogador mais abre ficam mais claras e mostram o que imp
 
 Histórias de usuário:
 - Como jogador, quero abrir o Início e ver logo o próximo jogo e o que preciso resolver antes dele.
-- Como jogador, quero ver o elenco em uma tabela legível, sem rolagem da página inteira, e agir sobre um jogador a partir da linha dele.
+- Como jogador, quero ver o elenco em uma tabela legível, sem rolagem da página inteira, e abrir os detalhes de um jogador clicando na linha dele, com as ações de renovar, vender e rescindir no próprio modal.
 - Como jogador, quero montar a escalação num campo claro, com a condição de cada um visível e os desfalques à parte.
 
 Escopo:
 - Início: cartão do próximo jogo em destaque (adversário, competição, mando, forma recente) com as ações Jogar rodada e Simular direto; avisos acionáveis (mercado, escalação ajustada, propostas) com as ações que já existem, inclusive Dispensar; posição na tabela e últimos resultados; torcida e diretoria com a barra e a tendência; metas da temporada; manchetes.
-- Elenco: contagem do elenco, filtros por setor e condição com Limpar filtros, tabela com posição, jogador, idade, força, características, situação, lugar na escalação, condição, evolução e contrato, e as ações Detalhes, Vender e Rescindir; cabeçalho e ações por linha sem estourar a largura.
+- Elenco: contagem do elenco, filtros por setor e condição com Limpar filtros, tabela com posição, jogador, idade, força, características, situação, lugar na escalação, condição, evolução e contrato, **sem coluna de ações**: cada linha é clicável (e o nome do jogador é um botão, para o teclado) e abre o modal do jogador, com os detalhes (força e condição em barras, nacionalidade, características, contrato, salário, valor de mercado, evolução e estatísticas da temporada) e os botões Renovar, Vender e Rescindir; Vender e Rescindir pedem confirmação em diálogo (preço da venda imediata e multa da rescisão), e Renovar abre o diálogo de salário e duração, com a resposta do jogador; a tabela não estoura a largura.
 - Escalação: esquema e postura, Escalar automaticamente, aviso de titulares cansados, campo com os titulares (posição, nome, posição natural, força, condição), reservas com condição, "Fora da relação" com os lesionados e suspensos, mensagens de escalação pronta e de problemas (LineupIssues, LineupNotice).
 - Dicas de primeiro acesso reancoradas nos elementos novos.
 
