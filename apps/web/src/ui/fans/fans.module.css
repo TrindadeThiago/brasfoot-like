@@ -76,3 +76,12 @@
   background: var(--color-accent);
   color: var(--color-surface);
 }
+
+/* Barra do medidor nativo com os tokens do tema, nos dois temas (026). */
+.row meter,
+.meterRow meter {
+  flex: 1;
+  min-width: 80px;
+  height: 10px;
+  accent-color: var(--color-accent);
+}

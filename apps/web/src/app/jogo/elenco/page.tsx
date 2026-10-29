@@ -21,11 +21,11 @@ import {
 } from "../../../storage/preferences";
 import { Button } from "../../../ui/Button";
 import { type Column, DataTable } from "../../../ui/DataTable";
-import { type Disposal, DisposalDialog } from "../../../ui/DisposalDialog";
+import { EmptyState } from "../../../ui/EmptyState";
 import { evolutionText, lastEvolution } from "../../../ui/evolution-text";
 import { FitnessMeter } from "../../../ui/FitnessMeter";
 import { conditionText, HangingBadge } from "../../../ui/PlayerCondition";
-import { PlayerDetails } from "../../../ui/PlayerDetails";
+import { PlayerModal } from "../../../ui/PlayerModal";
 import { SquadCounter } from "../../../ui/SquadCounter";
 import styles from "./page.module.css";
 
@@ -46,9 +46,7 @@ function SquadScreen({ save, game }: { save: SaveFile; game: Game }) {
   const t = useT();
   const [filter, setFilter] = useState(() => readPreferences().squadFilter ?? NO_FILTER);
   const [details, setDetails] = useState<string | undefined>();
-  const [disposal, setDisposal] = useState<Disposal | undefined>();
   const [notice, setNotice] = useState<string | undefined>();
-  const locked = game.state.live !== undefined;
   const closeDetails = useCallback(() => setDetails(undefined), []);
   const { squad, unavailable, competitionId, elsewhere, hanging } = useMemo(
     () => lineupContext(save),
@@ -119,7 +117,21 @@ function SquadScreen({ save, game }: { save: SaveFile; game: Game }) {
     {
       key: "name",
       header: t("col.player"),
-      render: (player) => player.displayName,
+      render: (player) => (
+        <button
+          type="button"
+          className={styles.nameButton}
+          aria-haspopup="dialog"
+          aria-label={t("lineup.detailsOf", { name: player.displayName })}
+          onClick={(event) => {
+            // O clique da linha também abre o modal: sem isto abriria duas vezes.
+            event.stopPropagation();
+            setDetails(player.id);
+          }}
+        >
+          {player.displayName}
+        </button>
+      ),
       sortValue: (player) => player.displayName,
     },
     {
@@ -185,34 +197,6 @@ function SquadScreen({ save, game }: { save: SaveFile; game: Game }) {
       sortValue: (player) => player.contract?.untilYear ?? 0,
       align: "right",
     },
-    {
-      key: "actions",
-      header: t("col.actions"),
-      render: (player) => (
-        <span className={styles.rowActions}>
-          <Button
-            aria-label={t("lineup.detailsOf", { name: player.displayName })}
-            onClick={() => setDetails(player.id)}
-          >
-            {t("lineup.details")}
-          </Button>
-          <Button
-            aria-label={t("squad.sellOf", { name: player.displayName })}
-            disabled={locked}
-            onClick={() => setDisposal({ kind: "sell", playerId: player.id })}
-          >
-            {t("squad.sell")}
-          </Button>
-          <Button
-            aria-label={t("squad.terminateOf", { name: player.displayName })}
-            disabled={locked}
-            onClick={() => setDisposal({ kind: "terminate", playerId: player.id })}
-          >
-            {t("squad.terminate")}
-          </Button>
-        </span>
-      ),
-    },
   ];
 
   return (
@@ -259,15 +243,19 @@ function SquadScreen({ save, game }: { save: SaveFile; game: Game }) {
         caption={t("squad.caption", { club: club?.name ?? "" })}
         initialSort={readPreferences().squadSort ?? { column: "position", direction: "ascending" }}
         onSortChange={(sort) => writePreferences({ squadSort: sort })}
+        onRowClick={(player) => setDetails(player.id)}
       />
-      {rows.length === 0 ? <p className={styles.empty}>{t("squad.noMatch")}</p> : null}
-      <PlayerDetails save={save} playerId={details} onClose={closeDetails} />
-      <DisposalDialog
+      {rows.length === 0 ? (
+        <EmptyState title={t("squad.noMatch")}>
+          <Button onClick={() => updateFilter(NO_FILTER)}>{t("squad.clearFilters")}</Button>
+        </EmptyState>
+      ) : null}
+      <PlayerModal
         save={save}
         game={game}
-        target={disposal}
-        onClose={() => setDisposal(undefined)}
-        onDone={setNotice}
+        playerId={details}
+        onClose={closeDetails}
+        onNotice={setNotice}
       />
     </div>
   );

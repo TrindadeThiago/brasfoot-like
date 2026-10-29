@@ -73,6 +73,17 @@ function freeRow(kit: RowKit, agent: FreeAgent): MarketRow {
   };
 }
 
+/**
+ * A linha do mercado de um só jogador (clube ou livre), igual à de `marketRows`, sem montar a lista
+ * inteira: a tela do elenco só precisa do salário e do valor de quem abriu (026).
+ */
+export function marketRowOf(context: MarketContext, playerId: string): MarketRow | undefined {
+  const player = context.world.players.find((entry) => entry.id === playerId);
+  if (player) return rowOf(kitOf(context), player);
+  const agent = context.market.freeAgents.find((entry) => entry.player.id === playerId);
+  return agent ? freeRow(kitOf(context), agent) : undefined;
+}
+
 function within(value: number, range?: [number, number]): boolean {
   return !range || (value >= range[0] && value <= range[1]);
 }

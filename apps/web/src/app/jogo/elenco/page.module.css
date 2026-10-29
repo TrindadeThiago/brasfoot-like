@@ -6,6 +6,7 @@
 
 .filters {
   display: flex;
+  flex-wrap: wrap;
   align-items: end;
   gap: var(--space-4);
 }
@@ -32,7 +33,19 @@
   color: var(--color-muted);
 }
 
-.rowActions {
-  display: inline-flex;
-  gap: var(--space-2);
+.nameButton {
+  all: unset;
+  cursor: pointer;
+  font-weight: 600;
+  text-align: left;
+}
+
+.nameButton:hover {
+  text-decoration: underline;
+}
+
+.nameButton:focus-visible {
+  outline: 3px solid var(--focus-color);
+  outline-offset: 2px;
+  border-radius: 4px;
 }

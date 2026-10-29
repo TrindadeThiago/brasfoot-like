@@ -48,6 +48,8 @@ export function LineupList({
     .filter((player) => !used.has(player.id))
     .sort(
       (a, b) =>
+        // Os desfalques (lesionados e suspensos) vêm primeiro, à parte dos demais (026).
+        Number(unavailable.has(b.id)) - Number(unavailable.has(a.id)) ||
         POSITIONS.indexOf(a.position) - POSITIONS.indexOf(b.position) ||
         b.strength - a.strength ||
         a.id.localeCompare(b.id),

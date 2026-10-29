@@ -66,6 +66,16 @@ for (const theme of ["dark", "light"] as const) {
       await expect(page.getByRole("navigation", { name: t("nav.menu") })).toBeVisible();
       problems.push(...(await scan(page, path)));
     }
+    // Modal do jogador no Elenco (026), com as ações.
+    await page.goto(`/jogo/elenco/?c=${career}`);
+    await page
+      .getByRole("button", { name: /^Detalhes de / })
+      .first()
+      .click();
+    await expect(page.getByRole("dialog")).toBeVisible();
+    problems.push(...(await scan(page, "/jogo/elenco/ (modal)")));
+    await page.keyboard.press("Escape");
+
     // Ajuda de atalhos aberta.
     await page.keyboard.press("?");
     await expect(page.getByRole("dialog", { name: t("help.title") })).toBeVisible();
