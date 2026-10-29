@@ -1,8 +1,15 @@
 .grid {
   display: grid;
-  grid-template-columns: 2fr minmax(180px, 1fr) 2fr;
+  grid-template-columns: minmax(0, 2fr) minmax(180px, 1fr) minmax(0, 2fr);
   gap: var(--space-4);
   align-items: start;
+}
+
+/* Com a barra lateral, abaixo de ~1200 px as três colunas ficam apertadas: empilha (025). */
+@media (max-width: 1199px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .card {

@@ -136,7 +136,7 @@ Desenvolvimento via Spec-Driven Development com Spec Kit. Os prompts de `/specki
 **Estado do M6:** export/import de carreiras e formato de mod (015); dicas de primeiro acesso,
 Configurações (tema claro/escuro), ajuda de atalhos em todas as telas, revisão de
 acessibilidade, versão e notas, aviso de atualização e publicação na Vercel (016). Primeira
-publicação em https://treinador-fc.vercel.app, em 2026-10-21. As versões 1.0.0 a 1.10.0 (de 21 a 28
+publicação em https://treinador-fc.vercel.app, em 2026-10-21. As versões 1.0.0 a 1.10.0 (de 20 a 28
 de outubro de 2026) passaram a ser chamadas de **fase beta**: o lançamento oficial 1.0.0 é o fim do
 marco 10 (ver [`interface-nova.md`](interface-nova.md), seção 6). Falta o teste de usabilidade com
 quem nunca viu o jogo (`specs/016-polimento-publicacao/usability.md`).

@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import type { useGame } from "../game/GameProvider";
 import { useT } from "../i18n";
-import { screenHref } from "./AppHeader";
 import { Button } from "./Button";
 import { Dialog } from "./Dialog";
 import { issueText } from "./lineup-text";
+import { screenHref } from "./shell/screens";
 
 /** Escalação inválida (bloqueia) e time sem goleiro (pede confirmação) antes de simular. */
 export function SimulateDialogs({

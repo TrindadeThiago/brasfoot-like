@@ -120,7 +120,7 @@ interface real mostra os dados do banco em uso.
 
 ## 6. Versões, branch e notas
 
-O marco 10 reinicia a numeração do jogo. As versões **1.0.0 a 1.10.0** (23 versões, de 21 a 28 de
+O marco 10 reinicia a numeração do jogo. As versões **1.0.0 a 1.10.0** (23 versões, de 20 a 28 de
 outubro de 2026) passam a ser a **fase beta**; o jogo só ganha o número 1.0.0 de novo no
 lançamento oficial, ao fim do marco, já com a interface nova inteira.
 
@@ -162,7 +162,7 @@ workflow de release (que só publica se a tag `vX.Y.Z` ainda não existe) funcio
   acrescenta a ela o que mudou, no mesmo PR; a 032 revisa o texto para resumir o marco inteiro: o que
   mudou na interface e que o jogo e os saves seguem os mesmos.
 - A página de notas mostra no topo a nota do 1.0.0 e, no fim, uma seção recolhida **"Fase beta"**
-  (1.0.0 a 1.10.0, de 21 a 28 de outubro de 2026), com uma frase explicando que o jogo passou por uma
+  (1.0.0 a 1.10.0, de 20 a 28 de outubro de 2026), com uma frase explicando que o jogo passou por uma
   fase beta antes do lançamento oficial. Dentro dela, as versões aparecem como "beta 1.10.0" e
   assim por diante, para não se confundirem com a nova.
 

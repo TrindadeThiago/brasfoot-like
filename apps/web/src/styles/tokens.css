@@ -1,16 +1,18 @@
 /* Tema escuro (padrão). O claro sobrescreve as cores em [data-theme="light"] (016). */
 :root {
   color-scheme: dark;
-  --color-bg: #0f1419;
-  --color-surface: #182029;
-  --color-surface-2: #212b36;
+  --color-bg: #0a0e13;
+  --color-sidebar: #0f151c;
+  --color-surface: #121922;
+  --color-surface-2: #16222c;
   --color-border: #2e3a47;
-  --color-text: #e8edf2;
-  --color-muted: #9aa7b4;
+  --color-text: #eef2f6;
+  --color-muted: #98a6b6;
   --color-accent: #3ddc84;
   --color-accent-strong: #2bb56b;
-  --color-danger: #ff6b6b;
-  --color-warning: #ffcc4d;
+  --color-danger: #ff8a8a;
+  --color-warning: #ffb454;
+  --color-info: #5ec8ff;
   --color-win: #3ddc84;
   --color-draw: #9aa7b4;
   --color-loss: #ff6b6b;
@@ -28,15 +30,26 @@
   --pitch-card-bg: rgba(15, 20, 25, 0.82);
   --pitch-card-selected: rgba(24, 48, 34, 0.95);
   --pitch-card-text: #e8edf2;
+  --pitch-muted: #9aa7b4;
+  --pitch-accent: #3ddc84;
+  --pitch-border: #2e3a47;
+  /* Cartões do jogo: cores de domínio, iguais nos dois temas. */
+  --card-yellow: #f5c518;
+  --card-red: #d93025;
+  --card-edge: rgba(0, 0, 0, 0.35);
   --focus-color: #7cc4ff;
   --radius: 8px;
+  --radius-lg: 12px;
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
   --space-5: 24px;
   --space-6: 32px;
-  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-body:
+    "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display:
+    "Space Grotesk", "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   --text-sm: 13px;
   --text-md: 15px;
@@ -46,23 +59,25 @@
 
 :root[data-theme="light"] {
   color-scheme: light;
-  --color-bg: #f4f6f9;
+  --color-bg: #eef1f5;
+  --color-sidebar: #f7f9fb;
   --color-surface: #ffffff;
-  --color-surface-2: #e9edf2;
-  --color-border: #ccd3db;
-  --color-text: #16202a;
-  --color-muted: #4e5b69;
-  --color-accent: #11703c;
+  --color-surface-2: #e6ebf1;
+  --color-border: #d3dae3;
+  --color-text: #14202b;
+  --color-muted: #4a5868;
+  --color-accent: #0f7a44;
   --color-accent-strong: #0b5a30;
-  --color-danger: #b42828;
+  --color-danger: #b42323;
   --color-warning: #8a5300;
+  --color-info: #0b5fa5;
   --color-win: #11703c;
   --color-draw: #5f6b78;
   --color-loss: #b42828;
   --color-highlight: rgba(17, 112, 60, 0.12);
   --color-on-accent: #ffffff;
   --color-on-danger: #ffffff;
-  --color-control-border: #6f7c8b;
+  --color-control-border: #6b7a8a;
   --color-warning-soft: rgba(138, 83, 0, 0.14);
   --color-warning-softer: rgba(138, 83, 0, 0.08);
   --color-backdrop: rgba(22, 32, 42, 0.45);

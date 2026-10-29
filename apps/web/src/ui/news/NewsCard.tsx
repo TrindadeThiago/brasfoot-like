@@ -4,7 +4,7 @@ import { latestFeed, newsRules } from "@brasfoot-like/engine";
 import type { SaveFile } from "@brasfoot-like/save";
 import Link from "next/link";
 import { useT } from "../../i18n";
-import { screenHref } from "../AppHeader";
+import { screenHref } from "../shell/screens";
 import styles from "./news.module.css";
 import { RoundFeed } from "./RoundFeed";
 

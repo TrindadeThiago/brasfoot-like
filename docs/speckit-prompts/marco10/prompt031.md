@@ -23,7 +23,7 @@ Escopo:
 - Configurações: rodada ao vivo (velocidade padrão e pausa automática), aparência e idioma (tema claro, escuro e do sistema), Dicas (mostrar de novo) e Sobre com versão e links.
 - Mods: documentação do formato, mod de exemplo, mundo padrão para baixar, carregar mod (.zip) com os erros de validação, mods carregados com Remover e as planilhas (exportar e importar clubes e jogadores, gerar pacote).
 - Sobre: apresentação, "O que dá para fazer", capturas de tela, aviso de que não há nomes reais, privacidade e como levar as carreiras a outro navegador.
-- Notas de versão: versões recolhíveis, com a atual aberta, e marcação de que as novidades foram vistas (016); as versões novas no topo e, no fim, a seção recolhida "Fase beta" (1.0.0 a 1.10.0, de 21 a 28 de outubro de 2026) com uma frase explicando o que foi, e as versões antigas rotuladas "beta" (docs/interface-nova.md §6).
+- Notas de versão: versões recolhíveis, com a atual aberta, e marcação de que as novidades foram vistas (016); as versões novas no topo e, no fim, a seção recolhida "Fase beta" (1.0.0 a 1.10.0, de 20 a 28 de outubro de 2026) com uma frase explicando o que foi, e as versões antigas rotuladas "beta" (docs/interface-nova.md §6).
 - Ajuda de atalhos (diálogo) e aviso de atualização com o novo visual.
 
 Requisitos:

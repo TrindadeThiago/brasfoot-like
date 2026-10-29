@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { releaseNotes, releaseNotesSchema } from "../src";
+import { betaReleaseNotes, releaseNotes, releaseNotesSchema } from "../src";
 
 const { version } = JSON.parse(
   readFileSync(join(import.meta.dirname, "../../../package.json"), "utf8"),
@@ -12,6 +12,18 @@ describe("notas de versão (016 US5)", () => {
     const notes = releaseNotes("pt-BR");
     expect(notes.map((note) => note.version)).toContain(version);
     expect(notes[0]?.version).toBe(version);
+  });
+
+  it("a nota atual começa pelo 1.0.0 e as notas beta não se misturam com ela (025 FR-018/FR-020)", () => {
+    const current = releaseNotes("pt-BR");
+    const beta = betaReleaseNotes("pt-BR");
+    expect(current).toHaveLength(1);
+    expect(current[0]?.version).toBe("1.0.0");
+    expect(beta).toHaveLength(23);
+    expect(beta[0]?.version).toBe("1.10.0");
+    expect(beta.at(-1)?.version).toBe("1.0.0");
+    // O 1.0.0 do beta é outro texto: a verificação de publicação lê só `releaseNotes`.
+    expect(beta.at(-1)?.changes).not.toEqual(current[0]?.changes);
   });
 
   it("recusam versão repetida, fora de ordem, data inválida e lista vazia", () => {

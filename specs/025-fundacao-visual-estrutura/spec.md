@@ -104,7 +104,7 @@ Como jogador, quero que o jogo mostre a versão 1.0.0 e que as notas de versão 
 
 1. **Given** o jogo, **When** o jogador abre o menu inicial ou a página Sobre, **Then** vê "versão 1.0.0".
 2. **Given** a página de notas de versão, **When** ela abre, **Then** mostra uma única nota nova, a do 1.0.0, e, no fim, uma seção recolhida "Fase beta".
-3. **Given** a seção "Fase beta", **When** o jogador a abre, **Then** vê as 23 notas antigas (1.0.0 a 1.10.0, de 21 a 28 de outubro de 2026), rotuladas como "beta 1.10.0" e assim por diante, com uma frase explicando que o jogo passou por uma fase beta.
+3. **Given** a seção "Fase beta", **When** o jogador a abre, **Then** vê as 23 notas antigas (1.0.0 a 1.10.0, de 20 a 28 de outubro de 2026), rotuladas como "beta 1.10.0" e assim por diante, com uma frase explicando que o jogo passou por uma fase beta.
 4. **Given** um jogador que tinha visto a 1.10.0, **When** abre o jogo na versão 1.0.0, **Then** vê o aviso de novidades da nova versão.
 5. **Given** as verificações de publicação, **When** elas procuram a nota da versão atual, **Then** encontram a do 1.0.0 e nunca uma nota da fase beta.
 

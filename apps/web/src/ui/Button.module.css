@@ -33,3 +33,21 @@
 .secondary:hover:not(:disabled) {
   border-color: var(--color-muted);
 }
+
+.text {
+  background: transparent;
+  border-color: transparent;
+  color: var(--color-accent);
+  padding-inline: var(--space-2);
+}
+
+.text:hover:not(:disabled) {
+  background: var(--color-highlight);
+  border-color: transparent;
+}
+
+.danger:hover:not(:disabled) {
+  background: var(--color-danger);
+  border-color: var(--color-danger);
+  color: var(--color-on-danger);
+}

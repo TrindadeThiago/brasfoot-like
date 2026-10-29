@@ -70,6 +70,8 @@ test("taça continental: aba, grupos, temporada inteira, chaveamento e históric
   }
   await expect(page).toHaveURL(seasonEnd);
 
+  // O resumo é tela de foco (025): volta-se ao Início para usar a barra lateral.
+  await page.getByRole("link", { name: t("nav.home"), exact: true }).click();
   // O mata-mata final tem o campeão e as origens dos participantes estão na página.
   await menu.getByRole("link", { name: t("nav.competition") }).click();
   await page

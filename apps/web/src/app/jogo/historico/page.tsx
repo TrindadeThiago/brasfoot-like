@@ -7,7 +7,6 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { GameLayout } from "../../../game/GameLayout";
 import { useT } from "../../../i18n";
-import { screenHref } from "../../../ui/AppHeader";
 import { Button } from "../../../ui/Button";
 import { Crest } from "../../../ui/Crest";
 import { ContinentalHistory } from "../../../ui/continental/ContinentalHistory";
@@ -17,6 +16,7 @@ import { OtherCompetitions } from "../../../ui/history/OtherCompetitions";
 import { ClubHistory, Records, Scorers, Titles } from "../../../ui/history/WorldHistory";
 import { QualificationSummary } from "../../../ui/qualification/QualificationSummary";
 import { RegionalHistory } from "../../../ui/regional/RegionalHistory";
+import { screenHref } from "../../../ui/shell/screens";
 import styles from "./page.module.css";
 
 type Tab =

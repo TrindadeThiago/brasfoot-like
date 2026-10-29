@@ -33,9 +33,17 @@ function contrast(a: string, b: string): number {
   return (high + 0.05) / (low + 0.05);
 }
 
-const SURFACES = ["color-bg", "color-surface", "color-surface-2"];
+// 025: a barra lateral (`color-sidebar`) e o tom de informação (`color-info`) entram nos pares.
+const SURFACES = ["color-bg", "color-sidebar", "color-surface", "color-surface-2"];
 /** Texto normal: ≥ 4,5:1 sobre os fundos. */
-const TEXT = ["color-text", "color-muted", "color-accent", "color-danger", "color-warning"];
+const TEXT = [
+  "color-text",
+  "color-muted",
+  "color-accent",
+  "color-danger",
+  "color-warning",
+  "color-info",
+];
 /** Texto sobre cor de destaque (botão primário, fichas de forma, cartão vermelho). */
 const ON = [
   ["color-on-accent", "color-accent"],

@@ -1,6 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, type Page, test } from "@playwright/test";
-import { createCareer, t } from "./helpers";
+import { createCareer, simulateSeason, t } from "./helpers";
 
 // 016 US4 (FR-017–FR-022, SC-004): varredura axe nas telas principais, nos dois temas. Falha com
 // violações graves ou críticas.
@@ -18,8 +18,12 @@ const GAME = [
   "/jogo/elenco/",
   "/jogo/escalacao/",
   "/jogo/competicao/",
+  "/jogo/calendario/",
+  "/jogo/financas/",
+  "/jogo/historico/",
   "/jogo/mercado/",
   "/jogo/carreira/",
+  "/jogo/noticias/",
 ];
 
 async function scan(page: Page, label: string): Promise<string[]> {
@@ -42,7 +46,7 @@ async function scan(page: Page, label: string): Promise<string[]> {
 
 for (const theme of ["dark", "light"] as const) {
   test(`sem violações graves de acessibilidade no tema ${theme}`, async ({ page }) => {
-    test.setTimeout(180_000);
+    test.setTimeout(420_000);
     await page.addInitScript((value) => {
       const key = "brasfoot-like:preferences";
       const prefs = JSON.parse(localStorage.getItem(key) ?? "{}");
@@ -74,6 +78,12 @@ for (const theme of ["dark", "light"] as const) {
     await expect(page.getByRole("region", { name: t("round.myMatch") })).toBeVisible();
     await page.getByRole("button", { name: t("round.pause") }).click();
     problems.push(...(await scan(page, "/jogo/rodada/")));
+
+    // Fim de temporada (025: tela de foco).
+    await page.goto(`/jogo/?c=${career}`);
+    await simulateSeason(page);
+    await expect(page).toHaveURL(/fim-de-temporada/);
+    problems.push(...(await scan(page, "/jogo/fim-de-temporada/")));
 
     expect(problems).toEqual([]);
   });

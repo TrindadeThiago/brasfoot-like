@@ -1,9 +1,9 @@
 .pitch {
   /* Gramado sempre escuro: dentro dele vale a paleta escura nos dois temas (016). */
   --color-text: var(--pitch-card-text);
-  --color-muted: #9aa7b4;
-  --color-accent: #3ddc84;
-  --color-border: #2e3a47;
+  --color-muted: var(--pitch-muted);
+  --color-accent: var(--pitch-accent);
+  --color-border: var(--pitch-border);
   color: var(--color-text);
   display: flex;
   flex-direction: column;

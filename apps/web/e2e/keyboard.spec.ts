@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page, test } from "@playwright/test";
-import { skipTips, t } from "./helpers";
+import { createCareer, skipTips, t } from "./helpers";
 
 // 016 US4 (FR-019, SC-004): o fluxo principal inteiro só com o teclado, sempre vendo o foco.
 
@@ -101,3 +101,33 @@ for (const theme of ["dark", "light"] as const) {
     expect((await download).suggestedFilename()).toMatch(/\.blsave$/);
   });
 }
+
+// 025 US4: o Tab percorre a barra lateral inteira, na ordem das telas, antes do conteúdo.
+test("Tab percorre a barra lateral na ordem das telas e chega ao rodapé (025)", async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  await createCareer(page, "Ana Souza", 1);
+  const keys = [
+    "nav.home",
+    "nav.squad",
+    "nav.lineup",
+    "nav.competition",
+    "nav.calendar",
+    "nav.finance",
+    "nav.history",
+    "nav.market",
+    "nav.career",
+    "nav.news",
+    "nav.opening",
+    "nav.settings",
+  ];
+  for (const key of keys) {
+    await tabTo(
+      page,
+      page.getByRole("link", { name: new RegExp(`^${t(key)}`) }).first(),
+      key,
+    );
+  }
+  await tabTo(page, page.getByRole("button", { name: t("nav.help") }), "atalhos");
+});

@@ -37,4 +37,14 @@ test("depois da primeira visita o jogo abre e continua sem rede (SC-007)", async
     await page.goto(path);
     await expect(page.getByRole("heading", { level: 1, name: t(title) })).toBeVisible();
   }
+
+  // 025: as fontes do jogo (woff2 do próprio site) abrem do cache, sem rede.
+  const families = await page.evaluate(async () => {
+    await document.fonts.ready;
+    return [...document.fonts]
+      .filter((face) => face.status === "loaded")
+      .map((face) => face.family);
+  });
+  expect(families.join(",")).toMatch(/Inter/);
+  expect(families.join(",")).toMatch(/Space Grotesk/);
 });

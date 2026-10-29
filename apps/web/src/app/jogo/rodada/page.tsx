@@ -19,7 +19,6 @@ import { divisionHref } from "../../../game/useDivision";
 import { SPEEDS, useLiveRound } from "../../../game/useLiveRound";
 import { formatDate, useT } from "../../../i18n";
 import type { RoundSpeed } from "../../../storage/preferences";
-import { screenHref } from "../../../ui/AppHeader";
 import { Button } from "../../../ui/Button";
 import { ShootoutPanel } from "../../../ui/cup/ShootoutPanel";
 import { EventFeed } from "../../../ui/EventFeed";
@@ -30,6 +29,7 @@ import { setLeaveGuard } from "../../../ui/leave-guard";
 import { MatchSummary } from "../../../ui/MatchSummary";
 import { RoundResults } from "../../../ui/RoundResults";
 import { SubstitutionPanel } from "../../../ui/SubstitutionPanel";
+import { screenHref } from "../../../ui/shell/screens";
 import { useShortcuts } from "../../../ui/useShortcuts";
 import styles from "./page.module.css";
 

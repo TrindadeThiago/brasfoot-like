@@ -10,7 +10,7 @@
   height: 13px;
   border-radius: 2px;
   /* Cor fixa: o cartão é amarelo nos dois temas (o token de aviso fica marrom no claro). */
-  background: #f5c518;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
+  background: var(--card-yellow);
+  box-shadow: 0 0 0 1px var(--card-edge);
   vertical-align: middle;
 }
