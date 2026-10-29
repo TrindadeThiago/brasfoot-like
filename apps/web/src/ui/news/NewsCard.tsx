@@ -22,7 +22,12 @@ export function NewsCard({ save }: { save: SaveFile }) {
             : `${t("news.title")} · ${t("news.round", { round: feed.round })}`
           : t("news.title")}
       </h2>
-      <RoundFeed save={save} headlines={feed?.headlines ?? []} limit={homeLimit} />
+      <RoundFeed
+        save={save}
+        headlines={feed?.headlines ?? []}
+        round={feed?.round ?? 0}
+        limit={homeLimit}
+      />
       <Link href={screenHref("/jogo/noticias", save.id)}>{t("news.seeAll")}</Link>
     </section>
   );

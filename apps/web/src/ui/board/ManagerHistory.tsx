@@ -3,8 +3,10 @@
 import type { ManagerSeasonRecord, Stint } from "@brasfoot-like/engine";
 import { divisionNameOf, type SaveFile } from "@brasfoot-like/save";
 import { useT } from "../../i18n";
+import { Card } from "../Card";
 import { reachedText } from "../continental/reachedText";
 import { type Column, DataTable } from "../DataTable";
+import { EmptyState } from "../EmptyState";
 import styles from "./board.module.css";
 import { goalTierText } from "./GoalsList";
 
@@ -94,22 +96,30 @@ export function ManagerHistory({ save }: { save: SaveFile }) {
   ];
   return (
     <div className={styles.layout}>
-      <DataTable
-        rows={stints}
-        columns={stintColumns}
-        rowKey={(row) => String(row.index)}
-        caption={t("career.history.stints")}
-      />
-      {seasons.length === 0 ? (
-        <p className={styles.muted}>{t("career.history.empty")}</p>
-      ) : (
-        <DataTable
-          rows={seasons}
-          columns={seasonColumns}
-          rowKey={(row) => String(row.index)}
-          caption={t("career.history.seasons")}
-        />
-      )}
+      <Card>
+        {stints.length === 0 ? (
+          <EmptyState title={t("career.history.noStints")} />
+        ) : (
+          <DataTable
+            rows={stints}
+            columns={stintColumns}
+            rowKey={(row) => String(row.index)}
+            caption={t("career.history.stints")}
+          />
+        )}
+      </Card>
+      <Card>
+        {seasons.length === 0 ? (
+          <EmptyState title={t("career.history.empty")} />
+        ) : (
+          <DataTable
+            rows={seasons}
+            columns={seasonColumns}
+            rowKey={(row) => String(row.index)}
+            caption={t("career.history.seasons")}
+          />
+        )}
+      </Card>
     </div>
   );
 }

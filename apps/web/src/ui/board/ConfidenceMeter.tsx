@@ -1,26 +1,15 @@
 "use client";
 
 import type { ConfidenceChange } from "@brasfoot-like/engine";
+import { confidenceLevel, reasonsOf, TREND_SYMBOL, trendOf } from "../../game/board-view";
 import { useT } from "../../i18n";
+import { Meter } from "../Meter";
 import styles from "./board.module.css";
 
-/** Soma das últimas três mudanças: positiva = em alta. */
-export function confidenceTrend(recent: readonly ConfidenceChange[]): "up" | "down" | "flat" {
-  const sum = recent.slice(-3).reduce((total, change) => total + change.delta, 0);
-  return sum > 0 ? "up" : sum < 0 ? "down" : "flat";
-}
-
-/** Fatores das mudanças mais recentes (os mais novos primeiro). */
-export function recentFactors(recent: readonly ConfidenceChange[], limit: number) {
-  return [...recent]
-    .reverse()
-    .flatMap((change) =>
-      change.factors.map((factor, index) => ({ ...factor, id: `${change.round}-${index}` })),
-    )
-    .slice(0, limit);
-}
-
-/** Confiança da diretoria: valor, medidor, tendência e motivos recentes (FR-012, FR-015). */
+/**
+ * Confiança da diretoria (029): valor, barra com o nível em texto, tendência em texto e símbolo e
+ * os motivos mais recentes com o efeito de cada um (FR-012, FR-015).
+ */
 export function ConfidenceMeter({
   value,
   recent,
@@ -29,24 +18,23 @@ export function ConfidenceMeter({
   recent: readonly ConfidenceChange[];
 }) {
   const t = useT();
-  const trend = confidenceTrend(recent);
-  const factors = recentFactors(recent, 3);
+  const level = confidenceLevel(value);
+  const trend = trendOf(recent);
+  const factors = reasonsOf(recent, 3);
   return (
     <div className={styles.meter}>
       <div className={styles.meterRow}>
         <span className={styles.value}>{value}</span>
-        <meter
-          min={0}
-          max={100}
-          low={30}
-          high={60}
-          optimum={100}
+        <Meter
           value={value}
-          aria-label={t("board.confidence", { value })}
+          label={t("board.confidence", { value })}
+          text={t("board.level", { level })}
+          tone={level === "high" ? "accent" : level === "medium" ? "warning" : "danger"}
         />
         <span
           className={trend === "up" ? styles.up : trend === "down" ? styles.down : styles.muted}
         >
+          <span aria-hidden="true">{TREND_SYMBOL[trend]} </span>
           {t(`board.trend.${trend}`)}
         </span>
       </div>

@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page, test } from "@playwright/test";
-import { createCareer, skipTips, t } from "./helpers";
+import { createCareer, simulate, skipTips, t } from "./helpers";
 
 // 016 US4 (FR-019, SC-004): o fluxo principal inteiro só com o teclado, sempre vendo o foco.
 
@@ -212,4 +212,34 @@ test("Mercado e Finanças: setas nas abas e foco devolvido ao fechar (028)", asy
   await page.keyboard.press("End");
   await expect(page.getByRole("tab", { name: t("finance.tab.history") })).toBeFocused();
   await expectFocusVisible(page, "aba de finanças");
+});
+
+// 029: abas da Carreira e setas de rodada das Notícias só com o teclado, com foco visível.
+test("Carreira e Notícias: setas nas abas, setas de rodada e foco visível (029)", async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  await createCareer(page, "Ana Souza", 1);
+  await simulate(page, 2);
+  const career = new URL(page.url()).searchParams.get("c") ?? "";
+  await page.goto(`/jogo/carreira/?c=${career}`);
+  const board = page.getByRole("tab", { name: t("career.tab.board") });
+  await board.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(page.getByRole("tab", { name: t("career.tab.fans") })).toBeFocused();
+  await expectFocusVisible(page, "aba da carreira");
+  await page.keyboard.press("End");
+  await expect(page.getByRole("tab", { name: t("career.tab.coaches") })).toBeFocused();
+
+  await page.goto(`/jogo/noticias/?c=${career}`);
+  // Na rodada mais nova a seta "próxima" está desativada; a "anterior" recebe o foco e navega.
+  await expect(page.getByRole("button", { name: t("news.next") })).toBeDisabled();
+  const previous = page.getByRole("button", { name: t("news.prev") });
+  await previous.focus();
+  await expect(previous).toBeFocused();
+  await expectFocusVisible(page, "seta de rodada");
+  const select = page.getByRole("combobox", { name: t("news.select") });
+  const latest = await select.inputValue();
+  await page.keyboard.press("Enter");
+  expect(await select.inputValue()).not.toBe(latest);
 });

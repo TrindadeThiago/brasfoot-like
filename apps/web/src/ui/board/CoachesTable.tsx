@@ -3,6 +3,7 @@
 import { coachOf } from "@brasfoot-like/engine";
 import { divisionNameOf, type SaveFile } from "@brasfoot-like/save";
 import { useT } from "../../i18n";
+import { Card } from "../Card";
 import { Crest } from "../Crest";
 import { type Column, DataTable } from "../DataTable";
 
@@ -68,13 +69,15 @@ export function CoachesTable({ save, level }: { save: SaveFile; level: number })
     },
   ];
   return (
-    <DataTable
-      rows={rows}
-      columns={columns}
-      rowKey={(row) => row.clubId}
-      caption={t("career.coaches.caption", { division: divisionNameOf(save, level) })}
-      highlight={(row) => row.clubId === save.board.manager.clubId}
-      initialSort={{ column: "reputation", direction: "descending" }}
-    />
+    <Card>
+      <DataTable
+        rows={rows}
+        columns={columns}
+        rowKey={(row) => row.clubId}
+        caption={t("career.coaches.caption", { division: divisionNameOf(save, level) })}
+        highlight={(row) => row.clubId === save.board.manager.clubId}
+        initialSort={{ column: "reputation", direction: "descending" }}
+      />
+    </Card>
   );
 }
