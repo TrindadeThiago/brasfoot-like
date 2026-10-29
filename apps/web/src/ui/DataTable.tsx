@@ -72,74 +72,76 @@ export function DataTable<Row>({
   }
 
   return (
-    <table className={styles.table}>
-      <caption>{caption}</caption>
-      <thead>
-        <tr>
-          {columns.map((column) => (
-            <th
-              key={column.key}
-              scope="col"
-              aria-sort={sort?.column === column.key ? sort.direction : "none"}
-              style={{ textAlign: column.align ?? "left" }}
-            >
-              {column.sortValue ? (
-                <button
-                  type="button"
-                  className={styles.sortButton}
-                  onClick={() => toggle(column.key)}
-                >
-                  {column.header}
-                  <span aria-hidden="true" className={styles.arrow}>
-                    {sort?.column === column.key
-                      ? sort.direction === "ascending"
-                        ? "▲"
-                        : "▼"
-                      : ""}
-                  </span>
-                </button>
-              ) : (
-                column.header
-              )}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {ordered.map((row) => {
-          const isHighlighted = highlight?.(row) ?? false;
-          const isSelected = selected?.(row) ?? false;
-          return (
-            <tr
-              key={rowKey(row)}
-              aria-current={isHighlighted ? "true" : undefined}
-              aria-selected={onRowClick ? isSelected : undefined}
-              className={[
-                isHighlighted ? styles.highlight : "",
-                isSelected ? styles.selected : "",
-                onRowClick ? styles.clickable : "",
-              ].join(" ")}
-              tabIndex={onRowClick ? 0 : undefined}
-              onClick={onRowClick ? () => onRowClick(row) : undefined}
-              onKeyDown={
-                onRowClick
-                  ? (event) => {
-                      if (event.key !== "Enter" && event.key !== " ") return;
-                      event.preventDefault();
-                      onRowClick(row);
-                    }
-                  : undefined
-              }
-            >
-              {columns.map((column) => (
-                <td key={column.key} style={{ textAlign: column.align ?? "left" }}>
-                  {column.render(row)}
-                </td>
-              ))}
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+    <div className={styles.scroll}>
+      <table className={styles.table}>
+        <caption>{caption}</caption>
+        <thead>
+          <tr>
+            {columns.map((column) => (
+              <th
+                key={column.key}
+                scope="col"
+                aria-sort={sort?.column === column.key ? sort.direction : "none"}
+                style={{ textAlign: column.align ?? "left" }}
+              >
+                {column.sortValue ? (
+                  <button
+                    type="button"
+                    className={styles.sortButton}
+                    onClick={() => toggle(column.key)}
+                  >
+                    {column.header}
+                    <span aria-hidden="true" className={styles.arrow}>
+                      {sort?.column === column.key
+                        ? sort.direction === "ascending"
+                          ? "▲"
+                          : "▼"
+                        : ""}
+                    </span>
+                  </button>
+                ) : (
+                  column.header
+                )}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {ordered.map((row) => {
+            const isHighlighted = highlight?.(row) ?? false;
+            const isSelected = selected?.(row) ?? false;
+            return (
+              <tr
+                key={rowKey(row)}
+                aria-current={isHighlighted ? "true" : undefined}
+                aria-selected={onRowClick ? isSelected : undefined}
+                className={[
+                  isHighlighted ? styles.highlight : "",
+                  isSelected ? styles.selected : "",
+                  onRowClick ? styles.clickable : "",
+                ].join(" ")}
+                tabIndex={onRowClick ? 0 : undefined}
+                onClick={onRowClick ? () => onRowClick(row) : undefined}
+                onKeyDown={
+                  onRowClick
+                    ? (event) => {
+                        if (event.key !== "Enter" && event.key !== " ") return;
+                        event.preventDefault();
+                        onRowClick(row);
+                      }
+                    : undefined
+                }
+              >
+                {columns.map((column) => (
+                  <td key={column.key} style={{ textAlign: column.align ?? "left" }}>
+                    {column.render(row)}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 }

@@ -17,7 +17,6 @@ body {
 }
 
 body {
-  min-width: 1024px;
   overflow-x: hidden;
 }
 
@@ -38,6 +37,7 @@ h2,
 h3 {
   margin: 0 0 var(--space-3);
   line-height: 1.2;
+  font-family: var(--font-display);
 }
 
 /* Título da tela dentro do jogo: o <h1> é o clube, no cabeçalho (016, revisão de consistência). */

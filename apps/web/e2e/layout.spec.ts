@@ -1,0 +1,93 @@
+import { expect, type Page, test } from "@playwright/test";
+import { createCareer, simulateSeason, t } from "./helpers";
+
+// 025 SC-001 / FR-010 / FR-011: as telas abrem na nova estrutura, nos dois temas, em 1440, 1024 e
+// 768 px, sem rolagem horizontal da página. A 600 px a barra lateral empilha acima do conteúdo.
+const WIDTHS = [1440, 1024, 768];
+const OUTSIDE = [
+  "/",
+  "/nova-carreira/",
+  "/carreiras/",
+  "/configuracoes/",
+  "/mods/",
+  "/sobre/",
+  "/notas-de-versao/",
+];
+const CLUB = [
+  "/jogo/",
+  "/jogo/elenco/",
+  "/jogo/escalacao/",
+  "/jogo/competicao/",
+  "/jogo/calendario/",
+  "/jogo/financas/",
+  "/jogo/historico/",
+  "/jogo/mercado/",
+  "/jogo/carreira/",
+  "/jogo/noticias/",
+];
+
+async function expectNoHorizontalScroll(page: Page, label: string): Promise<void> {
+  await page.waitForLoadState("networkidle");
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
+  expect(overflow, `${label}: rolagem horizontal da página`).toBeLessThanOrEqual(0);
+}
+
+for (const theme of ["dark", "light"] as const) {
+  test(`19 telas sem rolagem horizontal em 1440, 1024 e 768 px, tema ${theme}`, async ({
+    page,
+  }) => {
+    test.setTimeout(420_000);
+    await page.addInitScript((value) => {
+      const key = "brasfoot-like:preferences";
+      const prefs = JSON.parse(localStorage.getItem(key) ?? "{}");
+      localStorage.setItem(key, JSON.stringify({ ...prefs, theme: value }));
+    }, theme);
+    await createCareer(page, "Ana Souza", 1);
+    const career = new URL(page.url()).searchParams.get("c") ?? "";
+
+    for (const width of WIDTHS) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const path of OUTSIDE) {
+        await page.goto(path);
+        await expectNoHorizontalScroll(page, `${path} @${width}`);
+      }
+      for (const path of CLUB) {
+        await page.goto(`${path}?c=${career}`);
+        await expect(page.getByRole("navigation", { name: t("nav.menu") })).toBeVisible();
+        await expectNoHorizontalScroll(page, `${path} @${width}`);
+      }
+    }
+
+    // Abaixo de 768 px a barra empilha acima do conteúdo, sem perder nenhuma tela.
+    await page.setViewportSize({ width: 600, height: 900 });
+    await page.goto(`/jogo/elenco/?c=${career}`);
+    const nav = page.getByRole("navigation", { name: t("nav.menu") });
+    await expect(nav.getByRole("link")).toHaveCount(10);
+    const [navBox, mainBox] = await Promise.all([
+      nav.boundingBox(),
+      page.locator("main").boundingBox(),
+    ]);
+    expect((navBox?.y ?? 0) + (navBox?.height ?? 0)).toBeLessThanOrEqual((mainBox?.y ?? 0) + 1);
+    await expectNoHorizontalScroll(page, "elenco @600");
+
+    // Tela de foco: rodada ao vivo (sem barra lateral).
+    await page.setViewportSize({ width: 768, height: 900 });
+    await page.goto(`/jogo/?c=${career}`);
+    await page.getByRole("button", { name: t("home.playLive") }).click();
+    await expect(page.getByRole("region", { name: t("round.myMatch") })).toBeVisible();
+    await expect(page.getByRole("navigation", { name: t("nav.menu") })).toHaveCount(0);
+    await expectNoHorizontalScroll(page, "rodada @768");
+
+    // Fim de temporada, em cada largura.
+    await page.goto(`/jogo/?c=${career}`);
+    await simulateSeason(page);
+    await expect(page).toHaveURL(/fim-de-temporada/);
+    for (const width of WIDTHS) {
+      await page.setViewportSize({ width, height: 900 });
+      await expect(page.getByRole("navigation", { name: t("nav.menu") })).toHaveCount(0);
+      await expectNoHorizontalScroll(page, `fim-de-temporada @${width}`);
+    }
+  });
+}

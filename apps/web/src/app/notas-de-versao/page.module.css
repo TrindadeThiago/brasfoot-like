@@ -17,7 +17,8 @@
   padding: var(--space-4);
 }
 
-.card h2 {
+.card h2,
+.card h3 {
   margin: 0 0 var(--space-2);
   font-size: var(--text-md);
 }
@@ -28,4 +29,27 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
+}
+
+.beta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.beta summary {
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-3);
+}
+
+.beta > p {
+  color: var(--color-muted);
+  margin: 0 0 var(--space-3);
+}
+
+.beta .card {
+  margin-bottom: var(--space-3);
 }

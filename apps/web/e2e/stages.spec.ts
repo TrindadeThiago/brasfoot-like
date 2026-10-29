@@ -71,6 +71,8 @@ test("divisão em grupos e mata-mata: tabelas, chaveamento e posição final (01
   await expect(page).toHaveURL(seasonEnd);
   await expect(page.getByRole("heading", { name: /encerrada/ })).toBeVisible();
 
+  // O resumo é tela de foco (025): volta-se ao Início para usar a barra lateral.
+  await page.getByRole("link", { name: t("nav.home"), exact: true }).click();
   // O mata-mata tem a origem das vagas.
   await menu.getByRole("link", { name: t("nav.competition") }).click();
   await nav.getByRole("link").nth(1).click();

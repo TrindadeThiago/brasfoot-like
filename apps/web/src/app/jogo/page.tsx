@@ -17,7 +17,6 @@ import { useRouter } from "next/navigation";
 import { GameLayout } from "../../game/GameLayout";
 import { clubPosition, lastResults } from "../../game/selectors";
 import { formatDate, formatMoney, formatWeekday, useT } from "../../i18n";
-import { screenHref } from "../../ui/AppHeader";
 import { Button } from "../../ui/Button";
 import { BoardCard } from "../../ui/board/BoardCard";
 import { BoardNotice } from "../../ui/board/BoardNotice";
@@ -33,6 +32,7 @@ import { WindowStatus } from "../../ui/market/WindowStatus";
 import { NewsCard } from "../../ui/news/NewsCard";
 import { RoundResults } from "../../ui/RoundResults";
 import { SquadChangeNotice } from "../../ui/SquadChangeNotice";
+import { screenHref } from "../../ui/shell/screens";
 import { stageLabel } from "../../ui/stages/label";
 import styles from "./page.module.css";
 

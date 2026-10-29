@@ -25,14 +25,14 @@
   width: 8px;
   height: 11px;
   border-radius: 2px;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 0 1px var(--card-edge);
 }
 
 /* Cores fixas: o cartão é amarelo/vermelho nos dois temas. */
 .yellow {
-  background: #f5c518;
+  background: var(--card-yellow);
 }
 
 .red {
-  background: #d93025;
+  background: var(--card-red);
 }

@@ -3,7 +3,7 @@
 import type { SaveFile } from "@brasfoot-like/save";
 import Link from "next/link";
 import { useT } from "../../i18n";
-import { screenHref } from "../AppHeader";
+import { screenHref } from "../shell/screens";
 import styles from "./board.module.css";
 import { ConfidenceMeter } from "./ConfidenceMeter";
 import { GoalsList } from "./GoalsList";

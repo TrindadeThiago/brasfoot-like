@@ -1,6 +1,6 @@
 "use client";
 
-import { releaseNotes } from "@brasfoot-like/i18n";
+import { betaReleaseNotes, releaseNotes } from "@brasfoot-like/i18n";
 import Link from "next/link";
 import { useEffect } from "react";
 import { APP_VERSION } from "../../app-info";
@@ -12,6 +12,7 @@ import styles from "./page.module.css";
 export default function ReleaseNotesPage() {
   const t = useT();
   const notes = releaseNotes(currentLocale());
+  const betaNotes = betaReleaseNotes(currentLocale());
 
   // Ver as notas conta como já ter visto as novidades desta versão.
   useEffect(() => writePreferences({ lastSeenVersion: APP_VERSION }), []);
@@ -38,6 +39,22 @@ export default function ReleaseNotesPage() {
           </ul>
         </section>
       ))}
+      <details className={styles.beta}>
+        <summary>{t("notes.beta.title")}</summary>
+        <p>{t("notes.beta.intro")}</p>
+        {betaNotes.map((note) => (
+          <section key={note.version} className={styles.card}>
+            <h3>
+              {t("notes.beta.version", { version: note.version, date: formatDate(note.date) })}
+            </h3>
+            <ul>
+              {note.changes.map((change) => (
+                <li key={change}>{change}</li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </details>
     </main>
   );
 }

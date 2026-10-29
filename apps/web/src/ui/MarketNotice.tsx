@@ -3,9 +3,9 @@
 import type { SaveFile } from "@brasfoot-like/save";
 import Link from "next/link";
 import { useT } from "../i18n";
-import { screenHref } from "./AppHeader";
 import { Button } from "./Button";
 import styles from "./MarketNotice.module.css";
+import { screenHref } from "./shell/screens";
 
 /** Propostas abertas e contratos do elenco que terminam esta temporada. */
 export function marketNoticeCounts(save: SaveFile): {

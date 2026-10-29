@@ -5,9 +5,9 @@ import Link from "next/link";
 import type { SeasonEndSummary } from "../game/selectors";
 import { divisionHref } from "../game/useDivision";
 import { formatMoney, useT } from "../i18n";
-import { screenHref } from "./AppHeader";
 import { Crest } from "./Crest";
 import styles from "./SeasonSummary.module.css";
+import { screenHref } from "./shell/screens";
 
 /** Resumo do fim de temporada: situação do clube, campeões e quem sobe e desce (US3). */
 export function SeasonSummary({ save, summary }: { save: SaveFile; summary: SeasonEndSummary }) {

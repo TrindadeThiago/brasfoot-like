@@ -108,7 +108,7 @@
   "calendar.caption": "Jogos do {club}",
   "calendar.home": "Casa",
   "calendar.away": "Fora",
-  "calendar.showRound": "Ver todos os jogos da rodada {round}",
+  "calendar.showRound": "Ver jogos da rodada {round}",
   "calendar.showRoundShort": "Ver jogos",
   "calendar.roundMatches": "Jogos da rodada {round}",
   "calendar.notPlayed": "a disputar",
@@ -1227,5 +1227,8 @@
   "news.regionalRelegated.1": "Rebaixado no estadual: o {club} desce de divisão.",
   "news.regionalRelegated.2": "O {club} não resiste e é rebaixado no estadual.",
   "news.extra.qualification": "Classificação para outra competição.",
-  "mods.world.download": "Baixar o mundo padrão"
+  "mods.world.download": "Baixar o mundo padrão",
+  "notes.beta.title": "Fase beta",
+  "notes.beta.intro": "Antes do lançamento oficial, o jogo passou por uma fase beta, com as versões de 1.0.0 a 1.10.0. Estas são as notas dessa fase.",
+  "notes.beta.version": "beta {version} — {date}"
 }
