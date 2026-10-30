@@ -17,10 +17,11 @@ import {
   substitutionCap,
 } from "@brasfoot-like/engine";
 import type { SaveFile } from "@brasfoot-like/save";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fitnessAt } from "../game/selectors";
 import { label, useT } from "../i18n";
 import { FitnessMeter } from "./FitnessMeter";
+import { Notice } from "./Notice";
 import styles from "./SubstitutionPanel.module.css";
 
 interface PanelProps {
@@ -63,6 +64,7 @@ export function SubstitutionPanel({ match, side, save, onChange }: PanelProps) {
   const t = useT();
   const [out, setOut] = useState<string | undefined>();
   const [message, setMessage] = useState("");
+  const pendingRef = useRef<HTMLButtonElement | null>(null);
   const team = match.state.teams[side];
   const players = new Map(save.bank.players.map((player) => [player.id, player]));
   const name = (id: string) => players.get(id)?.displayName ?? id;
@@ -91,6 +93,10 @@ export function SubstitutionPanel({ match, side, save, onChange }: PanelProps) {
   // lista, na vaga dele, para o técnico escolher o substituto antes de o jogo resolver sozinho.
   const waiting = new Map(team.pending.map((entry) => [entry.slotId, entry]));
   const waitingIds = new Set(team.pending.map((entry) => entry.playerId));
+  // Quando aparece um substituto obrigatório, o foco vai ao jogador que precisa ser trocado (030 R6).
+  useEffect(() => {
+    if (team.pending.length > 0) pendingRef.current?.focus();
+  }, [team.pending.length]);
   // Reservas na ordem das posições (GOL, LAT, ZAG…), do mais forte ao mais fraco.
   const rank = (id: string) => POSITIONS.indexOf(players.get(id)?.position ?? "MF");
   const benchInOrder = [...team.bench].sort(
@@ -138,6 +144,15 @@ export function SubstitutionPanel({ match, side, save, onChange }: PanelProps) {
   return (
     <section aria-label={t("round.panel")} className={styles.panel}>
       <h2>{t("round.panel")}</h2>
+      {team.pending.length > 0 ? (
+        <Notice tone="warning" title={t("round.pendingTitle")}>
+          <p>
+            {t("round.pendingBody", {
+              players: team.pending.map((entry) => name(entry.playerId)).join(", "),
+            })}
+          </p>
+        </Notice>
+      ) : null}
       <div className={styles.controls}>
         <label>
           <span>{t("round.formation")}</span>
@@ -191,6 +206,7 @@ export function SubstitutionPanel({ match, side, save, onChange }: PanelProps) {
                   <li key={slot.id}>
                     <button
                       type="button"
+                      ref={team.pending[0]?.slotId === slot.id ? pendingRef : undefined}
                       aria-pressed={out === pending.playerId}
                       className={`${styles.row} ${out === pending.playerId ? styles.selected : ""}`}
                       onClick={() =>

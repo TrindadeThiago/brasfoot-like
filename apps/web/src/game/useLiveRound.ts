@@ -13,18 +13,17 @@ import {
 } from "@brasfoot-like/engine";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { type RoundSpeed, readPreferences, writePreferences } from "../storage/preferences";
+import { announcementsOf, type FeedItem } from "./live-view";
+
+export type { FeedItem } from "./live-view";
 
 /** Milissegundos por passo do relógio (~98 passos por rodada: 60 s, 45 s, 30 s). */
 export const TICK_MS: Record<RoundSpeed, number> = { slow: 610, normal: 460, fast: 305 };
 export const SPEEDS: readonly RoundSpeed[] = ["slow", "normal", "fast"];
 const MAX_TICKS_PER_UPDATE = 5;
 
-export interface FeedItem {
-  key: string;
-  matchIndex: number;
-  event: MatchEvent;
-  mine: boolean;
-}
+/** Lances do meu jogo que o estado guarda para a tela: os mais novos; os eventos do motor ficam inteiros (030 R4). */
+export const FEED_LIMIT = 200;
 
 /** Lesão ou expulsão do time do jogador entre os eventos novos (pausa automática, FR-010). */
 export function shouldAutoPause(events: readonly MatchEvent[], side: Side): boolean {
@@ -50,6 +49,7 @@ export function useLiveRound(
   initial: LiveRound,
   clubId: string,
   onFinish: (round: LiveRound) => void,
+  onAnnounce?: (items: FeedItem[], round: LiveRound) => void,
 ) {
   const [live, setLive] = useState(initial);
   const [paused, setPaused] = useState(false);
@@ -60,6 +60,8 @@ export function useLiveRound(
   const [feed, setFeed] = useState<FeedItem[]>([]);
   const liveRef = useRef(live);
   liveRef.current = live;
+  const announceRef = useRef(onAnnounce);
+  announceRef.current = onAnnounce;
   const finishedRef = useRef(false);
   const finished = isRoundFinished(live);
   const side = matchOf(live, clubId)?.side;
@@ -69,7 +71,16 @@ export function useLiveRound(
       const items = newEvents(liveRef.current, next, clubId);
       liveRef.current = next;
       setLive(next);
-      if (items.length > 0) setFeed((current) => [...items.reverse(), ...current]);
+      if (items.length > 0) {
+        // O anúncio vem do lote inteiro, na ordem em que os lances aconteceram.
+        const announced = announcementsOf(items);
+        if (announced.length > 0) announceRef.current?.(announced, next);
+        // Só os lances do meu jogo vão para a tela: os outros jogos aparecem em lista, com o placar.
+        const mine = items.filter((item) => item.mine);
+        if (mine.length > 0) {
+          setFeed((current) => [...mine.reverse(), ...current].slice(0, FEED_LIMIT));
+        }
+      }
       return items;
     },
     [clubId],

@@ -14,10 +14,26 @@ test("torcida: cartão na Início, clássicos no calendário e rivais na Carreir
   const menu = page.getByRole("navigation", { name: t("nav.menu") });
   await menu.getByRole("link", { name: t("nav.calendar") }).click();
   await expect(page).toHaveURL(/\/jogo\/calendario\//);
-  await expect(page.getByRole("img", { name: /^Clássico/ }).first()).toBeVisible();
+  // O calendário é mensal (027): procura o clássico mês a mês.
+  const months = page.getByRole("navigation", { name: t("calendar.months") }).getByRole("button");
+  const total = await months.count();
+  let found = false;
+  for (let index = 0; index < total && !found; index++) {
+    await months.nth(index).click();
+    // O clássico está no texto do dia (leitor de tela) e no painel do dia (027).
+    found = (await page.locator(".visually-hidden", { hasText: "(Clássico)" }).count()) > 0;
+  }
+  expect(found).toBe(true);
 
   await menu.getByRole("link", { name: t("nav.career") }).click();
   await expect(page).toHaveURL(/\/jogo\/carreira\//);
   await page.getByRole("tab", { name: t("career.tab.fans") }).click();
   await expect(page.getByRole("table", { name: t("fans.rivals.title") })).toBeVisible();
+  // A faixa e a tendência vêm em texto (029).
+  const fans = page.getByRole("region", { name: t("fans.title") });
+  await expect(fans.getByRole("meter")).toHaveAttribute(
+    "aria-valuetext",
+    /Revoltada|Insatisfeita|Neutra|Animada|Eufórica/,
+  );
+  await expect(fans.getByText(/Em alta|Em queda|Estável/)).toBeVisible();
 });

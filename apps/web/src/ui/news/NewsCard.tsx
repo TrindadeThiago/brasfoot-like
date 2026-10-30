@@ -4,7 +4,8 @@ import { latestFeed, newsRules } from "@brasfoot-like/engine";
 import type { SaveFile } from "@brasfoot-like/save";
 import Link from "next/link";
 import { useT } from "../../i18n";
-import { screenHref } from "../AppHeader";
+import { Card } from "../Card";
+import { screenHref } from "../shell/screens";
 import styles from "./news.module.css";
 import { RoundFeed } from "./RoundFeed";
 
@@ -14,7 +15,7 @@ export function NewsCard({ save }: { save: SaveFile }) {
   const feed = latestFeed(save.news);
   const { homeLimit } = newsRules(save.bank, save.league.competitionId);
   return (
-    <section aria-label={t("news.title")} className={styles.card}>
+    <Card aria-label={t("news.title")} className={styles.card}>
       <h2>
         {feed
           ? feed.round === 0
@@ -22,8 +23,13 @@ export function NewsCard({ save }: { save: SaveFile }) {
             : `${t("news.title")} · ${t("news.round", { round: feed.round })}`
           : t("news.title")}
       </h2>
-      <RoundFeed save={save} headlines={feed?.headlines ?? []} limit={homeLimit} />
+      <RoundFeed
+        save={save}
+        headlines={feed?.headlines ?? []}
+        round={feed?.round ?? 0}
+        limit={homeLimit}
+      />
       <Link href={screenHref("/jogo/noticias", save.id)}>{t("news.seeAll")}</Link>
-    </section>
+    </Card>
   );
 }

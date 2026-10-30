@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { DEFAULT_PROFILE, generateFootballWorld } from "@brasfoot-like/engine";
 import { writeModPackage } from "@brasfoot-like/modkit";
 import { afterEach, describe, expect, it } from "vitest";
-import { checkRelease } from "../src/check-release";
+import { checkRelease, MAX_PACKAGE_BYTES, MAX_SCRIPT_BYTES } from "../src/check-release";
 
 const dirs: string[] = [];
 
@@ -82,5 +82,21 @@ describe("check-release (016)", () => {
 
   it("sem tag, só confere o resto", () => {
     expect(checkRelease({ ...base, tag: undefined, outDir: fixture() })).toEqual([]);
+  });
+});
+
+describe("tamanho do pacote (032 R6)", () => {
+  it("passa abaixo dos limites e fala dos megabytes quando o pacote ou o JavaScript passam", () => {
+    expect(checkRelease({ ...base, outDir: fixture() })).toEqual([]);
+    const bigScript = fixture((dir) =>
+      writeFileSync(join(dir, "app.js"), Buffer.alloc(MAX_SCRIPT_BYTES + 1)),
+    );
+    const problems = checkRelease({ ...base, outDir: bigScript });
+    expect(problems).toHaveLength(1);
+    expect(problems[0]).toMatch(/JavaScript do pacote/);
+    const bigPackage = fixture((dir) =>
+      writeFileSync(join(dir, "dados.bin"), Buffer.alloc(MAX_PACKAGE_BYTES + 1)),
+    );
+    expect(checkRelease({ ...base, outDir: bigPackage })[0]).toMatch(/o pacote tem/);
   });
 });

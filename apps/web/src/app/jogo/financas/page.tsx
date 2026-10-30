@@ -3,60 +3,54 @@
 import type { SaveFile } from "@brasfoot-like/save";
 import { GameLayout } from "../../../game/GameLayout";
 import type { useGame } from "../../../game/GameProvider";
-import { formatMoney, formatNumber, useT } from "../../../i18n";
-import { CreditPanel } from "../../../ui/CreditPanel";
-import { PrizeStatement } from "../../../ui/continental/PrizeStatement";
-import { FinanceSummary } from "../../../ui/FinanceSummary";
-import { FinanceHistory, HomeGames } from "../../../ui/FinanceTables";
-import { StadiumPanel } from "../../../ui/StadiumPanel";
-import { TicketPrice } from "../../../ui/TicketPrice";
+import { useT } from "../../../i18n";
+import { CreditTab } from "../../../ui/finance/CreditTab";
+import { FinanceHeader } from "../../../ui/finance/FinanceHeader";
+import { FlowTab } from "../../../ui/finance/FlowTab";
+import { GateTab } from "../../../ui/finance/GateTab";
+import { HistoryTab } from "../../../ui/finance/HistoryTab";
+import { OverviewTab } from "../../../ui/finance/OverviewTab";
+import { StadiumTab } from "../../../ui/finance/StadiumTab";
+import { Tabs } from "../../../ui/Tabs";
 import styles from "./page.module.css";
 
 type Game = ReturnType<typeof useGame>;
 
 function Finances({ save, game }: { save: SaveFile; game: Game }) {
   const t = useT();
-  const finance = save.finances.clubs[save.clubId];
-  if (!finance) return null;
+  if (!save.finances.clubs[save.clubId]) return null;
   const locked = game.state.live !== undefined;
   return (
     <div className={styles.layout}>
       <h2 className="screen-title">{t("finance.title")}</h2>
-      <div className={styles.top}>
-        <span>
-          {t("finance.balance")}:{" "}
-          <span className={`${styles.balance} ${finance.cash < 0 ? styles.negative : ""}`}>
-            {formatMoney(finance.cash)}
-          </span>
-        </span>
-        <span>
-          {t("finance.debt")}: {formatMoney(finance.debt)}
-        </span>
-        <span>
-          {t("finance.capacity")}:{" "}
-          {t("finance.capacityValue", { seats: formatNumber(finance.capacity) })}
-        </span>
-      </div>
-      {finance.inCrisis ? (
-        <p role="alert" className={styles.crisis}>
-          {t("finance.crisis", { rounds: finance.negativeRounds })}
-        </p>
-      ) : null}
-      {locked ? <p>{t("finance.liveLocked")}</p> : null}
-      <div className={styles.grid}>
-        <FinanceSummary save={save} />
-        <TicketPrice save={save} disabled={locked} onApply={game.setTicketPrice} />
-        <CreditPanel
-          save={save}
-          disabled={locked}
-          onTake={game.takeLoan}
-          onRepay={game.repayLoan}
-        />
-        <StadiumPanel save={save} disabled={locked} onStart={game.startStadiumWorks} />
-      </div>
-      <HomeGames save={save} />
-      <PrizeStatement save={save} />
-      <FinanceHistory save={save} />
+      <FinanceHeader save={save} locked={locked} />
+      <Tabs
+        label={t("finance.tablist")}
+        tabs={[
+          {
+            id: "overview",
+            label: t("finance.tab.overview"),
+            content: <OverviewTab save={save} />,
+          },
+          { id: "flow", label: t("finance.tab.flow"), content: <FlowTab save={save} /> },
+          {
+            id: "gate",
+            label: t("finance.tab.gate"),
+            content: <GateTab save={save} game={game} locked={locked} />,
+          },
+          {
+            id: "stadium",
+            label: t("finance.tab.stadium"),
+            content: <StadiumTab save={save} game={game} locked={locked} />,
+          },
+          {
+            id: "credit",
+            label: t("finance.tab.credit"),
+            content: <CreditTab save={save} game={game} locked={locked} />,
+          },
+          { id: "history", label: t("finance.tab.history"), content: <HistoryTab save={save} /> },
+        ]}
+      />
     </div>
   );
 }

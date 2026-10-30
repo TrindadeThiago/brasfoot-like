@@ -1,27 +1,11 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, type Page, test } from "@playwright/test";
-import { createCareer, t } from "./helpers";
+import { structureProblems } from "../test/helpers/structure";
+import { createCareer } from "./helpers";
+import { forEachScreen } from "./screens-list";
 
 // 016 US4 (FR-017–FR-022, SC-004): varredura axe nas telas principais, nos dois temas. Falha com
 // violações graves ou críticas.
-const PAGES = [
-  "/",
-  "/carreiras/",
-  "/nova-carreira/",
-  "/mods/",
-  "/configuracoes/",
-  "/sobre/",
-  "/notas-de-versao/",
-];
-const GAME = [
-  "/jogo/",
-  "/jogo/elenco/",
-  "/jogo/escalacao/",
-  "/jogo/competicao/",
-  "/jogo/mercado/",
-  "/jogo/carreira/",
-];
-
 async function scan(page: Page, label: string): Promise<string[]> {
   await page.waitForLoadState("networkidle");
   const results = await new AxeBuilder({ page })
@@ -42,7 +26,7 @@ async function scan(page: Page, label: string): Promise<string[]> {
 
 for (const theme of ["dark", "light"] as const) {
   test(`sem violações graves de acessibilidade no tema ${theme}`, async ({ page }) => {
-    test.setTimeout(180_000);
+    test.setTimeout(420_000);
     await page.addInitScript((value) => {
       const key = "brasfoot-like:preferences";
       const prefs = JSON.parse(localStorage.getItem(key) ?? "{}");
@@ -53,27 +37,12 @@ for (const theme of ["dark", "light"] as const) {
     await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
 
     const problems: string[] = [];
-    for (const path of PAGES) {
-      await page.goto(path);
-      problems.push(...(await scan(page, path)));
-    }
-    for (const path of GAME) {
-      await page.goto(`${path}?c=${career}`);
-      await expect(page.getByRole("navigation", { name: t("nav.menu") })).toBeVisible();
-      problems.push(...(await scan(page, path)));
-    }
-    // Ajuda de atalhos aberta.
-    await page.keyboard.press("?");
-    await expect(page.getByRole("dialog", { name: t("help.title") })).toBeVisible();
-    problems.push(...(await scan(page, "ajuda")));
-    await page.keyboard.press("Escape");
-
-    // Rodada ao vivo, pausada para a página ficar estável.
-    await page.goto(`/jogo/?c=${career}`);
-    await page.getByRole("button", { name: t("home.playLive") }).click();
-    await expect(page.getByRole("region", { name: t("round.myMatch") })).toBeVisible();
-    await page.getByRole("button", { name: t("round.pause") }).click();
-    problems.push(...(await scan(page, "/jogo/rodada/")));
+    await forEachScreen(page, career, async (screen) => {
+      problems.push(...(await scan(page, screen.label)));
+      // Títulos, regiões e tabelas (032 US2): um h1, níveis sem salto, regiões com nome único.
+      const structure = await page.evaluate(structureProblems);
+      problems.push(...structure.map((problem) => `${screen.label}: ${problem}`));
+    });
 
     expect(problems).toEqual([]);
   });

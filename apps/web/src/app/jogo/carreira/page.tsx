@@ -3,62 +3,56 @@
 import { pendingOffers } from "@brasfoot-like/engine";
 import { divisionNameOf, type SaveFile, userDivisionLevel } from "@brasfoot-like/save";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { GameLayout } from "../../../game/GameLayout";
 import type { useGame } from "../../../game/GameProvider";
 import { useT } from "../../../i18n";
 import { Button } from "../../../ui/Button";
 import styles from "../../../ui/board/board.module.css";
 import { CoachesTable } from "../../../ui/board/CoachesTable";
+import { ConfidenceChanges } from "../../../ui/board/ConfidenceChanges";
 import { ConfidenceMeter } from "../../../ui/board/ConfidenceMeter";
 import { GoalsList } from "../../../ui/board/GoalsList";
 import { JobOffers } from "../../../ui/board/JobOffers";
 import { ManagerHistory } from "../../../ui/board/ManagerHistory";
+import { Card } from "../../../ui/Card";
+import { EmptyState } from "../../../ui/EmptyState";
 import { FansCard } from "../../../ui/fans/FansCard";
 import { RivalsList } from "../../../ui/fans/RivalsList";
+import { Tabs } from "../../../ui/Tabs";
 
 type Game = ReturnType<typeof useGame>;
 type Tab = "board" | "fans" | "offers" | "history" | "coaches";
 const TABS: readonly Tab[] = ["board", "fans", "offers", "history", "coaches"];
 
+/** Diretoria (029): metas e confiança lado a lado, e as mudanças por rodada abaixo. */
 function BoardTab({ save }: { save: SaveFile }) {
   const t = useT();
   const { manager } = save.board;
   const club = manager.clubId ? save.board.clubs[manager.clubId] : undefined;
   if (!club) {
     return (
-      <section className={styles.card}>
-        <h2>{t("career.unemployed")}</h2>
+      <EmptyState title={t("career.unemployed")}>
         <p>{t("career.unemployedDetail")}</p>
         <p>{t("career.reputation", { value: manager.reputation })}</p>
-      </section>
+      </EmptyState>
     );
   }
-  const changes = [...club.recent].reverse();
   return (
-    <div className={styles.columns}>
-      <section className={styles.card}>
-        <h2>{t("board.goals")}</h2>
-        <GoalsList save={save} />
-        <p>{t("career.reputation", { value: manager.reputation })}</p>
-        {manager.noFiring ? <p className={styles.muted}>{t("board.noFiring")}</p> : null}
-      </section>
-      <section className={styles.card}>
-        <h2>{t("board.confidenceLabel")}</h2>
-        <ConfidenceMeter value={club.confidence} recent={club.recent} />
-        <h3>{t("board.history")}</h3>
-        <ul className={styles.list}>
-          {changes.map((change) => (
-            <li key={`${change.season}-${change.round}-${change.value}`}>
-              {t("board.historyRound", { round: change.round })}:{" "}
-              {t("board.historyValue", { value: change.value, delta: change.delta })} —{" "}
-              {change.factors
-                .map((factor) => t(`board.factor.${factor.kind}`, { amount: factor.amount }))
-                .join(", ")}
-            </li>
-          ))}
-        </ul>
-      </section>
+    <div className={styles.layout}>
+      <div className={styles.columns}>
+        <Card aria-label={t("board.goals")}>
+          <h2 className={styles.heading}>{t("board.goals")}</h2>
+          <GoalsList save={save} />
+          <p>{t("career.reputation", { value: manager.reputation })}</p>
+          {manager.noFiring ? <p className={styles.muted}>{t("board.noFiring")}</p> : null}
+        </Card>
+        <Card aria-label={t("board.confidenceLabel")}>
+          <h2 className={styles.heading}>{t("board.confidenceLabel")}</h2>
+          <ConfidenceMeter value={club.confidence} recent={club.recent} />
+        </Card>
+      </div>
+      <ConfidenceChanges recent={club.recent} />
     </div>
   );
 }
@@ -67,73 +61,87 @@ function Career({ save, game }: { save: SaveFile; game: Game }) {
   const t = useT();
   // `?aba=offers` abre as propostas (link do aviso da Início).
   const requested = useSearchParams().get("aba");
-  const [tab, setTab] = useState<Tab>(TABS.find((name) => name === requested) ?? "board");
   const levels = save.league.divisions.map((season) => season.divisionLevel);
   const [level, setLevel] = useState(userDivisionLevel(save));
   const offers = pendingOffers(save.board).length;
   const locked = game.state.live !== undefined;
+  const heading = useRef<HTMLHeadingElement>(null);
+  const label = (name: Tab) =>
+    name === "offers" && offers > 0
+      ? `${t(`career.tab.${name}`)} (${offers})`
+      : t(`career.tab.${name}`);
   return (
     <div className={styles.layout}>
-      <h2 className="screen-title">{t("career.title")}</h2>
-      <div
-        className={styles.tabs}
-        role="tablist"
-        aria-label={t("career.tablist")}
-        data-tip-anchor="board"
-      >
-        {TABS.map((name) => (
-          <Button
-            key={name}
-            role="tab"
-            aria-selected={tab === name}
-            variant={tab === name ? "primary" : "secondary"}
-            onClick={() => setTab(name)}
-          >
-            {name === "offers" && offers > 0
-              ? `${t(`career.tab.${name}`)} (${offers})`
-              : t(`career.tab.${name}`)}
-          </Button>
-        ))}
+      <h2 ref={heading} tabIndex={-1} className="screen-title">
+        {t("career.title")}
+      </h2>
+      {/* A dica de primeiro acesso da diretoria aponta para a barra de abas. */}
+      <div data-tip-anchor="board">
+        <Tabs
+          label={t("career.tablist")}
+          initial={TABS.find((name) => name === requested) ?? "board"}
+          tabs={[
+            { id: "board", label: label("board"), content: <BoardTab save={save} /> },
+            {
+              id: "fans",
+              label: label("fans"),
+              content: (
+                <div className={styles.columns}>
+                  <FansCard save={save} clubId={save.clubId} />
+                  <Card className={styles.card}>
+                    <h2>{t("fans.rivals.title")}</h2>
+                    <RivalsList save={save} clubId={save.clubId} />
+                  </Card>
+                </div>
+              ),
+            },
+            {
+              id: "offers",
+              label: label("offers"),
+              content: (
+                <Card>
+                  <h2 className={styles.heading}>{t("career.offers.title")}</h2>
+                  <JobOffers
+                    save={save}
+                    disabled={locked}
+                    onAccept={(offerId) => {
+                      game.acceptJobOffer(offerId);
+                      // O botão some com a proposta: o foco vai ao título, e não se perde.
+                      heading.current?.focus();
+                    }}
+                    onDecline={(offerId) => {
+                      game.declineJobOffer(offerId);
+                      heading.current?.focus();
+                    }}
+                  />
+                </Card>
+              ),
+            },
+            { id: "history", label: label("history"), content: <ManagerHistory save={save} /> },
+            {
+              id: "coaches",
+              label: label("coaches"),
+              content: (
+                <div className={styles.layout}>
+                  <div className={styles.tabs}>
+                    {levels.map((entry) => (
+                      <Button
+                        key={entry}
+                        aria-pressed={entry === level}
+                        variant={entry === level ? "primary" : "secondary"}
+                        onClick={() => setLevel(entry)}
+                      >
+                        {divisionNameOf(save, entry)}
+                      </Button>
+                    ))}
+                  </div>
+                  <CoachesTable save={save} level={level} />
+                </div>
+              ),
+            },
+          ]}
+        />
       </div>
-      {tab === "board" ? <BoardTab save={save} /> : null}
-      {tab === "fans" ? (
-        <div className={styles.columns}>
-          <FansCard save={save} clubId={save.clubId} />
-          <section className={styles.card}>
-            <h2>{t("fans.rivals.title")}</h2>
-            <RivalsList save={save} clubId={save.clubId} />
-          </section>
-        </div>
-      ) : null}
-      {tab === "offers" ? (
-        <section className={styles.card}>
-          <h2>{t("career.offers.title")}</h2>
-          <JobOffers
-            save={save}
-            disabled={locked}
-            onAccept={(offerId) => void game.acceptJobOffer(offerId)}
-            onDecline={(offerId) => game.declineJobOffer(offerId)}
-          />
-        </section>
-      ) : null}
-      {tab === "history" ? <ManagerHistory save={save} /> : null}
-      {tab === "coaches" ? (
-        <>
-          <div className={styles.tabs}>
-            {levels.map((entry) => (
-              <Button
-                key={entry}
-                aria-pressed={entry === level}
-                variant={entry === level ? "primary" : "secondary"}
-                onClick={() => setLevel(entry)}
-              >
-                {divisionNameOf(save, entry)}
-              </Button>
-            ))}
-          </div>
-          <CoachesTable save={save} level={level} />
-        </>
-      ) : null}
     </div>
   );
 }

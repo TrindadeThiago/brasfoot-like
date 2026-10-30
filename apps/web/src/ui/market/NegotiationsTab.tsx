@@ -6,8 +6,13 @@ import type { SaveFile } from "@brasfoot-like/save";
 import { useState } from "react";
 import type { MarketActionResult, useGame } from "../../game/GameProvider";
 import { formatMoney, useT } from "../../i18n";
+import { Card } from "../Card";
+import { Pager } from "../Pager";
 import styles from "./market.module.css";
 import { NegotiationBody } from "./NegotiationDialog";
+
+/** Movimentações por página. */
+const LOG_PAGE_SIZE = 10;
 
 type Game = ReturnType<typeof useGame>;
 
@@ -23,6 +28,7 @@ export function NegotiationsTab({
 }) {
   const t = useT();
   const [message, setMessage] = useState<string | undefined>();
+  const [logPage, setLogPage] = useState(0);
   const disabled = game.state.live !== undefined;
   const handle = (result: MarketActionResult, _kind: NegotiationKind) => {
     setMessage(result.ok ? undefined : formatMarketError(result.error, "pt-BR"));
@@ -31,7 +37,7 @@ export function NegotiationsTab({
     save.bank.clubs.find((club) => club.id === clubId)?.shortName ?? "";
   return (
     <div className={styles.layout}>
-      <section className={styles.card} aria-label={t("market.negotiations.title")}>
+      <Card className={styles.card} aria-label={t("market.negotiations.title")}>
         <h2>{t("market.negotiations.title")}</h2>
         {message ? (
           <p role="alert" className={styles.error}>
@@ -63,34 +69,43 @@ export function NegotiationsTab({
             })}
           </ul>
         )}
-      </section>
-      <section className={styles.card} aria-label={t("market.log.title")}>
+      </Card>
+      <Card className={styles.card} aria-label={t("market.log.title")}>
         <h2>{t("market.log.title")}</h2>
         {save.market.log.length === 0 ? (
           <p className={styles.muted}>{t("market.log.empty")}</p>
         ) : (
           <ul className={styles.list}>
-            {[...save.market.log].reverse().map((entry) => (
-              <li
-                key={`${entry.playerId}-${entry.kind}-${entry.outcome ?? ""}-${entry.round}-${entry.fee}`}
-              >
-                {t(
-                  entry.outcome
-                    ? `market.log.outcome.${entry.outcome}`
-                    : `market.log.${entry.kind}`,
-                  {
-                    name: entry.displayName,
-                    from: clubName(entry.fromClubId),
-                    to: clubName(entry.toClubId),
-                    fee: formatMoney(entry.fee),
-                    round: entry.round,
-                  },
-                )}
-              </li>
-            ))}
+            {[...save.market.log]
+              .reverse()
+              .slice(logPage * LOG_PAGE_SIZE, (logPage + 1) * LOG_PAGE_SIZE)
+              .map((entry) => (
+                <li
+                  key={`${entry.playerId}-${entry.kind}-${entry.outcome ?? ""}-${entry.round}-${entry.fee}`}
+                >
+                  {t(
+                    entry.outcome
+                      ? `market.log.outcome.${entry.outcome}`
+                      : `market.log.${entry.kind}`,
+                    {
+                      name: entry.displayName,
+                      from: clubName(entry.fromClubId),
+                      to: clubName(entry.toClubId),
+                      fee: formatMoney(entry.fee),
+                      round: entry.round,
+                    },
+                  )}
+                </li>
+              ))}
           </ul>
         )}
-      </section>
+        <Pager
+          page={logPage}
+          pageSize={LOG_PAGE_SIZE}
+          total={save.market.log.length}
+          onPage={setLogPage}
+        />
+      </Card>
     </div>
   );
 }

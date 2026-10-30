@@ -15,7 +15,7 @@ export function withNationalCup<T extends Pick<CompletedBank, "competitions" | "
     return world;
   }
   const main = world.competitions[0];
-  if (!main || main.format.type !== "league") return world;
+  if (main?.format.type !== "league") return world;
   const reputation = new Map(world.clubs.map((club) => [club.id, club.reputation]));
   const clubs = main.divisions.flatMap((division) =>
     division.clubIds.map((id) => ({

@@ -60,6 +60,29 @@ export function formatWeekday(isoDate: string): string {
   );
 }
 
+/** Título de um mês `AAAA-MM` ("outubro de 2026"), sem fuso (027). */
+export function formatMonthTitle(monthKey: string): string {
+  return new Intl.DateTimeFormat(locale, {
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(`${monthKey}-01T00:00:00Z`));
+}
+
+/** Mês abreviado de `AAAA-MM` ("jan"), sem fuso (028). */
+export function formatMonthShort(monthKey: string): string {
+  return new Intl.DateTimeFormat(locale, { month: "short", timeZone: "UTC" })
+    .format(new Date(`${monthKey}-01T00:00:00Z`))
+    .replace(".", "");
+}
+
+/** Dia da semana abreviado de uma data `AAAA-MM-DD` ("dom"), sem fuso (027). */
+export function formatWeekdayShort(isoDate: string): string {
+  return new Intl.DateTimeFormat(locale, { weekday: "short", timeZone: "UTC" })
+    .format(new Date(`${isoDate}T00:00:00Z`))
+    .replace(".", "");
+}
+
 export function formatNumber(value: number): string {
   return number.format(value);
 }

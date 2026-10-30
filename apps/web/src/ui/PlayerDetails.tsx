@@ -20,6 +20,28 @@ const STATS = [
   ["player.matchesInjured", "matchesInjured"],
 ] as const;
 
+/** Estatísticas do jogador na temporada, com o aviso de quem ainda não jogou (compartilhada com o modal do Elenco). */
+export function PlayerStats({ save, playerId }: { save: SaveFile; playerId: string }) {
+  const t = useT();
+  const stats = seasonStats(userSeason(save)).find((entry) => entry.playerId === playerId);
+  return (
+    <>
+      <h3 className={styles.heading}>{t("player.season")}</h3>
+      {!stats || stats.matches === 0 ? (
+        <p className={styles.note}>{t("player.notPlayed")}</p>
+      ) : null}
+      <dl className={styles.stats}>
+        {STATS.map(([key, field]) => (
+          <div key={key} className={styles.row}>
+            <dt>{t(key)}</dt>
+            <dd>{String(stats?.[field] ?? 0)}</dd>
+          </div>
+        ))}
+      </dl>
+    </>
+  );
+}
+
 /** Atributos visíveis e histórico na temporada; nunca os ocultos (FR-019, FR-020). */
 export function PlayerDetails({
   save,
@@ -37,7 +59,6 @@ export function PlayerDetails({
   const condition = clubUnavailability(userSeason(save), save.bank, save.clubId).find(
     (entry) => entry.playerId === player.id,
   );
-  const stats = seasonStats(userSeason(save)).find((entry) => entry.playerId === player.id);
   const visible: [string, string][] = [
     ["player.position", label(`position.${player.position}`)],
     ["player.strength", String(player.strength)],
@@ -67,18 +88,7 @@ export function PlayerDetails({
           </div>
         ))}
       </dl>
-      <h3 className={styles.heading}>{t("player.season")}</h3>
-      {!stats || stats.matches === 0 ? (
-        <p className={styles.note}>{t("player.notPlayed")}</p>
-      ) : null}
-      <dl className={styles.stats}>
-        {STATS.map(([key, field]) => (
-          <div key={key} className={styles.row}>
-            <dt>{t(key)}</dt>
-            <dd>{String(stats?.[field] ?? 0)}</dd>
-          </div>
-        ))}
-      </dl>
+      <PlayerStats save={save} playerId={player.id} />
     </Dialog>
   );
 }

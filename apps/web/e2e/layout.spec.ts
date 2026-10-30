@@ -1,0 +1,166 @@
+import { expect, test } from "@playwright/test";
+import {
+  createCareer,
+  expectNoClippedText,
+  expectNoHorizontalScroll,
+  simulateSeason,
+  t,
+} from "./helpers";
+import { CLUB_PATHS, OUTSIDE_PATHS } from "./screens-list";
+
+// 025 SC-001 / FR-010 / FR-011: as telas abrem na nova estrutura, nos dois temas, em 1440, 1024 e
+// 768 px, sem rolagem horizontal da página. A 600 px a barra lateral empilha acima do conteúdo.
+const WIDTHS = [1440, 1280, 1024, 768];
+// 026: as três telas do dia a dia, validadas também contra texto cortado e botões fora da janela.
+const DAILY = [
+  "/jogo/",
+  "/jogo/elenco/",
+  "/jogo/escalacao/",
+  // 027: as telas de acompanhamento também não cortam texto.
+  "/jogo/competicao/",
+  "/jogo/competicao/resultados/",
+  "/jogo/competicao/artilharia/",
+  "/jogo/calendario/",
+  "/jogo/historico/",
+];
+const OUTSIDE = OUTSIDE_PATHS;
+const CLUB = CLUB_PATHS;
+for (const theme of ["dark", "light"] as const) {
+  test(`19 telas sem rolagem horizontal em 1440, 1024 e 768 px, tema ${theme}`, async ({
+    page,
+  }) => {
+    test.setTimeout(420_000);
+    await page.addInitScript((value) => {
+      const key = "brasfoot-like:preferences";
+      const prefs = JSON.parse(localStorage.getItem(key) ?? "{}");
+      localStorage.setItem(key, JSON.stringify({ ...prefs, theme: value }));
+    }, theme);
+    await createCareer(page, "Ana Souza", 1);
+    const career = new URL(page.url()).searchParams.get("c") ?? "";
+
+    for (const width of WIDTHS) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const path of OUTSIDE) {
+        await page.goto(path);
+        await expectNoHorizontalScroll(page, `${path} @${width}`);
+      }
+      for (const path of CLUB) {
+        await page.goto(`${path}?c=${career}`);
+        await expect(page.getByRole("navigation", { name: t("nav.menu") })).toBeVisible();
+        await expectNoHorizontalScroll(page, `${path} @${width}`);
+      }
+    }
+
+    // 031: as telas de fora da carreira não cortam texto nas larguras de trabalho, e o rodapé fixo da
+    // Nova carreira nunca cobre a última linha da tabela.
+    for (const width of [1440, 1280, 1024]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const path of OUTSIDE) {
+        await page.goto(path);
+        await page.waitForLoadState("networkidle");
+        await expectNoClippedText(page, `${path} @${width}`);
+      }
+      await page.goto("/nova-carreira/");
+      await page.getByRole("button", { name: t("newCareer.confirm") }).waitFor();
+      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+      const [footer, lastRow] = await Promise.all([
+        page.locator("form > div").last().boundingBox(),
+        page.locator("tbody tr").last().boundingBox(),
+      ]);
+      expect(
+        (lastRow?.y ?? 0) + (lastRow?.height ?? 0),
+        `última linha acima do rodapé @${width}`,
+      ).toBeLessThanOrEqual((footer?.y ?? 0) + 1);
+    }
+
+    // As três telas do dia a dia: sem texto cortado e, no Início, com as ações de jogar à vista.
+    for (const width of [1440, 1280, 1024]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const path of DAILY) {
+        await page.goto(`${path}?c=${career}`);
+        await page.waitForLoadState("networkidle");
+        await expectNoClippedText(page, `${path} @${width}`);
+      }
+    }
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(`/jogo/?c=${career}`);
+    for (const name of [t("home.playLive"), t("home.simulate")]) {
+      const box = await page.getByRole("button", { name }).boundingBox();
+      expect((box?.y ?? 0) + (box?.height ?? 0), `${name} dentro de 900 px`).toBeLessThanOrEqual(
+        900,
+      );
+    }
+
+    // Finanças: cada aba (com gráficos) sem rolagem horizontal da página nem texto cortado (028).
+    for (const width of [1440, 1280, 1024]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`/jogo/financas/?c=${career}`);
+      for (const key of ["overview", "flow", "gate", "stadium", "credit", "history"]) {
+        await page.getByRole("tab", { name: t(`finance.tab.${key}`) }).click();
+        await expectNoHorizontalScroll(page, `finanças/${key} @${width}`);
+        await expectNoClippedText(page, `finanças/${key} @${width}`);
+      }
+    }
+
+    // Carreira (cinco abas) e Notícias: sem rolagem horizontal da página nem texto cortado (029).
+    for (const width of [1440, 1280, 1024]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`/jogo/carreira/?c=${career}`);
+      for (const key of ["board", "fans", "offers", "history", "coaches"]) {
+        await page.getByRole("tab", { name: new RegExp(`^${t(`career.tab.${key}`)}`) }).click();
+        await expectNoHorizontalScroll(page, `carreira/${key} @${width}`);
+        await expectNoClippedText(page, `carreira/${key} @${width}`);
+      }
+      await page.goto(`/jogo/noticias/?c=${career}`);
+      await expectNoHorizontalScroll(page, `notícias @${width}`);
+      await expectNoClippedText(page, `notícias @${width}`);
+    }
+
+    // Abaixo de 768 px a barra empilha acima do conteúdo, sem perder nenhuma tela.
+    await page.setViewportSize({ width: 600, height: 900 });
+    await page.goto(`/jogo/elenco/?c=${career}`);
+    const nav = page.getByRole("navigation", { name: t("nav.menu") });
+    await expect(nav.getByRole("link")).toHaveCount(10);
+    const [navBox, mainBox] = await Promise.all([
+      nav.boundingBox(),
+      page.locator("main").boundingBox(),
+    ]);
+    expect((navBox?.y ?? 0) + (navBox?.height ?? 0)).toBeLessThanOrEqual((mainBox?.y ?? 0) + 1);
+    await expectNoHorizontalScroll(page, "elenco @600");
+
+    // Tela de foco: rodada ao vivo (sem barra lateral).
+    await page.setViewportSize({ width: 768, height: 900 });
+    await page.goto(`/jogo/?c=${career}`);
+    await page.getByRole("button", { name: t("home.playLive") }).click();
+    await expect(page.getByRole("region", { name: t("round.myMatch") })).toBeVisible();
+    await expect(page.getByRole("navigation", { name: t("nav.menu") })).toHaveCount(0);
+    await expectNoHorizontalScroll(page, "rodada @768");
+    // 030: nas larguras de trabalho, sem rolagem horizontal nem texto cortado, e o placar, o minuto e
+    // o estado do meu jogo dentro de 900 px (SC-003).
+    await page.getByRole("button", { name: t("round.pause") }).click();
+    for (const width of [1440, 1280, 1024]) {
+      await page.setViewportSize({ width, height: 900 });
+      await expectNoHorizontalScroll(page, `rodada @${width}`);
+      await expectNoClippedText(page, `rodada @${width}`);
+      const box = await page.getByRole("region", { name: t("round.myMatch") }).boundingBox();
+      expect(
+        (box?.y ?? 0) + (box?.height ?? 0),
+        `placar da rodada dentro de 900 px @${width}`,
+      ).toBeLessThanOrEqual(900);
+    }
+
+    // Fim de temporada, em cada largura.
+    await page.goto(`/jogo/?c=${career}`);
+    await simulateSeason(page);
+    await expect(page).toHaveURL(/fim-de-temporada/);
+    for (const width of WIDTHS) {
+      await page.setViewportSize({ width, height: 900 });
+      await expect(page.getByRole("navigation", { name: t("nav.menu") })).toHaveCount(0);
+      await expectNoHorizontalScroll(page, `fim-de-temporada @${width}`);
+    }
+    for (const width of [1440, 1280, 1024]) {
+      await page.setViewportSize({ width, height: 900 });
+      await expectNoClippedText(page, `fim-de-temporada @${width}`);
+    }
+  });
+}

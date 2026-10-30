@@ -1,0 +1,36 @@
+# Specification Quality Checklist: Telas de entrada e configuração
+
+**Purpose**: Validar completude e qualidade da spec antes do planejamento
+**Created**: 2026-10-30
+**Feature**: [spec.md](../spec.md)
+
+## Content Quality
+
+- [x] No implementation details (languages, frameworks, APIs)
+- [x] Focused on user value and business needs
+- [x] Written for non-technical stakeholders
+- [x] All mandatory sections completed
+
+## Requirement Completeness
+
+- [x] No [NEEDS CLARIFICATION] markers remain
+- [x] Requirements are testable and unambiguous
+- [x] Success criteria are measurable
+- [x] Success criteria are technology-agnostic (no implementation details)
+- [x] All acceptance scenarios are defined
+- [x] Edge cases are identified
+- [x] Scope is clearly bounded
+- [x] Dependencies and assumptions identified
+
+## Feature Readiness
+
+- [x] All functional requirements have clear acceptance criteria
+- [x] User scenarios cover primary flows
+- [x] Feature meets measurable outcomes defined in Success Criteria
+- [x] No implementation details leak into specification
+
+## Notes
+
+- Validação feita na primeira passada: nenhum item falhou e nenhum marcador de esclarecimento foi necessário.
+- O pedido diz que "Continuar carreira" do mockup não vira função, mas o menu de hoje já oferece continuar a carreira recente; a spec mantém o que existe (paridade) e não cria nada novo. Está nas Premissas.
+- O teste de usabilidade (SC-001) é manual, com um roteiro, e o resultado é registrado.

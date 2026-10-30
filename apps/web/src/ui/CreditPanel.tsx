@@ -7,6 +7,7 @@ import { useState } from "react";
 import type { FinanceActionResult } from "../game/GameProvider";
 import { formatMoney, useT } from "../i18n";
 import { Button } from "./Button";
+import { Card } from "./Card";
 import styles from "./FinancePanel.module.css";
 import { MoneyInput } from "./MoneyInput";
 
@@ -38,7 +39,7 @@ export function CreditPanel({
   };
   const amount = Number(value);
   return (
-    <section aria-label={t("finance.credit.title")} className={styles.card}>
+    <Card aria-label={t("finance.credit.title")} className={styles.card}>
       <h2>{t("finance.credit.title")}</h2>
       <p>
         {t("finance.credit.limit", {
@@ -52,7 +53,7 @@ export function CreditPanel({
           perRound: formatMoney(line.interestPerRound),
         })}
       </p>
-      <div className={styles.row}>
+      <div className={`${styles.row} ${styles.rowHint}`}>
         <label className={styles.field}>
           <span>{t("finance.credit.amount")}</span>
           <MoneyInput
@@ -73,11 +74,12 @@ export function CreditPanel({
           {t("finance.credit.settle")}
         </Button>
       </div>
+      {debt === 0 ? <p className={styles.muted}>{t("finance.credit.noDebt")}</p> : null}
       {error ? (
         <p role="alert" className={styles.error}>
           {error}
         </p>
       ) : null}
-    </section>
+    </Card>
   );
 }

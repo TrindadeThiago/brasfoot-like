@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { GameLayout } from "../../../game/GameLayout";
 import { useDivision } from "../../../game/useDivision";
 import { useT } from "../../../i18n";
-import { CompetitionSelect } from "../../../ui/CompetitionSelect";
+import { CompetitionHeader } from "../../../ui/CompetitionHeader";
 import { CompetitionTabs } from "../../../ui/CompetitionTabs";
 import { CampaignPanel } from "../../../ui/continental/CampaignPanel";
 import { Bracket } from "../../../ui/cup/Bracket";
@@ -15,6 +15,7 @@ import { ParticipantOrigins } from "../../../ui/qualification/ParticipantOrigins
 import { StandingsTable } from "../../../ui/StandingsTable";
 import { StageNav } from "../../../ui/stages/StageNav";
 import { currentStage, StageView } from "../../../ui/stages/StageView";
+import styles from "./page.module.css";
 
 function Standings({ save }: { save: SaveFile }) {
   const t = useT();
@@ -25,30 +26,30 @@ function Standings({ save }: { save: SaveFile }) {
     const known = Number.isInteger(requested) && requested >= 0 && requested < season.stages.length;
     const chosen = known ? requested : currentStage(season);
     return (
-      <>
-        <CompetitionSelect save={save} competitionId={competitionId} />
+      <div className={styles.layout}>
+        <CompetitionHeader save={save} competitionId={competitionId} />
         <CompetitionTabs careerId={save.id} level={level} competitionId={competitionId} />
         <DivisionTabs save={save} level={level} league={league} />
         <StageNav save={save} season={season} competitionId={competitionId} selected={chosen} />
         <StageView save={save} season={season} stageIndex={chosen} />
         <CampaignPanel save={save} competitionId={competitionId} />
         <ParticipantOrigins save={save} league={league} />
-      </>
+      </div>
     );
   }
   if (season.bracket) {
     return (
-      <>
-        <CompetitionSelect save={save} competitionId={competitionId} />
+      <div className={styles.layout}>
+        <CompetitionHeader save={save} competitionId={competitionId} />
         <CompetitionTabs careerId={save.id} level={level} competitionId={competitionId} cup />
         <Bracket save={save} season={season} />
         <ParticipantOrigins save={save} league={league} />
-      </>
+      </div>
     );
   }
   return (
-    <>
-      <CompetitionSelect save={save} competitionId={competitionId} />
+    <div className={styles.layout}>
+      <CompetitionHeader save={save} competitionId={competitionId} />
       <CompetitionTabs careerId={save.id} level={level} competitionId={competitionId} />
       <DivisionTabs save={save} level={level} league={league} />
       <div data-tip-anchor="table">
@@ -63,7 +64,7 @@ function Standings({ save }: { save: SaveFile }) {
         />
       </div>
       <ParticipantOrigins save={save} league={league} />
-    </>
+    </div>
   );
 }
 

@@ -1,8 +1,10 @@
 import { advanceCareerSeason, type SaveFile } from "@brasfoot-like/save";
 import { cleanup, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { t } from "../../src/i18n";
 import { renderApp } from "../helpers/app";
+import { eachFixture, monthGrid } from "../helpers/calendar";
 import { storedCareer } from "../helpers/career";
 import { memoryRouter } from "../helpers/router";
 import { careerSave, playedQualificationSeason, qualificationSave } from "../helpers/saves";
@@ -102,8 +104,12 @@ describe("calendário, metas e manchetes (021 US3, US6)", () => {
     const { store } = await storedCareer(1, () => save);
     memoryRouter.url = "/jogo/calendario?c=calendario";
     renderApp(memoryRouter.url, store);
-    const table = await screen.findByRole("table");
-    expect((table.textContent ?? "").includes(supercup?.name ?? "?")).toBe(true);
+    await monthGrid();
+    let found = false;
+    await eachFixture(userEvent.setup({ delay: null }), ({ item }) => {
+      if ((item.textContent ?? "").includes(supercup?.name ?? "?")) found = true;
+    });
+    expect(found).toBe(true);
     cleanup();
   });
 

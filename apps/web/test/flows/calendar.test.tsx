@@ -11,6 +11,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
 import { t } from "../../src/i18n";
 import { renderApp } from "../helpers/app";
+import { monthGrid, seasonLines } from "../helpers/calendar";
 import { storedCareer } from "../helpers/career";
 import { loadSaved } from "../helpers/live";
 import { memoryRouter } from "../helpers/router";
@@ -134,9 +135,6 @@ describe("calendário do clube (017 US4)", () => {
     memoryRouter.url = "/jogo/calendario?c=tela";
   });
 
-  const bodyRows = (table: HTMLElement) =>
-    within(within(table).getAllByRole("rowgroup")[1] as HTMLElement).getAllByRole("row");
-
   it("lista os jogos das duas competições por data, com placar nos disputados", async () => {
     const { store } = await storedCareer(1, () => twoCompetitionsSave("tela"));
     renderApp("/jogo?c=tela", store);
@@ -155,39 +153,37 @@ describe("calendário do clube (017 US4)", () => {
     );
     cleanup();
     renderApp("/jogo/calendario?c=tela", store);
-    const table = await screen.findByRole("table");
-    const rows = bodyRows(table);
-    expect(rows).toHaveLength(38 + 18);
-    const text = rows.map((row) => row.textContent ?? "");
-    expect(text.filter((line) => line.includes(TOURNAMENT_NAME))).toHaveLength(18);
+    await monthGrid();
+    const lines = (await seasonLines(userEvent.setup({ delay: null }))).map((line) => line.text);
+    expect(lines).toHaveLength(38 + 18);
+    expect(lines.filter((line) => line.includes(TOURNAMENT_NAME))).toHaveLength(18);
     // Os três primeiros jogos já foram disputados e mostram o placar; o seguinte, não.
-    for (const line of text.slice(0, 3)) expect(line).not.toContain(t("calendar.notPlayed"));
-    expect(text[3]).toContain(t("calendar.notPlayed"));
+    for (const line of lines.slice(0, 3)) expect(line).not.toContain(t("calendar.notPlayed"));
+    expect(lines[3]).toContain(t("calendar.notPlayed"));
     // Em ordem de data: domingo, domingo, quarta.
-    expect(text[0]).toContain("3 de janeiro de 2027");
-    expect(text[2]).toContain("13 de janeiro de 2027");
-  });
+    expect(lines[0]).toContain("3 de janeiro de 2027");
+    expect(lines[2]).toContain("13 de janeiro de 2027");
+  }, 60_000);
 
   it("o filtro mostra só a competição escolhida e permite voltar a todas", async () => {
     const { store } = await storedCareer(1, () => twoCompetitionsSave("tela"));
     renderApp("/jogo/calendario?c=tela", store);
     const user = userEvent.setup({ delay: null });
-    const table = await screen.findByRole("table");
-    expect(bodyRows(table)).toHaveLength(56);
+    await monthGrid();
+    expect(await seasonLines(user)).toHaveLength(56);
     const select = screen.getByLabelText(t("calendar.filter"));
     await user.selectOptions(select, TOURNAMENT_ID);
-    expect(bodyRows(table)).toHaveLength(18);
+    expect(await seasonLines(user)).toHaveLength(18);
     await user.selectOptions(select, "all");
-    expect(bodyRows(table)).toHaveLength(56);
-  });
+    expect(await seasonLines(user)).toHaveLength(56);
+  }, 60_000);
 
   it("banco padrão: só os jogos da divisão, sem filtro nem coluna de competição", async () => {
     const { store } = await storedCareer(1);
     renderApp("/jogo/calendario?c=tela", store);
-    const table = await screen.findByRole("table");
-    expect(bodyRows(table)).toHaveLength(38);
+    await monthGrid();
+    expect(await seasonLines(userEvent.setup({ delay: null }))).toHaveLength(38);
     expect(screen.queryByLabelText(t("calendar.filter"))).toBeNull();
-    expect(within(table).queryByText(t("col.competition"))).toBeNull();
   });
 });
 

@@ -9,6 +9,9 @@ import { readModPackage } from "@brasfoot-like/modkit";
 import { REPO_ROOT } from "./fs-bank";
 
 export const MIN_SCREENSHOTS = 4;
+/** Limites do pacote (032 R6): o build inteiro e só o JavaScript. */
+export const MAX_PACKAGE_BYTES = 4.5 * 1024 * 1024;
+export const MAX_SCRIPT_BYTES = 2.0 * 1024 * 1024;
 const REQUIRED = [
   "index.html",
   "sw.js",
@@ -72,6 +75,23 @@ export function checkRelease({ version, tag, notes, outDir }: ReleaseInput): str
     if (published !== version) {
       problems.push(`version.json diz ${published}, mas a versão é ${version}`);
     }
+  }
+  // Tamanho do pacote (032 R6): quem passa do limite tem de explicar o crescimento antes de publicar.
+  const files = walk(outDir);
+  const total = files.reduce((sum, file) => sum + statSync(file).size, 0);
+  const scripts = files
+    .filter((file) => file.endsWith(".js"))
+    .reduce((sum, file) => sum + statSync(file).size, 0);
+  const megabytes = (bytes: number) => (bytes / 1024 / 1024).toFixed(2).replace(".", ",");
+  if (total > MAX_PACKAGE_BYTES) {
+    problems.push(
+      `o pacote tem ${megabytes(total)} MB; o limite é ${megabytes(MAX_PACKAGE_BYTES)} MB`,
+    );
+  }
+  if (scripts > MAX_SCRIPT_BYTES) {
+    problems.push(
+      `o JavaScript do pacote tem ${megabytes(scripts)} MB; o limite é ${megabytes(MAX_SCRIPT_BYTES)} MB`,
+    );
   }
   const shots = existsSync(join(outDir, "screenshots"))
     ? readdirSync(join(outDir, "screenshots")).filter((name) => /\.(webp|png)$/.test(name))

@@ -9,7 +9,7 @@ cadastro e funciona sem internet depois do primeiro acesso.
 
 **Jogar:** https://treinador-fc.vercel.app
 
-![Tela inicial do clube, com a próxima rodada e as metas](apps/web/public/screenshots/home.png)
+![Início do clube na interface nova (tema escuro), com o próximo jogo e as metas](apps/web/public/screenshots/home.png)
 
 ## O que dá para fazer
 
@@ -26,8 +26,10 @@ cadastro e funciona sem internet depois do primeiro acesso.
   manchetes e histórico.
 - **Carreiras portáteis:** exportar e importar a carreira em arquivo `.blsave`.
 - **Mods:** carregar outros bancos de dados de clubes e jogadores, feitos pela comunidade.
-- **Acessível:** tema claro e escuro, atalhos de teclado em todas as telas (`?` mostra a ajuda) e
-  dicas no primeiro acesso.
+- **Interface nova:** barra lateral, tema claro e escuro e telas que funcionam de tablet (a partir de
+  768 px) a monitor grande, sem rolagem horizontal da página.
+- **Acessível:** contraste mínimo de 4,5:1, foco visível, uso só com o teclado (`?` mostra os
+  atalhos de cada tela), leitor de tela, movimento reduzido e dicas no primeiro acesso.
 
 Todos os clubes, jogadores, escudos e competições do jogo são **fictícios**. O jogo não distribui
 nomes, escudos ou marcas reais; quem quiser pode carregar mods com outros bancos de dados.
@@ -78,8 +80,8 @@ Para o e2e, instale o Chromium uma vez: `pnpm --filter @brasfoot-like/web exec p
 | `pnpm validate-bank <pasta ou .zip>` | Valida um banco de dados ou mod e lista todos os erros |
 | `pnpm gen:default-bank` | Gera o banco fictício padrão (`mods/default`) |
 | `pnpm gen:example-mod` | Gera o mod de exemplo e o pacote para download no jogo |
-| `pnpm screenshots` | Gera as capturas da página Sobre a partir do build |
-| `pnpm check-release` | Verificações antes de publicar (versão, notas, capturas, textos) |
+| `pnpm screenshots` | Gera as capturas da página Sobre e deste README (tema escuro) e os ícones do aplicativo, a partir do build |
+| `pnpm check-release` | Verificações antes de publicar (versão, notas, capturas, textos e tamanho do pacote) |
 
 ## Publicação
 
@@ -96,10 +98,12 @@ a cada push. Para publicar uma versão:
 
 O badge de versão acima lê o `version.json` do site publicado, então muda sozinho a cada release.
 
-As versões 1.0.0 a 1.10.0 (21 a 28 de outubro de 2026) são a **fase beta** do jogo: as tags e os
-Releases delas se chamam `beta-vX.Y.Z`. A numeração é reiniciada no marco 10, que é desenvolvido na
-branch `release/v1.0.0` e publicado de uma vez como o lançamento oficial 1.0.0 (`v1.0.0`). Ver
-[`docs/interface-nova.md`](docs/interface-nova.md), seção 6.
+As versões 1.0.0 a 1.10.0 (20 a 28 de outubro de 2026) são a **fase beta** do jogo: as tags e os
+Releases delas se chamam `beta-vX.Y.Z`. A numeração foi reiniciada no marco 10 (a interface nova),
+desenvolvido na branch `release/v1.0.0` e publicado de uma vez como o lançamento oficial 1.0.0
+(`v1.0.0`): um PR de `release/v1.0.0` para a `main`, com merge commit, que dispara o workflow de
+release. Antes dele, os gates do release (simulações de 30 temporadas, `check-release` e e2e
+completo) rodam sobre a branch. Ver [`docs/interface-nova.md`](docs/interface-nova.md), seção 6.
 
 ## Documentação
 

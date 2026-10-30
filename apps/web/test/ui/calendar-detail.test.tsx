@@ -3,8 +3,8 @@ import { seasonStateOf } from "@brasfoot-like/save";
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
-import { t } from "../../src/i18n";
 import { renderApp } from "../helpers/app";
+import { eachFixture, monthGrid } from "../helpers/calendar";
 import { storedCareer } from "../helpers/career";
 
 describe("calendário detalhado", () => {
@@ -23,16 +23,20 @@ describe("calendário detalhado", () => {
     const scorerName = save.bank.players.find((p) => p.id === scorer.playerId)?.displayName ?? "";
 
     renderApp("/jogo/calendario?c=tela", store);
-    const table = await screen.findByRole("table");
-    expect(
-      within(table).getByRole("columnheader", { name: t("calendar.col.highlights") }),
-    ).toBeTruthy();
-    expect(within(table).getAllByText(new RegExp(scorerName)).length).toBeGreaterThan(0);
+    await monthGrid();
 
     const user = userEvent.setup({ delay: null });
-    const [first] = within(table).getAllByRole("button", { name: /^Ver resumo de / });
-    if (!first) throw new Error("sem botão de resumo");
-    await user.click(first);
+    // O painel do dia traz os gols e cartões; percorre os jogos até achar o gol e abre o resumo.
+    let opened = false;
+    await eachFixture(user, async ({ item }) => {
+      if (!new RegExp(scorerName).test(item.textContent ?? "")) return undefined;
+      const [button] = within(item).getAllByRole("button", { name: /^Ver resumo de / });
+      if (!button) throw new Error("sem botão de resumo");
+      await user.click(button);
+      opened = true;
+      return "stop";
+    });
+    expect(opened).toBe(true);
     const dialog = await screen.findByRole("dialog");
     expect(within(dialog).getByRole("article")).toBeTruthy();
   });
@@ -40,8 +44,12 @@ describe("calendário detalhado", () => {
   it("jogo a disputar não tem botão de resumo", async () => {
     const { store, save } = await storedCareer(1);
     renderApp("/jogo/calendario?c=tela", store);
-    const table = await screen.findByRole("table");
-    expect(within(table).queryAllByRole("button", { name: /^Ver resumo de / })).toHaveLength(0);
+    await monthGrid();
+    let summaries = 0;
+    await eachFixture(userEvent.setup({ delay: null }), ({ item }) => {
+      summaries += within(item).queryAllByRole("button", { name: /^Ver resumo de / }).length;
+    });
+    expect(summaries).toBe(0);
     expect(save.clubId).toBeTruthy();
   });
 });

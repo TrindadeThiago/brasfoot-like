@@ -10,7 +10,7 @@
   border: 1px solid var(--color-accent);
   background: var(--color-surface-2);
   color: var(--color-text);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 24px var(--color-backdrop);
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -30,4 +30,18 @@
   display: flex;
   gap: var(--space-2);
   flex-wrap: wrap;
+}
+
+/* Telas estreitas (032): a dica vira uma faixa na base da janela, com altura limitada, e a tela leva o
+   elemento apontado para o topo (TipHost), para a faixa não cobrir o que ela explica. */
+@media (max-width: 767px) {
+  .tip {
+    left: var(--space-3);
+    right: var(--space-3);
+    bottom: var(--space-3);
+    width: auto;
+    max-width: none;
+    max-height: 45vh;
+    overflow-y: auto;
+  }
 }

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import ptBrNotes from "../locales/pt-BR/release-notes.json" with { type: "json" };
+import ptBrBetaNotes from "../locales/pt-BR/release-notes-beta.json" with { type: "json" };
 import type { Locale } from "./format";
 
 const SEMVER = /^\d+\.\d+\.\d+$/;
@@ -34,7 +35,13 @@ export const releaseNotesSchema = z
 export type ReleaseNote = z.infer<typeof releaseNotesSchema>[number];
 
 const NOTES: Record<Locale, unknown> = { "pt-BR": ptBrNotes };
+const BETA_NOTES: Record<Locale, unknown> = { "pt-BR": ptBrBetaNotes };
 
 export function releaseNotes(locale: Locale = "pt-BR"): ReleaseNote[] {
   return releaseNotesSchema.parse(NOTES[locale]);
+}
+
+/** Notas da fase beta (1.0.0 a 1.10.0, antes do lançamento oficial): mesmo esquema, arquivo próprio. */
+export function betaReleaseNotes(locale: Locale = "pt-BR"): ReleaseNote[] {
+  return releaseNotesSchema.parse(BETA_NOTES[locale]);
 }

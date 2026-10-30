@@ -1,0 +1,47 @@
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.card:hover {
+  border-color: var(--color-accent);
+}
+
+.primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.link {
+  color: inherit;
+  font-weight: 600;
+  font-size: var(--text-md);
+  text-decoration: none;
+}
+
+/* O link cobre o cartão todo; o foco visível é o contorno global do próprio link. */
+.link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: var(--radius);
+}
+
+.detail {
+  color: inherit;
+}
+
+.badge {
+  align-self: flex-start;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}

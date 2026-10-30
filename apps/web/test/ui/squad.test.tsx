@@ -31,8 +31,9 @@ describe("Elenco (FR-017)", () => {
       t("col.fitness"),
       t("col.evolution"),
       t("col.contractUntil"),
-      t("col.actions"),
     ]);
+    // 026: sem coluna de ações; as ações ficam no modal do jogador.
+    expect(headers).not.toContain("Ações");
     const player = squad[0];
     if (!player) throw new Error("sem jogador");
     const row = rows.find((candidate) => within(candidate).queryByText(player.displayName));
@@ -136,5 +137,36 @@ describe("Elenco (FR-017)", () => {
       (player) => player.clubId === save.clubId && !used.has(player.id),
     );
     if (out) expect(cellOf(out.id)).toBe(t("squad.inLineup.out"));
+  });
+
+  it("clicar na linha ou no nome abre o modal do jogador uma só vez (026)", async () => {
+    const { store, save } = await storedCareer(1);
+    renderApp("/jogo/elenco?c=tela", store);
+    const user = userEvent.setup({ delay: null });
+    const table = await screen.findByRole("table");
+    const player = save.bank.players.find((entry) => entry.clubId === save.clubId);
+    const name = player?.displayName ?? "";
+    const row = within(table).getByText(name).closest("tr") as HTMLElement;
+    await user.click(within(row).getAllByRole("cell")[0] as HTMLElement);
+    expect(screen.getAllByRole("dialog")).toHaveLength(1);
+    expect(screen.getByRole("dialog", { name }).getAttribute("aria-modal")).toBe("true");
+    await user.keyboard("{Escape}");
+    expect(screen.queryByRole("dialog")).toBeNull();
+    // O foco volta a quem abriu; o nome é o botão do teclado.
+    await user.click(screen.getByRole("button", { name: t("lineup.detailsOf", { name }) }));
+    expect(screen.getAllByRole("dialog")).toHaveLength(1);
+  });
+
+  it("filtro sem resultado mostra o estado vazio com Limpar filtros (026)", async () => {
+    const { store } = await storedCareer(1);
+    renderApp("/jogo/elenco?c=tela", store);
+    const user = userEvent.setup({ delay: null });
+    await screen.findByRole("table");
+    // Ninguém está indisponível no início: o filtro não deixa nenhuma linha.
+    await user.selectOptions(screen.getByLabelText(t("squad.filterAvailability")), "unavailable");
+    expect(await screen.findByText(t("squad.noMatch"))).toBeDefined();
+    const clear = screen.getAllByRole("button", { name: t("squad.clearFilters") });
+    await user.click(clear[clear.length - 1] as HTMLElement);
+    expect(screen.queryByText(t("squad.noMatch"))).toBeNull();
   });
 });

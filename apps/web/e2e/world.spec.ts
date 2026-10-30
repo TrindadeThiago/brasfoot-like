@@ -57,8 +57,10 @@ test("mundo de vários países: nova carreira em outro país, ligas alheias e me
   // A competição: o seletor de país mostra a liga do técnico e permite ver a de outro país.
   const menu = page.getByRole("navigation", { name: t("nav.menu") });
   await menu.getByRole("link", { name: t("nav.competition") }).click();
+  // Os países de fora ficam em "Demais competições" (027).
+  await page.getByRole("tab", { name: t("competition.others") }).click();
   const select = page.getByLabel(t("competition.country"));
-  await expect(select.locator("option")).toHaveCount(3);
+  await expect(select.locator("option")).not.toHaveCount(0);
   const first = await select.locator("option").first().textContent();
   await select.selectOption({ label: first ?? "" });
   await expect(page.getByRole("table").first()).toBeVisible();

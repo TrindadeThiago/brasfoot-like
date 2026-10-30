@@ -5,6 +5,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { t } from "../../src/i18n";
 import { renderApp } from "../helpers/app";
+import { eachMonth, monthGrid } from "../helpers/calendar";
 import { storedCareer } from "../helpers/career";
 
 vi.setConfig({ testTimeout: 60000 });
@@ -33,9 +34,16 @@ describe("torcida e clássicos no app (013)", () => {
     );
     renderApp("/jogo/calendario?c=tela", store);
     await screen.findByRole("heading", { level: 1 });
-    expect(screen.getAllByRole("img", { name: /^Clássico/ }).length).toBeGreaterThanOrEqual(
-      derbies.length,
-    );
+    await monthGrid();
+    let marked = 0;
+    await eachMonth(userEvent.setup({ delay: null }), () => {
+      // O clássico aparece no texto do dia (leitor de tela) e no painel (027).
+      marked +=
+        (screen.getByRole("table", { name: /^Calendário de / }).textContent ?? "").split(
+          "(Clássico)",
+        ).length - 1;
+    });
+    expect(marked).toBeGreaterThanOrEqual(derbies.length);
   });
 
   it("Carreira › Torcida lista os rivais", async () => {

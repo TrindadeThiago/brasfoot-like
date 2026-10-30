@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { t } from "../../src/i18n";
 import { renderApp } from "../helpers/app";
+import { eachFixture, monthGrid } from "../helpers/calendar";
 import { storedCareer } from "../helpers/career";
 import { memoryRouter } from "../helpers/router";
 import { continentalSave, playedContinentalSeason } from "../helpers/saves";
@@ -51,8 +52,12 @@ describe("taça continental ao lado das competições nacionais (022 US1)", () =
     const { store } = await storedCareer(1, () => save);
     memoryRouter.url = "/jogo/calendario?c=calendario";
     renderApp(memoryRouter.url, store);
-    const table = await screen.findByRole("table");
-    expect((table.textContent ?? "").includes(cup.name)).toBe(true);
+    await monthGrid();
+    let found = false;
+    await eachFixture(userEvent.setup({ delay: null }), ({ item }) => {
+      if ((item.textContent ?? "").includes(cup.name)) found = true;
+    });
+    expect(found).toBe(true);
     cleanup();
   });
 
@@ -77,6 +82,10 @@ describe("o peso da campanha continental na carreira (022 US2)", () => {
     const { store } = await storedCareer(1, () => played);
     memoryRouter.url = "/jogo/financas?c=peso";
     renderApp(memoryRouter.url, store);
+    // Os prêmios da temporada ficam na aba Histórico das Finanças (028).
+    await userEvent
+      .setup({ delay: null })
+      .click(await screen.findByRole("tab", { name: t("finance.tab.history") }));
     const table = await screen.findByRole("table", { name: t("finance.prizes.title") });
     expect(within(table).getAllByText(cup.name).length).toBeGreaterThan(0);
     cleanup();

@@ -114,15 +114,18 @@ describe("rodada ao vivo (US1, US3)", () => {
     expect(memoryRouter.pathname()).toBe("/jogo");
   });
 
-  it("sair no meio pede confirmação; recusar mantém a rodada", async () => {
+  it("sair no meio pede confirmação num diálogo; continuar mantém a rodada e sair vai à Início", async () => {
     const { user } = await startLive();
-    const confirm = vi.fn(() => false);
-    window.confirm = confirm;
     await user.keyboard("1");
-    expect(confirm).toHaveBeenCalledWith(t("round.confirmLeave"));
+    const dialog = await screen.findByRole("dialog", { name: t("round.leaveTitle") });
+    expect(within(dialog).getByText(t("round.confirmLeave"))).toBeDefined();
     expect(memoryRouter.pathname()).toBe("/jogo/rodada");
-    confirm.mockReturnValue(true);
+    await user.click(within(dialog).getByRole("button", { name: t("round.leaveStay") }));
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(memoryRouter.pathname()).toBe("/jogo/rodada");
     await user.keyboard("1");
+    const again = await screen.findByRole("dialog", { name: t("round.leaveTitle") });
+    await user.click(within(again).getByRole("button", { name: t("round.leaveConfirm") }));
     await waitFor(() => expect(memoryRouter.pathname()).toBe("/jogo"));
     writePreferences({});
   });

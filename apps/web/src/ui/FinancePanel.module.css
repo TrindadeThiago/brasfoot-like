@@ -1,7 +1,4 @@
 .card {
-  background: var(--color-surface);
-  border-radius: var(--radius);
-  padding: var(--space-4);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -22,6 +19,11 @@
   flex-wrap: wrap;
   gap: var(--space-2);
   align-items: end;
+}
+
+/* O campo de valor reserva uma linha de dica embaixo (MoneyInput): os botões sobem o mesmo tanto. */
+.rowHint > button {
+  margin-bottom: calc(12px * 1.2 + 2px);
 }
 
 .field {

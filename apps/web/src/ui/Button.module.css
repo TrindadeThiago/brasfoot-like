@@ -33,3 +33,28 @@
 .secondary:hover:not(:disabled) {
   border-color: var(--color-muted);
 }
+
+.text {
+  background: transparent;
+  border-color: transparent;
+  color: var(--color-accent);
+  padding-inline: var(--space-2);
+}
+
+.text:hover:not(:disabled) {
+  background: var(--color-highlight);
+  border-color: transparent;
+}
+
+.danger:hover:not(:disabled) {
+  background: var(--color-danger);
+  border-color: var(--color-danger);
+  color: var(--color-on-danger);
+}
+
+/* Alvo de toque de pelo menos 44 px em telas de toque (docs/interface-nova.md §2, 032). */
+@media (pointer: coarse) {
+  .button {
+    min-height: 44px;
+  }
+}

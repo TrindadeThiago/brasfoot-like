@@ -27,7 +27,7 @@
 
 ## 3. Mundo do jogo
 
-- **MVP:** um país fictício com **Série A e Série B**, 20 times cada, com acesso e rebaixamento. Desde a 1.10 o mundo padrão do jogo é o das cinco confederações (024); o país único segue como o banco de testes e como base dos mods de exemplo.
+- **MVP:** um país fictício com **Série A e Série B**, 20 times cada, com acesso e rebaixamento. Desde a fase beta (1.10, antes da numeração reiniciada) o mundo padrão do jogo é o das cinco confederações (024); o país único segue como o banco de testes e como base dos mods de exemplo.
 - País, competição e formato (pontos corridos, mata-mata, grupos) são **dados, não código** — adicionar ligas/países deve ser trabalho de dados.
 - Primeira expansão sugerida: copa nacional em mata-mata.
 - **Vários países (020):** um banco pode ter quantos países quiser; cada um com a sua pirâmide, a sua economia (a da competição principal dele) e o seu banco de nomes. O valor de mercado do jogador é universal, o salário segue a escala do país do clube, a reputação é do clube, e o técnico recebe propostas de qualquer país. Os jogos das ligas de outros países que o técnico não acompanha usam uma simulação resumida, equivalente à completa.
@@ -136,7 +136,7 @@ Desenvolvimento via Spec-Driven Development com Spec Kit. Os prompts de `/specki
 **Estado do M6:** export/import de carreiras e formato de mod (015); dicas de primeiro acesso,
 Configurações (tema claro/escuro), ajuda de atalhos em todas as telas, revisão de
 acessibilidade, versão e notas, aviso de atualização e publicação na Vercel (016). Primeira
-publicação em https://treinador-fc.vercel.app, em 2026-10-21. As versões 1.0.0 a 1.10.0 (de 21 a 28
+publicação em https://treinador-fc.vercel.app, em 2026-10-21. As versões 1.0.0 a 1.10.0 (de 20 a 28
 de outubro de 2026) passaram a ser chamadas de **fase beta**: o lançamento oficial 1.0.0 é o fim do
 marco 10 (ver [`interface-nova.md`](interface-nova.md), seção 6). Falta o teste de usabilidade com
 quem nunca viu o jogo (`specs/016-polimento-publicacao/usability.md`).
@@ -185,6 +185,15 @@ futebol sul-americano. Os prompts estão em [`speckit-prompts/`](speckit-prompts
 O marco 10 é a refatoração visual da interface (025 a 032), sem mudança de regras. Direção visual,
 estrutura das telas, requisitos de paridade, a branch de release e a numeração de versões (reinício
 com a 1.0.0 na 025 e lançamento oficial só no fim) em [`interface-nova.md`](interface-nova.md).
+
+**Estado do M10:** a fundação visual e as telas das features 025 a 031 (tokens e temas claro e
+escuro, barra lateral, componentes compartilhados, telas do clube, competição, mercado, carreira,
+rodada ao vivo, fim de temporada, entrada e configuração) estão na branch `release/v1.0.0`. A 032
+fecha o marco: telas utilizáveis de 768 px em diante (e empilhadas abaixo disso), nova revisão de
+acessibilidade nos dois temas, revisão de desempenho contra as metas da 020, auditoria de estilo,
+dicas revisadas, vitrine (capturas e ícones) e a nota única do 1.0.0 resumindo o marco. O lançamento
+oficial 1.0.0 é o PR de `release/v1.0.0` para a `main`, depois dos gates do release sobre a branch;
+o jogo e os saves seguem os mesmos (sem mudança de motor, regras ou formato de save).
 
 ## 14. Pós-lançamento
 

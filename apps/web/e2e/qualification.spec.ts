@@ -54,7 +54,11 @@ test("vagas entre competições: zona na tabela, supercopa e origem dos particip
   await expect(page.getByText(/vaga em /).first()).toBeVisible();
 
   // A supercopa da primeira edição: a origem dos participantes é o banco inicial.
-  await tabs.getByRole("link", { name: /Supercopa/ }).click();
+  const supercup = tabs.getByRole("link", { name: /Supercopa/ });
+  if ((await supercup.count()) === 0) {
+    await page.getByRole("tab", { name: t("competition.others") }).click();
+  }
+  await supercup.click();
   await expect(page.getByRole("region", { name: t("origin.title") })).toBeVisible();
   await expect(page.getByText(t("origin.bank")).first()).toBeVisible();
 });

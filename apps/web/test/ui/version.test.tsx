@@ -1,5 +1,5 @@
 // 016 US5: versão visível, notas de versão e aviso de novidades (FR-024–FR-026).
-import { releaseNotes } from "@brasfoot-like/i18n";
+import { betaReleaseNotes, releaseNotes } from "@brasfoot-like/i18n";
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -38,6 +38,19 @@ describe("versão e notas (016 US5)", () => {
     expect(within(first).getAllByRole("listitem")).toHaveLength(notes[0]?.changes.length ?? 0);
     // Ver as notas conta como já ter visto as novidades.
     expect(readPreferences().lastSeenVersion).toBe(APP_VERSION);
+  });
+
+  it("a fase beta fica recolhida no fim, com as 23 notas rotuladas como beta (025 US5)", async () => {
+    renderApp("/notas-de-versao", freshStore());
+    await screen.findByRole("heading", { level: 1, name: t("notes.title") });
+    const beta = betaReleaseNotes();
+    const summary = screen.getByText(t("notes.beta.title"));
+    const details = summary.closest("details") as HTMLDetailsElement;
+    expect(details.open).toBe(false);
+    expect(within(details).getByText(t("notes.beta.intro"))).toBeDefined();
+    const labels = within(details).getAllByRole("heading", { level: 3 });
+    expect(labels).toHaveLength(beta.length);
+    expect(labels[0]?.textContent).toContain(`beta ${beta[0]?.version}`);
   });
 
   it("jogador novo não recebe o aviso de novidades; a versão é gravada em silêncio", async () => {

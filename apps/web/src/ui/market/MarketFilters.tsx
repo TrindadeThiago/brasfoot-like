@@ -86,76 +86,78 @@ export function MarketFilters({
       noValidate
       onSubmit={(event) => event.preventDefault()}
     >
-      <h2>{t("market.filter.title")}</h2>
-      <div className={styles.filters}>
-        <label className={styles.field}>
-          <span>{t("market.filter.scope")}</span>
-          <select
-            value={form.scope}
-            onChange={(event) =>
-              onChange({ ...form, scope: event.target.value as FilterForm["scope"] })
-            }
-          >
-            <option value="all">{t("market.filter.scope.all")}</option>
-            <option value="clubs">{t("market.filter.scope.clubs")}</option>
-            <option value="free">{t("market.filter.scope.free")}</option>
-          </select>
-        </label>
-        <label className={styles.field}>
-          <span>{t("market.filter.position")}</span>
-          <select
-            value={form.position}
-            onChange={(event) =>
-              onChange({ ...form, position: event.target.value as FilterForm["position"] })
-            }
-          >
-            <option value="">{t("market.filter.anyPosition")}</option>
-            {POSITIONS.map((position) => (
-              <option key={position} value={position}>
-                {label(`position.${position}`)}
-              </option>
-            ))}
-          </select>
-        </label>
-        {countries.length > 1 ? (
+      <details open>
+        <summary className={styles.filtersToggle}>{t("market.filter.title")}</summary>
+        <div className={styles.filters}>
           <label className={styles.field}>
-            <span>{t("market.filter.country")}</span>
+            <span>{t("market.filter.scope")}</span>
             <select
-              value={form.country}
-              onChange={(event) => onChange({ ...form, country: event.target.value })}
+              value={form.scope}
+              onChange={(event) =>
+                onChange({ ...form, scope: event.target.value as FilterForm["scope"] })
+              }
             >
-              <option value="">{t("market.filter.anyCountry")}</option>
-              {countries.map((country) => (
-                <option key={country.id} value={country.id}>
-                  {country.name}
+              <option value="all">{t("market.filter.scope.all")}</option>
+              <option value="clubs">{t("market.filter.scope.clubs")}</option>
+              <option value="free">{t("market.filter.scope.free")}</option>
+            </select>
+          </label>
+          <label className={styles.field}>
+            <span>{t("market.filter.position")}</span>
+            <select
+              value={form.position}
+              onChange={(event) =>
+                onChange({ ...form, position: event.target.value as FilterForm["position"] })
+              }
+            >
+              <option value="">{t("market.filter.anyPosition")}</option>
+              {POSITIONS.map((position) => (
+                <option key={position} value={position}>
+                  {label(`position.${position}`)}
                 </option>
               ))}
             </select>
           </label>
-        ) : null}
-        {NUMBER_FIELDS.map(([key, text]) => (
-          <label key={key} className={styles.field}>
-            <span>{t(text)}</span>
+          {countries.length > 1 ? (
+            <label className={styles.field}>
+              <span>{t("market.filter.country")}</span>
+              <select
+                value={form.country}
+                onChange={(event) => onChange({ ...form, country: event.target.value })}
+              >
+                <option value="">{t("market.filter.anyCountry")}</option>
+                {countries.map((country) => (
+                  <option key={country.id} value={country.id}>
+                    {country.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
+          {NUMBER_FIELDS.map(([key, text]) => (
+            <label key={key} className={styles.field}>
+              <span>{t(text)}</span>
+              <input
+                type="number"
+                inputMode="numeric"
+                value={form[key]}
+                onChange={(event) => onChange({ ...form, [key]: event.target.value })}
+              />
+            </label>
+          ))}
+          <label className={styles.field}>
+            <span>{t("market.filter.text")}</span>
             <input
-              type="number"
-              inputMode="numeric"
-              value={form[key]}
-              onChange={(event) => onChange({ ...form, [key]: event.target.value })}
+              type="text"
+              value={form.text}
+              onChange={(event) => onChange({ ...form, text: event.target.value })}
             />
           </label>
-        ))}
-        <label className={styles.field}>
-          <span>{t("market.filter.text")}</span>
-          <input
-            type="text"
-            value={form.text}
-            onChange={(event) => onChange({ ...form, text: event.target.value })}
-          />
-        </label>
-      </div>
-      <div className={styles.actions}>
-        <Button onClick={() => onChange(EMPTY_FILTERS)}>{t("market.filter.clear")}</Button>
-      </div>
+        </div>
+        <div className={styles.actions}>
+          <Button onClick={() => onChange(EMPTY_FILTERS)}>{t("market.filter.clear")}</Button>
+        </div>
+      </details>
     </form>
   );
 }

@@ -1,7 +1,13 @@
+/* Tabela larga rola dentro do próprio quadro, sem rolagem horizontal da página (025 FR-010). */
+.scroll {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  max-width: 100%;
+}
+
 .table {
   background: var(--color-surface);
-  border-radius: var(--radius);
-  overflow: hidden;
 }
 
 .sortButton {
@@ -46,4 +52,13 @@
 
 .table td {
   vertical-align: middle;
+}
+
+/* Primeira coluna fixa: fica à vista enquanto o resto rola no quadro (027). */
+.stickyFirst th:first-child,
+.stickyFirst td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--color-surface);
 }

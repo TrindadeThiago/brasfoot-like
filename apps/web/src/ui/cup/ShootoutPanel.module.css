@@ -1,6 +1,7 @@
 .panel {
   background: var(--color-surface);
-  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   padding: var(--space-4);
 }
 
@@ -35,4 +36,9 @@
 
 .missed {
   color: var(--color-muted);
+}
+
+.winner {
+  margin: var(--space-2) 0 0;
+  font-weight: 700;
 }

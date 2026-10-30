@@ -1,0 +1,148 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-1) 0;
+}
+
+.track {
+  position: relative;
+  height: 18px;
+  display: flex;
+  align-items: center;
+}
+
+.bar {
+  display: block;
+  width: 100%;
+  height: 4px;
+  border: 0;
+  border-radius: 2px;
+  appearance: none;
+  background: var(--color-border);
+  accent-color: var(--color-accent);
+}
+
+.bar::-webkit-progress-bar {
+  background: var(--color-border);
+  border-radius: 2px;
+}
+
+.bar::-webkit-progress-value {
+  background: var(--color-accent);
+  border-radius: 2px;
+}
+
+.bar::-moz-progress-bar {
+  background: var(--color-accent);
+  border-radius: 2px;
+}
+
+/* Marco do intervalo sobre a linha. */
+.marker {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  width: 2px;
+  background: var(--color-muted);
+}
+
+/* Gols, cartões e lesões: cada um com forma própria, no minuto em que aconteceu. */
+.event {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: 12px;
+  height: 12px;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--color-text);
+  cursor: default;
+}
+
+.goal {
+  width: 18px;
+  height: 18px;
+  font-size: var(--text-md);
+}
+
+.yellow,
+.red {
+  width: 9px;
+  height: 13px;
+  border-radius: 2px;
+  font-size: 0;
+}
+
+.yellow {
+  background: var(--color-warning);
+}
+
+.red {
+  background: var(--color-danger);
+}
+
+.injury {
+  border-radius: 50%;
+  background: var(--color-danger);
+  color: var(--color-on-danger);
+}
+
+.caption {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.half {
+  position: absolute;
+  transform: translateX(-50%);
+}
+
+/* Descrição do lance ao passar o mouse (ou focar): balão acima da marca. */
+.tip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: none;
+  width: max-content;
+  max-width: 280px;
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-control-border);
+  border-radius: var(--radius);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  line-height: 1.35;
+  white-space: normal;
+  pointer-events: none;
+}
+
+.left .tip {
+  left: 0;
+  transform: none;
+}
+
+.right .tip {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
+.event:hover {
+  z-index: 4;
+}
+
+.event:hover .tip {
+  display: block;
+}

@@ -134,7 +134,7 @@ function LineupScreen({ save, game }: { save: SaveFile; game: ReturnType<typeof 
       </div>
       {isCareerSeasonOver(save) ? <p className={styles.note}>{t("lineup.seasonOver")}</p> : null}
       {tiredStarters > 0 ? (
-        <p role="status" className={styles.note}>
+        <p role="status" className={styles.tired}>
           {t("fitness.tired", { count: tiredStarters })}
         </p>
       ) : null}

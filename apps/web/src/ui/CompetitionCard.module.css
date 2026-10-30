@@ -1,0 +1,44 @@
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: flex-start;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text);
+  min-width: 0;
+}
+
+.card:hover,
+.card:focus-within {
+  border-color: var(--color-muted);
+}
+
+.current,
+.current:hover {
+  border-color: var(--color-accent);
+  box-shadow: inset 3px 0 0 var(--color-accent);
+}
+
+.name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--color-text);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+/* O cartão inteiro é clicável: o link cobre o cartão. */
+.name::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.meta {
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+}

@@ -6,6 +6,7 @@ import { GlobalShortcuts } from "../ui/GlobalShortcuts";
 import { SiteAnalytics } from "../ui/SiteAnalytics";
 import { THEME_SCRIPT, ThemeSync } from "../ui/ThemeProvider";
 import { UpdateNotice } from "../ui/UpdateNotice";
+import "../styles/fonts.css";
 import "../styles/global.css";
 import { RegisterServiceWorker } from "./register-sw";
 
@@ -38,8 +39,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <ThemeSync />
         <GameProvider>
-          <GlobalShortcuts>{children}</GlobalShortcuts>
           <UpdateNotice />
+          <GlobalShortcuts>{children}</GlobalShortcuts>
         </GameProvider>
         <RegisterServiceWorker />
         <SiteAnalytics />

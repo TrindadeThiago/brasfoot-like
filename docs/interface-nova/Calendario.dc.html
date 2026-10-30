@@ -16,7 +16,7 @@ a{color:inherit;text-decoration:none}
 a:hover{color:#ffffff}
 </style>
 </helmet>
-<div style="min-height: 980px; background: #0a0e13; color: #eef2f6; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.45; display: flex; flex-wrap: wrap">
+<div style="min-height: 1100px; background: #0a0e13; color: #eef2f6; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.45; display: flex; flex-wrap: wrap">
 
   <nav aria-label="Telas do jogo" style="flex: 1 1 232px; max-width: 100%; min-width: 0; background: #0f151c; border-right: 1px solid #1d2733; padding: 24px 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px">
     <div style="display: flex; align-items: center; gap: 12px; padding: 0 8px">
@@ -41,43 +41,125 @@ a:hover{color:#ffffff}
     </div>
   </nav>
 
-  <main style="flex: 999 1 640px; min-width: 0; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px">
+  <main style="flex: 999 1 640px; min-width: 0; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px">
 
     <header style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px; justify-content: space-between">
       <div>
         <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600; letter-spacing: -0.02em">Calendário</h1>
-        <div style="color: #98a6b6">Jogos do União Canoas na temporada 2026</div>
+        <div style="color: #98a6b6">Jogos do União Canoas na temporada 2027</div>
       </div>
-      <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end">
-        <label style="display: flex; flex-direction: column; gap: 4px; color: #98a6b6; font-size: 12px">
-          Competição
-          <select style="min-height: 44px; border-radius: 10px; border: 1px solid #2e3a47; background: #121922; color: #eef2f6; padding: 0 12px; font: inherit"><option>Todas as competições</option><option>Campeonato Nacional do Brasil</option><option>Campeonato Estadual do Rio Grande do Sul</option><option>Copa Nacional do Brasil</option></select>
-        </label>
-        <sc-for list="{{filters}}" as="f" hint-placeholder-count="3">
-          <button type="button" onClick="{{f.pick}}" style="{{f.style}}">{{f.label}}</button>
-        </sc-for>
-      </div>
+      <label style="display: flex; flex-direction: column; gap: 4px; color: #98a6b6; font-size: 12px">
+        Competição
+        <select value="{{compFilter}}" onChange="{{setComp}}" style="min-height: 44px; border-radius: 10px; border: 1px solid #2e3a47; background: #121922; color: #eef2f6; padding: 0 12px; font: inherit; min-width: 280px">
+          <option value="todas">Todas as competições</option>
+          <option value="nac">Campeonato Nacional do Brasil</option>
+          <option value="est">Campeonato Estadual do Rio Grande do Sul</option>
+          <option value="copa">Copa Nacional do Brasil</option>
+          <option value="cont">Taça Continental da América do Sul</option>
+        </select>
+      </label>
     </header>
 
-    <section aria-label="Jogos" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 8px 20px">
-      <sc-for list="{{games}}" as="g" hint-placeholder-count="8">
-        <div style="{{g.rowStyle}}">
-          <div style="width: 64px; flex: 0 0 auto">
-            <div style="color: #98a6b6; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em">Rodada</div>
-            <div style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">{{g.round}}</div>
-          </div>
-          <span style="{{g.venue}}">{{g.where}}</span>
-          <span style="flex: 1 1 160px; min-width: 0; font-weight: 500">{{g.opponent}}<span style="display: block; color: #98a6b6; font-size: 12px; font-weight: 400">{{g.comp}}</span></span>
-          <span style="{{g.result}}">{{g.text}}</span>
-          <div style="display: flex; gap: 6px">
-            <sc-if value="{{g.played}}" hint-placeholder-val="{{ false }}">
-              <button type="button" style="min-height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; font: inherit; font-weight: 500; cursor: pointer">Resumo</button>
-            </sc-if>
-            <button type="button" style="min-height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; font: inherit; font-weight: 500; cursor: pointer">Ver jogos</button>
-          </div>
-        </div>
+    <!-- Navegação de mês -->
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; justify-content: space-between">
+      <div style="display: flex; align-items: center; gap: 8px">
+        <button type="button" onClick="{{prevMonth}}" aria-label="Mês anterior" style="width: 44px; height: 44px; border-radius: 10px; border: 1px solid #2e3a47; background: #121922; color: #eef2f6; cursor: pointer; display: flex; align-items: center; justify-content: center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>
+        </button>
+        <h2 aria-live="polite" style="margin: 0; min-width: 220px; text-align: center; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 600; letter-spacing: -0.01em">{{monthTitle}}</h2>
+        <button type="button" onClick="{{nextMonth}}" aria-label="Próximo mês" style="width: 44px; height: 44px; border-radius: 10px; border: 1px solid #2e3a47; background: #121922; color: #eef2f6; cursor: pointer; display: flex; align-items: center; justify-content: center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+        </button>
+      </div>
+      <button type="button" onClick="{{goNext}}" style="min-height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid {{accent}}; background: transparent; color: {{accent}}; font: inherit; font-weight: 600; cursor: pointer">Ir para o próximo jogo</button>
+    </div>
+
+    <div role="group" aria-label="Ir para o mês" style="display: flex; flex-wrap: wrap; gap: 6px">
+      <sc-for list="{{months}}" as="m" hint-placeholder-count="12">
+        <button type="button" onClick="{{m.pick}}" aria-pressed="{{m.on}}" style="{{m.style}}">
+          {{m.label}}
+          <sc-if value="{{m.count}}" hint-placeholder-val="{{ false }}"><span style="{{m.badge}}">{{m.count}}</span></sc-if>
+        </button>
       </sc-for>
-    </section>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+      <!-- Calendário do mês -->
+      <section aria-label="{{monthTitle}}" style="flex: 3 1 640px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 1px; background: #1d2733; border: 1px solid #1d2733; border-radius: 16px; overflow: hidden">
+          <sc-for list="{{weekdays}}" as="w" hint-placeholder-count="7">
+            <div style="background: #0f151c; padding: 10px 12px; color: #98a6b6; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em"><abbr title="{{w.full}}" style="text-decoration: none">{{w.label}}</abbr></div>
+          </sc-for>
+          <sc-for list="{{cells}}" as="c" hint-placeholder-count="35">
+            <div style="{{c.style}}">
+              <div style="display: flex; justify-content: space-between; align-items: center; min-height: 24px">
+                <span style="{{c.num}}">{{c.day}}</span>
+                <sc-if value="{{c.today}}" hint-placeholder-val="{{ false }}"><span style="font-size: 11px; font-weight: 600; color: {{accent}}">Hoje</span></sc-if>
+              </div>
+              <sc-for list="{{c.games}}" as="g" hint-placeholder-count="1">
+                <button type="button" onClick="{{g.pick}}" aria-pressed="{{g.on}}" aria-label="{{g.aria}}" style="{{g.style}}">
+                  <span style="display: flex; justify-content: space-between; gap: 6px; font-size: 11px; font-weight: 600"><span style="{{g.venueStyle}}">{{g.venue}}</span><sc-if value="{{g.isNext}}" hint-placeholder-val="{{ false }}"><span style="color: {{accent}}">Próximo</span></sc-if></span>
+                  <span style="font-size: 12px; font-weight: 600; line-height: 1.2">{{g.opp}}</span>
+                  <span style="{{g.metaStyle}}">{{g.meta}}</span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 8px 20px; color: #98a6b6; font-size: 12px">
+          <sc-for list="{{legend}}" as="l" hint-placeholder-count="7">
+            <span style="display: inline-flex; align-items: center; gap: 6px"><span style="{{l.swatch}}"></span>{{l.label}}</span>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- Painel lateral -->
+      <aside aria-label="Detalhes dos jogos" style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+
+        <sc-if value="{{hasSel}}" hint-placeholder-val="{{ true }}">
+          <section aria-label="Jogo escolhido" style="background: linear-gradient(180deg, #14202b, #101820); border: 1px solid #1d2733; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+            <div style="color: #98a6b6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em">{{sel.date}}</div>
+            <div style="display: flex; align-items: center; gap: 14px">
+              <div style="width: 52px; height: 52px; border-radius: 14px; background: #16222c; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: {{accent}}; flex: 0 0 auto">{{sel.initials}}</div>
+              <div style="min-width: 0">
+                <div style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600; line-height: 1.2">{{sel.opp}}</div>
+                <div style="color: #98a6b6; font-size: 13px">{{sel.venueLong}}</div>
+              </div>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px">
+              <span style="{{sel.compChip}}">{{sel.comp}}</span>
+              <span style="border-radius: 6px; padding: 2px 8px; font-size: 12px; font-weight: 600; background: #1d2733; color: #b4c0cd">{{sel.phase}}</span>
+            </div>
+            <div style="{{sel.resultStyle}}">{{sel.result}}</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px">
+              <sc-if value="{{sel.played}}" hint-placeholder-val="{{ false }}">
+                <button type="button" style="min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; font: inherit; font-weight: 500; cursor: pointer">Resumo</button>
+              </sc-if>
+              <button type="button" style="min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid #2e3a47; background: #0f151c; color: #eef2f6; font: inherit; font-weight: 500; cursor: pointer">Ver jogos</button>
+              <sc-if value="{{sel.isNext}}" hint-placeholder-val="{{ false }}">
+                <a href="Rodada.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 10px; background: {{accent}}; color: #06140c; font-weight: 600">Jogar rodada</a>
+              </sc-if>
+            </div>
+          </section>
+        </sc-if>
+
+        <section aria-label="Jogos do mês" style="background: #121922; border: 1px solid #1d2733; border-radius: 16px; padding: 14px 8px 8px">
+          <h3 style="margin: 0 12px 6px; font-size: 12px; color: #98a6b6; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600">Jogos de {{monthName}}</h3>
+          <sc-if value="{{noGames}}" hint-placeholder-val="{{ false }}">
+            <div style="padding: 14px 12px; color: #98a6b6">Nenhum jogo neste mês.</div>
+          </sc-if>
+          <sc-for list="{{monthGames}}" as="g" hint-placeholder-count="4">
+            <button type="button" onClick="{{g.pick}}" aria-pressed="{{g.on}}" style="{{g.rowStyle}}">
+              <span style="width: 44px; flex: 0 0 auto; text-align: center"><span style="display: block; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; line-height: 1">{{g.day}}</span><span style="display: block; font-size: 11px; color: #98a6b6">{{g.wd}}</span></span>
+              <span style="flex: 1 1 auto; min-width: 0; text-align: left"><span style="display: block; font-weight: 500">{{g.opp}}</span><span style="display: block; color: #98a6b6; font-size: 12px">{{g.comp}}</span></span>
+              <span style="{{g.resStyle}}">{{g.res}}</span>
+            </button>
+          </sc-for>
+        </section>
+      </aside>
+    </div>
   </main>
 </div>
 </x-dc>
@@ -85,7 +167,8 @@ a:hover{color:#ffffff}
 class Component extends DCLogic {
   renderVals() {
     const accent = this.props.accent ?? '#3ddc84';
-    const filter = (this.state && this.state.filter) || 'Todos';
+    const st = this.state || {};
+    const compFilter = st.comp || 'todas';
     const base = 'display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;border-radius:10px;box-sizing:border-box;';
     const items = [
       ['Início', 'Main.dc.html', 'M3 11l9-8 9 8M5 10v10h14V10'],
@@ -103,32 +186,150 @@ class Component extends DCLogic {
       label: it[0], href: it[1], icon: it[2], badge: it[4] || '',
       style: base + (it[3] ? 'background:#16222c;color:' + accent + ';font-weight:600;' : 'color:#b4c0cd;font-weight:500;'),
     }));
-    const filters = ['Todos', 'Em casa', 'Fora'].map((name) => ({
-      label: name,
-      pick: () => this.setState({ filter: name }),
-      style: 'min-height:44px;padding:0 16px;border-radius:10px;font:inherit;font-weight:500;cursor:pointer;' +
-        (filter === name ? 'background:' + accent + ';color:#06140c;border:1px solid ' + accent + ';' : 'background:#121922;color:#eef2f6;border:1px solid #2e3a47;'),
-    }));
-    const data = [
-      [10, 'C', 'Ferroviário', 'V', '2 – 0'], [11, 'F', 'Sporting Vale', 'E', '1 – 1'], [12, 'C', 'Náutico do Sul', 'V', '3 – 1'],
-      [13, 'F', 'Atlético Marítimo', 'D', '0 – 2'], [14, 'C', 'Comercial FC', 'V', '1 – 0'], [15, 'C', 'Porto Oeste', '', 'Próximo jogo'],
-      [16, 'F', 'Guarani Alto', '', 'A jogar'], [17, 'C', 'União Planalto', '', 'A jogar'], [18, 'F', 'Estrela do Norte', '', 'A jogar'],
+
+    // ---------- datas ----------
+    const pad = (n) => (n < 10 ? '0' : '') + n;
+    const MONTHS = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+    const WD = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
+    const isoOf = (dt) => dt.getUTCFullYear() + '-' + pad(dt.getUTCMonth() + 1) + '-' + pad(dt.getUTCDate());
+    const TODAY = '2027-01-28';
+
+    // ---------- jogos da temporada ----------
+    const COMPS = {
+      est: { name: 'Campeonato Estadual do Rio Grande do Sul', color: '#5ec8ff' },
+      nac: { name: 'Campeonato Nacional do Brasil', color: accent },
+      copa: { name: 'Copa Nacional do Brasil', color: '#ffb454' },
+      cont: { name: 'Taça Continental da América do Sul', color: '#c79bff' },
+    };
+    const raw = [
+      ['2027-01-03', 'est', 'Fase de grupos, rodada 1', 'Esporte Clube Viamão', 'F', [1, 0]],
+      ['2027-01-10', 'est', 'Fase de grupos, rodada 2', 'Clube Atlético Bagé', 'F', [1, 2]],
+      ['2027-01-17', 'est', 'Fase de grupos, rodada 3', 'Rio Grande Atlético Clube', 'C', [2, 0]],
+      ['2027-01-24', 'est', 'Quartas de final, jogo 1', 'Porto Alegre Sport Clube', 'F', [1, 0]],
+      ['2027-01-27', 'copa', 'Fase de 32', 'Varginha Unidos', 'F', [0, 1]],
+      ['2027-01-31', 'est', 'Semifinal, jogo 1', 'Clube Atlético Bagé', 'F', null],
     ];
-    const games = data
-      .filter((d) => filter === 'Todos' || (filter === 'Em casa' ? d[1] === 'C' : d[1] === 'F'))
-      .map((d, i) => {
-        const next = d[4] === 'Próximo jogo';
-        const color = d[3] === 'V' ? '#3ddc84' : d[3] === 'D' ? '#ff8a8a' : '#b4c0cd';
-        return {
-          round: d[0], opponent: d[2], text: d[4], where: d[1] === 'C' ? 'Casa' : 'Fora', played: !!d[3],
-          comp: d[0] < 13 ? 'Campeonato Estadual do Rio Grande do Sul' : 'Campeonato Nacional do Brasil',
-          venue: 'flex:0 0 auto;min-width:48px;text-align:center;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:600;background:#16222c;color:' + (d[1] === 'C' ? accent : '#5ec8ff') + ';',
-          result: 'flex:0 0 auto;min-width:96px;text-align:center;border-radius:8px;padding:4px 12px;font-weight:600;font-variant-numeric:tabular-nums;' +
-            (d[3] ? 'background:#0f151c;color:' + color + ';' : next ? 'background:' + accent + ';color:#06140c;' : 'color:#98a6b6;'),
-          rowStyle: 'display:flex;flex-wrap:wrap;align-items:center;gap:16px;min-height:60px;' + (i ? 'border-top:1px solid #1d2733;' : ''),
-        };
+    const OPP = ['Associação Angra dos Reis', 'Bagé Unidos', 'União Paranaguá', 'Novo Hamburgo Operário', 'Guarulhos Unidos', 'Angra dos Reis Atlético Clube', 'Divinópolis Unidos', 'Unidos Guarulhos', 'Canoas Futebol Clube', 'Clube Atlético Bagé', 'São José dos Campos FC', 'Unidos Belo Horizonte', 'Esporte Clube São José dos Campos', 'Clube Esportivo Sorocaba', 'Maringá Operário', 'Nacional Maringá', 'Clube Esportivo Paranaguá', 'Belo Horizonte Independente', 'Nova Friburgo Sport Clube'];
+    const PAT = 'CFCFFFCFCCFCFCFCFCF';
+    for (let i = 0; i < 38; i++) {
+      const dt = new Date(Date.UTC(2027, 1, 28 + 7 * i));
+      const v = i < 19 ? PAT[i] : (PAT[i - 19] === 'C' ? 'F' : 'C');
+      raw.push([isoOf(dt), 'nac', 'Rodada ' + (i + 1), OPP[i % 19], v, null]);
+    }
+    raw.push(['2027-08-11', 'cont', 'Fase de grupos, jogo 1', 'A definir (sorteio em julho)', 'C', null]);
+    raw.push(['2027-08-25', 'cont', 'Fase de grupos, jogo 2', 'A definir (sorteio em julho)', 'F', null]);
+    raw.push(['2027-09-08', 'cont', 'Fase de grupos, jogo 3', 'A definir (sorteio em julho)', 'C', null]);
+    raw.sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));
+    const all = raw.map((r, i) => {
+      const p = r[0].split('-').map(Number);
+      const dt = new Date(Date.UTC(p[0], p[1] - 1, p[2]));
+      return { id: 'g' + i, iso: r[0], m: p[1] - 1, d: p[2], wd: dt.getUTCDay(), comp: r[1], phase: r[2], opp: r[3], ven: r[4], res: r[5] };
+    });
+    const nextGame = all.find((g) => g.res === null);
+    const games = all.filter((g) => compFilter === 'todas' || g.comp === compFilter);
+
+    const selId = st.sel || nextGame.id;
+    const selGame = all.find((g) => g.id === selId) || nextGame;
+    const month = st.month !== undefined ? st.month : selGame.m;
+
+    // ---------- apresentação ----------
+    const outcome = (g) => (g.res === null ? null : g.res[0] > g.res[1] ? 'V' : g.res[0] < g.res[1] ? 'D' : 'E');
+    const oColor = { V: '#3ddc84', D: '#ff8a8a', E: '#b4c0cd' };
+    const oBg = { V: 'rgba(61,220,132,0.12)', D: 'rgba(255,138,138,0.12)', E: 'rgba(180,192,205,0.10)' };
+    const scoreText = (g) => g.res[0] + ' – ' + g.res[1];
+    const shortDate = (g) => g.d + ' de ' + MONTHS[g.m].toLowerCase();
+    const longDate = (g) => WD[g.wd] + ', ' + g.d + ' de ' + MONTHS[g.m].toLowerCase() + ' de 2027';
+
+    const goto = (m, id) => () => this.setState({ month: m, sel: id });
+    const monthStrip = MONTHS.map((name, m) => {
+      const n = games.filter((g) => g.m === m).length;
+      const on = m === month;
+      return {
+        label: name.slice(0, 3), count: n ? String(n) : '', on: on ? 'true' : 'false',
+        pick: () => this.setState({ month: m }),
+        style: 'min-height:40px;padding:0 12px;border-radius:10px;font:inherit;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:6px;' + (on ? 'background:' + accent + ';color:#06140c;border:1px solid ' + accent + ';' : 'background:#121922;color:#eef2f6;border:1px solid #2e3a47;'),
+        badge: 'border-radius:99px;padding:0 6px;font-size:11px;font-weight:600;min-width:16px;text-align:center;' + (on ? 'background:rgba(6,20,12,0.18);color:#06140c;' : 'background:#1d2733;color:#b4c0cd;'),
+      };
+    });
+
+    const first = new Date(Date.UTC(2027, month, 1)).getUTCDay();
+    const dim = new Date(Date.UTC(2027, month + 1, 0)).getUTCDate();
+    const total = Math.ceil((first + dim) / 7) * 7;
+    const cells = [];
+    for (let i = 0; i < total; i++) {
+      const day = i - first + 1;
+      if (day < 1 || day > dim) {
+        cells.push({ day: '', games: [], today: false, style: 'background:#0f151c;min-height:112px;', num: '' });
+        continue;
+      }
+      const iso = '2027-' + pad(month + 1) + '-' + pad(day);
+      const here = games.filter((g) => g.iso === iso);
+      const hasGame = here.length > 0;
+      const isToday = iso === TODAY;
+      cells.push({
+        day, today: isToday,
+        style: 'min-height:112px;padding:8px;box-sizing:border-box;display:flex;flex-direction:column;gap:6px;min-width:0;background:' + (hasGame ? '#141d28' : '#121922') + ';',
+        num: 'font-size:13px;font-weight:600;' + (isToday ? 'background:' + accent + ';color:#06140c;border-radius:99px;min-width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;' : 'color:' + (hasGame ? '#eef2f6' : '#98a6b6') + ';'),
+        games: here.map((g) => {
+          const o = outcome(g);
+          const isNext = g.id === nextGame.id;
+          const on = g.id === selGame.id;
+          const bar = o ? oColor[o] : COMPS[g.comp].color;
+          return {
+            opp: g.opp, venue: g.ven === 'C' ? 'Casa' : 'Fora',
+            venueStyle: 'color:' + (g.ven === 'C' ? accent : '#5ec8ff') + ';',
+            meta: o ? o + ' ' + scoreText(g) : g.phase, isNext, on: on ? 'true' : 'false',
+            metaStyle: 'font-size:11px;font-variant-numeric:tabular-nums;' + (o ? 'font-weight:600;color:' + oColor[o] + ';' : 'color:#98a6b6;'),
+            aria: shortDate(g) + ', ' + g.opp + ', ' + (g.ven === 'C' ? 'em casa' : 'fora') + ', ' + COMPS[g.comp].name + (o ? ', resultado ' + scoreText(g) : ', ' + g.phase) + (isNext ? ', próximo jogo' : ''),
+            pick: () => this.setState({ sel: g.id, month: month }),
+            style: 'width:100%;display:flex;flex-direction:column;gap:2px;text-align:left;border:0;border-left:4px solid ' + bar + ';border-radius:8px;padding:6px 8px;font:inherit;color:inherit;cursor:pointer;background:' + (o ? oBg[o] : '#0f151c') + ';' + (isNext ? 'box-shadow:0 0 0 2px ' + accent + ';' : '') + (on ? 'outline:2px solid #eef2f6;outline-offset:1px;' : ''),
+          };
+        }),
       });
-    return { accent, nav, filters, games };
+    }
+
+    const monthGames = games.filter((g) => g.m === month).map((g) => {
+      const o = outcome(g);
+      const on = g.id === selGame.id;
+      return {
+        day: g.d, wd: WD[g.wd].slice(0, 3), opp: g.opp, comp: COMPS[g.comp].name,
+        res: o ? o + ' ' + scoreText(g) : g.id === nextGame.id ? 'Próximo' : 'A jogar', on: on ? 'true' : 'false',
+        resStyle: 'flex:0 0 auto;font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;color:' + (o ? oColor[o] : g.id === nextGame.id ? accent : '#98a6b6') + ';',
+        pick: () => this.setState({ sel: g.id }),
+        rowStyle: 'width:100%;display:flex;align-items:center;gap:10px;min-height:56px;padding:0 12px;border-radius:10px;font:inherit;color:inherit;cursor:pointer;border:1px solid ' + (on ? accent : 'transparent') + ';background:' + (on ? '#16222c' : 'transparent') + ';',
+      };
+    });
+
+    const so = outcome(selGame);
+    const sel = {
+      date: longDate(selGame), opp: selGame.opp, initials: selGame.opp.split(' ').filter((s) => /^[A-ZÀ-Ú]/.test(s)).map((s) => s[0]).slice(0, 2).join(''),
+      venueLong: selGame.ven === 'C' ? 'Em casa' : 'Fora de casa', comp: COMPS[selGame.comp].name, phase: selGame.phase,
+      compChip: 'border-radius:6px;padding:2px 8px;font-size:12px;font-weight:600;background:#16222c;color:' + COMPS[selGame.comp].color + ';',
+      played: so !== null, isNext: selGame.id === nextGame.id,
+      result: so ? (so === 'V' ? 'Vitória' : so === 'D' ? 'Derrota' : 'Empate') + ' · ' + scoreText(selGame) : selGame.id === nextGame.id ? 'Próximo jogo' : 'A jogar',
+      resultStyle: 'border-radius:10px;padding:10px 14px;font-family:Space Grotesk,sans-serif;font-size:20px;font-weight:600;font-variant-numeric:tabular-nums;' + (so ? 'background:' + oBg[so] + ';color:' + oColor[so] + ';' : 'background:#0f151c;color:' + (selGame.id === nextGame.id ? accent : '#b4c0cd') + ';'),
+    };
+
+    const legend = [
+      { label: 'Vitória', swatch: 'width:10px;height:10px;border-radius:3px;background:#3ddc84;' },
+      { label: 'Empate', swatch: 'width:10px;height:10px;border-radius:3px;background:#b4c0cd;' },
+      { label: 'Derrota', swatch: 'width:10px;height:10px;border-radius:3px;background:#ff8a8a;' },
+      { label: 'Estadual', swatch: 'width:10px;height:10px;border-radius:3px;background:' + COMPS.est.color + ';' },
+      { label: 'Nacional', swatch: 'width:10px;height:10px;border-radius:3px;background:' + COMPS.nac.color + ';' },
+      { label: 'Copa', swatch: 'width:10px;height:10px;border-radius:3px;background:' + COMPS.copa.color + ';' },
+      { label: 'Continental', swatch: 'width:10px;height:10px;border-radius:3px;background:' + COMPS.cont.color + ';' },
+      { label: 'Próximo jogo', swatch: 'width:10px;height:10px;border-radius:3px;border:2px solid ' + accent + ';box-sizing:border-box;' },
+    ];
+
+    return {
+      accent, nav, months: monthStrip, cells, legend, monthGames, sel, hasSel: true,
+      weekdays: ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'].map((label, i) => ({ label, full: WD[i] })),
+      monthTitle: MONTHS[month] + ' de 2027', monthName: MONTHS[month].toLowerCase(), noGames: monthGames.length === 0,
+      compFilter, setComp: (e) => this.setState({ comp: e.target.value }),
+      prevMonth: () => this.setState({ month: Math.max(0, month - 1) }),
+      nextMonth: () => this.setState({ month: Math.min(11, month + 1) }),
+      goNext: goto(nextGame.m, nextGame.id),
+    };
   }
 }
 </script>

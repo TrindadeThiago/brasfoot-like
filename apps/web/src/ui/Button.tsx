@@ -1,8 +1,10 @@
-import type { ButtonHTMLAttributes } from "react";
+import type { ButtonHTMLAttributes, Ref } from "react";
 import styles from "./Button.module.css";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "danger";
+  variant?: "primary" | "secondary" | "danger" | "text";
+  /** O `ref` é uma prop comum no React 19. */
+  ref?: Ref<HTMLButtonElement>;
 }
 
 export function Button({

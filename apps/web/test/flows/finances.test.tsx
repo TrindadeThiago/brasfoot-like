@@ -90,6 +90,7 @@ describe("preço do ingresso (US2)", () => {
     await screen.findByRole("region", { name: t("home.nextMatch") });
     await user.keyboard("6");
     expect(memoryRouter.pathname()).toBe("/jogo/financas");
+    await user.click(await screen.findByRole("tab", { name: t("finance.tab.gate") }));
     const panel = await screen.findByRole("region", { name: t("finance.ticket.title") });
     const { min, max } = economyRules(save.bank, save.league.competitionId).priceRange;
     const input = within(panel).getByLabelText(t("finance.ticket.price", { min, max }));
@@ -138,7 +139,9 @@ describe("tela de finanças (US4)", () => {
   it("totais por categoria + saldo inicial = saldo atual; jogos em casa listados", async () => {
     const { store, save } = await storedCareer(7);
     renderApp("/jogo/financas?c=tela", store);
+    const user = userEvent.setup({ delay: null });
     const summary = seasonFinanceSummary(save.finances, save.clubId);
+    await user.click(await screen.findByRole("tab", { name: t("finance.tab.flow") }));
     const region = await screen.findByRole("region", {
       name: t("finance.season", { year: save.league.year }),
     });
@@ -149,6 +152,7 @@ describe("tela de finanças (US4)", () => {
     const sum = LEDGER_CATEGORIES.reduce((total, category) => total + summary.totals[category], 0);
     expect(summary.startCash + sum).toBe(summary.cash);
     expect(region.textContent).toContain(formatMoney(summary.cash));
+    await user.click(screen.getByRole("tab", { name: t("finance.tab.gate") }));
     const games = await screen.findByRole("table", { name: t("finance.games.title") });
     const rows = within(within(games).getAllByRole("rowgroup")[1] as HTMLElement).getAllByRole(
       "row",
@@ -156,7 +160,8 @@ describe("tela de finanças (US4)", () => {
     const homeGames = save.finances.gates.filter((gate) => gate.clubId === save.clubId);
     expect(rows).toHaveLength(homeGames.length);
     expect(homeGames.every((gate) => gate.attendance <= gate.capacity)).toBe(true);
-    expect(screen.getByText(t("finance.history.empty"))).toBeDefined();
+    await user.click(screen.getByRole("tab", { name: t("finance.tab.history") }));
+    expect(await screen.findByText(t("finance.history.empty"))).toBeDefined();
   });
 
   it("depois de uma virada, o histórico mostra a temporada encerrada; saldo na Início", async () => {
@@ -177,6 +182,9 @@ describe("tela de finanças (US4)", () => {
       return turned.save;
     });
     renderApp("/jogo/financas?c=tela", store);
+    await userEvent
+      .setup({ delay: null })
+      .click(await screen.findByRole("tab", { name: t("finance.tab.history") }));
     const history = await screen.findByRole("table", { name: t("finance.history.title") });
     const rows = within(within(history).getAllByRole("rowgroup")[1] as HTMLElement).getAllByRole(
       "row",
@@ -199,8 +207,9 @@ describe("crédito bancário (US5)", () => {
   it("toma, paga juros na rodada, amortiza e quita; acima do limite é recusado", async () => {
     const { store, save } = await storedCareer(1);
     renderApp("/jogo/financas?c=tela", store);
-    const panel = await screen.findByRole("region", { name: t("finance.credit.title") });
     const user = userEvent.setup();
+    await user.click(await screen.findByRole("tab", { name: t("finance.tab.credit") }));
+    const panel = await screen.findByRole("region", { name: t("finance.credit.title") });
     const amount = within(panel).getByLabelText(t("finance.credit.amount"));
     await user.type(amount, "1000000");
     await user.click(within(panel).getByRole("button", { name: t("finance.credit.take") }));
@@ -219,6 +228,7 @@ describe("crédito bancário (US5)", () => {
     ).toBe(true);
 
     memoryRouter.push("/jogo/financas?c=tela");
+    await user.click(await screen.findByRole("tab", { name: t("finance.tab.credit") }));
     const again = await screen.findByRole("region", { name: t("finance.credit.title") });
     await user.type(within(again).getByLabelText(t("finance.credit.amount")), "400000");
     await user.click(within(again).getByRole("button", { name: t("finance.credit.repay") }));
@@ -252,8 +262,9 @@ describe("expansão do estádio (US6)", () => {
     if (!option) throw new Error("nenhuma obra cabe no caixa");
     const capacity = save.finances.clubs[save.clubId]?.capacity ?? 0;
     renderApp("/jogo/financas?c=tela", store);
-    const panel = await screen.findByRole("region", { name: t("finance.stadium.title") });
     const user = userEvent.setup();
+    await user.click(await screen.findByRole("tab", { name: t("finance.tab.stadium") }));
+    const panel = await screen.findByRole("region", { name: t("finance.stadium.title") });
     const label = t("finance.stadium.option", {
       seats: formatNumber(option.seats),
       cost: formatMoney(option.cost),
@@ -312,6 +323,9 @@ describe("crise financeira (US8)", () => {
     expect((await screen.findByRole("alert")).textContent).toBe(t("home.crisis", { rounds: 12 }));
     memoryRouter.push("/jogo/financas?c=tela");
     expect(await screen.findByText(t("finance.crisis", { rounds: 12 }))).toBeDefined();
+    await userEvent
+      .setup({ delay: null })
+      .click(await screen.findByRole("tab", { name: t("finance.tab.history") }));
     expect(
       screen.getByText(
         t("finance.history.crisis", {

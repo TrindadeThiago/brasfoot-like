@@ -10,6 +10,7 @@ import { type SaveFile, userSeason } from "@brasfoot-like/save";
 import { useT } from "../i18n";
 import { Crest } from "./Crest";
 import { type Column, DataTable } from "./DataTable";
+import { EmptyState } from "./EmptyState";
 import { FormChips } from "./FormChips";
 import { competitionName } from "./qualification/origin-text";
 import styles from "./StandingsTable.module.css";
@@ -182,7 +183,9 @@ export function StandingsTable({
         rowKey={(row) => row.clubId}
         caption={caption}
         highlight={(row) => row.clubId === save.clubId}
+        stickyFirst
       />
+      {rows.length === 0 ? <EmptyState title={t("competition.empty.noQualified")} /> : null}
       {legend !== "" ? <p className={styles.legend}>{legend}</p> : null}
     </>
   );

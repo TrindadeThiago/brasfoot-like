@@ -1,7 +1,13 @@
 "use client";
 
-import { type ReactNode, useEffect, useRef } from "react";
+import { type ReactNode, useEffect, useId, useRef } from "react";
 import styles from "./Dialog.module.css";
+
+/**
+ * Pilha dos diálogos abertos (026): quando um diálogo abre por cima de outro (o de venda sobre o
+ * modal do jogador), só o do topo responde a Esc e Tab; ao fechar, o foco volta ao que o abriu.
+ */
+const OPEN: symbol[] = [];
 
 interface DialogProps {
   open: boolean;
@@ -23,9 +29,16 @@ export function Dialog({
   dismissOnBackdrop = false,
 }: DialogProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const titleId = useId();
+  // `onClose` costuma ser uma função nova a cada render da tela: guardá-la numa ref evita refazer o
+  // efeito (e perder o elemento a que o foco volta) quando a tela se atualiza com o diálogo aberto.
+  const closeRef = useRef(onClose);
+  closeRef.current = onClose;
 
   useEffect(() => {
     if (!open) return;
+    const self = Symbol("dialog");
+    OPEN.push(self);
     const previous = document.activeElement as HTMLElement | null;
     const node = ref.current;
     const focusables = () => [
@@ -35,9 +48,10 @@ export function Dialog({
     ];
     focusables()[0]?.focus();
     function onKey(event: KeyboardEvent) {
+      if (OPEN.at(-1) !== self) return;
       if (event.key === "Escape") {
         event.preventDefault();
-        onClose();
+        closeRef.current();
       } else if (event.key === "Tab") {
         const items = focusables();
         const first = items[0];
@@ -55,9 +69,10 @@ export function Dialog({
     document.addEventListener("keydown", onKey);
     return () => {
       document.removeEventListener("keydown", onKey);
+      OPEN.splice(OPEN.indexOf(self), 1);
       previous?.focus();
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open) return null;
   return (
@@ -74,9 +89,9 @@ export function Dialog({
         className={styles.dialog}
         role="dialog"
         aria-modal="true"
-        aria-labelledby="dialog-title"
+        aria-labelledby={titleId}
       >
-        <h2 id="dialog-title">{title}</h2>
+        <h2 id={titleId}>{title}</h2>
         <div className={styles.body}>{children}</div>
         {actions ? <div className={styles.actions}>{actions}</div> : null}
       </div>

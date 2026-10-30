@@ -1,4 +1,4 @@
-import { generateWorldBank, type ModPackage } from "@brasfoot-like/engine";
+import { generateWorldBank, type ModPackage, mainCompetitionOf } from "@brasfoot-like/engine";
 import { writeModPackage } from "@brasfoot-like/modkit";
 import { createSave, migrateSave, type SaveFile } from "@brasfoot-like/save";
 import { screen, waitFor, within } from "@testing-library/react";
@@ -108,10 +108,11 @@ describe("nova carreira num mundo de vários países (020 US1)", () => {
 });
 
 describe("nova carreira no mundo padrão (020 FR-020)", () => {
-  it("sem filtro de país, sem coluna de país e sem contagem", async () => {
+  it("sem filtro de país e sem coluna de país; a busca e a contagem aparecem em qualquer mundo (031)", async () => {
     await renderClassicNewCareer();
     expect(screen.queryByLabelText(t("newCareer.country.filter"))).toBeNull();
-    expect(screen.queryByLabelText(t("newCareer.search"))).toBeNull();
+    expect(screen.getByLabelText(t("newCareer.search"))).toBeDefined();
+    expect(screen.getByRole("status")).toBeDefined();
     expect(screen.queryByRole("columnheader", { name: new RegExp(t("col.country")) })).toBeNull();
   });
 });
@@ -141,12 +142,13 @@ describe("consulta às ligas de outros países (020 US1)", () => {
     const user = userEvent.setup();
     const { store, save } = await worldSave();
     renderApp("/jogo/competicao?c=mundo", store);
+    // Os países de fora ficam em "Demais competições" (027): o seletor filtra os cartões.
+    await user.click(await screen.findByRole("tab", { name: t("competition.others") }));
     const country = await screen.findByLabelText(t("competition.country"));
     const [first] = save.bank.countries;
-    const second = save.bank.countries[1];
-    expect((country as HTMLSelectElement).value).toBe(second?.id);
-    // A liga do técnico é a do segundo país; escolher o primeiro mostra a liga de lá.
+    const league = mainCompetitionOf(save.bank, first?.id ?? "");
     await user.selectOptions(country, first?.name ?? "");
+    await user.click(await screen.findByRole("link", { name: league?.name ?? "" }));
     await waitFor(() =>
       expect(memoryRouter.url).toContain(`comp=liga-${first?.code.toLowerCase()}`),
     );
@@ -235,7 +237,11 @@ describe("mercado e propostas entre países (020 US2)", () => {
         t("career.offers.country", { country: save.bank.countries[2]?.name ?? "" }),
       ),
     ).toBeDefined();
-    await user.click(within(card).getByRole("button", { name: t("career.offers.accept") }));
+    // O aviso de mudança de país (029) vem antes das ações.
+    const warning = within(card).getByRole("region", { name: t("career.offers.abroadTitle") });
+    const accept = within(card).getByRole("button", { name: t("career.offers.accept") });
+    expect(warning.compareDocumentPosition(accept) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    await user.click(accept);
     await waitFor(async () => {
       const [summary] = await store.listSummaries();
       const loaded = await store.load(summary?.id ?? "");

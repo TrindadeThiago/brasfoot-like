@@ -1,7 +1,4 @@
 .card {
-  background: var(--color-surface);
-  border-radius: var(--radius);
-  padding: var(--space-4);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -75,4 +72,12 @@
 .biggest {
   background: var(--color-accent);
   color: var(--color-surface);
+}
+
+/* Barra do medidor nativo com os tokens do tema, nos dois temas (026). */
+.row meter {
+  flex: 1;
+  min-width: 80px;
+  height: 10px;
+  accent-color: var(--color-accent);
 }

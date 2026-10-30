@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { t } from "../../src/i18n";
 import { renderApp } from "../helpers/app";
+import { monthGrid, seasonLines, showRoundButton } from "../helpers/calendar";
 import { storedCareer } from "../helpers/career";
 
 describe("Competição (FR-018)", () => {
@@ -48,31 +49,24 @@ describe("Calendário (FR-019)", () => {
   it("mostra as 38 rodadas, placares disputados e a próxima rodada destacada", async () => {
     const { store, save } = await storedCareer(4);
     renderApp("/jogo/calendario?c=tela", store);
-    const table = await screen.findByRole("table");
-    const rows = within(within(table).getAllByRole("rowgroup")[1] as HTMLElement).getAllByRole(
-      "row",
-    );
-    expect(rows).toHaveLength(38);
+    await monthGrid();
+    const lines = await seasonLines(userEvent.setup({ delay: null }));
+    expect(lines).toHaveLength(38);
     const firstRecord = userSeason(save).records.find(
       (record) =>
         record.round === 1 && (record.home === save.clubId || record.away === save.clubId),
     );
-    expect(
-      within(rows[0] as HTMLElement).getByText(
-        `${firstRecord?.score.home} × ${firstRecord?.score.away}`,
-      ),
-    ).toBeDefined();
-    expect(rows[3]?.getAttribute("aria-current")).toBe("true");
-    expect(within(rows[10] as HTMLElement).getByText(t("calendar.notPlayed"))).toBeDefined();
+    expect(lines[0]?.text).toContain(`${firstRecord?.score.home} × ${firstRecord?.score.away}`);
+    expect(lines[3]?.current).toBe(true);
+    expect(lines[10]?.text).toContain(t("calendar.notPlayed"));
   });
 
   it("mostra todos os jogos de uma rodada num diálogo", async () => {
     const { store } = await storedCareer(4);
     renderApp("/jogo/calendario?c=tela", store);
     const user = userEvent.setup();
-    await user.click(
-      await screen.findByRole("button", { name: t("calendar.showRound", { round: 2 }) }),
-    );
+    await monthGrid();
+    await user.click(await showRoundButton(user, 2));
     const dialog = screen.getByRole("dialog", { name: t("calendar.roundMatches", { round: 2 }) });
     expect(within(dialog).getAllByRole("listitem")).toHaveLength(10);
   });
@@ -82,9 +76,8 @@ describe("Calendário (FR-019)", () => {
       const { store } = await storedCareer(4);
       renderApp("/jogo/calendario?c=tela", store);
       const user = userEvent.setup();
-      await user.click(
-        await screen.findByRole("button", { name: t("calendar.showRound", { round: 2 }) }),
-      );
+      await monthGrid();
+      await user.click(await showRoundButton(user, 2));
       await screen.findByRole("dialog");
       return user;
     }

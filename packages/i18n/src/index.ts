@@ -18,4 +18,4 @@ export {
   uiKeys,
 } from "./format";
 export type { ReleaseNote } from "./release-notes";
-export { releaseNotes, releaseNotesSchema } from "./release-notes";
+export { betaReleaseNotes, releaseNotes, releaseNotesSchema } from "./release-notes";

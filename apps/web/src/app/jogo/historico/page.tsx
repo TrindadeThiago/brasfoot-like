@@ -4,19 +4,19 @@ import type { HistoryRow, SeasonHistoryEntry } from "@brasfoot-like/engine";
 import { divisionNameOf, type SaveFile } from "@brasfoot-like/save";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
 import { GameLayout } from "../../../game/GameLayout";
 import { useT } from "../../../i18n";
-import { screenHref } from "../../../ui/AppHeader";
-import { Button } from "../../../ui/Button";
 import { Crest } from "../../../ui/Crest";
 import { ContinentalHistory } from "../../../ui/continental/ContinentalHistory";
 import { CupHistory } from "../../../ui/cup/CupHistory";
 import { type Column, DataTable } from "../../../ui/DataTable";
+import { EmptyState } from "../../../ui/EmptyState";
 import { OtherCompetitions } from "../../../ui/history/OtherCompetitions";
 import { ClubHistory, Records, Scorers, Titles } from "../../../ui/history/WorldHistory";
 import { QualificationSummary } from "../../../ui/qualification/QualificationSummary";
 import { RegionalHistory } from "../../../ui/regional/RegionalHistory";
+import { screenHref } from "../../../ui/shell/screens";
+import { Tabs } from "../../../ui/Tabs";
 import styles from "./page.module.css";
 
 type Tab =
@@ -127,6 +127,7 @@ function HistoryList({ save }: { save: SaveFile }) {
         columns={columns}
         rowKey={(entry) => String(entry.number)}
         caption={t("history.caption")}
+        stickyFirst
       />
       <OtherCompetitions save={save} entries={[...save.competitionHistory].reverse()} />
     </>
@@ -192,6 +193,7 @@ function HistoryDetail({ save, entry }: { save: SaveFile; entry: SeasonHistoryEn
               year: entry.year,
             })}
             highlight={(row) => row.clubId === save.clubId}
+            stickyFirst
           />
         );
       })}
@@ -204,12 +206,36 @@ function HistoryDetail({ save, entry }: { save: SaveFile; entry: SeasonHistoryEn
   );
 }
 
+/** Conteúdo de uma aba; antes da primeira temporada encerrada, o estado vazio explica o que virá. */
+function HistoryTab({ save, tab }: { save: SaveFile; tab: Tab }) {
+  const t = useT();
+  const hasData =
+    save.history.length > 0 ||
+    (tab === "cups" && (save.cupHistory ?? []).length > 0) ||
+    (tab === "continental" && (save.competitionHistory ?? []).length > 0) ||
+    tab === "regional";
+  if (!hasData) {
+    return <EmptyState title={t(tab === "seasons" ? "history.empty" : `history.empty.${tab}`)} />;
+  }
+  return (
+    <>
+      {tab === "seasons" ? <HistoryList save={save} /> : null}
+      {tab === "titles" ? <Titles save={save} /> : null}
+      {tab === "scorers" ? <Scorers save={save} /> : null}
+      {tab === "records" ? <Records save={save} /> : null}
+      {tab === "clubs" ? <ClubHistory save={save} /> : null}
+      {tab === "cups" ? <CupHistory save={save} /> : null}
+      {tab === "continental" ? <ContinentalHistory save={save} /> : null}
+      {tab === "regional" ? <RegionalHistory save={save} /> : null}
+    </>
+  );
+}
+
 function History({ save }: { save: SaveFile }) {
   const t = useT();
   const params = useSearchParams();
   const requested = Number(params?.get("t"));
   const entry = save.history.find((item) => item.number === requested);
-  const [tab, setTab] = useState<Tab>("seasons");
   const hasCup = save.bank.competitions.some((item) => item.format.type === "knockout");
   const hasInternational = save.bank.competitions.some((item) => item.countryId === undefined);
   const hasRegional = (save.regionalHistory ?? []).length > 0;
@@ -230,27 +256,14 @@ function History({ save }: { save: SaveFile }) {
   return (
     <div className={styles.layout}>
       <h2 className="screen-title">{t("history.title")}</h2>
-      <div role="tablist" aria-label={t("history.tablist")} className={styles.tabs}>
-        {tabs.map((name) => (
-          <Button
-            key={name}
-            role="tab"
-            aria-selected={tab === name}
-            variant={tab === name ? "primary" : "secondary"}
-            onClick={() => setTab(name)}
-          >
-            {t(`history.tab.${name}`)}
-          </Button>
-        ))}
-      </div>
-      {tab === "seasons" ? <HistoryList save={save} /> : null}
-      {tab === "titles" ? <Titles save={save} /> : null}
-      {tab === "scorers" ? <Scorers save={save} /> : null}
-      {tab === "records" ? <Records save={save} /> : null}
-      {tab === "clubs" ? <ClubHistory save={save} /> : null}
-      {tab === "cups" ? <CupHistory save={save} /> : null}
-      {tab === "continental" ? <ContinentalHistory save={save} /> : null}
-      {tab === "regional" ? <RegionalHistory save={save} /> : null}
+      <Tabs
+        label={t("history.tablist")}
+        tabs={tabs.map((name) => ({
+          id: name,
+          label: t(`history.tab.${name}`),
+          content: <HistoryTab save={save} tab={name} />,
+        }))}
+      />
       <Link href={`${screenHref("/jogo/carreira", save.id)}&aba=history`}>
         {t("history.managerLink")}
       </Link>

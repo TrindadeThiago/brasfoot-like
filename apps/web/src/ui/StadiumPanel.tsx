@@ -7,6 +7,7 @@ import { useState } from "react";
 import type { FinanceActionResult } from "../game/GameProvider";
 import { formatMoney, formatNumber, useT } from "../i18n";
 import { Button } from "./Button";
+import { Card } from "./Card";
 import styles from "./FinancePanel.module.css";
 
 /** Ampliação do estádio: opções com custo e duração, ou a obra em andamento (US6, FR-018). */
@@ -28,7 +29,7 @@ export function StadiumPanel({
     (option) => club.capacity + option.seats > stadium.maxCapacity,
   );
   return (
-    <section aria-label={t("finance.stadium.title")} className={styles.card}>
+    <Card aria-label={t("finance.stadium.title")} className={styles.card}>
       <h2>{t("finance.stadium.title")}</h2>
       <p>{t("finance.capacityValue", { seats: formatNumber(club.capacity) })}</p>
       {club.works ? (
@@ -52,7 +53,15 @@ export function StadiumPanel({
             });
             return (
               <li key={option.seats}>
-                <span>{label}</span>
+                <span>
+                  {label}
+                  <span className={styles.muted}>
+                    {" · "}
+                    {t("finance.stadium.after", {
+                      seats: formatNumber(club.capacity + option.seats),
+                    })}
+                  </span>
+                </span>
                 {tooExpensive ? (
                   <span className={styles.muted}>{t("finance.stadium.cantAfford")}</span>
                 ) : null}
@@ -76,6 +85,6 @@ export function StadiumPanel({
           {error}
         </p>
       ) : null}
-    </section>
+    </Card>
   );
 }

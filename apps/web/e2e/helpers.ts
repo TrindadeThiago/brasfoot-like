@@ -45,7 +45,7 @@ const CLASSIC_NAME = "Mundo clássico (e2e)";
  * dependem de uma liga de 20 clubes o instalam como mod (como um jogador faria) e o escolhem na nova
  * carreira; o mundo padrão atual tem os seus próprios testes.
  */
-function classicZip(): Buffer {
+export function classicZip(): Buffer {
   const dir = join(import.meta.dirname, "../../../mods/default");
   const file = (name: string) => JSON.parse(readFileSync(join(dir, name), "utf8"));
   const bank = joinBankFiles({
@@ -129,7 +129,69 @@ export async function simulateSeason(page: Page): Promise<void> {
     if (/fim-de-temporada/.test(page.url())) return;
     const button = page.getByRole("button", { name: t("home.simulate") });
     // Fora da Início não há botão: um respiro basta para a simulação do dia terminar.
-    if ((await button.count()) > 0) await expect(button).toBeEnabled();
-    else await page.waitForTimeout(250);
+    // O botão some se a simulação do dia leva ao fim da temporada: isso também encerra a espera.
+    if ((await button.count()) > 0) {
+      await expect
+        .poll(
+          async () =>
+            /fim-de-temporada/.test(page.url()) ||
+            (await button.isEnabled({ timeout: 500 }).catch(() => false)),
+          { timeout: 30_000 },
+        )
+        .toBe(true);
+    } else await page.waitForTimeout(250);
   }
+}
+
+export type Theme = "dark" | "light";
+
+/** Define o tema antes de a página carregar (preferência `theme`), preservando as outras preferências. */
+export async function setTheme(page: Page, theme: Theme): Promise<void> {
+  await page.addInitScript((value) => {
+    const key = "brasfoot-like:preferences";
+    const prefs = JSON.parse(localStorage.getItem(key) ?? "{}");
+    localStorage.setItem(key, JSON.stringify({ ...prefs, theme: value }));
+  }, theme);
+}
+
+/** Largura da janela em px (a altura padrão é a de um tablet em paisagem baixa, 900). */
+export async function setViewport(page: Page, width: number, height = 900): Promise<void> {
+  await page.setViewportSize({ width, height });
+}
+
+/**
+ * Zoom do navegador a 200% (WCAG, reflow): o navegador encolhe a janela de layout pela metade, então
+ * uma janela de 1 280 px a 200% tem 640 px de largura útil em CSS.
+ */
+export async function zoomTo200(page: Page, windowWidth = 1280, height = 800): Promise<void> {
+  await page.setViewportSize({ width: windowWidth / 2, height: height / 2 });
+}
+
+export async function expectNoHorizontalScroll(page: Page, label: string): Promise<void> {
+  await page.waitForLoadState("networkidle");
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
+  expect(overflow, `${label}: rolagem horizontal da página`).toBeLessThanOrEqual(0);
+}
+
+/** Elementos com texto escondido por `overflow: hidden` sem reticências (texto cortado de verdade). */
+export async function expectNoClippedText(page: Page, label: string): Promise<void> {
+  const clipped = await page.evaluate(() =>
+    [...document.querySelectorAll<HTMLElement>("main *, header *")]
+      .filter((element) => {
+        const style = getComputedStyle(element);
+        // O texto só-leitor-de-tela (`visually-hidden`) é cortado de propósito.
+        if (element.classList.contains("visually-hidden")) return false;
+        return (
+          style.overflowX === "hidden" &&
+          style.textOverflow !== "ellipsis" &&
+          element.scrollWidth > element.clientWidth + 1 &&
+          (element.textContent ?? "").trim().length > 0
+        );
+      })
+      .map((element) => `${element.tagName}.${element.className}`)
+      .slice(0, 5),
+  );
+  expect(clipped, `${label}: texto cortado`).toEqual([]);
 }

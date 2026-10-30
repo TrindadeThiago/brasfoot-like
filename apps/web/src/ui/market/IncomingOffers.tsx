@@ -6,13 +6,23 @@ import { useState } from "react";
 import type { useGame } from "../../game/GameProvider";
 import { formatMoney, useT } from "../../i18n";
 import { Button } from "../Button";
+import { Card } from "../Card";
 import { MoneyInput } from "../MoneyInput";
 import styles from "./market.module.css";
 
 type Game = ReturnType<typeof useGame>;
 
 /** Propostas da IA pelos jogadores do usuário: aceitar, recusar ou contrapropor uma vez (US4). */
-export function IncomingOffers({ save, game }: { save: SaveFile; game: Game }) {
+export function IncomingOffers({
+  save,
+  game,
+  onOpen,
+}: {
+  save: SaveFile;
+  game: Game;
+  /** Abre os detalhes do jogador pedido, para decidir entre aceitar e recusar. */
+  onOpen: (playerId: string) => void;
+}) {
   const t = useT();
   const [counters, setCounters] = useState<Record<string, string>>({});
   const [message, setMessage] = useState<string | undefined>();
@@ -36,7 +46,7 @@ export function IncomingOffers({ save, game }: { save: SaveFile; game: Game }) {
     );
   };
   return (
-    <section className={styles.card} aria-label={t("market.incoming.title")}>
+    <Card className={styles.card} aria-label={t("market.incoming.title")}>
       <h2>{t("market.incoming.title")}</h2>
       {message ? (
         <p role="status" className={styles.feedback}>
@@ -76,6 +86,13 @@ export function IncomingOffers({ save, game }: { save: SaveFile; game: Game }) {
                   >
                     {t("market.action.refuse")}
                   </Button>
+                  <Button
+                    aria-haspopup="dialog"
+                    aria-label={t("market.incoming.detailsOf", { name: player.displayName })}
+                    onClick={() => onOpen(player.id)}
+                  >
+                    {t("market.incoming.details")}
+                  </Button>
                 </div>
                 {offer.kind === "buy" ? (
                   <form
@@ -107,6 +124,6 @@ export function IncomingOffers({ save, game }: { save: SaveFile; game: Game }) {
           })}
         </ul>
       )}
-    </section>
+    </Card>
   );
 }

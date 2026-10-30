@@ -8,34 +8,40 @@ import {
   nextFixture,
   type SaveFile,
   seasonStateOf,
-  userDivisionLevel,
   userSeasonFor,
 } from "@brasfoot-like/save";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { GameLayout } from "../../../game/GameLayout";
 import type { useGame } from "../../../game/GameProvider";
+import { matchContext, otherMatchRows, shootoutWinner } from "../../../game/live-view";
 import { divisionHref } from "../../../game/useDivision";
-import { SPEEDS, useLiveRound } from "../../../game/useLiveRound";
+import { type FeedItem, SPEEDS, useLiveRound } from "../../../game/useLiveRound";
 import { formatDate, useT } from "../../../i18n";
-import type { RoundSpeed } from "../../../storage/preferences";
-import { screenHref } from "../../../ui/AppHeader";
 import { Button } from "../../../ui/Button";
 import { ShootoutPanel } from "../../../ui/cup/ShootoutPanel";
 import { EventFeed } from "../../../ui/EventFeed";
-import { clockText, eventText } from "../../../ui/event-text";
-import { LiveGrid } from "../../../ui/LiveGrid";
+import { eventText } from "../../../ui/event-text";
 import { LiveStats } from "../../../ui/LiveStats";
-import { setLeaveGuard } from "../../../ui/leave-guard";
+import { requestLeave, setLeaveGuard } from "../../../ui/leave-guard";
+import { ControlBar } from "../../../ui/live/ControlBar";
+import { ExtraTimeNotice } from "../../../ui/live/ExtraTimeNotice";
+import { LeaveDialog } from "../../../ui/live/LeaveDialog";
+import { MatchScoreboard } from "../../../ui/live/MatchScoreboard";
+import { OtherMatches } from "../../../ui/live/OtherMatches";
+import { ProgressBar } from "../../../ui/live/ProgressBar";
 import { MatchSummary } from "../../../ui/MatchSummary";
 import { RoundResults } from "../../../ui/RoundResults";
 import { SubstitutionPanel } from "../../../ui/SubstitutionPanel";
+import { screenHref } from "../../../ui/shell/screens";
 import { useShortcuts } from "../../../ui/useShortcuts";
 import styles from "./page.module.css";
 
 type Game = ReturnType<typeof useGame>;
 
-const ANNOUNCED = new Set(["shot", "red_card", "injury", "shootout_kick"]);
+/** Quantos anúncios ficam na região de leitor de tela (os mais novos). */
+const ANNOUNCEMENT_LINES = 20;
 
 function LiveRoundView({
   initial,
@@ -47,18 +53,43 @@ function LiveRoundView({
   onFinish: (round: LiveRound) => void;
 }) {
   const t = useT();
-  const round = useLiveRound(initial, save.clubId, onFinish);
+  const [announced, setAnnounced] = useState<{ key: string; text: string }[]>([]);
+  const saveRef = useRef(save);
+  saveRef.current = save;
+  // Os lances do meu jogo que o leitor de tela deve ouvir, todos os do lote e em ordem (030 R7).
+  const announce = useCallback((items: FeedItem[], next: LiveRound) => {
+    const lines = items.flatMap((item) => {
+      const match = next.matches[item.matchIndex];
+      const text = match ? eventText(item.event, match, saveRef.current) : undefined;
+      return text ? [{ key: item.key, text }] : [];
+    });
+    if (lines.length > 0)
+      setAnnounced((current) => [...current, ...lines].slice(-ANNOUNCEMENT_LINES));
+  }, []);
+  const round = useLiveRound(initial, save.clubId, onFinish, announce);
+  const toggleRef = useRef<HTMLButtonElement | null>(null);
+  // Ao retomar o painel some: se o foco estava dentro dele, volta ao botão Pausar (030 R6).
+  useEffect(() => {
+    if (!round.paused && document.activeElement === document.body) toggleRef.current?.focus();
+  }, [round.paused]);
   const mine = matchOf(round.live, save.clubId);
-  // Só os jogos da divisão do jogador aparecem; os demais avançam junto (research.md R2).
-  const level = userDivisionLevel(save);
-  const shownLevel = round.live.matches.some((match) => match.divisionLevel === level)
-    ? level
-    : round.live.matches[0]?.divisionLevel;
-  const shown = (index: number) => round.live.matches[index]?.divisionLevel === shownLevel;
+  const others = useMemo(() => otherMatchRows(round.live, save, save.clubId), [round.live, save]);
 
+  const router = useRouter();
+  const [asking, setAsking] = useState<((ok: boolean) => void) | undefined>();
+  const wasRunning = useRef(false);
+  const pausedRef = useRef(round.paused);
+  pausedRef.current = round.paused;
+  const pauseRef = useRef(round.pause);
+  pauseRef.current = round.pause;
   useEffect(() => {
     if (round.finished) return;
-    setLeaveGuard(t("round.confirmLeave"));
+    // A pergunta pausa a rodada; se o jogador ficar, ela volta a correr (030 R8).
+    setLeaveGuard(t("round.confirmLeave"), (answer) => {
+      wasRunning.current = !pausedRef.current;
+      pauseRef.current();
+      setAsking(() => answer);
+    });
     const onUnload = (event: BeforeUnloadEvent) => event.preventDefault();
     window.addEventListener("beforeunload", onUnload);
     return () => {
@@ -73,52 +104,49 @@ function LiveRoundView({
     round.setSpeed(SPEEDS[Math.max(0, SPEEDS.indexOf(round.speed) - 1)] ?? "slow");
   useShortcuts({ pause: round.toggle, faster, slower, finish: round.finishNow });
 
-  const announcement = useMemo(() => {
-    const item = round.feed.find(
-      (entry) =>
-        entry.mine &&
-        ANNOUNCED.has(entry.event.type) &&
-        (entry.event.type !== "shot" || entry.event.outcome === "goal"),
-    );
-    const match = item ? round.live.matches[item.matchIndex] : undefined;
-    return item && match ? (eventText(item.event, match, save) ?? "") : "";
-  }, [round.feed, round.live, save]);
-
   return (
     <div className={styles.layout}>
-      <div className={styles.controls} data-tip-anchor="round-controls">
-        <span className={styles.clock}>{mine ? clockText(mine.match.state) : ""}</span>
-        <label className={styles.field}>
-          <span>{t("round.speed")}</span>
-          <select
-            value={round.speed}
-            onChange={(event) => round.setSpeed(event.target.value as RoundSpeed)}
-          >
-            {SPEEDS.map((speed) => (
-              <option key={speed} value={speed}>
-                {t(`round.speed.${speed}`)}
-              </option>
-            ))}
-          </select>
-        </label>
-        <Button variant="primary" onClick={round.toggle} disabled={round.finished}>
-          {round.paused ? t("round.resume") : t("round.pause")}
-        </Button>
-        <Button onClick={round.finishNow} disabled={round.finished}>
-          {t("round.finishNow")}
-        </Button>
-        <label className={styles.check}>
-          <input
-            type="checkbox"
-            checked={round.autoPause}
-            onChange={(event) => round.setAutoPause(event.target.checked)}
+      <ControlBar
+        speed={round.speed}
+        paused={round.paused}
+        finished={round.finished}
+        autoPause={round.autoPause}
+        toggleRef={toggleRef}
+        onSpeed={round.setSpeed}
+        onToggle={round.toggle}
+        onFinishNow={round.finishNow}
+        onAutoPause={round.setAutoPause}
+        onLeave={() =>
+          void requestLeave().then((ok) => ok && router.push(screenHref("/jogo", save.id)))
+        }
+      />
+      <LeaveDialog
+        open={asking !== undefined}
+        message={t("round.confirmLeave")}
+        onAnswer={(ok) => {
+          asking?.(ok);
+          setAsking(undefined);
+          // Cancelou: a rodada volta a correr se ela estava correndo antes da pergunta.
+          if (!ok && wasRunning.current) round.resume();
+        }}
+      />
+      {mine ? <ProgressBar match={mine.match} save={save} /> : null}
+      <div role="log" aria-relevant="additions" className={styles.visuallyHidden}>
+        {announced.map((line) => (
+          <p key={line.key}>{line.text}</p>
+        ))}
+      </div>
+      {mine ? (
+        <section aria-label={t("round.myMatch")}>
+          <MatchScoreboard
+            match={mine.match}
+            save={save}
+            context={matchContext(save, round.live, mine.match)}
+            mine={mine.side}
           />
-          <span>{t("round.autoPause")}</span>
-        </label>
-      </div>
-      <div aria-live="polite" className={styles.visuallyHidden}>
-        {announcement}
-      </div>
+        </section>
+      ) : null}
+      {mine?.match.state.extraTime ? <ExtraTimeNotice /> : null}
       {round.paused && mine ? (
         <SubstitutionPanel
           match={mine.match}
@@ -133,42 +161,23 @@ function LiveRoundView({
           }
         />
       ) : null}
-      {mine?.match.state.extraTime ? (
-        <p role="status" className={styles.notice}>
-          {t("cup.extraTimeNotice")}
-        </p>
-      ) : null}
-      {mine?.match.state.shootout ? (
-        <ShootoutPanel
-          save={save}
-          home={mine.match.sides.home}
-          away={mine.match.sides.away}
-          kicks={mine.match.state.shootout.kicks}
-          score={mine.match.state.shootout.score}
-        />
-      ) : null}
-      {mine ? <LiveStats match={mine.match} save={save} /> : null}
       <div className={styles.board}>
-        <LiveGrid
-          matches={round.live.matches.filter((match) => match.divisionLevel === shownLevel)}
-          clubId={save.clubId}
-          save={save}
-        />
         <div className={styles.feeds}>
-          <EventFeed
-            title={t("round.myFeed")}
-            items={round.feed.filter((item) => item.mine)}
-            live={round.live}
-            save={save}
-          />
-          <EventFeed
-            title={t("round.feed")}
-            items={round.feed.filter((item) => shown(item.matchIndex))}
-            live={round.live}
-            save={save}
-          />
+          <EventFeed title={t("round.myFeed")} items={round.feed} live={round.live} save={save} />
+          {mine?.match.state.shootout ? (
+            <ShootoutPanel
+              save={save}
+              home={mine.match.sides.home}
+              away={mine.match.sides.away}
+              kicks={mine.match.state.shootout.kicks}
+              score={mine.match.state.shootout.score}
+              winner={shootoutWinner(mine.match.state)}
+            />
+          ) : null}
         </div>
+        {mine ? <LiveStats match={mine.match} save={save} /> : null}
       </div>
+      <OtherMatches rows={others} />
     </div>
   );
 }

@@ -6,11 +6,14 @@ import { usePathname, useRouter } from "next/navigation";
 import { type ReactNode, Suspense, useEffect, useMemo } from "react";
 import { useT } from "../i18n";
 import { type RoundMode, readPreferences } from "../storage/preferences";
-import { AppHeader, GAME_SCREENS, screenHref } from "../ui/AppHeader";
 import { AssetsProvider } from "../ui/AssetsProvider";
 import { ConflictDialog } from "../ui/ConflictDialog";
-import { confirmLeave } from "../ui/leave-guard";
+import { requestLeave } from "../ui/leave-guard";
 import { SimulateDialogs } from "../ui/SimulateDialogs";
+import { FocusScreen } from "../ui/shell/FocusScreen";
+import { ScreenHeader } from "../ui/shell/ScreenHeader";
+import { Sidebar } from "../ui/shell/Sidebar";
+import { GAME_SCREENS, isFocusPath, screenHref } from "../ui/shell/screens";
 import { type ShortcutId, screenOf } from "../ui/shortcuts";
 import { TipHost } from "../ui/tips/TipHost";
 import { useShortcuts } from "../ui/useShortcuts";
@@ -38,10 +41,10 @@ function Layout({ children }: { children: Render }) {
     const go = (index: number) => () => {
       const screen = GAME_SCREENS[index];
       if (!screen || (screen.club && !isEmployed(save))) return;
-      if (confirmLeave()) router.push(screenHref(screen.path, save.id));
+      void requestLeave().then((ok) => ok && router.push(screenHref(screen.path, save.id)));
     };
     const play = async (mode: RoundMode) => {
-      if (!confirmLeave()) return;
+      if (!(await requestLeave())) return;
       const outcome = await game.playRound(mode);
       if (outcome === "live") router.push(screenHref("/jogo/rodada", save.id));
       if (outcome === "finished") router.push(screenHref("/jogo/fim-de-temporada", save.id));
@@ -80,8 +83,23 @@ function Layout({ children }: { children: Render }) {
   if (blocked) return <main className={styles.message}>{t("common.loading")}</main>;
   return (
     <AssetsProvider assets={save.assets}>
-      <AppHeader save={save} />
-      <main className={styles.content}>{children(save, game)}</main>
+      {isFocusPath(pathname) ? (
+        // Tela de foco (025 FR-008): sem barra lateral, com o jeito de voltar ao Início.
+        <div className={styles.focus}>
+          <ScreenHeader save={save} />
+          <FocusScreen back={{ href: screenHref("/jogo", save.id), label: t("nav.home") }}>
+            <main>{children(save, game)}</main>
+          </FocusScreen>
+        </div>
+      ) : (
+        <div className={styles.shell}>
+          <Sidebar save={save} />
+          <div className={styles.column}>
+            <ScreenHeader save={save} />
+            <main className={styles.content}>{children(save, game)}</main>
+          </div>
+        </div>
+      )}
       <ConflictDialog />
       <SimulateDialogs save={save} game={game} />
       <TipHost
