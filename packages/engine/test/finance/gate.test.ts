@@ -116,3 +116,23 @@ describe("preço do ingresso (US2, SC-004)", () => {
     expect(nextHomeGateEstimate(finances, over, testWorld(), club, 20)).toBeUndefined();
   });
 });
+
+describe("preço do ingresso sem ótimo no teto da faixa (auditoria A6)", () => {
+  it("com estádio pequeno, a receita cai passado o preço que lota e o máximo da faixa nunca é o ótimo", () => {
+    const small = withCapacity(finances, fixture.home, 2000);
+    const revenueAt = (value: number) =>
+      gateFor(small, league, testWorld(), fixture, value, { noise: false });
+    const prices = Array.from({ length: 196 }, (_, index) => index + 5);
+    const best = prices.reduce((top, value) =>
+      revenueAt(value).revenue > revenueAt(top).revenue ? value : top,
+    );
+    expect(best).toBeLessThan(200);
+    // Preço inteiro: o ótimo lota o estádio, ou chega a 1% da lotação.
+    expect(revenueAt(best).attendance).toBeGreaterThanOrEqual(revenueAt(best).capacity * 0.99);
+    expect(revenueAt(200).revenue).toBeLessThan(revenueAt(best).revenue);
+    // Acima do preço que lota, quanto mais caro, menos receita.
+    for (let value = best; value < 200; value += 5) {
+      expect(revenueAt(value + 5).revenue).toBeLessThanOrEqual(revenueAt(value).revenue);
+    }
+  });
+});

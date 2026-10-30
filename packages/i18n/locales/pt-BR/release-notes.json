@@ -1,5 +1,13 @@
 [
   {
+    "version": "1.0.3",
+    "date": "2026-10-30",
+    "changes": [
+      "Bilheteria corrigida: com um preço de ingresso muito acima do que lota o estádio, o público agora cai de verdade. Antes, a demanda tinha um piso de 5% e, em estádios pequenos, o preço máximo (200) rendia mais que qualquer outro, com o estádio quase vazio. Agora a receita só cresce com o preço até o ponto em que o estádio lota e cai depois disso.",
+      "Quem usava o preço máximo em um estádio pequeno vai ver menos receita de bilheteria; o preço que lota continua sendo o melhor. Os clubes da IA, as simulações de temporada e os formatos de save e de mod não mudaram, e os saves existentes continuam abrindo."
+    ]
+  },
+  {
     "version": "1.0.2",
     "date": "2026-10-30",
     "changes": [
