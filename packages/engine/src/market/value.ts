@@ -31,13 +31,15 @@ export function marketValueFor(
 
 /**
  * Valor de mercado de um jogador com clube: valor derivado (reputação do clube dono do contrato)
- * × fator do contrato. Emprestado vale pelo clube de origem. Múltiplo de 1.000.
+ * × fator do contrato (regras da competição do país do dono). Emprestado vale pelo clube de origem. Múltiplo de 1.000.
  */
 export function marketValue(player: CompletedPlayer, world: CompletedBank, year: number): number {
   const ownerId = player.contract?.loan?.fromClubId ?? player.clubId;
   const club = world.clubs.find((entry) => entry.id === ownerId);
   if (!club) return 0;
-  const competition = world.competitions[0];
+  // As regras são as da competição do país do clube dono; sem país casado, as da primeira.
+  const competition =
+    world.competitions.find((entry) => entry.countryId === club.countryId) ?? world.competitions[0];
   const rules = marketRules(world, competition?.id ?? "");
   return marketValueFor(player, club, rules, seasonDate(world.manifest.referenceDate, year), year);
 }

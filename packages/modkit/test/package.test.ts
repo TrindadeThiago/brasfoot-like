@@ -54,6 +54,21 @@ describe("pacote de mod (015 US2, R3, R4)", () => {
     expect(codes(readModPackage(bytes, { ...MOD_LIMITS, json: 100 }))).toContain("file.too_large");
   });
 
+  it("zip bomb: recusa pelo tamanho descompactado sem inflar", () => {
+    const bomb = zipOf({ ...modZipEntries(), "lixo.bin": new Uint8Array(64 * 1024 * 1024) });
+    expect(bomb.length).toBeLessThan(MOD_LIMITS.package);
+    const result = readModPackage(bomb);
+    expect(codes(result)).toEqual(["file.too_large"]);
+    expect(result.ok ? [] : result.errors[0]?.params).toMatchObject({ file: "lixo.bin" });
+  });
+
+  it("muitas entradas que somam além do limite descompactado são recusadas", () => {
+    const entries: Record<string, Uint8Array> = {};
+    for (let index = 0; index < 5; index++) entries[`parte${index}.bin`] = new Uint8Array(1000);
+    const result = readModPackage(zipOf(entries), { ...MOD_LIMITS, unpacked: 3500 });
+    expect(codes(result)).toContain("package.too_large");
+  });
+
   it("gerar e ler de volta preserva o banco", () => {
     const bank = modBank();
     const result = readModPackage(writeModPackage(bank));

@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.0.1",
+    "date": "2026-10-30",
+    "changes": [
+      "Mods e saves importados agora têm um limite de tamanho depois de descompactados: um arquivo pequeno que se expandia para centenas de megabytes (e podia travar a aba) passa a ser recusado com a mensagem de arquivo grande demais, sem gastar memória.",
+      "Em mods com vários países, o valor de mercado dos jogadores passa a seguir as regras de contrato do país do clube dono, e não sempre as da primeira competição.",
+      "Nenhum formato de save ou de mod mudou, e nenhum resultado de partida mudou: os saves existentes continuam abrindo e as partidas seguem iguais para a mesma seed."
+    ]
+  },
+  {
     "version": "1.0.0",
     "date": "2026-10-30",
     "changes": [

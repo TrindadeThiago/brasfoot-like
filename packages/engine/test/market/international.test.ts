@@ -188,3 +188,37 @@ describe("limite de estrangeiros (020 FR-002a)", () => {
     expect(canSignForeign(context.world, manager)).toBe(false);
   });
 });
+
+describe("valor de mercado em mundo com vários países (A3)", () => {
+  it("usa as regras da competição do país do clube dono, não da primeira", () => {
+    const { context, manager } = setup((world) => {
+      const second = world.competitions.find(
+        (entry) => entry.countryId !== world.competitions[0]?.countryId,
+      );
+      if (!second) throw new Error("mundo com um país só");
+      (second as { market?: object }).market = { lastYearValuePct: 30 };
+    });
+    const world = context.world;
+    const year = context.league.year;
+    const firstCountry = world.competitions[0]?.countryId;
+    const lastYear = (player: CompletedPlayer) => ({
+      ...player,
+      contract: { wage: 1, untilYear: year },
+    });
+    const ofCountry = (same: boolean) =>
+      world.players.find(
+        (entry) => (countryOf(world, entry.clubId) === firstCountry) === same && entry.contract,
+      ) as CompletedPlayer;
+    const inFirst = ofCountry(true);
+    const inOther = ofCountry(false);
+    const longContract = (player: CompletedPlayer) => ({
+      ...player,
+      contract: { wage: 1, untilYear: year + 4 },
+    });
+    expect(manager).toBeDefined();
+    const ratio = (player: CompletedPlayer) =>
+      marketValue(lastYear(player), world, year) / marketValue(longContract(player), world, year);
+    expect(ratio(inFirst)).toBeCloseTo(0.6, 1);
+    expect(ratio(inOther)).toBeCloseTo(0.3, 1);
+  });
+});

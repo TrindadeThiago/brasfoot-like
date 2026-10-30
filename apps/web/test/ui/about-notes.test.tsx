@@ -73,9 +73,9 @@ describe("Notas de versão (031 US6)", () => {
   it("a marca dura a visita inteira, mesmo depois de gravar a versão como vista", async () => {
     writePreferences({ lastSeenVersion: "0.9.0" });
     renderApp("/notas-de-versao", freshStore());
-    expect(await screen.findByText(t("notes.new"))).toBeDefined();
+    expect((await screen.findAllByText(t("notes.new"))).length).toBeGreaterThan(0);
     expect(readPreferences().lastSeenVersion).toBe(APP_VERSION);
-    expect(screen.getByText(t("notes.new"))).toBeDefined();
+    expect(screen.getAllByText(t("notes.new")).length).toBeGreaterThan(0);
   });
 
   it("a fase beta fica recolhida no fim, com a frase e as versões rotuladas beta", async () => {

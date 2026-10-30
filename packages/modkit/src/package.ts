@@ -67,12 +67,38 @@ export function readModPackage(
     );
     return { ok: false, errors: issues, warnings: [] };
   }
+  // O tamanho descompactado vem do diretório do zip: confere antes de inflar cada entrada, para um
+  // pacote pequeno que expande para gigabytes ser recusado sem alocar nada.
+  const oversized: ValidationIssue[] = [];
+  let unpacked = 0;
   let raw: Record<string, Uint8Array>;
   try {
-    raw = unzipSync(bytes);
+    raw = unzipSync(bytes, {
+      filter(file) {
+        if (file.name.endsWith("/")) return true;
+        if (file.originalSize > limits.json) {
+          oversized.push(
+            makeIssue("file.too_large", "package", [], {
+              file: file.name,
+              size: file.originalSize,
+              max: limits.json,
+            }),
+          );
+          return false;
+        }
+        unpacked += file.originalSize;
+        return unpacked <= limits.unpacked;
+      },
+    });
   } catch {
     return { ok: false, errors: [makeIssue("package.not_zip", "package", [], {})], warnings: [] };
   }
+  if (unpacked > limits.unpacked) {
+    oversized.push(
+      makeIssue("package.too_large", "package", [], { size: unpacked, max: limits.unpacked }),
+    );
+  }
+  if (oversized.length > 0) return { ok: false, errors: oversized, warnings: [] };
   const all = entries(raw);
   const files: Record<string, unknown> = {};
   for (const [section, file] of Object.entries(BANK_FILES) as [DataSection, string][]) {
