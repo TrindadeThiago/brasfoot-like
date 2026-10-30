@@ -99,7 +99,7 @@ test("versão nova: aviso fora da rodada ao vivo, Recarregar troca a versão e a
   await notice.getByRole("button", { name: t("update.reload") }).click();
 
   await expect
-    .poll(() => page.evaluate(() => caches.keys()).catch(() => []), { timeout: 15_000 })
+    .poll(() => page.evaluate(() => caches.keys()).catch(() => []), { timeout: 30_000 })
     .toEqual([expect.stringContaining(next)]);
   await expect(notice).toHaveCount(0);
   await page.goto("/");

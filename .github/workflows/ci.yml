@@ -1,12 +1,21 @@
 name: ci
 
 # Jobs em paralelo: o runner de repositório privado tem 2 vCPUs, então os testes unitários são
-# divididos em shards (arquivos distribuídos por hash) e o e2e roda num job próprio.
-# Só roda em pull request: a `main` é publicada pelo release.yml, que repete os gates.
-# Mudanças só de documentação (docs/, specs/, .specify/, .claude/ e arquivos .md) não rodam o
-# CI; a ordem dos padrões importa: os últimos voltam a incluir o que é lido pelo código.
+# divididos em 2 shards (arquivos distribuídos por hash; menos jobs = menos instalações cobradas) e o
+# e2e roda num job próprio.
+# Só roda em pull request: a `main` é publicada pelo release.yml, que confere tipos, lint, build e
+# `check-release` (sem repetir unit e e2e). As simulações de 30 temporadas rodam só localmente
+# (`pnpm sim:gates`, gancho de pré-push).
+# Para gastar menos minutos de Actions:
+#   - PR em rascunho não roda (marque "Ready for review" para rodar);
+#   - o e2e (o job mais caro) só roda em PR para a `main`, com o rótulo `e2e` (vale no próximo push
+#     ou ao marcar "Ready for review") ou quando o PR muda `apps/web/e2e/`; PRs de feature para uma
+#     branch de release rodam checks e unit;
+#   - mudanças só de documentação (docs/, specs/, .specify/, .claude/, .github/ e arquivos .md) não
+#     rodam o CI; a ordem dos padrões importa: os últimos voltam a incluir o que é lido pelo código.
 on:
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     paths:
       - "**"
       - "!*.md"
@@ -15,6 +24,7 @@ on:
       - "!specs/**"
       - "!.specify/**"
       - "!.claude/**"
+      - "!.github/**"
       # Lidos pelos testes (packages/modkit/test/docs.test.ts) e publicados no site.
       - "docs/mod-format.md"
       - "apps/web/public/docs/**"
@@ -23,8 +33,38 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
+  # Decide, sem instalar nada (alguns segundos), se o e2e roda neste PR.
+  scope:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      e2e: ${{ steps.decide.outputs.e2e }}
+    steps:
+      - id: decide
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASE: ${{ github.event.pull_request.base.ref }}
+          LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          run=false
+          if [ "$BASE" = "main" ]; then run=true; echo "e2e: o PR vai para a main."; fi
+          case ",$LABELS," in *,e2e,*) run=true; echo "e2e: rótulo e2e.";; esac
+          if gh api "repos/$REPO/pulls/$PR/files" --paginate -q '.[].filename' | grep -q '^apps/web/e2e/'; then
+            run=true; echo "e2e: o PR muda apps/web/e2e/."
+          fi
+          echo "e2e=$run" >> "$GITHUB_OUTPUT"
+          echo "Rodar o e2e: $run"
+
   checks:
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -39,12 +79,13 @@ jobs:
       - run: pnpm lint
 
   unit:
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4]
+        shard: [1, 2]
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -54,9 +95,11 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       # Com 2 vCPUs o Vitest usaria 1 worker por padrão.
-      - run: pnpm test --shard=${{ matrix.shard }}/4 --maxWorkers=2
+      - run: pnpm test --shard=${{ matrix.shard }}/2 --maxWorkers=2
 
   e2e:
+    needs: scope
+    if: needs.scope.outputs.e2e == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -68,7 +111,17 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build:web
-      - run: pnpm --filter @brasfoot-like/web exec playwright install --with-deps chromium
+      # Navegador em cache (baixar o Chromium a cada execução custa ~1 minuto); as bibliotecas do
+      # sistema vêm do apt e não entram no cache.
+      - id: browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+      - if: steps.browsers.outputs.cache-hit != 'true'
+        run: pnpm --filter @brasfoot-like/web exec playwright install --with-deps chromium
+      - if: steps.browsers.outputs.cache-hit == 'true'
+        run: pnpm --filter @brasfoot-like/web exec playwright install-deps chromium
       - run: pnpm test:e2e
       - uses: actions/upload-artifact@v4
         if: failure()
@@ -77,4 +130,4 @@ jobs:
           path: |
             apps/web/playwright-report/
             apps/web/test-results/
-          retention-days: 14
+          retention-days: 7

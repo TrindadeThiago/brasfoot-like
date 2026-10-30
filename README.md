@@ -82,6 +82,8 @@ Para o e2e, instale o Chromium uma vez: `pnpm --filter @brasfoot-like/web exec p
 | `pnpm gen:example-mod` | Gera o mod de exemplo e o pacote para download no jogo |
 | `pnpm screenshots` | Gera as capturas da página Sobre e deste README (tema escuro) e os ícones do aplicativo, a partir do build |
 | `pnpm check-release` | Verificações antes de publicar (versão, notas, capturas, textos e tamanho do pacote) |
+| `pnpm sim:gates` | As três simulações de 30 temporadas (mundo, economia e mundo grande), antes de publicar |
+| `pnpm hooks:install` | Liga o gancho de pré-push, que roda `pnpm sim:gates` quando o push mexe no motor, no save, no modkit ou nas ferramentas (`SKIP_SIMS=1 git push` pula) |
 
 ## Publicação
 
@@ -92,11 +94,20 @@ a cada push. Para publicar uma versão:
    `packages/i18n/locales/pt-BR/release-notes.json`.
 2. Faça o merge na `main`. Não é preciso criar a tag.
 3. O workflow [`release`](.github/workflows/release.yml) dispara no push na `main`: se a versão do
-   `package.json` ainda não tem tag, roda todas as verificações (testes, e2e, simulações e
-   `check-release`), publica o build testado e então cria a tag `vX.Y.Z` e a release no GitHub com
-   as notas. Merge sem mudança de versão não publica nada.
+   `package.json` ainda não tem tag, confere tipos, lint, build e `check-release`, publica o build
+   conferido e então cria a tag `vX.Y.Z` e a release no GitHub com as notas. Merge sem mudança de
+   versão não publica nada. Os testes de unidade e o e2e rodam no PR ([`ci`](.github/workflows/ci.yml)), e
+   as simulações de 30 temporadas rodam só localmente (veja abaixo): para economizar minutos de
+   Actions, o release não repete nada disso.
 
 O badge de versão acima lê o `version.json` do site publicado, então muda sozinho a cada release.
+
+### Gastar poucos minutos de Actions
+
+- O `ci` não roda em PR em rascunho nem em mudança só de documentação ou de `.github/`.
+- O e2e (o job mais caro) só roda em PR para a `main`, com o rótulo `e2e` ou quando o PR muda
+  `apps/web/e2e/`; PRs de feature para uma branch de release rodam só tipos, lint e unidade.
+- Antes do PR final para a `main`, rode localmente `pnpm test:e2e` e `pnpm sim:gates`.
 
 As versões 1.0.0 a 1.10.0 (20 a 28 de outubro de 2026) são a **fase beta** do jogo: as tags e os
 Releases delas se chamam `beta-vX.Y.Z`. A numeração foi reiniciada no marco 10 (a interface nova),
