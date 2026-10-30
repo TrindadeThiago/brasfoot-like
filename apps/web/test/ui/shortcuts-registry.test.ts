@@ -1,6 +1,8 @@
 // @vitest-environment node
 // 016 R5 / FR-015 / FR-016 / SC-007: o registro de atalhos é a fonte única e não tem conflitos.
 // (Ids usados por `useShortcuts` são verificados pelo TypeScript: `ShortcutId`.)
+import { readdirSync, readFileSync, statSync } from "node:fs";
+import { join } from "node:path";
 import { uiKeys } from "@brasfoot-like/i18n";
 import { describe, expect, it } from "vitest";
 import { type ScreenId, SHORTCUTS, scopesOf, screenOf } from "../../src/ui/shortcuts";
@@ -83,5 +85,42 @@ describe("registro de atalhos", () => {
     expect(screenOf("/configuracoes/")).toBe("settings");
     expect(scopesOf("round")).toEqual(["global", "game", "round"]);
     expect(scopesOf("mods")).toEqual(["global", "mods"]);
+  });
+});
+
+// 032 US5 (FR-012): todo atalho listado na ajuda tem quem o trate (um `useShortcuts` ou o despacho
+// global), para a ajuda não prometer uma tecla que não faz nada.
+function sourceFiles(dir: string): string[] {
+  return readdirSync(dir).flatMap((name) => {
+    const path = join(dir, name);
+    return statSync(path).isDirectory() ? sourceFiles(path) : [path];
+  });
+}
+
+describe("atalhos listados na ajuda têm tratador (032)", () => {
+  const SRC = join(import.meta.dirname, "../../src");
+  const others = sourceFiles(SRC)
+    .filter((file) => /\.(tsx|ts)$/.test(file) && !file.endsWith("ui/shortcuts.ts"))
+    .map((file) => readFileSync(file, "utf8"))
+    .join("\n");
+
+  it("cada id do registro é tratado em algum arquivo da interface", () => {
+    // O tratador é uma chave do objeto de `useShortcuts` (`help:`, `"go-home":` ou a forma curta
+    // `faster,`). Os atalhos passivos (Enter numa lista) são tratados pelo próprio elemento.
+    const handled = (id: string) =>
+      new RegExp(`(^|[\\s{,])("${id}"|${id})\\s*(:|,|\\})`, "m").test(others);
+    const orphans = SHORTCUTS.filter((entry) => !("passive" in entry && entry.passive))
+      .filter((entry) => !handled(entry.id))
+      .map((entry) => entry.id);
+    expect(orphans).toEqual([]);
+  });
+
+  it("toda tela do jogo lista ao menos os atalhos gerais na ajuda", () => {
+    for (const screen of SCREENS) {
+      const general = SHORTCUTS.filter(
+        (entry) => scopesOf(screen).includes(entry.scope) && !("hidden" in entry && entry.hidden),
+      );
+      expect(general.length, screen).toBeGreaterThan(0);
+    }
   });
 });

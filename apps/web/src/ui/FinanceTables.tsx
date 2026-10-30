@@ -5,6 +5,7 @@ import { LEDGER_CATEGORIES } from "@brasfoot-like/engine";
 import type { SaveFile } from "@brasfoot-like/save";
 import { attendanceSeries } from "../game/finance-series";
 import { formatDate, formatMoney, formatNumber, useT } from "../i18n";
+import { Card } from "./Card";
 import { type Column, DataTable } from "./DataTable";
 import styles from "./FinancePanel.module.css";
 import { gateInfoOf } from "./finance/gate-info";
@@ -66,7 +67,7 @@ export function HomeGames({ save }: { save: SaveFile }) {
     },
   ];
   return (
-    <section aria-label={t("finance.games.title")} className={styles.card}>
+    <Card aria-label={t("finance.games.title")} className={styles.card}>
       {games.length === 0 ? (
         <>
           <h2>{t("finance.games.title")}</h2>
@@ -82,7 +83,7 @@ export function HomeGames({ save }: { save: SaveFile }) {
           caption={t("finance.games.title")}
         />
       )}
-    </section>
+    </Card>
   );
 }
 
@@ -129,7 +130,7 @@ export function FinanceHistory({ save }: { save: SaveFile }) {
     save.league.year - (save.league.number - season);
   const crises = save.finances.crises.filter((crisis) => crisis.clubId === save.clubId);
   return (
-    <section aria-label={t("finance.history.title")} className={styles.card}>
+    <Card aria-label={t("finance.history.title")} className={styles.card}>
       {seasons.length === 0 ? <h2>{t("finance.history.title")}</h2> : null}
       {crises.length > 0 ? (
         <div>
@@ -159,6 +160,6 @@ export function FinanceHistory({ save }: { save: SaveFile }) {
           caption={t("finance.history.title")}
         />
       )}
-    </section>
+    </Card>
   );
 }

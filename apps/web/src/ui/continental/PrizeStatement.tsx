@@ -3,6 +3,7 @@
 import type { LedgerEntry } from "@brasfoot-like/engine";
 import type { SaveFile } from "@brasfoot-like/save";
 import { formatDate, formatMoney, useT } from "../../i18n";
+import { Card } from "../Card";
 import { type Column, DataTable } from "../DataTable";
 import styles from "../FinancePanel.module.css";
 import { competitionName } from "../qualification/origin-text";
@@ -39,13 +40,13 @@ export function PrizeStatement({ save }: { save: SaveFile }) {
     },
   ];
   return (
-    <section aria-label={t("finance.prizes.title")} className={styles.card}>
+    <Card aria-label={t("finance.prizes.title")} className={styles.card}>
       <DataTable
         rows={entries}
         columns={columns}
         rowKey={(entry) => `${entry.date}-${entry.competitionId}-${entry.amount}-${entry.round}`}
         caption={t("finance.prizes.title")}
       />
-    </section>
+    </Card>
   );
 }

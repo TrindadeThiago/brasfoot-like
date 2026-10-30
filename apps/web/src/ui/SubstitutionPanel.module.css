@@ -78,7 +78,7 @@
     ". natural natural . .";
   align-items: center;
   gap: 0 var(--space-2);
-  padding: 4px var(--space-2);
+  padding: var(--space-1) var(--space-2);
   border-radius: 6px;
   border: 2px solid transparent;
   background: transparent;

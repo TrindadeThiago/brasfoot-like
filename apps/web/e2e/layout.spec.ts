@@ -1,5 +1,12 @@
-import { expect, type Page, test } from "@playwright/test";
-import { createCareer, simulateSeason, t } from "./helpers";
+import { expect, test } from "@playwright/test";
+import {
+  createCareer,
+  expectNoClippedText,
+  expectNoHorizontalScroll,
+  simulateSeason,
+  t,
+} from "./helpers";
+import { CLUB_PATHS, OUTSIDE_PATHS } from "./screens-list";
 
 // 025 SC-001 / FR-010 / FR-011: as telas abrem na nova estrutura, nos dois temas, em 1440, 1024 e
 // 768 px, sem rolagem horizontal da página. A 600 px a barra lateral empilha acima do conteúdo.
@@ -16,57 +23,8 @@ const DAILY = [
   "/jogo/calendario/",
   "/jogo/historico/",
 ];
-const OUTSIDE = [
-  "/",
-  "/nova-carreira/",
-  "/carreiras/",
-  "/configuracoes/",
-  "/mods/",
-  "/sobre/",
-  "/notas-de-versao/",
-];
-const CLUB = [
-  "/jogo/",
-  "/jogo/elenco/",
-  "/jogo/escalacao/",
-  "/jogo/competicao/",
-  "/jogo/calendario/",
-  "/jogo/financas/",
-  "/jogo/historico/",
-  "/jogo/mercado/",
-  "/jogo/carreira/",
-  "/jogo/noticias/",
-];
-
-async function expectNoHorizontalScroll(page: Page, label: string): Promise<void> {
-  await page.waitForLoadState("networkidle");
-  const overflow = await page.evaluate(
-    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
-  );
-  expect(overflow, `${label}: rolagem horizontal da página`).toBeLessThanOrEqual(0);
-}
-
-/** Elementos com texto escondido por `overflow: hidden` sem reticências (texto cortado de verdade). */
-async function expectNoClippedText(page: Page, label: string): Promise<void> {
-  const clipped = await page.evaluate(() =>
-    [...document.querySelectorAll<HTMLElement>("main *, header *")]
-      .filter((element) => {
-        const style = getComputedStyle(element);
-        // O texto só-leitor-de-tela (`visually-hidden`) é cortado de propósito.
-        if (element.classList.contains("visually-hidden")) return false;
-        return (
-          style.overflowX === "hidden" &&
-          style.textOverflow !== "ellipsis" &&
-          element.scrollWidth > element.clientWidth + 1 &&
-          (element.textContent ?? "").trim().length > 0
-        );
-      })
-      .map((element) => `${element.tagName}.${element.className}`)
-      .slice(0, 5),
-  );
-  expect(clipped, `${label}: texto cortado`).toEqual([]);
-}
-
+const OUTSIDE = OUTSIDE_PATHS;
+const CLUB = CLUB_PATHS;
 for (const theme of ["dark", "light"] as const) {
   test(`19 telas sem rolagem horizontal em 1440, 1024 e 768 px, tema ${theme}`, async ({
     page,

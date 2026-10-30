@@ -4,6 +4,7 @@ import { fansRules, moodBand } from "@brasfoot-like/engine";
 import type { SaveFile } from "@brasfoot-like/save";
 import { reasonsOf, TREND_SYMBOL, trendOf } from "../../game/board-view";
 import { useT } from "../../i18n";
+import { Card } from "../Card";
 import { Meter } from "../Meter";
 import styles from "./fans.module.css";
 
@@ -20,7 +21,7 @@ export function FansCard({ save, clubId }: { save: SaveFile; clubId: string }) {
   const trend = trendOf(club.recent);
   const factors = reasonsOf(club.recent, 3);
   return (
-    <section aria-label={t("fans.title")} className={styles.card}>
+    <Card aria-label={t("fans.title")} className={styles.card}>
       <h2>{t("fans.title")}</h2>
       <div className={styles.row}>
         <span className={styles.value}>{club.mood}</span>
@@ -53,6 +54,6 @@ export function FansCard({ save, clubId }: { save: SaveFile; clubId: string }) {
           ))}
         </ul>
       )}
-    </section>
+    </Card>
   );
 }

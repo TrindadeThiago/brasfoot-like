@@ -7,6 +7,7 @@ import { type FormEvent, useState } from "react";
 import type { FinanceActionResult } from "../game/GameProvider";
 import { formatMoney, formatNumber, useT } from "../i18n";
 import { Button } from "./Button";
+import { Card } from "./Card";
 import styles from "./FinancePanel.module.css";
 
 /** Preço do ingresso com a estimativa do próximo jogo em casa (US2, FR-016, FR-017). */
@@ -39,7 +40,7 @@ export function TicketPrice({
     );
   };
   return (
-    <section aria-label={t("finance.ticket.title")} className={styles.card}>
+    <Card aria-label={t("finance.ticket.title")} className={styles.card}>
       <h2>{t("finance.ticket.title")}</h2>
       <p>{t("finance.ticket.current", { price: formatMoney(finance?.ticketPrice ?? 0) })}</p>
       <form className={styles.row} onSubmit={submit} noValidate>
@@ -80,6 +81,6 @@ export function TicketPrice({
           {message.text}
         </p>
       ) : null}
-    </section>
+    </Card>
   );
 }

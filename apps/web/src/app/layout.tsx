@@ -39,8 +39,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <ThemeSync />
         <GameProvider>
-          <GlobalShortcuts>{children}</GlobalShortcuts>
           <UpdateNotice />
+          <GlobalShortcuts>{children}</GlobalShortcuts>
         </GameProvider>
         <RegisterServiceWorker />
         <SiteAnalytics />

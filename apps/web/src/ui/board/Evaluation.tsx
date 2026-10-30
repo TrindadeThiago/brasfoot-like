@@ -2,6 +2,7 @@
 
 import type { SaveFile } from "@brasfoot-like/save";
 import { useT } from "../../i18n";
+import { Card } from "../Card";
 import { reachedText } from "../continental/reachedText";
 import { competitionName } from "../qualification/origin-text";
 import styles from "./board.module.css";
@@ -14,7 +15,7 @@ export function Evaluation({ save }: { save: SaveFile }) {
   const goals = evaluation ? save.board.clubs[evaluation.clubId]?.goals : undefined;
   if (!evaluation) return null;
   return (
-    <section aria-label={t("board.title")} className={styles.card}>
+    <Card aria-label={t("board.title")} className={styles.card}>
       <h2>{t("board.evaluation.title", { year: save.league.year })}</h2>
       <ul className={styles.list}>
         <li>
@@ -65,6 +66,6 @@ export function Evaluation({ save }: { save: SaveFile }) {
           after: evaluation.reputationAfter,
         })}
       </p>
-    </section>
+    </Card>
   );
 }

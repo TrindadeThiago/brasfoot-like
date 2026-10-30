@@ -13,6 +13,7 @@ import {
 import { divisionNameOf, type SaveFile } from "@brasfoot-like/save";
 import { useState } from "react";
 import { useT } from "../../i18n";
+import { Card } from "../Card";
 import { Crest } from "../Crest";
 import { type Column, DataTable } from "../DataTable";
 import styles from "./history.module.css";
@@ -197,7 +198,7 @@ export function ClubHistory({ save }: { save: SaveFile }) {
           ))}
         </select>
       </label>
-      <section aria-label={t("history.clubs.titles")} className={styles.card}>
+      <Card aria-label={t("history.clubs.titles")} className={styles.card}>
         <h2>{t("history.clubs.titles")}</h2>
         {titles.length === 0 ? (
           <p className={styles.empty}>{t("history.clubs.noTitles")}</p>
@@ -214,7 +215,7 @@ export function ClubHistory({ save }: { save: SaveFile }) {
             ))}
           </ul>
         )}
-      </section>
+      </Card>
       <RecordsTable save={save} entries={records} caption={t("history.records.clubCaption")} />
       {legends.byMatches.length === 0 ? (
         <p className={styles.empty}>{t("history.legends.empty")}</p>
