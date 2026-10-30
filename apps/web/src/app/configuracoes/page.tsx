@@ -14,6 +14,9 @@ import {
 } from "../../storage/preferences";
 import { usePreferences } from "../../storage/usePreferences";
 import { Button } from "../../ui/Button";
+import { Card } from "../../ui/Card";
+import { EntryShell } from "../../ui/entry/EntryShell";
+import { Field } from "../../ui/Field";
 import styles from "./page.module.css";
 
 const SPEEDS: readonly RoundSpeed[] = ["slow", "normal", "fast"];
@@ -32,27 +35,28 @@ export default function SettingsPage() {
   };
 
   return (
-    <main className={styles.page}>
-      <div className={styles.top}>
-        <Button onClick={back}>{t("common.back")}</Button>
-      </div>
-      <h1>{t("settings.title")}</h1>
-
-      <section aria-labelledby="settings-round" className={styles.card}>
+    <EntryShell title={t("settings.title")} onBack={back}>
+      <Card aria-labelledby="settings-round" className={styles.card}>
         <h2 id="settings-round">{t("settings.round")}</h2>
-        <label className={styles.field}>
-          <span>{t("settings.speed")}</span>
-          <select
-            value={settings.roundSpeed}
-            onChange={(event) => writePreferences({ roundSpeed: event.target.value as RoundSpeed })}
-          >
-            {SPEEDS.map((speed) => (
-              <option key={speed} value={speed}>
-                {t(`round.speed.${speed}`)}
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className={styles.narrow}>
+          <Field label={t("settings.speed")}>
+            {(props) => (
+              <select
+                {...props}
+                value={settings.roundSpeed}
+                onChange={(event) =>
+                  writePreferences({ roundSpeed: event.target.value as RoundSpeed })
+                }
+              >
+                {SPEEDS.map((speed) => (
+                  <option key={speed} value={speed}>
+                    {t(`round.speed.${speed}`)}
+                  </option>
+                ))}
+              </select>
+            )}
+          </Field>
+        </div>
         <label className={styles.check}>
           <input
             type="checkbox"
@@ -61,39 +65,47 @@ export default function SettingsPage() {
           />
           <span>{t("round.autoPause")}</span>
         </label>
-      </section>
+      </Card>
 
-      <section aria-labelledby="settings-look" className={styles.card}>
+      <Card aria-labelledby="settings-look" className={styles.card}>
         <h2 id="settings-look">{t("settings.appearance")}</h2>
-        <label className={styles.field}>
-          <span>{t("settings.theme")}</span>
-          <select
-            value={settings.theme}
-            onChange={(event) => writePreferences({ theme: event.target.value as Theme })}
-          >
-            {THEMES.map((theme) => (
-              <option key={theme} value={theme}>
-                {t(`settings.theme.${theme}`)}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className={styles.field}>
-          <span>{t("settings.language")}</span>
-          <select
-            value={settings.locale}
-            onChange={(event) => writePreferences({ locale: event.target.value })}
-          >
-            {LOCALES.map((entry) => (
-              <option key={entry.id} value={entry.id}>
-                {entry.name}
-              </option>
-            ))}
-          </select>
-        </label>
-      </section>
+        <div className={styles.narrow}>
+          <Field label={t("settings.theme")}>
+            {(props) => (
+              <select
+                {...props}
+                value={settings.theme}
+                onChange={(event) => writePreferences({ theme: event.target.value as Theme })}
+              >
+                {THEMES.map((theme) => (
+                  <option key={theme} value={theme}>
+                    {t(`settings.theme.${theme}`)}
+                  </option>
+                ))}
+              </select>
+            )}
+          </Field>
+        </div>
+        <div className={styles.narrow}>
+          <Field label={t("settings.language")}>
+            {(props) => (
+              <select
+                {...props}
+                value={settings.locale}
+                onChange={(event) => writePreferences({ locale: event.target.value })}
+              >
+                {LOCALES.map((entry) => (
+                  <option key={entry.id} value={entry.id}>
+                    {entry.name}
+                  </option>
+                ))}
+              </select>
+            )}
+          </Field>
+        </div>
+      </Card>
 
-      <section aria-labelledby="settings-tips" className={styles.card}>
+      <Card aria-labelledby="settings-tips" className={styles.card}>
         <h2 id="settings-tips">{t("settings.tips")}</h2>
         <p className={styles.muted}>{t("settings.tipsHelp")}</p>
         <div>
@@ -107,16 +119,16 @@ export default function SettingsPage() {
           </Button>
         </div>
         {tipsReset ? <p role="status">{t("settings.tipsResetDone")}</p> : null}
-      </section>
+      </Card>
 
-      <section aria-labelledby="settings-about" className={styles.card}>
+      <Card aria-labelledby="settings-about" className={styles.card}>
         <h2 id="settings-about">{t("settings.about")}</h2>
         <p>{t("app.version", { name: appName(), version: APP_VERSION })}</p>
         <div className={styles.links}>
           <Link href="/notas-de-versao/">{t("nav.releaseNotes")}</Link>
           <Link href="/sobre/">{t("nav.about")}</Link>
         </div>
-      </section>
-    </main>
+      </Card>
+    </EntryShell>
   );
 }

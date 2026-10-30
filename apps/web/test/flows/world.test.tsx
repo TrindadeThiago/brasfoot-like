@@ -108,10 +108,11 @@ describe("nova carreira num mundo de vários países (020 US1)", () => {
 });
 
 describe("nova carreira no mundo padrão (020 FR-020)", () => {
-  it("sem filtro de país, sem coluna de país e sem contagem", async () => {
+  it("sem filtro de país e sem coluna de país; a busca e a contagem aparecem em qualquer mundo (031)", async () => {
     await renderClassicNewCareer();
     expect(screen.queryByLabelText(t("newCareer.country.filter"))).toBeNull();
-    expect(screen.queryByLabelText(t("newCareer.search"))).toBeNull();
+    expect(screen.getByLabelText(t("newCareer.search"))).toBeDefined();
+    expect(screen.getByRole("status")).toBeDefined();
     expect(screen.queryByRole("columnheader", { name: new RegExp(t("col.country")) })).toBeNull();
   });
 });

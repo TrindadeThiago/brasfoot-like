@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { applyUpdate, useUpdateReady } from "../app/register-sw";
 import { useT } from "../i18n";
 import { Button } from "./Button";
+import { Notice } from "./Notice";
 import { screenOf } from "./shortcuts";
 import styles from "./UpdateNotice.module.css";
 
@@ -17,16 +18,11 @@ export function UpdateNotice() {
   const screen = screenOf(usePathname() ?? "/");
   if (!ready || screen === "round") return null;
   return (
-    <div role="status" aria-labelledby="update-title" className={styles.notice}>
-      <div>
-        <p id="update-title" className={styles.title}>
-          {t("update.available")}
-        </p>
-        <p className={styles.detail}>{t("update.detail")}</p>
-      </div>
+    <Notice role="status" title={t("update.available")} className={styles.notice}>
+      <p className={styles.detail}>{t("update.detail")}</p>
       <Button variant="primary" onClick={applyUpdate}>
         {t("update.reload")}
       </Button>
-    </div>
+    </Notice>
   );
 }

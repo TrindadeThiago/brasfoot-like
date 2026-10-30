@@ -1,3 +1,4 @@
+/* Fixo no canto, por cima das telas; o visual vem do componente de aviso. */
 .notice {
   position: fixed;
   left: var(--space-4);
@@ -5,18 +6,10 @@
   z-index: 20;
   max-width: 420px;
   display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  background: var(--color-surface-2);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  padding: var(--space-3) var(--space-4);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
   box-shadow: 0 4px 16px var(--color-backdrop);
-}
-
-.title {
-  margin: 0;
-  font-weight: 600;
 }
 
 .detail {

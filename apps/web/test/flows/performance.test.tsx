@@ -2,11 +2,14 @@
 // > 200 ms. 007: rodada das duas divisões em modo direto < 1 s (SC-006), virada < 2 s (SC-005).
 // 016 R1: os mesmos limites pela interface numa carreira longa (10 temporadas; o motor é medido
 // em 30 temporadas em packages/save/test/long-career.test.ts).
-import { advanceLeague } from "@brasfoot-like/engine";
-import { touch, userSeason } from "@brasfoot-like/save";
+import { advanceLeague, validateBank } from "@brasfoot-like/engine";
+import { createSave, touch, userSeason } from "@brasfoot-like/save";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeAll, describe, expect, it } from "vitest";
+import { defaultBankInput } from "../../src/game/default-bank";
+import { filterClubs } from "../../src/game/new-career-form";
+import { competitionClubs } from "../../src/game/selectors";
 import { t } from "../../src/i18n";
 import { freshStore, renderApp } from "../helpers/app";
 import { loadSaved } from "../helpers/live";
@@ -132,4 +135,42 @@ describe("desempenho numa carreira de 10 temporadas (016 R1)", () => {
     console.log(`virada pela interface (fim da temporada 10): ${time.toFixed(0)} ms`);
     expect(time).toBeLessThan(2000);
   }, 60_000);
+});
+
+// 031 SC-002: o limite de 0,5 s vale para o navegador (e2e `first-run`/`world`, clique até o jogo; a
+// linha de base mediu 485 ms). No Vitest (happy-dom, sem a otimização do navegador) o mesmo
+// trabalho leva ~550 ms sozinho e até ~1,7 s com a suíte inteira em paralelo, então aqui o teto é 3 s;
+// o que o teste guarda é a ordem de grandeza (o limite real é medido em e2e/new-career.spec.ts).
+describe("nova carreira em mundo grande (031 SC-002)", () => {
+  it("cria a carreira com 440 clubes em menos de 3 s no Vitest em carga", () => {
+    const bank = defaultBankInput() as { clubs: { id: string }[] };
+    expect(bank.clubs).toHaveLength(440);
+    const start = performance.now();
+    const result = createSave({
+      id: "mundo-grande",
+      now: "2026-10-30T10:00:00.000Z",
+      managerName: "Ana",
+      clubId: bank.clubs[0]?.id ?? "",
+      seed: "s",
+      defaultBank: bank,
+    });
+    expect(result.ok).toBe(true);
+    expect(performance.now() - start).toBeLessThan(3000);
+  }, 30000);
+
+  it("filtra os 440 clubes em menos de 200 ms", () => {
+    const result = validateBank(defaultBankInput());
+    if (!result.ok) throw new Error("banco inválido");
+    const base = competitionClubs(result.bank);
+    // Até 440 linhas, repetindo os clubes do mundo padrão se a competição principal tiver menos.
+    const clubs = Array.from({ length: 440 }, (_, i) => {
+      const club = base[i % base.length];
+      if (!club) throw new Error("sem clubes");
+      return { ...club, id: `${club.id}-${i}` };
+    });
+    const start = performance.now();
+    const found = filterClubs(clubs, { country: "", division: 0, query: "sao" });
+    expect(found.length).toBeGreaterThan(0);
+    expect(performance.now() - start).toBeLessThan(200);
+  });
 });

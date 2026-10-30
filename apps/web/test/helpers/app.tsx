@@ -20,6 +20,7 @@ import ModsPage from "../../src/app/mods/page";
 import NotesPage from "../../src/app/notas-de-versao/page";
 import NewCareerPage from "../../src/app/nova-carreira/page";
 import OpeningPage from "../../src/app/page";
+import AboutPage from "../../src/app/sobre/page";
 import { GameProvider } from "../../src/game/GameProvider";
 import { createIndexedDbStore, type SaveStore } from "../../src/storage/indexeddb";
 import { createModStore, type ModStore } from "../../src/storage/mods";
@@ -48,6 +49,7 @@ const ROUTES: Record<string, ComponentType> = {
   "/mods": ModsPage,
   "/configuracoes": SettingsPage,
   "/notas-de-versao": NotesPage,
+  "/sobre": AboutPage,
 };
 
 function subscribe(listener: () => void) {

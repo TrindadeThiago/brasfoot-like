@@ -14,6 +14,7 @@ dist/
 apps/web/out/
 apps/web/public/mods/mundo-padrao.zip
 test-results/
+apps/web/screens-031/
 playwright-report/
 
 # Vercel CLI
