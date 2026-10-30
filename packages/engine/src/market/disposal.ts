@@ -3,15 +3,14 @@ import type { CompletedPlayer } from "../model/types";
 import { clubNeeds } from "./ai/needs";
 import { completeTransfer } from "./effects";
 import { toFreeAgent } from "./free-agents";
-import { marketRules } from "./rules";
+import { marketRules, QUICK_SALE_PCT } from "./rules";
 import { canAddPlayer, canRemovePlayer } from "./squad";
 import type { MarketContext, MarketResult, MarketUpdate } from "./types";
 import { fail } from "./types";
 import { marketValue } from "./value";
 import { isWindowOpen, roundsPlayed } from "./windows";
 
-/** Venda imediata: a IA paga esta parte do valor de mercado (o dono abre mão da negociação). */
-export const QUICK_SALE_PCT = 75;
+export { QUICK_SALE_PCT };
 /** Rescisão: o clube paga esta parte do salário que ainda deveria ao jogador. */
 export const TERMINATION_PCT = 50;
 
