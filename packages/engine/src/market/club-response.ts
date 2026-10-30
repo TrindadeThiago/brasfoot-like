@@ -1,9 +1,11 @@
+import { ageOn, seasonDate } from "../calendar/date";
 import type { CompletedPlayer } from "../model/types";
 import { createRng } from "../rng/xoshiro";
-import { marketRules } from "./rules";
+import { contractYearsRange } from "./contracts";
+import { marketRules, QUICK_SALE_PCT } from "./rules";
 import { canRemovePlayer, strengthRank } from "./squad";
 import type { ClubResponse, MarketContext, MarketRules } from "./types";
-import { marketValue } from "./value";
+import { marketValue, marketValueFor } from "./value";
 import { currentWindowEnd, transferWindows } from "./windows";
 
 /** Titulares prováveis (11 mais fortes) pesam mais na pedida (R6). */
@@ -41,6 +43,29 @@ export function askingPrice(context: MarketContext, player: CompletedPlayer): nu
   return Math.max(1000, roundThousand((((value * importance) / 100) * noise) / 100));
 }
 
+/**
+ * Pedida a quem compra para o elenco do usuário: nunca abaixo do que a venda imediata pagaria por
+ * ele depois de assinar o contrato mais longo permitido. Sem esse piso, comprar no último ano de
+ * contrato (valor de 60%) e revender com contrato novo (100%) dava lucro (auditoria v1.0.0, A2).
+ * Só vale para o usuário: a IA segue a pedida normal.
+ */
+export function buyAskingPrice(context: MarketContext, player: CompletedPlayer): number {
+  const ask = askingPrice(context, player);
+  const rules = rulesOf(context);
+  const manager = context.world.clubs.find((club) => club.id === context.managerClubId);
+  if (!manager) return ask;
+  const year = context.league.year;
+  const date = seasonDate(context.world.manifest.referenceDate, year);
+  const [, longest] = contractYearsRange(ageOn(player.birthDate, date), rules);
+  const signed: CompletedPlayer = {
+    ...player,
+    clubId: manager.id,
+    contract: { wage: player.contract?.wage ?? 0, untilYear: year + longest - 1 },
+  };
+  const resale = marketValueFor(signed, manager, rules, date, year);
+  return Math.max(ask, roundThousand((resale * QUICK_SALE_PCT) / 100));
+}
+
 /** Pedida de empréstimo: fração da compra; fora dos mais fortes, sem taxa. */
 export function loanAskingPrice(context: MarketContext, player: CompletedPlayer): number {
   const rules = rulesOf(context);
@@ -59,7 +84,7 @@ export function respondToOffer(
   if (!canRemovePlayer(context.world, player.clubId, player.id)) {
     return { kind: "refused", reason: "squad_minimum" };
   }
-  const ask = kind === "loan" ? loanAskingPrice(context, player) : askingPrice(context, player);
+  const ask = kind === "loan" ? loanAskingPrice(context, player) : buyAskingPrice(context, player);
   if (fee >= ask) return { kind: "accepted" };
   if (fee * 100 >= ask * rules.club.counterThresholdPct) return { kind: "countered", fee: ask };
   const rank = strengthRank(context.world, player.clubId, player.id);

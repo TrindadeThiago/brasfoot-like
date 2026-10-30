@@ -1,6 +1,9 @@
 import type { CompletedBank } from "../model/types";
 import type { MarketRules } from "./types";
 
+/** Venda imediata: a IA paga esta parte do valor de mercado (o dono abre mão da negociação). */
+export const QUICK_SALE_PCT = 75;
+
 /**
  * Regras do mercado padrão (research.md R3–R11), usadas quando o mod não traz
  * `competition.market` ou deixa campos de fora. Calibradas pelos testes de 30 temporadas.

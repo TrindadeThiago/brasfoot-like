@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.0.2",
+    "date": "2026-10-30",
+    "changes": [
+      "Mercado mais equilibrado para quem compra: comprar um jogador no último ano de contrato, assinar um contrato novo e revendê-lo na hora (venda imediata) deixou de dar lucro. Agora o clube vendedor nunca pede menos do que a venda imediata pagaria por aquele jogador depois de renovado; quem tem contrato mais longo custa o mesmo de antes.",
+      "Se a sua oferta pelo jogador ficar abaixo do novo piso, o clube responde com uma contraproposta (ou recusa, se a oferta estiver muito abaixo), como já fazia com qualquer oferta baixa.",
+      "Nada mais mudou: as regras da IA, os preços da venda imediata, as propostas recebidas, os formatos de save e de mod e os resultados das partidas seguem iguais, e os saves existentes continuam abrindo."
+    ]
+  },
+  {
     "version": "1.0.1",
     "date": "2026-10-30",
     "changes": [
