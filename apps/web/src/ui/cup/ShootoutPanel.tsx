@@ -16,12 +16,15 @@ export function ShootoutPanel({
   away,
   kicks,
   score,
+  winner,
 }: {
   save: SaveFile;
   home: string;
   away: string;
   kicks: readonly ShootoutKick[];
   score: Record<"home" | "away", number>;
+  /** Quem avançou, quando a série já acabou (a rodada ao vivo; o resumo mostra o resultado à parte). */
+  winner?: "home" | "away" | undefined;
 }) {
   const t = useT();
   const clubs = new Map(save.bank.clubs.map((club) => [club.id, club]));
@@ -56,6 +59,11 @@ export function ShootoutPanel({
           );
         })}
       </ol>
+      {winner ? (
+        <p className={styles.winner}>
+          {t("cup.shootout.winner", { club: sides[winner]?.name ?? "" })}
+        </p>
+      ) : null}
     </section>
   );
 }

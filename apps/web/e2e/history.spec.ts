@@ -22,6 +22,8 @@ test("Histórico: vazio explicativo, temporada encerrada e classificação final
   await simulateSeason(page);
   await expect(page).toHaveURL(/fim-de-temporada/);
   await page.getByRole("link", { name: t("nav.home"), exact: true }).click();
+  // Espera chegar à Início: o fim de temporada também tem um botão "Próxima temporada" (030).
+  await expect(page).toHaveURL(/\/jogo\/\?c=/);
   await page.getByRole("button", { name: t("home.nextSeason") }).click();
   await menu.getByRole("link", { name: t("nav.history") }).click();
 

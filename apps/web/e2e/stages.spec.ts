@@ -84,6 +84,8 @@ test("divisão em grupos e mata-mata: tabelas, chaveamento e posição final (01
   await menu.getByRole("link", { name: t("nav.home") }).click();
   await page.getByRole("link", { name: t("home.seasonEndLink") }).click();
   await expect(page).toHaveURL(seasonEnd);
+  // As posições finais das fases ficam em "Demais competições", recolhida (030).
+  await page.getByText(t("seasonEnd.otherCompetitions")).click();
   const final = page.getByRole("region", {
     name: t("stages.finalPositions", { division: DIVISION }),
   });

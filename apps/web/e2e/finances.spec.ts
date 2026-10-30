@@ -40,8 +40,11 @@ test("finanças: preço com estimativa, rodada em casa, crédito, obra e histór
 
   await simulateSeason(page);
   await expect(page).toHaveURL(/fim-de-temporada/);
-  await expect(page.getByText(/Premiação recebida/)).toBeVisible();
-  await page.getByRole("button", { name: t("seasonEnd.next") }).click();
+  await expect(page.getByRole("region", { name: t("seasonEnd.campaign") })).toBeVisible();
+  await page
+    .getByRole("button", { name: t("seasonEnd.next") })
+    .first()
+    .click();
   await expect(page.getByText(/temporada 2028 · rodada 1 de 38/)).toBeVisible();
 
   await page.keyboard.press("6");

@@ -48,7 +48,10 @@ test("propostas: demitido aceita uma só com o teclado (029)", async ({ page }) 
   // O último colocado da Série A é demitido na virada da temporada (seed fixa do e2e).
   const club = await createCareer(page, "Ana Souza", 19);
   await simulateSeason(page);
-  await page.getByRole("button", { name: t("seasonEnd.next") }).click();
+  await page
+    .getByRole("button", { name: t("seasonEnd.next") })
+    .first()
+    .click();
   await expect(page.getByRole("status", { name: t("board.notice.firedTitle") })).toBeVisible();
 
   // Tudo daqui em diante só com foco e teclado.

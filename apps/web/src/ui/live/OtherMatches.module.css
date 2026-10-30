@@ -1,0 +1,71 @@
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+}
+
+.title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-md);
+  color: var(--color-muted);
+}
+
+.list {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-sm);
+}
+
+/* Uma linha por jogo: competição, minuto, mandante, placar, visitante e o gol recente. */
+.item {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) 52px minmax(0, 1.4fr) 56px minmax(0, 1.4fr) auto;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.competition {
+  color: var(--color-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.minute {
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.home {
+  text-align: right;
+}
+
+.home,
+.away {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.score {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Gol recente: negrito, marca em texto ("gol") e fundo; nunca só a cor. */
+.recent {
+  background: var(--color-highlight);
+  border-radius: var(--radius);
+  font-weight: 800;
+}
+
+.goal {
+  color: var(--color-accent);
+  font-weight: 700;
+}

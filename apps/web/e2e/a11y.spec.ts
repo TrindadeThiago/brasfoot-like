@@ -127,6 +127,13 @@ for (const theme of ["dark", "light"] as const) {
     await expect(page.getByRole("region", { name: t("round.myMatch") })).toBeVisible();
     await page.getByRole("button", { name: t("round.pause") }).click();
     problems.push(...(await scan(page, "/jogo/rodada/")));
+    // Com o painel Meu time aberto (a rodada está pausada) e com o diálogo de saída por cima (030).
+    await expect(page.getByRole("region", { name: t("round.panel") })).toBeVisible();
+    problems.push(...(await scan(page, "/jogo/rodada/ (Meu time)")));
+    await page.getByRole("button", { name: t("round.leave") }).click();
+    await expect(page.getByRole("dialog", { name: t("round.leaveTitle") })).toBeVisible();
+    problems.push(...(await scan(page, "/jogo/rodada/ (sair)")));
+    await page.keyboard.press("Escape");
 
     // Fim de temporada (025: tela de foco).
     await page.goto(`/jogo/?c=${career}`);

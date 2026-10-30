@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { useT } from "../../i18n";
-import { confirmLeave } from "../leave-guard";
+import { isLeaveGuarded, requestLeave } from "../leave-guard";
 import styles from "./FocusScreen.module.css";
 import { Icon } from "./icons";
 
@@ -21,6 +22,7 @@ export function FocusScreen({
   children: ReactNode;
 }) {
   const t = useT();
+  const router = useRouter();
   return (
     <div className={styles.frame}>
       {back || actions ? (
@@ -30,7 +32,9 @@ export function FocusScreen({
               href={back.href}
               className={styles.back}
               onClick={(event) => {
-                if (!confirmLeave()) event.preventDefault();
+                if (!isLeaveGuarded()) return;
+                event.preventDefault();
+                void requestLeave().then((ok) => ok && router.push(back.href));
               }}
             >
               <Icon name="back" />
