@@ -172,9 +172,13 @@ O cache offline é por conteúdo. Só o `package.json` da raiz carrega a versão
 
 ## 7. Em aberto
 
-- **Tema claro:** desenhar e validar o contraste na 025, antes das telas.
-- **Telas estreitas:** a interface atual exige 1 024 px. O alvo do marco é tablet (a partir de
-  768 px) sem rolagem horizontal da página; versão para telefone continua no §14 do design.
-- **Capturas da página Sobre:** precisam ser refeitas ao fim do marco (`pnpm screenshots`).
-- **Revisão de dicas:** as dicas de primeiro acesso apontam para elementos da tela e precisam ser
-  reancoradas.
+Resolvido no marco 10:
+
+- **Tema claro:** desenhado e validado na 025, com o contraste dos pares de cor testado nos dois
+  temas (`apps/web/test/ui/contrast.test.ts`).
+- **Telas estreitas:** a 032 cobre todas as telas e diálogos de 768 px em diante sem rolagem
+  horizontal da página; abaixo disso a barra lateral empilha e as colunas viram uma. A versão para
+  telefone continua no §14 do design.
+- **Capturas da página Sobre:** regeneradas ao fim do marco (`pnpm screenshots`, tema escuro).
+- **Revisão de dicas:** as dicas de primeiro acesso foram reconferidas (cada âncora existe na tela
+  e, em telas estreitas, a dica não cobre o elemento apontado).

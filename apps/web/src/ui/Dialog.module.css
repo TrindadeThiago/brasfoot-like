@@ -14,14 +14,25 @@
   padding: var(--space-5);
   width: min(560px, calc(100vw - 2 * var(--space-4)));
   min-width: 0;
+  /* Cabe na janela (032): o título e as ações ficam à vista e o corpo rola por dentro. */
+  max-height: calc(100dvh - 2 * var(--space-4));
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog h2 {
+  flex: none;
 }
 
 .body {
   color: var(--color-muted);
   margin-bottom: var(--space-4);
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .actions {
+  flex: none;
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);

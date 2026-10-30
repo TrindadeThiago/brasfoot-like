@@ -19,6 +19,7 @@ import { Button } from "../../ui/Button";
 import { BoardCard } from "../../ui/board/BoardCard";
 import { BoardNotice } from "../../ui/board/BoardNotice";
 import { JobOffers } from "../../ui/board/JobOffers";
+import { Card } from "../../ui/Card";
 import { Crest } from "../../ui/Crest";
 import { FormChips } from "../../ui/FormChips";
 import { FansCard } from "../../ui/fans/FansCard";
@@ -189,7 +190,7 @@ export default function HomePage() {
                 ) : null}
               </div>
             ) : null}
-            <section aria-label={t("home.position")} className={styles.card}>
+            <Card aria-label={t("home.position")} className={styles.card}>
               <h2>{t("home.position")}</h2>
               <p className={styles.position}>{t("home.positionValue", { position })}</p>
               <p>
@@ -197,7 +198,7 @@ export default function HomePage() {
                   amount: formatMoney(save.finances.clubs[save.clubId]?.cash ?? 0),
                 })}
               </p>
-            </section>
+            </Card>
             <section
               aria-label={t("home.lastResults")}
               className={`${styles.card} ${styles.span2}`}

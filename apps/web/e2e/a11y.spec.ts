@@ -1,33 +1,11 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, type Page, test } from "@playwright/test";
-import { createCareer, simulateSeason, t } from "./helpers";
+import { structureProblems } from "../test/helpers/structure";
+import { createCareer } from "./helpers";
+import { forEachScreen } from "./screens-list";
 
 // 016 US4 (FR-017–FR-022, SC-004): varredura axe nas telas principais, nos dois temas. Falha com
 // violações graves ou críticas.
-const PAGES = [
-  "/",
-  "/carreiras/",
-  "/nova-carreira/",
-  "/mods/",
-  "/configuracoes/",
-  "/sobre/",
-  "/notas-de-versao/",
-];
-const GAME = [
-  "/jogo/",
-  "/jogo/elenco/",
-  "/jogo/escalacao/",
-  "/jogo/competicao/",
-  "/jogo/competicao/resultados/",
-  "/jogo/competicao/artilharia/",
-  "/jogo/calendario/",
-  "/jogo/financas/",
-  "/jogo/historico/",
-  "/jogo/mercado/",
-  "/jogo/carreira/",
-  "/jogo/noticias/",
-];
-
 async function scan(page: Page, label: string): Promise<string[]> {
   await page.waitForLoadState("networkidle");
   const results = await new AxeBuilder({ page })
@@ -59,101 +37,12 @@ for (const theme of ["dark", "light"] as const) {
     await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
 
     const problems: string[] = [];
-    for (const path of PAGES) {
-      await page.goto(path);
-      problems.push(...(await scan(page, path)));
-    }
-    for (const path of GAME) {
-      await page.goto(`${path}?c=${career}`);
-      await expect(page.getByRole("navigation", { name: t("nav.menu") })).toBeVisible();
-      problems.push(...(await scan(page, path)));
-    }
-    // Modal do jogador no Elenco (026), com as ações.
-    await page.goto(`/jogo/elenco/?c=${career}`);
-    await page
-      .getByRole("button", { name: /^Detalhes de / })
-      .first()
-      .click();
-    await expect(page.getByRole("dialog")).toBeVisible();
-    problems.push(...(await scan(page, "/jogo/elenco/ (modal)")));
-    await page.keyboard.press("Escape");
-
-    // Mercado: modal do jogador com o diálogo de oferta por cima, bandeja e comparação (028).
-    await page.goto(`/jogo/mercado/?c=${career}`);
-    const marketName = page.getByRole("button", { name: /^Detalhes de / }).first();
-    await marketName.click();
-    await page
-      .getByRole("dialog")
-      .getByRole("button", { name: t("market.modal.addCompare") })
-      .click();
-    problems.push(...(await scan(page, "/jogo/mercado/ (modal)")));
-    await page
-      .getByRole("dialog")
-      .getByRole("button", { name: t("market.action.offer") })
-      .click();
-    problems.push(...(await scan(page, "/jogo/mercado/ (oferta)")));
-    await page.keyboard.press("Escape");
-    await page.keyboard.press("Escape");
-
-    // Finanças: cada aba, com os gráficos (028).
-    await page.goto(`/jogo/financas/?c=${career}`);
-    for (const key of ["overview", "flow", "gate", "stadium", "credit", "history"]) {
-      await page.getByRole("tab", { name: t(`finance.tab.${key}`) }).click();
-      problems.push(...(await scan(page, `/jogo/financas/ (${key})`)));
-    }
-
-    // Carreira: cada aba; Notícias: com filtro (029).
-    await page.goto(`/jogo/carreira/?c=${career}`);
-    for (const key of ["board", "fans", "offers", "history", "coaches"]) {
-      await page.getByRole("tab", { name: new RegExp(`^${t(`career.tab.${key}`)}`) }).click();
-      problems.push(...(await scan(page, `/jogo/carreira/ (${key})`)));
-    }
-    await page.goto(`/jogo/noticias/?c=${career}`);
-    const mineOnly = page.getByRole("button", { name: t("news.filter.mine") });
-    if (await mineOnly.count()) {
-      await mineOnly.click();
-      problems.push(...(await scan(page, "/jogo/noticias/ (do meu clube)")));
-    }
-
-    // Ajuda de atalhos aberta.
-    await page.keyboard.press("?");
-    await expect(page.getByRole("dialog", { name: t("help.title") })).toBeVisible();
-    problems.push(...(await scan(page, "ajuda")));
-    await page.keyboard.press("Escape");
-
-    // Telas de fora da carreira (031): diálogo de apagar carreira e erros da Nova carreira.
-    await page.goto("/carreiras/");
-    await page
-      .getByRole("button", { name: t("saves.delete") })
-      .first()
-      .click();
-    await expect(page.getByRole("dialog", { name: t("saves.confirmDeleteTitle") })).toBeVisible();
-    problems.push(...(await scan(page, "/carreiras/ (apagar)")));
-    await page.keyboard.press("Escape");
-    await page.goto("/nova-carreira/");
-    await page.getByRole("button", { name: t("newCareer.confirm") }).click();
-    await expect(page.locator("form").getByRole("alert").first()).toBeVisible();
-    problems.push(...(await scan(page, "/nova-carreira/ (erros)")));
-
-    // Rodada ao vivo, pausada para a página ficar estável.
-    await page.goto(`/jogo/?c=${career}`);
-    await page.getByRole("button", { name: t("home.playLive") }).click();
-    await expect(page.getByRole("region", { name: t("round.myMatch") })).toBeVisible();
-    await page.getByRole("button", { name: t("round.pause") }).click();
-    problems.push(...(await scan(page, "/jogo/rodada/")));
-    // Com o painel Meu time aberto (a rodada está pausada) e com o diálogo de saída por cima (030).
-    await expect(page.getByRole("region", { name: t("round.panel") })).toBeVisible();
-    problems.push(...(await scan(page, "/jogo/rodada/ (Meu time)")));
-    await page.getByRole("button", { name: t("round.leave") }).click();
-    await expect(page.getByRole("dialog", { name: t("round.leaveTitle") })).toBeVisible();
-    problems.push(...(await scan(page, "/jogo/rodada/ (sair)")));
-    await page.keyboard.press("Escape");
-
-    // Fim de temporada (025: tela de foco).
-    await page.goto(`/jogo/?c=${career}`);
-    await simulateSeason(page);
-    await expect(page).toHaveURL(/fim-de-temporada/);
-    problems.push(...(await scan(page, "/jogo/fim-de-temporada/")));
+    await forEachScreen(page, career, async (screen) => {
+      problems.push(...(await scan(page, screen.label)));
+      // Títulos, regiões e tabelas (032 US2): um h1, níveis sem salto, regiões com nome único.
+      const structure = await page.evaluate(structureProblems);
+      problems.push(...structure.map((problem) => `${screen.label}: ${problem}`));
+    });
 
     expect(problems).toEqual([]);
   });

@@ -14,6 +14,7 @@ import type { useGame } from "../game/GameProvider";
 import { clubPosition } from "../game/selectors";
 import { formatDate, formatWeekday, useT } from "../i18n";
 import { Button } from "./Button";
+import { Card } from "./Card";
 import { Crest } from "./Crest";
 import { phaseLabel } from "./cup/phase";
 import { FormChips } from "./FormChips";
@@ -52,7 +53,7 @@ export function NextMatchCard({
     : undefined;
   const position = clubPosition(userSeason(save), save.bank, save.clubId);
   return (
-    <section aria-label={t("home.nextMatch")} className={styles.card}>
+    <Card aria-label={t("home.nextMatch")} className={styles.card}>
       <h2>{t("home.nextMatch")}</h2>
       {over ? (
         <p>
@@ -128,6 +129,6 @@ export function NextMatchCard({
           </Button>
         </div>
       ) : null}
-    </section>
+    </Card>
   );
 }

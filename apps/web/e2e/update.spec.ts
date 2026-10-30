@@ -79,6 +79,23 @@ test("versão nova: aviso fora da rodada ao vivo, Recarregar troca a versão e a
   await page.getByRole("button", { name: t("round.finishNow") }).click();
   await page.getByRole("link", { name: t("round.toHome") }).click();
   await expect(notice).toBeVisible();
+  // 032: em tela estreita o aviso entra no fluxo e não cobre a navegação nem sai da janela.
+  await page.setViewportSize({ width: 600, height: 900 });
+  const [noticeBox, navBox, view] = await Promise.all([
+    notice.boundingBox(),
+    page.getByRole("navigation", { name: t("nav.menu") }).boundingBox(),
+    Promise.resolve(page.viewportSize()),
+  ]);
+  const overlap =
+    noticeBox !== null &&
+    navBox !== null &&
+    noticeBox.x < navBox.x + navBox.width &&
+    noticeBox.x + noticeBox.width > navBox.x &&
+    noticeBox.y < navBox.y + navBox.height &&
+    noticeBox.y + noticeBox.height > navBox.y;
+  expect(overlap, "o aviso cobre a navegação em tela estreita").toBe(false);
+  expect((noticeBox?.x ?? 0) + (noticeBox?.width ?? 0)).toBeLessThanOrEqual((view?.width ?? 0) + 1);
+  await page.setViewportSize({ width: 1280, height: 800 });
   await notice.getByRole("button", { name: t("update.reload") }).click();
 
   await expect

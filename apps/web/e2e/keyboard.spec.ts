@@ -292,3 +292,63 @@ test("rodada ao vivo só com o teclado: substituir e trocar a posição de dois 
   await expect(panel).toBeHidden();
   await expect(page.getByRole("button", { name: t("round.pause") })).toBeFocused();
 });
+
+// 032 US2 (FR-004): ordem de tabulação. Nenhuma tela usa `tabindex` positivo, e cada parada do Tab
+// cai num elemento visível, dentro da janela na horizontal; o conteúdo (`main`) é alcançado depois da
+// barra lateral e o foco não fica preso (a sequência anda).
+test("ordem de tabulação sem tabindex positivo e sem paradas invisíveis nas telas de duas colunas (032)", async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
+  await createCareer(page, "Ana Souza", 1);
+  const career = new URL(page.url()).searchParams.get("c") ?? "";
+  for (const path of [
+    "/jogo/",
+    "/jogo/competicao/",
+    "/jogo/carreira/",
+    "/jogo/mercado/",
+    "/jogo/noticias/",
+    "/jogo/escalacao/",
+  ]) {
+    await page.goto(`${path}?c=${career}`);
+    await expect(page.getByRole("navigation", { name: t("nav.menu") })).toBeVisible();
+    expect(
+      await page
+        .locator("[tabindex]")
+        .evaluateAll(
+          (elements) =>
+            elements.filter((element) => Number(element.getAttribute("tabindex")) > 0).length,
+        ),
+      `${path}: tabindex positivo`,
+    ).toBe(0);
+    const stops: string[] = [];
+    let reachedMain = false;
+    for (let index = 0; index < 60; index++) {
+      await page.keyboard.press("Tab");
+      const info = await page.evaluate(() => {
+        const element = document.activeElement as HTMLElement | null;
+        if (!element || element === document.body) return undefined;
+        const box = element.getBoundingClientRect();
+        return {
+          id: `${element.tagName}:${(element.getAttribute("aria-label") ?? element.textContent ?? "").trim().slice(0, 24)}`,
+          visible: box.width > 0 && box.height > 0,
+          inside: box.right <= document.documentElement.clientWidth + 1 && box.left >= -1,
+          inMain: Boolean(element.closest("main")),
+        };
+      });
+      if (!info) continue;
+      expect(info.visible, `${path}: parada invisível ${info.id}`).toBe(true);
+      expect(info.inside, `${path}: parada fora da janela ${info.id}`).toBe(true);
+      if (info.inMain) reachedMain = true;
+      stops.push(info.id);
+    }
+    // Uma tela sem controles no conteúdo (Notícias antes da primeira manchete) não tem aonde chegar.
+    const interactiveInMain = await page
+      .locator("main a[href], main button, main input, main select, main [tabindex='0']")
+      .count();
+    if (interactiveInMain > 0) {
+      expect(reachedMain, `${path}: o Tab não chegou ao conteúdo`).toBe(true);
+    }
+    expect(new Set(stops).size, `${path}: o foco anda`).toBeGreaterThan(5);
+  }
+});

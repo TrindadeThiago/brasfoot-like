@@ -134,7 +134,7 @@
 .total {
   fill: var(--color-text);
   font-family: var(--font-display);
-  font-size: 13px;
+  font-size: var(--text-sm);
   font-weight: 600;
 }
 

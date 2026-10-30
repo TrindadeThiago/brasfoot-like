@@ -51,3 +51,10 @@
   border-color: var(--color-danger);
   color: var(--color-on-danger);
 }
+
+/* Alvo de toque de pelo menos 44 px em telas de toque (docs/interface-nova.md §2, 032). */
+@media (pointer: coarse) {
+  .button {
+    min-height: 44px;
+  }
+}

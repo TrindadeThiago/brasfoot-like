@@ -3,6 +3,7 @@
 import { type CampaignSpot, clubCampaign } from "@brasfoot-like/engine";
 import { type SaveFile, seasonStateOf } from "@brasfoot-like/save";
 import { formatDate, formatMoney, useT } from "../../i18n";
+import { Card } from "../Card";
 import { type Column, DataTable } from "../DataTable";
 import styles from "./CampaignPanel.module.css";
 import { reachedText } from "./reachedText";
@@ -61,7 +62,7 @@ export function CampaignPanel({ save, competitionId }: { save: SaveFile; competi
   ];
   const total = campaign.awards.reduce((sum, award) => sum + award.amount, 0);
   return (
-    <section aria-label={t("continental.campaign.title", { club })} className={styles.card}>
+    <Card aria-label={t("continental.campaign.title", { club })} className={styles.card}>
       <h2>{t("continental.campaign.title", { club })}</h2>
       <p>
         <strong>{t(`continental.campaign.status.${campaign.status}`)}</strong> ·{" "}
@@ -104,6 +105,6 @@ export function CampaignPanel({ save, competitionId }: { save: SaveFile; competi
           caption={t("continental.campaign.matches")}
         />
       ) : null}
-    </section>
+    </Card>
   );
 }

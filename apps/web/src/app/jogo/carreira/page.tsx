@@ -88,10 +88,10 @@ function Career({ save, game }: { save: SaveFile; game: Game }) {
               content: (
                 <div className={styles.columns}>
                   <FansCard save={save} clubId={save.clubId} />
-                  <section className={styles.card}>
+                  <Card className={styles.card}>
                     <h2>{t("fans.rivals.title")}</h2>
                     <RivalsList save={save} clubId={save.clubId} />
-                  </section>
+                  </Card>
                 </div>
               ),
             },

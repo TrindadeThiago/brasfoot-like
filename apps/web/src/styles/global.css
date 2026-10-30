@@ -110,3 +110,12 @@ textarea {
     /* biome-ignore-end lint/complexity/noImportantStyles: fim do bloco acima */
   }
 }
+
+/* Campos também com alvo de toque de 44 px em telas de toque (032). */
+@media (pointer: coarse) {
+  input:not([type="checkbox"], [type="radio"], [type="file"]),
+  select,
+  textarea {
+    min-height: 44px;
+  }
+}

@@ -3,6 +3,7 @@
 import { type LedgerCategory, seasonFinanceSummary } from "@brasfoot-like/engine";
 import type { SaveFile } from "@brasfoot-like/save";
 import { formatMoney, useT } from "../i18n";
+import { Card } from "./Card";
 import styles from "./FinancePanel.module.css";
 
 const REVENUES: readonly LedgerCategory[] = [
@@ -45,7 +46,7 @@ export function FinanceSummary({ save }: { save: SaveFile }) {
     );
   };
   return (
-    <section aria-label={t("finance.season", { year: save.league.year })} className={styles.card}>
+    <Card aria-label={t("finance.season", { year: save.league.year })} className={styles.card}>
       <h2>{t("finance.season", { year: save.league.year })}</h2>
       <p>
         {t("finance.startBalance")}: {formatMoney(summary.startCash)} ·{" "}
@@ -55,6 +56,6 @@ export function FinanceSummary({ save }: { save: SaveFile }) {
         {group(t("finance.revenues"), REVENUES)}
         {group(t("finance.expenses"), EXPENSES)}
       </div>
-    </section>
+    </Card>
   );
 }

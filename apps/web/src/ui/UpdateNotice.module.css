@@ -17,3 +17,15 @@
   font-size: var(--text-sm);
   color: var(--color-muted);
 }
+
+/* Telas estreitas (032): o aviso entra no fluxo, no topo da página, em vez de flutuar sobre os controles. */
+@media (max-width: 767px) {
+  .notice {
+    position: sticky;
+    top: 0;
+    left: auto;
+    bottom: auto;
+    max-width: none;
+    margin: var(--space-2);
+  }
+}

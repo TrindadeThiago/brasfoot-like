@@ -64,6 +64,10 @@ export function TipHost({
     if (!tip?.anchor) return;
     const target = document.querySelector<HTMLElement>(`[data-tip-anchor="${tip.anchor}"]`);
     target?.setAttribute("data-tip-target", "");
+    // Em tela estreita a dica fica na base da janela: leva o elemento apontado para o topo (032).
+    if (window.matchMedia?.("(max-width: 767px)").matches) {
+      target?.scrollIntoView?.({ block: "start", behavior: "auto" });
+    }
     return () => target?.removeAttribute("data-tip-target");
   }, [tip?.anchor]);
 

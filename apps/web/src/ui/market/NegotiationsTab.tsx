@@ -6,6 +6,7 @@ import type { SaveFile } from "@brasfoot-like/save";
 import { useState } from "react";
 import type { MarketActionResult, useGame } from "../../game/GameProvider";
 import { formatMoney, useT } from "../../i18n";
+import { Card } from "../Card";
 import { Pager } from "../Pager";
 import styles from "./market.module.css";
 import { NegotiationBody } from "./NegotiationDialog";
@@ -36,7 +37,7 @@ export function NegotiationsTab({
     save.bank.clubs.find((club) => club.id === clubId)?.shortName ?? "";
   return (
     <div className={styles.layout}>
-      <section className={styles.card} aria-label={t("market.negotiations.title")}>
+      <Card className={styles.card} aria-label={t("market.negotiations.title")}>
         <h2>{t("market.negotiations.title")}</h2>
         {message ? (
           <p role="alert" className={styles.error}>
@@ -68,8 +69,8 @@ export function NegotiationsTab({
             })}
           </ul>
         )}
-      </section>
-      <section className={styles.card} aria-label={t("market.log.title")}>
+      </Card>
+      <Card className={styles.card} aria-label={t("market.log.title")}>
         <h2>{t("market.log.title")}</h2>
         {save.market.log.length === 0 ? (
           <p className={styles.muted}>{t("market.log.empty")}</p>
@@ -104,7 +105,7 @@ export function NegotiationsTab({
           total={save.market.log.length}
           onPage={setLogPage}
         />
-      </section>
+      </Card>
     </div>
   );
 }

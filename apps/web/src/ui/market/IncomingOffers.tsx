@@ -6,6 +6,7 @@ import { useState } from "react";
 import type { useGame } from "../../game/GameProvider";
 import { formatMoney, useT } from "../../i18n";
 import { Button } from "../Button";
+import { Card } from "../Card";
 import { MoneyInput } from "../MoneyInput";
 import styles from "./market.module.css";
 
@@ -45,7 +46,7 @@ export function IncomingOffers({
     );
   };
   return (
-    <section className={styles.card} aria-label={t("market.incoming.title")}>
+    <Card className={styles.card} aria-label={t("market.incoming.title")}>
       <h2>{t("market.incoming.title")}</h2>
       {message ? (
         <p role="status" className={styles.feedback}>
@@ -123,6 +124,6 @@ export function IncomingOffers({
           })}
         </ul>
       )}
-    </section>
+    </Card>
   );
 }
