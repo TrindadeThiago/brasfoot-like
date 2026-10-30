@@ -121,6 +121,20 @@ for (const theme of ["dark", "light"] as const) {
     problems.push(...(await scan(page, "ajuda")));
     await page.keyboard.press("Escape");
 
+    // Telas de fora da carreira (031): diálogo de apagar carreira e erros da Nova carreira.
+    await page.goto("/carreiras/");
+    await page
+      .getByRole("button", { name: t("saves.delete") })
+      .first()
+      .click();
+    await expect(page.getByRole("dialog", { name: t("saves.confirmDeleteTitle") })).toBeVisible();
+    problems.push(...(await scan(page, "/carreiras/ (apagar)")));
+    await page.keyboard.press("Escape");
+    await page.goto("/nova-carreira/");
+    await page.getByRole("button", { name: t("newCareer.confirm") }).click();
+    await expect(page.locator("form").getByRole("alert").first()).toBeVisible();
+    problems.push(...(await scan(page, "/nova-carreira/ (erros)")));
+
     // Rodada ao vivo, pausada para a página ficar estável.
     await page.goto(`/jogo/?c=${career}`);
     await page.getByRole("button", { name: t("home.playLive") }).click();

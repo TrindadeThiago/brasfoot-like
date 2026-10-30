@@ -4,16 +4,21 @@ import { joinBankFiles, validateBank } from "@brasfoot-like/engine";
 import { MANAGER_NAME_MAX } from "@brasfoot-like/save";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useDeferredValue, useEffect, useMemo, useState } from "react";
+import { type FormEvent, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { DEFAULT_WORLD_SEED, defaultBankInput } from "../../game/default-bank";
 import { useGame } from "../../game/GameProvider";
+import { type FormError, filterClubs, validateNewCareerForm } from "../../game/new-career-form";
 import { competitionClubs, type LeagueClub } from "../../game/selectors";
-import { formatNumber, useT } from "../../i18n";
+import { useT } from "../../i18n";
 import type { StoredMod } from "../../storage/mods";
 import { AssetsProvider } from "../../ui/AssetsProvider";
 import { Button } from "../../ui/Button";
+import { Card } from "../../ui/Card";
 import { Crest } from "../../ui/Crest";
-import { type Column, DataTable } from "../../ui/DataTable";
+import { ClubPicker } from "../../ui/entry/ClubPicker";
+import { EntryShell } from "../../ui/entry/EntryShell";
+import { Field } from "../../ui/Field";
+import { Notice } from "../../ui/Notice";
 import styles from "./page.module.css";
 
 /** Clubes da competição do banco escolhido (padrão ou mod, 015). */
@@ -61,11 +66,6 @@ function groupsOf(bank: {
   return groups;
 }
 
-/** Texto sem acento e em minúsculas, para a busca por nome. */
-function plain(text: string): string {
-  return text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
-}
-
 export default function NewCareerPage() {
   const t = useT();
   const router = useRouter();
@@ -109,7 +109,7 @@ export default function NewCareerPage() {
   const [country, setCountry] = useState(countries[0]?.id ?? "");
   const [query, setQuery] = useState("");
   const ofCountry = useMemo(
-    () => allClubs.filter((club) => country === "" || club.countryId === country),
+    () => filterClubs(allClubs, { country, division: 0, query: "" }),
     [allClubs, country],
   );
   const divisions = useMemo(() => divisionsOf(ofCountry), [ofCountry]);
@@ -121,95 +121,48 @@ export default function NewCareerPage() {
   useEffect(() => {
     setDivision(divisions[0]?.level ?? 0);
   }, [divisions]);
-  const clubs = useMemo(() => {
-    const needle = plain(query.trim());
-    return ofCountry.filter(
-      (club) =>
-        (division === 0 || club.divisionLevel === division) &&
-        (needle === "" || plain(club.name).includes(needle) || plain(club.city).includes(needle)),
-    );
-  }, [ofCountry, division, query]);
+  const clubs = useMemo(
+    () => filterClubs(allClubs, { country, division, query }),
+    [allClubs, country, division, query],
+  );
   const [managerName, setManagerName] = useState("");
   const [noFiring, setNoFiring] = useState(false);
   const [clubId, setClubId] = useState<string | undefined>();
-  const [error, setError] = useState<string | undefined>();
+  const [errors, setErrors] = useState<FormError[]>([]);
+  const [createError, setCreateError] = useState<string | undefined>();
   const [creating, setCreating] = useState(false);
-
-  const columns: Column<LeagueClub>[] = [
-    {
-      key: "club",
-      header: t("col.club"),
-      render: (club) => (
-        <span className={styles.club}>
-          <Crest crest={club.crest} label={club.name} size={28} />
-          {club.name}
-        </span>
-      ),
-      sortValue: (club) => club.name,
-    },
-    ...(manyCountries
-      ? [
-          {
-            key: "country",
-            header: t("col.country"),
-            render: (club: LeagueClub) => club.countryName,
-            sortValue: (club: LeagueClub) => club.countryName,
-          },
-        ]
-      : []),
-    {
-      key: "city",
-      header: t("col.city"),
-      render: (club) => club.city,
-      sortValue: (club) => club.city,
-    },
-    {
-      key: "reputation",
-      header: t("col.reputation"),
-      render: (club) => club.reputation,
-      sortValue: (club) => club.reputation,
-      align: "right",
-    },
-    {
-      key: "strength",
-      header: t("col.strength"),
-      render: (club) => club.strength.toFixed(1).replace(".", ","),
-      sortValue: (club) => club.strength,
-      align: "right",
-    },
-    {
-      key: "stadium",
-      header: t("col.stadium"),
-      render: (club) => formatNumber(club.stadiumCapacity),
-      sortValue: (club) => club.stadiumCapacity,
-      align: "right",
-    },
-    {
-      key: "division",
-      header: t("newCareer.clubDivision"),
-      render: (club) => club.divisionName,
-      sortValue: (club) => club.divisionLevel,
-    },
-  ];
+  // Cada tentativa de começar com erro move o foco ao primeiro campo com erro (FR-007).
+  const [attempt, setAttempt] = useState(0);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const clubRef = useRef<HTMLElement>(null);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: só uma nova tentativa move o foco
+  useEffect(() => {
+    if (attempt === 0) return;
+    const first = errors[0]?.field;
+    if (first === "managerName") nameRef.current?.focus();
+    else if (first === "club") clubRef.current?.focus();
+  }, [attempt]);
 
   const selected = allClubs.find((club) => club.id === clubId);
   const divisionName = divisions.find((entry) => entry.level === division)?.name;
+  const errorOf = (field: FormError["field"]) => {
+    const found = errors.find((entry) => entry.field === field);
+    return found ? t(found.code, found.params) : undefined;
+  };
 
   async function submit(event: FormEvent) {
     event.preventDefault();
-    const trimmed = managerName.trim();
-    if (trimmed.length === 0 || trimmed.length > MANAGER_NAME_MAX) {
-      setError(t("save.invalid_name", { max: MANAGER_NAME_MAX, length: trimmed.length }));
-      return;
-    }
-    if (!clubId) {
-      setError(t("newCareer.noClub"));
+    const found = validateNewCareerForm({ managerName, clubId });
+    setErrors(found);
+    setCreateError(undefined);
+    if (found.length > 0) {
+      setAttempt((value) => value + 1);
       return;
     }
     setCreating(true);
     const result = await createCareer({
-      managerName: trimmed,
-      clubId,
+      managerName: managerName.trim(),
+      clubId: clubId ?? "",
       seed,
       noFiring,
       bank: bankInput,
@@ -217,7 +170,7 @@ export default function NewCareerPage() {
     });
     setCreating(false);
     if (!result.ok) {
-      setError(t(result.error.code, result.error.params));
+      setCreateError(t(result.error.code, result.error.params));
       return;
     }
     router.push(`/jogo/?c=${result.id}`);
@@ -225,153 +178,200 @@ export default function NewCareerPage() {
 
   return (
     <AssetsProvider assets={mod?.images}>
-      <main className={styles.page}>
-        <Link href="/">{t("common.back")}</Link>
-        <h1>{t("newCareer.title")}</h1>
+      <EntryShell title={t("newCareer.title")} wide>
         <form onSubmit={submit} className={styles.form} noValidate>
-          <label className={styles.field}>
-            <span>{t("newCareer.managerName")}</span>
-            <input
-              value={managerName}
-              maxLength={MANAGER_NAME_MAX}
-              placeholder={t("newCareer.managerPlaceholder")}
-              onChange={(event) => setManagerName(event.target.value)}
-            />
-          </label>
-          <label className={styles.check}>
-            <input
-              type="checkbox"
-              checked={noFiring}
-              onChange={(event) => setNoFiring(event.target.checked)}
-            />
-            <span>{t("newCareer.noFiring")}</span>
-          </label>
-          <small className={styles.help}>{t("newCareer.noFiringHelp")}</small>
-          <details className={styles.advanced}>
-            <summary>{t("newCareer.advanced")}</summary>
-            <label className={styles.field}>
-              <span>{t("newCareer.seed")}</span>
-              <input value={seed} onChange={(event) => setSeed(event.target.value)} />
-              <small>{t("newCareer.seedHelp")}</small>
-            </label>
-          </details>
-          {/* O rótulo fica fora do select: os nomes dos mundos ("24 países") não entram no texto dele. */}
-          <div className={styles.field}>
-            <label htmlFor="new-career-bank">{t("newCareer.bank")}</label>
-            <select
-              id="new-career-bank"
-              value={bankId}
-              onChange={(event) => setBankId(event.target.value)}
-            >
-              <option value="">{t("newCareer.defaultBank")}</option>
-              {installed.map((entry) => (
-                <option key={entry.id} value={entry.id}>
-                  {entry.summary.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          {mod ? null : <small className={styles.help}>{t("newCareer.defaultBank.help")}</small>}
-          <Link href="/mods/">{t("nav.mods")}</Link>
-          <h2>{t("newCareer.chooseClub")}</h2>
-          {manyCountries ? (
-            <label className={styles.field}>
-              <span>{t("newCareer.country.filter")}</span>
-              <select
-                value={country}
-                onChange={(event) => {
-                  setCountry(event.target.value);
-                  setClubId(undefined);
-                }}
+          <Card aria-labelledby="new-career-manager" className={styles.card}>
+            <h2 id="new-career-manager" className={styles.cardTitle}>
+              {t("newCareer.sectionManager")}
+            </h2>
+            <div className={styles.narrow}>
+              <Field
+                label={t("newCareer.managerName")}
+                hint={t("newCareer.managerHint", { max: MANAGER_NAME_MAX })}
+                error={errorOf("managerName")}
               >
-                {groupNames.length > 1
-                  ? [
-                      ...countries
-                        .filter((entry) => !groups.has(entry.id))
-                        .map((entry) => (
-                          <option key={entry.id} value={entry.id}>
-                            {entry.name}
-                          </option>
-                        )),
-                      ...groupNames.map((group) => (
-                        <optgroup key={group} label={group}>
-                          {countries
-                            .filter((entry) => groups.get(entry.id) === group)
-                            .map((entry) => (
-                              <option key={entry.id} value={entry.id}>
-                                {entry.name}
-                              </option>
-                            ))}
-                        </optgroup>
-                      )),
-                    ]
-                  : countries.map((entry) => (
+                {(props) => (
+                  <input
+                    {...props}
+                    ref={nameRef}
+                    value={managerName}
+                    maxLength={MANAGER_NAME_MAX}
+                    placeholder={t("newCareer.managerPlaceholder")}
+                    onChange={(event) => {
+                      setManagerName(event.target.value);
+                      setErrors((list) => list.filter((entry) => entry.field !== "managerName"));
+                    }}
+                  />
+                )}
+              </Field>
+            </div>
+            <label className={styles.check}>
+              <input
+                type="checkbox"
+                checked={noFiring}
+                aria-describedby="new-career-no-firing"
+                onChange={(event) => setNoFiring(event.target.checked)}
+              />
+              <span>{t("newCareer.noFiring")}</span>
+            </label>
+            <p id="new-career-no-firing" className={styles.help}>
+              {t("newCareer.noFiringHelp")}
+            </p>
+            <details className={styles.advanced}>
+              <summary>{t("newCareer.advanced")}</summary>
+              <div className={styles.narrow}>
+                <Field label={t("newCareer.seed")} hint={t("newCareer.seedHelp")}>
+                  {(props) => (
+                    <input
+                      {...props}
+                      value={seed}
+                      onChange={(event) => setSeed(event.target.value)}
+                    />
+                  )}
+                </Field>
+              </div>
+            </details>
+          </Card>
+          <Card aria-labelledby="new-career-world" className={styles.card}>
+            <h2 id="new-career-world" className={styles.cardTitle}>
+              {t("newCareer.sectionWorld")}
+            </h2>
+            <div className={styles.narrow}>
+              <Field
+                label={t("newCareer.bank")}
+                hint={mod ? undefined : t("newCareer.defaultBank.help")}
+              >
+                {(props) => (
+                  <select
+                    {...props}
+                    value={bankId}
+                    onChange={(event) => setBankId(event.target.value)}
+                  >
+                    <option value="">{t("newCareer.defaultBank")}</option>
+                    {installed.map((entry) => (
                       <option key={entry.id} value={entry.id}>
-                        {entry.name}
+                        {entry.summary.name}
                       </option>
                     ))}
-                <option value="">{t("newCareer.country.all")}</option>
-              </select>
-            </label>
+                  </select>
+                )}
+              </Field>
+            </div>
+            <Link href="/mods/">{t("nav.mods")}</Link>
+          </Card>
+          <Card aria-labelledby="new-career-club" className={styles.card}>
+            <h2 id="new-career-club" className={styles.cardTitle}>
+              {t("newCareer.chooseClub")}
+            </h2>
+            <div className={styles.filters}>
+              {manyCountries ? (
+                <Field label={t("newCareer.country.filter")}>
+                  {(props) => (
+                    <select
+                      {...props}
+                      value={country}
+                      onChange={(event) => {
+                        setCountry(event.target.value);
+                        setClubId(undefined);
+                      }}
+                    >
+                      {groupNames.length > 1
+                        ? [
+                            ...countries
+                              .filter((entry) => !groups.has(entry.id))
+                              .map((entry) => (
+                                <option key={entry.id} value={entry.id}>
+                                  {entry.name}
+                                </option>
+                              )),
+                            ...groupNames.map((group) => (
+                              <optgroup key={group} label={group}>
+                                {countries
+                                  .filter((entry) => groups.get(entry.id) === group)
+                                  .map((entry) => (
+                                    <option key={entry.id} value={entry.id}>
+                                      {entry.name}
+                                    </option>
+                                  ))}
+                              </optgroup>
+                            )),
+                          ]
+                        : countries.map((entry) => (
+                            <option key={entry.id} value={entry.id}>
+                              {entry.name}
+                            </option>
+                          ))}
+                      <option value="">{t("newCareer.country.all")}</option>
+                    </select>
+                  )}
+                </Field>
+              ) : null}
+              <Field label={t("newCareer.division.filter")}>
+                {(props) => (
+                  <select
+                    {...props}
+                    value={division}
+                    onChange={(event) => setDivision(Number(event.target.value))}
+                  >
+                    {divisions.map((entry) => (
+                      <option key={entry.level} value={entry.level}>
+                        {country === "" && manyCountries
+                          ? t("newCareer.division.level", { level: entry.level })
+                          : entry.name}
+                      </option>
+                    ))}
+                    <option value={0}>{t("newCareer.division.all")}</option>
+                  </select>
+                )}
+              </Field>
+            </div>
+            <ClubPicker
+              ref={clubRef}
+              clubs={clubs}
+              manyCountries={manyCountries}
+              caption={
+                divisionName && !(country === "" && manyCountries)
+                  ? t("newCareer.clubsCaption", { division: divisionName })
+                  : t("newCareer.clubsCaptionAll")
+              }
+              query={query}
+              onQuery={setQuery}
+              selectedId={clubId}
+              onSelect={(id) => {
+                setClubId(id);
+                setErrors((list) => list.filter((entry) => entry.field !== "club"));
+              }}
+              onClearFilters={() => {
+                setCountry("");
+                setDivision(0);
+                setQuery("");
+              }}
+              resetKey={`${country}:${division}`}
+              error={errorOf("club")}
+            />
+          </Card>
+          {createError ? (
+            <Notice role="alert" tone="danger" title={t("newCareer.createError.title")}>
+              <p className={styles.noticeText}>{createError}</p>
+            </Notice>
           ) : null}
-          <label className={styles.field}>
-            <span>{t("newCareer.division.filter")}</span>
-            <select value={division} onChange={(event) => setDivision(Number(event.target.value))}>
-              {divisions.map((entry) => (
-                <option key={entry.level} value={entry.level}>
-                  {country === "" && manyCountries
-                    ? t("newCareer.division.level", { level: entry.level })
-                    : entry.name}
-                </option>
-              ))}
-              <option value={0}>{t("newCareer.division.all")}</option>
-            </select>
-          </label>
-          {manyCountries ? (
-            <label className={styles.field}>
-              <span>{t("newCareer.search")}</span>
-              <input
-                type="search"
-                value={query}
-                placeholder={t("newCareer.searchPlaceholder")}
-                onChange={(event) => setQuery(event.target.value)}
-              />
-            </label>
-          ) : null}
-          {manyCountries ? (
-            <p role="status" aria-live="polite">
-              {t("newCareer.results", { count: clubs.length })}
-            </p>
-          ) : null}
-          <DataTable
-            key={`${country}:${division}`}
-            rows={clubs}
-            columns={columns}
-            rowKey={(club) => club.id}
-            caption={
-              divisionName && !(country === "" && manyCountries)
-                ? t("newCareer.clubsCaption", { division: divisionName })
-                : t("newCareer.clubsCaptionAll")
-            }
-            initialSort={{ column: "reputation", direction: "descending" }}
-            onRowClick={(club) => setClubId(club.id)}
-            selected={(club) => club.id === clubId}
-          />
           <div className={styles.footer}>
-            <span>
-              {selected ? t("newCareer.selected", { club: selected.name }) : t("newCareer.noClub")}
+            <span className={styles.chosen}>
+              {selected ? (
+                <>
+                  <Crest crest={selected.crest} label={selected.name} size={28} />
+                  {t("newCareer.selected", { club: selected.name })}
+                </>
+              ) : (
+                t("newCareer.noClubSelected")
+              )}
             </span>
-            {error ? (
-              <span role="alert" className={styles.error}>
-                {error}
-              </span>
-            ) : null}
-            <Button type="submit" variant="primary" disabled={creating}>
+            <Button type="submit" variant="primary" disabled={creating} aria-busy={creating}>
               {creating ? t("newCareer.creating") : t("newCareer.confirm")}
             </Button>
           </div>
         </form>
-      </main>
+      </EntryShell>
     </AssetsProvider>
   );
 }

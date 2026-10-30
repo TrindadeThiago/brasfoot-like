@@ -3,12 +3,15 @@
 import { joinBankFiles, type ModPackage, type ValidationIssue } from "@brasfoot-like/engine";
 import { applyCsv, clubsToCsv, playersToCsv, writeModPackage } from "@brasfoot-like/modkit";
 import { strToU8 } from "fflate";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { defaultBankInput } from "../../game/default-bank";
 import { useT } from "../../i18n";
 import { downloadBytes } from "../../storage/files";
 import type { StoredMod } from "../../storage/mods";
 import { Button } from "../Button";
+import { Card } from "../Card";
+import { Field } from "../Field";
+import { Notice } from "../Notice";
 import styles from "./mods.module.css";
 import { ValidationReport } from "./ValidationReport";
 
@@ -26,6 +29,7 @@ export function CsvPanel({
   onLoad: (bytes: Uint8Array) => Promise<void>;
 }) {
   const t = useT();
+  const titleId = useId();
   // "" = banco padrão; senão o id do mod.
   const [bankId, setBankId] = useState("");
   const [clubs, setClubs] = useState<string>();
@@ -49,26 +53,29 @@ export function CsvPanel({
   }
 
   return (
-    <section aria-label={t("mods.csv.title")} className={styles.card}>
-      <h2>{t("mods.csv.title")}</h2>
-      <label className={styles.field}>
-        <span>{t("mods.csv.bank")}</span>
-        <select
-          value={bankId}
-          onChange={(event) => {
-            setBankId(event.target.value);
-            setGenerated(undefined);
-            setReport(undefined);
-          }}
-        >
-          <option value="">{t("newCareer.defaultBank")}</option>
-          {mods.map((entry) => (
-            <option key={entry.id} value={entry.id}>
-              {entry.summary.name}
-            </option>
-          ))}
-        </select>
-      </label>
+    <Card aria-labelledby={titleId} className={styles.card}>
+      <h2 id={titleId}>{t("mods.csv.title")}</h2>
+      <p className={styles.muted}>{t("mods.csv.help")}</p>
+      <Field label={t("mods.csv.bank")}>
+        {(props) => (
+          <select
+            {...props}
+            value={bankId}
+            onChange={(event) => {
+              setBankId(event.target.value);
+              setGenerated(undefined);
+              setReport(undefined);
+            }}
+          >
+            <option value="">{t("newCareer.defaultBank")}</option>
+            {mods.map((entry) => (
+              <option key={entry.id} value={entry.id}>
+                {entry.summary.name}
+              </option>
+            ))}
+          </select>
+        )}
+      </Field>
       <div className={styles.actions}>
         <Button
           onClick={() => downloadBytes(strToU8(clubsToCsv(bank())), `${name}-clubs.csv`, CSV_TYPE)}
@@ -83,22 +90,26 @@ export function CsvPanel({
           {t("mods.csv.exportPlayers")}
         </Button>
       </div>
-      <label className={styles.field}>
-        <span>{t("mods.csv.importClubs")}</span>
-        <input
-          type="file"
-          accept=".csv,text/csv"
-          onChange={async (event) => setClubs(await event.target.files?.[0]?.text())}
-        />
-      </label>
-      <label className={styles.field}>
-        <span>{t("mods.csv.importPlayers")}</span>
-        <input
-          type="file"
-          accept=".csv,text/csv"
-          onChange={async (event) => setPlayers(await event.target.files?.[0]?.text())}
-        />
-      </label>
+      <Field label={t("mods.csv.importClubs")}>
+        {(props) => (
+          <input
+            {...props}
+            type="file"
+            accept=".csv,text/csv"
+            onChange={async (event) => setClubs(await event.target.files?.[0]?.text())}
+          />
+        )}
+      </Field>
+      <Field label={t("mods.csv.importPlayers")}>
+        {(props) => (
+          <input
+            {...props}
+            type="file"
+            accept=".csv,text/csv"
+            onChange={async (event) => setPlayers(await event.target.files?.[0]?.text())}
+          />
+        )}
+      </Field>
       <div className={styles.actions}>
         <Button
           variant="primary"
@@ -113,7 +124,7 @@ export function CsvPanel({
       ) : null}
       {generated ? (
         <>
-          <p role="status">{t("mods.csv.ok")}</p>
+          <Notice role="status" title={t("mods.csv.ok")} />
           <div className={styles.actions}>
             <Button onClick={() => downloadBytes(generated, `${name}-csv.zip`, "application/zip")}>
               {t("mods.csv.download")}
@@ -124,6 +135,6 @@ export function CsvPanel({
           </div>
         </>
       ) : null}
-    </section>
+    </Card>
   );
 }

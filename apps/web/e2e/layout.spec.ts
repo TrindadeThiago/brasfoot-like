@@ -93,6 +93,28 @@ for (const theme of ["dark", "light"] as const) {
       }
     }
 
+    // 031: as telas de fora da carreira não cortam texto nas larguras de trabalho, e o rodapé fixo da
+    // Nova carreira nunca cobre a última linha da tabela.
+    for (const width of [1440, 1280, 1024]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const path of OUTSIDE) {
+        await page.goto(path);
+        await page.waitForLoadState("networkidle");
+        await expectNoClippedText(page, `${path} @${width}`);
+      }
+      await page.goto("/nova-carreira/");
+      await page.getByRole("button", { name: t("newCareer.confirm") }).waitFor();
+      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+      const [footer, lastRow] = await Promise.all([
+        page.locator("form > div").last().boundingBox(),
+        page.locator("tbody tr").last().boundingBox(),
+      ]);
+      expect(
+        (lastRow?.y ?? 0) + (lastRow?.height ?? 0),
+        `última linha acima do rodapé @${width}`,
+      ).toBeLessThanOrEqual((footer?.y ?? 0) + 1);
+    }
+
     // As três telas do dia a dia: sem texto cortado e, no Início, com as ações de jogar à vista.
     for (const width of [1440, 1280, 1024]) {
       await page.setViewportSize({ width, height: 900 });

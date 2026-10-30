@@ -4,10 +4,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { APP_VERSION, appName } from "../app-info";
 import { useGame } from "../game/GameProvider";
+import { savesView } from "../game/saves-view";
 import { useT } from "../i18n";
 import type { SummaryEntry } from "../storage/indexeddb";
 import { readPreferences, writePreferences } from "../storage/preferences";
+import { ActionCard } from "../ui/entry/ActionCard";
 import { useOpenShortcutsHelp } from "../ui/GlobalShortcuts";
+import { Notice } from "../ui/Notice";
 import { TipHost } from "../ui/tips/TipHost";
 import styles from "./page.module.css";
 
@@ -17,6 +20,8 @@ export default function OpeningPage() {
   const openHelp = useOpenShortcutsHelp();
   const [last, setLast] = useState<SummaryEntry | undefined>();
   const [unavailable, setUnavailable] = useState(false);
+  // Quantidade de carreiras listadas (031); indefinida até a lista chegar ou se o armazenamento falhar.
+  const [count, setCount] = useState<number | undefined>();
   // Primeiro acesso (016): nenhuma carreira salva e nenhuma dica registrada.
   const [firstRun, setFirstRun] = useState(false);
   // Aviso de novidades (016 R8): versão vista diferente da atual, ou ausente com carreira salva.
@@ -28,6 +33,7 @@ export default function OpeningPage() {
       .listSummaries()
       .then((summaries) => {
         if (!alive) return;
+        setCount(savesView(summaries).count);
         const lastId = readPreferences().lastCareerId;
         const candidates = summaries.filter((summary) => summary.status === "ok");
         setLast(candidates.find((summary) => summary.id === lastId) ?? candidates[0]);
@@ -47,37 +53,50 @@ export default function OpeningPage() {
 
   return (
     <main className={styles.page}>
-      <h1 className={styles.title}>{t("app.name")}</h1>
-      <p className={styles.tagline}>{t("app.tagline")}</p>
+      <header className={styles.hero}>
+        <h1 className={styles.title}>{t("app.name")}</h1>
+        <p className={styles.tagline}>{t("app.tagline")}</p>
+        <p className={styles.pitch}>{t("opening.pitch")}</p>
+      </header>
       {whatsNew ? (
-        <div role="status" aria-labelledby="whats-new" className={styles.notice}>
-          <p id="whats-new">{t("notes.whatsNew", { version: APP_VERSION })}</p>
-          <Link
-            href="/notas-de-versao/"
-            onClick={() => writePreferences({ lastSeenVersion: APP_VERSION })}
-          >
-            {t("notes.whatsNewLink")}
-          </Link>
-          <button
-            type="button"
-            className={styles.linkButton}
-            onClick={() => {
-              writePreferences({ lastSeenVersion: APP_VERSION });
-              setWhatsNew(false);
-            }}
-          >
-            {t("common.close")}
-          </button>
-        </div>
+        <Notice
+          role="status"
+          title={t("notes.whatsNew", { version: APP_VERSION })}
+          className={styles.notice}
+        >
+          <div className={styles.noticeActions}>
+            <Link
+              href="/notas-de-versao/"
+              onClick={() => writePreferences({ lastSeenVersion: APP_VERSION })}
+            >
+              {t("notes.whatsNewLink")}
+            </Link>
+            <button
+              type="button"
+              className={styles.linkButton}
+              onClick={() => {
+                writePreferences({ lastSeenVersion: APP_VERSION });
+                setWhatsNew(false);
+              }}
+            >
+              {t("common.close")}
+            </button>
+          </div>
+        </Notice>
       ) : null}
       {unavailable ? (
-        <p role="alert" className={styles.warning}>
-          {t("opening.storageUnavailable")}
-        </p>
+        <Notice
+          role="alert"
+          tone="warning"
+          title={t("opening.storageUnavailable.title")}
+          className={styles.notice}
+        >
+          <p className={styles.noticeText}>{t("opening.storageUnavailable")}</p>
+        </Notice>
       ) : null}
       <nav className={styles.menu} aria-label={t("nav.menu")}>
         {last ? (
-          <Link className={styles.primary} href={`/jogo/?c=${last.id}`}>
+          <Link className={styles.continue} href={`/jogo/?c=${last.id}`}>
             <span>{t("opening.continue")}</span>
             <small>
               {t("opening.continueDetail", {
@@ -88,19 +107,20 @@ export default function OpeningPage() {
             </small>
           </Link>
         ) : null}
-        <Link
-          className={last ? styles.secondary : styles.primary}
+        <ActionCard
           href="/nova-carreira/"
-          data-tip-anchor="new-career"
-        >
-          {t("opening.newCareer")}
-        </Link>
-        <Link className={styles.secondary} href="/carreiras/">
-          {t("opening.savedCareers")}
-        </Link>
-        <Link className={styles.secondary} href="/mods/">
-          {t("nav.mods")}
-        </Link>
+          label={t("opening.newCareer")}
+          detail={t("opening.newCareerDetail")}
+          primary={!last}
+          tipAnchor="new-career"
+        />
+        <ActionCard
+          href="/carreiras/"
+          label={t("opening.savedCareers")}
+          detail={t("opening.savedCareersDetail")}
+          badge={count === undefined ? undefined : t("saves.count", { count })}
+        />
+        <ActionCard href="/mods/" label={t("nav.mods")} detail={t("opening.modsDetail")} />
       </nav>
       <footer className={styles.footer}>
         <Link href="/configuracoes/">{t("nav.settings")}</Link>
