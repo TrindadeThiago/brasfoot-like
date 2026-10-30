@@ -29,7 +29,9 @@
     "gen:world-mod": "pnpm --filter @brasfoot-like/tools gen:world-mod",
     "gen:continental-mod": "pnpm --filter @brasfoot-like/tools gen:continental-mod",
     "gen:regional-mod": "pnpm --filter @brasfoot-like/tools gen:regional-mod",
-    "gen:football-world": "pnpm --filter @brasfoot-like/tools gen:football-world"
+    "gen:football-world": "pnpm --filter @brasfoot-like/tools gen:football-world",
+    "sim:gates": "pnpm sim:world --seasons 30 && pnpm sim:economy --seasons 30 && pnpm sim:world --scale --countries 3 --seasons 30 --qualification",
+    "hooks:install": "git config core.hooksPath .githooks"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",

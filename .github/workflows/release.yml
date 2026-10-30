@@ -1,9 +1,11 @@
 name: release
 
-# Publica na Vercel só depois de todos os gates (016 contracts/release.md). Os gates rodam em
-# paralelo; o deploy usa exatamente o build testado pelo e2e (artefato `site`).
-# Dispara no push na `main`: se a versão do `package.json` ainda não tem tag `vX.Y.Z`, roda os
-# gates, publica e cria a tag e o Release do GitHub no fim. Versão já publicada = nada a fazer.
+# Publica na Vercel depois dos gates baratos: tipos, lint, build e `check-release`. Os testes de
+# unidade e o e2e já rodaram no PR (ci.yml), e as simulações de 30 temporadas rodam só localmente, no
+# gancho de pré-push (`pnpm sim:gates`, `.githooks/pre-push`): repeti-las aqui só gastava minutos de
+# Actions. O deploy usa exatamente o build conferido (artefato `site`).
+# Dispara no push na `main`: se a versão do `package.json` ainda não tem tag `vX.Y.Z`, confere,
+# publica e cria a tag e o Release do GitHub no fim. Versão já publicada = nada a fazer.
 # Mudanças só de documentação não disparam (mesmos filtros do ci.yml). `workflow_dispatch` serve
 # para refazer uma publicação que falhou antes de criar a tag.
 # Segredos: VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID.
@@ -52,41 +54,8 @@ jobs:
             echo "Publicando a versão $version."
           fi
 
-  checks:
-    needs: version
-    if: needs.version.outputs.publish == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22.13
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm typecheck
-      - run: pnpm lint
-
-  unit:
-    needs: version
-    if: needs.version.outputs.publish == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    strategy:
-      matrix:
-        shard: [1, 2, 3, 4]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22.13
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm test --shard=${{ matrix.shard }}/4 --maxWorkers=2
-
-  simulations:
+  # Um só job (uma instalação): tipos, lint, build e verificação do release.
+  build:
     needs: version
     if: needs.version.outputs.publish == 'true'
     runs-on: ubuntu-latest
@@ -99,49 +68,23 @@ jobs:
           node-version: 22.13
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm sim:world --seasons 30
-      - run: pnpm sim:economy --seasons 30
-      # Vagas entre competições (021): participantes por fase e unicidade em 30 temporadas.
-      - run: pnpm sim:world --scale --countries 3 --seasons 30 --qualification
-
-  e2e:
-    needs: version
-    if: needs.version.outputs.publish == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22.13
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm lint
       - run: pnpm build:web
       - name: Conferir a versão, as notas e o build
         run: pnpm check-release
         env:
           # A tag ainda não existe: informa a que será criada para a conferência valer.
           RELEASE_TAG: v${{ needs.version.outputs.version }}
-      - run: pnpm --filter @brasfoot-like/web exec playwright install --with-deps chromium
-      - run: pnpm test:e2e
       - uses: actions/upload-artifact@v4
         with:
           name: site
           path: apps/web/out/
           include-hidden-files: true
           retention-days: 7
-      - uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: playwright-report
-          path: |
-            apps/web/playwright-report/
-            apps/web/test-results/
-          retention-days: 14
 
   deploy:
-    needs: [version, checks, unit, simulations, e2e]
+    needs: [version, build]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
