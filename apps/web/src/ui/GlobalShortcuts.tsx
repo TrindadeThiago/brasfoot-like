@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from "react";
-import { confirmLeave } from "./leave-guard";
+import { requestLeave } from "./leave-guard";
 import { ShortcutsHelp } from "./ShortcutsHelp";
 import { screenOf } from "./shortcuts";
 import { useShortcuts } from "./useShortcuts";
@@ -30,7 +30,8 @@ export function GlobalShortcuts({ children }: { children: ReactNode }) {
     () => ({
       help: () => setOpen((current) => !current),
       settings: () => {
-        if (screen !== "settings" && confirmLeave()) router.push("/configuracoes/");
+        if (screen === "settings") return;
+        void requestLeave().then((ok) => ok && router.push("/configuracoes/"));
       },
     }),
     [screen, router],

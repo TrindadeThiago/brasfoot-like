@@ -86,7 +86,9 @@ describe("desempenho (SC-005)", () => {
     const store = freshStore();
     await store.save({ ...base, league: played.league });
     renderApp("/jogo/fim-de-temporada?c=tela", store);
-    const button = await screen.findByRole("button", { name: t("seasonEnd.next") });
+    const button = (
+      await screen.findAllByRole("button", { name: t("seasonEnd.next") })
+    )[0] as HTMLElement;
     const user = userEvent.setup();
     const start = performance.now();
     await user.click(button);
@@ -119,7 +121,9 @@ describe("desempenho numa carreira de 10 temporadas (016 R1)", () => {
     const store = freshStore();
     await store.save(career.seasonOver);
     renderApp("/jogo/fim-de-temporada?c=longa", store);
-    const button = await screen.findByRole("button", { name: t("seasonEnd.next") });
+    const button = (
+      await screen.findAllByRole("button", { name: t("seasonEnd.next") })
+    )[0] as HTMLElement;
     const user = userEvent.setup();
     const start = performance.now();
     await user.click(button);

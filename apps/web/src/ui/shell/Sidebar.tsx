@@ -2,10 +2,10 @@
 
 import type { SaveFile } from "@brasfoot-like/save";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useT } from "../../i18n";
 import { useOpenShortcutsHelp } from "../GlobalShortcuts";
-import { confirmLeave } from "../leave-guard";
+import { isLeaveGuarded, requestLeave } from "../leave-guard";
 import { Icon } from "./icons";
 import styles from "./Sidebar.module.css";
 import { attentionCount, availableScreens, isActiveScreen, screenHref } from "./screens";
@@ -20,8 +20,12 @@ export function Sidebar({ save }: { save: SaveFile }) {
   const t = useT();
   const openHelp = useOpenShortcutsHelp();
   const pathname = (usePathname() ?? "/jogo").replace(/\/+$/, "") || "/jogo";
-  const guard = (event: { preventDefault: () => void }) => {
-    if (!confirmLeave()) event.preventDefault();
+  const router = useRouter();
+  // Com a rodada ao vivo em andamento, o diálogo pergunta antes de seguir (030 R8).
+  const guard = (href: string) => (event: { preventDefault: () => void }) => {
+    if (!isLeaveGuarded()) return;
+    event.preventDefault();
+    void requestLeave().then((ok) => ok && router.push(href));
   };
   return (
     <div className={styles.sidebar}>
@@ -36,7 +40,7 @@ export function Sidebar({ save }: { save: SaveFile }) {
                   href={screenHref(screen.path, save.id)}
                   aria-current={active ? "page" : undefined}
                   className={active ? `${styles.item} ${styles.active}` : styles.item}
-                  onClick={guard}
+                  onClick={guard(screenHref(screen.path, save.id))}
                 >
                   <Icon name={screen.icon} />
                   <span className={styles.label}>{t(screen.key)}</span>
@@ -55,11 +59,11 @@ export function Sidebar({ save }: { save: SaveFile }) {
         </ul>
       </nav>
       <div className={styles.footer}>
-        <Link href="/" className={styles.item} onClick={guard}>
+        <Link href="/" className={styles.item} onClick={guard("/")}>
           <Icon name="menu" />
           <span className={styles.label}>{t("nav.opening")}</span>
         </Link>
-        <Link href="/configuracoes/" className={styles.item} onClick={guard}>
+        <Link href="/configuracoes/" className={styles.item} onClick={guard("/configuracoes/")}>
           <Icon name="settings" />
           <span className={styles.label}>{t("nav.settings")}</span>
         </Link>

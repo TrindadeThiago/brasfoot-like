@@ -8,7 +8,7 @@ import { useT } from "../i18n";
 import { type RoundMode, readPreferences } from "../storage/preferences";
 import { AssetsProvider } from "../ui/AssetsProvider";
 import { ConflictDialog } from "../ui/ConflictDialog";
-import { confirmLeave } from "../ui/leave-guard";
+import { requestLeave } from "../ui/leave-guard";
 import { SimulateDialogs } from "../ui/SimulateDialogs";
 import { FocusScreen } from "../ui/shell/FocusScreen";
 import { ScreenHeader } from "../ui/shell/ScreenHeader";
@@ -41,10 +41,10 @@ function Layout({ children }: { children: Render }) {
     const go = (index: number) => () => {
       const screen = GAME_SCREENS[index];
       if (!screen || (screen.club && !isEmployed(save))) return;
-      if (confirmLeave()) router.push(screenHref(screen.path, save.id));
+      void requestLeave().then((ok) => ok && router.push(screenHref(screen.path, save.id)));
     };
     const play = async (mode: RoundMode) => {
-      if (!confirmLeave()) return;
+      if (!(await requestLeave())) return;
       const outcome = await game.playRound(mode);
       if (outcome === "live") router.push(screenHref("/jogo/rodada", save.id));
       if (outcome === "finished") router.push(screenHref("/jogo/fim-de-temporada", save.id));

@@ -4,7 +4,7 @@ import { createCareer, t } from "./helpers";
 
 // 018 US1/US2/US6: copa nacional no banco padrão — o clube da Série A entra na "Fase de 32", o
 // chaveamento aparece, o jogo da copa é jogado ao vivo e liga e copa avançam juntas. Os pênaltis
-// ao vivo dependem de uma seed que decida assim; ficam nos testes de componente e do motor.
+// ao vivo dependem de uma seed que decida assim: estão em live-round.spec.ts (seed "pen-4") e nos testes de componente.
 const FIRST_CUP_PHASE = "Fase de 32";
 
 test("copa: avançar até o jogo da copa, ver o chaveamento e jogá-lo ao vivo (018)", async ({

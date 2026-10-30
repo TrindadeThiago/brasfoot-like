@@ -155,6 +155,19 @@ for (const theme of ["dark", "light"] as const) {
     await expect(page.getByRole("region", { name: t("round.myMatch") })).toBeVisible();
     await expect(page.getByRole("navigation", { name: t("nav.menu") })).toHaveCount(0);
     await expectNoHorizontalScroll(page, "rodada @768");
+    // 030: nas larguras de trabalho, sem rolagem horizontal nem texto cortado, e o placar, o minuto e
+    // o estado do meu jogo dentro de 900 px (SC-003).
+    await page.getByRole("button", { name: t("round.pause") }).click();
+    for (const width of [1440, 1280, 1024]) {
+      await page.setViewportSize({ width, height: 900 });
+      await expectNoHorizontalScroll(page, `rodada @${width}`);
+      await expectNoClippedText(page, `rodada @${width}`);
+      const box = await page.getByRole("region", { name: t("round.myMatch") }).boundingBox();
+      expect(
+        (box?.y ?? 0) + (box?.height ?? 0),
+        `placar da rodada dentro de 900 px @${width}`,
+      ).toBeLessThanOrEqual(900);
+    }
 
     // Fim de temporada, em cada largura.
     await page.goto(`/jogo/?c=${career}`);
@@ -164,6 +177,10 @@ for (const theme of ["dark", "light"] as const) {
       await page.setViewportSize({ width, height: 900 });
       await expect(page.getByRole("navigation", { name: t("nav.menu") })).toHaveCount(0);
       await expectNoHorizontalScroll(page, `fim-de-temporada @${width}`);
+    }
+    for (const width of [1440, 1280, 1024]) {
+      await page.setViewportSize({ width, height: 900 });
+      await expectNoClippedText(page, `fim-de-temporada @${width}`);
     }
   });
 }

@@ -22,3 +22,21 @@
   font-weight: 400;
   color: var(--color-muted);
 }
+
+/* Barras comparativas dos dois times (030). */
+.bar {
+  display: flex;
+  height: 6px;
+  margin-top: var(--space-1);
+  border-radius: 3px;
+  background: var(--color-surface-2);
+  overflow: hidden;
+}
+
+.home {
+  background: var(--color-info);
+}
+
+.away {
+  background: var(--color-accent);
+}

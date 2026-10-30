@@ -54,7 +54,8 @@ describe("virada de temporada no navegador (US2, US3)", () => {
     const { store, save } = await endOfSeason();
     const view = renderApp("/jogo/fim-de-temporada?c=tela", store);
     const user = userEvent.setup();
-    await user.click(await screen.findByRole("button", { name: t("seasonEnd.next") }));
+    const [next] = await screen.findAllByRole("button", { name: t("seasonEnd.next") });
+    await user.click(next as HTMLElement);
     await waitFor(() => expect(memoryRouter.pathname()).toBe("/jogo"));
 
     const expectedLevel = nextComposition(save.league, save.bank).composition[1]?.includes(

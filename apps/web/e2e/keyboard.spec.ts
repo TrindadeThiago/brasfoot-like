@@ -243,3 +243,52 @@ test("Carreira e Notícias: setas nas abas, setas de rodada e foco visível (029
   await page.keyboard.press("Enter");
   expect(await select.inputValue()).not.toBe(latest);
 });
+
+// 030 critério 1: substituir, trocar a posição de dois jogadores e voltar à rodada, só com o teclado.
+// O substituto obrigatório (lesão ou goleiro expulso) não dá para provocar numa rodada real; a escolha
+// do pendente e do reserva, também só pelo teclado, está nos testes de componente (`live-team.test.tsx`).
+test("rodada ao vivo só com o teclado: substituir e trocar a posição de dois jogadores (030)", async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  await createCareer(page, "Ana Souza", 1);
+  const play = page.getByRole("button", { name: t("home.playLive") });
+  await play.focus();
+  await page.keyboard.press("Enter");
+  const mine = page.getByRole("region", { name: t("round.myMatch") });
+  await expect(mine).toBeVisible();
+  // A partida precisa ter começado para aceitar mudanças.
+  await expect(mine.getByText(/^([5-9]|[1-9]\d)'$/)).toBeVisible({ timeout: 20_000 });
+
+  const pause = page.getByRole("button", { name: t("round.pause") });
+  await pause.focus();
+  await page.keyboard.press("Enter");
+  const panel = page.getByRole("region", { name: t("round.panel") });
+  await expect(panel).toBeVisible();
+  const onField = panel.getByRole("list").nth(0).getByRole("button");
+  const bench = panel.getByRole("list").nth(1).getByRole("button");
+
+  // Substituição: escolhe um titular (Enter) e um reserva (Enter).
+  await onField.nth(2).focus();
+  await expectFocusVisible(page, "titular do painel");
+  await page.keyboard.press("Enter");
+  await bench.first().focus();
+  await page.keyboard.press("Enter");
+  await expect(panel.getByText(t("round.substitutionsLeft", { used: 1, limit: 5 }))).toBeVisible();
+  await expect(panel.getByRole("status")).toContainText("entrou no lugar de");
+
+  // Troca de posição: dois titulares, sem gastar substituição.
+  await onField.nth(3).focus();
+  await page.keyboard.press("Enter");
+  await onField.nth(4).focus();
+  await page.keyboard.press("Enter");
+  await expect(panel.getByRole("status")).toContainText("trocaram de posição");
+  await expect(panel.getByText(t("round.substitutionsLeft", { used: 1, limit: 5 }))).toBeVisible();
+
+  // Retomar pelo teclado: o painel some e o foco volta ao botão da barra de controle.
+  const resume = page.getByRole("button", { name: t("round.resume") });
+  await resume.focus();
+  await page.keyboard.press("Enter");
+  await expect(panel).toBeHidden();
+  await expect(page.getByRole("button", { name: t("round.pause") })).toBeFocused();
+});
