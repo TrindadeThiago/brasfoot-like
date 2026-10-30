@@ -17,6 +17,25 @@ export function exportSave(save: SaveFile, now: string): Uint8Array {
   return gzipSync(strToU8(JSON.stringify(envelope)), { level: 6 });
 }
 
+/** Maior save descompactado aceito na importação (o maior medido em 30 temporadas é ~12 MB). */
+export const MAX_SAVE_BYTES = 128 * 1024 * 1024;
+
+/**
+ * Descompacta o gzip só se o tamanho declarado no rodapé (ISIZE) couber no limite, e nunca além
+ * dele: a saída tem o tamanho declarado + 1, então um rodapé mentiroso trunca e é recusado em vez
+ * de inflar na memória. Devolve `undefined` para entrada inválida ou grande demais.
+ */
+function gunzipLimited(bytes: Uint8Array): Uint8Array | undefined {
+  if (bytes.length < 18) return undefined;
+  const declared = new DataView(bytes.buffer, bytes.byteOffset, bytes.length).getUint32(
+    bytes.length - 4,
+    true,
+  );
+  if (declared > MAX_SAVE_BYTES) return undefined;
+  const out = gunzipSync(bytes, { out: new Uint8Array(declared + 1) });
+  return out.length === declared ? out : undefined;
+}
+
 function isGzip(bytes: Uint8Array): boolean {
   return bytes.length > 2 && bytes[0] === 0x1f && bytes[1] === 0x8b;
 }
@@ -28,7 +47,9 @@ function isGzip(bytes: Uint8Array): boolean {
 export function importSave(bytes: Uint8Array): ImportResult {
   let parsed: unknown;
   try {
-    const text = strFromU8(isGzip(bytes) ? gunzipSync(bytes) : bytes);
+    const raw = isGzip(bytes) ? gunzipLimited(bytes) : bytes;
+    if (!raw) return { status: "not_a_save" };
+    const text = strFromU8(raw);
     parsed = JSON.parse(text);
   } catch {
     return { status: "not_a_save" };

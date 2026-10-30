@@ -27,7 +27,14 @@ export {
 export type { CreateSaveInput, CreateSaveResult } from "./create";
 export { createSave } from "./create";
 export type { ImportResult } from "./file";
-export { asCopy, exportSave, importSave, SAVE_FILE_FORMAT, saveFileName } from "./file";
+export {
+  asCopy,
+  exportSave,
+  importSave,
+  MAX_SAVE_BYTES,
+  SAVE_FILE_FORMAT,
+  saveFileName,
+} from "./file";
 export type { FinanceSaveResult } from "./finance";
 export {
   repayManagerLoan,

@@ -5,6 +5,7 @@ import {
   asCopy,
   exportSave,
   importSave,
+  MAX_SAVE_BYTES,
   type SaveFile,
   saveFileName,
 } from "../src";
@@ -62,6 +63,14 @@ describe("arquivo de save (015 US1, critério de aceite 1, SC-001, SC-002)", () 
       strToU8(JSON.stringify({ format: "brasfoot-like-save", save: future })),
     );
     expect(result).toEqual({ status: "future_version", version: 999 });
+  });
+
+  it("gzip que expande além do limite é recusado, mesmo com o rodapé mentindo", () => {
+    const honest = gzipSync(new Uint8Array(MAX_SAVE_BYTES + 1024), { level: 9 });
+    expect(importSave(honest).status).toBe("not_a_save");
+    const forged = honest.slice();
+    new DataView(forged.buffer).setUint32(forged.length - 4, 1000, true);
+    expect(importSave(forged).status).toBe("not_a_save");
   });
 
   it("cópia com id novo e nome de arquivo seguro", () => {

@@ -2,6 +2,8 @@
 export interface ModLimits {
   /** Pacote inteiro (arquivo .zip). */
   package: number;
+  /** Soma de todas as entradas do pacote descompactado (protege contra zip bomb). */
+  unpacked: number;
   /** Cada arquivo JSON descompactado. */
   json: number;
   /** Cada imagem. */
@@ -14,6 +16,8 @@ export interface ModLimits {
 
 export const MOD_LIMITS: ModLimits = {
   package: 20 * 1024 * 1024,
+  /** Pacote de 20 MB já cabe o `players.json` do mundo completo (16 MB) e as imagens (5 MB) com folga. */
+  unpacked: 48 * 1024 * 1024,
   /**
    * 16 MB (eram 10): o `players.json` do mundo completo (024), com ~39 000 jogadores, tem 10,8 MB
    * descompactado e ~2,5 MB no .zip. O teto novo dá folga de 50% sem mudar o formato.

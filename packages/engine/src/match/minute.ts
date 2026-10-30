@@ -50,16 +50,11 @@ export function substitutionCap(state: MatchState): number {
 /** Jogador que importa para o desgaste: posição, características e identidade. */
 type Runner = Pick<CompletedPlayer, "id" | "position" | "traits">;
 
-const individualRate = new Map<string, number>();
-
 /** Multiplicador do desgaste do jogador (FATIGUE_TUNING): posição × característica × preparo. */
 function drainRate(player: Runner): number {
-  let preparation = individualRate.get(player.id);
-  if (preparation === undefined) {
-    const unit = (cyrb128(`fadiga:${player.id}`)[0] ?? 0) / 0xffffffff;
-    preparation = 1 + (unit * 2 - 1) * FATIGUE_TUNING.individualSpread;
-    individualRate.set(player.id, preparation);
-  }
+  // Calculado a cada chamada (um hash curto): um cache global cresceria com cada jogador já visto.
+  const unit = (cyrb128(`fadiga:${player.id}`)[0] ?? 0) / 0xffffffff;
+  const preparation = 1 + (unit * 2 - 1) * FATIGUE_TUNING.individualSpread;
   const pace = player.traits.includes("pace") ? FATIGUE_TUNING.paceTrait : 1;
   return FATIGUE_TUNING.position[player.position] * pace * preparation;
 }
