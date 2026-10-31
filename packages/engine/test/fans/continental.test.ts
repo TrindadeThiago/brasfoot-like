@@ -107,7 +107,8 @@ describe("torcida na competição entre países (022 US2, FR-019)", () => {
   });
 
   it("participar da competição aumenta a expectativa do ano", () => {
-    const middle = playDays(state, 10, seed, manager);
+    // 15 dias: aos 10, nesta seed, nenhum clube da liga estava à frente nem atrás da expectativa.
+    const middle = playDays(state, 15, seed, manager);
     const round = leagueRound(middle.league) - 1;
     expect(round).toBeGreaterThanOrEqual(5);
     const clubs = continentalLeague(middle).divisions[0]?.clubIds ?? [];

@@ -259,13 +259,13 @@ exports[`composição sem vagas entre competições (baseline 021) > banco de 3 
           1,
           [
             "clube-jod-001",
-            "clube-jod-002",
             "clube-jod-003",
             "clube-jod-004",
             "clube-jod-007",
             "clube-jod-009",
             "clube-jod-010",
             "clube-jod-014",
+            "clube-jod-018",
             "clube-jod-019",
             "clube-jod-020",
           ],
@@ -273,6 +273,7 @@ exports[`composição sem vagas entre competições (baseline 021) > banco de 3 
         [
           2,
           [
+            "clube-jod-002",
             "clube-jod-005",
             "clube-jod-006",
             "clube-jod-008",
@@ -282,7 +283,6 @@ exports[`composição sem vagas entre competições (baseline 021) > banco de 3 
             "clube-jod-015",
             "clube-jod-016",
             "clube-jod-017",
-            "clube-jod-018",
           ],
         ],
       ],
@@ -293,7 +293,6 @@ exports[`composição sem vagas entre competições (baseline 021) > banco de 3 
         [
           1,
           [
-            "clube-zim-001",
             "clube-zim-002",
             "clube-zim-004",
             "clube-zim-005",
@@ -302,19 +301,20 @@ exports[`composição sem vagas entre competições (baseline 021) > banco de 3 
             "clube-zim-009",
             "clube-zim-010",
             "clube-zim-013",
-            "clube-zim-017",
+            "clube-zim-014",
+            "clube-zim-016",
           ],
         ],
         [
           2,
           [
+            "clube-zim-001",
             "clube-zim-003",
             "clube-zim-006",
             "clube-zim-011",
             "clube-zim-012",
-            "clube-zim-014",
             "clube-zim-015",
-            "clube-zim-016",
+            "clube-zim-017",
             "clube-zim-018",
             "clube-zim-019",
             "clube-zim-020",

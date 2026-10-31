@@ -291,13 +291,16 @@ export function applyRoundSystems(
   /**
    * Liga de outro país que não o do técnico (020 R6): só decisões da IA. O mercado do jogador
    * (negociações, propostas recebidas e resumo de janela) e a última evolução mostrada a ele não
-   * são tocados, e a diretoria só avalia os clubes da liga.
+   * são tocados, e a diretoria só avalia os clubes da liga. `userClubId` é o clube do jogador,
+   * que a IA nunca altera (preço, obras, crédito, compras e vendas) mesmo numa liga estrangeira,
+   * onde `managerClubId` vai vazio.
    */
-  options: { foreign?: boolean } = {},
+  options: { foreign?: boolean; userClubId?: string } = {},
 ): CareerRoundResult {
   const foreign = options.foreign === true;
+  const userClubId = options.userClubId ?? managerClubId;
   // A bilheteria usa o humor de antes do jogo (013 R10).
-  let nextFinances = applyRoundFinances(finances, league, world, round, managerClubId, fans?.state);
+  let nextFinances = applyRoundFinances(finances, league, world, round, userClubId, fans?.state);
   let nextWorld = world;
   let nextRenewal = renewal?.state;
   if (renewal && round === midSeasonRound(league)) {
@@ -322,7 +325,7 @@ export function applyRoundSystems(
       league,
       finances: nextFinances,
       market: market.state,
-      managerClubId,
+      managerClubId: userClubId,
       careerSeed: market.careerSeed,
     };
     const ai = aiMarketRound(context);
