@@ -21,6 +21,11 @@ export interface FreeAgent {
   player: FreePlayer;
   lastClubId: string;
   sinceYear: number;
+  /**
+   * Rescindido pelo próprio clube do técnico (não por fim de contrato): esse clube não o
+   * recontrata. Sem isso, rescindir baixava a meta da diretoria e o jogador voltava sem custo.
+   */
+  releasedByClub?: true;
 }
 
 export type NegotiationKind = "buy" | "loan" | "free" | "renew";

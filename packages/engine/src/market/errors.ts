@@ -12,6 +12,8 @@ export const MARKET_ERROR_PARAMS = {
   "market.not_found": [],
   "market.invalid_stage": [],
   "market.no_buyer": [],
+  "market.season_over": [],
+  "market.recently_released": [],
 } as const satisfies Record<string, readonly string[]>;
 
 export type MarketErrorCode = keyof typeof MARKET_ERROR_PARAMS;

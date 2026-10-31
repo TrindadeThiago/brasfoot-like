@@ -273,3 +273,35 @@ describe("no máximo uma contraproposta de cada lado (SC-002)", () => {
     expect(paths).toBe(FEES.length * 2 * WAGE_FACTORS.length * 2);
   });
 });
+
+describe("recontratação do jogador rescindido (A9)", () => {
+  const own = open.world.players.find((player) => player.clubId === MANAGER) as typeof target;
+  const without = (ctx: typeof open, id: string) => ({
+    ...ctx,
+    world: { ...ctx.world, players: ctx.world.players.filter((p) => p.id !== id) },
+  });
+
+  it("o clube não recontrata quem ele mesmo rescindiu", () => {
+    const agent = { ...toFreeAgent(own, MANAGER, YEAR), releasedByClub: true as const };
+    const ctx = { ...without(open, own.id), market: addFreeAgents(open.market, [agent]) };
+    expect(startNegotiation(ctx, { kind: "free", playerId: own.id })).toMatchObject({
+      ok: false,
+      error: { code: "market.recently_released" },
+    });
+  });
+
+  it("quem saiu por fim de contrato do próprio clube pode ser recontratado", () => {
+    const agent = toFreeAgent(own, MANAGER, YEAR);
+    const ctx = { ...without(open, own.id), market: addFreeAgents(open.market, [agent]) };
+    expect(startNegotiation(ctx, { kind: "free", playerId: own.id }).ok).toBe(true);
+  });
+
+  it("o jogador rescindido por outro clube pode ser contratado", () => {
+    const agent = {
+      ...toFreeAgent(target, target.clubId, YEAR),
+      releasedByClub: true as const,
+    };
+    const ctx = { ...without(open, target.id), market: addFreeAgents(open.market, [agent]) };
+    expect(startNegotiation(ctx, { kind: "free", playerId: target.id }).ok).toBe(true);
+  });
+});

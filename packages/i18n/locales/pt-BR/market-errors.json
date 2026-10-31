@@ -10,5 +10,7 @@
   "market.invalid_amount": "O valor informado não é válido.",
   "market.not_found": "Jogador ou negociação não encontrado.",
   "market.invalid_stage": "Essa ação não está disponível nesta etapa da negociação.",
-  "market.no_buyer": "Nenhum clube quer ou pode pagar por esse jogador agora."
+  "market.no_buyer": "Nenhum clube quer ou pode pagar por esse jogador agora.",
+  "market.season_over": "A temporada acabou: não dá para rescindir contratos até a próxima começar.",
+  "market.recently_released": "Você rescindiu o contrato deste jogador e não pode recontratá-lo."
 }

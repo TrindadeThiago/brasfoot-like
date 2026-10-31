@@ -1,4 +1,6 @@
 // 026 US2: modal do jogador do Elenco — detalhes, ações e foco.
+
+import { formatMarketError } from "@brasfoot-like/i18n";
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -6,6 +8,7 @@ import { t } from "../../src/i18n";
 import { renderApp } from "../helpers/app";
 import { storedCareer } from "../helpers/career";
 import { memoryRouter } from "../helpers/router";
+import { careerSave } from "../helpers/saves";
 
 beforeEach(() => {
   localStorage.clear();
@@ -141,5 +144,39 @@ describe("modal do jogador (026)", () => {
       ).disabled,
     ).toBe(true);
     expect(within(modal).getByText(t("player.loanNoRenew"))).toBeDefined();
+  });
+
+  it("Rescindir fica habilitado no meio da temporada", async () => {
+    const { modal } = await openFirst();
+    const terminate = within(modal).getByRole("button", {
+      name: new RegExp(`^${t("squad.terminate")}`),
+    }) as HTMLButtonElement;
+    expect(terminate.disabled).toBe(false);
+  });
+
+  it("com a temporada encerrada, Rescindir fica desabilitado e o motivo aparece (A9)", async () => {
+    const total = careerSave("tela").league.divisions[0]?.calendar.length ?? 0;
+    const career = await storedCareer(total + 1);
+    const player = career.save.bank.players.find(
+      (entry) => entry.clubId === career.save.clubId && entry.position === "MF",
+    );
+    renderApp("/jogo/elenco?c=tela", career.store);
+    await screen.findByRole("table");
+    const user = userEvent.setup({ delay: null });
+    await user.click(
+      screen.getByRole("button", {
+        name: t("lineup.detailsOf", { name: player?.displayName ?? "" }),
+      }),
+    );
+    const modal = await screen.findByRole("dialog", { name: player?.displayName ?? "" });
+    const terminate = within(modal).getByRole("button", {
+      name: new RegExp(`^${t("squad.terminate")}`),
+    }) as HTMLButtonElement;
+    expect(terminate.disabled).toBe(true);
+    expect(
+      within(modal).getByText(
+        formatMarketError({ code: "market.season_over", params: {} }, "pt-BR"),
+      ),
+    ).toBeDefined();
   });
 });
