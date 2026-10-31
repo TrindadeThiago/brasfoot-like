@@ -147,10 +147,14 @@ export function startNegotiation(
   const openedRound = roundsPlayed(context.league);
 
   if (input.kind === "free" || input.kind === "renew") {
-    const free = context.market.freeAgents.some((entry) => entry.player.id === input.playerId);
+    const agent = context.market.freeAgents.find((entry) => entry.player.id === input.playerId);
+    const free = agent !== undefined;
     const owned = context.world.players.find((entry) => entry.id === input.playerId);
     if (input.kind === "free" ? !free : owned?.clubId !== context.managerClubId) {
       return fail("market.not_found");
+    }
+    if (agent?.releasedByClub && agent.lastClubId === context.managerClubId) {
+      return fail("market.recently_released");
     }
     if (
       input.kind === "free" &&

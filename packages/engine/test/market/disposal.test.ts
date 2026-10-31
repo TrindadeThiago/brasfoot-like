@@ -122,6 +122,29 @@ describe("rescisão", () => {
     expect(late.value.penalty).toBeLessThan(early.value.penalty);
   });
 
+  it("o livre rescindido pelo clube fica marcado como rescindido pelo clube", () => {
+    const done = terminateContract(context, sellable.id);
+    if (!done.ok) throw new Error(JSON.stringify(done.error));
+    const free = done.value.market.freeAgents.find((agent) => agent.player.id === sellable.id);
+    expect(free?.releasedByClub).toBe(true);
+  });
+
+  it("recusa a rescisão com a temporada encerrada, e aceita antes (A9)", () => {
+    const total = context.league.divisions[0]?.calendar.length ?? 0;
+    expect(total).toBeGreaterThan(1);
+    const last = contextAfter(total - 1);
+    expect(quoteTermination(last, sellable.id).ok).toBe(true);
+    const over = contextAfter(total);
+    expect(quoteTermination(over, sellable.id)).toMatchObject({
+      ok: false,
+      error: { code: "market.season_over" },
+    });
+    expect(terminateContract(over, sellable.id)).toMatchObject({
+      ok: false,
+      error: { code: "market.season_over" },
+    });
+  });
+
   it("tira o jogador do elenco, vira livre e a multa sai do caixa", () => {
     const quote = quoteTermination(context, sellable.id);
     if (!quote.ok) throw new Error("sem cotação");

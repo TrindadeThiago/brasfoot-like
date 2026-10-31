@@ -351,4 +351,46 @@ describe("mercado — empréstimos e livres (US5, US7)", () => {
       });
     });
   });
+
+  it("o livre rescindido pelo próprio clube não é recontratado: Iniciar fica desabilitado com o motivo (A9)", async () => {
+    const user = userEvent.setup();
+    const { store, save } = await storedCareer(6, (career) => {
+      // Um reserva fora da escalação, para a escalação guardada continuar válida.
+      const inLineup = new Set([...Object.values(career.lineup.starters), ...career.lineup.bench]);
+      const player = career.bank.players
+        .filter((entry) => entry.clubId === career.clubId && !inLineup.has(entry.id))
+        .sort((a, b) => a.strength - b.strength)[0];
+      if (!player) throw new Error("sem jogador");
+      const { clubId, contract: _contract, ...free } = player;
+      return {
+        ...career,
+        bank: {
+          ...career.bank,
+          players: career.bank.players.filter((entry) => entry.id !== player.id),
+        },
+        market: {
+          ...career.market,
+          freeAgents: [
+            {
+              player: free,
+              lastClubId: clubId,
+              sinceYear: career.league.year,
+              releasedByClub: true,
+            },
+          ],
+        },
+      };
+    });
+    const agent = save.market.freeAgents[0];
+    if (!agent) throw new Error("sem livre");
+    renderApp("/jogo/mercado?c=tela", store);
+    await screen.findByRole("table", { name: t("market.resultsCaption") });
+    await user.selectOptions(screen.getByLabelText(t("market.filter.scope")), "free");
+    const dialog = await startAction(user, agent.player.displayName, "sign");
+    expect(
+      (within(dialog).getByRole("button", { name: t("market.action.start") }) as HTMLButtonElement)
+        .disabled,
+    ).toBe(true);
+    expect(within(dialog).getByText(/não pode recontratá-lo/)).toBeDefined();
+  });
 });

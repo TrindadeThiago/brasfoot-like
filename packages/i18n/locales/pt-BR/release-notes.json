@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.0.5",
+    "date": "2026-10-31",
+    "changes": [
+      "Corrigida uma brecha na diretoria: rescindir os melhores jogadores logo depois da última rodada baixava a meta da temporada seguinte, e dava para recontratar o jogador como livre, por quase nada, depois que a meta já estava fixada. Agora a rescisão não é permitida com a temporada encerrada, e um jogador que o seu clube rescindiu não pode ser recontratado por ele.",
+      "O botão Rescindir, no modal do jogador, fica desabilitado quando a rescisão não é possível (temporada encerrada, elenco no mínimo, jogador emprestado ou rodada ao vivo) e mostra o motivo escrito logo abaixo.",
+      "Quem saiu por fim de contrato continua podendo ser recontratado, e jogadores rescindidos por outros clubes continuam disponíveis para você. Nenhum formato de save ou de mod mudou, os saves existentes continuam abrindo, e a IA, as partidas e as finanças não mudaram."
+    ]
+  },
+  {
     "version": "1.0.4",
     "date": "2026-10-30",
     "changes": [

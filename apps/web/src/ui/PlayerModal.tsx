@@ -1,7 +1,14 @@
 "use client";
 
 import { ageOn, clubUnavailability, type MarketRow, marketRowOf } from "@brasfoot-like/engine";
-import { currentDate, marketContextOf, type SaveFile, userSeason } from "@brasfoot-like/save";
+import { formatMarketError } from "@brasfoot-like/i18n";
+import {
+  currentDate,
+  marketContextOf,
+  quoteManagerTermination,
+  type SaveFile,
+  userSeason,
+} from "@brasfoot-like/save";
 import { useMemo, useState } from "react";
 import type { useGame } from "../game/GameProvider";
 import { fitnessAt } from "../game/selectors";
@@ -47,6 +54,11 @@ export function PlayerModal({
     [context, playerId],
   );
   const fitness = useMemo(() => fitnessAt(save), [save]);
+  // A cotação do motor decide se a rescisão é possível; o botão segue o que o motor recusa.
+  const termination = useMemo(
+    () => (player ? quoteManagerTermination(save, player.id) : undefined),
+    [player, save],
+  );
   if (!player) return null;
   const locked = game.state.live !== undefined;
   const onLoan = player.contract?.loan !== undefined;
@@ -86,6 +98,10 @@ export function PlayerModal({
   const fit = fitness(player.id);
   const reason = locked ? t("player.lockedLive") : undefined;
   const renewReason = reason ?? (onLoan ? t("player.loanNoRenew") : undefined);
+  const terminateReason =
+    reason ??
+    (termination && !termination.ok ? formatMarketError(termination.error, "pt-BR") : undefined);
+  const notes = [...new Set([renewReason, terminateReason].filter((note) => note !== undefined))];
   return (
     <>
       <Dialog
@@ -110,7 +126,7 @@ export function PlayerModal({
             </Button>
             <Button
               aria-label={t("squad.terminateOf", { name: player.displayName })}
-              disabled={locked}
+              disabled={terminateReason !== undefined}
               onClick={() => setDisposal({ kind: "terminate", playerId: player.id })}
             >
               {t("squad.terminate")}
@@ -148,7 +164,11 @@ export function PlayerModal({
             </div>
           ))}
         </dl>
-        {reason || renewReason ? <p className={styles.note}>{renewReason ?? reason}</p> : null}
+        {notes.map((note) => (
+          <p key={note} className={styles.note}>
+            {note}
+          </p>
+        ))}
         <PlayerStats save={save} playerId={player.id} />
       </Dialog>
       <DisposalDialog

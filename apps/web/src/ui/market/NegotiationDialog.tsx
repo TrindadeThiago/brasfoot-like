@@ -215,6 +215,19 @@ export function NegotiationDialog({
   const disabled = game.state.live !== undefined;
   const negotiation = save.market.negotiations.find((entry) => entry.playerId === row.playerId);
   const feeValue = fee ?? (kind === "loan" ? "0" : String(row.value));
+  // Quem o próprio clube rescindiu não é recontratado: o botão já mostra isso, sem tentar e falhar.
+  const rehireBlock =
+    kind === "free" &&
+    save.market.freeAgents.some(
+      (agent) =>
+        agent.player.id === row.playerId &&
+        agent.releasedByClub === true &&
+        agent.lastClubId === save.clubId,
+    )
+      ? formatMarketError({ code: "market.recently_released", params: {} }, "pt-BR")
+      : undefined;
+  // Sem negociação aberta, o erro de abrir uma (elenco cheio, limite de estrangeiros...) também aparece.
+  const openingFreeOrRenew = !negotiation && (kind === "free" || kind === "renew");
   const close = () => {
     setFee(undefined);
     setFeedback(undefined);
@@ -254,7 +267,9 @@ export function NegotiationDialog({
           {feedback}
         </p>
       ) : null}
-      {error && (finished || (negotiation && negotiation.stage !== "contract")) ? (
+      {rehireBlock ? <p className={styles.error}>{rehireBlock}</p> : null}
+      {error &&
+      (finished || openingFreeOrRenew || (negotiation && negotiation.stage !== "contract")) ? (
         <p role="alert" className={styles.error}>
           {error}
         </p>
@@ -272,7 +287,7 @@ export function NegotiationDialog({
       ) : kind === "free" || kind === "renew" ? (
         <Button
           variant="primary"
-          disabled={disabled}
+          disabled={disabled || rehireBlock !== undefined}
           onClick={() => handle(game.startNegotiation({ kind, playerId: row.playerId }), kind)}
         >
           {t("market.action.start")}

@@ -1,3 +1,4 @@
+import { isLeagueSeasonOver } from "../career/league";
 import { draft, post } from "../finance/ledger";
 import type { CompletedPlayer } from "../model/types";
 import { clubNeeds } from "./ai/needs";
@@ -5,7 +6,7 @@ import { completeTransfer } from "./effects";
 import { toFreeAgent } from "./free-agents";
 import { marketRules, QUICK_SALE_PCT } from "./rules";
 import { canAddPlayer, canRemovePlayer } from "./squad";
-import type { MarketContext, MarketResult, MarketUpdate } from "./types";
+import type { FreeAgent, MarketContext, MarketResult, MarketUpdate } from "./types";
 import { fail } from "./types";
 import { marketValue } from "./value";
 import { isWindowOpen, roundsPlayed } from "./windows";
@@ -103,6 +104,9 @@ export function quoteTermination(
   const player = ownPlayer(context, playerId);
   if (!player?.contract) return fail("market.not_found");
   if (player.contract.loan) return fail("market.player_on_loan");
+  // Depois da última rodada, antes da virada, a rescisão baixava a meta da próxima temporada
+  // sem custo esportivo (auditoria v1.0.0, A9).
+  if (isLeagueSeasonOver(context.league)) return fail("market.season_over");
   if (!canRemovePlayer(context.world, context.managerClubId, player.id)) {
     return fail("market.squad_minimum");
   }
@@ -137,7 +141,10 @@ export function terminateContract(
     category: "wages",
     amount: -penalty,
   });
-  const agent = toFreeAgent(player, context.managerClubId, context.league.year);
+  const agent: FreeAgent = {
+    ...toFreeAgent(player, context.managerClubId, context.league.year),
+    releasedByClub: true,
+  };
   return {
     ok: true,
     value: {
