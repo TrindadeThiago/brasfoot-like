@@ -78,9 +78,11 @@ export function gateFor(
   const opponent = 0.85 + (0.3 * (away?.reputation ?? 0)) / 100;
   const noise =
     options.noise === false ? 1 : 1 + (createRng(`${fixture.seed}:gate`).float() * 2 - 1) * NOISE;
+  // Sem piso na demanda: um piso fazia a receita voltar a crescer com o preço e o máximo da faixa
+  // virava o ótimo de estádios pequenos, vazios (auditoria v1.0.0, A6). O teto de 3 vale só para preço baixo.
   const priceFactor = Math.min(
     3,
-    Math.max(0.05, powQuarters(division.referencePrice / price, rules.priceElasticityPct)),
+    powQuarters(division.referencePrice / price, rules.priceElasticityPct),
   );
   // Humor da torcida do mandante (013 R5); sem humor informado, fator 1.
   const mood =
