@@ -1,6 +1,6 @@
 # Auditoria pós-1.0.0 — Treinador FC
 
-Auditoria somente leitura, feita em `main` (a2d9a0b). Nenhum arquivo do código foi alterado.
+Auditoria somente leitura, feita em `main` (a2d9a0b); as correções entregues depois estão na seção "Status de execução". O estado abaixo vale até a **1.0.5**.
 
 ## Status de execução
 
@@ -8,9 +8,19 @@ Auditoria somente leitura, feita em `main` (a2d9a0b). Nenhum arquivo do código 
 |---|---|
 | A1, A7 (limites de descompressão), A3 (regras de mercado por país), A8 (cache de fadiga), T1 (teste de escala) | **Feito** no PR #61, publicado na **1.0.1**. |
 | A2 (comprar e revender) | **Feito** no PR #62, publicado na **1.0.2**, com severidade revista (ver nota abaixo). |
-| A2b, A4, A5, A6, A9, A10, T2 | Pendentes. |
+| A6 (preço do ingresso) | **Feito** no PR #64, publicado na **1.0.3**. Era um bug, não só um preço ótimo único (ver nota). |
+| A11 (novo): a IA mexia no clube do jogador em mundos de vários países | **Feito** no PR #65, publicado na **1.0.4**. Não estava na auditoria; veio de um relato de jogador (preço mudando sozinho). |
+| A9 (meta da diretoria) | **Feito** no PR #66, publicado na **1.0.5** (ver nota). |
+| Constantes de partida (`directRedRate`, `injuryRate`) | **Abandonado**: a mudança quebra 11 testes de baseline e os valores já estão dentro das faixas do projeto. |
+| A2b, A4, A5, A10, T2 | Pendentes. |
 
 **Nota sobre o A2.** A estimativa original (+25% de lucro geral) era exagerada. Medido no mundo de teste, o lucro existia só para quem tinha 1 ano de contrato (cerca de 12% dos jogadores): 58% desses ciclos davam lucro, no máximo +35% e mediana +4%. Com 2 anos, 0,4%; com 3 ou mais, 0%. A severidade desceu de Alta para **Média**. A correção foi um piso na pedida de compra do usuário (`buyAskingPrice`, `market/club-response.ts`), igual ao que a venda imediata pagaria depois de renovado. Valores como `lastYearValuePct` e `QUICK_SALE_PCT` ficaram como estavam: mexer neles muda a IA e quebra os baselines de seed. **Limite conhecido:** comprar no último ano, renovar e esperar uma proposta recebida (85% a 110% do valor) ainda rende; é aleatório e limitado.
+
+**Nota sobre o A6.** O piso de 0,05 em `priceFactor` (`finance/gate.ts`) impedia a demanda de cair abaixo de 5%, então a receita voltava a crescer com o preço: em estádios pequenos o preço máximo da faixa (200) era o ótimo, com o estádio vazio (+56% de bilheteria contra o preço inicial num clube de 10 mil lugares). O piso foi removido; `sim:world` e `sim:economy` ficaram idênticos (os preços da IA nunca chegam à faixa em que o piso valia). Que o ótimo seja um número por clube, o preço que lota, ficou como está: o preço fixo da temporada capta 99,3% do ganho de ajustar por jogo, então é decisão de design.
+
+**Nota sobre o A11.** Nas rodadas das ligas de outros países, `career/day.ts` chamava `applyRoundSystems` com o clube do técnico vazio, e a IA de finanças e de mercado tratava o clube do jogador como dela: trocava o preço do ingresso, iniciava obras (69 mil para 97,8 mil lugares num teste), mexia em empréstimos e vendeu 2 jogadores sem ação do jogador. Corrigido com `options.userClubId`. Saves já afetados não são corrigidos retroativamente. Como o conserto desloca a evolução de mundos de vários países, 3 snapshots de composição foram regenerados.
+
+**Nota sobre o A9.** A hipótese original (vender estrelas antes da meta) estava errada: a janela de transferências está fechada entre a última rodada e a virada. O caminho real era a **rescisão**, que não depende de janela. Medido de ponta a ponta: no mundo de uma divisão, rescindir 1 jogador (multa de 520 mil) levou a meta de meio da tabela (posição 10) para evitar rebaixamento (posição 16), e o jogador foi recontratado com +9,5% de salário. Num mundo de 15 países e 360 clubes, 95% aceitam pelo menos 1 rescisão e em 36% dos 126 clubes com meta acima do piso a meta cai (mediana de 1 rescisão e 727 mil de multa); no clube testado, 5 de 5 rescindidos foram recontratados. Correção: `quoteTermination` recusa com a temporada encerrada (`market.season_over`), `FreeAgent.releasedByClub` impede o clube de recontratar quem rescindiu (`market.recently_released`), e os botões Rescindir e Iniciar ficam desabilitados com o motivo. **Limite conhecido:** rescindir antes da última rodada ainda baixa a meta, mas agora custa o jogador de verdade.
 
 ## Resumo executivo
 
@@ -46,10 +56,10 @@ Top 5 prioridades:
 | A3 | Mercado | Média (feito, 1.0.1) | P | `marketValue` usa as regras de `world.competitions[0]` para qualquer jogador. No mundo multi-país, os percentuais de contrato de outros países são ignorados. | `engine/src/market/value.ts:40`. | Resolver a competição pelo clube do jogador (a função em lote `marketValueFor` já recebe `rules`). |
 | A4 | Longo prazo | Média | M | Os craques (força ≥ 78) oscilam em onda: 9 → 58 → 8 → 34 ao longo de 30 temporadas. O p90 vai de 69 a 75 e volta a 70. O regulador (offset ±8, `targetMean` 59) estabiliza a média mas não a cauda. | `sim:world`, coluna "craques", temporadas 1, 16, 25 e 30. `engine/src/renewal/rules.ts:13` (o próprio comentário admite "ondas"). | Controlar também a distribuição por coorte de idade (geração uniforme) em vez de só a média e a promessa de craques. Meta: craques entre 20 e 40. |
 | A5 | Economia | Média | M | Em 30 temporadas, **0 clubes em crise**. A IA toma empréstimo sempre que o caixa fica negativo, e o crédito é folgado (2 mi + 30 mil × reputação). Não há risco de falência real. | `sim:economy`: coluna "crise" é 0 em todas as temporadas. `engine/src/finance/ai.ts:89`. | Reduzir o limite de crédito da IA e dar consequência à crise (venda forçada, teto de salários). Meta: 1 a 5% de clubes em crise por temporada. |
-| A6 | Finanças | Média | P | O preço ótimo do ingresso é único: o preço em que o público iguala a capacidade. Antes dele, a receita cai com o preço (elasticidade 1,5); depois, o estádio já está lotado. | `engine/src/finance/gate.ts:81-85` (`priceFactor`) e `finance/rules.ts` (`priceElasticityPct: 150`). | Hipótese que **não simulei**. Tornar a capacidade sensível (atmosfera/humor) ou adicionar sócio-torcedor. |
+| A6 | Finanças | Média (feito, 1.0.3; era um bug) | P | O preço ótimo do ingresso é único: o preço em que o público iguala a capacidade. Antes dele, a receita cai com o preço (elasticidade 1,5); depois, o estádio já está lotado. | `engine/src/finance/gate.ts:81-85` (`priceFactor`) e `finance/rules.ts` (`priceElasticityPct: 150`). | Hipótese que **não simulei**. Tornar a capacidade sensível (atmosfera/humor) ou adicionar sócio-torcedor. |
 | A7 | Robustez | Média (feito, 1.0.1) | P | `importSave` descompacta o gzip inteiro sem teto. | `packages/save/src/file.ts:31` (`gunzipSync`). | Mesmo tratamento do A1. |
 | A8 | Determinismo | Baixa (feito, 1.0.1) | P | `individualRate` é um `Map` global no módulo, sem limite e nunca esvaziado. O valor é determinístico (hash do id), mas cresce com cada jogador visto, e em testes ou worker longo vaza memória. | `engine/src/match/minute.ts:53`. | Calcular o hash sob demanda (é barato) ou usar cache com teto. |
-| A9 | Board | Baixa | M | Hipótese: a expectativa da diretoria usa a força atual do elenco. Vender os melhores jogadores antes de a meta ser fixada pode baixar a exigência. | `engine/src/board/goals.ts:73` e `:77`. Não confirmei o momento em que a meta é fixada. | Fixar a expectativa na virada de temporada, com o elenco daquele momento. |
+| A9 | Board | Média (feito, 1.0.5; hipótese revista: era a rescisão) | M | Hipótese: a expectativa da diretoria usa a força atual do elenco. Vender os melhores jogadores antes de a meta ser fixada pode baixar a exigência. | `engine/src/board/goals.ts:73` e `:77`. Não confirmei o momento em que a meta é fixada. | Fixar a expectativa na virada de temporada, com o elenco daquele momento. |
 | A10 | Performance | Baixa | M | Há 53 buscas lineares `world.players.find`/`world.clubs.find` no motor, algumas dentro de laços. `marketValue` faz um `find` de clube por jogador. | grep em `packages/engine/src`; `market/value.ts:36-41`. | Índices por id (`Map`) no contexto, calculados uma vez por dia ou virada. |
 | T1 | Testes | Média (feito, 1.0.1, paliativo) | P | O teste de escala do save falha quando a suíte roda em paralelo: mediana da virada 23,8 s contra o limite 18 s. **Sozinho passa (84 s).** É flaky por carga, não regressão. | `packages/save/test/football-world-scale.test.ts:71`. | Rodar sem paralelismo (projeto separado), ou medir CPU em vez de tempo de relógio. |
 | T2 | Testes | Baixa | M | Não há `fast-check` nem teste de propriedade: as invariantes (soma do caixa, escalação válida, conservação de dinheiro nas transferências) ficam só em exemplos. | `grep fast-check` em todos os `package.json`: vazio. | Adicionar como devDependency (exige aprovação) e cobrir as invariantes de A2, finanças e migração. |
@@ -80,8 +90,8 @@ A sensibilidade à força é alta: 4 pontos de diferença já dão ~+20 pontos p
 
 | Constante | Atual | Sugerido | Motivo |
 |---|---|---|---|
-| `MATCH_TUNING.directRedRate` | 0,0003 | 0,0002 | reduz vermelhos para ~0,10 por jogo |
-| `MATCH_TUNING.injuryRate` | 0,0016 | 0,0012 | reduz lesões para ~0,23 por jogo |
+| `MATCH_TUNING.directRedRate` | 0,0003 | **manter** | testado em 0,0002: quebra 11 testes de baseline (os 90 minutos de 200 partidas, equivalência de 2 temporadas, composição); vermelhos (0,138) estão dentro da faixa do projeto |
+| `MATCH_TUNING.injuryRate` | 0,0016 | **manter** | testado em 0,0012: mesmo problema; lesões (0,313) dentro da faixa |
 | `QUICK_SALE_PCT` | 75 | **manter** | testado em 65 e 70: não fecha o ciclo e pune vendas legítimas |
 | `lastYearValuePct` | 60 | **manter** | em 70 muda a IA e quebra 10 testes de baseline de seed (A2 foi resolvido por piso na pedida do usuário) |
 | `credit.perReputation` | 30 000 | 15 000 | dá pressão financeira à IA (A5) |
@@ -122,8 +132,8 @@ A sensibilidade à força é alta: 4 pontos de diferença já dão ~+20 pontos p
 | 5 ✓ | A8: cache de fadiga | Memória estável após N mil partidas (teste de memória do `sim:world`). |
 | 6 | A5: pressão financeira da IA | `sim:economy` entre 1% e 5% de clubes em crise, sem falência em cascata. |
 | 7 | A4: regulador de gerações | Critério novo em `sim:world`: craques sempre entre 20 e 40. |
-| 8 | A9 + A6: board e ingresso (após confirmar as hipóteses) | Teste de que vender antes da virada não muda a meta. Curva de receita por preço com máximo interior. |
+| 8 ✓ | A9 + A6: board e ingresso (feitos na 1.0.5 e 1.0.3) | Teste de que vender antes da virada não muda a meta. Curva de receita por preço com máximo interior. |
 
 ## Limitações
 
-Não rodei Playwright localmente (o CI rodou o e2e nos PRs #61 e #62). A6 e A9 são hipóteses por leitura de código, sem simulação. As constantes sugeridas para A4 e A5 e as de partidas (`directRedRate`, `injuryRate`) não foram testadas. O T1 não foi resolvido pela raiz: medir tempo de CPU não funcionou (o contador é do processo inteiro nas threads do vitest), então só ampliei a folga.
+Rodei o Playwright local só no spec do mercado (`market-keyboard`), que precisou ser ajustado à regra do A9; o resto do e2e rodou só no CI. O CI do #65 pulou o e2e (o job `scope` o dispensou), então a 1.0.4 foi publicada sem e2e. As constantes sugeridas para A4 e A5 não foram testadas. O cenário de rescisão em vários países foi medido no nível do motor, com um mundo gerado e uma seed. O T1 não foi resolvido pela raiz: medir tempo de CPU não funcionou (o contador é do processo inteiro nas threads do vitest), então só ampliei a folga.
