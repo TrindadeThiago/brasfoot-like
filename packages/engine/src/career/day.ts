@@ -376,7 +376,7 @@ export function completeCareerDay(
       systems.fans,
       undefined,
       siblings,
-      { foreign: true },
+      { foreign: true, userClubId: currentManager(next, managerClubId) },
     );
     if (!applied.ok) return applied;
     next = withForeignSystems(next, applied);

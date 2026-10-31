@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.0.4",
+    "date": "2026-10-30",
+    "changes": [
+      "Corrigido: em mundos com vários países, o computador mexia no seu clube sem você pedir. Nas rodadas das ligas de outros países, a IA trocava o preço do ingresso sozinha, começava obras no estádio, tomava ou pagava empréstimo e chegava a vender jogadores do seu elenco. Agora o seu clube só muda por ação sua.",
+      "Se você notou o preço do ingresso mudando sozinho (por exemplo de 20 para 52), a causa era essa. Saves existentes continuam abrindo; o que já foi alterado não é desfeito, então vale conferir o preço, o estádio e o elenco da sua carreira.",
+      "Os clubes da IA, as partidas e os formatos de save e de mod não mudaram."
+    ]
+  },
+  {
     "version": "1.0.3",
     "date": "2026-10-30",
     "changes": [
